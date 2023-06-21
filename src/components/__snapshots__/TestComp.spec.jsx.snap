@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TestComp matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="test-comp"
+  >
+    <h3>
+      Hello World!
+    </h3>
+    <span>
+      Random
+    </span>
+    <div
+      class="bx--content-switcher"
+      role="tablist"
+    >
+      <button
+        aria-selected="true"
+        class="bx--content-switcher-btn bx--content-switcher--selected"
+        role="tab"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="bx--content-switcher__label"
+        >
+          Hello
+        </span>
+      </button>
+      <button
+        aria-selected="false"
+        class="bx--content-switcher-btn"
+        role="tab"
+        tabindex="-1"
+        type="button"
+      >
+        <span
+          class="bx--content-switcher__label"
+          title="Two"
+        >
+          Two
+        </span>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

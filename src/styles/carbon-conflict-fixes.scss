@@ -1,0 +1,6 @@
+button[class*="bx--"] {
+  &:disabled {
+    margin: 0;
+  }
+  background-image: none;
+}
