@@ -1,20 +1,51 @@
 const path = require("path");
 const cssExtract = require("mini-css-extract-plugin");
+const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const packageJson = require("./package.json");
+const dependencies = packageJson.dependencies;
 
 module.exports = {
+  resolve: {
+    extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+  },
   entry: {
     index: "./src/index.js",
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-    library: "BahmniNextUI",
-    libraryTarget: "umd",
-    umdNamedDefine: true,
+    // library: "BahmniNextUI",
+    // libraryTarget: "umd",
+    // umdNamedDefine: true,
+    filename: "[name].[contenthash].js",
     clean: true,
   },
+  devServer: {},
   plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+    }),
     new cssExtract({
       filename: "styles.css",
+    }),
+    new ModuleFederationPlugin({
+      name: "bahmni_ipd",
+      filename: "remoteEntry.js",
+      exposes: {
+        IpdDashboard: "./src/bootstrap.js",
+      },
+      shared: {
+        ...dependencies,
+        react: {
+          singleton: true,
+          requiredVersion: dependencies.react,
+        },
+        "react-dom": {
+          singleton: true,
+          requiredVersion: dependencies["react-dom"],
+        },
+      },
     }),
   ],
   module: {
@@ -42,9 +73,5 @@ module.exports = {
         use: [cssExtract.loader, "css-loader", "sass-loader"],
       },
     ],
-  },
-  externals: {
-    react: "react", // Exclude react from the bundled output
-    "react-dom": "react-dom", // Exclude react-dom from the bundled output
   },
 };
