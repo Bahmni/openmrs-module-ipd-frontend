@@ -33,7 +33,7 @@ module.exports = {
       name: "bahmni_ipd",
       filename: "remoteEntry.js",
       exposes: {
-        IpdDashboard: "./src/bootstrap.js",
+        "./Dashboard": "./src/Dashboard.jsx",
       },
       shared: {
         ...dependencies,
