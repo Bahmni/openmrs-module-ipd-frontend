@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./Dashboard.scss";
 import { TestComp } from "bahmni-carbon-ui";
+import { Button } from "carbon-components-react";
 
 export default function Dashboard(props) {
   return (
@@ -12,6 +13,9 @@ export default function Dashboard(props) {
       <hr />
       <h4>A component from Bahmni Carbon UI</h4>
       <TestComp />
+
+      <h5>And now directly using carbon components</h5>
+      <Button kind="primary">Final button</Button>
     </>
   );
 }

@@ -6,52 +6,21 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const packageJson = require("./package.json");
 const dependencies = packageJson.dependencies;
 
-module.exports = {
-  resolve: {
-    extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
-  },
+const commonConfig = {
   entry: {
     index: "./src/index.js",
   },
+  resolve: {
+    extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+  },
   output: {
     path: path.resolve(__dirname, "dist"),
-    // library: "BahmniNextUI",
-    // libraryTarget: "umd",
-    // umdNamedDefine: true,
     filename: "[name].[contenthash].js",
     clean: true,
   },
-  devServer: {},
   plugins: [
-    new HtmlWebpackPlugin({
-      template: "./src/index.html",
-    }),
     new cssExtract({
       filename: "styles.css",
-    }),
-    new ModuleFederationPlugin({
-      name: "bahmni_ipd",
-      filename: "remoteEntry.js",
-      exposes: {
-        "./Dashboard": "./src/Dashboard.jsx",
-      },
-      shared: {
-        // ...dependencies,
-        "bahmni-carbon-ui": {
-          singleton: true,
-          requiredVersion: dependencies["bahmni-carbon-ui"],
-        },
-        react: {
-          singleton: true,
-          eager: true,
-          requiredVersion: dependencies.react,
-        },
-        "react-dom": {
-          singleton: true,
-          eager: true,
-          requiredVersion: dependencies["react-dom"],
-        },
-      },
     }),
   ],
   module: {
@@ -81,3 +50,69 @@ module.exports = {
     ],
   },
 };
+
+const federationConfig = {
+  ...commonConfig,
+  name: "federation",
+  resolve: {
+    ...commonConfig.resolve,
+    alias: {
+      react: path.resolve(__dirname, "./__mocks__/windowReact.js"),
+      "react-dom": path.resolve(__dirname, "./__mocks__/windowReactDom.js"),
+    },
+  },
+  // devServer: {},
+  plugins: [
+    ...commonConfig.plugins,
+    new ModuleFederationPlugin({
+      name: "bahmni_ipd",
+      filename: "remoteEntry.js",
+      exposes: {
+        "./Dashboard": "./src/Dashboard.jsx",
+      },
+      shared: {
+        // ...dependencies,
+        "carbon-components": {
+          singleton: true,
+          requiredVersion: dependencies["carbon-components"],
+        },
+        "carbon-components-react": {
+          singleton: true,
+          requiredVersion: dependencies["carbon-components-react"],
+        },
+        "bahmni-carbon-ui": {
+          singleton: true,
+          requiredVersion: dependencies["bahmni-carbon-ui"],
+        },
+        react: {
+          singleton: true,
+          eager: true,
+          requiredVersion: dependencies.react,
+        },
+        "react-dom": {
+          singleton: true,
+          eager: true,
+          requiredVersion: dependencies["react-dom"],
+        },
+      },
+    }),
+  ],
+  externals: {
+    react: "React", // Exclude react from the bundled output
+    "react-dom": "ReactDOM", // Exclude react-dom from the bundled output
+  },
+};
+
+const sandboxConfig = {
+  ...commonConfig,
+  name: "sandbox",
+  devServer: {},
+  plugins: [
+    ...commonConfig.plugins,
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+    }),
+  ],
+};
+
+module.exports = [federationConfig, sandboxConfig];
