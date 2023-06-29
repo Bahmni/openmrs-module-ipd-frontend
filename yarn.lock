@@ -3947,6 +3947,17 @@ babel-preset-jest@^29.5.0:
     babel-plugin-jest-hoist "^29.5.0"
     babel-preset-current-node-syntax "^1.0.0"
 
+bahmni-carbon-ui@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/bahmni-carbon-ui/-/bahmni-carbon-ui-0.0.8.tgz#998d4d61b68b8c1c7a40b9a04a6e5b7193ecc938"
+  integrity sha512-lfN40mhwt2AjN5A6N4v2LpOUkbuIyZfHb6XIXeJr5TBb8D4x7lKMpx7pV3J9iMBquifXX/ucYmiJMH6iSsiO+A==
+  dependencies:
+    "@storybook/addon-styling" "0.3"
+    "@storybook/react" "6.5"
+    carbon-components "^10.19.0"
+    carbon-components-react "^7.25.0"
+    carbon-icons "^7.0.7"
+
 bail@^1.0.0:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/bail/-/bail-1.0.5.tgz#b6fa133404a392cbc1f8c4bf63f5953351e7a776"

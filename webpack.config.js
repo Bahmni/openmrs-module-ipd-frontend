@@ -36,13 +36,19 @@ module.exports = {
         "./Dashboard": "./src/Dashboard.jsx",
       },
       shared: {
-        ...dependencies,
+        // ...dependencies,
+        "bahmni-carbon-ui": {
+          singleton: true,
+          requiredVersion: dependencies["bahmni-carbon-ui"],
+        },
         react: {
           singleton: true,
+          eager: true,
           requiredVersion: dependencies.react,
         },
         "react-dom": {
           singleton: true,
+          eager: true,
           requiredVersion: dependencies["react-dom"],
         },
       },

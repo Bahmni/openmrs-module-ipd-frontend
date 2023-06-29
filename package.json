@@ -37,6 +37,7 @@
   "dependencies": {
     "@storybook/addon-styling": "0.3",
     "@storybook/react": "6.5",
+    "bahmni-carbon-ui": "0.0.8",
     "carbon-components": "^10.19.0",
     "carbon-components-react": "^7.25.0",
     "carbon-icons": "^7.0.7",
