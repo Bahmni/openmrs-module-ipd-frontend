@@ -61,6 +61,10 @@ const federationConfig = {
       "react-dom": path.resolve(__dirname, "./__mocks__/windowReactDom.js"),
     },
   },
+  output: {
+    ...commonConfig.output,
+    path: path.resolve(commonConfig.output.path, "federation"),
+  },
   // devServer: {},
   plugins: [
     ...commonConfig.plugins,
@@ -106,6 +110,10 @@ const federationConfig = {
 const sandboxConfig = {
   ...commonConfig,
   name: "sandbox",
+  output: {
+    ...commonConfig.output,
+    path: path.resolve(commonConfig.output.path, "sandbox"),
+  },
   devServer: {},
   plugins: [
     ...commonConfig.plugins,

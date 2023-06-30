@@ -57,7 +57,7 @@
     "dev:sandbox": "webpack serve --mode development --open --config-name=sandbox",
     "dev:integrated": "concurrently \"yarn build --watch\" \"yarn serve:prod\"",
     "build": "webpack --mode production --config-name=federation",
-    "serve:prod": "cd dist && http-server -p=9001 -P=http://localhost:8080 -c-1"
+    "serve:prod": "cd dist/federation && http-server -p=9001 -P=http://localhost:8080 -c-1"
   },
   "exports": {
     ".": {
