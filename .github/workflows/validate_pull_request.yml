@@ -5,19 +5,21 @@ name: A workflow to validate PRs
 
 on:
   push:
-    branches: [ ipd-microfrontend ]
+    branches: [ipd-microfrontend]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js 14.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
-    - run: yarn build
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Install dependencies
+        run: yarn install
+      - name: Build
+        run: yarn build
