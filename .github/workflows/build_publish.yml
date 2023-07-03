@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - Bahmni-IPD-master
-      - ipd-microfrontend
     paths-ignore:
       - "**.md"
   workflow_dispatch:
@@ -62,7 +61,7 @@ jobs:
       - Trivy
     runs-on: ubuntu-latest
     env:
-      EVENT_TYPE: bahmni-ipd-frontend
+      EVENT_TYPE: bahmni-ipd-microfrontend-event
     steps:
       - name: 🔧 Create repository_dispatch
         run: |
