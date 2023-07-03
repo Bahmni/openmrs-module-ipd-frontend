@@ -72,7 +72,7 @@ const federationConfig = {
       name: "bahmni_ipd",
       filename: "remoteEntry.js",
       exposes: {
-        "./Dashboard": "./src/Dashboard.jsx",
+        "./Dashboard": "./src/entries/Dashboard.jsx",
       },
       shared: {
         // ...dependencies,

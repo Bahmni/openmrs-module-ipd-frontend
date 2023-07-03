@@ -16,6 +16,7 @@ export default function Dashboard(props) {
 
       <h5>And now directly using carbon components</h5>
       <Button kind="primary">Final button</Button>
+      <p>This is an additional change</p>
     </>
   );
 }
