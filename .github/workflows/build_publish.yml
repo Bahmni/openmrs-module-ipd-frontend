@@ -52,8 +52,8 @@ jobs:
           file: package/docker/Dockerfile
           push: true
           tags: |
-            bahmni/ipd-frontend:ipd-${{ github.run_number }}
-            bahmni/ipd-frontend:ipd
+            bahmni/microfrontend-ipd:ipd-${{ github.run_number }}
+            bahmni/microfrontend-ipd:ipd
 
   trigger-workflow:
     name: 🔁 Trigger workflow to deploy to Docker env
