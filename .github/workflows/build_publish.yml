@@ -34,6 +34,8 @@ jobs:
         run: yarn install
       - name: 🏗️ Build
         run: yarn build
+      - name: Test
+        run: yarn test:ci
       - name: 🖥️ Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: 🖥️ Set up Docker Buildx
