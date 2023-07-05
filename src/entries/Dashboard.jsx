@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./Dashboard.scss";
+import styles from "./Dashboard.module.scss";
 import { TestComp } from "bahmni-carbon-ui";
 import { Button } from "carbon-components-react";
 
@@ -19,6 +20,12 @@ export default function Dashboard(props) {
         </p>
       </div>
       <hr />
+      <div>
+        <h4>DEBUG: Following line has scoped styles applied via css-module</h4>
+        <p className={styles.scopedParagraphStyle}>
+          This should be in bold, red-color and underlined
+        </p>
+      </div>
 
       <div>
         <h4>
