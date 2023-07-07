@@ -1,26 +1,32 @@
-# bahmni-carbon-ui
+# IPD frontend for OpenMRS
 
-## Next Gen UI library for Bahmni
+A react micro-frontend to be loaded by Bahmni frontend for In Patient Department modules
 
-This is the UI component library for Bahmni and OpenMRS, built on top of Carbon Design system.
+## Architecture
 
-### Notes on local link
+This micro-frontend is built using Webpack's ModuleFederation plugin. Due to constraints on the _Bahmni_ side of things,
+the `webpack.config.js` contains 2 separate configurations, one for the federated module and the other for local development.
 
-To use a local copy of this lib with your project run the following commands
+### Entries
 
-```bash
-cd <project dir>/node_modules/react
-yarn link
-cd ../react-dom
-yarn link
+Currently, one component is exposed as an entry for the federated module (`src/entries/Dashboard.jsx`). Future entries should be added to `src/entries/`
+folder and then exposed using the `exposes: {...}` key in the ModuleFederationPlugin config of `webpack.config.js`.
 
-cd <bahmni-carbon-ui dir>
-yarn link
-yarn link react
-yarn link react-dom
+### Sandboxed development
 
-cd <project dir>
-yarn link bahmni-carbon-ui
+The following command loads the `src/entries/Dashboard.jsx` in a sandboxed view for local development. This view is fed with dummy data which
+can be modified in `src/index.js`
+
+```
+yarn dev:sandbox
 ```
 
-### Debug changes
+### Integrated development
+
+Running the following builds and watches the `dist/federation/` folder which can be served by an apache container for access by `bahmni`.
+
+```
+yarn dev:integrated
+```
+
+This builds the `remoteEntry.js` file which exposes the entries as specified in the ModuleFederationPlugin config
