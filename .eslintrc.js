@@ -7,6 +7,8 @@ module.exports = {
     "__mocks__/*",
     "*.config.js",
     ".*",
+    "**/__mocks__/*",
+    "src/setupTests.js",
   ],
   env: {
     browser: true,

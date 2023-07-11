@@ -1,6 +1,6 @@
 import { LS_LANG_KEY, BASE_URL } from "../../constants";
 
-const translationsBaseUrl = "/i18n";
+const translationsBaseUrl = "i18n";
 
 export function getLocale() {
   return localStorage.getItem(LS_LANG_KEY) || "en";
@@ -12,8 +12,8 @@ export const getTranslations = async (locale) => {
 };
 
 async function fetchTranslations(fileName) {
-  const response = await fetch(
-    `${BASE_URL}/${translationsBaseUrl}/${fileName}`
-  );
+  const url = `${BASE_URL}${translationsBaseUrl}/${fileName}`;
+  console.log("Fetching url: ", url);
+  const response = await fetch(url);
   return response.json();
 }
