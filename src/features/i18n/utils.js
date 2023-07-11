@@ -13,7 +13,6 @@ export const getTranslations = async (locale) => {
 
 async function fetchTranslations(fileName) {
   const url = `${BASE_URL}${translationsBaseUrl}/${fileName}`;
-  console.log("Fetching url: ", url);
   const response = await fetch(url);
   return response.json();
 }
