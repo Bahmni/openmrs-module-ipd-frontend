@@ -1,7 +1,8 @@
 const path = require("path");
-const cssExtract = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const packageJson = require("./package.json");
 const dependencies = packageJson.dependencies;
@@ -19,8 +20,11 @@ const commonConfig = {
     clean: true,
   },
   plugins: [
-    new cssExtract({
+    new MiniCssExtractPlugin({
       filename: "styles.css",
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: "public" }],
     }),
   ],
   module: {
@@ -42,24 +46,24 @@ const commonConfig = {
       {
         test: /\.css$/i,
         exclude: /\.module\.css$/i,
-        use: [cssExtract.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
       {
         test: /\.s[ac]ss$/i,
         exclude: /\.module\.s[ac]ss$/i,
-        use: [cssExtract.loader, "css-loader", "sass-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
       {
         test: /\.module\.css$/i,
         use: [
-          cssExtract.loader,
+          MiniCssExtractPlugin.loader,
           { loader: "css-loader", options: { modules: true } },
         ],
       },
       {
         test: /\.module\.s[ac]ss$/i,
         use: [
-          cssExtract.loader,
+          MiniCssExtractPlugin.loader,
           { loader: "css-loader", options: { modules: true } },
           "sass-loader",
         ],

@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[bahmni.admin-app]
+file_filter = public/i18n/locale_<lang>.json
+source_file = public/i18n/locale_en.json
+source_lang = en
+type = KEYVALUEJSON
