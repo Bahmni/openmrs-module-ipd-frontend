@@ -1,4 +1,4 @@
-import { LS_LANG_KEY } from "../../constants";
+import { LS_LANG_KEY, BASE_URL } from "../../constants";
 
 const translationsBaseUrl = "/i18n";
 
@@ -12,6 +12,8 @@ export const getTranslations = async (locale) => {
 };
 
 async function fetchTranslations(fileName) {
-  const response = await fetch(`${translationsBaseUrl}/${fileName}`);
+  const response = await fetch(
+    `${BASE_URL}/${translationsBaseUrl}/${fileName}`
+  );
   return response.json();
 }
