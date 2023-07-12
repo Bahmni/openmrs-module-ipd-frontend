@@ -5,7 +5,7 @@ import "bahmni-carbon-ui/styles.css";
 
 const devContainer = document.getElementById("dev-bahmni-ipd");
 if (devContainer) {
-  const options = {
+  const hostData = {
     patient: { uuid: "3ae1ee52-e9b2-4934-876d-30711c0e3e2f" },
   };
   const hostInterface = {
@@ -17,7 +17,7 @@ if (devContainer) {
     },
   };
   ReactDOM.render(
-    <Dashboard options={options} hostInterface={hostInterface} />,
+    <Dashboard hostData={hostData} hostInterface={hostInterface} />,
     devContainer
   );
 }

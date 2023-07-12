@@ -1,9 +1,9 @@
 import React from "react";
 import Dashboard from "./Dashboard";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 
 describe("Dashboard", () => {
-  it("should render", () => {
+  it("should render", async () => {
     const hostData = {
       patient: {
         uuid: "__test_patient_uuid__",
@@ -18,7 +18,9 @@ describe("Dashboard", () => {
       <Dashboard hostData={hostData} hostApi={hostApi} />
     );
 
-    expect(component.getByText("__test_patient_uuid__")).toBeTruthy();
+    await waitFor(() => {
+      expect(component.getByText("__test_patient_uuid__")).toBeTruthy();
+    });
 
     fireEvent.click(
       component.getByRole("button", {

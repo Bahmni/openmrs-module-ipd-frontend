@@ -85,6 +85,10 @@ const federationConfig = {
   output: {
     ...commonConfig.output,
     path: path.resolve(commonConfig.output.path, "federation"),
+    // NOTE: VERY IMPORTANT
+    // match this to the proxy setting. This sets up the base path for this micro-frontend
+    // This is mapped to BASE_URL in constants.js for convenience
+    publicPath: "/ipd/",
   },
   // devServer: {},
   plugins: [
