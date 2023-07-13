@@ -27,6 +27,7 @@
     "jest-fetch-mock": "^3.0.3",
     "lint-staged": "^13.2.2",
     "mini-css-extract-plugin": "^2.7.6",
+    "moment": "^2.29.4",
     "prettier": "^2.8.8",
     "react": "16.14.0",
     "react-dom": "16.14.0",
