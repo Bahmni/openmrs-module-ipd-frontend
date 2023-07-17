@@ -1,5 +1,30 @@
+.drug-chart-modal {
+  .bx--modal-container {
+    width: 550px;
+  }
+
+  @media screen and (max-width: 640px) {
+    .bx--modal-container {
+      width: 100%;
+    }
+  }
+}
+
+.bx--modal-container {
+  background-color: #ffffff;
+}
+
+.field-with-units {
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
 .bx--form-item,
 .schedule-section,
+.frequency,
 .start-time {
   padding-top: 3px;
 }
@@ -7,26 +32,43 @@
 .schedule-section,
 .inline-field {
   display: flex;
-  flex-direction: row;
-  padding-top: 8px;
+  padding-top: 3px;
+  align-items: baseline;
 }
 
 .schedule-section {
+  flex-direction: column;
   flex-wrap: wrap;
+
+  .inline-field {
+    flex-wrap: wrap;
+  }
 }
 
 .inline-field > * {
   margin-right: 1rem;
 }
 
+.route {
+  width: 60%;
+  margin-right: 0px;
+
+  .dropdown {
+    width: 70%;
+  }
+}
+
 .bx--text-input-wrapper--readonly .bx--text-input {
   width: 100%;
   overflow: auto;
   color: #8d8d8d;
+  background: #eee;
 }
 
 button[class*="bx--"]:disabled {
   opacity: 1;
+  border: none;
+  border-bottom: #c6c6c6 1px solid;
 }
 
 .bx--text-input__readonly-icon {
@@ -36,25 +78,34 @@ button[class*="bx--"]:disabled {
 
 .bx--text-area:disabled,
 .bx--text-input-wrapper--readonly .bx--text-input {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: #c6c6c6 1px solid;
   cursor: not-allowed;
 }
 
-.bx--date-picker__input:disabled {
+.bx--date-picker__input:disabled,
+.bx--number input[type="number"]:disabled {
   background-color: #eee;
-  border: #ccc 1px solid;
+  border: none;
+  border-bottom: #c6c6c6 1px solid;
 }
 
 .bx--number input[type="number"]:disabled {
-  background-color: #eee;
-  border: #ccc 1px solid;
   color: #777;
 }
 
 .bx--number__control-btn:disabled {
-  border-bottom-color: #c6c6c6;
+  border: none;
+  border-bottom-color: #c6c6c6 1px solid;
+}
+
+.frequency {
+  width: 100%;
 }
 
 .required {
   color: #e0182d;
+}
+
+.titleText {
+  font-size: 0.75rem;
 }
