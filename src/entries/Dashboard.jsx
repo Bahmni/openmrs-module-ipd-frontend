@@ -6,6 +6,7 @@ import { TestComp } from "bahmni-carbon-ui";
 import { Button } from "carbon-components-react";
 import { I18nProvider } from "../features/i18n/I18nProvider";
 import { FormattedMessage } from "react-intl";
+import Calendar from "../features/Calendar/Calendar.jsx";
 
 /**
  * NOTE: Currently there is nothing in this dashboard, all debugging items
@@ -60,6 +61,30 @@ export default function Dashboard(props) {
             <FormattedMessage id="IPD_HEADER" />
           </p>
         </div>
+        <Calendar
+          calendarData={[
+            {
+              6: { minutes: "00", status: "Administered" },
+              12: { minutes: "30", status: "Not-Administered" },
+              16: { minutes: "15", status: "Pending" },
+            },
+            {
+              4: { minutes: "00", status: "Administered" },
+              10: { minutes: "30", status: "Not-Administered" },
+              13: { minutes: "15", status: "Pending" },
+            },
+            {
+              7: { minutes: "00", status: "Administered" },
+              15: { minutes: "30", status: "Not-Administered" },
+              18: { minutes: "15", status: "Pending" },
+            },
+            {
+              9: { minutes: "00", status: "Administered" },
+              20: { minutes: "30", status: "Not-Administered" },
+              23: { minutes: "15", status: "Pending" },
+            },
+          ]}
+        />
       </I18nProvider>
     </>
   );
