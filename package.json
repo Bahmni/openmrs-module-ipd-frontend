@@ -47,7 +47,8 @@
     "carbon-icons": "^7.0.7",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "react-intl": "^3.3.2"
+    "react-intl": "^3.3.2",
+    "react-svg-loader": "^3.0.3"
   },
   "scripts": {
     "preinstall": "git config core.hooksPath .git-hooks",
