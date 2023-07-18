@@ -5,22 +5,43 @@ import AdministeredLateIcon from "../../icons/administered-late.svg";
 import LateIcon from "../../icons/late.svg";
 import NotAdministeredIcon from "../../icons/not-administered.svg";
 import PendingIcon from "../../icons/pending.svg";
+import { TooltipCarbon } from "bahmni-carbon-ui";
+
 export default function Image(props) {
-  const { iconType } = props;
+  const { iconType, info } = props;
+  let icon,
+    clickable = true;
   switch (iconType) {
     case "Administered":
-      return <AdministeredIcon />;
+      icon = <AdministeredIcon />;
+      clickable = true;
+      break;
     case "Not-Administered":
-      return <NotAdministeredIcon />;
-    case "Pending":
-      return <PendingIcon />;
+      icon = <NotAdministeredIcon />;
+      break;
     case "Late":
-      return <LateIcon />;
+      icon = <LateIcon />;
+      break;
     case "Administered-Late":
-      return <AdministeredLateIcon />;
+      icon = <AdministeredLateIcon />;
+      clickable = true;
+      break;
+    case "Pending":
+      icon = <PendingIcon />;
   }
+
+  return (
+    <div>
+      {info && clickable ? (
+        <TooltipCarbon icon={() => icon} content={info} />
+      ) : (
+        icon
+      )}
+    </div>
+  );
 }
 
 Image.propTypes = {
   iconType: PropTypes.string.isRequired,
+  info: PropTypes.string,
 };

@@ -4,7 +4,7 @@ import "./TimeCell.scss";
 import Image from "../SVGImage/SVGImage.jsx";
 
 export default function TimeCell(props) {
-  const { minutes, status } = props;
+  const { minutes, status, administrationInfo } = props;
   let left, right;
   if (+minutes < 30) {
     left = status;
@@ -13,8 +13,12 @@ export default function TimeCell(props) {
   }
   return (
     <div className={"time-cell"}>
-      <div>{left && <Image iconType={left} />}</div>
-      <div>{right && <Image iconType={right} />}</div>
+      <div data-testid="left-icon">
+        {left && <Image iconType={left} info={administrationInfo} />}
+      </div>
+      <div data-testid="right-icon">
+        {right && <Image iconType={right} info={administrationInfo} />}
+      </div>
     </div>
   );
 }
@@ -22,4 +26,5 @@ export default function TimeCell(props) {
 TimeCell.propTypes = {
   minutes: PropTypes.string,
   status: PropTypes.string,
+  administrationInfo: PropTypes.string,
 };

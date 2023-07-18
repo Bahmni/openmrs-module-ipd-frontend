@@ -8,10 +8,14 @@ export default function CalendarRow(props) {
     <div style={{ display: "flex" }}>
       {hours.map((hour) => {
         if (rowData[hour]) {
-          const { minutes, status } = rowData[hour];
+          const { minutes, status, administrationInfo } = rowData[hour];
           return (
             <div key={hour}>
-              <TimeCell minutes={minutes} status={status} />
+              <TimeCell
+                minutes={minutes}
+                status={status}
+                administrationInfo={administrationInfo}
+              />
             </div>
           );
         }

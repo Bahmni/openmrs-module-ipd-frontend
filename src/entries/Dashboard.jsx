@@ -64,8 +64,12 @@ export default function Dashboard(props) {
         <Calendar
           calendarData={[
             {
-              6: { minutes: "00", status: "Administered" },
-              12: { minutes: "30", status: "Not-Administered" },
+              6: {
+                minutes: "00",
+                status: "Administered",
+                administrationInfo: "Administered by: Dr. John Doe",
+              },
+              12: { minutes: "30", status: "Administered-Late" },
               16: { minutes: "15", status: "Pending" },
             },
             {
@@ -81,7 +85,7 @@ export default function Dashboard(props) {
             {
               9: { minutes: "00", status: "Administered" },
               20: { minutes: "30", status: "Not-Administered" },
-              23: { minutes: "15", status: "Pending" },
+              23: { minutes: "15", status: "Late" },
             },
           ]}
         />
