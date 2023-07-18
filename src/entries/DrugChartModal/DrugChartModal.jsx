@@ -3,7 +3,7 @@ import {
   DropdownCarbon,
   NumberInputCarbon,
   Title,
-  TimePicker,
+  TimePicker24Hour,
 } from "bahmni-carbon-ui";
 import { Modal, TextArea, TextInput } from "carbon-components-react";
 import moment from "moment";
@@ -12,20 +12,17 @@ import React from "react";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 import "./DrugChartModal.scss";
-import {
-  enableScheduleFrequencies,
-  enableStartTimeFrequencies,
-} from "../../constants";
 
 export default function DrugChartModal(props) {
   const { hostData, hostApi } = props;
-  const enableScheduleFrequency = enableScheduleFrequencies.find(
+  const enableScheduleFrequency = hostData?.scheduleFrequencies.find(
     (frequency) =>
       frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
   );
-  const enableStartTime = enableStartTimeFrequencies.includes(
+  const enableStartTime = hostData?.startTimeFrequencies.includes(
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
+  const invalidTimeText = "Enter Time in 24hr format";
 
   const handleClose = () => {
     hostApi.onModalClose?.("drug-chart-modal-close-event");
@@ -131,31 +128,50 @@ export default function DrugChartModal(props) {
             {enableScheduleFrequency && (
               <div className="schedule-section">
                 <Title text="Schedule" isRequired={true} />
-                {/* <label className="bx--label">Schedule</label> */}
                 <div className="inline-field" id="schedule">
                   {Array.from(
                     { length: enableScheduleFrequency.frequencyPerDay },
                     (_, index) => (
-                      <TimePicker
+                      <TimePicker24Hour
                         key={index}
+                        id={`schedule-${index}`}
                         onChange={() => {}}
                         labelText=" "
-                        id={`schedule-${index}`}
                         defaultTime={moment()}
+                        invalidText={invalidTimeText}
+                        width="70%"
                       />
                     )
+                    // 12-hour TimePicker from bahmni-carbon-ui can be added when making config changes
+                    // <TimePicker
+                    //   key={index}
+                    //   onChange={() => {}}
+                    //   labelText=" "
+                    //   id={`schedule-${index}`}
+                    //   defaultTime={moment()}
+                    // />
                   )}
                 </div>
               </div>
             )}
             {enableStartTime && (
               <div className="start-time">
-                <TimePicker
+                {/* <TimePicker
                   id={"start-time"}
                   onChange={() => {}}
                   defaultTime={moment()}
                   labelText={"Start Time"}
                   isRequired={true}
+                /> */}
+                <TimePicker24Hour
+                  data-modal-primary-focus
+                  labelText={"Start Time"}
+                  id={"start-time"}
+                  onChange={() => {}}
+                  isRequired={true}
+                  invalidText={invalidTimeText}
+                  defaultTime={moment()}
+                  width="80%"
                 />
               </div>
             )}
@@ -178,7 +194,6 @@ export default function DrugChartModal(props) {
               labelText="Additional Instruction"
             />
             <TextArea
-              data-modal-primary-focus
               data-testid="notes-section"
               className="notes-section"
               type="text"
@@ -195,6 +210,8 @@ export default function DrugChartModal(props) {
 DrugChartModal.propTypes = {
   hostData: PropTypes.shape({
     drugOrder: PropTypes.object,
+    scheduleFrequencies: PropTypes.array,
+    startTimeFrequencies: PropTypes.array,
   }).isRequired,
   hostApi: PropTypes.shape({
     onModalClose: PropTypes.func,
