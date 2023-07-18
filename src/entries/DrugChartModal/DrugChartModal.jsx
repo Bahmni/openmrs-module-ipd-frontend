@@ -175,31 +175,37 @@ export default function DrugChartModal(props) {
                 />
               </div>
             )}
-            <TextArea
-              className="instruction"
-              readOnly
-              type="text"
-              rows={1}
-              disabled={true}
-              value={hostData?.drugOrder?.instructions}
-              labelText="Instruction"
-            />
-            <TextArea
-              className="additional-instruction"
-              readOnly
-              type="text"
-              rows={1}
-              disabled={true}
-              value={hostData?.drugOrder?.additionalInstructions}
-              labelText="Additional Instruction"
-            />
-            <TextArea
-              data-testid="notes-section"
-              className="notes-section"
-              type="text"
-              rows={2}
-              labelText="Notes"
-            />
+            <div className="instructions">
+              <TextArea
+                className="instruction"
+                readOnly
+                type="text"
+                rows={1}
+                disabled={true}
+                value={hostData?.drugOrder?.instructions}
+                labelText="Instruction"
+              />
+            </div>
+            <div className="additional-instructions">
+              <TextArea
+                className="additional-instruction"
+                readOnly
+                type="text"
+                rows={1}
+                disabled={true}
+                value={hostData?.drugOrder?.additionalInstructions}
+                labelText="Additional Instruction"
+              />
+            </div>
+            <div className="notes-sections">
+              <TextArea
+                data-testid="notes-section"
+                className="notes-section"
+                type="text"
+                rows={1}
+                labelText="Notes"
+              />
+            </div>
           </div>
         </Modal>
       </I18nProvider>

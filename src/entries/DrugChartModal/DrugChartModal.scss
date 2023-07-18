@@ -26,26 +26,27 @@
     margin-right: 0px;
   }
 
-  .bx--form-item,
   .schedule-section,
   .frequency,
-  .start-time {
-    padding-top: 3px;
+  .start-time,
+  .inline-field,
+  .notes-sections,
+  .instructions,
+  .additional-instructions {
+    padding: 10px 0 10px 0;
   }
 
   .schedule-section,
   .inline-field {
     display: flex;
-    padding-top: 3px;
     align-items: inherit;
   }
 
   .schedule-section {
     flex-direction: column;
     flex-wrap: wrap;
-
     .inline-field {
-      flex-wrap: wrap;
+      padding: 0;
     }
   }
 
@@ -116,5 +117,9 @@
 
   .titleText {
     font-size: 0.75rem;
+  }
+
+  .bx--dropdown--disabled .bx--list-box__label {
+    font-size: 0.85rem;
   }
 }
