@@ -7,6 +7,7 @@ import { Button } from "carbon-components-react";
 import { I18nProvider } from "../features/i18n/I18nProvider";
 import { FormattedMessage } from "react-intl";
 import Calendar from "../features/Calendar/Calendar.jsx";
+import { DrugChart } from "../features/DrugChart/DrugChart.jsx";
 
 /**
  * NOTE: Currently there is nothing in this dashboard, all debugging items
@@ -89,6 +90,7 @@ export default function Dashboard(props) {
             },
           ]}
         />
+        <DrugChart patientId="dummyid" />
       </I18nProvider>
     </>
   );
