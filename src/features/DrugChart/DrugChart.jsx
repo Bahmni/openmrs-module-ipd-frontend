@@ -7,7 +7,6 @@ const TransformDrugChartData = (drugChartData) => {
   const transformedDrugChartData = [];
   drugChartData.forEach((schedule) => {
     const { slots } = schedule;
-    const transformedSlots = {};
     const slotData = {};
     slots.forEach((slot) => {
       const { startDateTime, status } = slot;
@@ -29,15 +28,9 @@ const TransformDrugChartData = (drugChartData) => {
         status: status,
         administrationInfo: adminInfo,
       };
-      transformedSlots.push(slotData);
     });
-    // console.log("TransformDrugChartData: transformedSlots: ", transformedSlots);
-    transformedDrugChartData.push(transformedSlots);
+    transformedDrugChartData.push(slotData);
   });
-  console.log(
-    "TransformDrugChartData: transformedDrugChartData: ",
-    transformedDrugChartData
-  );
   return transformedDrugChartData;
 };
 
@@ -61,7 +54,7 @@ export function DrugChart(props) {
           uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
           orderId: 11,
           serviceType: "Medication Administration",
-          status: "Administered",
+          status: "Not-Administered",
           startDateTime: "2023-08-08T08:30:00.000Z",
           endDateTime: "2023-08-08T09:30:00.000Z",
           notes: "some slot text",
@@ -102,7 +95,7 @@ export function DrugChart(props) {
           uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
           orderId: 11,
           serviceType: "Medication Administration",
-          status: "Administered",
+          status: "Administered-Late",
           startDateTime: "2023-08-08T08:30:00.000Z",
           endDateTime: "2023-08-08T09:30:00.000Z",
           notes: "some slot text",
@@ -117,7 +110,7 @@ export function DrugChart(props) {
           uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
           orderId: 12,
           serviceType: "Medication Administration",
-          status: "missed",
+          status: "Late",
           startDateTime: "2023-08-08T02:30:00.000Z",
           endDateTime: "2023-08-08T03:30:00.000Z",
           notes: "some slot text",

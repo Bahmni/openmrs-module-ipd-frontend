@@ -10,7 +10,7 @@ import { TooltipCarbon } from "bahmni-carbon-ui";
 export default function Image(props) {
   const { iconType, info } = props;
   let icon,
-    clickable = true;
+    clickable = false;
   switch (iconType) {
     case "Administered":
       icon = <AdministeredIcon />;
