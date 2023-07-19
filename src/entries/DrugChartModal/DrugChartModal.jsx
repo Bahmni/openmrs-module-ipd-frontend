@@ -137,7 +137,7 @@ export default function DrugChartModal(props) {
                         id={`schedule-${index}`}
                         onChange={() => {}}
                         labelText=" "
-                        defaultTime={moment()}
+                        defaultTime={""}
                         invalidText={invalidTimeText}
                         width="70%"
                       />
@@ -170,7 +170,7 @@ export default function DrugChartModal(props) {
                   onChange={() => {}}
                   isRequired={true}
                   invalidText={invalidTimeText}
-                  defaultTime={moment()}
+                  defaultTime={""}
                   width="80%"
                 />
               </div>
