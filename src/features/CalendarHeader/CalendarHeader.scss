@@ -1,0 +1,22 @@
+.calendar-header {
+  width: max-content;
+  position: sticky;
+  top: 0;
+  border: none;
+  background-color: #ededed;
+}
+
+td {
+  width: 41px;
+  height: 63px;
+  color: var(--gray-gray-80, #393939);
+  text-align: center;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.24px;
+  vertical-align: bottom;
+  padding-bottom: 8px;
+}

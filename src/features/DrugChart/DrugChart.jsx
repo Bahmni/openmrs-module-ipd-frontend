@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import Calendar from "../Calendar/Calendar";
+import { CalendarHeader } from "../CalendarHeader/CalendarHeader";
 
 const TransformDrugChartData = (drugChartData) => {
   const transformedDrugChartData = [];
@@ -126,8 +127,11 @@ export function DrugChart(props) {
   const transformedDrugchartData = TransformDrugChartData(drugChartData);
 
   return (
-    <div>
-      <Calendar calendarData={transformedDrugchartData} />
+    <div className="drug-chart">
+      <div className="drug-chart-content">
+        <CalendarHeader />
+        <Calendar calendarData={transformedDrugchartData} />
+      </div>
     </div>
   );
 }
