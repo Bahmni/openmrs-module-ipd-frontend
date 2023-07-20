@@ -7,7 +7,7 @@ import NotAdministeredIcon from "../../icons/not-administered.svg";
 import PendingIcon from "../../icons/pending.svg";
 import { TooltipCarbon } from "bahmni-carbon-ui";
 
-export default function Image(props) {
+export default function SVGIcon(props) {
   const { iconType, info } = props;
   let icon,
     clickable = false;
@@ -41,7 +41,7 @@ export default function Image(props) {
   );
 }
 
-Image.propTypes = {
+SVGIcon.propTypes = {
   iconType: PropTypes.string.isRequired,
   info: PropTypes.string,
 };

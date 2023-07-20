@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./TimeCell.scss";
-import Image from "../SVGImage/SVGImage.jsx";
+import SVGIcon from "../SVGIcon/SVGIcon.jsx";
 
 export default function TimeCell(props) {
   const { minutes, status, administrationInfo } = props;
@@ -14,10 +14,10 @@ export default function TimeCell(props) {
   return (
     <div className={"time-cell"}>
       <div data-testid="left-icon">
-        {left && <Image iconType={left} info={administrationInfo} />}
+        {left && <SVGIcon iconType={left} info={administrationInfo} />}
       </div>
       <div data-testid="right-icon">
-        {right && <Image iconType={right} info={administrationInfo} />}
+        {right && <SVGIcon iconType={right} info={administrationInfo} />}
       </div>
     </div>
   );

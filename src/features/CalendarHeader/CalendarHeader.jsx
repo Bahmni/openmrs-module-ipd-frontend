@@ -12,7 +12,10 @@ export function CalendarHeader() {
             {hours.map((hour) => {
               return (
                 <td key={hour}>
-                  <div className={"hour"}>{hour}:00</div>
+                  <div>
+                    {hour.toLocaleString("en-US", { minimumIntegerDigits: 2 })}
+                    :00
+                  </div>
                 </td>
               );
             })}
