@@ -6,20 +6,16 @@ export default function CalendarHeader() {
 
   return (
     <div className={"calendar-header"}>
-      <table>
-        <tbody>
-          <tr>
-            {hours.map((hour) => {
-              return (
-                <td key={hour}>
-                  {hour.toLocaleString("en-US", { minimumIntegerDigits: 2 })}
-                  :00
-                </td>
-              );
-            })}
-          </tr>
-        </tbody>
-      </table>
+      <div style={{ display: "flex" }}>
+        {hours.map((hour) => {
+          return (
+            <div key={hour} className={"hour-header"}>
+              {hour.toLocaleString("en-US", { minimumIntegerDigits: 2 })}
+              :00
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

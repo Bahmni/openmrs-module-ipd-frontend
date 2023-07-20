@@ -1,9 +1,8 @@
-tr:nth-child(even) {
-  background-color: #f4f4f4;
-}
-table {
+.drug-chart-calendar {
+  width: max-content;
   border-spacing: 0;
-  border-style: solid;
-  border-color: #c6c6c6;
-  border-width: 1px 0.5px;
+  margin: 0;
+  tbody > tr:nth-child(even) {
+    background-color: #f4f4f4;
+  }
 }
