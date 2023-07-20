@@ -9,124 +9,76 @@ exports[`CalendarHeader should match snapshot 1`] = `
       <tbody>
         <tr>
           <td>
-            <div>
-              00:00
-            </div>
+            00:00
           </td>
           <td>
-            <div>
-              01:00
-            </div>
+            01:00
           </td>
           <td>
-            <div>
-              02:00
-            </div>
+            02:00
           </td>
           <td>
-            <div>
-              03:00
-            </div>
+            03:00
           </td>
           <td>
-            <div>
-              04:00
-            </div>
+            04:00
           </td>
           <td>
-            <div>
-              05:00
-            </div>
+            05:00
           </td>
           <td>
-            <div>
-              06:00
-            </div>
+            06:00
           </td>
           <td>
-            <div>
-              07:00
-            </div>
+            07:00
           </td>
           <td>
-            <div>
-              08:00
-            </div>
+            08:00
           </td>
           <td>
-            <div>
-              09:00
-            </div>
+            09:00
           </td>
           <td>
-            <div>
-              10:00
-            </div>
+            10:00
           </td>
           <td>
-            <div>
-              11:00
-            </div>
+            11:00
           </td>
           <td>
-            <div>
-              12:00
-            </div>
+            12:00
           </td>
           <td>
-            <div>
-              13:00
-            </div>
+            13:00
           </td>
           <td>
-            <div>
-              14:00
-            </div>
+            14:00
           </td>
           <td>
-            <div>
-              15:00
-            </div>
+            15:00
           </td>
           <td>
-            <div>
-              16:00
-            </div>
+            16:00
           </td>
           <td>
-            <div>
-              17:00
-            </div>
+            17:00
           </td>
           <td>
-            <div>
-              18:00
-            </div>
+            18:00
           </td>
           <td>
-            <div>
-              19:00
-            </div>
+            19:00
           </td>
           <td>
-            <div>
-              20:00
-            </div>
+            20:00
           </td>
           <td>
-            <div>
-              21:00
-            </div>
+            21:00
           </td>
           <td>
-            <div>
-              22:00
-            </div>
+            22:00
           </td>
           <td>
-            <div>
-              23:00
-            </div>
+            23:00
           </td>
         </tr>
       </tbody>

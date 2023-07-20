@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import Calendar from "../Calendar/Calendar";
-import { CalendarHeader } from "../CalendarHeader/CalendarHeader";
+import CalendarHeader from "../CalendarHeader/CalendarHeader";
 
-const TransformDrugChartData = (drugChartData) => {
+export const TransformDrugChartData = (drugChartData) => {
   const transformedDrugChartData = [];
   drugChartData.forEach((schedule) => {
     const { slots } = schedule;
@@ -35,7 +35,7 @@ const TransformDrugChartData = (drugChartData) => {
   return transformedDrugChartData;
 };
 
-export function DrugChart(props) {
+export default function DrugChart(props) {
   const { patientId, viewDate = new Date() } = props;
   console.log("DrugChart: patientId: ", patientId);
   console.log("DrugChart: viewDate: ", viewDate);
@@ -77,6 +77,21 @@ export function DrugChart(props) {
           admin: {
             administeredBy: "Dr. John Doe",
             administeredAt: "2023-08-08T08:30:00.000Z",
+            adminid: "1234",
+          },
+        },
+        {
+          id: 3,
+          uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+          orderId: 12,
+          serviceType: "Medication Administration",
+          status: "Pending",
+          startDateTime: "2023-08-08T19:30:00.000Z",
+          endDateTime: "2023-08-08T09:30:00.000Z",
+          notes: "some slot text",
+          admin: {
+            administeredBy: "Dr. John Doe",
+            administeredAt: "2023-08-08T10:30:00.000Z",
             adminid: "1234",
           },
         },

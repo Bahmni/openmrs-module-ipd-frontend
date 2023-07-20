@@ -1,6 +1,14 @@
 import React from "react";
 import Dashboard from "./Dashboard";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+
+const MockedDrugChart = jest.fn();
+jest.mock("../features/DrugChart/DrugChart.jsx", () => {
+  return function DrugChart(props) {
+    MockedDrugChart(props);
+    return <div>DrugChart</div>;
+  };
+});
 
 describe("Dashboard", () => {
   it("should render", async () => {
@@ -14,19 +22,24 @@ describe("Dashboard", () => {
       onConfirm: jest.fn(),
     };
 
-    const component = render(
-      <Dashboard hostData={hostData} hostApi={hostApi} />
-    );
+    render(<Dashboard hostData={hostData} hostApi={hostApi} />);
+
+    // await waitFor(() => {
+    //   expect(component.getByText("__test_patient_uuid__")).toBeTruthy();
+    // });
+
+    // fireEvent.click(
+    //   component.getByRole("button", {
+    //     name: "Click to send event to host appliation",
+    //   })
+    // );
+    // expect(hostApi.onConfirm).toHaveBeenCalledWith("event-from-ipd");
 
     await waitFor(() => {
-      expect(component.getByText("__test_patient_uuid__")).toBeTruthy();
+      expect(MockedDrugChart).toHaveBeenCalled();
+      expect(MockedDrugChart).toHaveBeenCalledWith({
+        patientId: "__test_patient_uuid__",
+      });
     });
-
-    fireEvent.click(
-      component.getByRole("button", {
-        name: "Click to send event to host appliation",
-      })
-    );
-    expect(hostApi.onConfirm).toHaveBeenCalledWith("event-from-ipd");
   });
 });

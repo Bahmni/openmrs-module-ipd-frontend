@@ -1,7 +1,7 @@
 import React from "react";
 import "./CalendarHeader.scss";
 
-export function CalendarHeader() {
+export default function CalendarHeader() {
   const hours = [...Array(24).keys()];
 
   return (
@@ -12,10 +12,8 @@ export function CalendarHeader() {
             {hours.map((hour) => {
               return (
                 <td key={hour}>
-                  <div>
-                    {hour.toLocaleString("en-US", { minimumIntegerDigits: 2 })}
-                    :00
-                  </div>
+                  {hour.toLocaleString("en-US", { minimumIntegerDigits: 2 })}
+                  :00
                 </td>
               );
             })}

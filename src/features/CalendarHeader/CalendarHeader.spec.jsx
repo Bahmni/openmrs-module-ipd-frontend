@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { CalendarHeader } from "./CalendarHeader";
+import CalendarHeader from "./CalendarHeader";
 
 describe("CalendarHeader", () => {
   it("should match snapshot", () => {
