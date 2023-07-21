@@ -8,8 +8,8 @@ describe("CalendarHeader", () => {
     expect(asFragment()).toMatchSnapshot();
   });
   it("should render 24 hours", () => {
-    const { container } = render(<CalendarHeader />);
-    const hours = container.querySelectorAll("td");
+    const { getAllByTestId } = render(<CalendarHeader />);
+    const hours = getAllByTestId("hour");
     expect(hours.length).toBe(24);
   });
 });

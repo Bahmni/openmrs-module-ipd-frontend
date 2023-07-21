@@ -6,6 +6,9 @@ exports[`DrugChart should match snapshot 1`] = `
     class="drug-chart"
   >
     <div
+      class="drug-chart-left-panel"
+    />
+    <div
       class="drug-chart-content"
     >
       <div>

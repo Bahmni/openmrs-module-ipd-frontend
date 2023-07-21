@@ -9,7 +9,7 @@ export default function CalendarHeader() {
       <div style={{ display: "flex" }}>
         {hours.map((hour) => {
           return (
-            <div key={hour} className={"hour-header"}>
+            <div data-testid="hour" key={hour} className={"hour-header"}>
               {hour.toLocaleString("en-US", { minimumIntegerDigits: 2 })}
               :00
             </div>
