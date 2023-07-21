@@ -86,20 +86,20 @@ describe("TransformDrugChartData", () => {
     const TransformedDrugChartData = TransformDrugChartData(drugChartData);
     expect(TransformedDrugChartData).toEqual([
       {
-        14: {
-          administrationInfo: "Dr. John Doe [14:00]",
-          minutes: 0,
-          status: "Not-Administered",
-        },
-        17: {
-          administrationInfo: "Dr. John Doe [17:10]",
-          minutes: 0,
+        11: {
+          administrationInfo: "Dr. John Doe [11:40]",
+          minutes: 30,
           status: "Administered",
         },
-        21: {
-          administrationInfo: "Dr. John Doe [21:00]",
-          minutes: 0,
+        15: {
+          administrationInfo: "Dr. John Doe [15:30]",
+          minutes: 30,
           status: "Pending",
+        },
+        8: {
+          administrationInfo: "Dr. John Doe [08:30]",
+          minutes: 30,
+          status: "Not-Administered",
         },
       },
     ]);
