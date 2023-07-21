@@ -216,6 +216,7 @@ export default function DrugChart(props) {
 
   return (
     <div className="drug-chart">
+      <div className="drug-chart-left-panel"></div>
       <div className="drug-chart-content">
         <CalendarHeader />
         <Calendar calendarData={transformedDrugchartData} />
