@@ -112,6 +112,7 @@ const federationConfig = {
       filename: "remoteEntry.js",
       exposes: {
         "./Dashboard": "./src/entries/Dashboard.jsx",
+        "./DrugChartModal": "./src/entries/DrugChartModal/DrugChartModal.jsx",
       },
       shared: {
         // ...dependencies,

@@ -3,3 +3,4 @@ dist
 yarn-error.log
 .idea
 .talismanrc
+.DS_Store
