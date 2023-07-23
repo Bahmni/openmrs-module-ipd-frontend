@@ -2,8 +2,9 @@ import {
   DatePickerCarbon,
   DropdownCarbon,
   NumberInputCarbon,
-  Title,
+  TimePicker,
   TimePicker24Hour,
+  Title,
 } from "bahmni-carbon-ui";
 import { Modal, TextArea, TextInput } from "carbon-components-react";
 import moment from "moment";
@@ -11,6 +12,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
+import { getDrugOrderFrequencies } from "../../utils/DrugChartModalUtils";
 import "./DrugChartModal.scss";
 
 export default function DrugChartModal(props) {
@@ -22,11 +24,35 @@ export default function DrugChartModal(props) {
   const enableStartTime = hostData?.startTimeFrequencies.includes(
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
+  const enable24HourTimers = hostData?.enable24HourTimers || false;
   const invalidTimeText = "Enter Time in 24hr format";
+
+  const [startTime, setStartTime] = React.useState("");
 
   const handleClose = () => {
     hostApi.onModalClose?.("drug-chart-modal-close-event");
   };
+
+  const handleSave = async () => {
+    var time = "";
+    const allFrequencies = await getDrugOrderFrequencies();
+    enable24HourTimers
+      ? (time = startTime)
+      : (time = moment(startTime).format("hh:mm A"));
+    console.log("Entered time = ", time);
+    const frequencyConfig = allFrequencies.find(
+      (frequency) =>
+        frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
+    );
+    console.log(
+      "Number of Slots = ",
+      frequencyConfig?.frequencyPerDay *
+        hostData?.drugOrder?.uniformDosingType?.dose *
+        hostData?.drugOrder?.duration
+    );
+  };
+
+  const handleCancel = () => {};
 
   return (
     <>
@@ -39,8 +65,9 @@ export default function DrugChartModal(props) {
           secondaryButtonText={<FormattedMessage id="MODAL_CANCEL" />}
           onRequestClose={handleClose}
           closeButtonLabel="Close"
-          onRequestSubmit={() => {}}
-          onSecondarySubmit={() => {}}
+          onRequestSubmit={handleSave}
+          onSecondarySubmit={handleCancel}
+          preventCloseOnClickOutside={true}
         >
           <div>
             <TextInput
@@ -131,48 +158,54 @@ export default function DrugChartModal(props) {
                 <div className="inline-field" id="schedule">
                   {Array.from(
                     { length: enableScheduleFrequency.frequencyPerDay },
-                    (_, index) => (
-                      <TimePicker24Hour
-                        key={index}
-                        id={`schedule-${index}`}
-                        onChange={() => {}}
-                        labelText=" "
-                        defaultTime={""}
-                        invalidText={invalidTimeText}
-                        width="70%"
-                      />
-                    )
-                    // 12-hour TimePicker from bahmni-carbon-ui can be added when making config changes
-                    // <TimePicker
-                    //   key={index}
-                    //   onChange={() => {}}
-                    //   labelText=" "
-                    //   id={`schedule-${index}`}
-                    //   defaultTime={moment()}
-                    // />
+                    (_, index) =>
+                      enable24HourTimers ? (
+                        <TimePicker24Hour
+                          key={index}
+                          id={`schedule-${index}`}
+                          onChange={() => {}}
+                          labelText=" "
+                          defaultTime={""}
+                          invalidText={invalidTimeText}
+                          width="70%"
+                        />
+                      ) : (
+                        <TimePicker
+                          key={index}
+                          onChange={() => {}}
+                          labelText=" "
+                          id={`schedule-${index}`}
+                          invalidText={invalidTimeText}
+                          defaultTime={""}
+                        />
+                      )
                   )}
                 </div>
               </div>
             )}
             {enableStartTime && (
               <div className="start-time">
-                {/* <TimePicker
-                  id={"start-time"}
-                  onChange={() => {}}
-                  defaultTime={moment()}
-                  labelText={"Start Time"}
-                  isRequired={true}
-                /> */}
-                <TimePicker24Hour
-                  data-modal-primary-focus
-                  labelText={"Start Time"}
-                  id={"start-time"}
-                  onChange={() => {}}
-                  isRequired={true}
-                  invalidText={invalidTimeText}
-                  defaultTime={""}
-                  width="80%"
-                />
+                {enable24HourTimers ? (
+                  <TimePicker24Hour
+                    data-modal-primary-focus
+                    labelText={"Start Time"}
+                    id={"start-time"}
+                    onChange={(time) => setStartTime(time)}
+                    isRequired={true}
+                    invalidText={invalidTimeText}
+                    defaultTime={startTime}
+                    width="80%"
+                  />
+                ) : (
+                  <TimePicker
+                    id={"start-time"}
+                    onChange={(time) => setStartTime(time)}
+                    defaultTime={startTime}
+                    labelText={"Start Time"}
+                    invalidText={invalidTimeText}
+                    isRequired={true}
+                  />
+                )}
               </div>
             )}
             <div className="instructions">
@@ -218,6 +251,7 @@ DrugChartModal.propTypes = {
     drugOrder: PropTypes.object,
     scheduleFrequencies: PropTypes.array,
     startTimeFrequencies: PropTypes.array,
+    enable24HourTimers: PropTypes.bool,
   }).isRequired,
   hostApi: PropTypes.shape({
     onModalClose: PropTypes.func,

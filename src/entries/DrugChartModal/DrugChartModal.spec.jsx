@@ -6,7 +6,7 @@ import {
   mockScheduleDrugOrder,
   mockScheduleFrequencies,
   mockStartTimeFrequencies,
-} from "../test-utils/DrugChartModal/utils";
+} from "../../test-utils/DrugChartModal/utils";
 import "@testing-library/jest-dom";
 
 describe("DrugChartModal", () => {
