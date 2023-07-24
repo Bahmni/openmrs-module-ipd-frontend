@@ -1,0 +1,20 @@
+.calendar-header {
+  width: max-content;
+  position: sticky;
+  top: 0;
+  border: none;
+  background-color: #ededed;
+}
+
+.hour-header {
+  width: 43px;
+  height: 63px;
+  color: var(--gray-gray-80, #393939);
+  text-align: center;
+  font-family: "IBM Plex Sans";
+  font-size: 12px;
+  letter-spacing: 0.24px;
+  padding-bottom: 8px;
+  display: grid;
+  align-items: end;
+}

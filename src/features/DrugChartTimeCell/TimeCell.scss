@@ -1,0 +1,19 @@
+.time-cell {
+  border-left: 0.5px solid #c6c6c6;
+  border-right: 0.5px solid #c6c6c6;
+  display: flex;
+  height: 66px;
+  width: 42px;
+  align-items: center;
+  > div {
+    width: 21px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    &:last-child {
+      border-left: 1px dashed #c6c6c6;
+      height: 66px;
+      align-items: center;
+    }
+  }
+}

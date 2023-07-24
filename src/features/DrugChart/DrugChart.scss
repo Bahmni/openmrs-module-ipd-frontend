@@ -1,0 +1,19 @@
+.drug-chart {
+  height: calc(
+    7 * 66px
+  ); //TODO: Update the fixed height once the full dashboard is completed
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+  width: max(90vw, 1000px);
+  border: 1px solid #ccc;
+  margin: 0 auto;
+}
+
+.drug-chart-left-panel {
+  border-right: 1px solid #ccc;
+}
+
+.drug-chart-content {
+  overflow: auto;
+  height: 100%;
+}

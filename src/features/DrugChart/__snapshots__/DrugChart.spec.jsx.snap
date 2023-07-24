@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DrugChart should match snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="drug-chart"
+  >
+    <div
+      class="drug-chart-left-panel"
+    />
+    <div
+      class="drug-chart-content"
+    >
+      <div>
+        CalendarHeader
+      </div>
+      <div>
+        Calendar
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

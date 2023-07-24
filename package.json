@@ -14,7 +14,6 @@
     "@types/carbon-components-react": "^7.55.1",
     "babel-jest": "^29.5.0",
     "babel-loader": "^9.1.2",
-    "concurrently": "^8.2.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "5.2.6",
     "eslint": "^8.42.0",
@@ -22,7 +21,6 @@
     "eslint-plugin-jest": "^27.2.1",
     "eslint-plugin-react": "^7.32.2",
     "html-webpack-plugin": "^5.5.0",
-    "http-server": "^14.1.1",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "jest-fetch-mock": "^3.0.3",
@@ -43,27 +41,28 @@
   "dependencies": {
     "@storybook/addon-styling": "0.3",
     "@storybook/react": "6.5",
-    "bahmni-carbon-ui": "0.0.9",
+    "bahmni-carbon-ui": "0.1.0",
     "carbon-components": "^10.19.0",
     "carbon-components-react": "^7.25.0",
     "carbon-icons": "^7.0.7",
+    "moment": "^2.29.4",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "react-intl": "^3.3.2"
+    "react-intl": "^3.3.2",
+    "react-svg-loader": "^3.0.3"
   },
   "scripts": {
     "preinstall": "git config core.hooksPath .git-hooks",
     "start-storybook": "start-storybook -p 6006",
-    "test": "jest",
+    "test": " TZ=UTC jest",
     "test:ci": "yarn test --ci",
     "bump:patch": "yarn version --no-git-tag-version --patch",
     "bump:minor": "yarn version --no-git-tag-version --minor",
     "bump:major": "yarn version --no-git-tag-version --major",
     "lint": "eslint src/**/*.{js,jsx}",
     "dev:sandbox": "webpack serve --mode development --open --config-name=sandbox",
-    "dev:integrated": "concurrently \"yarn build --watch\" \"yarn serve:prod\"",
-    "build": "webpack --mode production --config-name=federation",
-    "serve:prod": "cd dist/federation && http-server -p=9001 -P=http://localhost:8080 -c-1"
+    "dev:integrated": "yarn build --watch",
+    "build": "webpack --mode production --config-name=federation"
   },
   "exports": {
     ".": {
