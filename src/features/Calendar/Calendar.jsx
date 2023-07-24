@@ -5,7 +5,7 @@ import "./Calendar.scss";
 export default function Calendar(props) {
   const { calendarData } = props;
   return (
-    <table className={"drug-chart-calendar"}>
+    <table className="drug-chart-calendar">
       <tbody>
         {calendarData.map((rowData, index) => {
           return (

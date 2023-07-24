@@ -12,7 +12,7 @@ export default function TimeCell(props) {
     right = status;
   }
   return (
-    <div className={"time-cell"}>
+    <div className="time-cell">
       <div data-testid="left-icon">
         {left && <SVGIcon iconType={left} info={administrationInfo} />}
       </div>

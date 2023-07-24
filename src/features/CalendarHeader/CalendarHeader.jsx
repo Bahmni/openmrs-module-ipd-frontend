@@ -5,7 +5,7 @@ export default function CalendarHeader() {
   const hours = [...Array(24).keys()];
 
   return (
-    <div className={"calendar-header"}>
+    <div className="calendar-header">
       <div style={{ display: "flex" }}>
         {hours.map((hour) => {
           return (

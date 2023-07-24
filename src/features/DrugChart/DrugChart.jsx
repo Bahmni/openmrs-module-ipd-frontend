@@ -6,8 +6,7 @@ import CalendarHeader from "../CalendarHeader/CalendarHeader";
 import "./DrugChart.scss";
 
 export const TransformDrugChartData = (drugChartData) => {
-  const transformedDrugChartData = [];
-  drugChartData.forEach((schedule) => {
+  const transformedDrugChartData = drugChartData.map((schedule) => {
     const { slots } = schedule;
     const slotData = {};
     slots.forEach((slot) => {
@@ -31,7 +30,7 @@ export const TransformDrugChartData = (drugChartData) => {
         administrationInfo: adminInfo,
       };
     });
-    transformedDrugChartData.push(slotData);
+    return slotData;
   });
   return transformedDrugChartData;
 };
