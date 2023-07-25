@@ -1,6 +1,10 @@
 .drug-chart {
+  --time-cell-height: 66px;
+  --half-hour-width: 21px;
+  --line-width: 1px;
+
   height: calc(
-    7 * 66px
+    7 * var(--time-cell-height)
   ); //TODO: Update the fixed height once the full dashboard is completed
   display: grid;
   grid-template-columns: 3fr 7fr;
