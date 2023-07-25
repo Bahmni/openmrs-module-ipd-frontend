@@ -4,7 +4,7 @@
   ); //TODO: Update the fixed height once the full dashboard is completed
   display: grid;
   grid-template-columns: 3fr 7fr;
-  width: max(90vw, 1000px);
+  width: 100%;
   border: 1px solid #ccc;
   margin: 0 auto;
 }
