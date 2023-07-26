@@ -9,7 +9,7 @@ import {
 import { Modal, TextArea, TextInput } from "carbon-components-react";
 import moment from "moment";
 import PropTypes from "prop-types";
-import React from "react";
+import React,{useState} from "react";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 import { getDrugOrderFrequencies } from "../../utils/DrugChartModalUtils";
@@ -24,18 +24,39 @@ export default function DrugChartModal(props) {
   const enableStartTime = hostData?.startTimeFrequencies.includes(
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
-  const enable24HourTimers = hostData?.enable24HourTimers || false;
+  const enable24HourTimers = hostData?.enable24HourTimers || true;
   const invalidTimeText = "Enter Time in 24hr format";
+  const invalidScheduleOrderText = "Time entered should be in ascending order";
+  var actualResult = true;
 
-  const [startTime, setStartTime] = React.useState("");
+  const [startTime, setStartTime] = useState("");
+  const[schedule,setSchedule] = useState([]);
+  
+  const addSchedule = (newSchedule,index) => {
+    const newScheduleArray = [...schedule];
+    newScheduleArray[index]=newSchedule;
+    setSchedule(newScheduleArray);
+  }
+ const  scheduleOrderCheck= (allSchedule) => {
+    for (let i = 0; i <allSchedule.length - 1; i++) {
+      const currentTime = moment(allSchedule[i], 'hh:mm A');
+      const nextTime = moment(allSchedule[i + 1], 'hh:mm A');
+
+      if (currentTime.isAfter(nextTime)) {
+        return false;
+      }
+    }
+    return true;
+  };
 
   const handleClose = () => {
     hostApi.onModalClose?.("drug-chart-modal-close-event");
   };
 
   const handleSave = async () => {
-    var time = "";
     const allFrequencies = await getDrugOrderFrequencies();
+   if(enableStartTime){
+    var time = "";
     enable24HourTimers
       ? (time = startTime)
       : (time = moment(startTime).format("hh:mm A"));
@@ -50,7 +71,31 @@ export default function DrugChartModal(props) {
         hostData?.drugOrder?.uniformDosingType?.dose *
         hostData?.drugOrder?.duration
     );
-  };
+    }
+    else{
+      var selectedSchedules= [];
+      enable24HourTimers
+      ? (selectedSchedules = schedule)
+      : (selectedSchedules = moment(startTime).format("hh:mm A"));
+      console.log("Entered time = ", selectedSchedules);
+      console.log("-----frequency------",allFrequencies);
+       actualResult = scheduleOrderCheck(selectedSchedules);
+      console.log("-----actualResult------",actualResult);
+       if(actualResult){
+      const frequencyConfig = allFrequencies.find(
+        (frequency) =>
+          frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
+      );
+      console.log(
+        "Number of Slots = ",
+        frequencyConfig?.frequencyPerDay *
+          hostData?.drugOrder?.uniformDosingType?.dose *
+          hostData?.drugOrder?.duration
+      );}
+      else{
+        console.log(actualResult,"---------Not Ascending----------")
+    }
+    }};
 
   const handleCancel = () => {};
 
@@ -163,22 +208,26 @@ export default function DrugChartModal(props) {
                         <TimePicker24Hour
                           key={index}
                           id={`schedule-${index}`}
-                          onChange={() => {}}
+                          defaultTime = {schedule[index]}
+                          onChange={(time) => {console.log(time+"______------time---------"),addSchedule(time,index)}}
                           labelText=" "
-                          defaultTime={""}
                           invalidText={invalidTimeText}
                           width="70%"
                         />
                       ) : (
                         <TimePicker
                           key={index}
-                          onChange={() => {}}
                           labelText=" "
+                          defaultTime = {schedule[index]}
+                          onChange={(time) => {console.log(moment(time).format("hh:mm A")+"______------time---------"),addSchedule(time,index)}}
                           id={`schedule-${index}`}
                           invalidText={invalidTimeText}
-                          defaultTime={""}
                         />
                       )
+                  )}
+                  { (actualResult) && (
+                    console.log("----ttimepicker-",actualResult),
+                      <p>Time entered should be in ascending order</p>
                   )}
                 </div>
               </div>
