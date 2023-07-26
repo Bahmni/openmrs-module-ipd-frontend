@@ -10,20 +10,15 @@ export default function CalendarRow(props) {
         if (rowData[hour]) {
           const { minutes, status, administrationInfo } = rowData[hour];
           return (
-            <div key={hour}>
-              <TimeCell
-                minutes={minutes}
-                status={status}
-                administrationInfo={administrationInfo}
-              />
-            </div>
+            <TimeCell
+              minutes={minutes}
+              status={status}
+              key={hour}
+              administrationInfo={administrationInfo}
+            />
           );
         }
-        return (
-          <div key={hour}>
-            <TimeCell />
-          </div>
-        );
+        return <TimeCell key={hour} />;
       })}
     </div>
   );
