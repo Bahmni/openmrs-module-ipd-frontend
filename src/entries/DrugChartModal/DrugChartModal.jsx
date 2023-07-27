@@ -9,95 +9,177 @@ import {
 import { Modal, TextArea, TextInput } from "carbon-components-react";
 import moment from "moment";
 import PropTypes from "prop-types";
-import React,{useState} from "react";
+import React, { useState, useEffect } from "react";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
-import { getDrugOrderFrequencies } from "../../utils/DrugChartModalUtils";
+import {
+  getDrugOrderFrequencies,
+  updateStartTimeBasedOnFrequency,
+} from "../../utils/DrugChartModalUtils";
 import "./DrugChartModal.scss";
 
 export default function DrugChartModal(props) {
   const { hostData, hostApi } = props;
-  const enableScheduleFrequency = hostData?.scheduleFrequencies.find(
+  const [allFrequencies, setAllFrequencies] = useState([]);
+  const enableSchedule = hostData?.scheduleFrequencies.find(
     (frequency) =>
       frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
   );
   const enableStartTime = hostData?.startTimeFrequencies.includes(
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
-  const enable24HourTimers = hostData?.enable24HourTimers || true;
-  const invalidTimeText = "Enter Time in 24hr format";
-  const invalidScheduleOrderText = "Time entered should be in ascending order";
-  var actualResult = true;
+  const enable24HourTimers = hostData?.enable24HourTimers || false;
 
-  const [startTime, setStartTime] = useState("");
-  const[schedule,setSchedule] = useState([]);
-  
-  const addSchedule = (newSchedule,index) => {
-    const newScheduleArray = [...schedule];
-    newScheduleArray[index]=newSchedule;
-    setSchedule(newScheduleArray);
-  }
- const  scheduleOrderCheck= (allSchedule) => {
-    for (let i = 0; i <allSchedule.length - 1; i++) {
-      const currentTime = moment(allSchedule[i], 'hh:mm A');
-      const nextTime = moment(allSchedule[i + 1], 'hh:mm A');
+  const [schedules, setSchedules] = useState([]);
+  const [startTime, setStartTime] = useState(moment());
+  const [showStartTimePassedWarning, setShowStartTimePassedWarning] =
+    useState(false);
+  const [showScheduleOrderWarning, setShowScheduleOrderWarning] =
+    useState(false);
+  const [showEmptyScheduleWarning, setShowEmptyScheduleWarning] =
+    useState(false);
 
-      if (currentTime.isAfter(nextTime)) {
-        return false;
-      }
+  const isInvalidTimeTextPresent = () => {
+    const screenContent = document.body.textContent;
+    const invalidTimeText = enable24HourTimers
+      ? "Please enter a valid time in 24-hr format"
+      : "Please enter a valid time in 12-hr format";
+    return screenContent.includes(invalidTimeText);
+  };
+
+  const handleSchedule = (newSchedule, index) => {
+    const newScheduleArray = [...schedules];
+    newScheduleArray[index] = newSchedule;
+    setSchedules(newScheduleArray);
+  };
+
+  const areSchedulesInOrder = (allSchedule) => {
+    return allSchedule.every((schedule, index) => {
+      if (index === 0) return true;
+      const currentTime = moment(schedule, "HH:mm");
+      const prevTime = moment(allSchedule[index - 1], "HH:mm");
+      return currentTime.isSameOrAfter(prevTime);
+    });
+  };
+
+  const validateSchedules = (schedules) => {
+    if (schedules.length === 0 || schedules.every((schedule) => !schedule)) {
+      return { isValid: false, warningType: "empty" };
     }
+
+    if (areSchedulesInOrder(schedules)) {
+      return { isValid: true, warningType: "" };
+    } else {
+      return { isValid: false, warningType: "passed" };
+    }
+  };
+
+  const convertSchedules = (schedules, enable24HourTimers) => {
+    return enable24HourTimers
+      ? schedules
+      : schedules.map((time) => moment(time, "hh:mm A"));
+  };
+
+  const handleScheduleWarnings = () => {
+    const { isValid, warningType } = validateSchedules(schedules);
+    setShowEmptyScheduleWarning(!isValid && warningType === "empty");
+    setShowScheduleOrderWarning(!isValid && warningType === "passed");
+    return { isValid, warningType };
+  };
+
+  const isValidSchedule = () => {
+    const { isValid, warningType } = handleScheduleWarnings();
+    if (!isValid && (warningType === "empty" || warningType === "passed"))
+      return false;
     return true;
+  };
+
+  const isStartTimeExceedingFrequency = (time, frequency) => {
+    const currentTime = moment();
+    const enteredTime = moment(time, "HH:mm");
+    const updatedTime = updateStartTimeBasedOnFrequency(frequency, currentTime);
+    return enteredTime.isAfter(updatedTime);
+  };
+
+  const handleStartTime = (time) => {
+    isStartTimeExceedingFrequency(
+      time,
+      hostData?.drugOrder?.uniformDosingType?.frequency
+    )
+      ? setShowStartTimePassedWarning(true)
+      : setShowStartTimePassedWarning(false);
+    setStartTime(time);
+  };
+
+  const getRequiredFrequency = () => {
+    return allFrequencies.find(
+      (frequency) =>
+        frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
+    );
+  };
+
+  const convertStartTime = (time, enable24HourTimers) => {
+    return enable24HourTimers ? time : time.format("hh:mm A");
+  };
+
+  const handleStartTimeChange = () => {
+    const time = convertStartTime(startTime, enable24HourTimers);
+    const frequencyConfig = getRequiredFrequency();
+    console.log(
+      "Number of Slots = ",
+      frequencyConfig?.frequencyPerDay *
+        hostData?.drugOrder?.uniformDosingType?.dose *
+        hostData?.drugOrder?.duration,
+      "Time = ",
+      time
+    );
+  };
+
+  const handleSchedulesChange = () => {
+    const schedulesArray = convertSchedules(schedules, enable24HourTimers);
+    const frequencyConfig = getRequiredFrequency();
+    console.log(
+      "Number of Slots = ",
+      frequencyConfig?.frequencyPerDay *
+        hostData?.drugOrder?.uniformDosingType?.dose *
+        hostData?.drugOrder?.duration,
+      "Schedules = ",
+      schedulesArray
+    );
+  };
+
+  const validateSave = () => {
+    if (isInvalidTimeTextPresent()) return false;
+    if (enableSchedule) {
+      return isValidSchedule();
+    }
+    return enableStartTime && !showStartTimePassedWarning;
+  };
+
+  const handleSave = () => {
+    const performSave = validateSave();
+    if (performSave) {
+      enableStartTime && handleStartTimeChange();
+      enableSchedule && handleSchedulesChange();
+      console.log("Drug Chart Modal Save Clicked and Validated");
+      console.log("ShowStartTimePassedWarning = ", showStartTimePassedWarning);
+      console.log("ShowEmptyScheduleWarning = ", showEmptyScheduleWarning);
+      console.log("ShowSchedulePassedWarning = ", showScheduleOrderWarning);
+      hostApi.onModalClose?.("drug-chart-modal-save-event");
+    }
+  };
+
+  const handleCancel = () => {
+    hostApi.onModalClose?.("drug-chart-modal-cancel-event");
   };
 
   const handleClose = () => {
     hostApi.onModalClose?.("drug-chart-modal-close-event");
   };
 
-  const handleSave = async () => {
-    const allFrequencies = await getDrugOrderFrequencies();
-   if(enableStartTime){
-    var time = "";
-    enable24HourTimers
-      ? (time = startTime)
-      : (time = moment(startTime).format("hh:mm A"));
-    console.log("Entered time = ", time);
-    const frequencyConfig = allFrequencies.find(
-      (frequency) =>
-        frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
-    );
-    console.log(
-      "Number of Slots = ",
-      frequencyConfig?.frequencyPerDay *
-        hostData?.drugOrder?.uniformDosingType?.dose *
-        hostData?.drugOrder?.duration
-    );
-    }
-    else{
-      var selectedSchedules= [];
-      enable24HourTimers
-      ? (selectedSchedules = schedule)
-      : (selectedSchedules = moment(startTime).format("hh:mm A"));
-      console.log("Entered time = ", selectedSchedules);
-      console.log("-----frequency------",allFrequencies);
-       actualResult = scheduleOrderCheck(selectedSchedules);
-      console.log("-----actualResult------",actualResult);
-       if(actualResult){
-      const frequencyConfig = allFrequencies.find(
-        (frequency) =>
-          frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
-      );
-      console.log(
-        "Number of Slots = ",
-        frequencyConfig?.frequencyPerDay *
-          hostData?.drugOrder?.uniformDosingType?.dose *
-          hostData?.drugOrder?.duration
-      );}
-      else{
-        console.log(actualResult,"---------Not Ascending----------")
-    }
-    }};
-
-  const handleCancel = () => {};
+  useEffect(async () => {
+    setAllFrequencies(await getDrugOrderFrequencies());
+  }, []);
 
   return (
     <>
@@ -106,10 +188,12 @@ export default function DrugChartModal(props) {
           className="drug-chart-modal"
           open
           modalHeading={<FormattedMessage id="DRUG_CHART_MODAL_HEADER" />}
-          primaryButtonText={<FormattedMessage id="MODAL_SAVE" />}
-          secondaryButtonText={<FormattedMessage id="MODAL_CANCEL" />}
+          primaryButtonText={<FormattedMessage id="DRUG_CHART_MODAL_SAVE" />}
+          secondaryButtonText={
+            <FormattedMessage id="DRUG_CHART_MODAL_CANCEL" />
+          }
           onRequestClose={handleClose}
-          closeButtonLabel="Close"
+          closeButtonLabel={<FormattedMessage id="DRUG_CHART_MODAL_CLOSE" />}
           onRequestSubmit={handleSave}
           onSecondarySubmit={handleCancel}
           preventCloseOnClickOutside={true}
@@ -197,39 +281,47 @@ export default function DrugChartModal(props) {
                 isDisabled={true}
               />
             </div>
-            {enableScheduleFrequency && (
+            {enableSchedule && (
               <div className="schedule-section">
-                <Title text="Schedule" isRequired={true} />
+                <Title text="Schedule(s)" isRequired={true} />
                 <div className="inline-field" id="schedule">
                   {Array.from(
-                    { length: enableScheduleFrequency.frequencyPerDay },
+                    { length: enableSchedule.frequencyPerDay },
                     (_, index) =>
                       enable24HourTimers ? (
                         <TimePicker24Hour
                           key={index}
                           id={`schedule-${index}`}
-                          defaultTime = {schedule[index]}
-                          onChange={(time) => {console.log(time+"______------time---------"),addSchedule(time,index)}}
+                          defaultTime={schedules[index]}
+                          onChange={(time) => {
+                            handleSchedule(time, index);
+                          }}
                           labelText=" "
-                          invalidText={invalidTimeText}
                           width="70%"
                         />
                       ) : (
                         <TimePicker
                           key={index}
                           labelText=" "
-                          defaultTime = {schedule[index]}
-                          onChange={(time) => {console.log(moment(time).format("hh:mm A")+"______------time---------"),addSchedule(time,index)}}
+                          defaultTime={schedules[index]}
+                          onChange={(time) => {
+                            handleSchedule(time, index);
+                          }}
                           id={`schedule-${index}`}
-                          invalidText={invalidTimeText}
                         />
                       )
                   )}
-                  { (actualResult) && (
-                    console.log("----ttimepicker-",actualResult),
-                      <p>Time entered should be in ascending order</p>
-                  )}
                 </div>
+                {showScheduleOrderWarning && (
+                  <p className="start-time-warning">
+                    <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
+                  </p>
+                )}
+                {showEmptyScheduleWarning && (
+                  <p className="start-time-warning">
+                    <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
+                  </p>
+                )}
               </div>
             )}
             {enableStartTime && (
@@ -239,21 +331,25 @@ export default function DrugChartModal(props) {
                     data-modal-primary-focus
                     labelText={"Start Time"}
                     id={"start-time"}
-                    onChange={(time) => setStartTime(time)}
+                    onChange={(time) => handleStartTime(time)}
                     isRequired={true}
-                    invalidText={invalidTimeText}
                     defaultTime={startTime}
+                    showWarning={showStartTimePassedWarning}
                     width="80%"
                   />
                 ) : (
                   <TimePicker
                     id={"start-time"}
-                    onChange={(time) => setStartTime(time)}
+                    onChange={(time) => handleStartTime(time)}
                     defaultTime={startTime}
                     labelText={"Start Time"}
-                    invalidText={invalidTimeText}
                     isRequired={true}
                   />
+                )}
+                {showStartTimePassedWarning && (
+                  <p className="start-time-warning">
+                    <FormattedMessage id="DRUG_CHART_MODAL_START_TIME_PASSED"></FormattedMessage>
+                  </p>
                 )}
               </div>
             )}
@@ -284,7 +380,7 @@ export default function DrugChartModal(props) {
                 data-testid="notes-section"
                 className="notes-section"
                 type="text"
-                rows={1}
+                rows={3}
                 labelText="Notes"
               />
             </div>

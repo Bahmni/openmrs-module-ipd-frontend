@@ -99,6 +99,8 @@ const federationConfig = {
       exposes: {
         "./Dashboard": "./src/entries/Dashboard.jsx",
         "./DrugChartModal": "./src/entries/DrugChartModal/DrugChartModal.jsx",
+        "./DrugChartModalNotification":
+          "./src/entries/DrugChartModal/DrugChartModalNotification.jsx",
       },
       shared: {
         // ...dependencies,

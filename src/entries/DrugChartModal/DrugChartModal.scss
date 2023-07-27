@@ -59,10 +59,17 @@
     }
   }
 
+  .start-time-warning {
+    margin: 0;
+    margin-top: 4px;
+    font-size: 0.75rem;
+    color: #da1e28;
+  }
+
   .bx--text-input-wrapper--readonly .bx--text-input {
     width: 100%;
     overflow: auto;
-    color: #8d8d8d;
+    color: #000000;
     background: #eee;
   }
 
@@ -91,7 +98,7 @@
   }
 
   .bx--number input[type="number"]:disabled {
-    color: #777;
+    color: #000000;
   }
 
   .bx--date-picker.bx--date-picker--single .bx--date-picker__input {
@@ -121,5 +128,9 @@
 
   .bx--dropdown--disabled .bx--list-box__label {
     font-size: 0.85rem;
+  }
+
+  .bx--dropdown--disabled .bx--list-box__label:disabled {
+    color: #000000;
   }
 }
