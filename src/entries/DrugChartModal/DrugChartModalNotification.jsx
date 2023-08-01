@@ -31,7 +31,7 @@ export default function DrugChartModalNotification(props) {
       title={title}
       kind={hostData?.notificationKind}
       onClose={() => {
-        hostApi.onClose?.("drug-chart-modal-notification-close-event");
+        hostApi?.onClose();
       }}
       messageDuration={3000}
       hideCloseButton={true}

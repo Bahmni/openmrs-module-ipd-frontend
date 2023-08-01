@@ -12,3 +12,4 @@ const hostUrl = localStorage.getItem("host")
 const RESTWS_V1 = hostUrl + "/openmrs/ws/rest/v1";
 export const DRUG_ORDERS_CONFIG_URL =
   RESTWS_V1 + "/bahmnicore/config/drugOrders";
+export const SAVE_MEDICATION_URL = RESTWS_V1 + "/ipd/schedule/medication";

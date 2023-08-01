@@ -1,10 +1,19 @@
 import axios from "axios";
-import { DRUG_ORDERS_CONFIG_URL } from "../constants";
+import { DRUG_ORDERS_CONFIG_URL, SAVE_MEDICATION_URL } from "../constants";
 
 export const getDrugOrderFrequencies = async () => {
   try {
     const response = await axios.get(DRUG_ORDERS_CONFIG_URL);
     if (response.status == 200) return response.data.frequencies;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const saveMedication = async (medication) => {
+  try {
+    const response = await axios.post(SAVE_MEDICATION_URL, medication);
+    return response;
   } catch (error) {
     console.error(error);
   }
@@ -36,7 +45,7 @@ export const updateStartTimeBasedOnFrequency = (frequency, time) => {
     case "Once a day":
       time.add(1, "day");
       break;
-    case "Nocte":
+    case "Nocte (At Night)":
       time.set({ hour: 23, minute: 59, second: 59 });
       break;
     case "Every 30 minutes":

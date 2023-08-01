@@ -8,5 +8,6 @@
   "DRUG_CHART_MODAL_SAVE_MESSAGE": "Medication tasks will be scheduled.",
   "DRUG_CHART_MODAL_START_TIME_PASSED": "Start time entered is already passed!",
   "DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING": "Time entered should be in ascending order",
-  "DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING": "Please select Schedule(s)"
+  "DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING": "Please select Schedule(s)",
+  "DRUG_CHART_MODAL_EMPTY_START_TIME_WARNING": "Please enter Start Time"
 }

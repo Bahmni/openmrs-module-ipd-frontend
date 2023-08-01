@@ -14,6 +14,7 @@ import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 import {
   getDrugOrderFrequencies,
+  saveMedication,
   updateStartTimeBasedOnFrequency,
 } from "../../utils/DrugChartModalUtils";
 import "./DrugChartModal.scss";
@@ -31,13 +32,16 @@ export default function DrugChartModal(props) {
   const enable24HourTimers = hostData?.enable24HourTimers || false;
 
   const [schedules, setSchedules] = useState([]);
-  const [startTime, setStartTime] = useState(moment());
+  const [startTime, setStartTime] = useState("");
   const [showStartTimePassedWarning, setShowStartTimePassedWarning] =
     useState(false);
   const [showScheduleOrderWarning, setShowScheduleOrderWarning] =
     useState(false);
   const [showEmptyScheduleWarning, setShowEmptyScheduleWarning] =
     useState(false);
+  const [showEmptyStartTimeWarning, setShowEmptyStartTimeWarning] =
+    useState(false);
+  const [drugChartNotes, setDrugChartNotes] = useState("");
 
   const isInvalidTimeTextPresent = () => {
     const screenContent = document.body.textContent;
@@ -62,8 +66,12 @@ export default function DrugChartModal(props) {
     });
   };
 
-  const validateSchedules = (schedules) => {
-    if (schedules.length === 0 || schedules.every((schedule) => !schedule)) {
+  const validateSchedules = async (schedules) => {
+    if (
+      schedules.length === 0 ||
+      schedules.length !== getRequiredFrequency().frequencyPerDay ||
+      schedules.every((schedule) => !schedule)
+    ) {
       return { isValid: false, warningType: "empty" };
     }
 
@@ -80,15 +88,15 @@ export default function DrugChartModal(props) {
       : schedules.map((time) => moment(time, "hh:mm A"));
   };
 
-  const handleScheduleWarnings = () => {
-    const { isValid, warningType } = validateSchedules(schedules);
+  const handleScheduleWarnings = async () => {
+    const { isValid, warningType } = await validateSchedules(schedules);
     setShowEmptyScheduleWarning(!isValid && warningType === "empty");
     setShowScheduleOrderWarning(!isValid && warningType === "passed");
     return { isValid, warningType };
   };
 
-  const isValidSchedule = () => {
-    const { isValid, warningType } = handleScheduleWarnings();
+  const isValidSchedule = async () => {
+    const { isValid, warningType } = await handleScheduleWarnings();
     if (!isValid && (warningType === "empty" || warningType === "passed"))
       return false;
     return true;
@@ -135,8 +143,49 @@ export default function DrugChartModal(props) {
     );
   };
 
+  const getUTCTime = (time) => {
+    const [hours, minutes] = time.split(":");
+    const [day, month, year] = moment(hostData?.drugOrder?.scheduledDate)
+      .format("DD-MM-YYYY")
+      .split("-");
+    const utcTime = moment(
+      `${year}-${month}-${day}T${hours}:${minutes}:00.0`
+    ).format("YYYY-MM-DDTHH:mm:ss.SSS");
+    console.log("utcTime = ", utcTime);
+    return utcTime;
+  };
+
+  const createDrugChartPayload = () => {
+    var payload = {
+      providerUuid: hostData?.drugOrder?.provider?.uuid,
+      patientUuid: hostData?.patientId,
+      orderUuid: hostData?.drugOrder?.uuid,
+      slotStartTime: "",
+      firstDaySlotsStartTime: [],
+      dayWiseSlotsStartTime: [],
+      comments: drugChartNotes,
+      medicationFrequency: "",
+    };
+    if (enableStartTime) {
+      const startTimeUTC = getUTCTime(startTime);
+      payload.slotStartTime = startTimeUTC;
+      payload.medicationFrequency = "START_TIME_DURATION_FREQUENCY";
+    }
+    if (enableSchedule) {
+      const schedulesUTC = schedules.map((schedule) => {
+        return getUTCTime(schedule);
+      });
+      console.log("schedules = ", schedulesUTC);
+      payload.dayWiseSlotsStartTime = schedulesUTC;
+      payload.medicationFrequency = "FIXED_SCHEDULE_FREQUENCY";
+    }
+    console.log("payload = ", payload);
+    return payload;
+  };
+
   const handleSchedulesChange = () => {
     const schedulesArray = convertSchedules(schedules, enable24HourTimers);
+
     const frequencyConfig = getRequiredFrequency();
     console.log(
       "Number of Slots = ",
@@ -148,16 +197,23 @@ export default function DrugChartModal(props) {
     );
   };
 
-  const validateSave = () => {
+  const validateSave = async () => {
     if (isInvalidTimeTextPresent()) return false;
     if (enableSchedule) {
-      return isValidSchedule();
+      return await isValidSchedule();
     }
-    return enableStartTime && !showStartTimePassedWarning;
+    if (enableStartTime) {
+      if (!startTime) {
+        setShowEmptyStartTimeWarning(true);
+        return false;
+      }
+      if (showStartTimePassedWarning) return false;
+      return true;
+    }
   };
 
-  const handleSave = () => {
-    const performSave = validateSave();
+  const handleSave = async () => {
+    const performSave = await validateSave();
     if (performSave) {
       enableStartTime && handleStartTimeChange();
       enableSchedule && handleSchedulesChange();
@@ -165,16 +221,18 @@ export default function DrugChartModal(props) {
       console.log("ShowStartTimePassedWarning = ", showStartTimePassedWarning);
       console.log("ShowEmptyScheduleWarning = ", showEmptyScheduleWarning);
       console.log("ShowSchedulePassedWarning = ", showScheduleOrderWarning);
-      hostApi.onModalClose?.("drug-chart-modal-save-event");
+      const medication = createDrugChartPayload();
+      const response = await saveMedication(medication);
+      response.status === 200 ? hostApi.onModalSave?.() : null;
     }
   };
 
   const handleCancel = () => {
-    hostApi.onModalClose?.("drug-chart-modal-cancel-event");
+    hostApi.onModalCancel?.();
   };
 
   const handleClose = () => {
-    hostApi.onModalClose?.("drug-chart-modal-close-event");
+    hostApi.onModalClose?.();
   };
 
   useEffect(async () => {
@@ -313,12 +371,12 @@ export default function DrugChartModal(props) {
                   )}
                 </div>
                 {showScheduleOrderWarning && (
-                  <p className="start-time-warning">
+                  <p className="time-warning">
                     <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
                   </p>
                 )}
                 {showEmptyScheduleWarning && (
-                  <p className="start-time-warning">
+                  <p className="time-warning">
                     <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
                   </p>
                 )}
@@ -347,8 +405,13 @@ export default function DrugChartModal(props) {
                   />
                 )}
                 {showStartTimePassedWarning && (
-                  <p className="start-time-warning">
+                  <p className="time-warning">
                     <FormattedMessage id="DRUG_CHART_MODAL_START_TIME_PASSED"></FormattedMessage>
+                  </p>
+                )}
+                {showEmptyStartTimeWarning && (
+                  <p className="time-warning">
+                    <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_START_TIME_WARNING"></FormattedMessage>
                   </p>
                 )}
               </div>
@@ -381,6 +444,8 @@ export default function DrugChartModal(props) {
                 className="notes-section"
                 type="text"
                 rows={3}
+                value={drugChartNotes}
+                onChange={(e) => setDrugChartNotes(e.target.value)}
                 labelText="Notes"
               />
             </div>
@@ -394,11 +459,14 @@ export default function DrugChartModal(props) {
 DrugChartModal.propTypes = {
   hostData: PropTypes.shape({
     drugOrder: PropTypes.object,
+    patientId: PropTypes.string,
     scheduleFrequencies: PropTypes.array,
     startTimeFrequencies: PropTypes.array,
     enable24HourTimers: PropTypes.bool,
   }).isRequired,
   hostApi: PropTypes.shape({
-    onModalClose: PropTypes.func,
+    onModalClose: PropTypes.func.isRequired,
+    onModalSave: PropTypes.func.isRequired,
+    onModalCancel: PropTypes.func.isRequired,
   }),
 };

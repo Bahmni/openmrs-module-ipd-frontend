@@ -60,6 +60,6 @@ export const mockStartTimeFrequencies = [
   "Every 8 hours",
   "Every 12 hours",
   "Once a day",
-  "Nocte",
+  "Nocte (At Night)",
   "Every 30 minutes",
 ];
