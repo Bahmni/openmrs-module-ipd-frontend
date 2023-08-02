@@ -43,6 +43,6 @@ DrugChartModalNotification.propTypes = {
     notificationKind: PropTypes.string.isRequired,
   }),
   hostApi: PropTypes.shape({
-    onClose: PropTypes.func.isRequired,
-  }),
+    onClose: PropTypes.func,
+  }).isRequired,
 };

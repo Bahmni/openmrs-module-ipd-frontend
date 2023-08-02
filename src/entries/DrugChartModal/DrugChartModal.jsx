@@ -29,7 +29,7 @@ export default function DrugChartModal(props) {
   const enableStartTime = hostData?.startTimeFrequencies.includes(
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
-  const enable24HourTimers = hostData?.enable24HourTimers || false;
+  const enable24HourTimers = hostData?.enable24HourTimers || true;
 
   const initialStringArray = Array.from(
     { length: enableSchedule?.frequencyPerDay },
@@ -317,7 +317,6 @@ export default function DrugChartModal(props) {
                     hostData?.drugOrder?.uniformDosingType?.doseUnits
                   }
                   options={[]}
-                  isDisabled={true}
                 />
               </div>
               <div className="route">
@@ -327,7 +326,6 @@ export default function DrugChartModal(props) {
                   titleText={"Route"}
                   selectedValue={hostData?.drugOrder?.route}
                   options={[]}
-                  isDisabled={true}
                 />
               </div>
             </div>
@@ -340,7 +338,6 @@ export default function DrugChartModal(props) {
                 value={moment(hostData?.drugOrder?.scheduledDate).format(
                   "MM/DD/YYYY"
                 )}
-                isDisabled={true}
               />
               <div className="field-with-units">
                 <NumberInputCarbon
@@ -356,7 +353,6 @@ export default function DrugChartModal(props) {
                   titleText={" "}
                   selectedValue={hostData?.drugOrder?.durationUnit}
                   options={[]}
-                  isDisabled={true}
                 />
               </div>
             </div>
@@ -369,7 +365,6 @@ export default function DrugChartModal(props) {
                   hostData?.drugOrder?.uniformDosingType?.frequency
                 }
                 options={[]}
-                isDisabled={true}
               />
             </div>
             {enableSchedule && (
@@ -492,7 +487,6 @@ export default function DrugChartModal(props) {
                 readOnly
                 type="text"
                 rows={1}
-                disabled={true}
                 value={hostData?.drugOrder?.instructions}
                 labelText="Instruction"
               />
@@ -503,7 +497,6 @@ export default function DrugChartModal(props) {
                 readOnly
                 type="text"
                 rows={1}
-                disabled={true}
                 value={hostData?.drugOrder?.additionalInstructions}
                 labelText="Additional Instruction"
               />
@@ -535,8 +528,8 @@ DrugChartModal.propTypes = {
     enable24HourTimers: PropTypes.bool,
   }).isRequired,
   hostApi: PropTypes.shape({
-    onModalClose: PropTypes.func.isRequired,
-    onModalSave: PropTypes.func.isRequired,
-    onModalCancel: PropTypes.func.isRequired,
-  }),
+    onModalClose: PropTypes.func,
+    onModalSave: PropTypes.func,
+    onModalCancel: PropTypes.func,
+  }).isRequired,
 };
