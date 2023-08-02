@@ -260,6 +260,8 @@ export default function DrugChartModal(props) {
     }
   };
 
+  console.log(allFrequencies);
+
   const handleCancel = () => {
     hostApi.onModalCancel?.();
   };
@@ -268,8 +270,17 @@ export default function DrugChartModal(props) {
     hostApi.onModalClose?.();
   };
 
-  useEffect(async () => {
-    setAllFrequencies(await getDrugOrderFrequencies());
+  const getAndSetFrequencies = async () => {
+    try {
+      const frequencies = await getDrugOrderFrequencies();
+      setAllFrequencies(frequencies);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAndSetFrequencies();
   }, []);
 
   return (

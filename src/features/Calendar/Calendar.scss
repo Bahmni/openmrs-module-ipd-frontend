@@ -1,0 +1,8 @@
+.drug-chart-calendar {
+  width: max-content;
+  border-spacing: 0;
+  margin: 0;
+  tbody > tr:nth-child(even) {
+    background-color: #f4f4f4;
+  }
+}

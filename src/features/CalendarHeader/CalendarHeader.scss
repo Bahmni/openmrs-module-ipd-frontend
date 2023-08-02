@@ -1,0 +1,29 @@
+.calendar-header {
+  width: max-content;
+  position: sticky;
+  top: 0;
+  border: none;
+  background-color: #ededed;
+}
+
+.hour-header {
+  --additional-borders: 0;
+  --border-widths: calc(
+    calc(2 + var(--additional-borders)) * var(--line-width)
+  );
+  --width: calc(calc(2 * var(--half-hour-width)) + var(--border-widths));
+  width: var(--width);
+  height: 63px;
+  color: var(--gray-gray-80, #393939);
+  text-align: center;
+  font-family: "IBM Plex Sans";
+  font-size: 12px;
+  letter-spacing: 0.24px;
+  padding-bottom: 8px;
+  display: grid;
+  align-items: end;
+
+  &:last-child {
+    --additional-borders: 1;
+  }
+}

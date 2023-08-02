@@ -1,0 +1,23 @@
+.drug-chart {
+  --time-cell-height: 66px;
+  --half-hour-width: 21px;
+  --line-width: 1px;
+
+  height: calc(
+    7 * var(--time-cell-height)
+  ); //TODO: Update the fixed height once the full dashboard is completed
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+  width: 100%;
+  border: 1px solid #ccc;
+  margin: 0 auto;
+}
+
+.drug-chart-left-panel {
+  border-right: 1px solid #ccc;
+}
+
+.drug-chart-content {
+  overflow: auto;
+  height: 100%;
+}
