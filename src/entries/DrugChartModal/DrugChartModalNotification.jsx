@@ -33,7 +33,6 @@ export default function DrugChartModalNotification(props) {
       onClose={() => {
         hostApi?.onClose();
       }}
-      messageDuration={3000}
       hideCloseButton={true}
     />
   );

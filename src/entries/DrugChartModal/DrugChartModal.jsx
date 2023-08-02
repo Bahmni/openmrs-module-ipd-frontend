@@ -31,10 +31,21 @@ export default function DrugChartModal(props) {
   );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
 
-  const [schedules, setSchedules] = useState([]);
+  const initialStringArray = Array.from(
+    { length: enableSchedule?.frequencyPerDay },
+    () => ""
+  );
+  const [schedules, setSchedules] = useState(initialStringArray);
   const [startTime, setStartTime] = useState("");
+  const [
+    showStartTimeBeyondNextDoseWarning,
+    setShowStartTimeBeyondNextDoseWarning,
+  ] = useState(false);
   const [showStartTimePassedWarning, setShowStartTimePassedWarning] =
     useState(false);
+  const [showSchedulePassedWarning, setShowSchedulePassedWarning] = useState(
+    []
+  );
   const [showScheduleOrderWarning, setShowScheduleOrderWarning] =
     useState(false);
   const [showEmptyScheduleWarning, setShowEmptyScheduleWarning] =
@@ -51,10 +62,23 @@ export default function DrugChartModal(props) {
     return screenContent.includes(invalidTimeText);
   };
 
+  const isTimePassed = (newTime) => {
+    const currentTime = moment();
+    const enteredTime = moment(newTime, "HH:mm");
+    return currentTime.isAfter(enteredTime);
+  };
+
   const handleSchedule = (newSchedule, index) => {
     const newScheduleArray = [...schedules];
     newScheduleArray[index] = newSchedule;
     setSchedules(newScheduleArray);
+    if (!isInvalidTimeTextPresent()) {
+      setShowSchedulePassedWarning((prevScheduleWarnings) => {
+        const newSchedulePassedWarnings = [...prevScheduleWarnings];
+        newSchedulePassedWarnings[index] = isTimePassed(newSchedule);
+        return newSchedulePassedWarnings;
+      });
+    }
   };
 
   const areSchedulesInOrder = (allSchedule) => {
@@ -66,12 +90,14 @@ export default function DrugChartModal(props) {
     });
   };
 
+  const convertSchedules = (schedules, enable24HourTimers) => {
+    return enable24HourTimers
+      ? schedules
+      : schedules.map((time) => moment(time, "hh:mm A"));
+  };
+
   const validateSchedules = async (schedules) => {
-    if (
-      schedules.length === 0 ||
-      schedules.length !== getRequiredFrequency().frequencyPerDay ||
-      schedules.every((schedule) => !schedule)
-    ) {
+    if (schedules.some((schedule) => schedule === "")) {
       return { isValid: false, warningType: "empty" };
     }
 
@@ -80,12 +106,6 @@ export default function DrugChartModal(props) {
     } else {
       return { isValid: false, warningType: "passed" };
     }
-  };
-
-  const convertSchedules = (schedules, enable24HourTimers) => {
-    return enable24HourTimers
-      ? schedules
-      : schedules.map((time) => moment(time, "hh:mm A"));
   };
 
   const handleScheduleWarnings = async () => {
@@ -109,11 +129,26 @@ export default function DrugChartModal(props) {
     return enteredTime.isAfter(updatedTime);
   };
 
-  const handleStartTime = (time) => {
+  const handleStartTime = async (time) => {
+    if (time === "") {
+      setShowEmptyStartTimeWarning(true);
+      setShowStartTimeBeyondNextDoseWarning(false);
+      setShowStartTimePassedWarning(false);
+      return;
+    } else {
+      setShowEmptyStartTimeWarning(false);
+    }
+    if (!moment(time, "HH:mm", true).isValid()) {
+      setStartTime(time);
+      return;
+    }
     isStartTimeExceedingFrequency(
       time,
       hostData?.drugOrder?.uniformDosingType?.frequency
     )
+      ? setShowStartTimeBeyondNextDoseWarning(true)
+      : setShowStartTimeBeyondNextDoseWarning(false);
+    isTimePassed(time)
       ? setShowStartTimePassedWarning(true)
       : setShowStartTimePassedWarning(false);
     setStartTime(time);
@@ -185,7 +220,6 @@ export default function DrugChartModal(props) {
 
   const handleSchedulesChange = () => {
     const schedulesArray = convertSchedules(schedules, enable24HourTimers);
-
     const frequencyConfig = getRequiredFrequency();
     console.log(
       "Number of Slots = ",
@@ -207,7 +241,6 @@ export default function DrugChartModal(props) {
         setShowEmptyStartTimeWarning(true);
         return false;
       }
-      if (showStartTimePassedWarning) return false;
       return true;
     }
   };
@@ -347,36 +380,50 @@ export default function DrugChartModal(props) {
                     { length: enableSchedule.frequencyPerDay },
                     (_, index) =>
                       enable24HourTimers ? (
-                        <TimePicker24Hour
-                          key={index}
-                          id={`schedule-${index}`}
-                          defaultTime={schedules[index]}
-                          onChange={(time) => {
-                            handleSchedule(time, index);
-                          }}
-                          labelText=" "
-                          width="70%"
-                        />
+                        <div className="schedule-time" key={index}>
+                          <TimePicker24Hour
+                            key={index}
+                            id={`schedule-${index}`}
+                            defaultTime={schedules[index]}
+                            onChange={(time) => {
+                              handleSchedule(time, index);
+                            }}
+                            labelText=" "
+                            width="70%"
+                          />
+                          {showSchedulePassedWarning[index] && (
+                            <p className="time-warning">
+                              <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
+                            </p>
+                          )}
+                        </div>
                       ) : (
-                        <TimePicker
-                          key={index}
-                          labelText=" "
-                          defaultTime={schedules[index]}
-                          onChange={(time) => {
-                            handleSchedule(time, index);
-                          }}
-                          id={`schedule-${index}`}
-                        />
+                        <div className="schedule-time" key={index}>
+                          <TimePicker
+                            key={index}
+                            labelText=" "
+                            defaultTime={schedules[index]}
+                            onChange={(time) => {
+                              handleSchedule(time, index);
+                            }}
+                            id={`schedule-${index}`}
+                          />
+                          {showSchedulePassedWarning[index] && (
+                            <p className="time-warning">
+                              <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
+                            </p>
+                          )}
+                        </div>
                       )
                   )}
                 </div>
                 {showScheduleOrderWarning && (
-                  <p className="time-warning">
+                  <p className="time-error">
                     <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
                   </p>
                 )}
                 {showEmptyScheduleWarning && (
-                  <p className="time-warning">
+                  <p className="time-error">
                     <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
                   </p>
                 )}
@@ -385,34 +432,57 @@ export default function DrugChartModal(props) {
             {enableStartTime && (
               <div className="start-time">
                 {enable24HourTimers ? (
-                  <TimePicker24Hour
-                    data-modal-primary-focus
-                    labelText={"Start Time"}
-                    id={"start-time"}
-                    onChange={(time) => handleStartTime(time)}
-                    isRequired={true}
-                    defaultTime={startTime}
-                    showWarning={showStartTimePassedWarning}
-                    width="80%"
-                  />
+                  <>
+                    <TimePicker24Hour
+                      data-modal-primary-focus
+                      labelText={"Start Time"}
+                      id={"start-time"}
+                      onChange={(time) => handleStartTime(time)}
+                      isRequired={true}
+                      defaultTime={startTime}
+                      width="80%"
+                    />
+                    {showStartTimePassedWarning && (
+                      <p className="time-warning">
+                        <FormattedMessage id="DRUG_CHART_MODAL_START_TIME_PASSED"></FormattedMessage>
+                      </p>
+                    )}
+                    {showStartTimeBeyondNextDoseWarning && (
+                      <p className="time-warning">
+                        <FormattedMessage id="DRUG_CHART_MODAL_START_TIME_BEYOND_NEXT_DOSE"></FormattedMessage>
+                      </p>
+                    )}
+                    {showEmptyStartTimeWarning && (
+                      <p className="time-error">
+                        <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_START_TIME_WARNING"></FormattedMessage>
+                      </p>
+                    )}
+                  </>
                 ) : (
-                  <TimePicker
-                    id={"start-time"}
-                    onChange={(time) => handleStartTime(time)}
-                    defaultTime={startTime}
-                    labelText={"Start Time"}
-                    isRequired={true}
-                  />
-                )}
-                {showStartTimePassedWarning && (
-                  <p className="time-warning">
-                    <FormattedMessage id="DRUG_CHART_MODAL_START_TIME_PASSED"></FormattedMessage>
-                  </p>
-                )}
-                {showEmptyStartTimeWarning && (
-                  <p className="time-warning">
-                    <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_START_TIME_WARNING"></FormattedMessage>
-                  </p>
+                  <>
+                    <TimePicker
+                      id={"start-time"}
+                      onChange={(time) => handleStartTime(time)}
+                      defaultTime={startTime}
+                      labelText={"Start Time"}
+                      isRequired={true}
+                    />
+                    {showStartTimePassedWarning && (
+                      <p className="time-warning">
+                        <FormattedMessage id="DRUG_CHART_MODAL_START_TIME_PASSED"></FormattedMessage>
+                      </p>
+                    )}
+                    {showStartTimeBeyondNextDoseWarning && (
+                      <p className="time-warning">
+                        <FormattedMessage id="DRUG_CHART_MODAL_START_TIME_BEYOND_NEXT_DOSE"></FormattedMessage>
+                      </p>
+                    )}
+                    {showEmptyStartTimeWarning && (
+                      <p className="time-error">
+                        <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_START_TIME_WARNING"></FormattedMessage>
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             )}

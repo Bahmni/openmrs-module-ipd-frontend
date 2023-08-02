@@ -59,11 +59,18 @@
     }
   }
 
-  .time-warning {
+  .time-error {
     margin: 0;
     margin-top: 4px;
     font-size: 0.75rem;
     color: #da1e28;
+  }
+
+  .time-warning {
+    margin: 0;
+    margin-top: 4px;
+    font-size: 0.75rem;
+    color: #2b95ff;
   }
 
   .bx--text-input-wrapper--readonly .bx--text-input {
