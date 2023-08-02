@@ -154,9 +154,19 @@
     pointer-events: auto;
   }
 
-  .bx--text-area .additional-instructions {
-    background-color: #f4f4f4;
-    pointer-events: none;
-    cursor: not-allowed !important;
+  .additional-instructions {
+    .bx--text-area {
+      background-color: #f4f4f4;
+      pointer-events: none;
+      cursor: not-allowed !important;
+    }
+  }
+
+  .instructions {
+    .bx--text-area {
+      background-color: #f4f4f4;
+      pointer-events: none;
+      cursor: not-allowed !important;
+    }
   }
 }

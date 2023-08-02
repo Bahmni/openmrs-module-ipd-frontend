@@ -386,11 +386,6 @@ export default function DrugChartModal(props) {
                             labelText=" "
                             width="70%"
                           />
-                          {showSchedulePassedWarning[index] && (
-                            <p className="time-warning">
-                              <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
-                            </p>
-                          )}
                         </div>
                       ) : (
                         <div className="schedule-time" key={index}>
@@ -403,11 +398,6 @@ export default function DrugChartModal(props) {
                             }}
                             id={`schedule-${index}`}
                           />
-                          {showSchedulePassedWarning[index] && (
-                            <p className="time-warning">
-                              <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
-                            </p>
-                          )}
                         </div>
                       )
                   )}
@@ -420,6 +410,13 @@ export default function DrugChartModal(props) {
                 {showEmptyScheduleWarning && (
                   <p className="time-error">
                     <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
+                  </p>
+                )}
+                {showSchedulePassedWarning.some(
+                  (showSchedulePassed) => showSchedulePassed === true
+                ) && (
+                  <p className="time-warning">
+                    <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
                   </p>
                 )}
               </div>
