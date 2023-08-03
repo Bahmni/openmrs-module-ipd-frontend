@@ -260,8 +260,6 @@ export default function DrugChartModal(props) {
     }
   };
 
-  console.log(allFrequencies);
-
   const handleCancel = () => {
     hostApi.onModalCancel?.();
   };
