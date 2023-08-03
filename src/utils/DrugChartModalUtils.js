@@ -1,14 +1,5 @@
 import axios from "axios";
-import { DRUG_ORDERS_CONFIG_URL, SAVE_MEDICATION_URL } from "../constants";
-
-export const getDrugOrderFrequencies = async () => {
-  try {
-    const response = await axios.get(DRUG_ORDERS_CONFIG_URL);
-    if (response.status == 200) return response.data.frequencies;
-  } catch (error) {
-    console.error(error);
-  }
-};
+import { SAVE_MEDICATION_URL } from "../constants";
 
 export const saveMedication = async (medication) => {
   try {

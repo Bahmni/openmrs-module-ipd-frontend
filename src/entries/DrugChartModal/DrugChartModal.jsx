@@ -9,19 +9,18 @@ import {
 import { Modal, TextArea, TextInput } from "carbon-components-react";
 import moment from "moment";
 import PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 import {
-  getDrugOrderFrequencies,
   saveMedication,
   updateStartTimeBasedOnFrequency,
 } from "../../utils/DrugChartModalUtils";
 import "./DrugChartModal.scss";
+import { medicationFrequency } from "../../constants";
 
 export default function DrugChartModal(props) {
   const { hostData, hostApi } = props;
-  const [allFrequencies, setAllFrequencies] = useState([]);
   const enableSchedule = hostData?.scheduleFrequencies.find(
     (frequency) =>
       frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
@@ -93,7 +92,7 @@ export default function DrugChartModal(props) {
   const convertSchedules = (schedules, enable24HourTimers) => {
     return enable24HourTimers
       ? schedules
-      : schedules.map((time) => moment(time, "hh:mm A"));
+      : schedules.map((time) => moment(time, "hh:mm A").format("HH:mm"));
   };
 
   const validateSchedules = async (schedules) => {
@@ -154,28 +153,13 @@ export default function DrugChartModal(props) {
     setStartTime(time);
   };
 
-  const getRequiredFrequency = () => {
-    return allFrequencies.find(
-      (frequency) =>
-        frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
-    );
-  };
-
   const convertStartTime = (time, enable24HourTimers) => {
-    return enable24HourTimers ? time : time.format("hh:mm A");
+    return enable24HourTimers ? time : moment(time, "hh:mm A").format("HH:mm");
   };
 
   const handleStartTimeChange = () => {
     const time = convertStartTime(startTime, enable24HourTimers);
-    const frequencyConfig = getRequiredFrequency();
-    console.log(
-      "Number of Slots = ",
-      frequencyConfig?.frequencyPerDay *
-        hostData?.drugOrder?.uniformDosingType?.dose *
-        hostData?.drugOrder?.duration,
-      "Time = ",
-      time
-    );
+    setStartTime(time);
   };
 
   const getUTCTime = (time) => {
@@ -183,10 +167,11 @@ export default function DrugChartModal(props) {
     const [day, month, year] = moment(hostData?.drugOrder?.scheduledDate)
       .format("DD-MM-YYYY")
       .split("-");
-    const utcTime = moment(
-      `${year}-${month}-${day}T${hours}:${minutes}:00.0`
-    ).format("YYYY-MM-DDTHH:mm:ss.SSS");
-    console.log("utcTime = ", utcTime);
+    const localTime = moment(
+      `${year}-${month}-${day} ${hours}:${minutes}`,
+      "YYYY-MM-DD HH:mm"
+    );
+    const utcTime = moment.utc(localTime).format("YYYY-MM-DDTHH:mm:ss.SSS");
     return utcTime;
   };
 
@@ -204,31 +189,23 @@ export default function DrugChartModal(props) {
     if (enableStartTime) {
       const startTimeUTC = getUTCTime(startTime);
       payload.slotStartTime = startTimeUTC;
-      payload.medicationFrequency = "START_TIME_DURATION_FREQUENCY";
+      payload.medicationFrequency =
+        medicationFrequency.START_TIME_DURATION_FREQUENCY;
     }
     if (enableSchedule) {
       const schedulesUTC = schedules.map((schedule) => {
         return getUTCTime(schedule);
       });
-      console.log("schedules = ", schedulesUTC);
       payload.dayWiseSlotsStartTime = schedulesUTC;
-      payload.medicationFrequency = "FIXED_SCHEDULE_FREQUENCY";
+      payload.medicationFrequency =
+        medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
     }
-    console.log("payload = ", payload);
     return payload;
   };
 
   const handleSchedulesChange = () => {
     const schedulesArray = convertSchedules(schedules, enable24HourTimers);
-    const frequencyConfig = getRequiredFrequency();
-    console.log(
-      "Number of Slots = ",
-      frequencyConfig?.frequencyPerDay *
-        hostData?.drugOrder?.uniformDosingType?.dose *
-        hostData?.drugOrder?.duration,
-      "Schedules = ",
-      schedulesArray
-    );
+    setSchedules(schedulesArray);
   };
 
   const validateSave = async () => {
@@ -250,10 +227,6 @@ export default function DrugChartModal(props) {
     if (performSave) {
       enableStartTime && handleStartTimeChange();
       enableSchedule && handleSchedulesChange();
-      console.log("Drug Chart Modal Save Clicked and Validated");
-      console.log("ShowStartTimePassedWarning = ", showStartTimePassedWarning);
-      console.log("ShowEmptyScheduleWarning = ", showEmptyScheduleWarning);
-      console.log("ShowSchedulePassedWarning = ", showScheduleOrderWarning);
       const medication = createDrugChartPayload();
       const response = await saveMedication(medication);
       response.status === 200 ? hostApi.onModalSave?.() : null;
@@ -268,18 +241,18 @@ export default function DrugChartModal(props) {
     hostApi.onModalClose?.();
   };
 
-  const getAndSetFrequencies = async () => {
-    try {
-      const frequencies = await getDrugOrderFrequencies();
-      setAllFrequencies(frequencies);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getAndSetFrequencies = async () => {
+  //   try {
+  //     const frequencies = await getDrugOrderFrequencies();
+  //     setAllFrequencies(frequencies);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getAndSetFrequencies();
-  }, []);
+  // useEffect(() => {
+  //   getAndSetFrequencies();
+  // }, []);
 
   return (
     <>
