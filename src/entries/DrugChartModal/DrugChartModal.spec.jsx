@@ -147,7 +147,7 @@ describe("DrugChartModal", () => {
       const saveButton = screen.getByRole("button", { name: "Save" });
       fireEvent.click(saveButton);
     });
-    expect(screen.getByText("Please select Schedule(s)")).toBeInTheDocument();
+    expect(screen.getByText("Please enter Schedule(s)")).toBeInTheDocument();
   });
 
   it("should show Please select Start Time when save is clicked without entering start time", async () => {
@@ -189,7 +189,7 @@ describe("DrugChartModal", () => {
 
     fireEvent.blur(document.getElementById("time-selector"));
     expect(
-      screen.getByText("Please enter a valid time in 24-hr format")
+      screen.getByText("Please enter in 24-hr format")
     ).toBeInTheDocument();
   });
 });

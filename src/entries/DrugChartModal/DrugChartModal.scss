@@ -132,7 +132,11 @@
   }
 
   .required {
-    color: #e0182d;
+    color: #da1e28;
+  }
+
+  .bx--time-picker--invalid ~ .bx--form-requirement {
+    padding-right: 10px;
   }
 
   .titleText {

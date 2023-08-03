@@ -12,10 +12,7 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
-import {
-  saveMedication,
-  updateStartTimeBasedOnFrequency,
-} from "../../utils/DrugChartModalUtils";
+import { saveMedication } from "../../utils/DrugChartModalUtils";
 import "./DrugChartModal.scss";
 import { medicationFrequency } from "../../constants";
 
@@ -52,12 +49,14 @@ export default function DrugChartModal(props) {
   const [showEmptyStartTimeWarning, setShowEmptyStartTimeWarning] =
     useState(false);
   const [drugChartNotes, setDrugChartNotes] = useState("");
+  const invalidTimeText24Hour = "Please enter in 24-hr format";
+  const invalidTimeText12Hour = "Please enter in 12-hr format";
 
   const isInvalidTimeTextPresent = () => {
     const screenContent = document.body.textContent;
     const invalidTimeText = enable24HourTimers
-      ? "Please enter a valid time in 24-hr format"
-      : "Please enter a valid time in 12-hr format";
+      ? invalidTimeText24Hour
+      : invalidTimeText12Hour;
     return screenContent.includes(invalidTimeText);
   };
 
@@ -85,7 +84,7 @@ export default function DrugChartModal(props) {
       if (index === 0) return true;
       const currentTime = moment(schedule, "HH:mm");
       const prevTime = moment(allSchedule[index - 1], "HH:mm");
-      return currentTime.isSameOrAfter(prevTime);
+      return currentTime.isAfter(prevTime);
     });
   };
 
@@ -119,6 +118,44 @@ export default function DrugChartModal(props) {
     if (!isValid && (warningType === "empty" || warningType === "passed"))
       return false;
     return true;
+  };
+
+  const updateStartTimeBasedOnFrequency = (frequency, time) => {
+    switch (frequency) {
+      case "Every Hour":
+        time.add(1, "hour");
+        break;
+      case "Every 2 hours":
+        time.add(2, "hours");
+        break;
+      case "Every 3 hours":
+        time.add(3, "hours");
+        break;
+      case "Every 4 hours":
+        time.add(4, "hours");
+        break;
+      case "Every 6 hours":
+        time.add(6, "hours");
+        break;
+      case "Every 8 hours":
+        time.add(8, "hours");
+        break;
+      case "Every 12 hours":
+        time.add(12, "hours");
+        break;
+      case "Once a day":
+        time.add(1, "day");
+        break;
+      case "Nocte (At Night)":
+        time.set({ hour: 23, minute: 59, second: 59 });
+        break;
+      case "Every 30 minutes":
+        time.add(30, "minutes");
+        break;
+      default:
+        break;
+    }
+    return time;
   };
 
   const isStartTimeExceedingFrequency = (time, frequency) => {
@@ -162,7 +199,7 @@ export default function DrugChartModal(props) {
     setStartTime(time);
   };
 
-  const getUTCTime = (time) => {
+  const getUTCTimeEpoch = (time) => {
     const [hours, minutes] = time.split(":");
     const [day, month, year] = moment(hostData?.drugOrder?.scheduledDate)
       .format("DD-MM-YYYY")
@@ -171,8 +208,8 @@ export default function DrugChartModal(props) {
       `${year}-${month}-${day} ${hours}:${minutes}`,
       "YYYY-MM-DD HH:mm"
     );
-    const utcTime = moment.utc(localTime).format("YYYY-MM-DDTHH:mm:ss.SSS");
-    return utcTime;
+    const utcTimeEpoch = moment.utc(localTime).unix();
+    return utcTimeEpoch;
   };
 
   const createDrugChartPayload = () => {
@@ -187,16 +224,16 @@ export default function DrugChartModal(props) {
       medicationFrequency: "",
     };
     if (enableStartTime) {
-      const startTimeUTC = getUTCTime(startTime);
-      payload.slotStartTime = startTimeUTC;
+      const startTimeUTCEpoch = getUTCTimeEpoch(startTime);
+      payload.slotStartTime = startTimeUTCEpoch;
       payload.medicationFrequency =
         medicationFrequency.START_TIME_DURATION_FREQUENCY;
     }
     if (enableSchedule) {
-      const schedulesUTC = schedules.map((schedule) => {
-        return getUTCTime(schedule);
+      const schedulesUTCTimeEpoch = schedules.map((schedule) => {
+        return getUTCTimeEpoch(schedule);
       });
-      payload.dayWiseSlotsStartTime = schedulesUTC;
+      payload.dayWiseSlotsStartTime = schedulesUTCTimeEpoch;
       payload.medicationFrequency =
         medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
     }
@@ -367,6 +404,7 @@ export default function DrugChartModal(props) {
                             }}
                             labelText=" "
                             width="70%"
+                            invalidText={invalidTimeText24Hour}
                           />
                         </div>
                       ) : (
@@ -379,6 +417,7 @@ export default function DrugChartModal(props) {
                               handleSchedule(time, index);
                             }}
                             id={`schedule-${index}`}
+                            invalidText={invalidTimeText12Hour}
                           />
                         </div>
                       )
@@ -415,6 +454,7 @@ export default function DrugChartModal(props) {
                       isRequired={true}
                       defaultTime={startTime}
                       width="80%"
+                      invalidText={invalidTimeText24Hour}
                     />
                     {showStartTimePassedWarning && (
                       <p className="time-warning">
@@ -440,6 +480,7 @@ export default function DrugChartModal(props) {
                       defaultTime={startTime}
                       labelText={"Start Time"}
                       isRequired={true}
+                      invalidText={invalidTimeText12Hour}
                     />
                     {showStartTimePassedWarning && (
                       <p className="time-warning">
