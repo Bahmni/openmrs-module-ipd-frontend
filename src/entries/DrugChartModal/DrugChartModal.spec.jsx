@@ -7,7 +7,7 @@ import {
   mockScheduleFrequencies,
   mockStartTimeFrequencies,
   mockDrugOrderFrequencies,
-} from "../../test-utils/DrugChartModal/utils";
+} from "./DrugChartModalTestUtils";
 import "@testing-library/jest-dom";
 import mockAdapter from "axios-mock-adapter";
 import axios from "axios";
