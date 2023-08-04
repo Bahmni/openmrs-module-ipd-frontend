@@ -11,5 +11,5 @@
   "DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING": "Times entered should be in ascending order",
   "DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING": "Please enter Schedule(s)",
   "DRUG_CHART_MODAL_EMPTY_START_TIME_WARNING": "Please enter Start Time",
-  "DRUG_CHART_MODAL_START_TIME_BEYOND_NEXT_DOSE": "Start Time doesn't match with the frequency"
+  "DRUG_CHART_MODAL_START_TIME_BEYOND_NEXT_DOSE": "Start Time does not match with the frequency"
 }
