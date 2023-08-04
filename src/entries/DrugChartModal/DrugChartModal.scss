@@ -1,6 +1,7 @@
 .drug-chart-modal {
   .bx--modal-container {
     width: 550px;
+    background: #ffffff;
   }
 
   @media screen and (max-width: 640px) {
@@ -9,8 +10,12 @@
     }
   }
 
-  .bx--modal-container {
-    background-color: #ffffff;
+  .bx--modal-header {
+    background: #ffffff;
+  }
+  .bx--modal-content {
+    background: #ffffff;
+    margin-bottom: 1rem;
   }
 
   .bx--list-box__wrapper {
@@ -59,17 +64,31 @@
     }
   }
 
-  .bx--text-input-wrapper--readonly .bx--text-input {
+  .time-error {
+    margin: 0;
+    margin-top: 4px;
+    font-size: 0.75rem;
+    color: #da1e28;
+  }
+
+  .time-warning {
+    margin: 0;
+    margin-top: 4px;
+    font-size: 0.75rem;
+    color: #2b95ff;
+  }
+
+  .bx--text-input-wrapper .bx--text-input {
     width: 100%;
     overflow: auto;
+    border: none;
+    background-color: #efefef;
     color: #8d8d8d;
-    background: #eee;
   }
 
   button[class*="bx--"]:disabled {
     opacity: 1;
     border: none;
-    border-bottom: #c6c6c6 1px solid;
   }
 
   .bx--text-input__readonly-icon {
@@ -77,21 +96,21 @@
     cursor: not-allowed;
   }
 
-  .bx--text-area:disabled,
-  .bx--text-input-wrapper--readonly .bx--text-input {
-    border-bottom: #c6c6c6 1px solid;
-    cursor: not-allowed;
+  .bx--date-picker.bx--date-picker--single .bx--date-picker__input {
+    background: #efefef;
   }
 
   .bx--date-picker__input:disabled,
   .bx--number input[type="number"]:disabled {
-    background-color: #eee;
     border: none;
-    border-bottom: #c6c6c6 1px solid;
   }
 
   .bx--number input[type="number"]:disabled {
-    color: #777;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #8d8d8d;
+    cursor: not-allowed;
+    background-color: #efefef;
   }
 
   .bx--date-picker.bx--date-picker--single .bx--date-picker__input {
@@ -100,7 +119,6 @@
 
   .bx--number__control-btn:disabled {
     border: none;
-    border-bottom-color: #c6c6c6 1px solid;
   }
 
   .frequency {
@@ -108,11 +126,16 @@
 
     .bx--list-box__field {
       max-width: initial;
+      border: none;
     }
   }
 
   .required {
-    color: #e0182d;
+    color: #da1e28;
+  }
+
+  .bx--time-picker--invalid ~ .bx--form-requirement {
+    padding-right: 10px;
   }
 
   .titleText {
@@ -121,5 +144,10 @@
 
   .bx--dropdown--disabled .bx--list-box__label {
     font-size: 0.85rem;
+  }
+
+  input#time-selector,
+  textarea.bx--text-area.notes-section {
+    background-color: #efefef;
   }
 }

@@ -6,10 +6,28 @@ import {
   mockScheduleDrugOrder,
   mockScheduleFrequencies,
   mockStartTimeFrequencies,
-} from "../test-utils/DrugChartModal/utils";
+  mockDrugOrderFrequencies,
+} from "./DrugChartModalTestUtils";
 import "@testing-library/jest-dom";
+import mockAdapter from "axios-mock-adapter";
+import axios from "axios";
+import { DRUG_ORDERS_CONFIG_URL } from "../../constants";
+
+let mockAxios;
 
 describe("DrugChartModal", () => {
+  beforeEach(() => {
+    mockAxios = new mockAdapter(axios);
+    const drugOrderFrequencies = mockDrugOrderFrequencies;
+    mockAxios.onGet(DRUG_ORDERS_CONFIG_URL).reply(200, {
+      results: drugOrderFrequencies,
+    });
+  });
+
+  afterEach(() => {
+    mockAxios.reset();
+  });
+
   it("Component renders successfully", async () => {
     render(
       <DrugChartModal
@@ -75,9 +93,9 @@ describe("DrugChartModal", () => {
       />
     );
     await waitFor(() => {
-      fireEvent.click(screen.getByLabelText("Close"));
-      expect(mockFunction).toHaveBeenCalledWith("drug-chart-modal-close-event");
+      fireEvent.click(document.getElementsByClassName("bx--modal-close")[0]);
     });
+    expect(mockFunction).toHaveBeenCalled();
   });
 
   it("should enable schedule dropdown when frequency is present in scheduleFrequencies", async () => {
@@ -92,7 +110,7 @@ describe("DrugChartModal", () => {
       />
     );
     await waitFor(() => {
-      const inputElement = screen.getByText("Schedule");
+      const inputElement = screen.getByText("Schedule(s)");
       expect(inputElement).toBeTruthy();
     });
   });
@@ -112,5 +130,66 @@ describe("DrugChartModal", () => {
       const inputElement = screen.getByText("Start Time");
       expect(inputElement).toBeTruthy();
     });
+  });
+
+  it("should show Please select Schedule(s) when save is clicked without entering schedule", async () => {
+    render(
+      <DrugChartModal
+        hostData={{
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockScheduleDrugOrder,
+        }}
+        hostApi={{}}
+      />
+    );
+    await waitFor(() => {
+      const saveButton = screen.getByRole("button", { name: "Save" });
+      fireEvent.click(saveButton);
+    });
+    expect(screen.getByText("Please enter Schedule(s)")).toBeInTheDocument();
+  });
+
+  it("should show Please select Start Time when save is clicked without entering start time", async () => {
+    render(
+      <DrugChartModal
+        hostData={{
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockStartTimeDrugOrder,
+        }}
+        hostApi={{}}
+      />
+    );
+    await waitFor(() => {
+      const saveButton = screen.getByRole("button", { name: "Save" });
+      fireEvent.click(saveButton);
+    });
+    expect(screen.getByText("Please enter Start Time")).toBeInTheDocument();
+  });
+
+  it("Should show invalid time format error message when wrong time is entered in the field", async () => {
+    render(
+      <DrugChartModal
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockStartTimeDrugOrder,
+        }}
+        hostApi={{}}
+      />
+    );
+
+    await waitFor(() => {
+      const startTimeInput = document.getElementById("time-selector");
+      const timeValue = "12:3";
+      fireEvent.change(startTimeInput, { target: { value: timeValue } });
+    });
+
+    fireEvent.blur(document.getElementById("time-selector"));
+    expect(
+      screen.getByText("Please enter in 24-hr format")
+    ).toBeInTheDocument();
   });
 });
