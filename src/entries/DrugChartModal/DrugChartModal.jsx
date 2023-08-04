@@ -312,10 +312,10 @@ export default function DrugChartModal(props) {
             <TextInput
               id="drug-name"
               className="drug-name"
-              readOnly
               type="text"
               value={hostData?.drugOrder?.drug?.name}
               labelText="Drug Name"
+              disabled
             />
             <div className="inline-field">
               <div className="field-with-units">
@@ -336,6 +336,7 @@ export default function DrugChartModal(props) {
                     hostData?.drugOrder?.uniformDosingType?.doseUnits
                   }
                   options={[]}
+                  isDisabled={true}
                 />
               </div>
               <div className="route">
@@ -345,6 +346,7 @@ export default function DrugChartModal(props) {
                   titleText={"Route"}
                   selectedValue={hostData?.drugOrder?.route}
                   options={[]}
+                  isDisabled={true}
                 />
               </div>
             </div>
@@ -357,6 +359,7 @@ export default function DrugChartModal(props) {
                 value={moment(hostData?.drugOrder?.scheduledDate).format(
                   "MM/DD/YYYY"
                 )}
+                isDisabled={true}
               />
               <div className="field-with-units">
                 <NumberInputCarbon
@@ -372,6 +375,7 @@ export default function DrugChartModal(props) {
                   titleText={" "}
                   selectedValue={hostData?.drugOrder?.durationUnit}
                   options={[]}
+                  isDisabled={true}
                 />
               </div>
             </div>
@@ -384,6 +388,7 @@ export default function DrugChartModal(props) {
                   hostData?.drugOrder?.uniformDosingType?.frequency
                 }
                 options={[]}
+                isDisabled={true}
               />
             </div>
             {enableSchedule && (
@@ -509,6 +514,7 @@ export default function DrugChartModal(props) {
                 rows={1}
                 value={hostData?.drugOrder?.instructions}
                 labelText="Instruction"
+                disabled
               />
             </div>
             <div className="additional-instructions">
@@ -519,6 +525,7 @@ export default function DrugChartModal(props) {
                 rows={1}
                 value={hostData?.drugOrder?.additionalInstructions}
                 labelText="Additional Instruction"
+                disabled
               />
             </div>
             <div className="notes-sections">

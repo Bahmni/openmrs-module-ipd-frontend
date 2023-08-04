@@ -1,6 +1,7 @@
 .drug-chart-modal {
   .bx--modal-container {
     width: 550px;
+    background: #ffffff;
   }
 
   @media screen and (max-width: 640px) {
@@ -9,8 +10,12 @@
     }
   }
 
-  .bx--modal-container {
-    background-color: #ffffff;
+  .bx--modal-header {
+    background: #ffffff;
+  }
+  .bx--modal-content {
+    background: #ffffff;
+    margin-bottom: 1rem;
   }
 
   .bx--list-box__wrapper {
@@ -73,17 +78,17 @@
     color: #2b95ff;
   }
 
-  .bx--text-input-wrapper--readonly .bx--text-input {
+  .bx--text-input-wrapper .bx--text-input {
     width: 100%;
     overflow: auto;
-    color: #000000;
-    background: #f4f4f4;
+    border: none;
+    background-color: #efefef;
+    color: #8d8d8d;
   }
 
   button[class*="bx--"]:disabled {
     opacity: 1;
     border: none;
-    border-bottom: #c6c6c6 1px solid;
   }
 
   .bx--text-input__readonly-icon {
@@ -91,36 +96,29 @@
     cursor: not-allowed;
   }
 
-  .bx--text-area:disabled,
-  .bx--text-input-wrapper--readonly .bx--text-input {
-    border-bottom: #c6c6c6 1px solid;
-    cursor: not-allowed;
+  .bx--date-picker.bx--date-picker--single .bx--date-picker__input {
+    background: #efefef;
   }
 
   .bx--date-picker__input:disabled,
   .bx--number input[type="number"]:disabled {
-    background-color: #eee;
     border: none;
-    border-bottom: #c6c6c6 1px solid;
   }
 
   .bx--number input[type="number"]:disabled {
-    color: #000000;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     font-weight: 400;
+    color: #8d8d8d;
+    cursor: not-allowed;
+    background-color: #efefef;
   }
 
   .bx--date-picker.bx--date-picker--single .bx--date-picker__input {
     margin-right: 5px;
-    background-color: #f4f4f4;
-    pointer-events: none;
-    cursor: not-allowed !important;
-    border-bottom: #c6c6c6 1px solid;
   }
 
   .bx--number__control-btn:disabled {
     border: none;
-    border-bottom-color: #c6c6c6 1px solid;
   }
 
   .frequency {
@@ -128,6 +126,7 @@
 
     .bx--list-box__field {
       max-width: initial;
+      border: none;
     }
   }
 
@@ -147,30 +146,8 @@
     font-size: 0.85rem;
   }
 
-  .bx--dropdown--disabled .bx--list-box__label:disabled {
-    color: #000000;
-  }
-
-  .bx--dropdown .bx--list-box__field {
+  input#time-selector,
+  textarea.bx--text-area.notes-section {
     background-color: #efefef;
-    border-bottom: 1px solid #c6c6c6;
-    cursor: not-allowed;
-    pointer-events: auto;
-  }
-
-  .additional-instructions {
-    .bx--text-area {
-      background-color: #f4f4f4;
-      pointer-events: none;
-      cursor: not-allowed !important;
-    }
-  }
-
-  .instructions {
-    .bx--text-area {
-      background-color: #f4f4f4;
-      pointer-events: none;
-      cursor: not-allowed !important;
-    }
   }
 }
