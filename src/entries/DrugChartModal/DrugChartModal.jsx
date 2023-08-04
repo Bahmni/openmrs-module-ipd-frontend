@@ -27,11 +27,11 @@ export default function DrugChartModal(props) {
   );
   const enable24HourTimers = hostData?.enable24HourTimers || true;
 
-  const schedulesLength = Array.from(
+  const schedulesArray = Array.from(
     { length: enableSchedule?.frequencyPerDay },
     () => ""
   );
-  const [schedules, setSchedules] = useState(schedulesLength);
+  const [schedules, setSchedules] = useState(schedulesArray);
   const [startTime, setStartTime] = useState("");
   const [
     showStartTimeBeyondNextDoseWarning,
@@ -382,35 +382,37 @@ export default function DrugChartModal(props) {
               <div className="schedule-section">
                 <Title text="Schedule(s)" isRequired={true} />
                 <div className="inline-field" id="schedule">
-                  {Array.from({ length: schedulesLength }, (_, index) =>
-                    enable24HourTimers ? (
-                      <div className="schedule-time" key={index}>
-                        <TimePicker24Hour
-                          key={index}
-                          id={`schedule-${index}`}
-                          defaultTime={schedules[index]}
-                          onChange={(time) => {
-                            handleSchedule(time, index);
-                          }}
-                          labelText=" "
-                          width="70%"
-                          invalidText={invalidTimeText24Hour}
-                        />
-                      </div>
-                    ) : (
-                      <div className="schedule-time" key={index}>
-                        <TimePicker
-                          key={index}
-                          labelText=" "
-                          defaultTime={schedules[index]}
-                          onChange={(time) => {
-                            handleSchedule(time, index);
-                          }}
-                          id={`schedule-${index}`}
-                          invalidText={invalidTimeText12Hour}
-                        />
-                      </div>
-                    )
+                  {Array.from(
+                    { length: enableSchedule?.frequencyPerDay },
+                    (_, index) =>
+                      enable24HourTimers ? (
+                        <div className="schedule-time" key={index}>
+                          <TimePicker24Hour
+                            key={index}
+                            id={`schedule-${index}`}
+                            defaultTime={schedules[index]}
+                            onChange={(time) => {
+                              handleSchedule(time, index);
+                            }}
+                            labelText=" "
+                            width="70%"
+                            invalidText={invalidTimeText24Hour}
+                          />
+                        </div>
+                      ) : (
+                        <div className="schedule-time" key={index}>
+                          <TimePicker
+                            key={index}
+                            labelText=" "
+                            defaultTime={schedules[index]}
+                            onChange={(time) => {
+                              handleSchedule(time, index);
+                            }}
+                            id={`schedule-${index}`}
+                            invalidText={invalidTimeText12Hour}
+                          />
+                        </div>
+                      )
                   )}
                 </div>
                 {showScheduleOrderWarning && (
