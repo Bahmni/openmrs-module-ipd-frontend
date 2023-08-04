@@ -22,13 +22,34 @@
     max-width: none;
   }
 
-  .field-with-units {
+  .dose-field-with-units {
     display: flex;
     flex-direction: row;
     width: 60%;
     justify-content: flex-start;
     align-items: flex-end;
     margin-right: 0px;
+  }
+
+  .duration-field-with-units {
+    display: flex;
+    flex-direction: row;
+    width: 49%;
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin-right: 0px;
+  }
+
+  .frequency .dropdown {
+    margin-right: 0px !important;
+  }
+
+  .date-picker-carbon {
+    width: 53%;
+    .bx--date-picker .bx--date-picker--single,
+    .bx--date-picker-container {
+      width: 100%;
+    }
   }
 
   .schedule-section,
@@ -89,6 +110,7 @@
   button[class*="bx--"]:disabled {
     opacity: 1;
     border: none;
+    border-radius: 0px;
   }
 
   .bx--text-input__readonly-icon {
@@ -98,6 +120,11 @@
 
   .bx--date-picker.bx--date-picker--single .bx--date-picker__input {
     background: #efefef;
+    width: 100% !important;
+  }
+
+  .bx--date-picker.bx--date-picker--single {
+    width: 100%;
   }
 
   .bx--date-picker__input:disabled,
@@ -111,10 +138,6 @@
     color: #8d8d8d;
     cursor: not-allowed;
     background-color: #efefef;
-  }
-
-  .bx--date-picker.bx--date-picker--single .bx--date-picker__input {
-    margin-right: 5px;
   }
 
   .bx--number__control-btn:disabled {
@@ -144,6 +167,10 @@
 
   .bx--dropdown--disabled .bx--list-box__label {
     font-size: 0.85rem;
+  }
+
+  .bx--number input[type="number"]:disabled ~ .bx--number__controls {
+    width: 55%;
   }
 
   input#time-selector,

@@ -305,7 +305,7 @@ export default function DrugChartModal(props) {
               disabled
             />
             <div className="inline-field">
-              <div className="field-with-units">
+              <div className="dose-field-with-units">
                 <NumberInputCarbon
                   id={"Dropdown"}
                   onChange={() => {}}
@@ -338,17 +338,7 @@ export default function DrugChartModal(props) {
               </div>
             </div>
             <div className="inline-field">
-              <DatePickerCarbon
-                id={"Dropdown"}
-                onChange={() => {}}
-                titleText={"Start Date"}
-                title={"Start Date"}
-                value={moment(hostData?.drugOrder?.scheduledDate).format(
-                  "MM/DD/YYYY"
-                )}
-                isDisabled={true}
-              />
-              <div className="field-with-units">
+              <div className="duration-field-with-units">
                 <NumberInputCarbon
                   id={"Dropdown"}
                   onChange={() => {}}
@@ -365,6 +355,16 @@ export default function DrugChartModal(props) {
                   isDisabled={true}
                 />
               </div>
+              <DatePickerCarbon
+                id={"Dropdown"}
+                onChange={() => {}}
+                titleText={"Start Date"}
+                title={"Start Date"}
+                value={moment(hostData?.drugOrder?.scheduledDate).format(
+                  "MM/DD/YYYY"
+                )}
+                isDisabled={true}
+              />
             </div>
             <div className="frequency">
               <DropdownCarbon
