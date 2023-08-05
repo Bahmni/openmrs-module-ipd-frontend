@@ -26,6 +26,9 @@ export const TransformDrugChartData = (drugChartData) => {
     } else {
       drugOrder.dosage = order.dose + order.doseUnits.display;
     }
+    if (order.duration) {
+      drugOrder.duration = order.duration + " " + order.durationUnits.display;
+    }
     slots.forEach((slot) => {
       const { startDateTime, status } = slot;
       const startDateTimeObj = new Date(startDateTime);
@@ -82,6 +85,11 @@ export default function DrugChart(props) {
         doseUnits: {
           uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
           display: "ml",
+        },
+        duration: 3,
+        durationUnits: {
+          uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+          display: "Day(s)",
         },
       },
       slots: [
@@ -198,6 +206,11 @@ export default function DrugChart(props) {
           uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
           display: "Tablet(s)",
         },
+        duration: 2,
+        durationUnits: {
+          uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+          display: "Day(s)",
+        },
       },
       slots: [
         {
@@ -247,6 +260,11 @@ export default function DrugChart(props) {
         doseUnits: {
           uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
           display: "ml",
+        },
+        duration: 4,
+        durationUnits: {
+          uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+          display: "Day(s)",
         },
       },
       dose: 2,
