@@ -25,19 +25,32 @@
   .dose-field-with-units {
     display: flex;
     flex-direction: row;
-    width: 60%;
+    width: 55%;
     justify-content: flex-start;
     align-items: flex-end;
-    margin-right: 0px;
+    margin-right: 10px;
+
+    .dropdown {
+      width: 142.449px;
+    }
   }
 
   .duration-field-with-units {
     display: flex;
     flex-direction: row;
-    width: 49%;
+    width: 55%;
     justify-content: flex-start;
     align-items: flex-end;
-    margin-right: 0px;
+    margin-right: 10px;
+
+    .dropdown {
+      width: 142.449px;
+    }
+  }
+
+  .-TaKcdG2c0NUzkYaFWOzlQ\=\= {
+    width: 142.449px;
+    margin-right: 5px;
   }
 
   .frequency .dropdown {
@@ -45,11 +58,15 @@
   }
 
   .date-picker-carbon {
-    width: 53%;
+    width: 45%;
     .bx--date-picker .bx--date-picker--single,
     .bx--date-picker-container {
       width: 100%;
     }
+  }
+
+  .schedule-time {
+    margin-right: 5px;
   }
 
   .schedule-section,
@@ -77,7 +94,7 @@
   }
 
   .route {
-    width: 60%;
+    width: 45%;
     margin-right: 0px;
 
     .dropdown {
@@ -175,6 +192,10 @@
 
   input#time-selector,
   textarea.bx--text-area.notes-section {
+    background-color: #efefef;
+  }
+
+  .bx--time-picker .bx--select-input {
     background-color: #efefef;
   }
 }

@@ -183,7 +183,7 @@ describe("DrugChartModal", () => {
 
     await waitFor(() => {
       const startTimeInput = document.getElementById("time-selector");
-      const timeValue = "12:3";
+      const timeValue = "41:22";
       fireEvent.change(startTimeInput, { target: { value: timeValue } });
     });
 
