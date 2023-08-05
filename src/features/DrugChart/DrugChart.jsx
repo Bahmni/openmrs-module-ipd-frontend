@@ -46,7 +46,6 @@ export const TransformDrugChartData = (drugChartData) => {
         administrationInfo: adminInfo,
       };
       if (status === "Administered" || status === "Administered-Late") {
-        console.log(startDateTimeObj);
         drugOrder.administrationInfo.push({
           kind: status,
           time: administeredTime,
@@ -321,14 +320,7 @@ export default function DrugChart(props) {
     <div className={"drug-chart-dashboard"}>
       <div className="drug-chart">
         <div className="drug-chart-left-panel">
-          <div
-            style={{
-              height: "63px",
-              backgroundColor: "#ededed",
-              position: "sticky",
-              top: 0,
-            }}
-          ></div>
+          <div className={"header"} />
           <DrugList drugDetails={transformedDrugchartData[1]} />
         </div>
         <div className="drug-chart-content">

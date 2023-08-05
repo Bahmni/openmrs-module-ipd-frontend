@@ -21,7 +21,13 @@
   font-size: 13px;
   overflow-y: auto;
   height: 100%;
-  min-width: 200px;
+  min-width: 225px;
+  .header {
+    height: 63px;
+    background-color: #ededed;
+    position: sticky;
+    top: 0;
+  }
   table {
     table-layout: fixed;
     border-spacing: 0;
