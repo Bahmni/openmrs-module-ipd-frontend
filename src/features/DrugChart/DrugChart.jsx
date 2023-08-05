@@ -5,6 +5,7 @@ import Calendar from "../Calendar/Calendar";
 import CalendarHeader from "../CalendarHeader/CalendarHeader";
 import "./DrugChart.scss";
 import DrugList from "../DrugList/DrugList";
+import DrugChartLegend from "../DrugChartLegend/DrugChartLegend";
 
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
@@ -299,22 +300,25 @@ export default function DrugChart(props) {
   ];
   const transformedDrugchartData = TransformDrugChartData(drugChartData);
   return (
-    <div className="drug-chart">
-      <div className="drug-chart-left-panel">
-        <div
-          style={{
-            height: "63px",
-            backgroundColor: "#ededed",
-            position: "sticky",
-            top: 0,
-          }}
-        ></div>
-        <DrugList drugDetails={transformedDrugchartData[1]} />
+    <div className={"drug-chart-dashboard"}>
+      <div className="drug-chart">
+        <div className="drug-chart-left-panel">
+          <div
+            style={{
+              height: "63px",
+              backgroundColor: "#ededed",
+              position: "sticky",
+              top: 0,
+            }}
+          ></div>
+          <DrugList drugDetails={transformedDrugchartData[1]} />
+        </div>
+        <div className="drug-chart-content">
+          <CalendarHeader />
+          <Calendar calendarData={transformedDrugchartData[0]} />
+        </div>
       </div>
-      <div className="drug-chart-content">
-        <CalendarHeader />
-        <Calendar calendarData={transformedDrugchartData[0]} />
-      </div>
+      <DrugChartLegend />
     </div>
   );
 }
