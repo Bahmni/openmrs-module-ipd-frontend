@@ -22,6 +22,7 @@
   padding-bottom: 8px;
   display: grid;
   align-items: end;
+  box-sizing: border-box;
 
   &:last-child {
     --additional-borders: 1;

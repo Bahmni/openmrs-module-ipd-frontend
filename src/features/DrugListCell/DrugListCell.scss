@@ -1,0 +1,17 @@
+.drug-name {
+  max-width: 85%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+  color: #393939;
+  font-style: normal;
+}
+.dosage {
+  font-size: 12px;
+  font-weight: 400;
+  color: #393939;
+  > * {
+    display: inline-block;
+  }
+}

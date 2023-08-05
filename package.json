@@ -48,6 +48,7 @@
     "carbon-components-react": "^7.25.0",
     "carbon-icons": "^7.0.7",
     "moment": "^2.29.4",
+    "prop-types": "^15.8.1",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-intl": "^3.3.2",

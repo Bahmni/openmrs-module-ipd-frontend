@@ -15,6 +15,29 @@
 
 .drug-chart-left-panel {
   border-right: 1px solid #ccc;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 13px;
+  overflow-y: auto;
+  height: 100%;
+  min-width: 200px;
+  table {
+    table-layout: fixed;
+    border-spacing: 0;
+    width: 100%;
+    tbody > tr:nth-child(even) {
+      background-color: #f4f4f4;
+    }
+    tr {
+      height: 66px;
+      border-bottom: 0;
+      td {
+        line-height: 20px;
+        padding: 0 10px;
+        max-width: 100%;
+        border: 0;
+      }
+    }
+  }
 }
 
 .drug-chart-content {
