@@ -5,9 +5,9 @@
   tbody {
     tr {
       border-bottom: 0;
-    }
-    tr:nth-child(even) {
-      background-color: #f4f4f4;
+      &:nth-child(even) {
+        background-color: #f4f4f4;
+      }
     }
   }
 }

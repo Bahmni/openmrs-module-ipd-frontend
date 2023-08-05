@@ -15,6 +15,7 @@ export default function DrugListCell(props) {
     administrationInfo,
   } = drugInfo;
   const drugNameText = <div className={"drug-name"}>{drugName}</div>;
+  //TODO: Add tooltip for drug name
   return (
     <td>
       {/*<TooltipDefinitionCarbon tooltipText={drugName} content={drugNameText}/>*/}
