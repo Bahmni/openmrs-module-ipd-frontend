@@ -12,7 +12,7 @@ exports[`DrugChart should match snapshot 1`] = `
         class="drug-chart-left-panel"
       >
         <div
-          style="height: 63px; background-color: rgb(237, 237, 237); position: sticky; top: 0px;"
+          class="header"
         />
         <div>
           <table
@@ -184,7 +184,7 @@ exports[`DrugChart should match snapshot 1`] = `
       </div>
       <div>
         <test-file-stub />
-        Not - Administered
+        Not Administered
       </div>
       <div>
         <test-file-stub />
