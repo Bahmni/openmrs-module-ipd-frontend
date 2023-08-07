@@ -4,24 +4,40 @@ import moment from "moment";
 import Calendar from "../Calendar/Calendar";
 import CalendarHeader from "../CalendarHeader/CalendarHeader";
 import "./DrugChart.scss";
+import DrugList from "../DrugList/DrugList";
+import DrugChartLegend from "../DrugChartLegend/DrugChartLegend";
 
 export const TransformDrugChartData = (drugChartData) => {
+  const drugOrderData = [];
   const transformedDrugChartData = drugChartData.map((schedule) => {
-    const { slots } = schedule;
+    const { slots, order } = schedule;
     const slotData = {};
+    const drugOrder = {
+      drugName: order.drug.display,
+      drugRoute: order.route.display,
+      administrationInfo: [],
+    };
+    if (order.duration) {
+      drugOrder.duration = order.duration + " " + order.durationUnits.display;
+    }
+    if (order.doseUnits.display !== "ml") {
+      drugOrder.dosage = order.dose;
+      drugOrder.doseType = order.doseUnits.display;
+    } else {
+      drugOrder.dosage = order.dose + order.doseUnits.display;
+    }
+    if (order.duration) {
+      drugOrder.duration = order.duration + " " + order.durationUnits.display;
+    }
     slots.forEach((slot) => {
       const { startDateTime, status } = slot;
       const startDateTimeObj = new Date(startDateTime);
-      let adminInfo;
+      let adminInfo, administeredTime;
       if (slot.admin) {
         const { administeredBy, administeredAt } = slot.admin;
-        const administeredTime = moment(new Date(administeredAt)).format(
-          "HH:mm"
-        );
-
+        administeredTime = moment(new Date(administeredAt)).format("HH:mm");
         adminInfo = administeredBy + " [" + administeredTime + "]";
       }
-
       const startHour = startDateTimeObj.getHours();
       const startMinutes = startDateTimeObj.getMinutes();
       slotData[startHour] = {
@@ -29,10 +45,17 @@ export const TransformDrugChartData = (drugChartData) => {
         status: status,
         administrationInfo: adminInfo,
       };
+      if (status === "Administered" || status === "Administered-Late") {
+        drugOrder.administrationInfo.push({
+          kind: status,
+          time: administeredTime,
+        });
+      }
     });
+    drugOrderData.push(drugOrder);
     return slotData;
   });
-  return transformedDrugChartData;
+  return [transformedDrugChartData, drugOrderData];
 };
 
 export default function DrugChart(props) {
@@ -49,6 +72,25 @@ export default function DrugChart(props) {
       comment: "some comment",
       startDate: "2023-08-08T18:30:00.000Z",
       endDate: "2023-08-08T18:30:00.000Z",
+      order: {
+        drug: {
+          display: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
+        },
+        route: {
+          uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+          display: "Oral",
+        },
+        dose: 25,
+        doseUnits: {
+          uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
+          display: "ml",
+        },
+        duration: 3,
+        durationUnits: {
+          uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+          display: "Day(s)",
+        },
+      },
       slots: [
         {
           id: 1,
@@ -71,7 +113,7 @@ export default function DrugChart(props) {
           notes: "some slot text",
           admin: {
             administeredBy: "Dr. John Doe",
-            administeredAt: "2023-08-08T08:30:00.000Z",
+            administeredAt: "2023-08-08T11:35:00.000Z",
             adminid: "1234",
           },
         },
@@ -95,6 +137,20 @@ export default function DrugChart(props) {
       comment: "some comment",
       scheduleStartDate: "2023-08-08T18:30:00.000Z",
       scheduleEndDate: "2023-08-08T18:30:00.000Z",
+      order: {
+        drug: {
+          display: "Ibuprofen 400 mg Tablet",
+        },
+        route: {
+          uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+          display: "Oral",
+        },
+        dose: 4,
+        doseUnits: {
+          uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
+          display: "Tablet(s)",
+        },
+      },
       slots: [
         {
           id: 3,
@@ -107,7 +163,7 @@ export default function DrugChart(props) {
           notes: "some slot text",
           admin: {
             administeredBy: "Dr. John Doe",
-            administeredAt: "2023-08-08T08:30:00.000Z",
+            administeredAt: "2023-08-08T08:45:00.000Z",
             adminid: "1234",
           },
         },
@@ -136,6 +192,25 @@ export default function DrugChart(props) {
       comment: "some comment",
       scheduleStartDate: "2023-08-08T18:30:00.000Z",
       scheduleEndDate: "2023-08-08T18:30:00.000Z",
+      order: {
+        drug: {
+          display: "Amoxicillin/Clavulanic Acid 1000 mg Tablet (Tablet)",
+        },
+        route: {
+          uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+          display: "Oral",
+        },
+        dose: "4",
+        doseUnits: {
+          uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
+          display: "Tablet(s)",
+        },
+        duration: 2,
+        durationUnits: {
+          uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+          display: "Day(s)",
+        },
+      },
       slots: [
         {
           id: 3,
@@ -172,16 +247,45 @@ export default function DrugChart(props) {
       comment: "some comment",
       startDate: "2023-08-08T18:30:00.000Z",
       endDate: "2023-08-08T18:30:00.000Z",
+      order: {
+        drug: {
+          display: "Isoflurane 250 mL Inhalation Anesthetic Liquid (Liquid)",
+        },
+        route: {
+          uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+          display: "Oral",
+        },
+        dose: 30,
+        doseUnits: {
+          uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
+          display: "ml",
+        },
+        duration: 4,
+        durationUnits: {
+          uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+          display: "Day(s)",
+        },
+      },
+      dose: 2,
+      doseUnits: {
+        uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
+        display: "Tablet(s)",
+      },
       slots: [
         {
           id: 1,
           uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
           orderId: 13,
           serviceType: "Medication Administration",
-          status: "Not-Administered",
+          status: "Administered-Late",
           startDateTime: "2023-08-08T10:45:00.000Z",
           endDateTime: "2023-08-08T09:30:00.000Z",
           notes: "some slot text",
+          admin: {
+            administeredBy: "Dr. John Doe",
+            administeredAt: "2023-08-08T10:50:00.000Z",
+            adminid: "1234",
+          },
         },
         {
           id: 2,
@@ -212,14 +316,19 @@ export default function DrugChart(props) {
     },
   ];
   const transformedDrugchartData = TransformDrugChartData(drugChartData);
-
   return (
-    <div className="drug-chart">
-      <div className="drug-chart-left-panel"></div>
-      <div className="drug-chart-content">
-        <CalendarHeader />
-        <Calendar calendarData={transformedDrugchartData} />
+    <div className={"drug-chart-dashboard"}>
+      <div className="drug-chart">
+        <div className="drug-chart-left-panel">
+          <div className={"header"} />
+          <DrugList drugDetails={transformedDrugchartData[1]} />
+        </div>
+        <div className="drug-chart-content">
+          <CalendarHeader />
+          <Calendar calendarData={transformedDrugchartData[0]} />
+        </div>
       </div>
+      <DrugChartLegend />
     </div>
   );
 }

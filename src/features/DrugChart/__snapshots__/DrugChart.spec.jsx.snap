@@ -3,19 +3,200 @@
 exports[`DrugChart should match snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="drug-chart"
+    class="drug-chart-dashboard"
   >
     <div
-      class="drug-chart-left-panel"
-    />
+      class="drug-chart"
+    >
+      <div
+        class="drug-chart-left-panel"
+      >
+        <div
+          class="header"
+        />
+        <div>
+          <table
+            style="overflow: hidden;"
+          >
+            <tbody>
+              <tr>
+                <td>
+                  <div
+                    class="drug-name"
+                  >
+                    Paracetamol 120 mg/5 mL Suspension (Liquid)
+                  </div>
+                  <div
+                    class="dosage"
+                  >
+                    <span>
+                      25ml
+                    </span>
+                    <span>
+                       - Oral
+                    </span>
+                    <span>
+                       - 3 Day(s)
+                    </span>
+                  </div>
+                  <div
+                    style="display: flex; align-items: center; gap: 5px;"
+                  >
+                    <test-file-stub />
+                    <span
+                      style="color: rgb(82, 82, 82);"
+                    >
+                      11:35
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div
+                    class="drug-name"
+                  >
+                    Ibuprofen 400 mg Tablet
+                  </div>
+                  <div
+                    class="dosage"
+                  >
+                    <span>
+                      4
+                    </span>
+                    <span>
+                       - Tablet(s)
+                    </span>
+                    <span>
+                       - Oral
+                    </span>
+                  </div>
+                  <div
+                    style="display: flex; align-items: center; gap: 5px;"
+                  >
+                    <test-file-stub />
+                    <span
+                      style="color: rgb(218, 30, 40);"
+                    >
+                      08:45
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div
+                    class="drug-name"
+                  >
+                    Amoxicillin/Clavulanic Acid 1000 mg Tablet (Tablet)
+                  </div>
+                  <div
+                    class="dosage"
+                  >
+                    <span>
+                      4
+                    </span>
+                    <span>
+                       - Tablet(s)
+                    </span>
+                    <span>
+                       - Oral
+                    </span>
+                    <span>
+                       - 2 Day(s)
+                    </span>
+                  </div>
+                  <div
+                    style="display: flex; align-items: center; gap: 5px;"
+                  >
+                    <test-file-stub />
+                    <span
+                      style="color: rgb(82, 82, 82);"
+                    >
+                      06:30
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div
+                    class="drug-name"
+                  >
+                    Isoflurane 250 mL Inhalation Anesthetic Liquid (Liquid)
+                  </div>
+                  <div
+                    class="dosage"
+                  >
+                    <span>
+                      30ml
+                    </span>
+                    <span>
+                       - Oral
+                    </span>
+                    <span>
+                       - 4 Day(s)
+                    </span>
+                  </div>
+                  <div
+                    style="display: flex; align-items: center; gap: 5px;"
+                  >
+                    <test-file-stub />
+                    <span
+                      style="color: rgb(218, 30, 40);"
+                    >
+                      10:50
+                      <span
+                        style="color: rgb(82, 82, 82);"
+                      >
+                        ,
+                      </span>
+                    </span>
+                    <span
+                      style="color: rgb(82, 82, 82);"
+                    >
+                      13:40
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div
+        class="drug-chart-content"
+      >
+        <div>
+          CalendarHeader
+        </div>
+        <div>
+          Calendar
+        </div>
+      </div>
+    </div>
     <div
-      class="drug-chart-content"
+      class="drug-chart-legend"
     >
       <div>
-        CalendarHeader
+        <test-file-stub />
+        Administered
       </div>
       <div>
-        Calendar
+        <test-file-stub />
+        Not Administered
+      </div>
+      <div>
+        <test-file-stub />
+        Late
+      </div>
+      <div>
+        <test-file-stub />
+        Administered Late
+      </div>
+      <div>
+        <test-file-stub />
+        Pending
       </div>
     </div>
   </div>

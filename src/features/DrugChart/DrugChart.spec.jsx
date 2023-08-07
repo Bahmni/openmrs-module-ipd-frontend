@@ -25,6 +25,25 @@ const drugChartData = [
     comment: "some comment",
     startDate: "2023-08-08T18:30:00.000Z",
     endDate: "2023-08-08T18:30:00.000Z",
+    order: {
+      drug: {
+        display: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
+      },
+      route: {
+        uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+        display: "Oral",
+      },
+      dose: 25,
+      doseUnits: {
+        uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
+        display: "ml",
+      },
+      duration: 3,
+      durationUnits: {
+        uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+        display: "Day(s)",
+      },
+    },
     slots: [
       {
         id: 1,
@@ -85,23 +104,39 @@ describe("TransformDrugChartData", () => {
   it("should transform drug chart data", () => {
     const TransformedDrugChartData = TransformDrugChartData(drugChartData);
     expect(TransformedDrugChartData).toEqual([
-      {
-        11: {
-          administrationInfo: "Dr. John Doe [11:40]",
-          minutes: 30,
-          status: "Administered",
+      [
+        {
+          11: {
+            administrationInfo: "Dr. John Doe [11:40]",
+            minutes: 30,
+            status: "Administered",
+          },
+          15: {
+            administrationInfo: "Dr. John Doe [15:30]",
+            minutes: 30,
+            status: "Pending",
+          },
+          8: {
+            administrationInfo: "Dr. John Doe [08:30]",
+            minutes: 30,
+            status: "Not-Administered",
+          },
         },
-        15: {
-          administrationInfo: "Dr. John Doe [15:30]",
-          minutes: 30,
-          status: "Pending",
+      ],
+      [
+        {
+          administrationInfo: [
+            {
+              kind: "Administered",
+              time: "11:40",
+            },
+          ],
+          dosage: "25ml",
+          drugName: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
+          drugRoute: "Oral",
+          duration: "3 Day(s)",
         },
-        8: {
-          administrationInfo: "Dr. John Doe [08:30]",
-          minutes: 30,
-          status: "Not-Administered",
-        },
-      },
+      ],
     ]);
   });
 });
