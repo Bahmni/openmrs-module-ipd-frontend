@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import useScrollSync from "react-scroll-sync-hook";
 import moment from "moment";
@@ -340,12 +340,22 @@ export default function DrugChart(props) {
       ],
     },
   ];
-  useEffect(async () => {
-    const newDrugChartData = await fetchMedications(patientId, forDate);
+  useEffect(() => {
+    fetchMedication();
+  }, []);
+  const [drugchartdataNew, setDrugChartDataNew] = useState();
+  const fetchMedication = async () => {
+    try {
+      const newDrugChartData = await fetchMedications(patientId, forDate);
 
-    console.log("newDrugChartData: ", newDrugChartData);
-  });
+      setDrugChartDataNew(newDrugChartData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const transformedDrugchartData = TransformDrugChartData(drugChartData);
+  console.log("drugchartdataNew", drugchartdataNew);
+
   return (
     <div className="drug-chart-dashboard">
       <div className="drug-chart">
