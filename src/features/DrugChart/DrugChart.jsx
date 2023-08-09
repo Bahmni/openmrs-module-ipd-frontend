@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import useScrollSync from "react-scroll-sync-hook";
 import moment from "moment";
 import Calendar from "../Calendar/Calendar";
 import CalendarHeader from "../CalendarHeader/CalendarHeader";
@@ -59,10 +60,35 @@ export const TransformDrugChartData = (drugChartData) => {
 };
 
 export default function DrugChart(props) {
-  const { patientId, viewDate = new Date() } = props;
+  const { patientId, viewDate } = props;
   console.log("DrugChart: patientId: ", patientId);
   console.log("DrugChart: viewDate: ", viewDate);
 
+  const leftPane = useRef(null);
+  const rightPane = useRef(null);
+
+  const { registerPane, unregisterPane } = useScrollSync({
+    vertical: true,
+  });
+
+  useEffect(() => {
+    if (leftPane.current) {
+      registerPane(leftPane.current);
+    }
+    if (rightPane.current) {
+      registerPane(rightPane.current);
+    }
+
+    return () => {
+      if (leftPane.current) {
+        unregisterPane(leftPane.current);
+      }
+
+      if (rightPane.current) {
+        unregisterPane(rightPane.current);
+      }
+    };
+  }, [leftPane, rightPane, registerPane, unregisterPane]);
   const drugChartData = [
     {
       scheduleId: 1,
@@ -317,13 +343,13 @@ export default function DrugChart(props) {
   ];
   const transformedDrugchartData = TransformDrugChartData(drugChartData);
   return (
-    <div className={"drug-chart-dashboard"}>
+    <div className="drug-chart-dashboard">
       <div className="drug-chart">
-        <div className="drug-chart-left-panel">
-          <div className={"header"} />
+        <div className="drug-chart-left-panel" ref={leftPane}>
+          <div className="header" />
           <DrugList drugDetails={transformedDrugchartData[1]} />
         </div>
-        <div className="drug-chart-content">
+        <div className="drug-chart-content" ref={rightPane}>
           <CalendarHeader />
           <Calendar calendarData={transformedDrugchartData[0]} />
         </div>

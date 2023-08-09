@@ -46,6 +46,12 @@
       }
     }
   }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.drug-chart-left-panel::-webkit-scrollbar {
+  display: none;
 }
 
 .drug-chart-content {
