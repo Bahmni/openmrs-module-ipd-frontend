@@ -19,7 +19,10 @@ export default function Dashboard(props) {
             Click to send event to host appliation
           </Button> */}
 
-        <DrugChart patientId={hostData?.patient?.uuid} />
+        <DrugChart
+          patientId={hostData?.patientId}
+          viewDate={hostData?.forDate}
+        />
       </I18nProvider>
     </>
   );
@@ -27,11 +30,7 @@ export default function Dashboard(props) {
 
 Dashboard.propTypes = {
   hostData: PropTypes.shape({
-    patient: PropTypes.shape({
-      uuid: PropTypes.string.isRequired,
-    }).isRequired,
+    patientId: PropTypes.string,
+    forDate: PropTypes.instanceOf(Date),
   }).isRequired,
-  hostApi: PropTypes.shape({
-    onConfirm: PropTypes.func,
-  }),
 };

@@ -7,7 +7,7 @@ import CalendarHeader from "../CalendarHeader/CalendarHeader";
 import "./DrugChart.scss";
 import DrugList from "../DrugList/DrugList";
 import DrugChartLegend from "../DrugChartLegend/DrugChartLegend";
-
+import { fetchMedications } from "../../utils/DrugChartUtils";
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
   const transformedDrugChartData = drugChartData.map((schedule) => {
@@ -58,19 +58,20 @@ export const TransformDrugChartData = (drugChartData) => {
   });
   return [transformedDrugChartData, drugOrderData];
 };
-
+export const GetUTCEpochForDate = (viewDate) => {
+  const utcTimeEpoch = moment.utc(viewDate).unix();
+  return utcTimeEpoch;
+};
 export default function DrugChart(props) {
   const { patientId, viewDate } = props;
   console.log("DrugChart: patientId: ", patientId);
   console.log("DrugChart: viewDate: ", viewDate);
-
+  const forDate = GetUTCEpochForDate(viewDate);
   const leftPane = useRef(null);
   const rightPane = useRef(null);
-
   const { registerPane, unregisterPane } = useScrollSync({
     vertical: true,
   });
-
   useEffect(() => {
     if (leftPane.current) {
       registerPane(leftPane.current);
@@ -78,12 +79,10 @@ export default function DrugChart(props) {
     if (rightPane.current) {
       registerPane(rightPane.current);
     }
-
     return () => {
       if (leftPane.current) {
         unregisterPane(leftPane.current);
       }
-
       if (rightPane.current) {
         unregisterPane(rightPane.current);
       }
@@ -341,6 +340,11 @@ export default function DrugChart(props) {
       ],
     },
   ];
+  useEffect(async () => {
+    const newDrugChartData = await fetchMedications(patientId, forDate);
+
+    console.log("newDrugChartData: ", newDrugChartData);
+  });
   const transformedDrugchartData = TransformDrugChartData(drugChartData);
   return (
     <div className="drug-chart-dashboard">
@@ -358,7 +362,6 @@ export default function DrugChart(props) {
     </div>
   );
 }
-
 DrugChart.propTypes = {
   patientId: PropTypes.string.isRequired,
   viewDate: PropTypes.instanceOf(Date),
