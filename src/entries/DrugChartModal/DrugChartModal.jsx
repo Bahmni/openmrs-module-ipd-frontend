@@ -216,9 +216,9 @@ export default function DrugChartModal(props) {
       providerUuid: hostData?.drugOrder?.provider?.uuid,
       patientUuid: hostData?.patientId,
       orderUuid: hostData?.drugOrder?.uuid,
-      slotStartTime: "",
-      firstDaySlotsStartTime: [],
-      dayWiseSlotsStartTime: [],
+      slotStartTime: null,
+      firstDaySlotsStartTime: null,
+      dayWiseSlotsStartTime: null,
       comments: drugChartNotes,
       medicationFrequency: "",
     };
@@ -233,6 +233,7 @@ export default function DrugChartModal(props) {
         return getUTCTimeEpoch(schedule);
       });
       payload.dayWiseSlotsStartTime = schedulesUTCTimeEpoch;
+      payload.firstDaySlotsStartTime = [];
       payload.medicationFrequency =
         medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
     }
