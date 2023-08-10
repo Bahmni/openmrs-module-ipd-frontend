@@ -31,8 +31,8 @@ export const TransformDrugChartData = (drugChartData) => {
       drugOrder.duration = order.duration + " " + order.durationUnits.display;
     }
     slots.forEach((slot) => {
-      const { startDateTime, status } = slot;
-      const startDateTimeObj = new Date(startDateTime);
+      const { startTime, status } = slot;
+      const startDateTimeObj = new Date(startTime * 1000);
       let adminInfo, administeredTime;
       if (slot.admin) {
         const { administeredBy, administeredAt } = slot.admin;
@@ -88,284 +88,32 @@ export default function DrugChart(props) {
       }
     };
   }, [leftPane, rightPane, registerPane, unregisterPane]);
-  const drugChartData = [
-    {
-      scheduleId: 1,
-      scheduleUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-      scheduleServiceType: "Medication Administration",
-      patientUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-      comment: "some comment",
-      startDate: "2023-08-08T18:30:00.000Z",
-      endDate: "2023-08-08T18:30:00.000Z",
-      order: {
-        drug: {
-          display: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
-        },
-        route: {
-          uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
-          display: "Oral",
-        },
-        dose: 25,
-        doseUnits: {
-          uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
-          display: "ml",
-        },
-        duration: 3,
-        durationUnits: {
-          uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
-          display: "Day(s)",
-        },
-      },
-      slots: [
-        {
-          id: 1,
-          uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-          orderId: 11,
-          serviceType: "Medication Administration",
-          status: "Not-Administered",
-          startDateTime: "2023-08-08T08:30:00.000Z",
-          endDateTime: "2023-08-08T09:30:00.000Z",
-          notes: "some slot text",
-        },
-        {
-          id: 2,
-          uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-          orderId: 12,
-          serviceType: "Medication Administration",
-          status: "Administered",
-          startDateTime: "2023-08-08T11:30:00.000Z",
-          endDateTime: "2023-08-08T09:30:00.000Z",
-          notes: "some slot text",
-          admin: {
-            administeredBy: "Dr. John Doe",
-            administeredAt: "2023-08-08T11:35:00.000Z",
-            adminid: "1234",
-          },
-        },
-        {
-          id: 3,
-          uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-          orderId: 12,
-          serviceType: "Medication Administration",
-          status: "Pending",
-          startDateTime: "2023-08-08T14:30:00.000Z",
-          endDateTime: "2023-08-08T09:30:00.000Z",
-          notes: "some slot text",
-        },
-      ],
-    },
-    {
-      scheduleId: 2,
-      scheduleUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-      patientUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-      scheduleServiceType: "Medication Administration",
-      comment: "some comment",
-      scheduleStartDate: "2023-08-08T18:30:00.000Z",
-      scheduleEndDate: "2023-08-08T18:30:00.000Z",
-      order: {
-        drug: {
-          display: "Ibuprofen 400 mg Tablet",
-        },
-        route: {
-          uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
-          display: "Oral",
-        },
-        dose: 4,
-        doseUnits: {
-          uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
-          display: "Tablet(s)",
-        },
-      },
-      slots: [
-        {
-          id: 3,
-          uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-          orderId: 11,
-          serviceType: "Medication Administration",
-          status: "Administered-Late",
-          startDateTime: "2023-08-08T08:30:00.000Z",
-          endDateTime: "2023-08-08T09:30:00.000Z",
-          notes: "some slot text",
-          admin: {
-            administeredBy: "Dr. John Doe",
-            administeredAt: "2023-08-08T08:45:00.000Z",
-            adminid: "1234",
-          },
-        },
-        {
-          id: 4,
-          uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-          orderId: 12,
-          serviceType: "Medication Administration",
-          status: "Late",
-          startDateTime: "2023-08-08T02:30:00.000Z",
-          endDateTime: "2023-08-08T03:30:00.000Z",
-          notes: "some slot text",
-          admin: {
-            administeredBy: "Dr. John Doe",
-            administeredAt: "2023-08-08T08:30:00.000Z",
-            adminid: "1234",
-          },
-        },
-      ],
-    },
-    {
-      scheduleId: 3,
-      scheduleUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-      patientUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-      scheduleServiceType: "Medication Administration",
-      comment: "some comment",
-      scheduleStartDate: "2023-08-08T18:30:00.000Z",
-      scheduleEndDate: "2023-08-08T18:30:00.000Z",
-      order: {
-        drug: {
-          display: "Amoxicillin/Clavulanic Acid 1000 mg Tablet (Tablet)",
-        },
-        route: {
-          uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
-          display: "Oral",
-        },
-        dose: "4",
-        doseUnits: {
-          uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
-          display: "Tablet(s)",
-        },
-        duration: 2,
-        durationUnits: {
-          uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
-          display: "Day(s)",
-        },
-      },
-      slots: [
-        {
-          id: 3,
-          uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-          orderId: 11,
-          serviceType: "Medication Administration",
-          status: "Administered",
-          startDateTime: "2023-08-08T06:30:00.000Z",
-          endDateTime: "2023-08-08T09:30:00.000Z",
-          notes: "some slot text",
-          admin: {
-            administeredBy: "Dr. John Doe",
-            administeredAt: "2023-08-08T06:30:00.000Z",
-            adminid: "1234",
-          },
-        },
-        {
-          id: 4,
-          uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-          orderId: 12,
-          serviceType: "Medication Administration",
-          status: "Late",
-          startDateTime: "2023-08-08T04:30:00.000Z",
-          endDateTime: "2023-08-08T05:30:00.000Z",
-          notes: "some slot text",
-        },
-      ],
-    },
-    {
-      scheduleId: 4,
-      scheduleUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-      scheduleServiceType: "Medication Administration",
-      patientUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-      comment: "some comment",
-      startDate: "2023-08-08T18:30:00.000Z",
-      endDate: "2023-08-08T18:30:00.000Z",
-      order: {
-        drug: {
-          display: "Isoflurane 250 mL Inhalation Anesthetic Liquid (Liquid)",
-        },
-        route: {
-          uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
-          display: "Oral",
-        },
-        dose: 30,
-        doseUnits: {
-          uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
-          display: "ml",
-        },
-        duration: 4,
-        durationUnits: {
-          uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
-          display: "Day(s)",
-        },
-      },
-      dose: 2,
-      doseUnits: {
-        uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
-        display: "Tablet(s)",
-      },
-      slots: [
-        {
-          id: 1,
-          uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-          orderId: 13,
-          serviceType: "Medication Administration",
-          status: "Administered-Late",
-          startDateTime: "2023-08-08T10:45:00.000Z",
-          endDateTime: "2023-08-08T09:30:00.000Z",
-          notes: "some slot text",
-          admin: {
-            administeredBy: "Dr. John Doe",
-            administeredAt: "2023-08-08T10:50:00.000Z",
-            adminid: "1234",
-          },
-        },
-        {
-          id: 2,
-          uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-          orderId: 12,
-          serviceType: "Medication Administration",
-          status: "Administered",
-          startDateTime: "2023-08-08T13:35:00.000Z",
-          endDateTime: "2023-08-08T09:30:00.000Z",
-          notes: "some slot text",
-          admin: {
-            administeredBy: "Dr. John Doe",
-            administeredAt: "2023-08-08T13:40:00.000Z",
-            adminid: "1234",
-          },
-        },
-        {
-          id: 3,
-          uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-          orderId: 12,
-          serviceType: "Medication Administration",
-          status: "Pending",
-          startDateTime: "2023-08-08T15:30:00.000Z",
-          endDateTime: "2023-08-08T09:30:00.000Z",
-          notes: "some slot text",
-        },
-      ],
-    },
-  ];
   useEffect(() => {
     fetchMedication();
   }, []);
-  const [drugchartdataNew, setDrugChartDataNew] = useState();
+  const [drugchartdataNew, setDrugChartDataNew] = useState([[], []]);
+  const [isLoading, setLoading] = useState(true);
   const fetchMedication = async () => {
-    try {
-      const newDrugChartData = await fetchMedications(patientId, forDate);
-
-      setDrugChartDataNew(newDrugChartData);
-    } catch (e) {
-      console.log(e);
+    const response = await fetchMedications(patientId, forDate);
+    if (response.status === 200) {
+      setDrugChartDataNew(TransformDrugChartData(response.data));
+      setLoading(false);
     }
   };
-  const transformedDrugchartData = TransformDrugChartData(drugChartData);
-  console.log("drugchartdataNew", drugchartdataNew);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="drug-chart-dashboard">
       <div className="drug-chart">
         <div className="drug-chart-left-panel" ref={leftPane}>
           <div className="header" />
-          <DrugList drugDetails={transformedDrugchartData[1]} />
+          <DrugList drugDetails={drugchartdataNew[1]} />
         </div>
         <div className="drug-chart-content" ref={rightPane}>
           <CalendarHeader />
-          <Calendar calendarData={transformedDrugchartData[0]} />
+          <Calendar calendarData={drugchartdataNew[0]} />
         </div>
       </div>
       <DrugChartLegend />
