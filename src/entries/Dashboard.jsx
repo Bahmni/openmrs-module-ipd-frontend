@@ -2,8 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./Dashboard.scss";
 import { I18nProvider } from "../features/i18n/I18nProvider";
-import DrugChart from "../features/DrugChart/DrugChart.jsx";
-
+import DrugChartWrapper from "../features/DrugChart/DrugChartWrapper/DrugChartWrapper.jsx";
 /**
  * NOTE: Currently there is nothing in this dashboard, all debugging items
  */
@@ -18,8 +17,7 @@ export default function Dashboard(props) {
           >
             Click to send event to host appliation
           </Button> */}
-
-        <DrugChart
+        <DrugChartWrapper
           patientId={hostData?.patientId}
           viewDate={hostData?.forDate}
         />
@@ -27,7 +25,6 @@ export default function Dashboard(props) {
     </>
   );
 }
-
 Dashboard.propTypes = {
   hostData: PropTypes.shape({
     patientId: PropTypes.string,
