@@ -32,11 +32,19 @@ export default function DrugChart(props) {
   return (
     <div className="drug-chart-dashboard">
       <div className="drug-chart">
-        <div className="drug-chart-left-panel" ref={leftPane}>
+        <div
+          className="drug-chart-left-panel"
+          data-testid="left-panel"
+          ref={leftPane}
+        >
           <div className="header" />
           <DrugList drugDetails={drugChartData[1]} />
         </div>
-        <div className="drug-chart-content" ref={rightPane}>
+        <div
+          className="drug-chart-content"
+          data-testid="right-panel"
+          ref={rightPane}
+        >
           <CalendarHeader />
           <Calendar calendarData={drugChartData[0]} />
         </div>

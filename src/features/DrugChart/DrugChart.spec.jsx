@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import DrugChart, { TransformDrugChartData } from "./DrugChart";
+import DrugChart from "./DrugChart";
 
 const mockCalendar = jest.fn();
 jest.mock("../CalendarHeader/CalendarHeader", () => {
@@ -17,126 +17,71 @@ jest.mock("../Calendar/Calendar", () => {
 });
 
 const drugChartData = [
-  {
-    scheduleId: 1,
-    scheduleUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-    scheduleServiceType: "Medication Administration",
-    patientUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-    comment: "some comment",
-    startDate: "2023-08-08T18:30:00.000Z",
-    endDate: "2023-08-08T18:30:00.000Z",
-    order: {
-      drug: {
-        display: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
+  [
+    {
+      8: {
+        minutes: 0,
+        status: "SCHEDULED",
       },
-      route: {
-        uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
-        display: "Oral",
+      13: {
+        minutes: 0,
+        status: "SCHEDULED",
       },
-      dose: 25,
-      doseUnits: {
-        uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
-        display: "ml",
+      17: {
+        minutes: 0,
+        status: "SCHEDULED",
       },
-      duration: 3,
-      durationUnits: {
-        uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
-        display: "Day(s)",
+      23: {
+        minutes: 55,
+        status: "SCHEDULED",
       },
     },
-    slots: [
-      {
-        id: 1,
-        uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-        orderId: 11,
-        serviceType: "Medication Administration",
-        status: "Not-Administered",
-        startDateTime: "2023-08-08T08:30:00.000Z",
-        endDateTime: "2023-08-08T09:30:00.000Z",
-        notes: "some slot text",
-        admin: {
-          administeredBy: "Dr. John Doe",
-          administeredAt: "2023-08-08T08:30:00.000Z",
-          adminid: "1234",
-        },
+    {
+      11: {
+        minutes: 0,
+        status: "SCHEDULED",
       },
-      {
-        id: 2,
-        uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-        orderId: 12,
-        serviceType: "Medication Administration",
-        status: "Administered",
-        startDateTime: "2023-08-08T11:30:00.000Z",
-        endDateTime: "2023-08-08T09:30:00.000Z",
-        notes: "some slot text",
-        admin: {
-          administeredBy: "Dr. John Doe",
-          administeredAt: "2023-08-08T11:40:00.000Z",
-          adminid: "1234",
-        },
+      15: {
+        minutes: 55,
+        status: "SCHEDULED",
       },
-      {
-        id: 3,
-        uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-        orderId: 12,
-        serviceType: "Medication Administration",
-        status: "Pending",
-        startDateTime: "2023-08-08T15:30:00.000Z",
-        endDateTime: "2023-08-08T09:30:00.000Z",
-        notes: "some slot text",
-        admin: {
-          administeredBy: "Dr. John Doe",
-          administeredAt: "2023-08-08T15:30:00.000Z",
-          adminid: "1234",
-        },
+      19: {
+        minutes: 10,
+        status: "SCHEDULED",
       },
-    ],
-  },
+    },
+  ],
+  [
+    {
+      drugName: "Suxamethonium Chloride 100 mg/2 mL Ampoule (50 mg/mL )",
+      drugRoute: "Intravenous",
+      administrationInfo: [],
+      duration: "4 Day(s)",
+      dosage: 2,
+      doseType: "mg",
+    },
+    {
+      drugName: "Enalapril 5 mg Tablet",
+      drugRoute: "Oral",
+      administrationInfo: [],
+      duration: "4 Day(s)",
+      dosage: 1,
+      doseType: "Tablet(s)",
+    },
+  ],
 ];
 describe("DrugChart", () => {
   it("should match snapshot", () => {
-    const { asFragment } = render(<DrugChart patientId="test-id" />);
+    const { asFragment } = render(<DrugChart drugChartData={drugChartData} />);
     expect(asFragment()).toMatchSnapshot();
   });
-});
 
-describe("TransformDrugChartData", () => {
-  it("should transform drug chart data", () => {
-    const TransformedDrugChartData = TransformDrugChartData(drugChartData);
-    expect(TransformedDrugChartData).toEqual([
-      [
-        {
-          11: {
-            administrationInfo: "Dr. John Doe [11:40]",
-            minutes: 30,
-            status: "Administered",
-          },
-          15: {
-            administrationInfo: "Dr. John Doe [15:30]",
-            minutes: 30,
-            status: "Pending",
-          },
-          8: {
-            administrationInfo: "Dr. John Doe [08:30]",
-            minutes: 30,
-            status: "Not-Administered",
-          },
-        },
-      ],
-      [
-        {
-          administrationInfo: [
-            {
-              kind: "Administered",
-              time: "11:40",
-            },
-          ],
-          dosage: "25ml",
-          drugName: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
-          drugRoute: "Oral",
-          duration: "3 Day(s)",
-        },
-      ],
-    ]);
+  it("should synchronize scroll position of the right panel and the left panel when scrolled to bottom", () => {
+    const { getByTestId } = render(<DrugChart drugChartData={drugChartData} />);
+    const leftPanel = getByTestId("left-panel");
+    const rightPanel = getByTestId("right-panel");
+    leftPanel.scrollBottom = 100;
+    rightPanel.scrollBottom = 100;
+    expect(leftPanel.scrollBottom).toEqual(rightPanel.scrollBottom);
   });
 });
