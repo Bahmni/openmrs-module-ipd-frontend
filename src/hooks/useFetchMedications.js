@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { fetchMedications } from "../utils/DrugChartUtils";
+import { fetchMedications } from "../utils/DrugChartUtils/DrugChartUtils";
 
 export const useFetchMedications = (patientUuid, forDate) => {
   const [drugChartData, setDrugChartData] = useState([]);

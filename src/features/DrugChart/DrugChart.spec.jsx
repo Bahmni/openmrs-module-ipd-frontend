@@ -16,6 +16,18 @@ jest.mock("../Calendar/Calendar", () => {
   };
 });
 
+const mockRegisterPane = jest.fn();
+const mockUnregisterPane = jest.fn();
+
+jest.mock("react-scroll-sync-hook", () => {
+  return function useScrollSync() {
+    return {
+      registerPane: mockRegisterPane,
+      unregisterPane: mockUnregisterPane,
+    };
+  };
+});
+
 const drugChartData = [
   [
     {
@@ -70,10 +82,23 @@ const drugChartData = [
     },
   ],
 ];
+
 describe("DrugChart", () => {
   it("should match snapshot", () => {
     const { asFragment } = render(<DrugChart drugChartData={drugChartData} />);
     expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("should call register pane when ref is on rightpane", () => {
+    const { getByTestId } = render(<DrugChart drugChartData={drugChartData} />);
+    const rightPanel = getByTestId("right-panel");
+    expect(mockRegisterPane).toHaveBeenCalledWith(rightPanel);
+  });
+
+  it("should  unregisterPane when component is  unmounted", () => {
+    const { unmount } = render(<DrugChart drugChartData={drugChartData} />);
+    unmount();
+    expect(mockUnregisterPane).toHaveBeenCalled();
   });
 
   it("should synchronize scroll position of the right panel and the left panel when scrolled to bottom", () => {

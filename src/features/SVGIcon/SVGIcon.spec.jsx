@@ -15,13 +15,26 @@ jest.mock("bahmni-carbon-ui", () => {
 });
 
 describe("SVGImage", () => {
-  it("should render pending icon when info is not present", () => {
-    render(<SVGIcon iconType="Pending" />);
-    expect(MockTooltipCarbon).not.toHaveBeenCalled();
+  const test = ["Not-Administered", "Pending", "Late"];
+
+  test.forEach((iconType) => {
+    it(`should render ${iconType} icon`, () => {
+      render(<SVGIcon iconType={iconType} />);
+      expect(MockTooltipCarbon).not.toHaveBeenCalled();
+    });
   });
 
-  it("should render pending icon when info is present", () => {
+  it("should render Administered icon when info is present", () => {
     render(<SVGIcon iconType="Administered" info="info" />);
+    expect(MockTooltipCarbon).toHaveBeenCalled();
+    expect(MockTooltipCarbon).toHaveBeenCalledWith({
+      icon: expect.any(Function),
+      content: "info",
+    });
+  });
+
+  it("should render Administered-Late icon when info is present", () => {
+    render(<SVGIcon iconType="Administered-Late" info="info" />);
     expect(MockTooltipCarbon).toHaveBeenCalled();
     expect(MockTooltipCarbon).toHaveBeenCalledWith({
       icon: expect.any(Function),

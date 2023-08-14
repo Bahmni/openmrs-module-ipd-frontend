@@ -34,51 +34,33 @@ const testData = [
         id: 1,
         uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
         orderId: 11,
-        serviceType: "Medication Administration",
-        status: "Not-Administered",
-        startDateTime: "2023-08-08T08:30:00.000Z",
-        endDateTime: "2023-08-08T09:30:00.000Z",
-        notes: "some slot text",
+        serviceType: "MedicationRequest",
+        status: "SCHEDULED",
+        startTime: 1690906550,
       },
       {
         id: 2,
-        uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-        orderId: 12,
-        serviceType: "Medication Administration",
-        status: "Administered",
-        startDateTime: "2023-08-08T11:30:00.000Z",
-        endDateTime: "2023-08-08T09:30:00.000Z",
-        notes: "some slot text",
-        admin: {
-          administeredBy: "Dr. John Doe",
-          administeredAt: "2023-08-08T11:35:00.000Z",
-          adminid: "1234",
-        },
+        uuid: "738aa77d-03fc-438f-a87a-ae8a8867cyu721",
+        orderId: 11,
+        serviceType: "MedicationRequest",
+        status: "SCHEDULED",
+        startTime: 1690916550,
       },
       {
         id: 3,
-        uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-        orderId: 12,
-        serviceType: "Medication Administration",
-        status: "Pending",
-        startDateTime: "2023-08-08T14:30:00.000Z",
-        endDateTime: "2023-08-08T09:30:00.000Z",
-        notes: "some slot text",
+        uuid: "738aa77d-03fc-438f-a87a-a3ed8a8867c421",
+        serviceType: "MedicationRequest",
+        status: "SCHEDULED",
+        startTime: 1690918550,
       },
     ],
   },
 ];
-// const mockFetchMedications = jest.fn();
-jest.mock("../utils/DrugChartUtils", () => ({
+jest.mock("../utils/DrugChartUtils/DrugChartUtils", () => ({
   fetchMedications: jest.fn().mockResolvedValue({
     data: testData,
   }),
 }));
-
-// jest.mock("../utils/DrugChartUtils", () => ({
-//     fetchMedications: mockFetchMedications,
-
-// }));
 
 describe("useFetchMedications", () => {
   it("should return medications", async () => {

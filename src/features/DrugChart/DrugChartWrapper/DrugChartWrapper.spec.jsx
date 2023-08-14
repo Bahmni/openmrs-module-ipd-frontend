@@ -4,13 +4,15 @@ import DrugChartWrapper, { TransformDrugChartData } from "./DrugChartWrapper";
 
 const drugChartData = [
   {
-    scheduleId: 1,
-    scheduleUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-    scheduleServiceType: "Medication Administration",
-    patientUuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+    id: 1,
+    uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+    serviceType: "Medication Administration",
     comment: "some comment",
-    startDate: "2023-08-08T18:30:00.000Z",
-    endDate: "2023-08-08T18:30:00.000Z",
+    startDate: 1690906304,
+    endDate: 1691165503,
+    patient: {
+      uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+    },
     order: {
       drug: {
         display: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
@@ -57,10 +59,33 @@ const drugChartData = [
     ],
   },
 ];
+
+const mockUseFetchMedications = jest.fn();
+
+jest.mock("../../../hooks/useFetchMedications", () => ({
+  useFetchMedications: () => mockUseFetchMedications(),
+}));
+
 describe("DrugChartWrapper", () => {
+  const mockDate = new Date(1466424490000);
   it("matches snapshot", () => {
+    mockUseFetchMedications.mockReturnValue({
+      isLoading: false,
+      drugChartData,
+    });
     const { container } = render(
-      <DrugChartWrapper drugChartData={drugChartData} />
+      <DrugChartWrapper patientId="testid" viewDate={mockDate} />
+    );
+    expect(container).toMatchSnapshot();
+  });
+
+  it("should render loading state when isLoading is true", () => {
+    mockUseFetchMedications.mockReturnValue({
+      isLoading: true,
+      drugChartData: [],
+    });
+    const { container } = render(
+      <DrugChartWrapper patientId="test-id" viewDate={mockDate} />
     );
     expect(container).toMatchSnapshot();
   });
