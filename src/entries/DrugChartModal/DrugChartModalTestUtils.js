@@ -51,6 +51,24 @@ export const mockScheduleFrequencies = [
   },
 ];
 
+export const mockScheduleFrequenciesWithTimings = [
+  {
+    name: "Twice a day",
+    frequencyPerDay: 2,
+    scheduleTiming: ["8:00", "16:00"],
+  },
+  {
+    name: "Thrice a day",
+    frequencyPerDay: 3,
+    scheduleTiming: ["8:00", "10:00", "20:00"],
+  },
+  {
+    name: "Four times a day",
+    frequencyPerDay: 4,
+    scheduleTiming: ["8:00", "10:00", "14:00", "20:00"],
+  },
+];
+
 export const mockStartTimeFrequencies = [
   "Every Hour",
   "Every 2 hours",
