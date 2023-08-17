@@ -26,7 +26,7 @@ export default function DrugChartModal(props) {
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
-  const isAutoFill = !!enableSchedule;
+  const isAutoFill = !!enableSchedule?.scheduleTiming;
 
   useEffect(() => {
     if (isAutoFill) {
