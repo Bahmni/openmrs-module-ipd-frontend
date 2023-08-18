@@ -9,7 +9,7 @@ import {
 import { Modal, TextArea, TextInput } from "carbon-components-react";
 import moment from "moment";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 import { saveMedication } from "../../utils/DrugChartModalUtils";
@@ -26,12 +26,28 @@ export default function DrugChartModal(props) {
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
+  const isAutoFill = !!enableSchedule?.scheduleTiming;
 
-  const schedulesArray = Array.from(
-    { length: enableSchedule?.frequencyPerDay },
-    () => ""
-  );
-  const [schedules, setSchedules] = useState(schedulesArray);
+  useEffect(() => {
+    if (isAutoFill) {
+      if (enable24HourTimers) {
+        setSchedules(enableSchedule?.scheduleTiming || []);
+      } else {
+        const parsedTimings = enableSchedule?.scheduleTiming.map((time) =>
+          moment(time, "hh:mm A")
+        );
+        setSchedules(parsedTimings || []);
+      }
+    } else {
+      const defaultSchedules = Array.from(
+        { length: enableSchedule?.frequencyPerDay },
+        () => ""
+      );
+      setSchedules(defaultSchedules);
+    }
+  }, [isAutoFill, enable24HourTimers, enableSchedule]);
+
+  const [schedules, setSchedules] = useState([]);
   const [startTime, setStartTime] = useState("");
   const [
     showStartTimeBeyondNextDoseWarning,

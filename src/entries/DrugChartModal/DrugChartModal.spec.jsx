@@ -7,6 +7,7 @@ import {
   mockScheduleFrequencies,
   mockStartTimeFrequencies,
   mockDrugOrderFrequencies,
+  mockScheduleFrequenciesWithTimings,
 } from "./DrugChartModalTestUtils";
 import "@testing-library/jest-dom";
 import mockAdapter from "axios-mock-adapter";
@@ -191,5 +192,26 @@ describe("DrugChartModal", () => {
     expect(
       screen.getByText("Please enter in 24-hr format")
     ).toBeInTheDocument();
+  });
+
+  it("Should show pre-filled timing in the schedule fields if the schedule time is provided from config", async () => {
+    render(
+      <DrugChartModal
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockScheduleDrugOrder,
+        }}
+        hostApi={{}}
+      />
+    );
+
+    await waitFor(() => {
+      const startTimeInputs = document.querySelectorAll("#time-selector");
+      expect(startTimeInputs).toBeDefined();
+      expect(startTimeInputs[0].value).toBe("8:00");
+      expect(startTimeInputs[1].value).toBe("16:00");
+    });
   });
 });
