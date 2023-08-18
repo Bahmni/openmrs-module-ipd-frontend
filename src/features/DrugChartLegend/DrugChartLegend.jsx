@@ -11,19 +11,16 @@ export default function DrugChartLegend() {
   return (
     <div className={"drug-chart-legend"}>
       <div>
-        <AdministeredIcon />
-        <FormattedMessage id="ADMINISTERED" defaultMessage={"Administered"} />
-      </div>
-      <div>
-        <NotAdministeredIcon />
-        <FormattedMessage
-          id="NOT_ADMINISTERED"
-          defaultMessage={"Not Administered"}
-        />
+        <PendingIcon />
+        <FormattedMessage id="PENDING" defaultMessage={"Pending"} />
       </div>
       <div>
         <LateIcon />
         <FormattedMessage id="LATE" defaultMessage={"Late"} />
+      </div>
+      <div>
+        <AdministeredIcon />
+        <FormattedMessage id="ADMINISTERED" defaultMessage={"Administered"} />
       </div>
       <div>
         <AdministeredLateIcon />
@@ -33,8 +30,11 @@ export default function DrugChartLegend() {
         />
       </div>
       <div>
-        <PendingIcon />
-        <FormattedMessage id="PENDING" defaultMessage={"Pending"} />
+        <NotAdministeredIcon />
+        <FormattedMessage
+          id="NOT_ADMINISTERED"
+          defaultMessage={"Not Administered"}
+        />
       </div>
     </div>
   );

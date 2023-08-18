@@ -1,0 +1,114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DrugListCell should  match snapshot 1`] = `
+<div>
+  <td>
+    <div
+      class="drug-name"
+    >
+      Suxamethonium Chloride 100 mg/2 mL Ampoule (50 mg/mL )
+    </div>
+    <div
+      class="dosage"
+    >
+      <span>
+        2
+      </span>
+      <span>
+         - 
+        mg
+      </span>
+      <span>
+         - 
+        Intravenous
+      </span>
+      <span>
+         - 
+        4 Day(s)
+      </span>
+    </div>
+  </td>
+</div>
+`;
+
+exports[`DrugListCell should  match snapshot for drug cell with admin info status as Administered 1`] = `
+<div>
+  <td>
+    <div
+      class="drug-name"
+    >
+      Enalapril 5 mg Tablet
+    </div>
+    <div
+      class="dosage"
+    >
+      <span>
+        1
+      </span>
+      <span>
+         - 
+        Tablet(s)
+      </span>
+      <span>
+         - 
+        Oral
+      </span>
+      <span>
+         - 
+        4 Day(s)
+      </span>
+    </div>
+    <div
+      style="display: flex; align-items: center; gap: 5px;"
+    >
+      <test-file-stub />
+      <span
+        style="color: rgb(82, 82, 82);"
+      >
+        8.45
+      </span>
+    </div>
+  </td>
+</div>
+`;
+
+exports[`DrugListCell should  match snapshot for for drug cell with admin info status as Administered-Late 1`] = `
+<div>
+  <td>
+    <div
+      class="drug-name"
+    >
+      Enalapril 5 mg Tablet
+    </div>
+    <div
+      class="dosage"
+    >
+      <span>
+        1
+      </span>
+      <span>
+         - 
+        Tablet(s)
+      </span>
+      <span>
+         - 
+        Oral
+      </span>
+      <span>
+         - 
+        4 Day(s)
+      </span>
+    </div>
+    <div
+      style="display: flex; align-items: center; gap: 5px;"
+    >
+      <test-file-stub />
+      <span
+        style="color: rgb(218, 30, 40);"
+      >
+        8.45
+      </span>
+    </div>
+  </td>
+</div>
+`;

@@ -26,7 +26,7 @@ export default function SVGIcon(props) {
       icon = <AdministeredLateIcon />;
       clickable = true;
       break;
-    case "Pending":
+    default:
       icon = <PendingIcon />;
   }
 
