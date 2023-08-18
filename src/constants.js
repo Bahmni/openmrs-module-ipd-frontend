@@ -10,9 +10,7 @@ const hostUrl = localStorage.getItem("host")
   ? "https://" + localStorage.getItem("host")
   : "";
 const RESTWS_V1 = hostUrl + "/openmrs/ws/rest/v1";
-export const SAVE_MEDICATION_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
-export const FETCH_MEDICATIONS_BASE_URL =
-  RESTWS_V1 + "/ipd/schedule/type/medication";
+export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
 
 export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
