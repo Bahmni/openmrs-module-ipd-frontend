@@ -17,5 +17,6 @@
   "LATE": "Late",
   "ADMINISTERED": "Administered",
   "PENDING": "Pending",
-  "NOTE": "Note"
+  "NOTE": "Note",
+  "NO_DIAGNOSIS_MESSAGE": "No Diagnosis"
 }
