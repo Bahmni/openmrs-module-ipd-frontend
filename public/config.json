@@ -12,9 +12,14 @@
         "displayOrder": 2
       },
       {
+        "name": "Treatments",
+        "component": "TR",
+        "displayOrder": 3
+      },
+      {
         "name": "Diagnosis",
         "component": "DG",
-        "displayOrder": 3
+        "displayOrder": 4
       }
     ]
   }
