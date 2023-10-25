@@ -11,6 +11,8 @@ const hostUrl = localStorage.getItem("host")
   : "";
 const RESTWS_V1 = hostUrl + "/openmrs/ws/rest/v1";
 export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
+const BAHMNI_CORE = RESTWS_V1 + "/bahmnicore";
+export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
 
 export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",

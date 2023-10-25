@@ -1,4 +1,5 @@
 import React, { useState, useRef, Suspense, useEffect } from "react";
+import PropTypes from "prop-types";
 import {
   Header,
   HeaderMenuButton,
@@ -9,12 +10,13 @@ import {
 import { componentMapping } from "./componentMapping";
 import "./Dashboard.scss";
 
-export default function Dashboard() {
+export default function Dashboard(props) {
+  const { hostData } = props;
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
   const refs = useRef([]);
-
+  console.log("hostData ---- ", hostData);
   const fetchConfigJson = () => {
     fetch("./config.json")
       .then((response) => {
@@ -90,6 +92,7 @@ export default function Dashboard() {
         // style={{ marginLeft: isSideNavExpanded ? "16rem" : "0" }}
       >
         {sections?.map((el) => {
+          console.log("hostdata in secionts ", hostData);
           const DisplayControl = componentMapping[el.component];
           return (
             <section
@@ -107,3 +110,8 @@ export default function Dashboard() {
     </main>
   );
 }
+Dashboard.propTypes = {
+  hostData: PropTypes.shape({
+    patient: { uuid: PropTypes.string },
+  }).isRequired,
+};
