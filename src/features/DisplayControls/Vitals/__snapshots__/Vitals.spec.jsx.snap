@@ -2,7 +2,9 @@
 
 exports[`Vitals should match snapshot 1`] = `
 <DocumentFragment>
-  <div>
+  <div
+    style="padding: 10px;"
+  >
     Vitals
   </div>
 </DocumentFragment>

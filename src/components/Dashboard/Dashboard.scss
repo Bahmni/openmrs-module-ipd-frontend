@@ -3,8 +3,10 @@
     transition: margin-left 0.5s;
     padding: 16px;
     position: relative;
-    top: 3rem;
     margin-left: 16rem;
+  }
+  .bx--accordion__title {
+    font-weight: 600;
   }
 
   .bx--side-nav__overlay-active {
@@ -49,6 +51,7 @@
 
   .bx--accordion__heading {
     border-bottom: 1px solid #007d79;
+    border-radius: 0;
   }
 
   .bx--accordion__item:last-child {
@@ -56,6 +59,9 @@
   }
   svg[class*="bx--accordion__arrow"] {
     fill: #666;
+  }
+  .bx--accordion__content {
+    padding: 0;
   }
 }
 
