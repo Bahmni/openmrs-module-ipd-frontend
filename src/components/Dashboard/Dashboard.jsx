@@ -23,7 +23,7 @@ export default function Dashboard() {
     updateWindowWidth(window.outerWidth);
   });
   useEffect(() => {
-    updateSideNav(window.outerWidth > 1040);
+    updateSideNav(window.outerWidth > 1024);
   }, [windowWidth]);
 
   const fetchConfig = () => {
