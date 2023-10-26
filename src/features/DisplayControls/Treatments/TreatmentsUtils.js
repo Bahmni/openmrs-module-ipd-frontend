@@ -32,3 +32,31 @@ export const getPrescribedAndActiveDrugOrders = async (
     console.error(error);
   }
 };
+
+export const treatmentHeaders = [
+  {
+    header: "Start Date",
+    key: "startDate",
+    isSortable: true,
+  },
+  {
+    header: "Drug Name",
+    key: "drugName",
+    isSortable: false,
+  },
+  {
+    header: "Dosage Details",
+    key: "dosageDetails",
+    isSortable: false,
+  },
+  {
+    header: "Prescribed By",
+    key: "prescribedBy",
+    isSortable: true,
+  },
+  {
+    header: "Actions",
+    key: "actions",
+    isSortable: false,
+  },
+];
