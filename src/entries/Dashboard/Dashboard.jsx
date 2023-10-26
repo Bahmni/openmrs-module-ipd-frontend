@@ -11,12 +11,12 @@ import { componentMapping } from "./componentMapping";
 import "./Dashboard.scss";
 
 export default function Dashboard(props) {
-  const { hostData } = props;
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
   const refs = useRef([]);
-  console.log("hostData ---- ", hostData);
+
+
   const fetchConfigJson = () => {
     fetch("./config.json")
       .then((response) => {
@@ -110,8 +110,8 @@ export default function Dashboard(props) {
     </main>
   );
 }
-Dashboard.propTypes = {
-  hostData: PropTypes.shape({
-    patient: { uuid: PropTypes.string },
-  }).isRequired,
-};
+// Dashboard.propTypes = {
+//   hostData: PropTypes.shape({
+//     patient: { uuid: PropTypes.string },
+//   }).isRequired,
+// };

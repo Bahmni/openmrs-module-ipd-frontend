@@ -9,7 +9,8 @@ export const LS_LANG_KEY = "NG_TRANSLATE_LANG_KEY";
 const hostUrl = localStorage.getItem("host")
   ? "https://" + localStorage.getItem("host")
   : "";
-const RESTWS_V1 = hostUrl + "/openmrs/ws/rest/v1";
+const RESTWS_V1 = "http://localhost/openmrs/ws/rest/v1";
+// hostUrl + "/openmrs/ws/rest/v1";
 export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
 const BAHMNI_CORE = RESTWS_V1 + "/bahmnicore";
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
