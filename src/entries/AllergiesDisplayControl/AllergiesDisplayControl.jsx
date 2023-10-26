@@ -94,66 +94,63 @@ export const AllergiesDisplayControl = (props) => {
     return sortedRows;
   };
 
+  if (isLoading)
+    return (
+      <DataTableSkeleton
+        data-testid="datatable-skeleton"
+        headers={headers}
+        aria-label="sample table"
+        zebra="true"
+      />
+    );
+
   return (
-    <>
-      <div style={{ paddingBottom: "1rem" }}>Allergies</div>
-      {isLoading ? (
-        <DataTableSkeleton
-          data-testid="datatable-skeleton"
-          headers={headers}
-          aria-label="sample table"
-          zebra="true"
-        />
-      ) : (
-        <DataTable
-          rows={rows}
-          headers={headers}
-          useZebraStyles={true}
-          data-testid="datatable"
-          // sortRow={customSortRow}
-        >
-          {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-            <Table {...getTableProps()}>
-              <TableHead>
-                <TableRow>
-                  {headers.map((header, index) => (
-                    <TableHeader
-                      key={index + header.key}
-                      {...getHeaderProps({ header })}
-                      isSortable={header.key === "severity"}
-                    >
-                      {header.header}
-                    </TableHeader>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row, index) => (
-                  <TableRow
-                    key={index + row.id}
-                    {...getRowProps({ row })}
-                    data-testid="table-body-row"
+    <DataTable
+      rows={rows}
+      headers={headers}
+      useZebraStyles={true}
+      data-testid="datatable"
+    >
+      {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
+        <Table {...getTableProps()}>
+          <TableHead>
+            <TableRow>
+              {headers.map((header, index) => (
+                <TableHeader
+                  key={index + header.key}
+                  {...getHeaderProps({ header })}
+                  isSortable={header.key === "severity"}
+                >
+                  {header.header}
+                </TableHeader>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, index) => (
+              <TableRow
+                key={index + row.id}
+                {...getRowProps({ row })}
+                data-testid="table-body-row"
+              >
+                {row.cells.map((cell) => (
+                  <TableCell
+                    key={cell.id}
+                    className={
+                      cell.id.includes("severity") && cell.value == "High"
+                        ? "high-severity-color"
+                        : ""
+                    }
                   >
-                    {row.cells.map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className={
-                          cell.id.includes("severity") && cell.value == "High"
-                            ? "high-severity-color"
-                            : ""
-                        }
-                      >
-                        {cell.value}
-                      </TableCell>
-                    ))}
-                  </TableRow>
+                    {cell.value}
+                  </TableCell>
                 ))}
-              </TableBody>
-            </Table>
-          )}
-        </DataTable>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       )}
-    </>
+    </DataTable>
   );
 };
 
