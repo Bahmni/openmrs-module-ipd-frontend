@@ -46,6 +46,17 @@
     outline: none;
     border: none;
   }
+
+  .bx--accordion__heading {
+    border-bottom: 1px solid #007d79;
+  }
+
+  .bx--accordion__item:last-child {
+    border: none;
+  }
+  svg[class*="bx--accordion__arrow"] {
+    fill: #666;
+  }
 }
 
 @media (max-width: 1040px) {

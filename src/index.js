@@ -1,7 +1,7 @@
 import React from "react";
 import * as ReactDOM from "react-dom";
 // import Dashboard from "./entries/Dashboard";
-import Dashboard from "./entries/Dashboard/Dashboard";
+import Dashboard from "./components/Dashboard/Dashboard";
 import "bahmni-carbon-ui/styles.css";
 
 const devContainer = document.getElementById("dev-bahmni-ipd");

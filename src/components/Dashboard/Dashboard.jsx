@@ -1,5 +1,7 @@
 import React, { useState, useRef, Suspense, useEffect } from "react";
 import {
+  Accordion,
+  AccordionItem,
   Header,
   HeaderMenuButton,
   SideNav,
@@ -8,33 +10,33 @@ import {
 } from "carbon-components-react";
 import { componentMapping } from "./componentMapping";
 import "./Dashboard.scss";
+import data from "../../utils/config.json";
 
 export default function Dashboard() {
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
   const refs = useRef([]);
+  const [windowWidth, updateWindowWidth] = useState(window.outerWidth);
 
-  const fetchConfigJson = () => {
-    fetch("./config.json")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        const { config: { sections = [] } = {} } = data;
-        const updatedSections = sections
-          .filter((sec) => componentMapping[sec.component])
-          .sort((a, b) => a.displayOrder - b.displayOrder);
-        updateSelectedTab(updatedSections[0].component);
-        setSections(updatedSections);
-      })
-      .catch((e) => {
-        console.log("error -> ", e.message);
-      });
+  window.addEventListener("resize", () => {
+    updateWindowWidth(window.outerWidth);
+  });
+  useEffect(() => {
+    updateSideNav(window.outerWidth > 1040);
+  }, [windowWidth]);
+
+  const fetchConfig = () => {
+    const { config: { sections = [] } = {} } = data;
+    const updatedSections = sections
+      .filter((sec) => componentMapping[sec.component])
+      .sort((a, b) => a.displayOrder - b.displayOrder);
+    updateSelectedTab(updatedSections[0].component);
+    setSections(updatedSections);
   };
 
   useEffect(() => {
-    fetchConfigJson();
+    fetchConfig();
   }, []);
 
   const onClickSideNavExpand = () => {
@@ -85,24 +87,25 @@ export default function Dashboard() {
         </SideNav>
       </Header>
 
-      <section
-        className="main"
-        // style={{ marginLeft: isSideNavExpanded ? "16rem" : "0" }}
-      >
-        {sections?.map((el) => {
-          const DisplayControl = componentMapping[el.component];
-          return (
-            <section
-              key={el.component}
-              ref={(ref) => (refs.current[el.component] = ref)}
-              style={{ height: "1200px" }}
-            >
-              <Suspense fallback={<p>Loading...</p>}>
-                <DisplayControl />
-              </Suspense>
-            </section>
-          );
-        })}
+      <section className="main">
+        <Accordion className={"accordion"}>
+          {sections?.map((el) => {
+            const DisplayControl = componentMapping[el.component];
+            return (
+              <section
+                key={el.component}
+                ref={(ref) => (refs.current[el.component] = ref)}
+                style={{ height: "1200px" }}
+              >
+                <Suspense fallback={<p>Loading...</p>}>
+                  <AccordionItem open title={el.name}>
+                    <DisplayControl />
+                  </AccordionItem>
+                </Suspense>
+              </section>
+            );
+          })}
+        </Accordion>
       </section>
     </main>
   );
