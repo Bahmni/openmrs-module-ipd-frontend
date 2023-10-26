@@ -14,7 +14,7 @@ describe("AllergiesDisplayControl", () => {
         hostData={{ patientId: "__test_patient_uuid__" }}
       />
     );
-    expect(screen.getByText("Allergies")).toBeInTheDocument();
+    expect(screen.getByText("Allergen")).toBeInTheDocument();
   });
   it("should show data in the table", async () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
@@ -60,8 +60,6 @@ describe("AllergiesDisplayControl", () => {
     await waitFor(() => {
       expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
     });
-
-    screen.debug(screen.getAllByTestId("table-body-row"));
 
     expect(screen.getAllByTestId("table-body-row")[0]).toHaveTextContent(
       "Beef"
