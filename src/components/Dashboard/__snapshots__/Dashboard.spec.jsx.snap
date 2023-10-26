@@ -1,0 +1,170 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard should match snapshot 1`] = `
+<DocumentFragment>
+  <main
+    class="ipd-page"
+  >
+    <header
+      aria-label="IBM Platform Name"
+      class="bx--header border-bottom-0 header-bg-color"
+    >
+      <button
+        aria-label="Open menu"
+        class="header-nav-toggle-btn bx--header__action bx--header__menu-trigger bx--header__menu-toggle"
+        title="Open menu"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          focusable="false"
+          height="20"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 20 20"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M2 14.8H18V16H2zM2 11.2H18V12.399999999999999H2zM2 7.6H18V8.799999999999999H2zM2 4H18V5.2H2z"
+          />
+        </svg>
+      </button>
+      <div
+        class="bx--side-nav__overlay"
+      />
+      <nav
+        aria-label="Side navigation"
+        class="bx--side-nav__navigation bx--side-nav navbar-border bx--side-nav--ux bx--side-nav--hidden"
+      >
+        <ul
+          class="bx--side-nav__items"
+        >
+          <li
+            class="bx--side-nav__item"
+          >
+            <a
+              class="bx--side-nav__link bx--side-nav__link--current cursor-pointer"
+            >
+              <span
+                class="bx--side-nav__link-text"
+              >
+                Patient Summary
+              </span>
+            </a>
+          </li>
+          <li
+            class="bx--side-nav__item"
+          >
+            <a
+              class="bx--side-nav__link cursor-pointer"
+            >
+              <span
+                class="bx--side-nav__link-text"
+              >
+                Vitals
+              </span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <section
+      class="main"
+    >
+      <ul
+        class="bx--accordion accordion bx--accordion--end bx--accordion--md"
+      >
+        <section
+          style="height: 1200px;"
+        >
+          <li
+            class="bx--accordion__item bx--accordion__item--active"
+            style="display: none;"
+          >
+            <button
+              aria-controls="accordion-item-1"
+              aria-expanded="true"
+              class="bx--accordion__heading"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="bx--accordion__arrow"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                />
+              </svg>
+              <div
+                class="bx--accordion__title"
+                dir="auto"
+              >
+                Patient Summary
+              </div>
+            </button>
+            <div
+              class="bx--accordion__content"
+              id="accordion-item-1"
+            />
+          </li>
+          <p>
+            Loading...
+          </p>
+        </section>
+        <section
+          style="height: 1200px;"
+        >
+          <li
+            class="bx--accordion__item bx--accordion__item--active"
+            style="display: none;"
+          >
+            <button
+              aria-controls="accordion-item-2"
+              aria-expanded="true"
+              class="bx--accordion__heading"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="bx--accordion__arrow"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                />
+              </svg>
+              <div
+                class="bx--accordion__title"
+                dir="auto"
+              >
+                Vitals
+              </div>
+            </button>
+            <div
+              class="bx--accordion__content"
+              id="accordion-item-2"
+            />
+          </li>
+          <p>
+            Loading...
+          </p>
+        </section>
+      </ul>
+    </section>
+  </main>
+</DocumentFragment>
+`;
