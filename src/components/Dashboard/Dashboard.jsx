@@ -11,8 +11,11 @@ import {
 import { componentMapping } from "./componentMapping";
 import "./Dashboard.scss";
 import data from "../../utils/config.json";
+import PropTypes from "prop-types";
 
-export default function Dashboard() {
+export default function Dashboard(props) {
+  const { hostData } = props;
+  console.log("hostData", hostData);
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
@@ -110,3 +113,7 @@ export default function Dashboard() {
     </main>
   );
 }
+
+Dashboard.propTypes = {
+  hostData: PropTypes.object.isRequired,
+};
