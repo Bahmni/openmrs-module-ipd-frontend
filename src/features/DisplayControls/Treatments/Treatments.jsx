@@ -17,15 +17,20 @@ import {
   getPrescribedAndActiveDrugOrders,
   treatmentHeaders,
 } from "./TreatmentsUtils";
+import PropTypes from "prop-types";
+import "./Treatments.scss";
 
-const Treatments = () => {
+const Treatments = ({ patientId }) => {
+  console.log("patientUuid", patientId);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const patientUuid = "82260304-0a02-4c27-a879-e697c2180a7d";
+  const patientUuid = patientId;
   //   "82260304-0a02-4c27-a879-e697c2180a7d";
   //   "d22c5c6b-278f-47cc-91b0-92087c712519";
 
-  const NoTreatmentsMessage = <FormattedMessage id={"NO_TREATMENTS_MESSAGE"} />;
+  const NoIPDMedicationMessage = (
+    <FormattedMessage id={"NO_IPD_MEDICATION_MESSAGE"} />
+  );
 
   const AddToDrugChart = <FormattedMessage id={"ADD_TO_DRUG_CHART"} />;
 
@@ -83,41 +88,53 @@ const Treatments = () => {
       {isLoading ? (
         <DataTableSkeleton />
       ) : treatments && treatments.length === 0 ? (
-        <>{NoTreatmentsMessage}</>
+        <div className="no-treatments">{NoIPDMedicationMessage}</div>
       ) : (
-        <DataTable rows={treatments} headers={treatmentHeaders}>
-          {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-            <Table {...getTableProps()}>
-              <TableHead>
-                <TableRow>
-                  {headers.map((header) => (
-                    <TableHeader
-                      key={header.key}
-                      {...getHeaderProps({
-                        header,
-                        isSortable: header.isSortable,
-                      })}
-                    >
-                      {header.header}
-                    </TableHeader>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.id} {...getRowProps({ row })}>
-                    {row.cells.map((cell) => (
-                      <TableCell key={cell.id}>{cell.value}</TableCell>
+        <div className="treatments">
+          <DataTable rows={treatments} headers={treatmentHeaders}>
+            {({
+              rows,
+              headers,
+              getTableProps,
+              getHeaderProps,
+              getRowProps,
+            }) => (
+              <Table {...getTableProps()}>
+                <TableHead>
+                  <TableRow>
+                    {headers.map((header) => (
+                      <TableHeader
+                        key={header.key}
+                        {...getHeaderProps({
+                          header,
+                          isSortable: header.isSortable,
+                        })}
+                      >
+                        {header.header}
+                      </TableHeader>
                     ))}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </DataTable>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow key={row.id} {...getRowProps({ row })}>
+                      {row.cells.map((cell) => (
+                        <TableCell key={cell.id}>{cell.value}</TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </DataTable>
+        </div>
       )}
     </I18nProvider>
   );
+};
+
+Treatments.propTypes = {
+  patientId: PropTypes.string.isRequired,
 };
 
 export default Treatments;

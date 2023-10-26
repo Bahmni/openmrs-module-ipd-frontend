@@ -18,6 +18,6 @@
   "ADMINISTERED": "Administered",
   "PENDING": "Pending",
   "NOTE": "Note",
-  "NO_TREATMENTS_MESSAGE": "No IPD Medication is prescribed for this patient yet",
+  "NO_IPD_MEDICATION_MESSAGE": "No IPD Medication is prescribed for this patient yet",
   "ADD_TO_DRUG_CHART": "Add to Drug Chart"
 }
