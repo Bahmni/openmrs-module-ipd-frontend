@@ -52,34 +52,39 @@ const Treatments = () => {
     },
   ];
 
+  const isIPDDrugOrder = (drugOrder) => {
+    return drugOrder.careSetting === "INPATIENT";
+  };
+
   const modifyTreatmentData = (drugOrders) => {
-    const treatments = drugOrders.visitDrugOrders.map((drugOrder) => {
-      const treatment = {};
-      treatment.id = drugOrder.uuid;
-      treatment.startDate = new Date(
-        drugOrder.effectiveStartDate
-      ).toLocaleDateString();
-      treatment.drugName = drugOrder.drug.name;
-      const dosingInstructions =
-        drugOrder.dosingInstructions.dose +
-        " " +
-        drugOrder.dosingInstructions.doseUnits +
-        " - " +
-        drugOrder.dosingInstructions.route +
-        " - " +
-        drugOrder.dosingInstructions.frequency +
-        " - for " +
-        drugOrder.duration +
-        " " +
-        drugOrder.durationUnits;
-      treatment.dosageDetails = dosingInstructions;
-      treatment.prescribedBy = drugOrder.provider.name;
-      treatment.actions =
-        drugOrder.careSetting == "INPATIENT" ? (
+    const treatments = drugOrders.visitDrugOrders
+      .filter((drugOrder) => isIPDDrugOrder(drugOrder))
+      .map((drugOrder) => {
+        const treatment = {};
+        treatment.id = drugOrder.uuid;
+        treatment.startDate = new Date(
+          drugOrder.effectiveStartDate
+        ).toLocaleDateString();
+        treatment.drugName = drugOrder.drug.name;
+        const dosingInstructions =
+          drugOrder.dosingInstructions.dose +
+          " " +
+          drugOrder.dosingInstructions.doseUnits +
+          " - " +
+          drugOrder.dosingInstructions.route +
+          " - " +
+          drugOrder.dosingInstructions.frequency +
+          " - for " +
+          drugOrder.duration +
+          " " +
+          drugOrder.durationUnits;
+        treatment.dosageDetails = dosingInstructions;
+        treatment.prescribedBy = drugOrder.provider.name;
+        treatment.actions = isIPDDrugOrder(drugOrder) ? (
           <Link href="#">{AddToDrugChart}</Link>
         ) : null;
-      return treatment;
-    });
+        return treatment;
+      });
     setTreatments(treatments);
   };
 

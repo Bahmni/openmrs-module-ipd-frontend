@@ -25,7 +25,7 @@ describe("Treatments", () => {
     const { getByText } = render(<Treatments />);
     await waitFor(() => {
       expect(
-        getByText("No treatments prescribed for this patient")
+        getByText("No IPD Medication is prescribed for this patient yet")
       ).toBeTruthy();
     });
   });
