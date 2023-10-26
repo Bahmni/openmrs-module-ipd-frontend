@@ -6,6 +6,59 @@ export const mockAllergiesIntolerenceResponse = {
       {
         resource: {
           resourceType: "AllergyIntolerance",
+          id: "216e656d-f738-42ce-acbe-802f2bf658b6",
+          type: "allergy",
+          category: ["food"],
+          criticality: "high",
+          code: {
+            coding: [
+              {
+                code: "b68e3d18-8ee2-43a8-9074-f7c77369e1b4",
+                display: "Milk products",
+              },
+            ],
+          },
+          patient: {
+            reference: "Patient/9c041a87-d148-40f3-a854-e1f23d3b9f17",
+            type: "Patient",
+            display: "Test Patient",
+          },
+          reaction: [
+            {
+              substance: {
+                coding: [
+                  {
+                    code: "b68e3d18-8ee2-43a8-9074-f7c77369e1b4",
+                    display: "Milk products",
+                  },
+                ],
+              },
+              manifestation: [
+                {
+                  coding: [
+                    {
+                      code: "5ce31515-71dc-4ccf-87a9-9665f82790f6",
+                      display: "Bronchospasm",
+                    },
+                  ],
+                },
+                {
+                  coding: [
+                    {
+                      code: "b2479396-9b2c-42df-a06f-85bb8e93e7b3",
+                      display: "Cough",
+                    },
+                  ],
+                },
+              ],
+              severity: "severe",
+            },
+          ],
+        },
+      },
+      {
+        resource: {
+          resourceType: "AllergyIntolerance",
           id: "400ccf4c-6290-4f62-9aff-eff1d9575b43",
           type: "allergy",
           category: ["food"],
@@ -155,59 +208,6 @@ export const mockAllergiesIntolerenceResponse = {
                 },
               ],
               severity: "mild",
-            },
-          ],
-        },
-      },
-      {
-        resource: {
-          resourceType: "AllergyIntolerance",
-          id: "216e656d-f738-42ce-acbe-802f2bf658b6",
-          type: "allergy",
-          category: ["food"],
-          criticality: "high",
-          code: {
-            coding: [
-              {
-                code: "b68e3d18-8ee2-43a8-9074-f7c77369e1b4",
-                display: "Milk products",
-              },
-            ],
-          },
-          patient: {
-            reference: "Patient/9c041a87-d148-40f3-a854-e1f23d3b9f17",
-            type: "Patient",
-            display: "Test Patient",
-          },
-          reaction: [
-            {
-              substance: {
-                coding: [
-                  {
-                    code: "b68e3d18-8ee2-43a8-9074-f7c77369e1b4",
-                    display: "Milk products",
-                  },
-                ],
-              },
-              manifestation: [
-                {
-                  coding: [
-                    {
-                      code: "5ce31515-71dc-4ccf-87a9-9665f82790f6",
-                      display: "Bronchospasm",
-                    },
-                  ],
-                },
-                {
-                  coding: [
-                    {
-                      code: "b2479396-9b2c-42df-a06f-85bb8e93e7b3",
-                      display: "Cough",
-                    },
-                  ],
-                },
-              ],
-              severity: "severe",
             },
           ],
         },

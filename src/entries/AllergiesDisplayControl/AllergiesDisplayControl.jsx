@@ -1,5 +1,6 @@
 import {
   DataTable,
+  DataTableSkeleton,
   Table,
   TableBody,
   TableCell,
@@ -19,7 +20,6 @@ export const AllergiesDisplayControl = (props) => {
     hostData?.patientId
   );
   const [rows, setRows] = useState([]);
-  console.log("allergiesData", allergiesData);
 
   useEffect(() => {
     if (allergiesData && allergiesData.entry) {
@@ -37,8 +37,6 @@ export const AllergiesDisplayControl = (props) => {
       setRows(sortedRow(allergies));
     }
   }, [allergiesData]);
-
-  console.log("sortedRow", rows);
 
   const getSortingWait = (severity) => {
     if (severity === "High") return -1;
@@ -86,102 +84,75 @@ export const AllergiesDisplayControl = (props) => {
     },
   ];
 
-  if (isLoading) <div>Loading...</div>;
-
-  //   const groupById = (acc, item) => {
-  //     const id = item.severity;
-  //     if(id in acc){
-  //       acc[id].push(item);
-  //     }else{
-  //       acc[id] = [item];
-  //     }
-  //     return acc;
-  //   };
-
-  //   const sortByWait = (a,b) => a.sortWeight - b.sortWeight;
-  // const sortByAllergen = (a,b) => a[0].allergen === b[0].allergen? 0 : a[0].allergen > b[0].allergen ? 1 : -1;
-
   const sortedRow = (rows) => {
-    //  const groups = Object.values(rows.reduce(groupById, {}))
-    // .map(group => group.sort(sortByWait))
-    // .sort(sortByAllergen);
-    // console.log('groups', groups)
-    const temp = rows
+    const sortedRows = rows
       .sort((a, b) => {
         if (a === b) return 0;
         return a.allergen > b.allergen ? 1 : -1;
       })
       .sort((a, b) => a.sortWeight - b.sortWeight);
-
-    console.log("temp", temp);
-    return temp;
-
-    // return temp.sort((a, b) => {
-    //   if (a === b) return 0;
-    //   console.log("first", a.allergen, b.allergen, a.allergen > b.allergen);
-    //   return a.allergen > b.allergen ? 1 : -1;
-    // });
+    return sortedRows;
   };
-
-  // function customSortRow(cellA, cellB, { sortDirection, sortStates, locale }) {
-  //   if (sortDirection === sortStates.DESC) {
-  //     return compare(cellB, cellA, locale);
-  //   }
-
-  //   return compare(cellA, cellB, locale);
-  // }
-
-  // const compare = (firstCell, secondCell, locale) => {
-  //   console.log('firstCell', firstCell, secondCell, firstCell > secondCell)
-  //   if (firstCell === secondCell) return 0;
-  //   return firstCell < secondCell ? 1 : -1;
-  // };
 
   return (
     <>
-      <div>Allergies</div>
-      <DataTable
-        rows={rows}
-        headers={headers}
-        useZebraStyles={true}
-        // sortRow={customSortRow}
-      >
-        {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-          <Table {...getTableProps()}>
-            <TableHead>
-              <TableRow>
-                {headers.map((header, index) => (
-                  <TableHeader
-                    key={index + header.key}
-                    {...getHeaderProps({ header })}
-                    isSortable={header.key === "severity"}
-                  >
-                    {header.header}
-                  </TableHeader>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row, index) => (
-                <TableRow key={index + row.id} {...getRowProps({ row })}>
-                  {row.cells.map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={
-                        cell.id.includes("severity") && cell.value == "High"
-                          ? "high-severity-color"
-                          : ""
-                      }
+      <div style={{ paddingBottom: "1rem" }}>Allergies</div>
+      {isLoading ? (
+        <DataTableSkeleton
+          data-testid="datatable-skeleton"
+          headers={headers}
+          aria-label="sample table"
+          zebra="true"
+        />
+      ) : (
+        <DataTable
+          rows={rows}
+          headers={headers}
+          useZebraStyles={true}
+          data-testid="datatable"
+          // sortRow={customSortRow}
+        >
+          {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
+            <Table {...getTableProps()}>
+              <TableHead>
+                <TableRow>
+                  {headers.map((header, index) => (
+                    <TableHeader
+                      key={index + header.key}
+                      {...getHeaderProps({ header })}
+                      isSortable={header.key === "severity"}
                     >
-                      {cell.value}
-                    </TableCell>
+                      {header.header}
+                    </TableHeader>
                   ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </DataTable>
+              </TableHead>
+              <TableBody>
+                {rows.map((row, index) => (
+                  <TableRow
+                    key={index + row.id}
+                    {...getRowProps({ row })}
+                    data-testid="table-body-row"
+                  >
+                    {row.cells.map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={
+                          cell.id.includes("severity") && cell.value == "High"
+                            ? "high-severity-color"
+                            : ""
+                        }
+                      >
+                        {cell.value}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </DataTable>
+      )}
     </>
   );
 };
