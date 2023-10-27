@@ -1,13 +1,13 @@
 import React from "react";
 import * as ReactDOM from "react-dom";
 // import Dashboard from "./entries/Dashboard";
-import Dashboard from "./entries/Dashboard/Dashboard";
+import Dashboard from "./components/Dashboard/Dashboard";
 import "bahmni-carbon-ui/styles.css";
 
 const devContainer = document.getElementById("dev-bahmni-ipd");
 if (devContainer) {
   // const hostData = {
-  //   patient: { uuid: "c6184658-2149-40c9-b2d2-96621c93f74a" },
+  //   patient: { uuid: "3ae1ee52-e9b2-4934-876d-30711c0e3e2f" },
   // };
   // const hostInterface = {
   //   onConfirm(event) {

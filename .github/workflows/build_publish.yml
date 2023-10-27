@@ -55,6 +55,11 @@ jobs:
           tags: |
             bahmni/microfrontend-ipd:ipd-${{ github.run_number }}
             bahmni/microfrontend-ipd:ipd
+      - name: Push Translations to Transifex
+        run: |
+          bash .github/scripts/transifex.sh
+        env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
 
   trigger-workflow:
     name: 🔁 Trigger workflow to deploy to Docker env
