@@ -3,25 +3,30 @@ import { act, render, fireEvent, screen } from "@testing-library/react";
 
 import Dashboard from "./Dashboard";
 
+const hostData = {
+  patient: {
+    uuid: "patientUuid",
+  },
+};
 describe("Dashboard", () => {
   it("should match snapshot", () => {
-    const { asFragment } = render(<Dashboard />);
+    const { asFragment } = render(<Dashboard hostData={hostData} />);
     expect(asFragment()).toMatchSnapshot();
   });
   it("renders the header", () => {
-    render(<Dashboard />);
+    render(<Dashboard hostData={hostData} />);
     const header = screen.getByRole("banner");
     expect(header).toBeTruthy();
   });
 
   it("renders the side navigation", () => {
-    render(<Dashboard />);
+    render(<Dashboard hostData={hostData} />);
     const sideNav = screen.getByRole("navigation");
     expect(sideNav).toBeTruthy();
   });
 
   it("renders the accordion sections", () => {
-    render(<Dashboard />);
+    render(<Dashboard hostData={hostData} />);
     const section1 = screen.findAllByText("Patient Summary");
     const section2 = screen.findAllByText("Vitals");
     expect(section1).toBeTruthy();
@@ -29,7 +34,7 @@ describe("Dashboard", () => {
   });
 
   it("should update window width on resize", () => {
-    render(<Dashboard />);
+    render(<Dashboard hostData={hostData} />);
 
     expect(window.innerWidth).toEqual(window.outerWidth);
 
@@ -38,13 +43,13 @@ describe("Dashboard", () => {
       window.dispatchEvent(new Event("resize"));
     });
 
-    render(<Dashboard />);
+    render(<Dashboard hostData={hostData} />);
 
     expect(window.innerWidth).toEqual(1200);
   });
 
   it("should update sidenav on click of side nav expand", async () => {
-    render(<Dashboard />);
+    render(<Dashboard hostData={hostData} />);
 
     const menuButton = screen.getByLabelText("Open menu");
 

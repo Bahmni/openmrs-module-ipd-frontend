@@ -14,16 +14,40 @@ import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import { I18nProvider } from "../../i18n/I18nProvider";
 import PropTypes from "prop-types";
-import {
-  getPrescribedAndActiveDrugOrders,
-  treatmentHeaders,
-} from "./TreatmentsUtils";
+import { getPrescribedAndActiveDrugOrders } from "./TreatmentsUtils";
 import "./Treatments.scss";
 
 const Treatments = (props) => {
   const { patientId } = props;
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const treatmentHeaders = [
+    {
+      header: "Start Date",
+      key: "startDate",
+      isSortable: true,
+    },
+    {
+      header: "Drug Name",
+      key: "drugName",
+      isSortable: false,
+    },
+    {
+      header: "Dosage Details",
+      key: "dosageDetails",
+      isSortable: false,
+    },
+    {
+      header: "Prescribed By",
+      key: "prescribedBy",
+      isSortable: true,
+    },
+    {
+      header: "Actions",
+      key: "actions",
+      isSortable: false,
+    },
+  ];
 
   const NoTreatmentsMessage = <FormattedMessage id={"NO_TREATMENTS_MESSAGE"} />;
 
@@ -70,12 +94,13 @@ const Treatments = (props) => {
   useEffect(() => {
     const getActiveDrugOrders = async () => {
       const drugOrders = await getPrescribedAndActiveDrugOrders(patientId);
-      modifyTreatmentData(drugOrders);
+      if (drugOrders.visitDrugOrders) {
+        modifyTreatmentData(drugOrders);
+        setIsLoading(false);
+      }
     };
 
-    setIsLoading(true);
     getActiveDrugOrders();
-    setIsLoading(false);
   }, []);
 
   return (
