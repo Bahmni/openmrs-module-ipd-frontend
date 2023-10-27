@@ -13,17 +13,16 @@ import {
 import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import { I18nProvider } from "../../i18n/I18nProvider";
+import PropTypes from "prop-types";
 import {
   getPrescribedAndActiveDrugOrders,
   treatmentHeaders,
 } from "./TreatmentsUtils";
 
-const Treatments = () => {
+const Treatments = (props) => {
+  const { patientId } = props;
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const patientUuid = "82260304-0a02-4c27-a879-e697c2180a7d";
-  //   "82260304-0a02-4c27-a879-e697c2180a7d";
-  //   "d22c5c6b-278f-47cc-91b0-92087c712519";
 
   const NoTreatmentsMessage = <FormattedMessage id={"NO_TREATMENTS_MESSAGE"} />;
 
@@ -69,7 +68,7 @@ const Treatments = () => {
 
   useEffect(() => {
     const getActiveDrugOrders = async () => {
-      const drugOrders = await getPrescribedAndActiveDrugOrders(patientUuid);
+      const drugOrders = await getPrescribedAndActiveDrugOrders(patientId);
       modifyTreatmentData(drugOrders);
     };
 
@@ -118,6 +117,10 @@ const Treatments = () => {
       )}
     </I18nProvider>
   );
+};
+
+Treatments.propTypes = {
+  patientId: PropTypes.string.isRequired,
 };
 
 export default Treatments;

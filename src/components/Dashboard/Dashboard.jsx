@@ -102,7 +102,7 @@ export default function Dashboard(props) {
               >
                 <Suspense fallback={<p>Loading...</p>}>
                   <AccordionItem open title={el.name}>
-                    <DisplayControl />
+                    <DisplayControl patientId={hostData?.patient?.uuid} />
                   </AccordionItem>
                 </Suspense>
               </section>
