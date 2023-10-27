@@ -99,7 +99,7 @@ const Treatments = ({ patientId }) => {
               getHeaderProps,
               getRowProps,
             }) => (
-              <Table {...getTableProps()}>
+              <Table {...getTableProps()} useZebraStyles>
                 <TableHead>
                   <TableRow>
                     {headers.map((header) => (
