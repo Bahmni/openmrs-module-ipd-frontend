@@ -12,12 +12,19 @@ import React, { useEffect, useState } from "react";
 import { useFetchAllergiesIntolerance } from "../../../hooks/useFetchAllergiesIntolerance";
 import PropTypes from "prop-types";
 import "./Allergies.scss";
+import { FormattedMessage } from "react-intl";
 
 const Allergies = (props) => {
   const { patientId } = props;
 
   const { allergiesData, isLoading } = useFetchAllergiesIntolerance(patientId);
   const [rows, setRows] = useState([]);
+  const NoAllergenMessage = (
+    <FormattedMessage
+      id={"NO_ALLERGENS_MESSAGE"}
+      defaultMessage={"No Allergen is captured for this patient yet."}
+    />
+  );
 
   useEffect(() => {
     if (allergiesData && allergiesData.entry) {
@@ -103,7 +110,9 @@ const Allergies = (props) => {
       />
     );
 
-  return (
+  return allergiesData.entry === undefined ? (
+    <div className="no-allergen-message"> {NoAllergenMessage} </div>
+  ) : (
     <DataTable
       rows={rows}
       headers={headers}
