@@ -9,7 +9,7 @@ const PatientSummary = () => {
     };
   }, []);
 
-  return <div>PatientSummary</div>;
+  return <div style={{ padding: "10px" }}>PatientSummary</div>;
 };
 
 export default PatientSummary;
