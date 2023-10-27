@@ -162,9 +162,6 @@ const sandboxConfig = {
     path: path.resolve(commonConfig.output.path, "sandbox"),
   },
   devServer: {
-    proxy: {
-      "/openmrs": "http://localhost:8081",
-    },
   },
   plugins: [
     ...commonConfig.plugins,
