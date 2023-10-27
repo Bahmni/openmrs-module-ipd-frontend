@@ -12,6 +12,7 @@ import { componentMapping } from "./componentMapping";
 import "./Dashboard.scss";
 import data from "../../utils/config.json";
 import PropTypes from "prop-types";
+import { I18nProvider } from "../../features/i18n/I18nProvider";
 
 export default function Dashboard(props) {
   const { hostData } = props;
@@ -102,7 +103,9 @@ export default function Dashboard(props) {
               >
                 <Suspense fallback={<p>Loading...</p>}>
                   <AccordionItem open title={el.name}>
-                    <DisplayControl patientId={hostData?.patient?.uuid} />
+                    <I18nProvider>
+                      <DisplayControl patientId={hostData?.patient?.uuid} />
+                    </I18nProvider>
                   </AccordionItem>
                 </Suspense>
               </section>

@@ -93,7 +93,6 @@ exports[`Dashboard should match snapshot 1`] = `
         >
           <li
             class="bx--accordion__item bx--accordion__item--active"
-            style="display: none;"
           >
             <button
               aria-controls="accordion-item-1"
@@ -126,18 +125,16 @@ exports[`Dashboard should match snapshot 1`] = `
             <div
               class="bx--accordion__content"
               id="accordion-item-1"
-            />
+            >
+              <div />
+            </div>
           </li>
-          <p>
-            Loading...
-          </p>
         </section>
         <section
           style="margin-bottom: 2.5rem;"
         >
           <li
             class="bx--accordion__item bx--accordion__item--active"
-            style="display: none;"
           >
             <button
               aria-controls="accordion-item-2"
@@ -170,18 +167,16 @@ exports[`Dashboard should match snapshot 1`] = `
             <div
               class="bx--accordion__content"
               id="accordion-item-2"
-            />
+            >
+              <div />
+            </div>
           </li>
-          <p>
-            Loading...
-          </p>
         </section>
         <section
           style="margin-bottom: 2.5rem;"
         >
           <li
             class="bx--accordion__item bx--accordion__item--active"
-            style="display: none;"
           >
             <button
               aria-controls="accordion-item-3"
@@ -214,11 +209,10 @@ exports[`Dashboard should match snapshot 1`] = `
             <div
               class="bx--accordion__content"
               id="accordion-item-3"
-            />
+            >
+              <div />
+            </div>
           </li>
-          <p>
-            Loading...
-          </p>
         </section>
       </ul>
     </section>

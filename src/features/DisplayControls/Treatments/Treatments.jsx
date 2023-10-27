@@ -12,7 +12,6 @@ import {
 } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
 import { useState } from "react";
-import { I18nProvider } from "../../i18n/I18nProvider";
 import PropTypes from "prop-types";
 import { getPrescribedAndActiveDrugOrders } from "./TreatmentsUtils";
 import "./Treatments.scss";
@@ -49,9 +48,19 @@ const Treatments = (props) => {
     },
   ];
 
-  const NoTreatmentsMessage = <FormattedMessage id={"NO_TREATMENTS_MESSAGE"} />;
+  const NoTreatmentsMessage = (
+    <FormattedMessage
+      id={"NO_TREATMENTS_MESSAGE"}
+      defaultMessage={"No IPD Medication is prescribed for this patient yet"}
+    />
+  );
 
-  const AddToDrugChart = <FormattedMessage id={"ADD_TO_DRUG_CHART"} />;
+  const AddToDrugChart = (
+    <FormattedMessage
+      id={"ADD_TO_DRUG_CHART"}
+      defaultMessage={"Add to Drug Chart"}
+    />
+  );
 
   const isIPDDrugOrder = (drugOrder) => {
     return drugOrder.careSetting === "INPATIENT";
@@ -104,7 +113,7 @@ const Treatments = (props) => {
   }, []);
 
   return (
-    <I18nProvider>
+    <>
       {isLoading ? (
         <DataTableSkeleton />
       ) : treatments && treatments.length === 0 ? (
@@ -141,7 +150,7 @@ const Treatments = (props) => {
           )}
         </DataTable>
       )}
-    </I18nProvider>
+    </>
   );
 };
 
