@@ -98,11 +98,11 @@ export default function Dashboard(props) {
               <section
                 key={el.component}
                 ref={(ref) => (refs.current[el.component] = ref)}
-                style={{ height: "1200px" }}
+                style={{ marginBottom: "40px" }}
               >
                 <Suspense fallback={<p>Loading...</p>}>
                   <AccordionItem open title={el.name}>
-                    <DisplayControl />
+                    <DisplayControl patientId={props?.hostData?.patient.uuid} />
                   </AccordionItem>
                 </Suspense>
               </section>
@@ -113,7 +113,6 @@ export default function Dashboard(props) {
     </main>
   );
 }
-
 Dashboard.propTypes = {
   hostData: PropTypes.object.isRequired,
 };
