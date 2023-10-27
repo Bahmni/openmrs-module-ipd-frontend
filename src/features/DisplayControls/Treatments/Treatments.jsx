@@ -86,7 +86,7 @@ const Treatments = (props) => {
       ) : (
         <DataTable rows={treatments} headers={treatmentHeaders}>
           {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-            <Table {...getTableProps()}>
+            <Table {...getTableProps()} useZebraStyles>
               <TableHead>
                 <TableRow>
                   {headers.map((header) => (
