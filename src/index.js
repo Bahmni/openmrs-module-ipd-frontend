@@ -6,9 +6,9 @@ import "bahmni-carbon-ui/styles.css";
 
 const devContainer = document.getElementById("dev-bahmni-ipd");
 if (devContainer) {
-  // const hostData = {
-  //   patient: { uuid: "3ae1ee52-e9b2-4934-876d-30711c0e3e2f" },
-  // };
+  const hostData = {
+    patient: { uuid: "82260304-0a02-4c27-a879-e697c2180a7d" },
+  };
   // const hostInterface = {
   //   onConfirm(event) {
   //     console.log(
@@ -19,7 +19,7 @@ if (devContainer) {
   // };
   ReactDOM.render(
     // <Dashboard hostData={hostData} hostInterface={hostInterface} />,
-    <Dashboard />,
+    <Dashboard hostData={hostData} />,
     devContainer
   );
 }

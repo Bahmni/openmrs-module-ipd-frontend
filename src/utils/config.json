@@ -12,13 +12,13 @@
         "displayOrder": 2
       },
       {
-        "name": "Treatments",
-        "component": "TR",
+        "name": "Allergies",
+        "component": "AL",
         "displayOrder": 3
       },
       {
-        "name": "Diagnosis",
-        "component": "DG",
+        "name": "Treatments",
+        "component": "TR",
         "displayOrder": 4
       }
     ]
