@@ -17,5 +17,6 @@
   "LATE": "Late",
   "ADMINISTERED": "Administered",
   "PENDING": "Pending",
-  "NOTE": "Note"
+  "NOTE": "Note",
+  "NO_ALLERGENS_MESSAGE": "No Allergen is captured for this patient yet."
 }
