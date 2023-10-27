@@ -18,6 +18,7 @@ import {
   getPrescribedAndActiveDrugOrders,
   treatmentHeaders,
 } from "./TreatmentsUtils";
+import "./Treatments.scss";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -82,7 +83,7 @@ const Treatments = (props) => {
       {isLoading ? (
         <DataTableSkeleton />
       ) : treatments && treatments.length === 0 ? (
-        <>{NoTreatmentsMessage}</>
+        <div className="no-treatments">{NoTreatmentsMessage}</div>
       ) : (
         <DataTable rows={treatments} headers={treatmentHeaders}>
           {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
