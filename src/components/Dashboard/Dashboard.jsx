@@ -116,7 +116,6 @@ export default function Dashboard(props) {
     </main>
   );
 }
-
 Dashboard.propTypes = {
   hostData: PropTypes.object.isRequired,
 };
