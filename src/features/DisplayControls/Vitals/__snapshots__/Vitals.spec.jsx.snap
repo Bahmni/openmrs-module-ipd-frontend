@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Vitals should match snapshot 1`] = `
+<DocumentFragment>
+  <div
+    style="padding: 10px;"
+  >
+    Vitals
+  </div>
+</DocumentFragment>
+`;

@@ -37,6 +37,10 @@ const commonConfig = {
         },
       },
       {
+        test: /\.json$/,
+        use: "json-loader",
+      },
+      {
         test: /\.(ts|tsx|js|jsx)$/,
         exclude: /node_modules/,
         use: {
@@ -115,6 +119,7 @@ const federationConfig = {
         "./DrugChartModal": "./src/entries/DrugChartModal/DrugChartModal.jsx",
         "./DrugChartModalNotification":
           "./src/entries/DrugChartModal/DrugChartModalNotification.jsx",
+        "./IpdDashboard": "./src/components/Dashboard/Dashboard.jsx",
       },
       shared: {
         // ...dependencies,
