@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import {
-  Accordion,
-  AccordionItem,
   DataTable,
   TableCell,
   TableHead,
@@ -12,28 +9,16 @@ import {
   TableRow,
   DataTableSkeleton,
 } from "carbon-components-react";
-import { I18nProvider } from "../../i18n/I18nProvider";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { getPatientDiagnosis } from "./DiagnosisUtils";
-import PropTypes from "prop-types";
 
 const Diagnosis = () => {
    
-  const patientUuid = "c6184658-2149-40c9-b2d2-96621c93f74a";
+  const patientUuid = "7cd01fbf-7b2e-4dc0-8ab4-7155cd86980b";
   const[diagnosis,setDiagnosis] = useState([]);
   const[isLoading,setIsLoading] = useState(null);
-  const data = [
-    {
-        id: 1,
-        diagnosis: 'Anemia',
-        order: 'Primary',
-        certainity:'confirmed',
-        status: 'Active',
-        diagnosedBy: 'Dr ',
-        diagnosisDate:new Date().toLocaleDateString()
-    }
-  ]
+  
   const NoDiagnosisMessage = (
     <FormattedMessage
       id={"NO_DIAGNOSIS_MESSAGE"}
@@ -42,86 +27,100 @@ const Diagnosis = () => {
   
 const diagnosisHeaders = [
     {
+        id: '1',
         header: 'Diagnosis',
         key: 'diagnosis',
         isSortable: true 
     },
     {
+        id: '2',
         header: 'Order',
         key: 'order',
         isSortable: true 
     },
     {
-        header: 'Certainity',
-        key: 'certainity',
+        id: '3',
+        header: 'Certainty',
+        key: 'certainty',
         isSortable: true 
     },
     {
+        id: '4',
         header: 'Status',
         key: 'status',
         isSortable: true 
     },
     {
+        id: '5',
         header: 'Diagnosed by',
         key: 'diagnosedBy',
         isSortable: true 
     },
     {
+        id: '6',
         header: 'Diagnosis date ',
         key: 'diagnosisDate',
         isSortable: true 
     },
   ];
-  
+
+const mapDiagnosisData = (diagnosisList) => {
+    const mappedDiagnoses = diagnosisList.map((diagnosis) => {
+        let status = diagnosis.diagnosisStatusConcept ? "INACTIVE" : "ACTIVE";
+        let diagnosisDate = new Date(diagnosis.diagnosisDateTime).toLocaleDateString();
+        return {
+            id: diagnosis.codedAnswer.uuid,
+            diagnosis: diagnosis.codedAnswer.name,
+            order: diagnosis.order,
+            certainty: diagnosis.certainty,
+            status: status,
+            diagnosedBy: diagnosis.providers[0].name,
+            diagnosisDate: diagnosisDate
+        };
+    });
+    setDiagnosis(mappedDiagnoses);
+};
+    const getDiagnosis =  async () => {
+        const diagnosisList  = await getPatientDiagnosis(patientUuid);
+        mapDiagnosisData(diagnosisList);
+    }
 
     useEffect (() => { 
-        const getDiagnosis =  async () => {
-            console.log("+++++++",);
-            const diagnosisList  = await getPatientDiagnosis(patientUuid);
-            console.log("+++++++diagnosisList ++++",diagnosisList);
-          }
+        setIsLoading(true);
         getDiagnosis();
         setIsLoading(false);
-         },[])
-    
+    },[]);
 
   return (
-    <I18nProvider>
-    <Accordion align="end">
-        <AccordionItem className='diagnosis-accordion' open title='Diagnosis'>
-            {isLoading ? (
-                <DataTableSkeleton />) : diagnosis && diagnosis.length === 0 ? (
-                    <div>{NoDiagnosisMessage}</div>
-                ) : (
-                <DataTable rows={diagnosis} headers={diagnosisHeaders}>
-                    {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-                        <Table {...getTableProps()}>
-                        <TableHead>
-                            <TableRow>
-                            {headers.map((header) => (
-                                <TableHeader key={header} {...getHeaderProps({ header, isSortable: header.isSortable })}>
-                                {header.header}
-                                </TableHeader>
-                            ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows.map((row) => (
-                            <TableRow key={row} {...getRowProps({ row })}>
-                                {row.cells.map((cell) => (
-                                <TableCell key={cell.id}>{cell.value}</TableCell>
-                                ))}
-                            </TableRow>
-                            ))}
-                        </TableBody>
-                        </Table>
-                    )}
-                </DataTable>
-             )
-            }
-            </AccordionItem>
-        </Accordion>
-    </I18nProvider>
+    isLoading ? (
+        <DataTableSkeleton />) : diagnosis && diagnosis.length === 0 ? (
+            <div>{NoDiagnosisMessage}</div>
+        ) : (
+        diagnosis.length != 0 && <DataTable rows={diagnosis} headers={diagnosisHeaders} >
+            {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
+                <Table {...getTableProps()} useZebraStyles>
+                <TableHead>
+                    <TableRow>
+                    {headers.map((header) => (
+                        <TableHeader key={header.id} {...getHeaderProps({ header, isSortable: header.isSortable })}>
+                        {header.header}
+                        </TableHeader>
+                    ))}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {rows.map((row) => (
+                    <TableRow key={row.id} {...getRowProps({ row })}>
+                        {row.cells.map((cell) => (
+                        <TableCell key={cell.id}>{cell.value}</TableCell>
+                        ))}
+                    </TableRow>
+                    ))}
+                </TableBody>
+                </Table>
+            )}
+        </DataTable>
+        )
   );
 };
 

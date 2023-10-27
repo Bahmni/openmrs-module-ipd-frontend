@@ -8,9 +8,8 @@ export const getPatientDiagnosis = async (patientUuid) => {
         params: {patientUuid: patientUuid},
         withCredentials: true,
       });
-    console.log("Resposnse",response);
-    return response;
+    return response.data;
   } catch (error) {
-    console.error(error ,"hhhhhh");
+    console.error(error);
   }
 };
