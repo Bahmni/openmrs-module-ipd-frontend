@@ -12,20 +12,23 @@ import {
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { getPatientDiagnosis } from "./DiagnosisUtils";
+import PropTypes from "prop-types";
+import "./Diagnosis.scss";
 
-const Diagnosis = () => {
+const Diagnosis = (props) => {
    
-  const patientUuid = "7cd01fbf-7b2e-4dc0-8ab4-7155cd86980b";
-  const[diagnosis,setDiagnosis] = useState([]);
-  const[isLoading,setIsLoading] = useState(null);
-  
-  const NoDiagnosisMessage = (
+    const {patientId} = props;
+    const[diagnosis, setDiagnosis] = useState([]);
+    const[isLoading, setIsLoading] = useState(true);
+
+    const NoDiagnosisMessage = (
     <FormattedMessage
-      id={"NO_DIAGNOSIS_MESSAGE"}
+        id={"NO_DIAGNOSIS_MESSAGE"}
+        defaultMessage={"No Diagnosis found for this patient"}
     />
-);
+    );
   
-const diagnosisHeaders = [
+    const diagnosisHeaders = [
     {
         id: '1',
         header: 'Diagnosis',
@@ -52,77 +55,83 @@ const diagnosisHeaders = [
     },
     {
         id: '5',
-        header: 'Diagnosed by',
+        header: 'Diagnosed By',
         key: 'diagnosedBy',
         isSortable: true 
     },
     {
         id: '6',
-        header: 'Diagnosis date ',
+        header: 'Diagnosis Date ',
         key: 'diagnosisDate',
         isSortable: true 
     },
-  ];
+    ];
 
-const mapDiagnosisData = (diagnosisList) => {
-    const mappedDiagnoses = diagnosisList.map((diagnosis) => {
-        let status = diagnosis.diagnosisStatusConcept ? "INACTIVE" : "ACTIVE";
-        let diagnosisDate = new Date(diagnosis.diagnosisDateTime).toLocaleDateString();
-        return {
-            id: diagnosis.codedAnswer.uuid,
-            diagnosis: diagnosis.codedAnswer.name,
-            order: diagnosis.order,
-            certainty: diagnosis.certainty,
-            status: status,
-            diagnosedBy: diagnosis.providers[0].name,
-            diagnosisDate: diagnosisDate
-        };
-    });
-    setDiagnosis(mappedDiagnoses);
-};
+    const mapDiagnosisData = (diagnosisList) => {
+        const mappedDiagnoses = diagnosisList.map((diagnosis) => {
+            let status = diagnosis.diagnosisStatusConcept ? "Inactive" : "Active";
+            let diagnosisDate = new Date(diagnosis.diagnosisDateTime).toLocaleDateString();
+            return {
+                id: diagnosis.codedAnswer.uuid,
+                diagnosis: diagnosis.codedAnswer.name,
+                order: diagnosis.order,
+                certainty: diagnosis.certainty,
+                status: status,
+                diagnosedBy: diagnosis.providers[0].name,
+                diagnosisDate: diagnosisDate
+            };
+        });
+        setDiagnosis(mappedDiagnoses);
+        setIsLoading(false);
+    };
     const getDiagnosis =  async () => {
-        const diagnosisList  = await getPatientDiagnosis(patientUuid);
+        const diagnosisList  = await getPatientDiagnosis(patientId);
         mapDiagnosisData(diagnosisList);
     }
 
     useEffect (() => { 
-        setIsLoading(true);
         getDiagnosis();
-        setIsLoading(false);
     },[]);
-
-  return (
-    isLoading ? (
-        <DataTableSkeleton />) : diagnosis && diagnosis.length === 0 ? (
-            <div>{NoDiagnosisMessage}</div>
-        ) : (
-        diagnosis.length != 0 && <DataTable rows={diagnosis} headers={diagnosisHeaders} >
-            {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-                <Table {...getTableProps()} useZebraStyles>
-                <TableHead>
-                    <TableRow>
-                    {headers.map((header) => (
-                        <TableHeader key={header.id} {...getHeaderProps({ header, isSortable: header.isSortable })}>
-                        {header.header}
-                        </TableHeader>
-                    ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                    <TableRow key={row.id} {...getRowProps({ row })}>
-                        {row.cells.map((cell) => (
-                        <TableCell key={cell.id}>{cell.value}</TableCell>
-                        ))}
-                    </TableRow>
-                    ))}
-                </TableBody>
-                </Table>
+    console.log("diagnosisList --- ", diagnosis);
+    return ( <>
+        {isLoading ? (
+        <DataTableSkeleton data-testid="diagnosis-datatable-skeleton"/>)
+            :  (
+                diagnosis && diagnosis.length === 0 ? (
+                <div className="no-dignosis-message">{NoDiagnosisMessage}</div> ) :
+                <DataTable 
+                    rows={diagnosis} 
+                    headers={diagnosisHeaders} 
+                    useZebraStyles={true}
+                    >
+                    {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
+                        <Table {...getTableProps()} useZebraStyles data-testid="diagnosis-datatable">
+                        <TableHead>
+                            <TableRow>
+                            {headers.map((header) => (
+                                <TableHeader key={header.id} {...getHeaderProps({ header, isSortable: header.isSortable })}>
+                                {header.header}
+                                </TableHeader>
+                            ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rows.map((row) => (
+                            <TableRow key={row.id} {...getRowProps({ row })}>
+                                {row.cells.map((cell) => (
+                                <TableCell key={cell.id}>{cell.value}</TableCell>
+                                ))}
+                            </TableRow>
+                            ))}
+                        </TableBody>
+                        </Table>
+                    )}
+                </DataTable>
             )}
-        </DataTable>
-        )
-  );
-};
+        </>);
+    };
 
-
+Diagnosis.propTypes = {
+    patientId: PropTypes.string.isRequired,
+  };
 export default Diagnosis;

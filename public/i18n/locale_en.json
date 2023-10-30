@@ -18,5 +18,5 @@
   "ADMINISTERED": "Administered",
   "PENDING": "Pending",
   "NOTE": "Note",
-  "NO_DIAGNOSIS_MESSAGE": "No Diagnosis"
+  "NO_DIAGNOSIS_MESSAGE": "No Diagnosis found for this patient"
 }
