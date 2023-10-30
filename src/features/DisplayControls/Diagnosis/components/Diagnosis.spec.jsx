@@ -3,7 +3,7 @@ import React from "react";
 import Diagnosis from "./Diagnosis";
 import { getPatientDiagnosis } from "../utils/DiagnosisUtils";
 
-jest.mock("./DiagnosisUtils", () => ({
+jest.mock("../utils/DiagnosisUtils", () => ({
     getPatientDiagnosis: jest.fn(),
 }));
 
