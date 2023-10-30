@@ -25,7 +25,7 @@ describe("Dashboard", () => {
     expect(sideNav).toBeTruthy();
   });
 
-  it.skip("renders the accordion sections", () => {
+  it("renders the accordion sections", () => {
     render(<Dashboard hostData={hostData} />);
     const section1 = screen.findAllByText("Patient Summary");
     const section2 = screen.findAllByText("Vitals");
