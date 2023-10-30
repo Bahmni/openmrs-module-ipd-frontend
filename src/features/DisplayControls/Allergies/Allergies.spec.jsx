@@ -73,4 +73,15 @@ describe("Allergies", () => {
 
     expect(screen.queryByTestId("datatable-skeleton")).not.toBeInTheDocument();
   });
+
+  it("should show no data message when there is no data", async () => {
+    axios.get.mockResolvedValue({ data: { entry: undefined } });
+    render(<Allergies patientId={"__test_patient_uuid__"} />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/No Allergen is captured for this patient yet/i)
+      ).toBeInTheDocument();
+    });
+  });
 });
