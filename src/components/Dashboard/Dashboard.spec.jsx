@@ -1,5 +1,11 @@
 import React from "react";
-import { act, render, fireEvent, screen } from "@testing-library/react";
+import {
+  act,
+  render,
+  fireEvent,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 
 import Dashboard from "./Dashboard";
 
@@ -13,10 +19,12 @@ describe("Dashboard", () => {
     const { asFragment } = render(<Dashboard hostData={hostData} />);
     expect(asFragment()).toMatchSnapshot();
   });
-  it("renders the header", () => {
+  it("renders the header", async () => {
     render(<Dashboard hostData={hostData} />);
-    const header = screen.findByRole("banner");
-    expect(header).toBeTruthy();
+    await waitFor(() => {
+      const header = screen.getByRole("banner");
+      expect(header).toBeTruthy();
+    });
   });
 
   it.skip("renders the side navigation", () => {
