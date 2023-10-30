@@ -20,9 +20,9 @@ describe("Dashboard", () => {
     expect(asFragment()).toMatchSnapshot();
   });
   it("renders the header", async () => {
-    render(<Dashboard />);
+    render(<Dashboard hostData={hostData} />);
     await waitFor(() => {
-      const header = screen.getByRole("banner");
+      const header = screen.queryByRole("banner");
       expect(header).toBeTruthy();
     });
   });
