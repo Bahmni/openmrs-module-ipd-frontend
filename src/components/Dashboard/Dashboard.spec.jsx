@@ -25,7 +25,9 @@ describe("Dashboard", () => {
     //   const header = screen.queryByRole("banner");
     //   expect(header).toBeTruthy();
     // });
-    const header = screen.getByRole("banner", { name: "IPD Dashboard Header" });
+    // const header = screen.getByRole("banner", { name: "IPD Dashboard Header" });
+    const header = screen.getByTestId("ipd-header");
+
     expect(header).toBeTruthy();
   });
 

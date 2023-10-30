@@ -8,6 +8,7 @@ exports[`Dashboard should match snapshot 1`] = `
     <header
       aria-label="IPD Dashboard Header"
       class="bx--header border-bottom-0 header-bg-color"
+      data-testid="ipd-header"
     >
       <button
         aria-label="Open menu"

@@ -60,6 +60,7 @@ export default function Dashboard(props) {
       <Header
         className="border-bottom-0 header-bg-color"
         aria-label="IPD Dashboard Header"
+        data-testid="ipd-header"
       >
         <HeaderMenuButton
           aria-label="Open menu"
