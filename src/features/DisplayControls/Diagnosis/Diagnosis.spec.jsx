@@ -16,7 +16,6 @@ describe("Diagnosis", () => {
         getPatientDiagnosis.mockImplementation(() => {
             return Promise.resolve([]);
         });
-        // const { getByText } = 
         render(
         <Diagnosis patientId="__test_patient_uuid__" />
         );
@@ -119,8 +118,8 @@ describe("Diagnosis", () => {
         });
         expect(screen.getByText("Arthropathy")).toBeTruthy();
         expect(screen.getByText("Inactive")).toBeTruthy();
-        expect(screen.getByText("26/10/2023")).toBeTruthy();
-        expect(screen.getByText("27/10/2023")).toBeTruthy();
+        expect(screen.getByText("10/26/2023")).toBeTruthy();
+        expect(screen.getByText("10/27/2023")).toBeTruthy();
     });
   
 });

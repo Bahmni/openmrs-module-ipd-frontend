@@ -92,7 +92,7 @@ const Diagnosis = (props) => {
     useEffect (() => { 
         getDiagnosis();
     },[]);
-    console.log("diagnosisList --- ", diagnosis);
+
     return ( <>
         {isLoading ? (
         <DataTableSkeleton data-testid="diagnosis-datatable-skeleton"/>)
@@ -133,5 +133,5 @@ const Diagnosis = (props) => {
 
 Diagnosis.propTypes = {
     patientId: PropTypes.string.isRequired,
-  };
+};
 export default Diagnosis;
