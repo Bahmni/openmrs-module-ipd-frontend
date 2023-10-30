@@ -8,21 +8,20 @@ jest.mock("./TreatmentsUtils", () => ({
 }));
 
 describe("Treatments", () => {
-  beforeEach(() => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it("should show no treatments message if no drug orders are present for that patient", async () => {
     getPrescribedAndActiveDrugOrders.mockImplementation(() => {
       return Promise.resolve({
         visitDrugOrders: [],
         activeDrugOrders: [],
       });
     });
-  });
-
-  it("should show no treatments message if no drug orders are present for that patient", async () => {
-    getPrescribedAndActiveDrugOrders.mockResolvedValueOnce({
-      visitDrugOrders: [],
-      activeDrugOrders: [],
-    });
-    const { getByText } = render(<Treatments />);
+    const { getByText } = render(
+      <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+    );
     await waitFor(() => {
       expect(
         getByText("No IPD Medication is prescribed for this patient yet")
@@ -30,11 +29,11 @@ describe("Treatments", () => {
     });
   });
 
-  it("should show OPD treatments without Add to Drug Chart link", async () => {
+  it("should not show OPD treatments", async () => {
     const treatments = [
       {
         uuid: "1",
-        effectiveStartDate: new Date("01/01/2022"),
+        effectiveStartDate: new Date("1/1/2022"),
         drug: {
           name: "Drug 1",
         },
@@ -52,25 +51,27 @@ describe("Treatments", () => {
         careSetting: "OUTPATIENT",
       },
     ];
-    getPrescribedAndActiveDrugOrders.mockResolvedValueOnce({
-      visitDrugOrders: treatments,
-      activeDrugOrders: [],
+    getPrescribedAndActiveDrugOrders.mockImplementation(() => {
+      return Promise.resolve({
+        visitDrugOrders: treatments,
+        activeDrugOrders: [],
+      });
     });
-    const { getByText, queryByText } = render(<Treatments />);
+    const { getByText } = render(
+      <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+    );
     await waitFor(() => {
-      expect(getByText("1/1/2022")).toBeTruthy();
-      expect(getByText("Drug 1")).toBeTruthy();
-      expect(getByText("1 mg - Oral - Once a day - for 7 days")).toBeTruthy();
-      expect(getByText("Dr. John Doe")).toBeTruthy();
-      expect(queryByText("Add to Drug Chart")).toBeNull();
+      expect(
+        getByText("No IPD Medication is prescribed for this patient yet")
+      ).toBeTruthy();
     });
   });
 
-  it("should render an AddToDrugChart link for inpatient treatments", async () => {
+  it("should render an AddToDrugChart link for IPD treatments", async () => {
     const treatments = [
       {
         uuid: "1",
-        effectiveStartDate: new Date("01/01/2022"),
+        effectiveStartDate: new Date("1/1/2022"),
         drug: {
           name: "Drug 1",
         },
@@ -88,11 +89,15 @@ describe("Treatments", () => {
         careSetting: "INPATIENT",
       },
     ];
-    getPrescribedAndActiveDrugOrders.mockResolvedValueOnce({
-      visitDrugOrders: treatments,
-      activeDrugOrders: [],
+    getPrescribedAndActiveDrugOrders.mockImplementation(() => {
+      return Promise.resolve({
+        visitDrugOrders: treatments,
+        activeDrugOrders: [],
+      });
     });
-    const { getByText } = render(<Treatments />);
+    const { getByText } = render(
+      <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+    );
     await waitFor(() => {
       expect(getByText("1/1/2022")).toBeTruthy();
       expect(getByText("Drug 1")).toBeTruthy();
