@@ -27,6 +27,8 @@ describe("Dashboard", () => {
     // });
     // const header = screen.getByRole("banner", { name: "IPD Dashboard Header" });
     const header = screen.getByTestId("ipd-header");
+    console.log("before debug header");
+    screen.debug(header);
 
     expect(header).toBeTruthy();
   });
@@ -41,6 +43,8 @@ describe("Dashboard", () => {
     render(<Dashboard hostData={hostData} />);
     const section1 = screen.findAllByText("Patient Summary");
     const section2 = screen.findAllByText("Vitals");
+    // console.log("before section1");
+    // screen.debug(section1);
     expect(section1).toBeTruthy();
     expect(section2).toBeTruthy();
   });
