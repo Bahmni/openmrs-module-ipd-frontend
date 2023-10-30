@@ -13,11 +13,12 @@ import {
 import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { getPrescribedAndActiveDrugOrders } from "./TreatmentsUtils";
+// import { getPrescribedAndActiveDrugOrders } from "./TreatmentsUtils";
 import "./Treatments.scss";
 
 const Treatments = (props) => {
   const { patientId } = props;
+  console.log(patientId);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const treatmentHeaders = [
@@ -102,7 +103,8 @@ const Treatments = (props) => {
 
   useEffect(() => {
     const getActiveDrugOrders = async () => {
-      const drugOrders = await getPrescribedAndActiveDrugOrders(patientId);
+      // const drugOrders = await getPrescribedAndActiveDrugOrders(patientId);
+      const drugOrders = {};
       if (drugOrders.visitDrugOrders) {
         modifyTreatmentData(drugOrders);
         setIsLoading(false);
