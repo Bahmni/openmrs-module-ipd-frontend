@@ -88,5 +88,9 @@
     "*.!(js|jsx)": [
       "prettier --write --ignore-unknown"
     ]
+  },
+  "resolutions": {
+    "@babel/traverse": "7.23.2",
+    "browserify-sign": "4.2.2"
   }
 }
