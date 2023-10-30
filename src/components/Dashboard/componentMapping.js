@@ -6,6 +6,6 @@ export const componentMapping = {
   ),
   VT: lazy(() => import("../../features/DisplayControls/Vitals/Vitals")),
   TR: lazy(() =>
-    import("../../features/DisplayControls/Treatments/Treatments")
+    import("../../features/DisplayControls/Treatments/components/Treatments")
   ),
 };

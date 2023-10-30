@@ -1,9 +1,9 @@
 import { render, waitFor } from "@testing-library/react";
 import React from "react";
-import Treatments from "./Treatments";
-import { getPrescribedAndActiveDrugOrders } from "./TreatmentsUtils";
+import Treatments from "../components/Treatments";
+import { getPrescribedAndActiveDrugOrders } from "../utils/TreatmentsUtils";
 
-jest.mock("./TreatmentsUtils", () => ({
+jest.mock("../utils/TreatmentsUtils", () => ({
   getPrescribedAndActiveDrugOrders: jest.fn(),
 }));
 

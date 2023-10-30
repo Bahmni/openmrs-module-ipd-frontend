@@ -13,13 +13,13 @@ describe("Dashboard", () => {
     const { asFragment } = render(<Dashboard hostData={hostData} />);
     expect(asFragment()).toMatchSnapshot();
   });
-  it.skip("renders the header", () => {
+  it("renders the header", () => {
     render(<Dashboard hostData={hostData} />);
     const header = screen.getByRole("banner");
     expect(header).toBeTruthy();
   });
 
-  it.skip("renders the side navigation", () => {
+  it("renders the side navigation", () => {
     render(<Dashboard hostData={hostData} />);
     const sideNav = screen.getByRole("navigation");
     expect(sideNav).toBeTruthy();
@@ -43,12 +43,10 @@ describe("Dashboard", () => {
       window.dispatchEvent(new Event("resize"));
     });
 
-    render(<Dashboard hostData={hostData} />);
-
     expect(window.innerWidth).toEqual(1200);
   });
 
-  it.skip("should update sidenav on click of side nav expand", async () => {
+  it("should update sidenav on click of side nav expand", async () => {
     render(<Dashboard hostData={hostData} />);
 
     const menuButton = screen.getByLabelText("Open menu");

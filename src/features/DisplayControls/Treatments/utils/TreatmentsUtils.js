@@ -1,5 +1,5 @@
-import { PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL } from "../../../constants";
-import { getLocale } from "../../i18n/utils";
+import { PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL } from "../../../../constants";
+import { getLocale } from "../../../i18n/utils";
 import axios from "axios";
 
 export const getPrescribedAndActiveDrugOrders = async (
