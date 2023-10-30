@@ -59,7 +59,7 @@ export default function Dashboard(props) {
     <main className="ipd-page">
       <Header
         className="border-bottom-0 header-bg-color"
-        aria-label="IBM Platform Name"
+        aria-label="IPD Dashboard Header"
       >
         <HeaderMenuButton
           aria-label="Open menu"

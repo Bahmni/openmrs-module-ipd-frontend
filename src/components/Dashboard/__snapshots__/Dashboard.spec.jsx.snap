@@ -6,7 +6,7 @@ exports[`Dashboard should match snapshot 1`] = `
     class="ipd-page"
   >
     <header
-      aria-label="IBM Platform Name"
+      aria-label="IPD Dashboard Header"
       class="bx--header border-bottom-0 header-bg-color"
     >
       <button

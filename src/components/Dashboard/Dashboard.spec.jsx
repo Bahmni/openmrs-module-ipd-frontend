@@ -4,7 +4,7 @@ import {
   render,
   fireEvent,
   screen,
-  waitFor,
+  // waitFor,
 } from "@testing-library/react";
 
 import Dashboard from "./Dashboard";
@@ -21,10 +21,11 @@ describe("Dashboard", () => {
   });
   it("renders the header", async () => {
     render(<Dashboard hostData={hostData} />);
-    let header;
-    await waitFor(() => {
-      header = screen.getByRole("banner");
-    });
+    // await waitFor(() => {
+    //   const header = screen.queryByRole("banner");
+    //   expect(header).toBeTruthy();
+    // });
+    const header = screen.getByRole("banner", { name: "IPD Dashboard Header" });
     expect(header).toBeTruthy();
   });
 
