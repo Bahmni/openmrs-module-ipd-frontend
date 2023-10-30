@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 const PatientSummary = () => {
   useEffect(() => {
-    console.log("mounting");
+    console.log("mounting test");
 
     return () => {
       console.log("unmounting");
