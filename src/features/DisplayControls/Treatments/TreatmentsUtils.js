@@ -29,7 +29,7 @@ export const getPrescribedAndActiveDrugOrders = async (
     if (response.status !== 200) throw new Error(response.statusText);
     return response.data;
   } catch (error) {
-    console.error(error);
+    // console.error("error ->", error);
     return error;
   }
 };
