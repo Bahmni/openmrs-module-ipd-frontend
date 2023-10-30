@@ -21,10 +21,11 @@ describe("Dashboard", () => {
   });
   it("renders the header", async () => {
     render(<Dashboard hostData={hostData} />);
+    let header;
     await waitFor(() => {
-      const header = screen.queryByRole("banner");
-      expect(header).toBeTruthy();
+      header = screen.getByRole("banner");
     });
+    expect(header).toBeTruthy();
   });
 
   it.skip("renders the side navigation", () => {
