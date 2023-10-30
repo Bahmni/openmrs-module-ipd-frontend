@@ -20,7 +20,7 @@ describe("Dashboard", () => {
     expect(asFragment()).toMatchSnapshot();
   });
   it("renders the header", async () => {
-    render(<Dashboard hostData={hostData} />);
+    render(<Dashboard />);
     await waitFor(() => {
       const header = screen.getByRole("banner");
       expect(header).toBeTruthy();
