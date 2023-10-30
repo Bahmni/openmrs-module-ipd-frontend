@@ -11,9 +11,9 @@ import {
 } from "carbon-components-react";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { getPatientDiagnosis } from "./DiagnosisUtils";
+import { getPatientDiagnosis } from "../utils/DiagnosisUtils";
 import PropTypes from "prop-types";
-import "./Diagnosis.scss";
+import "../styles/Diagnosis.scss";
 
 const Diagnosis = (props) => {
    

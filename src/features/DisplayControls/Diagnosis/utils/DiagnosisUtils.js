@@ -1,5 +1,5 @@
 import axios from "axios";
-import { DIAGNOSIS_SEARCH_URL } from "../../../constants";
+import { DIAGNOSIS_SEARCH_URL } from "../../../../constants";
 
 
 export const getPatientDiagnosis = async (patientUuid) => {

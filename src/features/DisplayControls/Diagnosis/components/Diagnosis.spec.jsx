@@ -1,7 +1,7 @@
 import { render, waitFor, screen } from "@testing-library/react";
 import React from "react";
 import Diagnosis from "./Diagnosis";
-import { getPatientDiagnosis } from "./DiagnosisUtils";
+import { getPatientDiagnosis } from "../utils/DiagnosisUtils";
 
 jest.mock("./DiagnosisUtils", () => ({
     getPatientDiagnosis: jest.fn(),
