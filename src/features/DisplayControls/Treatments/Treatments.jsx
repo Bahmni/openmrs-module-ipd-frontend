@@ -104,7 +104,6 @@ const Treatments = (props) => {
   useEffect(() => {
     const getActiveDrugOrders = async () => {
       const drugOrders = await getPrescribedAndActiveDrugOrders(patientId);
-      // const drugOrders = {};
       if (drugOrders.visitDrugOrders) {
         modifyTreatmentData(drugOrders);
         setIsLoading(false);

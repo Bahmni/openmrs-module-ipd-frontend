@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  act,
-  render,
-  fireEvent,
-  screen,
-  // waitFor,
-} from "@testing-library/react";
+import { act, render, fireEvent, screen } from "@testing-library/react";
 
 import Dashboard from "./Dashboard";
 
@@ -21,16 +15,8 @@ describe("Dashboard", () => {
   });
   it("renders the header", async () => {
     render(<Dashboard hostData={hostData} />);
-    // await waitFor(() => {
     const header = screen.queryByRole("banner");
     expect(header).toBeTruthy();
-    // });
-    // const header = screen.getByRole("banner", { name: "IPD Dashboard Header" });
-    // const header = screen.getByTestId("ipd-header");
-    // console.log("before debug header");
-    // screen.debug(header);
-
-    // expect(header).toBeTruthy();
   });
 
   it("renders the side navigation", () => {
