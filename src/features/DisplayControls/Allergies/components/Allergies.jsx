@@ -9,9 +9,9 @@ import {
   TableRow,
 } from "carbon-components-react";
 import React, { useEffect, useState } from "react";
-import { useFetchAllergiesIntolerance } from "../../../hooks/useFetchAllergiesIntolerance";
+import { useFetchAllergiesIntolerance } from "../hooks/useFetchAllergiesIntolerance";
 import PropTypes from "prop-types";
-import "./Allergies.scss";
+import "../styles/Allergies.scss";
 import { FormattedMessage } from "react-intl";
 
 const Allergies = (props) => {

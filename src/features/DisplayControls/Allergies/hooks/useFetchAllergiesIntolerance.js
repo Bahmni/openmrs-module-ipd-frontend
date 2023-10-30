@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { fetchAllergiesData } from "../features/DisplayControls/Allergies/AllergiesUtils/AllergiesUtils";
+import { fetchAllergiesData } from "../utils/AllergiesUtils";
 
 export const useFetchAllergiesIntolerance = (patientUuid) => {
   const [allergiesData, setAllergiesData] = useState([]);
