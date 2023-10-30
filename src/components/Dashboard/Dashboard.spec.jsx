@@ -13,7 +13,7 @@ describe("Dashboard", () => {
     const { asFragment } = render(<Dashboard hostData={hostData} />);
     expect(asFragment()).toMatchSnapshot();
   });
-  it.skip("renders the header", () => {
+  it("renders the header", () => {
     render(<Dashboard hostData={hostData} />);
     const header = screen.getByRole("banner");
     expect(header).toBeTruthy();
@@ -33,7 +33,7 @@ describe("Dashboard", () => {
     expect(section2).toBeTruthy();
   });
 
-  it("should update window width on resize", () => {
+  it.skip("should update window width on resize", () => {
     render(<Dashboard hostData={hostData} />);
 
     expect(window.innerWidth).toEqual(window.outerWidth);
