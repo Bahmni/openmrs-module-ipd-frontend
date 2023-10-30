@@ -7,7 +7,7 @@ jest.mock("./TreatmentsUtils", () => ({
   getPrescribedAndActiveDrugOrders: jest.fn(),
 }));
 
-describe.skip("Treatments", () => {
+describe("Treatments", () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
