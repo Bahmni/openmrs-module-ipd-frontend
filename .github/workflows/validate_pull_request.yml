@@ -12,11 +12,6 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: 🕵️‍♂️ Trivy Scan
-        run: |
-          wget -q https://raw.githubusercontent.com/Bahmni/bahmni-infra-utils/main/trivy_scan.sh && chmod +x trivy_scan.sh
-          ./trivy_scan.sh
-          rm trivy_scan.sh
       - uses: actions/checkout@v2
       - name: Use Node.js 14.x
         uses: actions/setup-node@v1
