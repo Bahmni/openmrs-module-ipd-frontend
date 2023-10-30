@@ -15,7 +15,7 @@ describe("Dashboard", () => {
   });
   it("renders the header", () => {
     render(<Dashboard hostData={hostData} />);
-    const header = screen.getByRole("banner");
+    const header = screen.findByRole("banner");
     expect(header).toBeTruthy();
   });
 
