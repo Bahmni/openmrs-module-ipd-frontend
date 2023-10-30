@@ -12,12 +12,19 @@ import React, { useEffect, useState } from "react";
 import { useFetchAllergiesIntolerance } from "../../../hooks/useFetchAllergiesIntolerance";
 import PropTypes from "prop-types";
 import "./Allergies.scss";
+import { FormattedMessage } from "react-intl";
 
 const Allergies = (props) => {
   const { patientId } = props;
 
   const { allergiesData, isLoading } = useFetchAllergiesIntolerance(patientId);
   const [rows, setRows] = useState([]);
+  const NoAllergenMessage = (
+    <FormattedMessage
+      id={"NO_ALLERGENS_MESSAGE"}
+      defaultMessage={"No Allergen is captured for this patient yet."}
+    />
+  );
 
   useEffect(() => {
     if (allergiesData && allergiesData.entry) {
@@ -37,14 +44,15 @@ const Allergies = (props) => {
   }, [allergiesData]);
 
   const getSortingWait = (severity) => {
-    if (severity === "High") return -1;
-    if (severity === "Mild") return 0;
+    if (severity === "Severe") return -1;
+    if (severity === "Moderate") return 0;
     return 1;
   };
 
   const getSeverity = (criticality) => {
-    if (criticality == "unable-to-assess") return "Mild";
-    return criticality.charAt(0).toUpperCase() + criticality.slice(1);
+    if (criticality == "unable-to-assess") return "Moderate";
+    else if (criticality == "high") return "Severe";
+    else return "Mild";
   };
 
   const getComments = (notes) =>
@@ -102,7 +110,9 @@ const Allergies = (props) => {
       />
     );
 
-  return (
+  return allergiesData.entry === undefined ? (
+    <div className="no-allergen-message"> {NoAllergenMessage} </div>
+  ) : (
     <DataTable
       rows={rows}
       headers={headers}
@@ -110,7 +120,7 @@ const Allergies = (props) => {
       data-testid="datatable"
     >
       {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-        <Table {...getTableProps()}>
+        <Table {...getTableProps()} useZebraStyles>
           <TableHead>
             <TableRow>
               {headers.map((header, index) => (
@@ -135,7 +145,7 @@ const Allergies = (props) => {
                   <TableCell
                     key={cell.id}
                     className={
-                      cell.id.includes("severity") && cell.value == "High"
+                      cell.id.includes("severity") && cell.value == "Severe"
                         ? "high-severity-color"
                         : ""
                     }

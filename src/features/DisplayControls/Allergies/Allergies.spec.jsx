@@ -2,19 +2,20 @@ import { render, waitFor, screen } from "@testing-library/react";
 import axios from "axios";
 import React from "react";
 import { mockAllergiesIntolerenceResponse } from "./AllergiesTestUtils";
-import { Allergies } from "./Allergies";
+import Allergies from "./Allergies";
 import "@testing-library/jest-dom/extend-expect";
 
 jest.mock("axios");
 describe("Allergies", () => {
   it("should render Allergies", () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies hostData={{ patientId: "__test_patient_uuid__" }} />);
+    render(<Allergies patientId={"__test_patient_uuid__"} />);
     expect(screen.getByText("Allergen")).toBeInTheDocument();
   });
+
   it("should show data in the table", async () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies hostData={{ patientId: "__test_patient_uuid__" }} />);
+    render(<Allergies patientId={"__test_patient_uuid__"} />);
 
     await waitFor(() => {
       expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
@@ -22,24 +23,25 @@ describe("Allergies", () => {
     expect(screen.getByText("Beef")).toBeInTheDocument();
     expect(screen.getByText(/test comment/i)).toBeInTheDocument();
   });
+
   it("should highlight severity column when the value is high", async () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies hostData={{ patientId: "__test_patient_uuid__" }} />);
+    render(<Allergies patientId={"__test_patient_uuid__"} />);
 
     await waitFor(() => {
       expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
     });
-
-    expect(screen.getAllByRole("cell", { name: /high/i })[0]).toHaveClass(
+    expect(screen.getAllByRole("cell", { name: /severe/i })[0]).toHaveClass(
       "high-severity-color"
     );
     expect(screen.getAllByRole("cell", { name: /mild/i })[0]).not.toHaveClass(
       "high-severity-color"
     );
   });
+
   it("should sort Allergen in ASC order based on severity", async () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies hostData={{ patientId: "__test_patient_uuid__" }} />);
+    render(<Allergies patientId={"__test_patient_uuid__"} />);
 
     await waitFor(() => {
       expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
@@ -49,19 +51,19 @@ describe("Allergies", () => {
       "Beef"
     );
     expect(screen.getAllByTestId("table-body-row")[0]).toHaveTextContent(
-      "High"
+      "Severe"
     );
     expect(screen.getAllByTestId("table-body-row")[1]).toHaveTextContent(
       "Milk product"
     );
     expect(screen.getAllByTestId("table-body-row")[1]).toHaveTextContent(
-      "High"
+      "Severe"
     );
   });
 
   it("should show table skeleton on loading", async () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies hostData={{ patientId: "__test_patient_uuid__" }} />);
+    render(<Allergies patientId={"__test_patient_uuid__"} />);
 
     expect(screen.getByTestId("datatable-skeleton")).toBeInTheDocument();
 
