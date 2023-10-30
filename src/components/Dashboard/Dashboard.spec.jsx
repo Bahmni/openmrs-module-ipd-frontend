@@ -22,18 +22,18 @@ describe("Dashboard", () => {
   it("renders the header", async () => {
     render(<Dashboard hostData={hostData} />);
     // await waitFor(() => {
-    //   const header = screen.queryByRole("banner");
-    //   expect(header).toBeTruthy();
+    const header = screen.queryByRole("banner");
+    expect(header).toBeTruthy();
     // });
     // const header = screen.getByRole("banner", { name: "IPD Dashboard Header" });
-    const header = screen.getByTestId("ipd-header");
-    console.log("before debug header");
-    screen.debug(header);
+    // const header = screen.getByTestId("ipd-header");
+    // console.log("before debug header");
+    // screen.debug(header);
 
-    expect(header).toBeTruthy();
+    // expect(header).toBeTruthy();
   });
 
-  it.skip("renders the side navigation", () => {
+  it("renders the side navigation", () => {
     render(<Dashboard hostData={hostData} />);
     const sideNav = screen.getByRole("navigation");
     expect(sideNav).toBeTruthy();
@@ -47,7 +47,7 @@ describe("Dashboard", () => {
     expect(section2).toBeTruthy();
   });
 
-  it.skip("should update window width on resize", () => {
+  it("should update window width on resize", () => {
     render(<Dashboard hostData={hostData} />);
 
     expect(window.innerWidth).toEqual(window.outerWidth);
@@ -62,7 +62,7 @@ describe("Dashboard", () => {
     expect(window.innerWidth).toEqual(1200);
   });
 
-  it.skip("should update sidenav on click of side nav expand", async () => {
+  it("should update sidenav on click of side nav expand", async () => {
     render(<Dashboard hostData={hostData} />);
 
     const menuButton = screen.getByLabelText("Open menu");
