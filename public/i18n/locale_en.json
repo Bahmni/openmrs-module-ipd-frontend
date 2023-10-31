@@ -20,5 +20,6 @@
   "NOTE": "Note",
   "NO_IPD_MEDICATION_MESSAGE": "No IPD Medication is prescribed for this patient yet",
   "ADD_TO_DRUG_CHART": "Add to Drug Chart",
-  "NO_ALLERGENS_MESSAGE": "No Allergen is captured for this patient yet."
+  "NO_ALLERGENS_MESSAGE": "No Allergen is captured for this patient yet.",
+  "NO_DIAGNOSIS_MESSAGE": "No Diagnosis found for this patient"
 }
