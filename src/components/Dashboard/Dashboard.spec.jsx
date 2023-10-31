@@ -3,7 +3,7 @@ import { act, render, fireEvent, screen } from "@testing-library/react";
 
 import Dashboard from "./Dashboard";
 
-describe.skip("Dashboard", () => {
+describe("Dashboard", () => {
   it("should match snapshot", () => {
     const { asFragment } = render(<Dashboard />);
     expect(asFragment()).toMatchSnapshot();

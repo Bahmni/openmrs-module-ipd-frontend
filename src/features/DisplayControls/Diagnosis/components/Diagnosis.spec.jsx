@@ -3,8 +3,30 @@ import React from "react";
 import Diagnosis from "./Diagnosis";
 import { getPatientDiagnosis } from "../utils/DiagnosisUtils";
 
+const headers = [
+  {
+    id: "1",
+    header: "Diagnosis",
+    key: "diagnosis",
+    isSortable: false,
+  },
+  {
+    id: "4",
+    header: "Status",
+    key: "status",
+    isSortable: true,
+  },
+  {
+    id: "6",
+    header: "Diagnosis Date ",
+    key: "diagnosisDate",
+    isSortable: true,
+  },
+];
+
 jest.mock("../utils/DiagnosisUtils", () => ({
   getPatientDiagnosis: jest.fn(),
+  diagnosisHeaders: headers,
 }));
 
 describe("Diagnosis", () => {
@@ -114,7 +136,7 @@ describe("Diagnosis", () => {
     });
     expect(screen.getByText("Arthropathy")).toBeTruthy();
     expect(screen.getByText("Inactive")).toBeTruthy();
-    expect(screen.getByText("10/26/2023")).toBeTruthy();
-    expect(screen.getByText("10/27/2023")).toBeTruthy();
+    expect(screen.getByText("26/10/2023")).toBeTruthy();
+    expect(screen.getByText("27/10/2023")).toBeTruthy();
   });
 });

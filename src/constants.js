@@ -18,3 +18,5 @@ export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
   FIXED_SCHEDULE_FREQUENCY: "FIXED_SCHEDULE_FREQUENCY",
 };
+export const defaultDateFormat = "DD MMM YYYY";
+export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
