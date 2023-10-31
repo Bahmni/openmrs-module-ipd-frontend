@@ -37,7 +37,7 @@ describe("Treatments", () => {
     const treatments = [
       {
         uuid: "1",
-        effectiveStartDate: new Date("1/1/2022"),
+        effectiveStartDate: new Date("01/01/2022"),
         drug: {
           name: "Drug 1",
         },
@@ -75,7 +75,7 @@ describe("Treatments", () => {
     const treatments = [
       {
         uuid: "1",
-        effectiveStartDate: new Date("1/1/2022"),
+        effectiveStartDate: new Date("01/01/2022"),
         drug: {
           name: "Drug 1",
         },
@@ -103,7 +103,7 @@ describe("Treatments", () => {
       <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
     );
     await waitFor(() => {
-      expect(getByText("1/1/2022")).toBeTruthy();
+      expect(getByText("01/01/2022")).toBeTruthy();
       expect(getByText("Drug 1")).toBeTruthy();
       expect(getByText("1 mg - Oral - Once a day - for 7 days")).toBeTruthy();
       expect(getByText("Dr. John Doe")).toBeTruthy();

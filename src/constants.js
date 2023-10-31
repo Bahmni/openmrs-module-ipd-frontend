@@ -18,3 +18,4 @@ export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
   FIXED_SCHEDULE_FREQUENCY: "FIXED_SCHEDULE_FREQUENCY",
 };
+export const dateFormat = "DD/MM/YYYY";
