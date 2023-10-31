@@ -99,7 +99,7 @@ export default function Dashboard(props) {
               <section
                 key={el.component}
                 ref={(ref) => (refs.current[el.component] = ref)}
-                style={{ marginBottom: "2.5rem" }}
+                style={{ marginBottom: "40px" }}
               >
                 <Suspense fallback={<p>Loading...</p>}>
                   <AccordionItem open title={el.name}>

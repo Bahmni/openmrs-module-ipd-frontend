@@ -89,7 +89,7 @@ exports[`Dashboard should match snapshot 1`] = `
         class="bx--accordion accordion bx--accordion--end bx--accordion--md"
       >
         <section
-          style="margin-bottom: 2.5rem;"
+          style="margin-bottom: 40px;"
         >
           <li
             class="bx--accordion__item bx--accordion__item--active"
@@ -131,7 +131,7 @@ exports[`Dashboard should match snapshot 1`] = `
           </li>
         </section>
         <section
-          style="margin-bottom: 2.5rem;"
+          style="margin-bottom: 40px;"
         >
           <li
             class="bx--accordion__item bx--accordion__item--active"
@@ -173,7 +173,7 @@ exports[`Dashboard should match snapshot 1`] = `
           </li>
         </section>
         <section
-          style="margin-bottom: 2.5rem;"
+          style="margin-bottom: 40px;"
         >
           <li
             class="bx--accordion__item bx--accordion__item--active"

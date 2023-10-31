@@ -3,9 +3,13 @@ import React from "react";
 import Treatments from "../components/Treatments";
 import { getPrescribedAndActiveDrugOrders } from "../utils/TreatmentsUtils";
 
-jest.mock("../utils/TreatmentsUtils", () => ({
-  getPrescribedAndActiveDrugOrders: jest.fn(),
-}));
+jest.mock("../utils/TreatmentsUtils", () => {
+  const originalModule = jest.requireActual("../utils/TreatmentsUtils");
+  return {
+    ...originalModule,
+    getPrescribedAndActiveDrugOrders: jest.fn(),
+  };
+});
 
 describe("Treatments", () => {
   afterEach(() => {

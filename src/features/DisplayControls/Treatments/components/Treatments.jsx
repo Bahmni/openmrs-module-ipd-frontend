@@ -13,40 +13,16 @@ import {
 import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { getPrescribedAndActiveDrugOrders } from "../utils/TreatmentsUtils";
+import {
+  getPrescribedAndActiveDrugOrders,
+  treatmentHeaders,
+} from "../utils/TreatmentsUtils";
 import "../styles/Treatments.scss";
 
 const Treatments = (props) => {
   const { patientId } = props;
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const treatmentHeaders = [
-    {
-      header: "Start Date",
-      key: "startDate",
-      isSortable: true,
-    },
-    {
-      header: "Drug Name",
-      key: "drugName",
-      isSortable: false,
-    },
-    {
-      header: "Dosage Details",
-      key: "dosageDetails",
-      isSortable: false,
-    },
-    {
-      header: "Prescribed By",
-      key: "prescribedBy",
-      isSortable: true,
-    },
-    {
-      header: "Actions",
-      key: "actions",
-      isSortable: false,
-    },
-  ];
 
   const NoTreatmentsMessage = (
     <FormattedMessage
