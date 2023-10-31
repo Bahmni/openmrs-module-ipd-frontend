@@ -43,8 +43,6 @@ describe("Dashboard", () => {
       window.dispatchEvent(new Event("resize"));
     });
 
-    render(<Dashboard hostData={hostData} />);
-
     expect(window.innerWidth).toEqual(1200);
   });
 

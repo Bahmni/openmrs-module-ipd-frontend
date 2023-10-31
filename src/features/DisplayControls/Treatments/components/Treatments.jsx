@@ -13,8 +13,8 @@ import {
 import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { getPrescribedAndActiveDrugOrders } from "./TreatmentsUtils";
-import "./Treatments.scss";
+import { getPrescribedAndActiveDrugOrders } from "../utils/TreatmentsUtils";
+import "../styles/Treatments.scss";
 
 const Treatments = (props) => {
   const { patientId } = props;
