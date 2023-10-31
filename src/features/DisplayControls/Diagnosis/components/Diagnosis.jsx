@@ -32,7 +32,7 @@ const Diagnosis = (props) => {
       id: "1",
       header: "Diagnosis",
       key: "diagnosis",
-      isSortable: true,
+      isSortable: false,
     },
     {
       id: "2",
@@ -56,7 +56,7 @@ const Diagnosis = (props) => {
       id: "5",
       header: "Diagnosed By",
       key: "diagnosedBy",
-      isSortable: true,
+      isSortable: false,
     },
     {
       id: "6",
@@ -67,21 +67,32 @@ const Diagnosis = (props) => {
   ];
 
   const mapDiagnosisData = (diagnosisList) => {
-    const mappedDiagnoses = diagnosisList.map((diagnosis) => {
-      let status = diagnosis.diagnosisStatusConcept ? "Inactive" : "Active";
-      let diagnosisDate = new Date(
-        diagnosis.diagnosisDateTime
-      ).toLocaleDateString();
-      return {
-        id: diagnosis.codedAnswer.uuid,
-        diagnosis: diagnosis.codedAnswer.name,
-        order: diagnosis.order,
-        certainty: diagnosis.certainty,
-        status: status,
-        diagnosedBy: diagnosis.providers[0].name,
-        diagnosisDate: diagnosisDate,
-      };
-    });
+    const mappedDiagnoses =
+      diagnosisList === undefined
+        ? []
+        : diagnosisList.map((diagnosis) => {
+            let status = diagnosis.diagnosisStatusConcept
+              ? "Inactive"
+              : "Active";
+            let diagnosisDate = new Date(
+              diagnosis.diagnosisDateTime
+            ).toLocaleDateString();
+            let diagnosisId = diagnosis.codedAnswer
+              ? diagnosis.codedAnswer.uuid
+              : diagnosis.freeTextAnswer + diagnosis.diagnosisDateTime;
+            let diagnosisName = diagnosis.codedAnswer
+              ? diagnosis.codedAnswer.name
+              : diagnosis.freeTextAnswer;
+            return {
+              id: diagnosisId,
+              diagnosis: diagnosisName,
+              order: diagnosis.order,
+              certainty: diagnosis.certainty,
+              status: status,
+              diagnosedBy: diagnosis.providers[0].name,
+              diagnosisDate: diagnosisDate,
+            };
+          });
     setDiagnosis(mappedDiagnoses);
     setIsLoading(false);
   };
