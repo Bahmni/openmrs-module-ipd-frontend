@@ -49,33 +49,20 @@ exports[`Dashboard should match snapshot 1`] = `
               <span
                 class="bx--side-nav__link-text"
               >
-                Patient Summary
-              </span>
-            </a>
-          </li>
-          <li
-            class="bx--side-nav__item"
-          >
-            <a
-              class="bx--side-nav__link cursor-pointer"
-            >
-              <span
-                class="bx--side-nav__link-text"
-              >
-                Vitals
-              </span>
-            </a>
-          </li>
-          <li
-            class="bx--side-nav__item"
-          >
-            <a
-              class="bx--side-nav__link cursor-pointer"
-            >
-              <span
-                class="bx--side-nav__link-text"
-              >
                 Allergies
+              </span>
+            </a>
+          </li>
+          <li
+            class="bx--side-nav__item"
+          >
+            <a
+              class="bx--side-nav__link cursor-pointer"
+            >
+              <span
+                class="bx--side-nav__link-text"
+              >
+                Diagnosis
               </span>
             </a>
           </li>
@@ -132,7 +119,7 @@ exports[`Dashboard should match snapshot 1`] = `
                 class="bx--accordion__title"
                 dir="auto"
               >
-                Patient Summary
+                Allergies
               </div>
             </button>
             <div
@@ -174,7 +161,7 @@ exports[`Dashboard should match snapshot 1`] = `
                 class="bx--accordion__title"
                 dir="auto"
               >
-                Vitals
+                Diagnosis
               </div>
             </button>
             <div
@@ -216,54 +203,12 @@ exports[`Dashboard should match snapshot 1`] = `
                 class="bx--accordion__title"
                 dir="auto"
               >
-                Allergies
-              </div>
-            </button>
-            <div
-              class="bx--accordion__content"
-              id="accordion-item-3"
-            >
-              <div />
-            </div>
-          </li>
-        </section>
-        <section
-          style="margin-bottom: 40px;"
-        >
-          <li
-            class="bx--accordion__item bx--accordion__item--active"
-          >
-            <button
-              aria-controls="accordion-item-4"
-              aria-expanded="true"
-              class="bx--accordion__heading"
-              type="button"
-            >
-              <svg
-                aria-hidden="true"
-                class="bx--accordion__arrow"
-                fill="currentColor"
-                focusable="false"
-                height="16"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 16 16"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
-                />
-              </svg>
-              <div
-                class="bx--accordion__title"
-                dir="auto"
-              >
                 Treatments
               </div>
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-4"
+              id="accordion-item-3"
             >
               <div />
             </div>

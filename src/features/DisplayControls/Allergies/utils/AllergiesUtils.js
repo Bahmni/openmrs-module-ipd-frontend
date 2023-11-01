@@ -7,6 +7,6 @@ export const fetchAllergiesData = async (patientUuid) => {
     const response = await axios.get(FETCH_ALLERGIES_URL);
     return response;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };

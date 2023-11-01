@@ -161,8 +161,7 @@ const sandboxConfig = {
     ...commonConfig.output,
     path: path.resolve(commonConfig.output.path, "sandbox"),
   },
-  devServer: {
-  },
+  devServer: {},
   plugins: [
     ...commonConfig.plugins,
     new HtmlWebpackPlugin({

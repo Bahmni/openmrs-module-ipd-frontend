@@ -12,6 +12,8 @@ const hostUrl = localStorage.getItem("host")
 const RESTWS_V1 = hostUrl + "/openmrs/ws/rest/v1";
 const FHIR2_R4 = hostUrl + "/openmrs/ws/fhir2/R4";
 export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
+const BAHMNI_CORE = RESTWS_V1 + "/bahmnicore";
+export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
 export const PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL =
   RESTWS_V1 + "/bahmnicore/drugOrders/prescribedAndActive";
 export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
@@ -20,4 +22,6 @@ export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
   FIXED_SCHEDULE_FREQUENCY: "FIXED_SCHEDULE_FREQUENCY",
 };
+export const defaultDateFormat = "DD MMM YYYY";
+export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
 export const dateFormat = "DD/MM/YYYY";

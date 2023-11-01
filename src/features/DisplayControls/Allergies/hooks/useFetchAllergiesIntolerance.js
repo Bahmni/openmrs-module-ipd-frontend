@@ -10,7 +10,7 @@ export const useFetchAllergiesIntolerance = (patientUuid) => {
       const response = await fetchAllergiesData(patientUuid);
       setAllergiesData(response.data);
     } catch (e) {
-      console.log(e);
+      return e;
     } finally {
       setLoading(false);
     }

@@ -110,7 +110,7 @@ const Allergies = (props) => {
       />
     );
 
-  return allergiesData.entry === undefined ? (
+  return allergiesData?.entry === undefined ? (
     <div className="no-allergen-message"> {NoAllergenMessage} </div>
   ) : (
     <DataTable

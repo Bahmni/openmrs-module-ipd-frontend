@@ -1,10 +1,9 @@
 import { lazy } from "react";
 
 export const componentMapping = {
-  PS: lazy(() =>
-    import("../../features/DisplayControls/PatientSummary/PatientSummary")
+  DG: lazy(() =>
+    import("../../features/DisplayControls/Diagnosis/components/Diagnosis")
   ),
-  VT: lazy(() => import("../../features/DisplayControls/Vitals/Vitals")),
   TR: lazy(() =>
     import("../../features/DisplayControls/Treatments/components/Treatments")
   ),

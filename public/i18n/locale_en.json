@@ -18,6 +18,7 @@
   "ADMINISTERED": "Administered",
   "PENDING": "Pending",
   "NOTE": "Note",
+  "NO_DIAGNOSIS_MESSAGE": "No Diagnosis found for this patient",
   "NO_TREATMENTS_MESSAGE": "No IPD Medication is prescribed for this patient yet",
   "ADD_TO_DRUG_CHART": "Add to Drug Chart",
   "NO_ALLERGENS_MESSAGE": "No Allergen is captured for this patient yet."
