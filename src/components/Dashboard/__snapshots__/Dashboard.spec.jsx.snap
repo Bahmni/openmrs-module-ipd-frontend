@@ -79,6 +79,19 @@ exports[`Dashboard should match snapshot 1`] = `
               </span>
             </a>
           </li>
+          <li
+            class="bx--side-nav__item"
+          >
+            <a
+              class="bx--side-nav__link cursor-pointer"
+            >
+              <span
+                class="bx--side-nav__link-text"
+              >
+                Treatments
+              </span>
+            </a>
+          </li>
         </ul>
       </nav>
     </header>
@@ -203,7 +216,7 @@ exports[`Dashboard should match snapshot 1`] = `
                 class="bx--accordion__title"
                 dir="auto"
               >
-                Treatments
+                Allergies
               </div>
             </button>
             <div
@@ -219,10 +232,9 @@ exports[`Dashboard should match snapshot 1`] = `
         >
           <li
             class="bx--accordion__item bx--accordion__item--active"
-            style="display: none;"
           >
             <button
-              aria-controls="accordion-item-3"
+              aria-controls="accordion-item-4"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -246,17 +258,16 @@ exports[`Dashboard should match snapshot 1`] = `
                 class="bx--accordion__title"
                 dir="auto"
               >
-                Allergies
+                Treatments
               </div>
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-3"
-            />
+              id="accordion-item-4"
+            >
+              <div />
+            </div>
           </li>
-          <p>
-            Loading...
-          </p>
         </section>
       </ul>
     </section>
