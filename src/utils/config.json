@@ -14,7 +14,17 @@
       {
         "name": "Diagnosis",
         "component": "DG",
+        "displayOrder": 4
+      },
+      {
+        "name": "Allergies",
+        "component": "AL",
         "displayOrder": 3
+      },
+      {
+        "name": "Treatments",
+        "component": "TR",
+        "displayOrder": 5
       }
     ]
   }
