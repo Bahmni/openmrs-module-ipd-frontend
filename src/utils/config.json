@@ -15,6 +15,11 @@
         "name": "Diagnosis",
         "component": "DG",
         "displayOrder": 3
+      },
+      {
+        "name": "Treatments",
+        "component": "TR",
+        "displayOrder": 5
       }
     ]
   }
