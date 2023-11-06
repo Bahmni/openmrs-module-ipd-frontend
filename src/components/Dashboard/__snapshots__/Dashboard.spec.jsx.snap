@@ -90,6 +90,7 @@ exports[`Dashboard should match snapshot 1`] = `
       >
         <svg
           aria-hidden="true"
+          data-testid="Back button"
           fill="currentColor"
           focusable="false"
           height="20"

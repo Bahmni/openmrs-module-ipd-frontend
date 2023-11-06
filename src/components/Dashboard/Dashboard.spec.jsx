@@ -54,4 +54,14 @@ describe.skip("Dashboard", () => {
     fireEvent.click(menuButton);
     expect(screen.getByRole("navigation")).toBeTruthy();
   });
+
+  it("should go back on click of left Arrow button", () => {
+    const spy = jest.spyOn(window.history, "back");
+    render(<Dashboard hostData={hostData} />);
+
+    const arrowButton = screen.getByTestId("Back button");
+
+    fireEvent.click(arrowButton);
+    expect(spy).toHaveBeenCalled();
+  });
 });

@@ -19,7 +19,7 @@ import { getPatientDashboardUrl } from "../../constants";
 
 export default function Dashboard(props) {
   const { hostData } = props;
-  const { patient, isINPatientDashboard } = hostData;
+  const { patient, isInPatientDashboard } = hostData;
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
@@ -96,8 +96,12 @@ export default function Dashboard(props) {
 
       <section className="main">
         <div className={"navigation-buttons"}>
-          <ArrowLeft size={20} onClick={() => window.history.back()} />
-          {isINPatientDashboard && (
+          <ArrowLeft
+            data-testid={"Back button"}
+            size={20}
+            onClick={() => window.history.back()}
+          />
+          {isInPatientDashboard && (
             <Link
               onClick={() => {
                 window.location.href = getPatientDashboardUrl(patient?.uuid);
