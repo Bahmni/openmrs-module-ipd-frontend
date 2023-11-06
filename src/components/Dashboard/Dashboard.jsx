@@ -1,4 +1,5 @@
 import React, { useState, useRef, Suspense, useEffect } from "react";
+import { FormattedMessage } from "react-intl";
 import {
   Accordion,
   AccordionItem,
@@ -69,7 +70,6 @@ export default function Dashboard(props) {
           className="header-nav-toggle-btn"
           onClick={onClickSideNavExpand}
           isActive={isSideNavExpanded}
-          isCollapsible={window.outerWidth < 1024}
         />
         <SideNav
           aria-label="Side navigation"
@@ -104,10 +104,13 @@ export default function Dashboard(props) {
           {isInPatientDashboard && (
             <Link
               onClick={() => {
-                window.location.href = getPatientDashboardUrl(patient?.uuid);
+                window.open(getPatientDashboardUrl(patient?.uuid), "_blank");
               }}
             >
-              View Clinical
+              <FormattedMessage
+                id={"VIEW_CLINICAL_DASHBOARD"}
+                defaultMessage={"View Clinical Dashboard"}
+              />
             </Link>
           )}
         </div>
