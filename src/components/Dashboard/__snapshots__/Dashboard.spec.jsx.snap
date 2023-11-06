@@ -11,7 +11,7 @@ exports[`Dashboard should match snapshot 1`] = `
     >
       <button
         aria-label="Open menu"
-        class="header-nav-toggle-btn bx--header__action bx--header__menu-trigger bx--header__menu-toggle"
+        class="header-nav-toggle-btn bx--header__action bx--header__menu-trigger bx--header__menu-toggle bx--header__menu-toggle__hidden"
         title="Open menu"
         type="button"
       >
@@ -85,6 +85,24 @@ exports[`Dashboard should match snapshot 1`] = `
     <section
       class="main"
     >
+      <div
+        class="navigation-buttons"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          focusable="false"
+          height="20"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 32 32"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M14 26L15.41 24.59 7.83 17 28 17 28 15 7.83 15 15.41 7.41 14 6 4 16 14 26z"
+          />
+        </svg>
+      </div>
       <ul
         class="bx--accordion accordion bx--accordion--end bx--accordion--md"
       >

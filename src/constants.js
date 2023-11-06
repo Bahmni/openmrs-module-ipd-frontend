@@ -25,3 +25,6 @@ export const medicationFrequency = {
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
 export const dateFormat = "DD/MM/YYYY";
+
+export const getPatientDashboardUrl = (patientUuid) =>
+  `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard?currentTab=DASHBOARD_TAB_GENERAL_KEY`;
