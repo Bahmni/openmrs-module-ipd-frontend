@@ -13,12 +13,18 @@ export default function TaskTile(props) {
   // else {
   //   newMedicationNursingTask = medicationNursingTask;
   // }
+  let isGroupedTask, taskCount;
+  if (medicationNursingTask.length > 1) {
+    isGroupedTask = true;
+    taskCount = medicationNursingTask.length - 1;
+  }
   console.log(
     "inside tasktile newMedicationNursingTask",
     newMedicationNursingTask
   );
   const { drugName, dosage, doseType, drugRoute, duration, starttime } =
     newMedicationNursingTask;
+  const isRelevantTask = false;
 
   // const drugName = "Sodium chloride 0.9% (1L) Infusion bag (normal saline) (injection)";
   // const drugName = "Sodium chloride 0.9% ";
@@ -30,21 +36,42 @@ export default function TaskTile(props) {
 
   // ];
 
-  const moreInfo = true;
-  const tileNumber = 2;
-  const drugNameText = <div className={"drug-name"}>{drugName}</div>;
+  // const showMoreInfo = true;
+  // const tileNumber = 2;
+  const drugNameText = (
+    <div
+      className={"drug-name"}
+      style={{ color: isRelevantTask ? "#393939" : "#A9A9A9" }}
+    >
+      {drugName}
+    </div>
+  );
   return (
-    <div style={{ position: "relative" }}>
-      <div className="tile tile-2"></div>
+    <div style={{ position: "relative", width: "350px" }}>
+      {isGroupedTask && (
+        <div
+          className="tile tile-2"
+          style={{
+            backgroundColor: isRelevantTask ? "#e3fed1" : "#EDF8E6",
+          }}
+        ></div>
+      )}
 
-      <div className="tile tile-1">
-        {/* style={1>2 ? {backGround: ''} ''} */}
+      <div
+        className="tile tile-1"
+        style={{
+          backgroundColor: isRelevantTask ? "#e3fed1" : "#EDF8E6",
+        }}
+      >
         <div className="tile-content">
           <div className="tile-title">
             <SVGIcon />
             {drugNameText}
           </div>
-          <div className={"dosage"}>
+          <div
+            className={"dosage"}
+            style={{ color: isRelevantTask ? "#393939" : "#A9A9A9" }}
+          >
             <span>{dosage}</span>
             {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
             <span>&nbsp;-&nbsp;{drugRoute}</span>
@@ -52,9 +79,9 @@ export default function TaskTile(props) {
           </div>
           <div className="dosage">
             <Clock />
-            <div>{starttime}</div>
+            <div>&nbsp;{starttime}</div>
           </div>
-          {moreInfo && <div className="more-info">{tileNumber}</div>}
+          {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
         </div>
       </div>
     </div>

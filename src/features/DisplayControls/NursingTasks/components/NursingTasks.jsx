@@ -15,7 +15,6 @@ export default function NursingTasks(props) {
 
   useEffect(() => {
     const fetchNursingTasks = async () => {
-      console.log("inside fetch patientId", patientId);
       setIsLoading(true);
       const forDate = GetUTCEpochForDate(new Date().toUTCString());
       const nursingTasks = await fetchMedicationNursingTasks(
@@ -32,13 +31,14 @@ export default function NursingTasks(props) {
     fetchNursingTasks();
   }, []);
 
-  const showMedicationNursingTasks = () => {
-    if (isLoading) {
-      return <>Loading...</>;
-    }
-    if (medicationNursingTasks && medicationNursingTasks.length === 0) {
-      return <>No Nursing Tasks</>;
-    }
+  const showCurrentDate = () => {
+    var currentDate = new Date();
+
+    var formattedDate = currentDate.toLocaleDateString();
+    return <div className="date-text">{formattedDate}</div>;
+  };
+
+  const showTaskTiles = () => {
     return medicationNursingTasks.map((medicationNursingTask) => {
       return (
         <>
@@ -47,23 +47,30 @@ export default function NursingTasks(props) {
       );
     });
   };
-  return (
-    <div style={{ flexDirection: "column" }}>
-      {showMedicationNursingTasks()}
-    </div>
-  );
-}
-// for each element in medicationNursingTasks array render component TaskTile with props passed as array element
-// <TaskTile medicationNursingTasks={medicationNursingTasks} />
-// <>
-{
-  /* {console.log(medicationNursingTasks)} */
-}
 
-{
-  /* <div>Nursing tasks tile</div> */
+  const showMedicationNursingTasks = () => {
+    if (isLoading) {
+      return <>Loading...</>;
+    }
+    if (medicationNursingTasks && medicationNursingTasks.length === 0) {
+      return <>No Nursing Tasks</>;
+    }
+    // return medicationNursingTasks.map((medicationNursingTask) => {
+    //   return (
+    //     <>
+    //       <TaskTile medicationNursingTask={medicationNursingTask} />
+    //     </>
+    //   );
+    // })
+    return (
+      <div style={{ flexDirection: "column" }}>
+        {showCurrentDate()}
+        {showTaskTiles()}
+      </div>
+    );
+  };
+  return <div style={{ display: "flex" }}>{showMedicationNursingTasks()}</div>;
 }
-//   </>
 
 NursingTasks.propTypes = {
   patientId: PropTypes.string.isRequired,
