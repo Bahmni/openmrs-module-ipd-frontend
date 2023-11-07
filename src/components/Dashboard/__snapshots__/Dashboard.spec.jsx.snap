@@ -35,7 +35,7 @@ exports[`Dashboard should match snapshot 1`] = `
       />
       <nav
         aria-label="Side navigation"
-        class="bx--side-nav__navigation bx--side-nav navbar-border bx--side-nav--ux bx--side-nav--hidden"
+        class="bx--side-nav__navigation bx--side-nav navbar-border bx--side-nav--ux"
       >
         <ul
           class="bx--side-nav__items"
@@ -103,6 +103,11 @@ exports[`Dashboard should match snapshot 1`] = `
             d="M14 26L15.41 24.59 7.83 17 28 17 28 15 7.83 15 15.41 7.41 14 6 4 16 14 26z"
           />
         </svg>
+        <a
+          class="bx--link"
+        >
+          View Clinical Dashboard
+        </a>
       </div>
       <ul
         class="bx--accordion accordion bx--accordion--end bx--accordion--md"

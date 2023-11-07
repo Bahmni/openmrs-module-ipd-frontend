@@ -20,7 +20,7 @@ import { getPatientDashboardUrl } from "../../constants";
 
 export default function Dashboard(props) {
   const { hostData } = props;
-  const { patient, isInPatientDashboard } = hostData;
+  const { patient } = hostData;
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
@@ -74,7 +74,7 @@ export default function Dashboard(props) {
         <SideNav
           aria-label="Side navigation"
           className="navbar-border"
-          isPersistent={false}
+          isPersistent={true}
           expanded={isSideNavExpanded}
         >
           <SideNavItems>
@@ -101,18 +101,16 @@ export default function Dashboard(props) {
             size={20}
             onClick={() => window.history.back()}
           />
-          {isInPatientDashboard && (
-            <Link
-              onClick={() => {
-                window.open(getPatientDashboardUrl(patient?.uuid), "_blank");
-              }}
-            >
-              <FormattedMessage
-                id={"VIEW_CLINICAL_DASHBOARD"}
-                defaultMessage={"View Clinical Dashboard"}
-              />
-            </Link>
-          )}
+          <Link
+            onClick={() => {
+              window.location.href = getPatientDashboardUrl(patient?.uuid);
+            }}
+          >
+            <FormattedMessage
+              id={"VIEW_CLINICAL_DASHBOARD"}
+              defaultMessage={"View Clinical Dashboard"}
+            />
+          </Link>
         </div>
         <Accordion className={"accordion"}>
           {sections?.map((el) => {
