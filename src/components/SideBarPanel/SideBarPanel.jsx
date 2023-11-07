@@ -1,34 +1,33 @@
-import React from "react";
-import { Grid, Row, Column } from "carbon-components-react";
 import { CloseLarge } from "@carbon/icons-react";
+import { Button } from "carbon-components-react";
 import PropTypes from "prop-types";
+import React from "react";
 
 import "./SideBarPanel.scss";
 
 export default function SideBarPanel(props) {
-  const { title, children } = props;
-  console.log("Inside SideBarPanel");
+  const { title, closeSideBar, children } = props;
   const closePanel = () => {
-    console.log("close panel");
+    console.log("Close");
   };
 
   return (
     <div className="side-bar-nav">
-      <Grid>
-        <Row>
-          <Column>
-            <div>
-              <h1>{title}</h1>
-            </div>
-          </Column>
-          <Column className="close-column">
-            <button className="close-button" onClick={closePanel}>
-              <CloseLarge size={32} aria-label="Close" className="close-icon" />
-            </button>
-          </Column>
-        </Row>
-        {children}
-      </Grid>
+      <div className="side-bar-header">
+        <div>
+          <h1>{title}</h1>
+        </div>
+        <div className="close-icon">
+          <Button
+            renderIcon={CloseLarge}
+            hasIconOnly
+            iconDescription="Close"
+            kind="ghost"
+            onClick={closeSideBar ? closeSideBar() : closePanel}
+          />
+        </div>
+      </div>
+      <div className="side-bar-children">{children}</div>
     </div>
   );
 }
@@ -36,4 +35,5 @@ export default function SideBarPanel(props) {
 SideBarPanel.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  closeSideBar: PropTypes.func,
 };

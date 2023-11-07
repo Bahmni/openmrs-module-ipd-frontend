@@ -1,25 +1,30 @@
-.close-button {
-  background-color: white;
-  border-color: white;
-  border-style: none;
-  // margin-top: 1.25rem;
+.side-bar-header {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.close-column {
-  text-align: right;
+.close-icon {
+  top: 48px;
+  right: 0 !important;
+  border: none;
+  position: fixed;
 }
 
 .side-bar-nav {
-  background: red;
+  background: white;
   position: fixed;
-  bottom: 0;
-  /* left: 0; */
+  top: 48px;
   right: 0 !important;
+  height: 100%;
   width: 30%;
   min-width: 540px;
-  z-index: 499;
-  display: flex;
-  align-items: center;
+  z-index: 9999;
   overflow: scroll;
   box-shadow: -1px 2px 3px 0px #aaa;
+}
+
+.side-bar-children {
+  padding: 20px;
 }
