@@ -23,6 +23,7 @@ import "../styles/Treatments.scss";
 import { formatDate } from "../../../../utils/DateFormatter";
 import { dateFormat } from "../../../../constants";
 import DrugChartSlider from "../../../../components/DrugChartSlider/DrugChartSlider";
+import DrugChartSliderNotification from "../../../../components/DrugChartSlider/DrugChartSliderNotification";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -30,13 +31,21 @@ const Treatments = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [buttonClicked, setButtonClick] = useState(false);
   const [selectedDrugOrder, setSelectedDrugOrder] = useState({});
+  const [showWarningNotification, setShowWarningNotification] = useState(false);
+  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   var drugOrderList = {};
   const DrugChartSliderActions = {
     onModalClose: () => {
       setButtonClick(false);
     },
-    onModalCancel: () => {},
-    onModalSave: () => {},
+    onModalCancel: () => {
+      setButtonClick(false);
+      setShowWarningNotification(true);
+    },
+    onModalSave: () => {
+      setButtonClick(false);
+      setShowSuccessNotification(true);
+    },
   };
 
   const NoTreatmentsMessage = (
@@ -140,6 +149,18 @@ const Treatments = (props) => {
           title={AddToDrugChart}
           hostData={selectedDrugOrder}
           hostApi={DrugChartSliderActions}
+        />
+      )}
+      {showWarningNotification && (
+        <DrugChartSliderNotification
+          hostData={{ notificationKind: "warning" }}
+          hostApi={{ onClose: () => setShowWarningNotification(false) }}
+        />
+      )}
+      {showSuccessNotification && (
+        <DrugChartSliderNotification
+          hostData={{ notificationKind: "success" }}
+          hostApi={{ onClose: () => setShowSuccessNotification(false) }}
         />
       )}
       {isLoading ? (

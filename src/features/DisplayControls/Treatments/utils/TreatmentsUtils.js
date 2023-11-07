@@ -90,6 +90,7 @@ export const updateDrugOrderList = (drugOrderList) => {
       frequency: visitDrugOrder.dosingInstructions.frequency,
     };
     visitDrugOrder.route = visitDrugOrder.dosingInstructions.route;
+    visitDrugOrder.durationUnit = visitDrugOrder.durationUnits;
     visitDrugOrder.additionalInstructions = JSON.stringify(
       visitDrugOrder.dosingInstructions.additionalInstructions
     );

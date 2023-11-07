@@ -527,7 +527,10 @@ const DrugChartSlider = (props) => {
             />
           </div>
         </div>
-        <SaveAndCloseButtons onSave={handleSave} onClose={handleCancel} />
+        <SaveAndCloseButtons
+          onSave={() => handleSave()}
+          onClose={() => handleCancel()}
+        />
       </SideBarPanel>
     </I18nProvider>
   );
