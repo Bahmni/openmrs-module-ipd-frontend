@@ -3,7 +3,7 @@ import { Button } from "carbon-components-react";
 import PropTypes from "prop-types";
 import React from "react";
 
-import "./SideBarPanel.scss";
+import "../styles/SideBarPanel.scss";
 
 export default function SideBarPanel(props) {
   const { title, closeSideBar, children } = props;

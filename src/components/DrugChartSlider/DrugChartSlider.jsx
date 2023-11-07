@@ -1,5 +1,5 @@
 import React from "react";
-import SideBarPanel from "../../../../../components/SideBarPanel/SideBarPanel";
+import SideBarPanel from "../../features/SideBarPanel/components/SideBarPanel";
 import { TextInput } from "carbon-components-react";
 import {
   DatePickerCarbon,
@@ -8,7 +8,7 @@ import {
 } from "bahmni-carbon-ui";
 import PropTypes from "prop-types";
 import { TextArea } from "carbon-components-react";
-import "../../styles/DrugChartSlider.scss";
+import "./DrugChartSlider.scss";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi } = props;

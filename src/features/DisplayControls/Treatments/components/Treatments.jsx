@@ -22,7 +22,7 @@ import {
 import "../styles/Treatments.scss";
 import { formatDate } from "../../../../utils/DateFormatter";
 import { dateFormat } from "../../../../constants";
-import DrugChartSlider from "./DrugChartSlider/DrugChartSlider";
+import DrugChartSlider from "../../../../components/DrugChartSlider/DrugChartSlider";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -141,6 +141,7 @@ const Treatments = (props) => {
       {buttonClicked && (
         <DrugChartSlider
           title="Add to drug chart"
+          closeSideBar={() => setButtonClick(false)}
           hostData={hostData}
           hostApi="api"
         />
