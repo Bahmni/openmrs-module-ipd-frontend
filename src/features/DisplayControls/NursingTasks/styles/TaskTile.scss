@@ -1,0 +1,64 @@
+.tile {
+  border: 1px solid #007d79;
+  background-color: #e3fed1;
+  width: 323px;
+  height: 90px;
+}
+.tile-1 {
+  position: absolute;
+  z-index: 1;
+  // margin-top: 16px;
+  // margin-left: 12px;
+}
+.tile-2 {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.tile-content {
+  padding: 10px;
+}
+
+.tile-title {
+  flex-direction: row;
+  display: flex;
+}
+
+.drug-name {
+  // max-width: 85%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-wrap: wrap;
+  font-weight: 500;
+  color: #393939;
+  font-style: normal;
+  padding-left: 4px;
+  font-family: Inter;
+  font-size: 14px;
+  line-height: normal;
+  letter-spacing: 0.14px;
+}
+.dosage {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #393939;
+  font-family: Inter;
+  letter-spacing: 0.12px;
+  align-items: center;
+  display: flex;
+}
+
+.more-info {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #393939;
+  font-family: Inter;
+  letter-spacing: 0.12px;
+  justify-content: flex-end;
+  display: flex;
+  // position:relative;
+  // top:-10px;
+}
