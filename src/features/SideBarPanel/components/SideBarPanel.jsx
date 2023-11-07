@@ -11,6 +11,15 @@ export default function SideBarPanel(props) {
     console.log("Close");
   };
 
+  const handleClose = () => {
+    console.log(closeSideBar);
+    if (closeSideBar) {
+      closeSideBar();
+    } else {
+      closePanel();
+    }
+  };
+
   return (
     <div className="side-bar-nav">
       <div className="side-bar-header">
@@ -23,7 +32,7 @@ export default function SideBarPanel(props) {
             hasIconOnly
             iconDescription="Close"
             kind="ghost"
-            onClick={closeSideBar ? closeSideBar() : closePanel}
+            onClick={handleClose}
           />
         </div>
       </div>

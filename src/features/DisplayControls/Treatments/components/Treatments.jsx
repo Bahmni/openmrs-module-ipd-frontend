@@ -9,7 +9,6 @@ import {
   TableRow,
   Link,
   DataTableSkeleton,
-  Button,
 } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
 import { useState } from "react";
@@ -18,6 +17,7 @@ import {
   getPrescribedAndActiveDrugOrders,
   treatmentHeaders,
   getConfigsForTreatments,
+  updateDrugOrderList,
 } from "../utils/TreatmentsUtils";
 import "../styles/Treatments.scss";
 import { formatDate } from "../../../../utils/DateFormatter";
@@ -29,8 +29,15 @@ const Treatments = (props) => {
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [buttonClicked, setButtonClick] = useState(false);
-  const [hostData, setHostData] = useState({});
-  const [drugOrders, setDrugOrders] = useState([]);
+  const [selectedDrugOrder, setSelectedDrugOrder] = useState({});
+  var drugOrderList = {};
+  const DrugChartSliderActions = {
+    onModalClose: () => {
+      setButtonClick(false);
+    },
+    onModalCancel: () => {},
+    onModalSave: () => {},
+  };
 
   const NoTreatmentsMessage = (
     <FormattedMessage
@@ -40,14 +47,12 @@ const Treatments = (props) => {
   );
 
   const handleAddToDrugChartClick = (drugOrderId) => {
-    console.log("drugOrder", drugOrders);
-    console.log("drugOrderId", drugOrderId);
-    // const drugOrderObject = drugOrders.find(
-    //   (drugOrder) => drugOrder.uuid === drugOrderId
-    // );
-    // setHostData(
-    //   drugOrder= drugOrderObject
-    //   );
+    setSelectedDrugOrder((prevState) => ({
+      ...prevState,
+      drugOrder: drugOrderList.visitDrugOrders.find(
+        (drugOrder) => drugOrder.uuid === drugOrderId
+      ),
+    }));
     setButtonClick(true);
   };
 
@@ -91,14 +96,10 @@ const Treatments = (props) => {
           drugName: drugOrder.drug.name,
           dosageDetails: setDosingInstructions(drugOrder),
           prescribedBy: drugOrder.provider.name,
-          // actions: <Link href="#">{AddToDrugChart}</Link>,
           actions: (
-            <Button
-              as={Link}
-              onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}
-            >
+            <Link onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}>
               {AddToDrugChart}
-            </Button>
+            </Link>
           ),
         };
       });
@@ -107,43 +108,38 @@ const Treatments = (props) => {
 
   useEffect(() => {
     const getActiveDrugOrdersAndTreatmentConfig = async () => {
-      const drugOrderList = await getPrescribedAndActiveDrugOrders(patientId);
-      const treatmentsConfigList = await getConfigsForTreatments();
-
-      console.log("treatmentsConfigList", treatmentsConfigList);
-
-      if (drugOrderList.visitDrugOrders && treatmentsConfigList) {
-        console.log("inside if for treatment config ");
-        setDrugOrders(drugOrderList.visitDrugOrders);
+      drugOrderList = await getPrescribedAndActiveDrugOrders(patientId);
+      if (drugOrderList.visitDrugOrders.length > 0) {
+        drugOrderList = updateDrugOrderList(drugOrderList);
         modifyTreatmentData(drugOrderList);
-        setHostData({
-          patientId: patientId,
-          scheduleFrequencies: treatmentsConfigList.scheduleFrequencies,
-          startTimeFrequencies: treatmentsConfigList.startTimeFrequencies,
-          enable24HrTimeFormat: treatmentsConfigList.enable24HrTimeFormat,
-          drugOrder: null,
-        });
       }
-      console.log("drugOrdersList", drugOrderList);
     };
-    getActiveDrugOrdersAndTreatmentConfig();
-    console.log("treatments", treatments);
-  }, []);
 
-  useEffect(() => {
-    if (drugOrders.length > 0) {
-      setIsLoading(false);
-    }
-  }, [drugOrders]);
+    const getTreatmentConfigs = async () => {
+      const treatmentConfigs = await getConfigsForTreatments();
+      setSelectedDrugOrder({
+        patientId: patientId,
+        scheduleFrequencies: treatmentConfigs.scheduleFrequencies,
+        startTimeFrequencies: treatmentConfigs.startTimeFrequencies,
+        enable24HourTimers: treatmentConfigs.enable24HourTimers,
+        drugOrder: null,
+      });
+    };
+
+    getActiveDrugOrdersAndTreatmentConfig().then(() => {
+      getTreatmentConfigs().then(() => {
+        setIsLoading(false);
+      });
+    });
+  }, []);
 
   return (
     <>
       {buttonClicked && (
         <DrugChartSlider
-          title="Add to drug chart"
-          closeSideBar={() => setButtonClick(false)}
-          hostData={hostData}
-          hostApi="api"
+          title={AddToDrugChart}
+          hostData={selectedDrugOrder}
+          hostApi={DrugChartSliderActions}
         />
       )}
       {isLoading ? (

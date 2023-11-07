@@ -71,9 +71,8 @@ export const getConfigsForTreatments = async () => {
     });
 
     if (response.status !== 200) throw new Error(response.statusText);
-    console.log("inside utils response", response.data.config);
     const treatmentConfig = {
-      enable24HrTimeFormat: response.data.config.enable24HourTimers,
+      enable24HourTimers: response.data.config.enable24HourTimers,
       startTimeFrequencies: response.data.config.drugChartStartTimeFrequencies,
       scheduleFrequencies: response.data.config.drugChartScheduleFrequencies,
     };
@@ -81,4 +80,19 @@ export const getConfigsForTreatments = async () => {
   } catch (error) {
     return error;
   }
+};
+
+export const updateDrugOrderList = (drugOrderList) => {
+  drugOrderList.visitDrugOrders.forEach((visitDrugOrder) => {
+    visitDrugOrder.uniformDosingType = {
+      dose: visitDrugOrder.dosingInstructions.dose,
+      doseUnits: visitDrugOrder.dosingInstructions.doseUnits,
+      frequency: visitDrugOrder.dosingInstructions.frequency,
+    };
+    visitDrugOrder.route = visitDrugOrder.dosingInstructions.route;
+    visitDrugOrder.additionalInstructions = JSON.stringify(
+      visitDrugOrder.dosingInstructions.additionalInstructions
+    );
+  });
+  return drugOrderList;
 };

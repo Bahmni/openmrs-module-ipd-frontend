@@ -3,6 +3,10 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  h1 {
+    color: #393939;
+  }
 }
 
 .close-icon {
@@ -23,8 +27,4 @@
   z-index: 9999;
   overflow: scroll;
   box-shadow: -1px 2px 3px 0px #aaa;
-}
-
-.side-bar-children {
-  padding: 20px;
 }
