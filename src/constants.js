@@ -25,3 +25,5 @@ export const medicationFrequency = {
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
 export const dateFormat = "DD/MM/YYYY";
+export const CLINICAL_CONFIG_URL =
+  hostUrl + "/bahmni_config/openmrs/apps/clinical/app.json";

@@ -40,6 +40,7 @@
     "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
+    "@carbon/icons-react": "^11.29.2",
     "@storybook/addon-styling": "0.3",
     "@storybook/react": "6.5",
     "@testing-library/react-hooks": "^8.0.1",

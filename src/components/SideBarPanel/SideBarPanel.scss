@@ -1,0 +1,25 @@
+.close-button {
+  background-color: white;
+  border-color: white;
+  border-style: none;
+  // margin-top: 1.25rem;
+}
+
+.close-column {
+  text-align: right;
+}
+
+.side-bar-nav {
+  background: red;
+  position: fixed;
+  bottom: 0;
+  /* left: 0; */
+  right: 0 !important;
+  width: 30%;
+  min-width: 540px;
+  z-index: 499;
+  display: flex;
+  align-items: center;
+  overflow: scroll;
+  box-shadow: -1px 2px 3px 0px #aaa;
+}

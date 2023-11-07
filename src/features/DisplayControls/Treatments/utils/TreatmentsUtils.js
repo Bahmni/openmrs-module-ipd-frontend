@@ -1,4 +1,7 @@
-import { PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL } from "../../../../constants";
+import {
+  PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL,
+  CLINICAL_CONFIG_URL,
+} from "../../../../constants";
 import { getLocale } from "../../../i18n/utils";
 import axios from "axios";
 
@@ -56,6 +59,25 @@ export const getPrescribedAndActiveDrugOrders = async (
     });
     if (response.status !== 200) throw new Error(response.statusText);
     return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getConfigsForTreatments = async () => {
+  try {
+    const response = await axios.get(CLINICAL_CONFIG_URL, {
+      withCredentials: true,
+    });
+
+    if (response.status !== 200) throw new Error(response.statusText);
+    console.log("inside utils response", response.data.config);
+    const treatmentConfig = {
+      enable24HrTimeFormat: response.data.config.enable24HourTimers,
+      startTimeFrequencies: response.data.config.drugChartStartTimeFrequencies,
+      scheduleFrequencies: response.data.config.drugChartScheduleFrequencies,
+    };
+    return treatmentConfig;
   } catch (error) {
     return error;
   }

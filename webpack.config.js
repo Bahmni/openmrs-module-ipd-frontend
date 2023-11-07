@@ -120,6 +120,10 @@ const federationConfig = {
         "./DrugChartModalNotification":
           "./src/entries/DrugChartModal/DrugChartModalNotification.jsx",
         "./IpdDashboard": "./src/components/Dashboard/Dashboard.jsx",
+        "./DrugChartSlider":
+          "./src/features/DisplayControls/Treatments/components/DrugChartSlider/DrugChartSlider.jsx",
+        "./DrugChartSliderNotification":
+          "./src/features/DisplayControls/Treatments/components/DrugChartSlider/DrugChartSliderNotification.jsx",
       },
       shared: {
         // ...dependencies,
