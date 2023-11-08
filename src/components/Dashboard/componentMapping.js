@@ -10,4 +10,7 @@ export const componentMapping = {
   AL: lazy(() =>
     import("../../features/DisplayControls/Allergies/components/Allergies")
   ),
+  VT: lazy(() =>
+    import("../../features/DisplayControls/Vitals/components/Vitals")
+  ),
 };

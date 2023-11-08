@@ -17,6 +17,7 @@ export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
 export const PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL =
   RESTWS_V1 + "/bahmnicore/drugOrders/prescribedAndActive";
 export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
+export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
 
 export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
