@@ -16,7 +16,7 @@ import "./Dashboard.scss";
 import data from "../../utils/config.json";
 import PropTypes from "prop-types";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
-import { getPatientDashboardUrl } from "../../constants";
+import { getPatientDashboardUrl } from "../../utils/DashboardUtils/DashboardUtils";
 
 export default function Dashboard(props) {
   const { hostData } = props;
