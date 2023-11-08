@@ -1,116 +1,232 @@
-import React ,{useEffect} from "react";
-import { Grid, Column, ColumnHang, GridSettings, Row } from "carbon-components-react";
+import React, { useEffect } from "react";
+import { Column, Row, Tile } from "carbon-components-react";
 import { getPatientVitals } from "../utils/VitalsUtils";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import "../styles/Vitals.scss";
 
 const Vitals = (props) => {
   const { patientId } = props;
   const [Vitals, setVitals] = useState({});
+  const [VitalUnits, setVitalUnits] = useState({});
+  const [VitalsDate, setVitalsDate] = useState(null);
+  const [VitalsTime, setVitalsTime] = useState(null);
 
-  const getVitals = async () => {
-    const VitalsList = await getPatientVitals(patientId);
-    setVitals(mapVitalsData(VitalsList));
-    console.log(Vitals);
+  var latestDate = null;
+
+  const setDateAndTime = (date) => {
+    const dateObj = new Date(date);
+    setVitalsDate(dateObj.toISOString().split("T")[0]);
+    setVitalsTime(dateObj.toTimeString().split(" ")[0]);
   };
 
-  const mapVitalsData = (VitalsList) => {
-    console.log("Vitalslist",VitalsList);
-    let mappedVitals ={};
-      if (VitalsList.tabularData)
-         {const tabularData = VitalsList.tabularData;
+  function getLatestDate(tabularData) {
+    for (const dateKey in tabularData) {
+      if (latestDate === null || dateKey > latestDate) {
+        latestDate = dateKey;
+      }
+    }
+  }
 
-          let latestDate = null;
-          for (const dateKey in tabularData) {
-            if (tabularData.hasOwnProperty(dateKey)) {
-              if (latestDate === null || dateKey > latestDate) {
-                latestDate = dateKey;
-              }
-            }
-          }
-          
-          if (latestDate !== null) {
-              console.log("dAte",latestDate);
-            mappedVitals = {
-              Temp: tabularData[latestDate].Temperature.value,
-              HeartRate: parseInt(tabularData[latestDate].Pulse.value,10),
-              SystolicPressure: parseInt(tabularData[latestDate]['Systolic Blood Pressure'].value,10),
-              DiastolicPressure: parseInt(tabularData[latestDate]['Diastolic Blood Pressure'].value,10),
-              Height: parseInt(tabularData[latestDate].HEIGHT.value,10),
-              Weight: parseInt(tabularData[latestDate].WEIGHT.value,10),
-              RespiratoryRate: parseInt(tabularData[latestDate]['Respiratory Rate'].value,10),
-              SpO2: parseInt(tabularData[latestDate].SpO2.value,10),
-              BMI: tabularData[latestDate].BMI.value
-            };
-          }};
-        return mappedVitals;  
-    }    
+  const mapVitalsData = (VitalsList) => {
+    var mappedVitals = {};
+    if (VitalsList.tabularData) {
+      const VitalsValues = VitalsList.tabularData;
+      getLatestDate(VitalsValues);
+      setDateAndTime(latestDate);
+      if (latestDate !== null) {
+        mappedVitals = {
+          Temp: {
+            value: VitalsValues[latestDate].Temperature?.value,
+            abnormal: VitalsValues[latestDate].Temperature?.abnormal,
+          },
+          HeartRate: {
+            value: parseInt(VitalsValues[latestDate].Pulse?.value, 10),
+            abnormal: VitalsValues[latestDate].Pulse?.abnormal,
+          },
+          SystolicPressure: {
+            value: parseInt(
+              VitalsValues[latestDate]["Systolic Blood Pressure"]?.value,
+              10
+            ),
+            abnormal:
+              VitalsValues[latestDate]["Systolic Blood Pressure"]?.abnormal,
+          },
+          DiastolicPressure: {
+            value: parseInt(
+              VitalsValues[latestDate]["Diastolic Blood Pressure"]?.value,
+              10
+            ),
+            abnormal:
+              VitalsValues[latestDate]["Diastolic Blood Pressure"]?.abnormal,
+          },
+          Height: {
+            value: parseInt(VitalsValues[latestDate].HEIGHT?.value, 10),
+            abnormal: VitalsValues[latestDate].HEIGHT?.abnormal,
+          },
+          Weight: {
+            value: parseInt(VitalsValues[latestDate].WEIGHT?.value, 10),
+            abnormal: VitalsValues[latestDate].WEIGHT?.abnormal,
+          },
+          RespiratoryRate: {
+            value: parseInt(
+              VitalsValues[latestDate]["Respiratory Rate"]?.value,
+              10
+            ),
+            abnormal: VitalsValues[latestDate]["Respiratory Rate"]?.abnormal,
+          },
+          SpO2: {
+            value: parseInt(VitalsValues[latestDate].SpO2?.value, 10),
+            abnormal: VitalsValues[latestDate].SpO2?.abnormal,
+          },
+          BMI: {
+            value: VitalsValues[latestDate].BMI?.value,
+            abnormal: VitalsValues[latestDate].BMI?.abnormal,
+          },
+        };
+      }
+    }
+    return mappedVitals;
+  };
+
+  const handleVitalUnits = (units) => {
+    units.forEach((unit) => {
+      setVitalUnits((oldUnits) => {
+        return {
+          ...oldUnits,
+          [unit.name]: unit.units,
+        };
+      });
+    });
+  };
 
   useEffect(() => {
+    const getVitals = async () => {
+      const VitalsList = await getPatientVitals(patientId);
+      handleVitalUnits(VitalsList.conceptDetails);
+      setVitals(mapVitalsData(VitalsList));
+    };
+
     getVitals();
   }, []);
 
-
   return (
-    <Grid>
-      <Row style={{paddingTop:0.5}}>
+    <>
+      {VitalsDate ? VitalsDate : "-"} {VitalsTime ? VitalsTime : "-"}
+      <Row>
         <Column>
-           Date,Time
+          <Tile
+            className={Vitals.Temp?.abnormal ? "abnormal-tiles" : "vital-tiles"}
+          >
+            Temp
+            <br />
+            <br />
+            {Vitals.Temp?.value ? Vitals.Temp?.value : "-"}{" "}
+            {VitalUnits.Temperature ? VitalUnits.Temperature : "-"}
+          </Tile>
+        </Column>
+        <Column>
+          <Tile
+            className={
+              Vitals.SystolicPressure?.abnormal ||
+              Vitals.DiastolicPressure?.abnormal
+                ? "abnormal-tiles"
+                : "vital-tiles"
+            }
+          >
+            BP
+            <br />
+            <br />
+            {Vitals.SystolicPressure?.value && Vitals.DiastolicPressure?.value
+              ? Vitals.SystolicPressure?.value / Vitals.DiastolicPressure?.value
+              : "-"}{" "}
+            {VitalUnits["Diastolic Blood Pressure"]
+              ? VitalUnits["Diastolic Blood Pressure"]
+              : "-"}
+          </Tile>
+        </Column>
+        <Column>
+          <Tile
+            className={
+              Vitals.HeartRate?.abnormal ? "abnormal-tiles" : "vital-tiles"
+            }
+          >
+            HeartRate
+            <br />
+            <br />
+            {Vitals.HeartRate?.value ? Vitals.HeartRate?.value : "-"}{" "}
+            {VitalUnits.Pulse ? VitalUnits.Pulse : "-"}
+          </Tile>
+        </Column>
+        <Column>
+          <Tile
+            className={
+              Vitals.RespiratoryRate?.abnormal
+                ? "abnormal-tiles"
+                : "vital-tiles"
+            }
+          >
+            R.Rate
+            <br />
+            <br />
+            {Vitals.RespiratoryRate?.value
+              ? Vitals.RespiratoryRate?.value
+              : "-"}{" "}
+            {VitalUnits["Respiratory Rate"]
+              ? VitalUnits["Respiratory Rate"]
+              : "-"}
+          </Tile>
+        </Column>
+        <Column>
+          <Tile
+            className={
+              Vitals.Weight?.abnormal ? "abnormal-tiles" : "vital-tiles"
+            }
+          >
+            Weight
+            <br />
+            <br />
+            {Vitals.Weight?.value ? Vitals.Weight?.value : "-"}{" "}
+            {VitalUnits.WEIGHT ? VitalUnits.WEIGHT : "-"}
+          </Tile>
+        </Column>
+        <Column>
+          <Tile
+            className={
+              Vitals.Height?.abnormal ? "abnormal-tiles" : "vital-tiles"
+            }
+          >
+            Height
+            <br />
+            <br />
+            {Vitals.Height?.value ? Vitals.Height?.value : "-"}{" "}
+            {VitalUnits.HEIGHT ? VitalUnits.HEIGHT : "-"}
+          </Tile>
+        </Column>
+        <Column>
+          <Tile
+            className={Vitals.SpO2?.abnormal ? "abnormal-tiles" : "vital-tiles"}
+          >
+            SpO2
+            <br />
+            <br />
+            {Vitals.SpO2?.value ? Vitals.SpO2?.value : "-"}{" "}
+            {VitalUnits.SpO2 ? VitalUnits.SpO2 : "-"}
+          </Tile>
+        </Column>
+        <Column>
+          <Tile
+            className={Vitals.BMI?.abnormal ? "abnormal-tiles" : "vital-tiles"}
+          >
+            BMI
+            <br />
+            <br />
+            {Vitals.BMI?.value ? Vitals.BMI?.value : "-"}{" "}
+            {VitalUnits.BMI ? VitalUnits.BMI : "-"}
+          </Tile>
         </Column>
       </Row>
-      <Row style={{paddingBottom:1}}>
-          <Column sm={3} md={2} lg={1}>
-          Temp
-          </Column>
-          <Column sm={3} md={1} lg={2}>
-            BP
-          </Column>
-          <Column sm={3} md={1} lg={1} >
-            HeartRate
-          </Column>
-          <Column sm={3} md={1} lg={1} style={{color:"red"}} >
-            R.Rate
-          </Column>
-          <Column sm={3} md={1} lg={1}>
-            Weight
-          </Column>
-          <Column sm={3} md={1} lg={1}>
-            Height
-          </Column>
-          <Column sm={3} md={1} lg={1}>
-            SpO2
-          </Column>
-          <Column sm={3} md={1} lg={1}>
-            BMI
-          </Column>
-        </Row>
-        <Row padding>
-          <Column sm={3} md={2} lg={1}>
-           {Vitals.Temp}C
-          </Column>
-          <Column sm={3} md={1} lg={2}>
-          {Vitals.SystolicPressure}/{Vitals.DiastolicPressure}mmHg
-          </Column>
-          <Column sm={3} md={1} lg={1} >
-          {Vitals.HeartRate}bpm
-          </Column>
-          <Column sm={3} md={1} lg={1} style={{color:"red"}}>
-          {Vitals.RespiratoryRate}bpm
-          </Column>
-          <Column sm={3} md={1} lg={1}>
-          {Vitals.Weight}kg
-          </Column>
-          <Column sm={3} md={1} lg={1}>
-          {Vitals.Height}cm
-          </Column>
-          <Column sm={3} md={1} lg={1}>
-          {Vitals.SpO2}%
-          </Column>
-          <Column sm={3} md={1} lg={1}>
-          {Vitals.BMI}kg/m
-          </Column>
-        </Row>
-    </Grid>
+    </>
   );
 };
 Vitals.propTypes = {

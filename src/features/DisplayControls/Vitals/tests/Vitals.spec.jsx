@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import Vitals from "./Vitals";
+import Vitals from "../components/Vitals";
 
 describe("Vitals", () => {
   it("should match snapshot", () => {
