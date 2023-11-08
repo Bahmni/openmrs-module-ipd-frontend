@@ -33,13 +33,13 @@ const Vitals = (props) => {
               console.log("dAte",latestDate);
             mappedVitals = {
               Temp: tabularData[latestDate].Temperature.value,
-              HeartRate: tabularData[latestDate].Pulse.value,
-              SystolicPressure: tabularData[latestDate]['Systolic Blood Pressure'].value,
-              DiastolicPressure: tabularData[latestDate]['Diastolic Blood Pressure'].value,
-              Height: tabularData[latestDate].HEIGHT.value,
-              Weight: tabularData[latestDate].WEIGHT.value,
-              RespiratoryRate: tabularData[latestDate]['Respiratory Rate'].value,
-              SpO2: tabularData[latestDate].SpO2.value,
+              HeartRate: parseInt(tabularData[latestDate].Pulse.value,10),
+              SystolicPressure: parseInt(tabularData[latestDate]['Systolic Blood Pressure'].value,10),
+              DiastolicPressure: parseInt(tabularData[latestDate]['Diastolic Blood Pressure'].value,10),
+              Height: parseInt(tabularData[latestDate].HEIGHT.value,10),
+              Weight: parseInt(tabularData[latestDate].WEIGHT.value,10),
+              RespiratoryRate: parseInt(tabularData[latestDate]['Respiratory Rate'].value,10),
+              SpO2: parseInt(tabularData[latestDate].SpO2.value,10),
               BMI: tabularData[latestDate].BMI.value
             };
           }};
@@ -53,27 +53,22 @@ const Vitals = (props) => {
 
   return (
     <Grid>
-      <Row>
-      </Row>
-      <Row>
+      <Row style={{paddingTop:0.5}}>
         <Column>
            Date,Time
         </Column>
       </Row>
-      <Row>
-    
-      </Row>
-      <Row>
+      <Row style={{paddingBottom:1}}>
           <Column sm={3} md={2} lg={1}>
           Temp
           </Column>
-          <Column sm={3} md={1} lg={1}>
+          <Column sm={3} md={1} lg={2}>
             BP
           </Column>
           <Column sm={3} md={1} lg={1} >
             HeartRate
           </Column>
-          <Column sm={3} md={1} lg={1} >
+          <Column sm={3} md={1} lg={1} style={{color:"red"}} >
             R.Rate
           </Column>
           <Column sm={3} md={1} lg={1}>
@@ -91,28 +86,28 @@ const Vitals = (props) => {
         </Row>
         <Row padding>
           <Column sm={3} md={2} lg={1}>
-           {Vitals.Temp}
+           {Vitals.Temp}C
           </Column>
-          <Column sm={3} md={1} lg={1}>
-          {Vitals.SystolicPressure}/{Vitals.DiastolicPressure}
+          <Column sm={3} md={1} lg={2}>
+          {Vitals.SystolicPressure}/{Vitals.DiastolicPressure}mmHg
           </Column>
           <Column sm={3} md={1} lg={1} >
-          {Vitals.HeartRate}
+          {Vitals.HeartRate}bpm
           </Column>
           <Column sm={3} md={1} lg={1} style={{color:"red"}}>
-          {Vitals.RespiratoryRate}
+          {Vitals.RespiratoryRate}bpm
           </Column>
           <Column sm={3} md={1} lg={1}>
-          {Vitals.Weight}
+          {Vitals.Weight}kg
           </Column>
           <Column sm={3} md={1} lg={1}>
-          {Vitals.Height}
+          {Vitals.Height}cm
           </Column>
           <Column sm={3} md={1} lg={1}>
-          {Vitals.SpO2}
+          {Vitals.SpO2}%
           </Column>
           <Column sm={3} md={1} lg={1}>
-          {Vitals.BMI}
+          {Vitals.BMI}kg/m
           </Column>
         </Row>
     </Grid>
