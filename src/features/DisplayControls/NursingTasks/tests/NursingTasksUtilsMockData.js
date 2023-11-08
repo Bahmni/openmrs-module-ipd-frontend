@@ -164,3 +164,42 @@ export const mockExtractedMedicationNursingTasksData = [
     },
   ],
 ];
+
+export const mockTaskTileData = [
+  [
+    {
+      drugName: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
+      drugRoute: "Oral",
+      duration: "3 Day(s)",
+      dosage: 25,
+      doseType: "mg",
+      startTimeInEpochSeconds: 1690906550,
+      startTime: "04:15 PM",
+    },
+  ],
+];
+
+export const mockTaskTileDataForGroupedTask = [
+  [
+    {
+      drugName: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
+      drugRoute: "Oral",
+      duration: "3 Day(s)",
+      dosage: 25,
+      doseType: "mg",
+      startTimeInEpochSeconds: 1690906550,
+      startTime: "04:15 PM",
+    },
+  ],
+  [
+    {
+      drugName: "Paracetamol 120 mg (Tablet)",
+      drugRoute: "Oral",
+      duration: "3 Day(s)",
+      dosage: 25,
+      doseType: "mg",
+      startTimeInEpochSeconds: 1690906550,
+      startTime: "04:15 PM",
+    },
+  ],
+];

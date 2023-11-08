@@ -1,0 +1,102 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TaskTile should match the snapshot for grouped task 1`] = `
+<DocumentFragment>
+  <div
+    style="position: relative; width: 350px;"
+  >
+    <div
+      class="tile tile-2"
+      style="background-color: rgb(237, 248, 230);"
+    />
+    <div
+      class="tile tile-1"
+      style="background-color: rgb(237, 248, 230);"
+    >
+      <div
+        class="tile-content"
+      >
+        <div
+          class="tile-title"
+        >
+          <div>
+            <test-file-stub />
+          </div>
+          <div
+            class="drug-name"
+            style="color: rgb(169, 169, 169);"
+          />
+        </div>
+        <div
+          class="dosage"
+          style="color: rgb(169, 169, 169);"
+        >
+          <span />
+          <span>
+             - 
+          </span>
+        </div>
+        <div
+          class="dosage"
+        >
+          <test-file-stub />
+          <div>
+             
+          </div>
+        </div>
+        <div
+          class="more-info"
+        >
+          (1 more)
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`TaskTile should match the snapshot for non grouped task 1`] = `
+<DocumentFragment>
+  <div
+    style="position: relative; width: 350px;"
+  >
+    <div
+      class="tile tile-1"
+      style="background-color: rgb(237, 248, 230);"
+    >
+      <div
+        class="tile-content"
+      >
+        <div
+          class="tile-title"
+        >
+          <div>
+            <test-file-stub />
+          </div>
+          <div
+            class="drug-name"
+            style="color: rgb(169, 169, 169);"
+          />
+        </div>
+        <div
+          class="dosage"
+          style="color: rgb(169, 169, 169);"
+        >
+          <span />
+          <span>
+             - 
+          </span>
+        </div>
+        <div
+          class="dosage"
+        >
+          <test-file-stub />
+          <div>
+             
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
