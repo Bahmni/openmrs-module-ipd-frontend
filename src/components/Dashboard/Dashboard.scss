@@ -4,7 +4,16 @@
     padding: 16px;
     position: relative;
     margin-left: 16rem;
+    width: calc(100% - 16rem);
   }
+
+  .main-with-slider {
+    transition: margin-left 0.5s;
+    padding: 16px;
+    position: relative;
+    width: calc(100% - 550px);
+  }
+
   .bx--accordion__title {
     font-weight: 600;
   }
@@ -69,30 +78,6 @@
   .ipd-page {
     .main {
       margin-left: 0;
-    }
-  }
-}
-
-@media screen and (min-width: 1024px) {
-  .ipd-page {
-    .main {
-      width: calc(100% - 550px - 16rem);
-    }
-  }
-}
-
-@media screen and (min-width: 640px) and (max-width: 1024px) {
-  .ipd-page {
-    .main {
-      width: calc(100% - 550px);
-    }
-  }
-}
-
-@media screen and (max-width: 640px) {
-  .ipd-page {
-    .main {
-      width: 100%;
     }
   }
 }

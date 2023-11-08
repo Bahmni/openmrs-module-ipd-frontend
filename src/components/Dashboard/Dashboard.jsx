@@ -13,21 +13,31 @@ import "./Dashboard.scss";
 import data from "../../utils/config.json";
 import PropTypes from "prop-types";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
+import { SliderContext } from "../../context/SliderContext";
 
 export default function Dashboard(props) {
   const { hostData } = props;
   console.log("hostData", hostData);
+  const [isSliderOpen, updateSliderOpen] = useState(false);
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
   const refs = useRef([]);
   const [windowWidth, updateWindowWidth] = useState(window.outerWidth);
 
+  const toggleSlider = () => {
+    updateSliderOpen((oldState) => !oldState);
+  };
+
+  const isDesktopLayout = () => {
+    return window.outerWidth > 1024;
+  };
+
   window.addEventListener("resize", () => {
     updateWindowWidth(window.outerWidth);
   });
   useEffect(() => {
-    updateSideNav(window.outerWidth > 1024);
+    updateSideNav(isDesktopLayout());
   }, [windowWidth]);
 
   const fetchConfig = () => {
@@ -56,64 +66,66 @@ export default function Dashboard(props) {
   };
 
   return (
-    <main className="ipd-page">
-      <Header
-        className="border-bottom-0 header-bg-color"
-        aria-label="IBM Platform Name"
-      >
-        <HeaderMenuButton
-          aria-label="Open menu"
-          className="header-nav-toggle-btn"
-          onClick={onClickSideNavExpand}
-          isActive={isSideNavExpanded}
-          isCollapsible={true}
-        />
-        <SideNav
-          aria-label="Side navigation"
-          className="navbar-border"
-          isPersistent={false}
-          expanded={isSideNavExpanded}
+    <SliderContext.Provider value={{ isSliderOpen, toggleSlider }}>
+      <main className="ipd-page">
+        <Header
+          className="border-bottom-0 header-bg-color"
+          aria-label="IBM Platform Name"
         >
-          <SideNavItems>
+          <HeaderMenuButton
+            aria-label="Open menu"
+            className="header-nav-toggle-btn"
+            onClick={onClickSideNavExpand}
+            isActive={isSideNavExpanded}
+            isCollapsible={true}
+          />
+          <SideNav
+            aria-label="Side navigation"
+            className="navbar-border"
+            isPersistent={false}
+            expanded={isSideNavExpanded}
+          >
+            <SideNavItems>
+              {sections?.map((el) => {
+                return (
+                  <SideNavLink
+                    className="cursor-pointer"
+                    isActive={el.component === selectedTab}
+                    key={el.component}
+                    onClick={() => scrollToSection(el.component)}
+                  >
+                    {el.name}
+                  </SideNavLink>
+                );
+              })}
+            </SideNavItems>
+          </SideNav>
+        </Header>
+
+        <section className={isSliderOpen ? "main-with-slider" : "main"}>
+          <Accordion className={"accordion"}>
             {sections?.map((el) => {
+              const DisplayControl = componentMapping[el.component];
               return (
-                <SideNavLink
-                  className="cursor-pointer"
-                  isActive={el.component === selectedTab}
+                <section
                   key={el.component}
-                  onClick={() => scrollToSection(el.component)}
+                  ref={(ref) => (refs.current[el.component] = ref)}
+                  style={{ marginBottom: "40px" }}
                 >
-                  {el.name}
-                </SideNavLink>
+                  <Suspense fallback={<p>Loading...</p>}>
+                    <AccordionItem open title={el.name}>
+                      <I18nProvider>
+                        <DisplayControl patientId={hostData?.patient?.uuid} />
+                      </I18nProvider>
+                    </AccordionItem>
+                  </Suspense>
+                </section>
               );
             })}
-          </SideNavItems>
-        </SideNav>
-      </Header>
-
-      <section className="main">
-        <Accordion className={"accordion"}>
-          {sections?.map((el) => {
-            const DisplayControl = componentMapping[el.component];
-            return (
-              <section
-                key={el.component}
-                ref={(ref) => (refs.current[el.component] = ref)}
-                style={{ marginBottom: "40px" }}
-              >
-                <Suspense fallback={<p>Loading...</p>}>
-                  <AccordionItem open title={el.name}>
-                    <I18nProvider>
-                      <DisplayControl patientId={hostData?.patient?.uuid} />
-                    </I18nProvider>
-                  </AccordionItem>
-                </Suspense>
-              </section>
-            );
-          })}
-        </Accordion>
-      </section>
-    </main>
+          </Accordion>
+        </section>
+      </main>
+    </SliderContext.Provider>
   );
 }
 Dashboard.propTypes = {

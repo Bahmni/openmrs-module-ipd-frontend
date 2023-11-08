@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import {
   DataTable,
   TableCell,
@@ -24,27 +24,32 @@ import { formatDate } from "../../../../utils/DateFormatter";
 import { dateFormat } from "../../../../constants";
 import DrugChartSlider from "../../../../components/DrugChartSlider/DrugChartSlider";
 import DrugChartSliderNotification from "../../../../components/DrugChartSlider/DrugChartSliderNotification";
+import { SliderContext } from "../../../../context/SliderContext";
 
 const Treatments = (props) => {
   const { patientId } = props;
+  const { isSliderOpen, toggleSlider } = useContext(SliderContext);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [buttonClicked, setButtonClick] = useState(false);
+  const [openDrugChartClicked, setOpenDrugChartClicked] = useState(false);
   const [selectedDrugOrder, setSelectedDrugOrder] = useState({});
   const [showWarningNotification, setShowWarningNotification] = useState(false);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   var drugOrderList = {};
   const DrugChartSliderActions = {
     onModalClose: () => {
-      setButtonClick(false);
+      setOpenDrugChartClicked(false);
+      toggleSlider();
     },
     onModalCancel: () => {
-      setButtonClick(false);
+      setOpenDrugChartClicked(false);
       setShowWarningNotification(true);
+      toggleSlider();
     },
     onModalSave: () => {
-      setButtonClick(false);
+      setOpenDrugChartClicked(false);
       setShowSuccessNotification(true);
+      toggleSlider();
     },
   };
 
@@ -62,7 +67,11 @@ const Treatments = (props) => {
         (drugOrder) => drugOrder.uuid === drugOrderId
       ),
     }));
-    setButtonClick(true);
+    if (openDrugChartClicked && isSliderOpen) {
+      return;
+    }
+    setOpenDrugChartClicked(true);
+    toggleSlider();
   };
 
   const AddToDrugChart = (
@@ -144,7 +153,7 @@ const Treatments = (props) => {
 
   return (
     <>
-      {buttonClicked && (
+      {isSliderOpen && (
         <DrugChartSlider
           title={AddToDrugChart}
           hostData={selectedDrugOrder}

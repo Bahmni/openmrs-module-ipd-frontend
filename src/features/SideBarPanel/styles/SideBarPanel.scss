@@ -10,7 +10,7 @@
 }
 
 .close-icon {
-  top: 0;
+  top: 48px;
   right: 0 !important;
   border: none;
   position: fixed;
@@ -19,26 +19,13 @@
 .side-bar-nav-desktop {
   background: white;
   position: fixed;
-  top: 0;
+  top: 48px;
   right: 0 !important;
   height: 100%;
   z-index: 9999;
   overflow: scroll;
-  padding-top: 48px;
   box-shadow: -1px 2px 3px 0px #aaa;
 }
-
-// .side-bar-nav-tablet {
-//   background: white;
-//   position: fixed;
-//   top: 0;
-//   right: 0 !important;
-//   height: 100%;
-//   z-index: 9999;
-//   padding-top: 48px;
-//   overflow: scroll;
-//   box-shadow: -1px 2px 3px 0px #aaa;
-// }
 
 @media screen and (min-width: 1024px) {
   .side-bar-nav-desktop {
