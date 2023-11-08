@@ -7,21 +7,9 @@ import "../styles/SideBarPanel.scss";
 
 export default function SideBarPanel(props) {
   const { title, closeSideBar, children } = props;
-  const closePanel = () => {
-    console.log("Close");
-  };
-
-  const handleClose = () => {
-    console.log(closeSideBar);
-    if (closeSideBar) {
-      closeSideBar();
-    } else {
-      closePanel();
-    }
-  };
 
   return (
-    <div className="side-bar-nav">
+    <div className="side-bar-nav-desktop">
       <div className="side-bar-header">
         <div>
           <h1>{title}</h1>
@@ -32,7 +20,7 @@ export default function SideBarPanel(props) {
             hasIconOnly
             iconDescription="Close"
             kind="ghost"
-            onClick={handleClose}
+            onClick={closeSideBar}
           />
         </div>
       </div>
@@ -44,5 +32,5 @@ export default function SideBarPanel(props) {
 SideBarPanel.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
-  closeSideBar: PropTypes.func,
+  closeSideBar: PropTypes.func.isRequired,
 };

@@ -91,9 +91,16 @@ export const updateDrugOrderList = (drugOrderList) => {
     };
     visitDrugOrder.route = visitDrugOrder.dosingInstructions.route;
     visitDrugOrder.durationUnit = visitDrugOrder.durationUnits;
-    visitDrugOrder.additionalInstructions = JSON.stringify(
-      visitDrugOrder.dosingInstructions.additionalInstructions
+    const administrationInstructions = JSON.parse(
+      visitDrugOrder.dosingInstructions.administrationInstructions
     );
+    visitDrugOrder.instructions = administrationInstructions.instructions
+      ? administrationInstructions.instructions
+      : "";
+    visitDrugOrder.additionalInstructions =
+      administrationInstructions.additionalInstructions
+        ? administrationInstructions.additionalInstructions
+        : "";
   });
   return drugOrderList;
 };
