@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { FormattedMessage } from "react-intl";
+
 import {
   fetchMedicationNursingTasks,
   ExtractMedicationNursingTasksData,
@@ -12,6 +14,13 @@ export default function NursingTasks(props) {
   console.log("patientId", patientId);
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const NoNursingTasksMessage = (
+    <FormattedMessage
+      id={"NO_NURSING_TASKS_MESSAGE"}
+      defaultMessage={"No Nursing tasks scheduled for this patient yet"}
+    />
+  );
 
   useEffect(() => {
     const fetchNursingTasks = async () => {
@@ -53,15 +62,9 @@ export default function NursingTasks(props) {
       return <>Loading...</>;
     }
     if (medicationNursingTasks && medicationNursingTasks.length === 0) {
-      return <>No Nursing Tasks</>;
+      return <>{NoNursingTasksMessage}</>;
     }
-    // return medicationNursingTasks.map((medicationNursingTask) => {
-    //   return (
-    //     <>
-    //       <TaskTile medicationNursingTask={medicationNursingTask} />
-    //     </>
-    //   );
-    // })
+
     return (
       <div style={{ flexDirection: "column" }}>
         {showCurrentDate()}

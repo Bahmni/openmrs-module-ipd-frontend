@@ -25,7 +25,6 @@ export const ExtractMedicationNursingTasksData = (
 
   medicationNursingTasksData.forEach((item) => {
     const { order, slots } = item;
-    //   const { drug, route, duration } = order;
     const drugName = order.drug.display;
     const drugRoute = order.route.display;
     let duration, dosage, doseType;
@@ -48,26 +47,27 @@ export const ExtractMedicationNursingTasksData = (
         duration,
         dosage,
         doseType,
-        starttime: startTimeInDate.toLocaleTimeString([], {
+        startTimeInEpochSeconds: startTime,
+        startTime: startTimeInDate.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
       });
     });
   });
-  extractedData.sort((a, b) => a.starttime.localeCompare(b.starttime));
+  extractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
 
   const groupedData = [];
   let currentStartTime = null;
   let currentGroup = [];
 
   extractedData.forEach((item) => {
-    if (item.starttime !== currentStartTime) {
+    if (item.startTime !== currentStartTime) {
       if (currentGroup.length > 0) {
         groupedData.push(currentGroup);
       }
       currentGroup = [item];
-      currentStartTime = item.starttime;
+      currentStartTime = item.startTime;
     } else {
       currentGroup.push(item);
     }
@@ -78,6 +78,4 @@ export const ExtractMedicationNursingTasksData = (
   }
 
   return groupedData;
-
-  // return extractedData;
 };

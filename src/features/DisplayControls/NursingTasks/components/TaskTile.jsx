@@ -7,12 +7,7 @@ import "../styles/TaskTile.scss";
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
-  //   if(medicationNursingTask.length >1) {
-  //   newMedicationNursingTask = medicationNursingTask[0];
-  // }
-  // else {
-  //   newMedicationNursingTask = medicationNursingTask;
-  // }
+
   let isGroupedTask, taskCount;
   if (medicationNursingTask.length > 1) {
     isGroupedTask = true;
@@ -22,22 +17,28 @@ export default function TaskTile(props) {
     "inside tasktile newMedicationNursingTask",
     newMedicationNursingTask
   );
-  const { drugName, dosage, doseType, drugRoute, duration, starttime } =
-    newMedicationNursingTask;
-  const isRelevantTask = false;
+  const {
+    drugName,
+    dosage,
+    doseType,
+    drugRoute,
+    duration,
+    startTime,
+    startTimeInEpochSeconds,
+  } = newMedicationNursingTask;
 
-  // const drugName = "Sodium chloride 0.9% (1L) Infusion bag (normal saline) (injection)";
-  // const drugName = "Sodium chloride 0.9% ";
-  // const dosage = "500";
-  // const doseType = "mg";
-  // const drugRoute = "Oral";
-  // const duration = "5 days";
-  // const administrationInfo = [
+  const isWithin60Minutes = () => {
+    const currentTime = Math.floor(new Date().getTime() / 1000);
+    const sixtyMinutesInSeconds = 60 * 60;
 
-  // ];
+    return (
+      startTimeInEpochSeconds >= currentTime &&
+      startTimeInEpochSeconds <= currentTime + sixtyMinutesInSeconds
+    );
+  };
+  const isRelevantTask = isWithin60Minutes();
+  console.log("isRelevantTask", isRelevantTask, startTime);
 
-  // const showMoreInfo = true;
-  // const tileNumber = 2;
   const drugNameText = (
     <div
       className={"drug-name"}
@@ -79,7 +80,7 @@ export default function TaskTile(props) {
           </div>
           <div className="dosage">
             <Clock />
-            <div>&nbsp;{starttime}</div>
+            <div>&nbsp;{startTime}</div>
           </div>
           {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
         </div>
