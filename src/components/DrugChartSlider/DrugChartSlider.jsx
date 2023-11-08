@@ -12,7 +12,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
-import { saveMedication } from "../../utils/DrugChartModalUtils";
+import { saveMedication } from "../../utils/DrugChartSliderUtils";
 import SideBarPanel from "../../features/SideBarPanel/components/SideBarPanel";
 import "./DrugChartSlider.scss";
 import { medicationFrequency } from "../../constants";
