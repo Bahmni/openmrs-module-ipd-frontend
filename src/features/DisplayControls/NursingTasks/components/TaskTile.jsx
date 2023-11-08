@@ -36,6 +36,15 @@ export default function TaskTile(props) {
       startTimeInEpochSeconds <= currentTime + sixtyMinutesInSeconds
     );
   };
+
+  const isLateTask = () => {
+    const currentTime = Math.floor(new Date().getTime() / 1000);
+    const sixtyMinutesInSeconds = 60 * 60;
+
+    return startTimeInEpochSeconds < currentTime - sixtyMinutesInSeconds;
+  };
+
+  const iconType = isLateTask() ? "Late" : "Pending";
   const isRelevantTask = isWithin60Minutes();
   console.log("isRelevantTask", isRelevantTask, startTime);
 
@@ -66,7 +75,7 @@ export default function TaskTile(props) {
       >
         <div className="tile-content">
           <div className="tile-title">
-            <SVGIcon />
+            <SVGIcon iconType={iconType} />
             {drugNameText}
           </div>
           <div

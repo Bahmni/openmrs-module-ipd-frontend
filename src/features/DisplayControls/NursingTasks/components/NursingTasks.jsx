@@ -50,9 +50,12 @@ export default function NursingTasks(props) {
   const showTaskTiles = () => {
     return medicationNursingTasks.map((medicationNursingTask) => {
       return (
-        <>
+        <div
+          style={{ display: "flex", height: "110px" }}
+          key={medicationNursingTask}
+        >
           <TaskTile medicationNursingTask={medicationNursingTask} />
-        </>
+        </div>
       );
     });
   };
@@ -72,7 +75,7 @@ export default function NursingTasks(props) {
       </div>
     );
   };
-  return <div style={{ display: "flex" }}>{showMedicationNursingTasks()}</div>;
+  return <div>{showMedicationNursingTasks()}</div>;
 }
 
 NursingTasks.propTypes = {
