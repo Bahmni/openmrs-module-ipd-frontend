@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
+import "../styles/NursingTasks.scss";
 
 import {
   fetchMedicationNursingTasks,
@@ -18,7 +19,7 @@ export default function NursingTasks(props) {
   const NoNursingTasksMessage = (
     <FormattedMessage
       id={"NO_NURSING_TASKS_MESSAGE"}
-      defaultMessage={"No Nursing tasks scheduled for this patient yet"}
+      defaultMessage={"No nursing task is scheduled for the patient"}
     />
   );
 
@@ -65,7 +66,7 @@ export default function NursingTasks(props) {
       return <>Loading...</>;
     }
     if (medicationNursingTasks && medicationNursingTasks.length === 0) {
-      return <>{NoNursingTasksMessage}</>;
+      return <div className="no-nursing-tasks">{NoNursingTasksMessage}</div>;
     }
 
     return (

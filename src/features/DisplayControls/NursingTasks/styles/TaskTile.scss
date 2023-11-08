@@ -24,7 +24,6 @@
 }
 
 .drug-name {
-  // max-width: 85%;
   white-space: nowrap;
   overflow: hidden;
   text-wrap: wrap;
@@ -69,6 +68,7 @@
   letter-spacing: 0.12px;
   justify-content: flex-end;
   display: flex;
-  // position:relative;
-  // top:-10px;
+  position: absolute;
+  bottom: 2px;
+  right: 8px;
 }
