@@ -114,6 +114,7 @@ const Vitals = (props) => {
 
   return (
     <>
+      <br />
       {VitalsDate ? VitalsDate : "-"} {VitalsTime ? VitalsTime : "-"}
       <Row>
         <Column>
