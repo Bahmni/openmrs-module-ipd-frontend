@@ -56,25 +56,16 @@ export default function TaskTile(props) {
 
   const drugNameText = (
     <div
-      className={"drug-name"}
+      className="drug-title"
       style={{ color: isRelevantTask ? "#393939" : "#A9A9A9" }}
     >
       {drugName}
     </div>
   );
   return (
-    <div style={{ position: "relative", width: "350px" }}>
-      {isGroupedTask && (
-        <div
-          className="tile tile-2"
-          style={{
-            backgroundColor: isRelevantTask ? "#e3fed1" : "#EDF8E6",
-          }}
-        ></div>
-      )}
-
+    <div className="tile-parent-container">
       <div
-        className="tile tile-1"
+        className="tile"
         style={{
           backgroundColor: isRelevantTask ? "#e3fed1" : "#EDF8E6",
         }}
@@ -100,6 +91,14 @@ export default function TaskTile(props) {
           {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
         </div>
       </div>
+      {isGroupedTask && (
+        <div
+          className="tile tile-2"
+          style={{
+            backgroundColor: isRelevantTask ? "#e3fed1" : "#EDF8E6",
+          }}
+        ></div>
+      )}
     </div>
   );
 }

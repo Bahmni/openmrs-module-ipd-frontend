@@ -48,12 +48,9 @@ export default function NursingTasks(props) {
   };
 
   const showTaskTiles = () => {
-    return medicationNursingTasks.map((medicationNursingTask) => {
+    return medicationNursingTasks.map((medicationNursingTask, index) => {
       return (
-        <div
-          style={{ display: "flex", height: "110px" }}
-          key={medicationNursingTask}
-        >
+        <div key={index}>
           <TaskTile medicationNursingTask={medicationNursingTask} />
         </div>
       );
@@ -62,16 +59,16 @@ export default function NursingTasks(props) {
 
   const showMedicationNursingTasks = () => {
     if (isLoading) {
-      return <>Loading...</>;
+      return <div>Loading...</div>;
     }
     if (medicationNursingTasks && medicationNursingTasks.length === 0) {
       return <div className="no-nursing-tasks">{NoNursingTasksMessage}</div>;
     }
 
     return (
-      <div style={{ flexDirection: "column" }}>
+      <div className="nursing-tasks-content-container">
         {showCurrentDate()}
-        {showTaskTiles()}
+        <div className="nursing-task-tiles-container">{showTaskTiles()}</div>
       </div>
     );
   };
