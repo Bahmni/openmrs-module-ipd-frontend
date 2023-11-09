@@ -19,7 +19,7 @@ import {
 } from "../utils/TreatmentsUtils";
 import "../styles/Treatments.scss";
 import { formatDate } from "../../../../utils/DateFormatter";
-import { dateFormat } from "../../../../constants";
+import { DDMMYYY_DATE_FORMAT } from "../../../../constants";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -68,7 +68,7 @@ const Treatments = (props) => {
           id: drugOrder.uuid,
           startDate: formatDate(
             new Date(drugOrder.effectiveStartDate),
-            dateFormat
+            DDMMYYY_DATE_FORMAT
           ),
           drugName: drugOrder.drug.name,
           dosageDetails: setDosingInstructions(drugOrder),

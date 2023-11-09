@@ -23,5 +23,6 @@
   "ADD_TO_DRUG_CHART": "Add to Drug Chart",
   "NO_ALLERGENS_MESSAGE": "No Allergen is captured for this patient yet.",
   "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard",
-  "YEARS": "Years"
+  "YEARS": "Years",
+  "SHOW_DETAILS": "Show Details"
 }

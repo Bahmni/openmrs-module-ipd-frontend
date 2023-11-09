@@ -7,18 +7,21 @@ import {
   Row,
   Column,
   Button,
-  Loading,
+  SkeletonText,
 } from "carbon-components-react";
-import { Image48 } from "@carbon/icons-react";
-import "../styles/PatientHeader.scss";
+import { Image32 } from "@carbon/icons-react";
 import { formatDate } from "../../../../utils/DateFormatter";
 import { FormattedMessage } from "react-intl";
+import { DDMMYYY_DATE_FORMAT } from "../../../../constants";
+import "../styles/PatientHeader.scss";
 
 export const PatientHeader = (props) => {
   const { patientId } = props;
-  const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
   const [patientDetails, updatePatientDetails] = useState({});
-  const [isLoading, updateIsLoading] = useState(false);
+  const [isLoading, updateIsLoading] = useState(true);
+
+  const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
+  //   const showDetails = <FormattedMessage id="SHOW_DETAILS" defaultMessage="Show Details" />;
 
   const extractPatientInfo = (patientInfo) => {
     updatePatientDetails({
@@ -29,13 +32,14 @@ export const PatientHeader = (props) => {
       age: patientInfo?.person?.age,
       birthDate: formatDate(
         new Date(patientInfo?.person?.birthdate),
-        "DD/MM/YYYY"
+        DDMMYYY_DATE_FORMAT
       ),
       attributes: patientInfo?.person?.attributes,
       addresses: patientInfo?.person?.addresses,
       gender: getGender(patientInfo?.person?.gender),
       identifier: patientInfo?.identifiers[0]?.identifier,
     });
+    updateIsLoading(false);
   };
 
   useEffect(() => {
@@ -44,54 +48,49 @@ export const PatientHeader = (props) => {
       extractPatientInfo(patientInfo);
     };
 
-    updateIsLoading(true);
     getPatientInfo();
-    updateIsLoading(false);
   }, []);
 
   return (
     <>
       <Tile className="patient-header">
         {isLoading ? (
-          <Loading />
+          <SkeletonText />
         ) : (
-          <Grid>
-            <Row>
-              <Button
-                renderIcon={Image48}
-                hasIconOnly
-                className="patient-image"
-              ></Button>
-              <Column>
-                <Row>
-                  <Column>
-                    <h1>{patientDetails?.fullName}</h1>
-                  </Column>
-                </Row>
-                <Row>
-                  <Column>
-                    <h3 className="patient-info">{patientDetails?.gender}</h3>
-                  </Column>
-                  <Column>
-                    <h3 className="patient-info">
-                      {patientDetails?.age} {years}
-                    </h3>
-                  </Column>
-                  <Column>
-                    <h3 className="patient-info">
-                      {patientDetails?.birthDate}
-                    </h3>
-                  </Column>
-                  <Column>
-                    <h3 className="patient-info">
-                      {patientDetails?.identifier}
-                    </h3>
-                  </Column>
-                  <Column sm={5} md={7} lg={8} />
-                </Row>
-              </Column>
-            </Row>
-          </Grid>
+          <>
+            <Grid>
+              <Row>
+                <Button hasIconOnly>
+                  <Image32 />
+                </Button>
+
+                <Column>
+                  <Row>
+                    <Column>
+                      <h1 className="patient-name">
+                        {patientDetails?.fullName}
+                      </h1>
+                    </Column>
+                  </Row>
+                  <Row>
+                    <div className="other-info">
+                      <h3 className="patient-info">{patientDetails?.gender}</h3>
+                      <h3 className="patient-info">
+                        {patientDetails?.age} {years}
+                      </h3>
+                      <h3 className="patient-info">
+                        {patientDetails?.birthDate}
+                      </h3>
+                      <h3 className="patient-info">
+                        {patientDetails?.identifier}
+                      </h3>
+                    </div>
+                  </Row>
+                </Column>
+              </Row>
+            </Grid>
+            {/* <Button kind="tertiary" className="show-more">{showDetails} <ChevronDown20 /></Button> */}
+          </>
         )}
       </Tile>
     </>
