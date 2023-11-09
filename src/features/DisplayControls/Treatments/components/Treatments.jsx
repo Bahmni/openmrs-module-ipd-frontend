@@ -18,7 +18,7 @@ import {
   treatmentHeaders,
 } from "../utils/TreatmentsUtils";
 import "../styles/Treatments.scss";
-import { formatDate } from "../../../../utils/DateFormatter";
+import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { dateFormat } from "../../../../constants";
 
 const Treatments = (props) => {
@@ -66,7 +66,7 @@ const Treatments = (props) => {
       .map((drugOrder) => {
         return {
           id: drugOrder.uuid,
-          startDate: formatDate(
+          startDate: formatDateAsString(
             new Date(drugOrder.effectiveStartDate),
             dateFormat
           ),

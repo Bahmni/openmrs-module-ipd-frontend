@@ -4,6 +4,8 @@ import { getPatientVitals } from "../utils/VitalsUtils";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import "../styles/Vitals.scss";
+import { formatDate } from "../../../../utils/DateTimeUtils";
+import { formatDateAsString } from "../../../../utils/DateFormatter";
 
 const Vitals = (props) => {
   const { patientId } = props;
@@ -15,9 +17,9 @@ const Vitals = (props) => {
   var latestDate = null;
 
   const setDateAndTime = (date) => {
-    const dateObj = new Date(date);
-    setVitalsDate(dateObj.toISOString().split("T")[0]);
-    setVitalsTime(dateObj.toTimeString().split(" ")[0]);
+    const dateAndTime = formatDate(date).split(" ");
+    setVitalsDate(formatDateAsString(new Date(date), "DD/MM/YY"));
+    setVitalsTime(dateAndTime.slice(3).join(" "));
   };
 
   function getLatestDate(tabularData) {
