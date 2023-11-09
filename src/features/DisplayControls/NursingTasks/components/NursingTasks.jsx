@@ -12,7 +12,6 @@ import TaskTile from "./TaskTile";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
-  console.log("patientId", patientId);
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 

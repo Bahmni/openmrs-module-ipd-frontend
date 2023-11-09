@@ -53,7 +53,6 @@ export default function TaskTile(props) {
 
   const iconType = isLateTask() ? "Late" : "Pending";
   const isRelevantTask = getRelevantTaskStatus();
-  console.log("isRelevantTask", isRelevantTask, startTime);
 
   const drugNameText = (
     <div

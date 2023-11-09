@@ -21,7 +21,6 @@ export const ExtractMedicationNursingTasksData = (
   medicationNursingTasksData
 ) => {
   const extractedData = [];
-  console.log("medicationNursingTasksData", medicationNursingTasksData);
 
   medicationNursingTasksData.forEach((item) => {
     const { order, slots } = item;
