@@ -6,10 +6,13 @@ import React from "react";
 import "../styles/SideBarPanel.scss";
 
 export default function SideBarPanel(props) {
-  const { title, closeSideBar, children } = props;
+  const { title, closeSideBar, isClinicalDashboard, children } = props;
 
+  const sideBarPanelClass = isClinicalDashboard
+    ? "clinical-side-bar-nav"
+    : "ipd-side-bar-nav";
   return (
-    <div className="side-bar-nav-desktop">
+    <div className={sideBarPanelClass}>
       <div className="side-bar-header">
         <div>
           <h1>{title}</h1>
@@ -33,4 +36,5 @@ SideBarPanel.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   closeSideBar: PropTypes.func.isRequired,
+  isClinicalDashboard: PropTypes.bool.isRequired,
 };

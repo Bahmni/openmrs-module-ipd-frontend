@@ -10,16 +10,17 @@
 }
 
 .close-icon {
-  top: 48px;
-  right: 0 !important;
+  position: absolute;
+  right: 16px;
+  top: 16px;
   border: none;
-  position: fixed;
+  font-size: 32px;
 }
 
-.side-bar-nav-desktop {
+.clinical-side-bar-nav,
+.ipd-side-bar-nav {
   background: white;
   position: fixed;
-  top: 48px;
   right: 0 !important;
   height: 100%;
   z-index: 9999;
@@ -28,21 +29,32 @@
 }
 
 @media screen and (min-width: 1024px) {
-  .side-bar-nav-desktop {
+  .clinical-side-bar-nav,
+  .ipd-side-bar-nav {
     width: 30%;
     min-width: 540px;
   }
 }
 
 @media screen and (min-width: 640px) and (max-width: 1024px) {
-  .side-bar-nav-desktop {
+  .clinical-side-bar-nav,
+  .ipd-side-bar-nav {
     width: 30%;
     min-width: 500px;
   }
 }
 
 @media screen and (max-width: 640px) {
-  .side-bar-nav-desktop {
+  .clinical-side-bar-nav,
+  .ipd-side-bar-nav {
     width: 100%;
   }
+}
+
+.clinical-side-bar-nav {
+  top: 95px;
+}
+
+.ipd-side-bar-nav {
+  top: 50px;
 }
