@@ -12,7 +12,7 @@ export const componentMapping = {
   ),
   NT: lazy(() =>
     import(
-      "../../features/DisplayControls/NursingTasks/components/NursingTasks"
+      "../../features/DisplayControls/NursingTasks/Components/NursingTasks"
     )
   ),
 };

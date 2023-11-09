@@ -31,6 +31,10 @@
         "component": "NT",
         "displayOrder": 6
       }
-    ]
+    ],
+    "nursingTasks": {
+      "timeInMinutesFromNowToShowTaskAsRelevant": 60,
+      "timeInMinutesFromNowToShowPastTaskAsLate": 60
+    }
   }
 }

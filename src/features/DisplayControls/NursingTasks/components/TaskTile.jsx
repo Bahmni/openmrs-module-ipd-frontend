@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
+import data from "../../../../utils/config.json";
+
 import "../styles/TaskTile.scss";
 
 export default function TaskTile(props) {
@@ -13,10 +15,7 @@ export default function TaskTile(props) {
     isGroupedTask = true;
     taskCount = medicationNursingTask.length - 1;
   }
-  console.log(
-    "inside tasktile newMedicationNursingTask",
-    newMedicationNursingTask
-  );
+
   const {
     drugName,
     dosage,
@@ -27,25 +26,33 @@ export default function TaskTile(props) {
     startTimeInEpochSeconds,
   } = newMedicationNursingTask;
 
-  const isWithin60Minutes = () => {
-    const currentTime = Math.floor(new Date().getTime() / 1000);
-    const sixtyMinutesInSeconds = 60 * 60;
+  const { config: { nursingTasks = {} } = {} } = data;
+
+  const getRelevantTaskStatus = () => {
+    const currentTimeInSeconds = Math.floor(new Date().getTime() / 1000);
+    const relevantTaskStatusWindowInSeconds =
+      nursingTasks &&
+      nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
 
     return (
-      startTimeInEpochSeconds >= currentTime &&
-      startTimeInEpochSeconds <= currentTime + sixtyMinutesInSeconds
+      startTimeInEpochSeconds >= currentTimeInSeconds &&
+      startTimeInEpochSeconds <=
+        currentTimeInSeconds + relevantTaskStatusWindowInSeconds
     );
   };
 
   const isLateTask = () => {
     const currentTime = Math.floor(new Date().getTime() / 1000);
-    const sixtyMinutesInSeconds = 60 * 60;
+    const lateTaskStatusWindowInSeconds =
+      nursingTasks.timeInMinutesFromNowToShowPastTaskAsLate * 60;
 
-    return startTimeInEpochSeconds < currentTime - sixtyMinutesInSeconds;
+    return (
+      startTimeInEpochSeconds < currentTime - lateTaskStatusWindowInSeconds
+    );
   };
 
   const iconType = isLateTask() ? "Late" : "Pending";
-  const isRelevantTask = isWithin60Minutes();
+  const isRelevantTask = getRelevantTaskStatus();
   console.log("isRelevantTask", isRelevantTask, startTime);
 
   const drugNameText = (
