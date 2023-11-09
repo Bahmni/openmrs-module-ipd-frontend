@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import "../styles/Vitals.scss";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
+import { FormattedMessage } from "react-intl";
 
 const Vitals = (props) => {
   const { patientId } = props;
@@ -13,6 +14,21 @@ const Vitals = (props) => {
   const [VitalUnits, setVitalUnits] = useState({});
   const [VitalsDate, setVitalsDate] = useState(null);
   const [VitalsTime, setVitalsTime] = useState(null);
+
+  const vitalsHeaders = {
+    header1: <FormattedMessage id={"Temperature"} defaultMessage={"Temp"} />,
+    header2: <FormattedMessage id={"BLOOD_PRESSURE"} defaultMessage={"BP"} />,
+    header3: (
+      <FormattedMessage id={"HEART_RATE"} defaultMessage={"Heart rate"} />
+    ),
+    header4: (
+      <FormattedMessage id={"RESPIRATORY_RATE"} defaultMessage={"R.rate"} />
+    ),
+    header5: <FormattedMessage id={"WEIGHT"} defaultMessage={"Weight"} />,
+    header6: <FormattedMessage id={"HEIGHT"} defaultMessage={"Height"} />,
+    header7: <FormattedMessage id={"SPO2"} defaultMessage={"SpO2"} />,
+    header8: <FormattedMessage id={"BMI"} defaultMessage={"BMI"} />,
+  };
 
   var latestDate = null;
 
@@ -115,13 +131,13 @@ const Vitals = (props) => {
   return (
     <>
       <br />
-      {VitalsDate ? VitalsDate : "-"} {VitalsTime ? VitalsTime : "-"}
+      {VitalsDate ? VitalsDate : "-"},{VitalsTime ? VitalsTime : "-"}
       <Row>
         <Column>
           <Tile
             className={Vitals.Temp?.abnormal ? "abnormal-tiles" : "vital-tiles"}
           >
-            Temp
+            {vitalsHeaders.header1}
             <br />
             <br />
             {Vitals.Temp?.value ? Vitals.Temp?.value : "-"}{" "}
@@ -137,11 +153,13 @@ const Vitals = (props) => {
                 : "vital-tiles"
             }
           >
-            BP
+            {vitalsHeaders.header2}
             <br />
             <br />
             {Vitals.SystolicPressure?.value && Vitals.DiastolicPressure?.value
-              ? Vitals.SystolicPressure?.value / Vitals.DiastolicPressure?.value
+              ? Vitals.SystolicPressure?.value +
+                "/" +
+                Vitals.DiastolicPressure?.value
               : "-"}{" "}
             {VitalUnits["Diastolic Blood Pressure"]
               ? VitalUnits["Diastolic Blood Pressure"]
@@ -154,7 +172,7 @@ const Vitals = (props) => {
               Vitals.HeartRate?.abnormal ? "abnormal-tiles" : "vital-tiles"
             }
           >
-            HeartRate
+            {vitalsHeaders.header3}
             <br />
             <br />
             {Vitals.HeartRate?.value ? Vitals.HeartRate?.value : "-"}{" "}
@@ -169,7 +187,7 @@ const Vitals = (props) => {
                 : "vital-tiles"
             }
           >
-            R.Rate
+            {vitalsHeaders.header4}
             <br />
             <br />
             {Vitals.RespiratoryRate?.value
@@ -186,7 +204,7 @@ const Vitals = (props) => {
               Vitals.Weight?.abnormal ? "abnormal-tiles" : "vital-tiles"
             }
           >
-            Weight
+            {vitalsHeaders.header5}
             <br />
             <br />
             {Vitals.Weight?.value ? Vitals.Weight?.value : "-"}{" "}
@@ -199,7 +217,7 @@ const Vitals = (props) => {
               Vitals.Height?.abnormal ? "abnormal-tiles" : "vital-tiles"
             }
           >
-            Height
+            {vitalsHeaders.header6}
             <br />
             <br />
             {Vitals.Height?.value ? Vitals.Height?.value : "-"}{" "}
@@ -210,7 +228,7 @@ const Vitals = (props) => {
           <Tile
             className={Vitals.SpO2?.abnormal ? "abnormal-tiles" : "vital-tiles"}
           >
-            SpO2
+            {vitalsHeaders.header7}
             <br />
             <br />
             {Vitals.SpO2?.value ? Vitals.SpO2?.value : "-"}{" "}
@@ -221,7 +239,7 @@ const Vitals = (props) => {
           <Tile
             className={Vitals.BMI?.abnormal ? "abnormal-tiles" : "vital-tiles"}
           >
-            BMI
+            {vitalsHeaders.header8}
             <br />
             <br />
             {Vitals.BMI?.value ? Vitals.BMI?.value : "-"}{" "}
