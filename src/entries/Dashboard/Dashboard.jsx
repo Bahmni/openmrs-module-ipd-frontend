@@ -1,4 +1,5 @@
 import React, { useState, useRef, Suspense, useEffect } from "react";
+import { FormattedMessage } from "react-intl";
 import {
   Accordion,
   AccordionItem,
@@ -7,16 +8,19 @@ import {
   SideNav,
   SideNavItems,
   SideNavLink,
+  Link,
 } from "carbon-components-react";
+import { ArrowLeft } from "@carbon/icons-react/next";
 import { componentMapping } from "./componentMapping";
 import "./Dashboard.scss";
 import data from "../../utils/config.json";
 import PropTypes from "prop-types";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
+import { getPatientDashboardUrl } from "../../utils/CommonUtils";
 
 export default function Dashboard(props) {
   const { hostData } = props;
-  console.log("hostData", hostData);
+  const { patient } = hostData;
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
@@ -66,12 +70,11 @@ export default function Dashboard(props) {
           className="header-nav-toggle-btn"
           onClick={onClickSideNavExpand}
           isActive={isSideNavExpanded}
-          isCollapsible={true}
         />
         <SideNav
           aria-label="Side navigation"
           className="navbar-border"
-          isPersistent={false}
+          isPersistent={true}
           expanded={isSideNavExpanded}
         >
           <SideNavItems>
@@ -92,6 +95,23 @@ export default function Dashboard(props) {
       </Header>
 
       <section className="main">
+        <div className={"navigation-buttons"}>
+          <ArrowLeft
+            data-testid={"Back button"}
+            size={20}
+            onClick={() => window.history.back()}
+          />
+          <Link
+            onClick={() => {
+              window.location.href = getPatientDashboardUrl(patient?.uuid);
+            }}
+          >
+            <FormattedMessage
+              id={"VIEW_CLINICAL_DASHBOARD"}
+              defaultMessage={"View Clinical Dashboard"}
+            />
+          </Link>
+        </div>
         <Accordion className={"accordion"}>
           {sections?.map((el) => {
             const DisplayControl = componentMapping[el.component];
@@ -104,7 +124,7 @@ export default function Dashboard(props) {
                 <Suspense fallback={<p>Loading...</p>}>
                   <AccordionItem open title={el.name}>
                     <I18nProvider>
-                      <DisplayControl patientId={hostData?.patient?.uuid} />
+                      <DisplayControl patientId={patient?.uuid} />
                     </I18nProvider>
                   </AccordionItem>
                 </Suspense>
