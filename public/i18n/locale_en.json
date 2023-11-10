@@ -29,5 +29,8 @@
   "WEIGHT": "Weight",
   "HEIGHT": "Height",
   "SPO2": "SpO2",
-  "BMI": "BMI"
+  "BMI": "BMI",
+  "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard",
+  "YEARS": "Years",
+  "SHOW_DETAILS": "Show Details"
 }

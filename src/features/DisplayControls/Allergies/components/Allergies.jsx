@@ -106,7 +106,6 @@ const Allergies = (props) => {
         data-testid="datatable-skeleton"
         headers={headers}
         aria-label="sample table"
-        zebra="true"
       />
     );
 
