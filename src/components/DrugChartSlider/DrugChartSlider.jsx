@@ -19,7 +19,7 @@ import { medicationFrequency } from "../../constants";
 import { SaveAndCloseButtons } from "../../features/SaveAndCloseButtons/components/SaveAndCloseButtons";
 
 const DrugChartSlider = (props) => {
-  const { title, hostData, hostApi } = props;
+  const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
   const enableSchedule = hostData?.scheduleFrequencies.find(
     (frequency) =>
       frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
@@ -66,7 +66,6 @@ const DrugChartSlider = (props) => {
     useState(false);
   const [showEmptyStartTimeWarning, setShowEmptyStartTimeWarning] =
     useState(false);
-  const [drugChartNotes, setDrugChartNotes] = useState("");
   const invalidTimeText24Hour = "Please enter in 24-hr format";
   const invalidTimeText12Hour = "Please enter in 12-hr format";
 
@@ -540,6 +539,8 @@ DrugChartSlider.propTypes = {
   title: PropTypes.string.isRequired,
   hostData: PropTypes.object.isRequired,
   hostApi: PropTypes.object.isRequired,
+  setDrugChartNotes: PropTypes.func.isRequired,
+  drugChartNotes: PropTypes.string.isRequired,
 };
 
 export default DrugChartSlider;

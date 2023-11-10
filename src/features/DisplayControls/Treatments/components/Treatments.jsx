@@ -34,6 +34,7 @@ const Treatments = (props) => {
   const [selectedDrugOrder, setSelectedDrugOrder] = useState({});
   const [showWarningNotification, setShowWarningNotification] = useState(false);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [drugChartNotes, setDrugChartNotes] = useState("");
   var drugOrderList = {};
   const DrugChartSliderActions = {
     onModalClose: () => {
@@ -67,6 +68,7 @@ const Treatments = (props) => {
       return;
     }
     updateSliderOpen(true);
+    setDrugChartNotes("");
   };
 
   const AddToDrugChart = (
@@ -153,6 +155,8 @@ const Treatments = (props) => {
           title={AddToDrugChart}
           hostData={selectedDrugOrder}
           hostApi={DrugChartSliderActions}
+          setDrugChartNotes={setDrugChartNotes}
+          drugChartNotes={drugChartNotes}
         />
       )}
       {showWarningNotification && (

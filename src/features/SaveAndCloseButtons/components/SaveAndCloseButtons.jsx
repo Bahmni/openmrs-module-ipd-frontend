@@ -2,6 +2,7 @@ import React from "react";
 import propTypes from "prop-types";
 import { Button } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
+import "../styles/SaveAndCloseButtons.scss";
 
 export const SaveAndCloseButtons = (props) => {
   const {
@@ -14,12 +15,22 @@ export const SaveAndCloseButtons = (props) => {
   } = props;
   return (
     <div className="footer">
-      <Button kind="secondary" data-testid="cancel" onClick={onClose}>
+      <Button
+        kind="secondary"
+        data-testid="cancel"
+        onClick={onClose}
+        className="cancel-button-slider"
+      >
         <span>
           <FormattedMessage id={"CANCEL"} defaultMessage={"Cancel"} />
         </span>
       </Button>
-      <Button kind="primary" onClick={onSave} disabled={isSaveDisabled}>
+      <Button
+        kind="primary"
+        onClick={onSave}
+        disabled={isSaveDisabled}
+        className="save-button-slider"
+      >
         {primaryButtonText}
       </Button>
     </div>

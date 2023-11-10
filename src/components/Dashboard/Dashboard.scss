@@ -4,7 +4,6 @@
     padding: 16px;
     position: relative;
     margin-left: 16rem;
-    width: calc(100% - 16rem);
   }
 
   .main-with-slider {
@@ -78,7 +77,12 @@
   .ipd-page {
     .main {
       margin-left: 0;
-      width: 100%;
     }
+  }
+}
+
+@media (max-width: 640px) {
+  .header-nav-toggle-btn {
+    display: none;
   }
 }
