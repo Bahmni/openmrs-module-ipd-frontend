@@ -2,7 +2,7 @@ import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import MockDate from "mockdate";
 
-import TaskTile from "../Components/TaskTile";
+import TaskTile from "../components/TaskTile";
 import {
   mockTaskTileData,
   mockTaskTileDataForGroupedTask,
