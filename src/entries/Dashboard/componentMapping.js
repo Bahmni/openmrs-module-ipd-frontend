@@ -10,4 +10,9 @@ export const componentMapping = {
   AL: lazy(() =>
     import("../../features/DisplayControls/Allergies/components/Allergies")
   ),
+  NT: lazy(() =>
+    import(
+      "../../features/DisplayControls/NursingTasks/components/NursingTasks"
+    )
+  ),
 };

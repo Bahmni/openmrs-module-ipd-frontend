@@ -1,0 +1,65 @@
+.nursing-tasks-tile {
+  border: 1px solid #007d79;
+  background-color: #e3fed1;
+  width: 323px;
+  height: 90px;
+  position: relative;
+}
+
+.tile-parent-container {
+  margin-bottom: 20px;
+  margin-right: 20px;
+  height: 90px;
+}
+
+.stacked-tile {
+  position: relative;
+  top: -80px;
+  left: 8px;
+  z-index: -1;
+}
+
+.tile-content {
+  padding: 10px;
+}
+
+.tile-title {
+  flex-direction: row;
+  display: flex;
+}
+
+.drug-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-wrap: wrap;
+  font-weight: 500;
+  color: #393939;
+  font-style: normal;
+  padding-left: 4px;
+  font-family: Inter;
+  font-size: 14px;
+  line-height: normal;
+  letter-spacing: 0.14px;
+}
+.tile-content-subtext {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #393939;
+  font-family: Inter;
+  letter-spacing: 0.12px;
+  align-items: center;
+  display: flex;
+}
+
+.more-info {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #393939;
+  font-family: Inter;
+  letter-spacing: 0.12px;
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+}

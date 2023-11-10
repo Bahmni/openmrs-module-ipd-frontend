@@ -25,7 +25,16 @@
         "name": "Treatments",
         "component": "TR",
         "displayOrder": 5
+      },
+      {
+        "name": "Nursing Tasks",
+        "component": "NT",
+        "displayOrder": 6
       }
-    ]
+    ],
+    "nursingTasks": {
+      "timeInMinutesFromNowToShowTaskAsRelevant": 60,
+      "timeInMinutesFromNowToShowPastTaskAsLate": 60
+    }
   }
 }
