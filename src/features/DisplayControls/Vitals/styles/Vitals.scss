@@ -1,24 +1,31 @@
-.vital-tiles {
-  margin: 0px 0px 0px 0px;
-  text-align: center;
-  background-color: #7d565500;
+.vital-tiles,
+.abnormal-tiles {
+  margin: 3px;
+  padding: 3px;
+  display: flex;
+  flex-flow: column;
+  align-items: normal;
+  text-align: left;
+  background-color: #ffffff;
+  justify-content: space-between;
   font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
-  min-height: 4rem;
-  min-width: 6rem;
-  padding-left: 0rem;
-  border: solid;
-  border-color: #8d8d8d;
+}
+
+.vital-values {
+  font-size: 16px;
+}
+
+.vital-value-and-unit {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+.vital-tiles {
+  border: 1px solid #525252;
 }
 
 .abnormal-tiles {
-  margin: 0px 0px 0px 0px;
-  text-align: left;
-  background-color: #7d565500;
-  font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
-  min-height: 6rem;
-  min-width: 6rem;
-  padding-left: 0rem;
-  color: red;
-  border: solid;
-  border-color: #8d8d8d;
+  border: 2px solid #da1e28;
+  color: #da1e28;
 }

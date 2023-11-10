@@ -16,25 +16,29 @@ const Vitals = (props) => {
   const [VitalsTime, setVitalsTime] = useState(null);
 
   const vitalsHeaders = {
-    header1: <FormattedMessage id={"Temperature"} defaultMessage={"Temp"} />,
-    header2: <FormattedMessage id={"BLOOD_PRESSURE"} defaultMessage={"BP"} />,
-    header3: (
+    temperature: (
+      <FormattedMessage id={"Temperature"} defaultMessage={"Temp"} />
+    ),
+    bloodPressure: (
+      <FormattedMessage id={"BLOOD_PRESSURE"} defaultMessage={"BP"} />
+    ),
+    heartRate: (
       <FormattedMessage id={"HEART_RATE"} defaultMessage={"Heart rate"} />
     ),
-    header4: (
+    respiratoryRate: (
       <FormattedMessage id={"RESPIRATORY_RATE"} defaultMessage={"R.rate"} />
     ),
-    header5: <FormattedMessage id={"WEIGHT"} defaultMessage={"Weight"} />,
-    header6: <FormattedMessage id={"HEIGHT"} defaultMessage={"Height"} />,
-    header7: <FormattedMessage id={"SPO2"} defaultMessage={"SpO2"} />,
-    header8: <FormattedMessage id={"BMI"} defaultMessage={"BMI"} />,
+    weight: <FormattedMessage id={"WEIGHT"} defaultMessage={"Weight"} />,
+    height: <FormattedMessage id={"HEIGHT"} defaultMessage={"Height"} />,
+    spO2: <FormattedMessage id={"SPO2"} defaultMessage={"SpO2"} />,
+    BMI: <FormattedMessage id={"BMI"} defaultMessage={"BMI"} />,
   };
 
   var latestDate = null;
 
-  const setDateAndTime = (date) => {
-    const dateAndTime = formatDate(date).split(" ");
-    setVitalsDate(formatDateAsString(new Date(date), "DD/MM/YY"));
+  const setDateAndTime = (latestDateAndTime) => {
+    const dateAndTime = formatDate(latestDateAndTime).split(" ");
+    setVitalsDate(formatDateAsString(new Date(latestDateAndTime), "DD/MM/YY"));
     setVitalsTime(dateAndTime.slice(3).join(" "));
   };
 
@@ -129,7 +133,7 @@ const Vitals = (props) => {
   }, []);
 
   return (
-    <>
+    <Tile>
       <br />
       {VitalsDate ? VitalsDate : "-"},{VitalsTime ? VitalsTime : "-"}
       <br />
@@ -139,11 +143,11 @@ const Vitals = (props) => {
           <Tile
             className={Vitals.Temp?.abnormal ? "abnormal-tiles" : "vital-tiles"}
           >
-            {vitalsHeaders.header1}
-            <br />
-            <br />
-            {Vitals.Temp?.value ? Vitals.Temp?.value : "-"}{" "}
-            {VitalUnits.Temperature ? VitalUnits.Temperature : "-"}
+            {vitalsHeaders.temperature}
+            <span className="vital-values">
+              {Vitals.Temp?.value ? Vitals.Temp?.value : "-"}{" "}
+              {VitalUnits.Temperature ? VitalUnits.Temperature : "-"}
+            </span>
           </Tile>
         </Column>
         <Column>
@@ -155,17 +159,17 @@ const Vitals = (props) => {
                 : "vital-tiles"
             }
           >
-            {vitalsHeaders.header2}
-            <br />
-            <br />
-            {Vitals.SystolicPressure?.value && Vitals.DiastolicPressure?.value
-              ? Vitals.SystolicPressure?.value +
-                "/" +
-                Vitals.DiastolicPressure?.value
-              : "-"}{" "}
-            {VitalUnits["Diastolic Blood Pressure"]
-              ? VitalUnits["Diastolic Blood Pressure"]
-              : "-"}
+            {vitalsHeaders.bloodPressure}
+            <span className="vital-values">
+              {Vitals.SystolicPressure?.value && Vitals.DiastolicPressure?.value
+                ? Vitals.SystolicPressure?.value +
+                  "/" +
+                  Vitals.DiastolicPressure?.value
+                : "-"}{" "}
+              {VitalUnits["Diastolic Blood Pressure"]
+                ? VitalUnits["Diastolic Blood Pressure"]
+                : "-"}
+            </span>
           </Tile>
         </Column>
         <Column>
@@ -174,11 +178,11 @@ const Vitals = (props) => {
               Vitals.HeartRate?.abnormal ? "abnormal-tiles" : "vital-tiles"
             }
           >
-            {vitalsHeaders.header3}
-            <br />
-            <br />
-            {Vitals.HeartRate?.value ? Vitals.HeartRate?.value : "-"}{" "}
-            {VitalUnits.Pulse ? VitalUnits.Pulse : "-"}
+            {vitalsHeaders.heartRate}
+            <span className="vital-values">
+              {Vitals.HeartRate?.value ? Vitals.HeartRate?.value : "-"}{" "}
+              {VitalUnits.Pulse ? VitalUnits.Pulse : "-"}
+            </span>
           </Tile>
         </Column>
         <Column>
@@ -189,15 +193,15 @@ const Vitals = (props) => {
                 : "vital-tiles"
             }
           >
-            {vitalsHeaders.header4}
-            <br />
-            <br />
-            {Vitals.RespiratoryRate?.value
-              ? Vitals.RespiratoryRate?.value
-              : "-"}{" "}
-            {VitalUnits["Respiratory Rate"]
-              ? VitalUnits["Respiratory Rate"]
-              : "-"}
+            {vitalsHeaders.respiratoryRate}
+            <span className="vital-values">
+              {Vitals.RespiratoryRate?.value
+                ? Vitals.RespiratoryRate?.value
+                : "-"}{" "}
+              {VitalUnits["Respiratory Rate"]
+                ? VitalUnits["Respiratory Rate"]
+                : "-"}
+            </span>
           </Tile>
         </Column>
         <Column>
@@ -206,11 +210,11 @@ const Vitals = (props) => {
               Vitals.Weight?.abnormal ? "abnormal-tiles" : "vital-tiles"
             }
           >
-            {vitalsHeaders.header5}
-            <br />
-            <br />
-            {Vitals.Weight?.value ? Vitals.Weight?.value : "-"}{" "}
-            {VitalUnits.WEIGHT ? VitalUnits.WEIGHT : "-"}
+            {vitalsHeaders.weight}
+            <span className="vital-values">
+              {Vitals.Weight?.value ? Vitals.Weight?.value : "-"}{" "}
+              {VitalUnits.WEIGHT ? VitalUnits.WEIGHT : "-"}
+            </span>
           </Tile>
         </Column>
         <Column>
@@ -219,37 +223,37 @@ const Vitals = (props) => {
               Vitals.Height?.abnormal ? "abnormal-tiles" : "vital-tiles"
             }
           >
-            {vitalsHeaders.header6}
-            <br />
-            <br />
-            {Vitals.Height?.value ? Vitals.Height?.value : "-"}{" "}
-            {VitalUnits.HEIGHT ? VitalUnits.HEIGHT : "-"}
+            {vitalsHeaders.height}
+            <span className="vital-values">
+              {Vitals.Height?.value ? Vitals.Height?.value : "-"}{" "}
+              {VitalUnits.HEIGHT ? VitalUnits.HEIGHT : "-"}
+            </span>
           </Tile>
         </Column>
         <Column>
           <Tile
             className={Vitals.SpO2?.abnormal ? "abnormal-tiles" : "vital-tiles"}
           >
-            {vitalsHeaders.header7}
-            <br />
-            <br />
-            {Vitals.SpO2?.value ? Vitals.SpO2?.value : "-"}{" "}
-            {VitalUnits.SpO2 ? VitalUnits.SpO2 : "-"}
+            {vitalsHeaders.spO2}
+            <span className="vital-values">
+              {Vitals.SpO2?.value ? Vitals.SpO2?.value : "-"}{" "}
+              {VitalUnits.SpO2 ? VitalUnits.SpO2 : "-"}
+            </span>
           </Tile>
         </Column>
         <Column>
           <Tile
             className={Vitals.BMI?.abnormal ? "abnormal-tiles" : "vital-tiles"}
           >
-            {vitalsHeaders.header8}
-            <br />
-            <br />
-            {Vitals.BMI?.value ? Vitals.BMI?.value : "-"}{" "}
-            {VitalUnits.BMI ? VitalUnits.BMI : "-"}
+            {vitalsHeaders.BMI}
+            <span className="vital-values">
+              {Vitals.BMI?.value ? Vitals.BMI?.value : "-"}{" "}
+              {VitalUnits.BMI ? VitalUnits.BMI : "-"}
+            </span>
           </Tile>
         </Column>
       </Row>
-    </>
+    </Tile>
   );
 };
 Vitals.propTypes = {

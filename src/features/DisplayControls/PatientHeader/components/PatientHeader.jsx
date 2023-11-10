@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { fetchPatientInfo, getGender } from "../utils/PatientHeaderUtils";
 import { Tile, Grid, Row, Column, SkeletonText } from "carbon-components-react";
-import { Image32 } from "@carbon/icons-react";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { FormattedMessage } from "react-intl";
 import { DDMMYYY_DATE_FORMAT } from "../../../../constants";
@@ -48,13 +47,12 @@ export const PatientHeader = (props) => {
     <>
       <Tile className="patient-header">
         {isLoading ? (
-          <SkeletonText />
+          <SkeletonText className="is-loading" />
         ) : (
           <>
             <Grid>
-              <Row>
-                <Image32 />
-
+              <Row className="patient-image-and-details">
+                <div className={"patient-image"} />
                 <Column>
                   <Row>
                     <Column>
