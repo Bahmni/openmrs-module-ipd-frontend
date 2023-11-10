@@ -9,7 +9,7 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
       <div
         class="date-text"
       >
-        8/11/2023
+        11/08/2023
       </div>
       <div
         class="nursing-task-tiles-container"
@@ -19,7 +19,7 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
             class="tile-parent-container"
           >
             <div
-              class="tile"
+              class="nursing-tasks-tile"
               style="background-color: rgb(237, 248, 230);"
             >
               <div
@@ -68,7 +68,7 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
               </div>
             </div>
             <div
-              class="tile tile-2"
+              class="nursing-tasks-tile stacked-tile"
               style="background-color: rgb(237, 248, 230);"
             />
           </div>
@@ -78,7 +78,7 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
             class="tile-parent-container"
           >
             <div
-              class="tile"
+              class="nursing-tasks-tile"
               style="background-color: rgb(237, 248, 230);"
             >
               <div

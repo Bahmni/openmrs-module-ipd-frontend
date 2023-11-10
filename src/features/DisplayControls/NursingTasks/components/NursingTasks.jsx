@@ -9,6 +9,7 @@ import {
   GetUTCEpochForDate,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
@@ -22,28 +23,24 @@ export default function NursingTasks(props) {
     />
   );
 
+  const fetchNursingTasks = async () => {
+    setIsLoading(true);
+    const forDate = GetUTCEpochForDate(new Date().toUTCString());
+    const nursingTasks = await fetchMedicationNursingTasks(patientId, forDate);
+    if (nursingTasks) {
+      const extractedData = ExtractMedicationNursingTasksData(nursingTasks);
+      setMedicationNursingTasks(extractedData);
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchNursingTasks = async () => {
-      setIsLoading(true);
-      const forDate = GetUTCEpochForDate(new Date().toUTCString());
-      const nursingTasks = await fetchMedicationNursingTasks(
-        patientId,
-        forDate
-      );
-      if (nursingTasks) {
-        const extractedData = ExtractMedicationNursingTasksData(nursingTasks);
-        setMedicationNursingTasks(extractedData);
-        setIsLoading(false);
-      }
-    };
-
     fetchNursingTasks();
   }, []);
 
   const showCurrentDate = () => {
     var currentDate = new Date();
 
-    var formattedDate = currentDate.toLocaleDateString();
+    var formattedDate = formatDate(currentDate, "DD/MM/YYYY");
     return <div className="date-text">{formattedDate}</div>;
   };
 

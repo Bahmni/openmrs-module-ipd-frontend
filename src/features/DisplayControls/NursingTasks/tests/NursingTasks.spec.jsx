@@ -66,7 +66,7 @@ describe("NursingTasks", () => {
     const { getByText } = render(<NursingTasks patientId="patientid" />);
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
-      expect(getByText("8/11/2023")).toBeTruthy();
+      expect(getByText("11/08/2023")).toBeTruthy();
     });
   });
 });

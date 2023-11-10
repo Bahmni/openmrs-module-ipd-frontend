@@ -6,7 +6,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
     class="tile-parent-container"
   >
     <div
-      class="tile"
+      class="nursing-tasks-tile"
       style="background-color: rgb(237, 248, 230);"
     >
       <div
@@ -48,7 +48,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
       </div>
     </div>
     <div
-      class="tile tile-2"
+      class="nursing-tasks-tile stacked-tile"
       style="background-color: rgb(237, 248, 230);"
     />
   </div>
@@ -61,7 +61,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
     class="tile-parent-container"
   >
     <div
-      class="tile"
+      class="nursing-tasks-tile"
       style="background-color: rgb(237, 248, 230);"
     >
       <div
