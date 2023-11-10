@@ -297,7 +297,7 @@ const DrugChartSlider = (props) => {
         }
         closeSideBar={handleClose}
       >
-        <div style={{ padding: "20px" }}>
+        <div style={{ padding: "20px", paddingBottom: "120px" }}>
           <TextInput
             id="drug-name"
             className="drug-name"
