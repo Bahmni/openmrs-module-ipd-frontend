@@ -21,7 +21,6 @@ export default function TaskTile(props) {
     dosage,
     doseType,
     drugRoute,
-    duration,
     startTime,
     startTimeInEpochSeconds,
   } = newMedicationNursingTask;
@@ -76,15 +75,14 @@ export default function TaskTile(props) {
             {drugNameText}
           </div>
           <div
-            className={"dosage"}
+            className="tile-content-subtext"
             style={{ color: isRelevantTask ? "#393939" : "#A9A9A9" }}
           >
             <span>{dosage}</span>
             {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
             <span>&nbsp;-&nbsp;{drugRoute}</span>
-            {duration && <span>&nbsp;-&nbsp;{duration}</span>}
           </div>
-          <div className="dosage">
+          <div className="tile-content-subtext">
             <Clock />
             <div>&nbsp;{startTime}</div>
           </div>

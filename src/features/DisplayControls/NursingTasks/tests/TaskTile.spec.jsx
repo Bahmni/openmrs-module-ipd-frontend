@@ -1,5 +1,7 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
+import MockDate from "mockdate";
+
 import TaskTile from "../Components/TaskTile";
 import {
   mockTaskTileData,
@@ -7,6 +9,13 @@ import {
 } from "./NursingTasksUtilsMockData";
 
 describe("TaskTile", () => {
+  beforeEach(() => {
+    MockDate.set("2023-08-11");
+  });
+
+  afterEach(() => {
+    MockDate.reset();
+  });
   it("should match the snapshot for non grouped task", () => {
     const { asFragment } = render(
       <TaskTile medicationNursingTask={mockTaskTileData} />

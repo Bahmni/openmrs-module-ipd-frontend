@@ -1,0 +1,130 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NursingTasks should show nursing tasks when nursing task reponse is not empty 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="nursing-tasks-content-container"
+    >
+      <div
+        class="date-text"
+      >
+        8/11/2023
+      </div>
+      <div
+        class="nursing-task-tiles-container"
+      >
+        <div>
+          <div
+            class="tile-parent-container"
+          >
+            <div
+              class="tile"
+              style="background-color: rgb(237, 248, 230);"
+            >
+              <div
+                class="tile-content"
+              >
+                <div
+                  class="tile-title"
+                >
+                  <div>
+                    <test-file-stub />
+                  </div>
+                  <div
+                    class="drug-title"
+                    style="color: rgb(169, 169, 169);"
+                  >
+                    Paracetamol 120 mg/5 mL Suspension (Liquid)
+                  </div>
+                </div>
+                <div
+                  class="tile-content-subtext"
+                  style="color: rgb(169, 169, 169);"
+                >
+                  <span>
+                    25
+                  </span>
+                  <span>
+                     - mg
+                  </span>
+                  <span>
+                     - Oral
+                  </span>
+                </div>
+                <div
+                  class="tile-content-subtext"
+                >
+                  <test-file-stub />
+                  <div>
+                     04:15 PM
+                  </div>
+                </div>
+                <div
+                  class="more-info"
+                >
+                  (1 more)
+                </div>
+              </div>
+            </div>
+            <div
+              class="tile tile-2"
+              style="background-color: rgb(237, 248, 230);"
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            class="tile-parent-container"
+          >
+            <div
+              class="tile"
+              style="background-color: rgb(237, 248, 230);"
+            >
+              <div
+                class="tile-content"
+              >
+                <div
+                  class="tile-title"
+                >
+                  <div>
+                    <test-file-stub />
+                  </div>
+                  <div
+                    class="drug-title"
+                    style="color: rgb(169, 169, 169);"
+                  >
+                    Paracetamol 120 mg (Tablet)
+                  </div>
+                </div>
+                <div
+                  class="tile-content-subtext"
+                  style="color: rgb(169, 169, 169);"
+                >
+                  <span>
+                    25
+                  </span>
+                  <span>
+                     - mg
+                  </span>
+                  <span>
+                     - Oral
+                  </span>
+                </div>
+                <div
+                  class="tile-content-subtext"
+                >
+                  <test-file-stub />
+                  <div>
+                     04:32 PM
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

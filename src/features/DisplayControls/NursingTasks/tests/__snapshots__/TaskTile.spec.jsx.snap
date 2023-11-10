@@ -3,14 +3,10 @@
 exports[`TaskTile should match the snapshot for grouped task 1`] = `
 <DocumentFragment>
   <div
-    style="position: relative; width: 350px;"
+    class="tile-parent-container"
   >
     <div
-      class="tile tile-2"
-      style="background-color: rgb(237, 248, 230);"
-    />
-    <div
-      class="tile tile-1"
+      class="tile"
       style="background-color: rgb(237, 248, 230);"
     >
       <div
@@ -23,12 +19,12 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
             <test-file-stub />
           </div>
           <div
-            class="drug-name"
+            class="drug-title"
             style="color: rgb(169, 169, 169);"
           />
         </div>
         <div
-          class="dosage"
+          class="tile-content-subtext"
           style="color: rgb(169, 169, 169);"
         >
           <span />
@@ -37,7 +33,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
           </span>
         </div>
         <div
-          class="dosage"
+          class="tile-content-subtext"
         >
           <test-file-stub />
           <div>
@@ -51,6 +47,10 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
         </div>
       </div>
     </div>
+    <div
+      class="tile tile-2"
+      style="background-color: rgb(237, 248, 230);"
+    />
   </div>
 </DocumentFragment>
 `;
@@ -58,10 +58,10 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
 exports[`TaskTile should match the snapshot for non grouped task 1`] = `
 <DocumentFragment>
   <div
-    style="position: relative; width: 350px;"
+    class="tile-parent-container"
   >
     <div
-      class="tile tile-1"
+      class="tile"
       style="background-color: rgb(237, 248, 230);"
     >
       <div
@@ -74,12 +74,12 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
             <test-file-stub />
           </div>
           <div
-            class="drug-name"
+            class="drug-title"
             style="color: rgb(169, 169, 169);"
           />
         </div>
         <div
-          class="dosage"
+          class="tile-content-subtext"
           style="color: rgb(169, 169, 169);"
         >
           <span />
@@ -88,7 +88,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
           </span>
         </div>
         <div
-          class="dosage"
+          class="tile-content-subtext"
         >
           <test-file-stub />
           <div>
