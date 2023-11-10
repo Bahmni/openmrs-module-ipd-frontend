@@ -12,13 +12,11 @@
 .close-icon {
   position: absolute;
   right: 16px;
-  top: 16px;
+  top: 8px;
   border: none;
-  font-size: 32px;
 }
 
-.clinical-side-bar-nav,
-.ipd-side-bar-nav {
+.side-bar-nav {
   background: white;
   position: fixed;
   right: 0 !important;
@@ -29,32 +27,25 @@
 }
 
 @media screen and (min-width: 1024px) {
-  .clinical-side-bar-nav,
-  .ipd-side-bar-nav {
+  .side-bar-nav {
     width: 30%;
     min-width: 540px;
   }
 }
 
 @media screen and (min-width: 640px) and (max-width: 1024px) {
-  .clinical-side-bar-nav,
-  .ipd-side-bar-nav {
+  .side-bar-nav {
     width: 30%;
     min-width: 500px;
   }
 }
 
 @media screen and (max-width: 640px) {
-  .clinical-side-bar-nav,
-  .ipd-side-bar-nav {
+  .side-bar-nav {
     width: 100%;
   }
 }
 
-.clinical-side-bar-nav {
-  top: 95px;
-}
-
-.ipd-side-bar-nav {
+.side-bar-nav {
   top: 50px;
 }

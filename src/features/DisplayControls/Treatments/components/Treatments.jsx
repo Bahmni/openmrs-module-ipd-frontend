@@ -28,28 +28,24 @@ import { SliderContext } from "../../../../context/SliderContext";
 
 const Treatments = (props) => {
   const { patientId } = props;
-  const { isSliderOpen, toggleSlider } = useContext(SliderContext);
+  const { isSliderOpen, updateSliderOpen } = useContext(SliderContext);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [openDrugChartClicked, setOpenDrugChartClicked] = useState(false);
   const [selectedDrugOrder, setSelectedDrugOrder] = useState({});
   const [showWarningNotification, setShowWarningNotification] = useState(false);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   var drugOrderList = {};
   const DrugChartSliderActions = {
     onModalClose: () => {
-      setOpenDrugChartClicked(false);
-      toggleSlider();
+      updateSliderOpen(false);
     },
     onModalCancel: () => {
-      setOpenDrugChartClicked(false);
       setShowWarningNotification(true);
-      toggleSlider();
+      updateSliderOpen(false);
     },
     onModalSave: () => {
-      setOpenDrugChartClicked(false);
       setShowSuccessNotification(true);
-      toggleSlider();
+      updateSliderOpen(false);
     },
   };
 
@@ -67,11 +63,10 @@ const Treatments = (props) => {
         (drugOrder) => drugOrder.uuid === drugOrderId
       ),
     }));
-    if (openDrugChartClicked && isSliderOpen) {
+    if (isSliderOpen) {
       return;
     }
-    setOpenDrugChartClicked(true);
-    toggleSlider();
+    updateSliderOpen(true);
   };
 
   const AddToDrugChart = (

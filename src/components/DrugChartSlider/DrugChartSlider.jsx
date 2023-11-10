@@ -29,7 +29,6 @@ const DrugChartSlider = (props) => {
   );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
   const isAutoFill = !!enableSchedule?.scheduleTiming;
-  const isClinicalDashboard = hostData?.isClinicalDashboard || false;
 
   useEffect(() => {
     if (isAutoFill) {
@@ -297,7 +296,6 @@ const DrugChartSlider = (props) => {
           title ? title : <FormattedMessage id="DRUG_CHART_MODAL_HEADER" />
         }
         closeSideBar={handleClose}
-        isClinicalDashboard={isClinicalDashboard}
       >
         <div style={{ padding: "20px" }}>
           <TextInput

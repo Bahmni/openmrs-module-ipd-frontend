@@ -25,10 +25,6 @@ export default function Dashboard(props) {
   const refs = useRef([]);
   const [windowWidth, updateWindowWidth] = useState(window.outerWidth);
 
-  const toggleSlider = () => {
-    updateSliderOpen((oldState) => !oldState);
-  };
-
   const isDesktopLayout = () => {
     return window.outerWidth > 1024;
   };
@@ -66,7 +62,7 @@ export default function Dashboard(props) {
   };
 
   return (
-    <SliderContext.Provider value={{ isSliderOpen, toggleSlider }}>
+    <SliderContext.Provider value={{ isSliderOpen, updateSliderOpen }}>
       <main className="ipd-page">
         <Header
           className="border-bottom-0 header-bg-color"
