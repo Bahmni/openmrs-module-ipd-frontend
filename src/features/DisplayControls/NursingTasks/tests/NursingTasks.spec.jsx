@@ -1,6 +1,6 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
-import NursingTasks from "../Components/NursingTasks";
+import NursingTasks from "../components/NursingTasks";
 import { mockNursingTasksResponse } from "./NursingTasksUtilsMockData";
 import MockDate from "mockdate";
 
