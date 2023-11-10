@@ -47,7 +47,7 @@ export const PatientHeader = (props) => {
     <>
       <Tile className="patient-header">
         {isLoading ? (
-          <SkeletonText className="is-loading" />
+          <SkeletonText className="is-loading" data-testid="header-loading" />
         ) : (
           <>
             <Grid>
