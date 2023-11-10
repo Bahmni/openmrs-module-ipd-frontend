@@ -132,6 +132,8 @@ const Vitals = (props) => {
     <>
       <br />
       {VitalsDate ? VitalsDate : "-"},{VitalsTime ? VitalsTime : "-"}
+      <br />
+      <br />
       <Row>
         <Column>
           <Tile

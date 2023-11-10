@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { fetchPatientInfo, getGender } from "../utils/PatientHeaderUtils";
-import {
-  Tile,
-  Grid,
-  Row,
-  Column,
-  Button,
-  SkeletonText,
-} from "carbon-components-react";
+import { Tile, Grid, Row, Column, SkeletonText } from "carbon-components-react";
 import { Image32 } from "@carbon/icons-react";
-import { formatDate } from "../../../../utils/DateFormatter";
+import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { FormattedMessage } from "react-intl";
 import { DDMMYYY_DATE_FORMAT } from "../../../../constants";
 import "../styles/PatientHeader.scss";
@@ -30,7 +23,7 @@ export const PatientHeader = (props) => {
       familyName: patientInfo?.person?.preferredName.familyName,
       middleName: patientInfo?.person?.preferredName.middleName,
       age: patientInfo?.person?.age,
-      birthDate: formatDate(
+      birthDate: formatDateAsString(
         new Date(patientInfo?.person?.birthdate),
         DDMMYYY_DATE_FORMAT
       ),
@@ -60,9 +53,7 @@ export const PatientHeader = (props) => {
           <>
             <Grid>
               <Row>
-                <Button hasIconOnly>
-                  <Image32 />
-                </Button>
+                <Image32 />
 
                 <Column>
                   <Row>

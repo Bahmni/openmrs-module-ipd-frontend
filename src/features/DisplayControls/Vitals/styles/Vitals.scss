@@ -1,11 +1,13 @@
 .vital-tiles {
   margin: 0px 0px 0px 0px;
-  text-align: left;
+  text-align: center;
   background-color: #7d565500;
   font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
-  min-height: 3rem;
-  min-width: 3rem;
+  min-height: 4rem;
+  min-width: 6rem;
   padding-left: 0rem;
+  border: solid;
+  border-color: #8d8d8d;
 }
 
 .abnormal-tiles {
@@ -13,8 +15,10 @@
   text-align: left;
   background-color: #7d565500;
   font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
-  min-height: 3rem;
-  min-width: 3rem;
+  min-height: 6rem;
+  min-width: 6rem;
   padding-left: 0rem;
   color: red;
+  border: solid;
+  border-color: #8d8d8d;
 }
