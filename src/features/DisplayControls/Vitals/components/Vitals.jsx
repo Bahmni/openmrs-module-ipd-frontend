@@ -135,7 +135,8 @@ const Vitals = (props) => {
   return (
     <Tile>
       <br />
-      {VitalsDate ? VitalsDate : "-"},{VitalsTime ? VitalsTime : "-"}
+      {VitalsDate ? VitalsDate : "-"}
+      {VitalsTime ? "," + VitalsTime : "-"}
       <br />
       <br />
       <Row>
@@ -146,7 +147,7 @@ const Vitals = (props) => {
             {vitalsHeaders.temperature}
             <span className="vital-values">
               {Vitals.Temp?.value ? Vitals.Temp?.value : "-"}{" "}
-              {VitalUnits.Temperature ? VitalUnits.Temperature : "-"}
+              {Vitals.Temp?.value ? VitalUnits.Temperature : " "}
             </span>
           </Tile>
         </Column>
@@ -166,9 +167,9 @@ const Vitals = (props) => {
                   "/" +
                   Vitals.DiastolicPressure?.value
                 : "-"}{" "}
-              {VitalUnits["Diastolic Blood Pressure"]
+              {Vitals.SystolicPressure?.value
                 ? VitalUnits["Diastolic Blood Pressure"]
-                : "-"}
+                : " "}
             </span>
           </Tile>
         </Column>
@@ -181,7 +182,7 @@ const Vitals = (props) => {
             {vitalsHeaders.heartRate}
             <span className="vital-values">
               {Vitals.HeartRate?.value ? Vitals.HeartRate?.value : "-"}{" "}
-              {VitalUnits.Pulse ? VitalUnits.Pulse : "-"}
+              {Vitals.HeartRate?.value ? VitalUnits.Pulse : " "}
             </span>
           </Tile>
         </Column>
@@ -198,9 +199,9 @@ const Vitals = (props) => {
               {Vitals.RespiratoryRate?.value
                 ? Vitals.RespiratoryRate?.value
                 : "-"}{" "}
-              {VitalUnits["Respiratory Rate"]
+              {Vitals.RespiratoryRate?.value
                 ? VitalUnits["Respiratory Rate"]
-                : "-"}
+                : " "}
             </span>
           </Tile>
         </Column>
@@ -213,7 +214,7 @@ const Vitals = (props) => {
             {vitalsHeaders.weight}
             <span className="vital-values">
               {Vitals.Weight?.value ? Vitals.Weight?.value : "-"}{" "}
-              {VitalUnits.WEIGHT ? VitalUnits.WEIGHT : "-"}
+              {Vitals.Weight?.value ? VitalUnits.WEIGHT : " "}
             </span>
           </Tile>
         </Column>
@@ -226,7 +227,7 @@ const Vitals = (props) => {
             {vitalsHeaders.height}
             <span className="vital-values">
               {Vitals.Height?.value ? Vitals.Height?.value : "-"}{" "}
-              {VitalUnits.HEIGHT ? VitalUnits.HEIGHT : "-"}
+              {Vitals.Height?.value ? VitalUnits.HEIGHT : " "}
             </span>
           </Tile>
         </Column>
@@ -237,7 +238,7 @@ const Vitals = (props) => {
             {vitalsHeaders.spO2}
             <span className="vital-values">
               {Vitals.SpO2?.value ? Vitals.SpO2?.value : "-"}{" "}
-              {VitalUnits.SpO2 ? VitalUnits.SpO2 : "-"}
+              {Vitals.SpO2?.value ? VitalUnits.SpO2 : " "}
             </span>
           </Tile>
         </Column>
@@ -248,7 +249,7 @@ const Vitals = (props) => {
             {vitalsHeaders.BMI}
             <span className="vital-values">
               {Vitals.BMI?.value ? Vitals.BMI?.value : "-"}{" "}
-              {VitalUnits.BMI ? VitalUnits.BMI : "-"}
+              {Vitals.BMI?.value ? VitalUnits.BMI : " "}
             </span>
           </Tile>
         </Column>

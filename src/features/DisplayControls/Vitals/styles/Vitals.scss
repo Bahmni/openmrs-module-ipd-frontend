@@ -1,12 +1,12 @@
 .vital-tiles,
 .abnormal-tiles {
   margin: 3px;
-  padding: 3px;
+  padding: 10px;
   display: flex;
   flex-flow: column;
   align-items: normal;
   text-align: left;
-  background-color: #ffffff;
+  background-color: whitesmoke;
   justify-content: space-between;
   font-family: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
 }
@@ -19,10 +19,6 @@
   display: flex;
   flex-flow: row;
   justify-content: space-between;
-}
-
-.vital-tiles {
-  border: 1px solid #525252;
 }
 
 .abnormal-tiles {
