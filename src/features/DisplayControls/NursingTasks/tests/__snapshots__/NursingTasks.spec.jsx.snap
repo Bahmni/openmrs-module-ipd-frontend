@@ -28,15 +28,36 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
                 <div
                   class="tile-title"
                 >
-                  <div>
-                    <test-file-stub />
-                  </div>
                   <div
-                    class="drug-title"
-                    style="color: rgb(169, 169, 169);"
+                    style="margin-top: 2px;"
                   >
-                    Paracetamol 120 mg/5 mL Suspension (Liquid)
+                    <div>
+                      <test-file-stub />
+                    </div>
                   </div>
+                  <span
+                    class="bx--tooltip--definition bx--tooltip--a11y"
+                  >
+                    <button
+                      aria-describedby="definition-tooltip-1"
+                      class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                      type="button"
+                    >
+                      <div
+                        class="drug-title"
+                        style="color: rgb(169, 169, 169);"
+                      >
+                        Paracetamol 120 mg/5 mL Suspension (Liquid)
+                      </div>
+                    </button>
+                    <span
+                      class="bx--assistive-text"
+                      id="definition-tooltip-1"
+                      role="tooltip"
+                    >
+                      Paracetamol 120 mg/5 mL Suspension (Liquid)
+                    </span>
+                  </span>
                 </div>
                 <div
                   class="tile-content-subtext"
@@ -87,15 +108,36 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
                 <div
                   class="tile-title"
                 >
-                  <div>
-                    <test-file-stub />
-                  </div>
                   <div
-                    class="drug-title"
-                    style="color: rgb(169, 169, 169);"
+                    style="margin-top: 2px;"
                   >
-                    Paracetamol 120 mg (Tablet)
+                    <div>
+                      <test-file-stub />
+                    </div>
                   </div>
+                  <span
+                    class="bx--tooltip--definition bx--tooltip--a11y"
+                  >
+                    <button
+                      aria-describedby="definition-tooltip-2"
+                      class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                      type="button"
+                    >
+                      <div
+                        class="drug-title"
+                        style="color: rgb(169, 169, 169);"
+                      >
+                        Paracetamol 120 mg (Tablet)
+                      </div>
+                    </button>
+                    <span
+                      class="bx--assistive-text"
+                      id="definition-tooltip-2"
+                      role="tooltip"
+                    >
+                      Paracetamol 120 mg (Tablet)
+                    </span>
+                  </span>
                 </div>
                 <div
                   class="tile-content-subtext"

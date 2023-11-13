@@ -4,6 +4,8 @@ import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
 import data from "../../../../utils/config.json";
 
+import { TooltipDefinition } from "carbon-components-react";
+
 import "../styles/TaskTile.scss";
 
 export default function TaskTile(props) {
@@ -71,8 +73,12 @@ export default function TaskTile(props) {
       >
         <div className="tile-content">
           <div className="tile-title">
-            <SVGIcon iconType={iconType} />
-            {drugNameText}
+            <div style={{ marginTop: "2px" }}>
+              <SVGIcon iconType={iconType} />
+            </div>
+            <TooltipDefinition tooltipText={drugName}>
+              {drugNameText}
+            </TooltipDefinition>
           </div>
           <div
             className="tile-content-subtext"
