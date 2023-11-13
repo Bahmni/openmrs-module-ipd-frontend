@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+
 .nursing-tasks-tile {
   border: 1px solid #007d79;
   background-color: #e3fed1;
@@ -10,6 +12,7 @@
   margin-bottom: 20px;
   margin-right: 20px;
   height: 90px;
+  font-family: "Inter", sans-serif;
 }
 
 .stacked-tile {
@@ -36,20 +39,27 @@
   color: #393939;
   font-style: normal;
   padding-left: 4px;
-  font-family: Inter;
   font-size: 14px;
   line-height: normal;
   letter-spacing: 0.14px;
+  text-align: left;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
 }
 .tile-content-subtext {
   margin-top: 4px;
   font-size: 12px;
   font-weight: 400;
   color: #393939;
-  font-family: Inter;
   letter-spacing: 0.12px;
   align-items: center;
   display: flex;
+}
+
+.nursing-task-icon-container {
+  margin-top: 2px;
 }
 
 .more-info {
@@ -57,9 +67,21 @@
   font-size: 12px;
   font-weight: 400;
   color: #393939;
-  font-family: Inter;
   letter-spacing: 0.12px;
   position: absolute;
   bottom: 4px;
   right: 8px;
+}
+
+.bx--tooltip__trigger.bx--tooltip__trigger--definition {
+  border-bottom: 0px;
+}
+.bx--tooltip__trigger.bx--tooltip__trigger--definition.bx--tooltip--bottom.bx--tooltip--align-start.bx--tooltip--a11y
+  + .bx--assistive-text {
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 15px;
+  letter-spacing: 0.16px;
 }
