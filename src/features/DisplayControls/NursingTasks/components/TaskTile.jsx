@@ -73,7 +73,7 @@ export default function TaskTile(props) {
       >
         <div className="tile-content">
           <div className="tile-title">
-            <div style={{ marginTop: "2px" }}>
+            <div className="nursing-task-icon-container">
               <SVGIcon iconType={iconType} />
             </div>
             <TooltipDefinition tooltipText={drugName}>

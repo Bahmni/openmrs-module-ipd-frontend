@@ -16,7 +16,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
           class="tile-title"
         >
           <div
-            style="margin-top: 2px;"
+            class="nursing-task-icon-container"
           >
             <div>
               <test-file-stub />
@@ -90,7 +90,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
           class="tile-title"
         >
           <div
-            style="margin-top: 2px;"
+            class="nursing-task-icon-container"
           >
             <div>
               <test-file-stub />

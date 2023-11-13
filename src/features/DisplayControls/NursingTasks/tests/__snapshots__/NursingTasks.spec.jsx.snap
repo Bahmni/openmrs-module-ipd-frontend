@@ -29,7 +29,7 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
                   class="tile-title"
                 >
                   <div
-                    style="margin-top: 2px;"
+                    class="nursing-task-icon-container"
                   >
                     <div>
                       <test-file-stub />
@@ -109,7 +109,7 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
                   class="tile-title"
                 >
                   <div
-                    style="margin-top: 2px;"
+                    class="nursing-task-icon-container"
                   >
                     <div>
                       <test-file-stub />
