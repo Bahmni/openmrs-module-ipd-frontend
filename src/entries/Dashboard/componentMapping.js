@@ -1,13 +1,14 @@
 import { lazy } from "react";
+import { componentKeys } from "../../constants";
 
 export const componentMapping = {
-  DG: lazy(() =>
+  [componentKeys.DIAGNOSIS]: lazy(() =>
     import("../../features/DisplayControls/Diagnosis/components/Diagnosis")
   ),
-  TR: lazy(() =>
+  [componentKeys.TREATMENTS]: lazy(() =>
     import("../../features/DisplayControls/Treatments/components/Treatments")
   ),
-  AL: lazy(() =>
+  [componentKeys.ALLERGIES]: lazy(() =>
     import("../../features/DisplayControls/Allergies/components/Allergies")
   ),
 };
