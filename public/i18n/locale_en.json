@@ -22,5 +22,6 @@
   "NO_TREATMENTS_MESSAGE": "No IPD Medication is prescribed for this patient yet",
   "ADD_TO_DRUG_CHART": "Add to Drug Chart",
   "NO_ALLERGENS_MESSAGE": "No Allergen is captured for this patient yet.",
+  "NO_NURSING_TASKS_MESSAGE": "No nursing task is scheduled for the patient",
   "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard"
 }

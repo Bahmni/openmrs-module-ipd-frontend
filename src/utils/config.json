@@ -18,7 +18,17 @@
         "componentKey": "TR",
         "displayOrder": 3,
         "refreshKey": 3
+      },
+      {
+        "title": "Nursing Tasks",
+        "componentKey": "NT",
+        "displayOrder": 4,
+        "refreshKey": 4
       }
-    ]
+    ],
+    "nursingTasks": {
+      "timeInMinutesFromNowToShowTaskAsRelevant": 60,
+      "timeInMinutesFromNowToShowPastTaskAsLate": 60
+    }
   }
 }
