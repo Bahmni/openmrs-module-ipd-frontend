@@ -46,8 +46,10 @@ const Vitals = (props) => {
 
   const setDateAndTime = (latestDateAndTime) => {
     const dateAndTime = formatDate(latestDateAndTime).split(" ");
-    setVitalsDate(formatDateAsString(new Date(latestDateAndTime), "DD/MM/YY"));
-    setVitalsTime(dateAndTime.slice(3).join(" "));
+    setVitalsDate(
+      formatDateAsString(new Date(latestDateAndTime), "DD/MM/YYYY")
+    );
+    setVitalsTime(dateAndTime.slice(3).join(" ").toUpperCase());
   };
 
   function getLatestDate(tabularData) {
@@ -152,7 +154,7 @@ const Vitals = (props) => {
         <Tile>
           <br />
           {VitalsDate ? VitalsDate : "-"}
-          {VitalsTime ? "," + VitalsTime : "-"}
+          {VitalsTime ? ", " + VitalsTime : "-"}
           <br />
           <br />
           <Row>
