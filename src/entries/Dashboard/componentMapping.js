@@ -12,5 +12,10 @@ export const componentMapping = {
   ),
   VT: lazy(() =>
     import("../../features/DisplayControls/Vitals/components/Vitals")
+   ),
+  NT: lazy(() =>
+    import(
+      "../../features/DisplayControls/NursingTasks/components/NursingTasks"
+    )
   ),
 };

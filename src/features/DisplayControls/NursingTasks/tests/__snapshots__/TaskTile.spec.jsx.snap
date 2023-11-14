@@ -1,0 +1,140 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TaskTile should match the snapshot for grouped task 1`] = `
+<DocumentFragment>
+  <div
+    class="tile-parent-container"
+  >
+    <div
+      class="nursing-tasks-tile"
+      style="background-color: rgb(237, 248, 230);"
+    >
+      <div
+        class="tile-content"
+      >
+        <div
+          class="tile-title"
+        >
+          <div
+            class="nursing-task-icon-container"
+          >
+            <div>
+              <test-file-stub />
+            </div>
+          </div>
+          <span
+            class="bx--tooltip--definition bx--tooltip--a11y"
+          >
+            <button
+              aria-describedby="definition-tooltip-2"
+              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+              type="button"
+            >
+              <div
+                class="drug-title"
+                style="color: rgb(169, 169, 169);"
+              />
+            </button>
+            <span
+              class="bx--assistive-text"
+              id="definition-tooltip-2"
+              role="tooltip"
+            />
+          </span>
+        </div>
+        <div
+          class="tile-content-subtext"
+          style="color: rgb(169, 169, 169);"
+        >
+          <span />
+          <span>
+             - 
+          </span>
+        </div>
+        <div
+          class="tile-content-subtext"
+        >
+          <test-file-stub />
+          <div>
+             
+          </div>
+        </div>
+        <div
+          class="more-info"
+        >
+          (1 more)
+        </div>
+      </div>
+    </div>
+    <div
+      class="nursing-tasks-tile stacked-tile"
+      style="background-color: rgb(237, 248, 230);"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`TaskTile should match the snapshot for non grouped task 1`] = `
+<DocumentFragment>
+  <div
+    class="tile-parent-container"
+  >
+    <div
+      class="nursing-tasks-tile"
+      style="background-color: rgb(237, 248, 230);"
+    >
+      <div
+        class="tile-content"
+      >
+        <div
+          class="tile-title"
+        >
+          <div
+            class="nursing-task-icon-container"
+          >
+            <div>
+              <test-file-stub />
+            </div>
+          </div>
+          <span
+            class="bx--tooltip--definition bx--tooltip--a11y"
+          >
+            <button
+              aria-describedby="definition-tooltip-1"
+              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+              type="button"
+            >
+              <div
+                class="drug-title"
+                style="color: rgb(169, 169, 169);"
+              />
+            </button>
+            <span
+              class="bx--assistive-text"
+              id="definition-tooltip-1"
+              role="tooltip"
+            />
+          </span>
+        </div>
+        <div
+          class="tile-content-subtext"
+          style="color: rgb(169, 169, 169);"
+        >
+          <span />
+          <span>
+             - 
+          </span>
+        </div>
+        <div
+          class="tile-content-subtext"
+        >
+          <test-file-stub />
+          <div>
+             
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
