@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import {
   DataTable,
   TableCell,
@@ -16,15 +16,39 @@ import PropTypes from "prop-types";
 import {
   getPrescribedAndActiveDrugOrders,
   treatmentHeaders,
+  getConfigsForTreatments,
+  updateDrugOrderList,
 } from "../utils/TreatmentsUtils";
 import "../styles/Treatments.scss";
 import { formatDate } from "../../../../utils/DateFormatter";
 import { dateFormat } from "../../../../constants";
+import DrugChartSlider from "../../../../components/DrugChartSlider/DrugChartSlider";
+import DrugChartSliderNotification from "../../../../components/DrugChartSlider/DrugChartSliderNotification";
+import { SliderContext } from "../../../../context/SliderContext";
 
 const Treatments = (props) => {
   const { patientId } = props;
+  const { isSliderOpen, updateSliderOpen } = useContext(SliderContext);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedDrugOrder, setSelectedDrugOrder] = useState({});
+  const [showWarningNotification, setShowWarningNotification] = useState(false);
+  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [drugChartNotes, setDrugChartNotes] = useState("");
+  var drugOrderList = {};
+  const DrugChartSliderActions = {
+    onModalClose: () => {
+      updateSliderOpen(false);
+    },
+    onModalCancel: () => {
+      setShowWarningNotification(true);
+      updateSliderOpen(false);
+    },
+    onModalSave: () => {
+      setShowSuccessNotification(true);
+      updateSliderOpen(false);
+    },
+  };
 
   const NoTreatmentsMessage = (
     <FormattedMessage
@@ -32,6 +56,20 @@ const Treatments = (props) => {
       defaultMessage={"No IPD Medication is prescribed for this patient yet"}
     />
   );
+
+  const handleAddToDrugChartClick = (drugOrderId) => {
+    setSelectedDrugOrder((prevState) => ({
+      ...prevState,
+      drugOrder: drugOrderList.visitDrugOrders.find(
+        (drugOrder) => drugOrder.uuid === drugOrderId
+      ),
+    }));
+    if (isSliderOpen) {
+      return;
+    }
+    updateSliderOpen(true);
+    setDrugChartNotes("");
+  };
 
   const AddToDrugChart = (
     <FormattedMessage
@@ -73,26 +111,66 @@ const Treatments = (props) => {
           drugName: drugOrder.drug.name,
           dosageDetails: setDosingInstructions(drugOrder),
           prescribedBy: drugOrder.provider.name,
-          actions: <Link href="#">{AddToDrugChart}</Link>,
+          actions: (
+            <Link onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}>
+              {AddToDrugChart}
+            </Link>
+          ),
         };
       });
     setTreatments(treatments);
   };
 
   useEffect(() => {
-    const getActiveDrugOrders = async () => {
-      const drugOrders = await getPrescribedAndActiveDrugOrders(patientId);
-      if (drugOrders.visitDrugOrders) {
-        modifyTreatmentData(drugOrders);
-        setIsLoading(false);
+    const getActiveDrugOrdersAndTreatmentConfig = async () => {
+      drugOrderList = await getPrescribedAndActiveDrugOrders(patientId);
+      if (drugOrderList.visitDrugOrders.length > 0) {
+        drugOrderList = updateDrugOrderList(drugOrderList);
+        modifyTreatmentData(drugOrderList);
       }
     };
 
-    getActiveDrugOrders();
+    const getTreatmentConfigs = async () => {
+      const treatmentConfigs = await getConfigsForTreatments();
+      setSelectedDrugOrder({
+        patientId: patientId,
+        scheduleFrequencies: treatmentConfigs.scheduleFrequencies,
+        startTimeFrequencies: treatmentConfigs.startTimeFrequencies,
+        enable24HourTimers: treatmentConfigs.enable24HourTimers,
+        drugOrder: null,
+      });
+    };
+
+    getActiveDrugOrdersAndTreatmentConfig().then(() => {
+      getTreatmentConfigs().then(() => {
+        setIsLoading(false);
+      });
+    });
   }, []);
 
   return (
     <>
+      {isSliderOpen && (
+        <DrugChartSlider
+          title={AddToDrugChart}
+          hostData={selectedDrugOrder}
+          hostApi={DrugChartSliderActions}
+          setDrugChartNotes={setDrugChartNotes}
+          drugChartNotes={drugChartNotes}
+        />
+      )}
+      {showWarningNotification && (
+        <DrugChartSliderNotification
+          hostData={{ notificationKind: "warning" }}
+          hostApi={{ onClose: () => setShowWarningNotification(false) }}
+        />
+      )}
+      {showSuccessNotification && (
+        <DrugChartSliderNotification
+          hostData={{ notificationKind: "success" }}
+          hostApi={{ onClose: () => setShowSuccessNotification(false) }}
+        />
+      )}
       {isLoading ? (
         <DataTableSkeleton />
       ) : treatments && treatments.length === 0 ? (

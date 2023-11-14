@@ -5,6 +5,14 @@
     position: relative;
     margin-left: 16rem;
   }
+
+  .main-with-slider {
+    transition: margin-left 0.5s;
+    padding: 16px;
+    position: relative;
+    width: calc(100% - 550px);
+  }
+
   .bx--accordion__title {
     font-weight: 600;
   }
@@ -80,5 +88,11 @@
     .main {
       margin-left: 0;
     }
+  }
+}
+
+@media (max-width: 640px) {
+  .header-nav-toggle-btn {
+    display: none;
   }
 }
