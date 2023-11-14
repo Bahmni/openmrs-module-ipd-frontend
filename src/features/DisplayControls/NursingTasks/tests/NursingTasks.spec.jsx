@@ -45,13 +45,13 @@ describe("NursingTasks", () => {
     mockFetchMedicationNursingTasks.mockResolvedValueOnce(
       mockNursingTasksResponse
     );
-    const { getByText, asFragment } = render(
+    const { getAllByText, asFragment } = render(
       <NursingTasks patientId="patientid" />
     );
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
       expect(
-        getByText("Paracetamol 120 mg/5 mL Suspension (Liquid)")
+        getAllByText("Paracetamol 120 mg/5 mL Suspension (Liquid)")
       ).toBeTruthy();
       expect(asFragment()).toMatchSnapshot();
     });
