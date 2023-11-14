@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Column, Row, Tile } from "carbon-components-react";
+import { Column, Row, Tile, SkeletonText } from "carbon-components-react";
 import { getPatientVitals } from "../utils/VitalsUtils";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -14,6 +14,7 @@ const Vitals = (props) => {
   const [VitalUnits, setVitalUnits] = useState({});
   const [VitalsDate, setVitalsDate] = useState(null);
   const [VitalsTime, setVitalsTime] = useState(null);
+  const [isLoading, updateIsLoading] = useState(true);
 
   const vitalsHeaders = {
     temperature: (
@@ -127,6 +128,7 @@ const Vitals = (props) => {
       const VitalsList = await getPatientVitals(patientId);
       handleVitalUnits(VitalsList.conceptDetails);
       setVitals(mapVitalsData(VitalsList));
+      updateIsLoading(false);
     };
 
     getVitals();
@@ -134,126 +136,139 @@ const Vitals = (props) => {
 
   return (
     <Tile>
-      <br />
-      {VitalsDate ? VitalsDate : "-"}
-      {VitalsTime ? "," + VitalsTime : "-"}
-      <br />
-      <br />
-      <Row>
-        <Column>
-          <Tile
-            className={Vitals.Temp?.abnormal ? "abnormal-tiles" : "vital-tiles"}
-          >
-            {vitalsHeaders.temperature}
-            <span className="vital-values">
-              {Vitals.Temp?.value ? Vitals.Temp?.value : "-"}{" "}
-              {Vitals.Temp?.value ? VitalUnits.Temperature : " "}
-            </span>
-          </Tile>
-        </Column>
-        <Column>
-          <Tile
-            className={
-              Vitals.SystolicPressure?.abnormal ||
-              Vitals.DiastolicPressure?.abnormal
-                ? "abnormal-tiles"
-                : "vital-tiles"
-            }
-          >
-            {vitalsHeaders.bloodPressure}
-            <span className="vital-values">
-              {Vitals.SystolicPressure?.value && Vitals.DiastolicPressure?.value
-                ? Vitals.SystolicPressure?.value +
-                  "/" +
+      {isLoading ? (
+        <SkeletonText className="is-loading" data-testid="header-loading" />
+      ) : (
+        <>
+          <br />
+          {VitalsDate ? VitalsDate : "-"}
+          {VitalsTime ? "," + VitalsTime : "-"}
+          <br />
+          <br />
+          <Row>
+            <Column>
+              <Tile
+                className={
+                  Vitals.Temp?.abnormal ? "abnormal-tiles" : "vital-tiles"
+                }
+              >
+                {vitalsHeaders.temperature}
+                <span className="vital-values">
+                  {Vitals.Temp?.value ? Vitals.Temp?.value : "-"}{" "}
+                  {Vitals.Temp?.value ? VitalUnits.Temperature : " "}
+                </span>
+              </Tile>
+            </Column>
+            <Column>
+              <Tile
+                className={
+                  Vitals.SystolicPressure?.abnormal ||
+                  Vitals.DiastolicPressure?.abnormal
+                    ? "abnormal-tiles"
+                    : "vital-tiles"
+                }
+              >
+                {vitalsHeaders.bloodPressure}
+                <span className="vital-values">
+                  {Vitals.SystolicPressure?.value &&
                   Vitals.DiastolicPressure?.value
-                : "-"}{" "}
-              {Vitals.SystolicPressure?.value
-                ? VitalUnits["Diastolic Blood Pressure"]
-                : " "}
-            </span>
-          </Tile>
-        </Column>
-        <Column>
-          <Tile
-            className={
-              Vitals.HeartRate?.abnormal ? "abnormal-tiles" : "vital-tiles"
-            }
-          >
-            {vitalsHeaders.heartRate}
-            <span className="vital-values">
-              {Vitals.HeartRate?.value ? Vitals.HeartRate?.value : "-"}{" "}
-              {Vitals.HeartRate?.value ? VitalUnits.Pulse : " "}
-            </span>
-          </Tile>
-        </Column>
-        <Column>
-          <Tile
-            className={
-              Vitals.RespiratoryRate?.abnormal
-                ? "abnormal-tiles"
-                : "vital-tiles"
-            }
-          >
-            {vitalsHeaders.respiratoryRate}
-            <span className="vital-values">
-              {Vitals.RespiratoryRate?.value
-                ? Vitals.RespiratoryRate?.value
-                : "-"}{" "}
-              {Vitals.RespiratoryRate?.value
-                ? VitalUnits["Respiratory Rate"]
-                : " "}
-            </span>
-          </Tile>
-        </Column>
-        <Column>
-          <Tile
-            className={
-              Vitals.Weight?.abnormal ? "abnormal-tiles" : "vital-tiles"
-            }
-          >
-            {vitalsHeaders.weight}
-            <span className="vital-values">
-              {Vitals.Weight?.value ? Vitals.Weight?.value : "-"}{" "}
-              {Vitals.Weight?.value ? VitalUnits.WEIGHT : " "}
-            </span>
-          </Tile>
-        </Column>
-        <Column>
-          <Tile
-            className={
-              Vitals.Height?.abnormal ? "abnormal-tiles" : "vital-tiles"
-            }
-          >
-            {vitalsHeaders.height}
-            <span className="vital-values">
-              {Vitals.Height?.value ? Vitals.Height?.value : "-"}{" "}
-              {Vitals.Height?.value ? VitalUnits.HEIGHT : " "}
-            </span>
-          </Tile>
-        </Column>
-        <Column>
-          <Tile
-            className={Vitals.SpO2?.abnormal ? "abnormal-tiles" : "vital-tiles"}
-          >
-            {vitalsHeaders.spO2}
-            <span className="vital-values">
-              {Vitals.SpO2?.value ? Vitals.SpO2?.value : "-"}{" "}
-              {Vitals.SpO2?.value ? VitalUnits.SpO2 : " "}
-            </span>
-          </Tile>
-        </Column>
-        <Column>
-          <Tile
-            className={Vitals.BMI?.abnormal ? "abnormal-tiles" : "vital-tiles"}
-          >
-            {vitalsHeaders.BMI}
-            <span className="vital-values">
-              {Vitals.BMI?.value ? Vitals.BMI?.value : "-"}{" "}
-              {Vitals.BMI?.value ? VitalUnits.BMI : " "}
-            </span>
-          </Tile>
-        </Column>
-      </Row>
+                    ? Vitals.SystolicPressure?.value +
+                      "/" +
+                      Vitals.DiastolicPressure?.value
+                    : "-"}{" "}
+                  {Vitals.SystolicPressure?.value
+                    ? VitalUnits["Diastolic Blood Pressure"]
+                    : " "}
+                </span>
+              </Tile>
+            </Column>
+            <Column>
+              <Tile
+                className={
+                  Vitals.HeartRate?.abnormal ? "abnormal-tiles" : "vital-tiles"
+                }
+              >
+                {vitalsHeaders.heartRate}
+                <span className="vital-values">
+                  {Vitals.HeartRate?.value ? Vitals.HeartRate?.value : "-"}{" "}
+                  {Vitals.HeartRate?.value ? VitalUnits.Pulse : " "}
+                </span>
+              </Tile>
+            </Column>
+            <Column>
+              <Tile
+                className={
+                  Vitals.RespiratoryRate?.abnormal
+                    ? "abnormal-tiles"
+                    : "vital-tiles"
+                }
+              >
+                {vitalsHeaders.respiratoryRate}
+                <span className="vital-values">
+                  {Vitals.RespiratoryRate?.value
+                    ? Vitals.RespiratoryRate?.value
+                    : "-"}{" "}
+                  {Vitals.RespiratoryRate?.value
+                    ? VitalUnits["Respiratory Rate"]
+                    : " "}
+                </span>
+              </Tile>
+            </Column>
+            <Column>
+              <Tile
+                className={
+                  Vitals.Weight?.abnormal ? "abnormal-tiles" : "vital-tiles"
+                }
+              >
+                {vitalsHeaders.weight}
+                <span className="vital-values">
+                  {Vitals.Weight?.value ? Vitals.Weight?.value : "-"}{" "}
+                  {Vitals.Weight?.value ? VitalUnits.WEIGHT : " "}
+                </span>
+              </Tile>
+            </Column>
+            <Column>
+              <Tile
+                className={
+                  Vitals.Height?.abnormal ? "abnormal-tiles" : "vital-tiles"
+                }
+              >
+                {vitalsHeaders.height}
+                <span className="vital-values">
+                  {Vitals.Height?.value ? Vitals.Height?.value : "-"}{" "}
+                  {Vitals.Height?.value ? VitalUnits.HEIGHT : " "}
+                </span>
+              </Tile>
+            </Column>
+            <Column>
+              <Tile
+                className={
+                  Vitals.SpO2?.abnormal ? "abnormal-tiles" : "vital-tiles"
+                }
+              >
+                {vitalsHeaders.spO2}
+                <span className="vital-values">
+                  {Vitals.SpO2?.value ? Vitals.SpO2?.value : "-"}{" "}
+                  {Vitals.SpO2?.value ? VitalUnits.SpO2 : " "}
+                </span>
+              </Tile>
+            </Column>
+            <Column>
+              <Tile
+                className={
+                  Vitals.BMI?.abnormal ? "abnormal-tiles" : "vital-tiles"
+                }
+              >
+                {vitalsHeaders.BMI}
+                <span className="vital-values">
+                  {Vitals.BMI?.value ? Vitals.BMI?.value : "-"}{" "}
+                  {Vitals.BMI?.value ? VitalUnits.BMI : " "}
+                </span>
+              </Tile>
+            </Column>
+          </Row>
+        </>
+      )}
     </Tile>
   );
 };
