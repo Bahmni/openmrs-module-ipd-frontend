@@ -16,6 +16,13 @@ const Vitals = (props) => {
   const [VitalsTime, setVitalsTime] = useState(null);
   const [isLoading, updateIsLoading] = useState(true);
 
+  const NoVitalsMessage = (
+    <FormattedMessage
+      id={"NO_VITALS_MESSAGE"}
+      defaultMessage={"No Vitals found for this patient"}
+    />
+  );
+
   const vitalsHeaders = {
     temperature: (
       <FormattedMessage id={"Temperature"} defaultMessage={"Temp"} />
@@ -56,8 +63,8 @@ const Vitals = (props) => {
     if (VitalsList.tabularData) {
       const VitalsValues = VitalsList.tabularData;
       getLatestDate(VitalsValues);
-      setDateAndTime(latestDate);
       if (latestDate !== null) {
+        setDateAndTime(latestDate);
         mappedVitals = {
           Temp: {
             value: VitalsValues[latestDate].Temperature?.value,
@@ -129,17 +136,20 @@ const Vitals = (props) => {
       handleVitalUnits(VitalsList.conceptDetails);
       setVitals(mapVitalsData(VitalsList));
       updateIsLoading(false);
+      console.log("Vitals ", Vitals);
     };
 
     getVitals();
   }, []);
 
   return (
-    <Tile>
+    <>
       {isLoading ? (
         <SkeletonText className="is-loading" data-testid="header-loading" />
+      ) : Object.keys(Vitals).length === 0 ? (
+        <div className="no-vitals-message">{NoVitalsMessage}</div>
       ) : (
-        <>
+        <Tile>
           <br />
           {VitalsDate ? VitalsDate : "-"}
           {VitalsTime ? "," + VitalsTime : "-"}
@@ -267,9 +277,9 @@ const Vitals = (props) => {
               </Tile>
             </Column>
           </Row>
-        </>
+        </Tile>
       )}
-    </Tile>
+    </>
   );
 };
 Vitals.propTypes = {
