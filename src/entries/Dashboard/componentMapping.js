@@ -11,6 +11,9 @@ export const componentMapping = {
   [componentKeys.ALLERGIES]: lazy(() =>
     import("../../features/DisplayControls/Allergies/components/Allergies")
   ),
+  [componentKeys.VITALS]: lazy(() =>
+    import("../../features/DisplayControls/Vitals/components/Vitals")
+  ),
   [componentKeys.NURSING_TASKS]: lazy(() =>
     import(
       "../../features/DisplayControls/NursingTasks/components/NursingTasks"

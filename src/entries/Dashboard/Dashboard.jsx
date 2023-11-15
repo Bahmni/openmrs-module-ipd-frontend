@@ -17,7 +17,9 @@ import data from "../../utils/config.json";
 import PropTypes from "prop-types";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 import { getPatientDashboardUrl } from "../../utils/CommonUtils";
+import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
 import RefreshDisplayControl from "../../context/RefreshDisplayControl";
+
 
 export default function Dashboard(props) {
   const { hostData } = props;
@@ -122,7 +124,7 @@ export default function Dashboard(props) {
             />
           </Link>
         </div>
-
+        <PatientHeader patientId={patient?.uuid} />
         <Accordion className={"accordion"}>
           {sections?.map((el) => {
             const DisplayControl = componentMapping[el.componentKey];
