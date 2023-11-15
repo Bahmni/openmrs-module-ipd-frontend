@@ -1,4 +1,7 @@
-import React, { useEffect } from "react";
+import React, {
+  // useContext,
+  useEffect,
+} from "react";
 import {
   DataTable,
   TableCell,
@@ -15,11 +18,15 @@ import { getPatientDiagnosis, diagnosisHeaders } from "../utils/DiagnosisUtils";
 import PropTypes from "prop-types";
 import "../styles/Diagnosis.scss";
 import { formatDate } from "../../../../utils/DateTimeUtils";
+// import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
+// import { componentKeys } from "../../../../constants";
 
 const Diagnosis = (props) => {
   const { patientId } = props;
   const [diagnosis, setDiagnosis] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // const refreshDisplayControl = useContext(RefreshDisplayControl);
 
   const NoDiagnosisMessage = (
     <FormattedMessage
@@ -30,7 +37,7 @@ const Diagnosis = (props) => {
 
   const mapDiagnosisData = (diagnosisList) => {
     const mappedDiagnoses =
-      diagnosisList === undefined
+      diagnosisList === undefined || !Array.isArray(diagnosisList)
         ? []
         : diagnosisList.map((diagnosis) => {
             let status = diagnosis.diagnosisStatusConcept
@@ -70,6 +77,14 @@ const Diagnosis = (props) => {
 
   return (
     <>
+      {/* <button
+        onClick={() => {
+          // refreshDisplayControl([componentKeys.ALLERGIES ,componentKeys.TREATMENTS]);
+          refreshDisplayControl([componentKeys.ALLERGIES]);
+        }}
+      >
+        refresh
+      </button> */}
       {isLoading ? (
         <DataTableSkeleton data-testid="diagnosis-datatable-skeleton" />
       ) : diagnosis && diagnosis.length === 0 ? (
