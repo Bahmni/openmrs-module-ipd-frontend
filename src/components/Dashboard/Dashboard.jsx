@@ -17,7 +17,6 @@ import { SliderContext } from "../../context/SliderContext";
 
 export default function Dashboard(props) {
   const { hostData } = props;
-  console.log("hostData", hostData);
   const [isSliderOpen, updateSliderOpen] = useState(false);
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);

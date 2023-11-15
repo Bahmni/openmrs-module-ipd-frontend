@@ -10,7 +10,8 @@
     transition: margin-left 0.5s;
     padding: 16px;
     position: relative;
-    width: calc(100% - 550px);
+    width: calc(100% - 550px - 16rem);
+    margin-left: 16rem;
   }
 
   .bx--accordion__title {
@@ -77,6 +78,10 @@
   .ipd-page {
     .main {
       margin-left: 0;
+    }
+    .main-with-slider {
+      margin-left: 0;
+      width: calc(100% - 550px);
     }
   }
 }
