@@ -63,6 +63,60 @@ describe("DrugChartSlider", () => {
     });
   });
 
+  it("should show dose field to be disabled", async () => {
+    render(
+      <DrugChartSlider
+        hostData={{
+          drugOrder: mockScheduleDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+      />
+    );
+    await waitFor(() => {
+      const inputElement = screen.getByLabelText("Dose");
+      expect(inputElement).toBeInTheDocument();
+      expect(inputElement).not.toHaveStyle("cursor: pointer");
+    });
+  });
+
+  it("should show duration field to be disabled", async () => {
+    render(
+      <DrugChartSlider
+        hostData={{
+          drugOrder: mockScheduleDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+      />
+    );
+    await waitFor(() => {
+      const inputElement = screen.getByLabelText("Duration");
+      expect(inputElement).toBeInTheDocument();
+      expect(inputElement).not.toHaveStyle("cursor: pointer");
+    });
+  });
+
+  it("should show start date field to be disabled", async () => {
+    render(
+      <DrugChartSlider
+        hostData={{
+          drugOrder: mockScheduleDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+      />
+    );
+    await waitFor(() => {
+      const inputElement = screen.getByLabelText("Start Date");
+      expect(inputElement).toBeInTheDocument();
+      expect(inputElement).not.toHaveStyle("cursor: pointer");
+    });
+  });
+
   it("should show notes field to be enabled", async () => {
     render(
       <DrugChartSlider
@@ -81,7 +135,7 @@ describe("DrugChartSlider", () => {
     });
   });
 
-  it("should enable schedule dropdown when frequency is present in scheduleFrequencies", async () => {
+  it("should enable schedule when frequency is present in scheduleFrequencies", async () => {
     render(
       <DrugChartSlider
         hostData={{

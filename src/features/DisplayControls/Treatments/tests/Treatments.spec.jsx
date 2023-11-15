@@ -2,6 +2,7 @@ import { render, waitFor } from "@testing-library/react";
 import React from "react";
 import Treatments from "../components/Treatments";
 import { getPrescribedAndActiveDrugOrders } from "../utils/TreatmentsUtils";
+import { SliderContext } from "../../../../context/SliderContext";
 
 jest.mock("../utils/TreatmentsUtils", () => {
   const originalModule = jest.requireActual("../utils/TreatmentsUtils");
@@ -10,6 +11,11 @@ jest.mock("../utils/TreatmentsUtils", () => {
     getPrescribedAndActiveDrugOrders: jest.fn(),
   };
 });
+
+const mockProviderValue = {
+  isSliderOpen: false,
+  updateSliderOpen: jest.fn(),
+};
 
 describe("Treatments", () => {
   afterEach(() => {
@@ -24,7 +30,9 @@ describe("Treatments", () => {
       });
     });
     const { getByText } = render(
-      <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+      <SliderContext.Provider value={mockProviderValue}>
+        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       expect(
@@ -46,6 +54,8 @@ describe("Treatments", () => {
           doseUnits: "mg",
           route: "Oral",
           frequency: "Once a day",
+          administrationInstructions:
+            '{"instructions":"As directed","additionalInstructions":"all good"}',
         },
         duration: 7,
         durationUnits: "days",
@@ -62,7 +72,9 @@ describe("Treatments", () => {
       });
     });
     const { getByText } = render(
-      <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+      <SliderContext.Provider value={mockProviderValue}>
+        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       expect(
@@ -84,6 +96,8 @@ describe("Treatments", () => {
           doseUnits: "mg",
           route: "Oral",
           frequency: "Once a day",
+          administrationInstructions:
+            '{"instructions":"As directed","additionalInstructions":"all good"}',
         },
         duration: 7,
         durationUnits: "days",
@@ -100,7 +114,9 @@ describe("Treatments", () => {
       });
     });
     const { getByText } = render(
-      <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+      <SliderContext.Provider value={mockProviderValue}>
+        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       expect(getByText("01/01/2022")).toBeTruthy();
