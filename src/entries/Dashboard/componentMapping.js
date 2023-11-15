@@ -11,10 +11,9 @@ export const componentMapping = {
   [componentKeys.ALLERGIES]: lazy(() =>
     import("../../features/DisplayControls/Allergies/components/Allergies")
   ),
-  VT: lazy(() =>
+  [componentKeys.VITALS]: lazy(() =>
     import("../../features/DisplayControls/Vitals/components/Vitals")
-   ),
-  NT: lazy(() =>
+  ),
   [componentKeys.NURSING_TASKS]: lazy(() =>
     import(
       "../../features/DisplayControls/NursingTasks/components/NursingTasks"

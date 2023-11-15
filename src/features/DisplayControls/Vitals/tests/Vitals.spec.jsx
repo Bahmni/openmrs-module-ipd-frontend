@@ -3,7 +3,13 @@ import React from "react";
 import Vitals from "../components/Vitals";
 import { getPatientVitals } from "../utils/VitalsUtils";
 
-jest.mock("../utils/VitalsUtils");
+jest.mock("../utils/VitalsUtils", () => {
+  const originalModule = jest.requireActual("../utils/VitalsUtils");
+  return {
+    ...originalModule,
+    getPatientVitals: jest.fn(),
+  };
+});
 
 describe("Vitals", () => {
   const mockVitalsData = {
@@ -97,7 +103,7 @@ describe("Vitals", () => {
           abnormal: false,
         },
         "Respiratory Rate": {
-          value: "20.0",
+          value: "25.0",
           abnormal: false,
         },
         SpO2: {
@@ -139,6 +145,28 @@ describe("Vitals", () => {
     getPatientVitals.mockResolvedValue(mockVitalsData);
     render(<Vitals patientId="123" />);
     expect(screen.getByTestId("header-loading")).toBeTruthy();
+  });
+
+  it("displays vital details after data is fetched", async () => {
+    getPatientVitals.mockResolvedValue(mockVitalsData);
+    render(<Vitals patientId="123" />);
+    await waitFor(() => {
+      expect(screen.getByText(/Temp/i)).toBeTruthy();
+      expect(screen.getByText(/BP/i)).toBeTruthy();
+      expect(screen.getByText(/Heart rate/i)).toBeTruthy();
+      expect(screen.getByText(/R.rate/i)).toBeTruthy();
+      expect(screen.getByText(/Weight/i)).toBeTruthy();
+      expect(screen.getByText(/Height/i)).toBeTruthy();
+      expect(screen.getByText(/SpO2/i)).toBeTruthy();
+      expect(screen.getByText(/BMI/i)).toBeTruthy();
+      expect(screen.getByText(/36.0/)).toBeTruthy();
+      expect(screen.getByText(/110\/80/)).toBeTruthy();
+      expect(screen.getByText(/25/)).toBeTruthy();
+      expect(screen.getByText(/93/)).toBeTruthy();
+      expect(screen.getByText(/19.53/)).toBeTruthy();
+      expect(screen.getByText(/50/)).toBeTruthy();
+      expect(screen.getByText(/160/)).toBeTruthy();
+    });
   });
 
   it("displays text when vitals is not present", async () => {
@@ -218,30 +246,9 @@ describe("Vitals", () => {
     });
     render(<Vitals patientId="123" />);
     await waitFor(() =>
-      expect(screen.getByText("No Vitals found for this patient")).toBeTruthy()
+      expect(
+        screen.getByText("No Vitals available for this patient")
+      ).toBeTruthy()
     );
-  });
-
-  it("displays vital details after data is fetched", async () => {
-    getPatientVitals.mockResolvedValue(mockVitalsData);
-    render(<Vitals patientId="123" />);
-    await waitFor(() => {
-      expect(screen.getByText(/Temp/i)).toBeTruthy();
-      expect(screen.getByText(/BP/i)).toBeTruthy();
-      expect(screen.getByText(/Heart rate/i)).toBeTruthy();
-      expect(screen.getByText(/R.rate/i)).toBeTruthy();
-      expect(screen.getByText(/Weight/i)).toBeTruthy();
-      expect(screen.getByText(/Height/i)).toBeTruthy();
-      expect(screen.getByText(/SpO2/i)).toBeTruthy();
-      expect(screen.getByText(/BMI/i)).toBeTruthy();
-
-      expect(screen.getByText(/36.0/)).toBeTruthy();
-      expect(screen.getByText(/110\/80/)).toBeTruthy();
-      expect(screen.getByText(/20/)).toBeTruthy();
-      expect(screen.getByText(/93/)).toBeTruthy();
-      expect(screen.getByText(/19.53/)).toBeTruthy();
-      expect(screen.getByText(/50/)).toBeTruthy();
-      expect(screen.getByText(/160/)).toBeTruthy();
-    });
   });
 });

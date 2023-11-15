@@ -31,9 +31,8 @@
   "HEIGHT": "Height",
   "SPO2": "SpO2",
   "BMI": "BMI",
-  "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard",
   "YEARS": "Years",
-  "SHOW_DETAILS": "Show Details"
+  "SHOW_DETAILS": "Show Details",
   "NO_NURSING_TASKS_MESSAGE": "No nursing task is scheduled for the patient",
   "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard"
 }

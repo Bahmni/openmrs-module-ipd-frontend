@@ -34,8 +34,8 @@ export const dateFormat = "DD/MM/YYYY";
 
 export const componentKeys = {
   ALLERGIES: "AL",
+  VITALS: "VT",
   DIAGNOSIS: "DG",
   TREATMENTS: "TR",
   NURSING_TASKS: "NT",
 };
-
