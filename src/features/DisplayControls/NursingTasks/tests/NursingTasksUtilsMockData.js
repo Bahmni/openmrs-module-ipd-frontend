@@ -174,7 +174,7 @@ export const mockTaskTileData = [
       dosage: 25,
       doseType: "mg",
       startTimeInEpochSeconds: 1690906550,
-      startTime: "04:15 PM",
+      startTime: "16:15",
     },
   ],
 ];
@@ -188,7 +188,7 @@ export const mockTaskTileDataForGroupedTask = [
       dosage: 25,
       doseType: "mg",
       startTimeInEpochSeconds: 1690906550,
-      startTime: "04:15 PM",
+      startTime: "16:15",
     },
   ],
   [
@@ -199,7 +199,7 @@ export const mockTaskTileDataForGroupedTask = [
       dosage: 25,
       doseType: "mg",
       startTimeInEpochSeconds: 1690906550,
-      startTime: "04:15 PM",
+      startTime: "16:15",
     },
   ],
 ];
