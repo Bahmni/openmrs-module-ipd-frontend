@@ -42,7 +42,7 @@ const Vitals = (props) => {
     BMI: <FormattedMessage id={"BMI"} defaultMessage={"BMI"} />,
   };
 
-  var latestDate = null;
+  let latestDate = null;
 
   const setDateAndTime = (latestDateAndTime) => {
     const dateAndTime = formatDate(latestDateAndTime).split(" ");
@@ -52,16 +52,16 @@ const Vitals = (props) => {
     setVitalsTime(dateAndTime.slice(3).join(" ").toUpperCase());
   };
 
-  function getLatestDate(tabularData) {
+  const getLatestDate = (tabularData) => {
     for (const dateKey in tabularData) {
       if (latestDate === null || dateKey > latestDate) {
         latestDate = dateKey;
       }
     }
-  }
+  };
 
   const mapVitalsData = (VitalsList) => {
-    var mappedVitals = {};
+    let mappedVitals = {};
     if (VitalsList.tabularData) {
       const VitalsValues = VitalsList.tabularData;
       getLatestDate(VitalsValues);
@@ -122,13 +122,17 @@ const Vitals = (props) => {
   };
 
   const handleVitalUnits = (units) => {
+    let updatedUnits = {};
+
     units.forEach((unit) => {
-      setVitalUnits((oldUnits) => {
-        return {
-          ...oldUnits,
-          [unit.name]: unit.units,
-        };
-      });
+      updatedUnits[unit.name] = unit.units;
+    });
+
+    setVitalUnits((oldUnits) => {
+      return {
+        ...oldUnits,
+        ...updatedUnits,
+      };
     });
   };
 
@@ -138,7 +142,6 @@ const Vitals = (props) => {
       handleVitalUnits(VitalsList.conceptDetails);
       setVitals(mapVitalsData(VitalsList));
       updateIsLoading(false);
-      console.log("Vitals ", Vitals);
     };
 
     getVitals();
