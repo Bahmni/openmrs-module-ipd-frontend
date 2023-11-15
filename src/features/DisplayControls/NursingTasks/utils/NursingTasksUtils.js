@@ -50,6 +50,7 @@ export const ExtractMedicationNursingTasksData = (
         startTime: startTimeInDate.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
+          hourCycle: "h23",
         }),
       });
     });
