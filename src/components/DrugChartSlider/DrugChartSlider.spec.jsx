@@ -13,6 +13,7 @@ import "@testing-library/jest-dom";
 import mockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import { DRUG_ORDERS_CONFIG_URL } from "../../constants";
+import DrugChartSliderNotification from "./DrugChartSliderNotification";
 
 let mockAxios;
 
@@ -249,5 +250,14 @@ describe("DrugChartSlider", () => {
       expect(startTimeInputs[0].value).toBe("8:00");
       expect(startTimeInputs[1].value).toBe("16:00");
     });
+  });
+});
+
+describe("DrugChartSliderNotification", () => {
+  it("Component renders successfully", async () => {
+    const { container } = render(
+      <DrugChartSliderNotification hostData={{}} hostApi={{}} />
+    );
+    expect(container).toMatchSnapshot();
   });
 });
