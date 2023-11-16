@@ -10,8 +10,9 @@
     transition: margin-left 0.5s;
     padding: 16px;
     position: relative;
-    width: calc(100% - 550px - 16rem);
+    // width: calc(100% - 550px - 16rem);
     margin-left: 16rem;
+    margin-right: 540px;
   }
 
   .bx--accordion__title {
@@ -91,7 +92,8 @@
     }
     .main-with-slider {
       margin-left: 0;
-      width: calc(100% - 550px);
+      // width: calc(100% - 550px);
+      margin-right: 540px;
     }
   }
 }
