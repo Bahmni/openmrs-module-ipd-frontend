@@ -30,6 +30,12 @@
         "componentKey": "NT",
         "displayOrder": 5,
         "refreshKey": 5
+      },
+      {
+        "title": "Drug Chart",
+        "componentKey": "DC",
+        "displayOrder": 6,
+        "refreshKey": 6
       }
     ],
     "nursingTasks": {

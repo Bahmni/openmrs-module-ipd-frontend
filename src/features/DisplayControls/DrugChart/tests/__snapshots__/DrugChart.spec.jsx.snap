@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DrugChart should match snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="drug-chart-dashboard"
+  >
+    <div
+      class="drug-chart"
+    >
+      <div
+        class="drug-chart-left-panel"
+        data-testid="left-panel"
+      >
+        <div
+          class="header"
+        />
+        <div>
+          <table
+            style="overflow: hidden;"
+          >
+            <tbody>
+              <tr>
+                <td>
+                  <div
+                    class="drug-name"
+                  >
+                    Suxamethonium Chloride 100 mg/2 mL Ampoule (50 mg/mL )
+                  </div>
+                  <div
+                    class="dosage"
+                  >
+                    <span>
+                      2
+                    </span>
+                    <span>
+                       - mg
+                    </span>
+                    <span>
+                       - Intravenous
+                    </span>
+                    <span>
+                       - 4 Day(s)
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div
+                    class="drug-name"
+                  >
+                    Enalapril 5 mg Tablet
+                  </div>
+                  <div
+                    class="dosage"
+                  >
+                    <span>
+                      1
+                    </span>
+                    <span>
+                       - Tablet(s)
+                    </span>
+                    <span>
+                       - Oral
+                    </span>
+                    <span>
+                       - 4 Day(s)
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div
+        class="drug-chart-content"
+        data-testid="right-panel"
+      >
+        <div>
+          CalendarHeader
+        </div>
+        <div>
+          Calendar
+        </div>
+      </div>
+    </div>
+    <div
+      class="drug-chart-legend"
+    >
+      <div>
+        <test-file-stub />
+        Pending
+      </div>
+      <div>
+        <test-file-stub />
+        Late
+      </div>
+      <div>
+        <test-file-stub />
+        Administered
+      </div>
+      <div>
+        <test-file-stub />
+        Administered Late
+      </div>
+      <div>
+        <test-file-stub />
+        Not Administered
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

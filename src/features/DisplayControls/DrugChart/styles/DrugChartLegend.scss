@@ -1,0 +1,12 @@
+.drug-chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  font-size: 12px;
+  > * {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
