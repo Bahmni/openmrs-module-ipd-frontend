@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import DrugChartModal from "./DrugChartModal";
+import DrugChartSlider from "./DrugChartSlider";
 import {
   mockStartTimeDrugOrder,
   mockScheduleDrugOrder,
@@ -8,15 +8,16 @@ import {
   mockStartTimeFrequencies,
   mockDrugOrderFrequencies,
   mockScheduleFrequenciesWithTimings,
-} from "./DrugChartModalTestUtils";
+} from "./DrugChartSliderTestUtils";
 import "@testing-library/jest-dom";
 import mockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import { DRUG_ORDERS_CONFIG_URL } from "../../constants";
+import DrugChartSliderNotification from "./DrugChartSliderNotification";
 
 let mockAxios;
 
-describe("DrugChartModal", () => {
+describe("DrugChartSlider", () => {
   beforeEach(() => {
     mockAxios = new mockAdapter(axios);
     const drugOrderFrequencies = mockDrugOrderFrequencies;
@@ -31,7 +32,7 @@ describe("DrugChartModal", () => {
 
   it("Component renders successfully", async () => {
     render(
-      <DrugChartModal
+      <DrugChartSlider
         hostData={{
           drugOrder: mockStartTimeDrugOrder,
           scheduleFrequencies: mockScheduleFrequencies,
@@ -47,7 +48,7 @@ describe("DrugChartModal", () => {
 
   it("should show drug name field to be disabled", async () => {
     render(
-      <DrugChartModal
+      <DrugChartSlider
         hostData={{
           drugOrder: mockScheduleDrugOrder,
           scheduleFrequencies: mockScheduleFrequencies,
@@ -63,9 +64,63 @@ describe("DrugChartModal", () => {
     });
   });
 
+  it("should show dose field to be disabled", async () => {
+    render(
+      <DrugChartSlider
+        hostData={{
+          drugOrder: mockScheduleDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+      />
+    );
+    await waitFor(() => {
+      const inputElement = screen.getByLabelText("Dose");
+      expect(inputElement).toBeInTheDocument();
+      expect(inputElement).not.toHaveStyle("cursor: pointer");
+    });
+  });
+
+  it("should show duration field to be disabled", async () => {
+    render(
+      <DrugChartSlider
+        hostData={{
+          drugOrder: mockScheduleDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+      />
+    );
+    await waitFor(() => {
+      const inputElement = screen.getByLabelText("Duration");
+      expect(inputElement).toBeInTheDocument();
+      expect(inputElement).not.toHaveStyle("cursor: pointer");
+    });
+  });
+
+  it("should show start date field to be disabled", async () => {
+    render(
+      <DrugChartSlider
+        hostData={{
+          drugOrder: mockScheduleDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+      />
+    );
+    await waitFor(() => {
+      const inputElement = screen.getByLabelText("Start Date");
+      expect(inputElement).toBeInTheDocument();
+      expect(inputElement).not.toHaveStyle("cursor: pointer");
+    });
+  });
+
   it("should show notes field to be enabled", async () => {
     render(
-      <DrugChartModal
+      <DrugChartSlider
         hostData={{
           drugOrder: mockStartTimeDrugOrder,
           scheduleFrequencies: mockScheduleFrequencies,
@@ -81,27 +136,9 @@ describe("DrugChartModal", () => {
     });
   });
 
-  it("should trigger onModalClose event on click of close button", async () => {
-    const mockFunction = jest.fn();
+  it("should enable schedule when frequency is present in scheduleFrequencies", async () => {
     render(
-      <DrugChartModal
-        hostData={{
-          drugOrder: mockStartTimeDrugOrder,
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-        }}
-        hostApi={{ onModalClose: mockFunction }}
-      />
-    );
-    await waitFor(() => {
-      fireEvent.click(document.getElementsByClassName("bx--modal-close")[0]);
-    });
-    expect(mockFunction).toHaveBeenCalled();
-  });
-
-  it("should enable schedule dropdown when frequency is present in scheduleFrequencies", async () => {
-    render(
-      <DrugChartModal
+      <DrugChartSlider
         hostData={{
           scheduleFrequencies: mockScheduleFrequencies,
           startTimeFrequencies: mockStartTimeFrequencies,
@@ -118,7 +155,7 @@ describe("DrugChartModal", () => {
 
   it("should enable start time when frequency is present in scheduleFrequencies", async () => {
     render(
-      <DrugChartModal
+      <DrugChartSlider
         hostData={{
           scheduleFrequencies: mockScheduleFrequencies,
           startTimeFrequencies: mockStartTimeFrequencies,
@@ -135,7 +172,7 @@ describe("DrugChartModal", () => {
 
   it("should show Please select Schedule(s) when save is clicked without entering schedule", async () => {
     render(
-      <DrugChartModal
+      <DrugChartSlider
         hostData={{
           scheduleFrequencies: mockScheduleFrequencies,
           startTimeFrequencies: mockStartTimeFrequencies,
@@ -153,7 +190,7 @@ describe("DrugChartModal", () => {
 
   it("should show Please select Start Time when save is clicked without entering start time", async () => {
     render(
-      <DrugChartModal
+      <DrugChartSlider
         hostData={{
           scheduleFrequencies: mockScheduleFrequencies,
           startTimeFrequencies: mockStartTimeFrequencies,
@@ -171,7 +208,7 @@ describe("DrugChartModal", () => {
 
   it("Should show invalid time format error message when wrong time is entered in the field", async () => {
     render(
-      <DrugChartModal
+      <DrugChartSlider
         hostData={{
           enable24HourTimers: true,
           scheduleFrequencies: mockScheduleFrequencies,
@@ -196,7 +233,7 @@ describe("DrugChartModal", () => {
 
   it("Should show pre-filled timing in the schedule fields if the schedule time is provided from config", async () => {
     render(
-      <DrugChartModal
+      <DrugChartSlider
         hostData={{
           enable24HourTimers: true,
           scheduleFrequencies: mockScheduleFrequenciesWithTimings,
@@ -213,5 +250,14 @@ describe("DrugChartModal", () => {
       expect(startTimeInputs[0].value).toBe("8:00");
       expect(startTimeInputs[1].value).toBe("16:00");
     });
+  });
+});
+
+describe("DrugChartSliderNotification", () => {
+  it("Component renders successfully", async () => {
+    const { container } = render(
+      <DrugChartSliderNotification hostData={{}} hostApi={{}} />
+    );
+    expect(container).toMatchSnapshot();
   });
 });

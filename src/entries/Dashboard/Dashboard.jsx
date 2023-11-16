@@ -19,11 +19,12 @@ import { I18nProvider } from "../../features/i18n/I18nProvider";
 import { getPatientDashboardUrl } from "../../utils/CommonUtils";
 import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
 import RefreshDisplayControl from "../../context/RefreshDisplayControl";
-
+import { SliderContext } from "../../context/SliderContext";
 
 export default function Dashboard(props) {
   const { hostData } = props;
   const { patient } = hostData;
+  const [isSliderOpen, updateSliderOpen] = useState(false);
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
@@ -72,88 +73,90 @@ export default function Dashboard(props) {
   };
 
   return (
-    <main className="ipd-page">
-      <Header
-        className="border-bottom-0 header-bg-color"
-        aria-label="IBM Platform Name"
-      >
-        <HeaderMenuButton
-          aria-label="Open menu"
-          className="header-nav-toggle-btn"
-          onClick={onClickSideNavExpand}
-          isActive={isSideNavExpanded}
-        />
-        <SideNav
-          aria-label="Side navigation"
-          className="navbar-border"
-          isPersistent={true}
-          expanded={isSideNavExpanded}
+    <SliderContext.Provider value={{ isSliderOpen, updateSliderOpen }}>
+      <main className="ipd-page">
+        <Header
+          className="border-bottom-0 header-bg-color"
+          aria-label="IBM Platform Name"
         >
-          <SideNavItems>
+          <HeaderMenuButton
+            aria-label="Open menu"
+            className="header-nav-toggle-btn"
+            onClick={onClickSideNavExpand}
+            isActive={isSideNavExpanded}
+          />
+          <SideNav
+            aria-label="Side navigation"
+            className="navbar-border"
+            isPersistent={true}
+            expanded={isSideNavExpanded}
+          >
+            <SideNavItems>
+              {sections?.map((el) => {
+                return (
+                  <SideNavLink
+                    className="cursor-pointer"
+                    isActive={el.componentKey === selectedTab}
+                    key={el.componentKey}
+                    onClick={() => scrollToSection(el.componentKey)}
+                  >
+                    {el.title}
+                  </SideNavLink>
+                );
+              })}
+            </SideNavItems>
+          </SideNav>
+        </Header>
+
+        <section className={isSliderOpen ? "main-with-slider" : "main"}>
+          <div className={"navigation-buttons"}>
+            <ArrowLeft
+              data-testid={"Back button"}
+              size={20}
+              onClick={() => window.history.back()}
+            />
+            <Link
+              onClick={() => {
+                window.location.href = getPatientDashboardUrl(patient?.uuid);
+              }}
+            >
+              <FormattedMessage
+                id={"VIEW_CLINICAL_DASHBOARD"}
+                defaultMessage={"View Clinical Dashboard"}
+              />
+            </Link>
+          </div>
+          <PatientHeader patientId={patient?.uuid} />
+          <Accordion className={"accordion"}>
             {sections?.map((el) => {
+              const DisplayControl = componentMapping[el.componentKey];
               return (
-                <SideNavLink
-                  className="cursor-pointer"
-                  isActive={el.componentKey === selectedTab}
+                <section
                   key={el.componentKey}
-                  onClick={() => scrollToSection(el.componentKey)}
+                  ref={(ref) => (refs.current[el.componentKey] = ref)}
+                  style={{ marginBottom: "40px" }}
                 >
-                  {el.title}
-                </SideNavLink>
+                  <Suspense fallback={<p>Loading...</p>}>
+                    <AccordionItem open title={el.title}>
+                      <I18nProvider>
+                        <RefreshDisplayControl.Provider
+                          value={refreshDisplayControl}
+                        >
+                          <DisplayControl
+                            key={el.refreshKey}
+                            patientId={patient?.uuid}
+                          />
+                        </RefreshDisplayControl.Provider>
+                      </I18nProvider>
+                    </AccordionItem>
+                  </Suspense>
+                </section>
               );
             })}
-          </SideNavItems>
-        </SideNav>
-      </Header>
-
-      <section className="main">
-        <div className={"navigation-buttons"}>
-          <ArrowLeft
-            data-testid={"Back button"}
-            size={20}
-            onClick={() => window.history.back()}
-          />
-          <Link
-            onClick={() => {
-              window.location.href = getPatientDashboardUrl(patient?.uuid);
-            }}
-          >
-            <FormattedMessage
-              id={"VIEW_CLINICAL_DASHBOARD"}
-              defaultMessage={"View Clinical Dashboard"}
-            />
-          </Link>
-        </div>
-        <PatientHeader patientId={patient?.uuid} />
-        <Accordion className={"accordion"}>
-          {sections?.map((el) => {
-            const DisplayControl = componentMapping[el.componentKey];
-            return (
-              <section
-                key={el.componentKey}
-                ref={(ref) => (refs.current[el.componentKey] = ref)}
-                style={{ marginBottom: "40px" }}
-              >
-                <Suspense fallback={<p>Loading...</p>}>
-                  <AccordionItem open title={el.title}>
-                    <I18nProvider>
-                      <RefreshDisplayControl.Provider
-                        value={refreshDisplayControl}
-                      >
-                        <DisplayControl
-                          key={el.refreshKey}
-                          patientId={patient?.uuid}
-                        />
-                      </RefreshDisplayControl.Provider>
-                    </I18nProvider>
-                  </AccordionItem>
-                </Suspense>
-              </section>
-            );
-          })}
-        </Accordion>
-      </section>
-    </main>
+          </Accordion>
+        </section>
+      </main>
+    </SliderContext.Provider>
   );
 }
 Dashboard.propTypes = {
