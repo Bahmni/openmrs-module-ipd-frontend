@@ -1,4 +1,4 @@
-import { CloseLarge } from "@carbon/icons-react";
+import { Close } from "@carbon/icons-react/next";
 import { Button } from "carbon-components-react";
 import PropTypes from "prop-types";
 import React from "react";
@@ -16,7 +16,7 @@ export default function SideBarPanel(props) {
         </div>
         <div className="close-icon">
           <Button
-            renderIcon={CloseLarge}
+            renderIcon={Close}
             hasIconOnly
             iconDescription="Close"
             kind="ghost"

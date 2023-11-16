@@ -1,4 +1,5 @@
 import React, { useState, useRef, Suspense, useEffect } from "react";
+import { FormattedMessage } from "react-intl";
 import {
   Accordion,
   AccordionItem,
@@ -7,16 +8,22 @@ import {
   SideNav,
   SideNavItems,
   SideNavLink,
+  Link,
 } from "carbon-components-react";
+import { ArrowLeft } from "@carbon/icons-react/next";
 import { componentMapping } from "./componentMapping";
 import "./Dashboard.scss";
 import data from "../../utils/config.json";
 import PropTypes from "prop-types";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
+import { getPatientDashboardUrl } from "../../utils/CommonUtils";
+import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
+import RefreshDisplayControl from "../../context/RefreshDisplayControl";
 import { SliderContext } from "../../context/SliderContext";
 
 export default function Dashboard(props) {
   const { hostData } = props;
+  const { patient } = hostData;
   const [isSliderOpen, updateSliderOpen] = useState(false);
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
@@ -24,23 +31,19 @@ export default function Dashboard(props) {
   const refs = useRef([]);
   const [windowWidth, updateWindowWidth] = useState(window.outerWidth);
 
-  const isDesktopLayout = () => {
-    return window.outerWidth > 1024;
-  };
-
   window.addEventListener("resize", () => {
     updateWindowWidth(window.outerWidth);
   });
   useEffect(() => {
-    updateSideNav(isDesktopLayout());
+    updateSideNav(window.outerWidth > 1024);
   }, [windowWidth]);
 
   const fetchConfig = () => {
     const { config: { sections = [] } = {} } = data;
     const updatedSections = sections
-      .filter((sec) => componentMapping[sec.component])
+      .filter((sec) => componentMapping[sec.componentKey])
       .sort((a, b) => a.displayOrder - b.displayOrder);
-    updateSelectedTab(updatedSections[0].component);
+    updateSelectedTab(updatedSections[0].componentKey);
     setSections(updatedSections);
   };
 
@@ -52,12 +55,21 @@ export default function Dashboard(props) {
     updateSideNav((oldState) => !oldState);
   };
 
-  const scrollToSection = (index) => {
-    updateSelectedTab(index);
+  const scrollToSection = (key) => {
+    updateSelectedTab(key);
     window.scrollTo({
-      top: refs.current[index].offsetTop,
+      top: refs.current[key].offsetTop,
       behavior: "smooth",
     });
+  };
+
+  const refreshDisplayControl = (componentKeyArray) => {
+    const updatedSections = sections.map((el) => {
+      return componentKeyArray.includes(el.componentKey)
+        ? { ...el, refreshKey: Math.random() }
+        : el;
+    });
+    setSections(updatedSections);
   };
 
   return (
@@ -72,12 +84,11 @@ export default function Dashboard(props) {
             className="header-nav-toggle-btn"
             onClick={onClickSideNavExpand}
             isActive={isSideNavExpanded}
-            isCollapsible={true}
           />
           <SideNav
             aria-label="Side navigation"
             className="navbar-border"
-            isPersistent={false}
+            isPersistent={true}
             expanded={isSideNavExpanded}
           >
             <SideNavItems>
@@ -85,11 +96,11 @@ export default function Dashboard(props) {
                 return (
                   <SideNavLink
                     className="cursor-pointer"
-                    isActive={el.component === selectedTab}
-                    key={el.component}
-                    onClick={() => scrollToSection(el.component)}
+                    isActive={el.componentKey === selectedTab}
+                    key={el.componentKey}
+                    onClick={() => scrollToSection(el.componentKey)}
                   >
-                    {el.name}
+                    {el.title}
                   </SideNavLink>
                 );
               })}
@@ -98,19 +109,44 @@ export default function Dashboard(props) {
         </Header>
 
         <section className={isSliderOpen ? "main-with-slider" : "main"}>
+          <div className={"navigation-buttons"}>
+            <ArrowLeft
+              data-testid={"Back button"}
+              size={20}
+              onClick={() => window.history.back()}
+            />
+            <Link
+              onClick={() => {
+                window.location.href = getPatientDashboardUrl(patient?.uuid);
+              }}
+            >
+              <FormattedMessage
+                id={"VIEW_CLINICAL_DASHBOARD"}
+                defaultMessage={"View Clinical Dashboard"}
+              />
+            </Link>
+          </div>
+          <PatientHeader patientId={patient?.uuid} />
           <Accordion className={"accordion"}>
             {sections?.map((el) => {
-              const DisplayControl = componentMapping[el.component];
+              const DisplayControl = componentMapping[el.componentKey];
               return (
                 <section
-                  key={el.component}
-                  ref={(ref) => (refs.current[el.component] = ref)}
+                  key={el.componentKey}
+                  ref={(ref) => (refs.current[el.componentKey] = ref)}
                   style={{ marginBottom: "40px" }}
                 >
                   <Suspense fallback={<p>Loading...</p>}>
-                    <AccordionItem open title={el.name}>
+                    <AccordionItem open title={el.title}>
                       <I18nProvider>
-                        <DisplayControl patientId={hostData?.patient?.uuid} />
+                        <RefreshDisplayControl.Provider
+                          value={refreshDisplayControl}
+                        >
+                          <DisplayControl
+                            key={el.refreshKey}
+                            patientId={patient?.uuid}
+                          />
+                        </RefreshDisplayControl.Provider>
                       </I18nProvider>
                     </AccordionItem>
                   </Suspense>

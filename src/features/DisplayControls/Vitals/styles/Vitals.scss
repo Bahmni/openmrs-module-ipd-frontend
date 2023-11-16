@@ -1,0 +1,28 @@
+.vital-tiles,
+.abnormal-tiles {
+  margin: 3px;
+  padding: 10px;
+  display: flex;
+  flex-flow: column;
+  align-items: normal;
+  text-align: left;
+  background-color: whitesmoke;
+  justify-content: space-between;
+}
+
+.vital-values {
+  font-size: 16px;
+}
+
+.vital-value-and-unit {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+.abnormal-tiles {
+  color: #da1e28;
+}
+.no-vitals-message {
+  padding-top: 10px;
+}

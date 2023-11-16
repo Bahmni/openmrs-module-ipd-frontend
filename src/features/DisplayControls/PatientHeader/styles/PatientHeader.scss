@@ -1,0 +1,48 @@
+.patient-header {
+  margin: 10px 0 10px 0;
+  padding: 0;
+  .patient-name {
+    color: #393939;
+    font-size: 20px;
+    margin: 10px 0 10px 0;
+  }
+  .patient-details {
+    align-items: center;
+  }
+
+  .patient-image {
+    width: 56px;
+    height: 56px;
+    background-color: #007d79;
+  }
+
+  .patient-header-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  .patient-info {
+    padding: 0 10px;
+    min-width: fit-content;
+    color: #525252;
+    font-size: 14px;
+  }
+}
+
+.is-loading {
+  height: 64px;
+}
+
+.other-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 0 0 10px;
+}
+
+.bx--row.patient-image-and-details {
+  align-items: center;
+}

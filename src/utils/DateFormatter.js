@@ -1,4 +1,4 @@
-export const formatDate = (date, format) => {
+export const formatDateAsString = (date, format) => {
   if (!(date instanceof Date)) {
     throw new Error("Invalid date object");
   }

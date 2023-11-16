@@ -72,6 +72,16 @@
   .bx--accordion__content {
     padding: 0;
   }
+
+  .navigation-buttons {
+    color: #0f62fe;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    > * {
+      cursor: pointer;
+    }
+  }
 }
 
 @media (max-width: 1024px) {

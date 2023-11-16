@@ -19,7 +19,20 @@
   "PENDING": "Pending",
   "NOTE": "Note",
   "NO_DIAGNOSIS_MESSAGE": "No Diagnosis found for this patient",
+  "NO_VITALS_MESSAGE": "No Vitals available for this patient",
   "NO_TREATMENTS_MESSAGE": "No IPD Medication is prescribed for this patient yet",
   "ADD_TO_DRUG_CHART": "Add to Drug Chart",
-  "NO_ALLERGENS_MESSAGE": "No Allergen is captured for this patient yet."
+  "NO_ALLERGENS_MESSAGE": "No Allergen is captured for this patient yet.",
+  "Temperature": "Temp",
+  "BLOOD_PRESSURE": "BP",
+  "HEART_RATE": "Heart rate",
+  "RESPIRATORY_RATE": "R.rate",
+  "WEIGHT": "Weight",
+  "HEIGHT": "Height",
+  "SPO2": "SpO2",
+  "BMI": "BMI",
+  "YEARS": "Years",
+  "SHOW_DETAILS": "Show Details",
+  "NO_NURSING_TASKS_MESSAGE": "No nursing task is scheduled for the patient",
+  "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard"
 }
