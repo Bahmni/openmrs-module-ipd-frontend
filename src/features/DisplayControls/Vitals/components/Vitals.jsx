@@ -75,8 +75,10 @@ const Vitals = (props) => {
       ) : (
         <Tile>
           <br />
-          {VitalsDate ? VitalsDate : "-"}
-          {VitalsTime ? ", " + VitalsTime : "-"}
+          <div className="vital-date-time">
+            {VitalsDate ? VitalsDate : "-"}
+            {VitalsTime ? ", " + VitalsTime : "-"}
+          </div>
           <br />
           <br />
           <Row>
