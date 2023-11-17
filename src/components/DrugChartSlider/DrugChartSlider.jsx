@@ -369,7 +369,7 @@ const DrugChartSlider = (props) => {
           </div>
           <div className="frequency">
             <DropdownCarbon
-              id={"Dropdown"}
+              id={"DropdownFrequency"}
               onChange={() => {}}
               titleText={"Frequency"}
               selectedValue={hostData?.drugOrder?.uniformDosingType?.frequency}

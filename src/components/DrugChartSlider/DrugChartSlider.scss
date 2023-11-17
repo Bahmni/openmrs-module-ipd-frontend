@@ -24,13 +24,11 @@
   }
 }
 
-.-TaKcdG2c0NUzkYaFWOzlQ\=\= {
-  width: 142.449px;
-  margin-right: 5px;
-}
-
 .frequency .dropdown {
   margin-right: 0px !important;
+  #DropdownFrequency {
+    width: 500px;
+  }
 }
 
 .date-picker-carbon {
@@ -64,6 +62,9 @@
 .schedule-section {
   flex-direction: column;
   flex-wrap: wrap;
+  .titleText {
+    color: #000;
+  }
   .inline-field {
     padding: 0;
   }
