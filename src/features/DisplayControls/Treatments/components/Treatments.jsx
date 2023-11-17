@@ -101,6 +101,7 @@ const Treatments = (props) => {
   const modifyTreatmentData = (drugOrders) => {
     const treatments = drugOrders.visitDrugOrders
       .filter((drugOrder) => isIPDDrugOrder(drugOrder))
+      .filter((drugOrder) => drugOrder.dateStopped === null)
       .map((drugOrder) => {
         return {
           id: drugOrder.uuid,

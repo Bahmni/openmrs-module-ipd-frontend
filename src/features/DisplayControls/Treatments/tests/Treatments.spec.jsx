@@ -46,6 +46,7 @@ describe("Treatments", () => {
       {
         uuid: "1",
         effectiveStartDate: new Date("01/01/2022"),
+        dateStopped: null,
         drug: {
           name: "Drug 1",
         },
@@ -88,6 +89,7 @@ describe("Treatments", () => {
       {
         uuid: "1",
         effectiveStartDate: new Date("01/01/2022"),
+        dateStopped: null,
         drug: {
           name: "Drug 1",
         },
@@ -132,6 +134,7 @@ describe("Treatments", () => {
       {
         uuid: "1",
         effectiveStartDate: new Date("01/01/2022"),
+        dateStopped: null,
         drug: {
           name: "Drug 1",
         },
