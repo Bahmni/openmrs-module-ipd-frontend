@@ -11,12 +11,12 @@ import { TextArea, TextInput } from "carbon-components-react";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
-import { I18nProvider } from "../../features/i18n/I18nProvider";
-import { saveMedication } from "../../utils/DrugChartSliderUtils";
-import SideBarPanel from "../../features/SideBarPanel/components/SideBarPanel";
-import "./DrugChartSlider.scss";
-import { medicationFrequency } from "../../constants";
-import { SaveAndCloseButtons } from "../../features/SaveAndCloseButtons/components/SaveAndCloseButtons";
+import { I18nProvider } from "../../i18n/I18nProvider";
+import { saveMedication } from "../../../utils/DrugChartSliderUtils";
+import SideBarPanel from "../../../components/SideBarPanel/components/SideBarPanel";
+import "../styles/DrugChartSlider.scss";
+import { medicationFrequency } from "../../../constants";
+import { SaveAndCloseButtons } from "../../../components/SaveAndCloseButtons/components/SaveAndCloseButtons";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
@@ -291,6 +291,7 @@ const DrugChartSlider = (props) => {
   return (
     <I18nProvider>
       <SideBarPanel
+        className="add-to-drug-chart-slider"
         title={
           title ? title : <FormattedMessage id="DRUG_CHART_MODAL_HEADER" />
         }
