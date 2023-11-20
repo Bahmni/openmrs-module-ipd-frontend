@@ -45,7 +45,7 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
                     >
                       <div
                         class="drug-title"
-                        style="color: rgb(169, 169, 169);"
+                        style="color: rgb(82, 82, 82); font-weight: 400;"
                       >
                         Paracetamol 120 mg/5 mL Suspension (Liquid)
                       </div>
@@ -61,7 +61,7 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
                 </div>
                 <div
                   class="tile-content-subtext"
-                  style="color: rgb(169, 169, 169);"
+                  style="color: rgb(82, 82, 82);"
                 >
                   <span>
                     25
@@ -125,7 +125,7 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
                     >
                       <div
                         class="drug-title"
-                        style="color: rgb(169, 169, 169);"
+                        style="color: rgb(82, 82, 82); font-weight: 400;"
                       >
                         Paracetamol 120 mg (Tablet)
                       </div>
@@ -141,7 +141,7 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
                 </div>
                 <div
                   class="tile-content-subtext"
-                  style="color: rgb(169, 169, 169);"
+                  style="color: rgb(82, 82, 82);"
                 >
                   <span>
                     25

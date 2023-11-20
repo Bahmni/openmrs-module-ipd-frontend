@@ -58,7 +58,10 @@ export default function TaskTile(props) {
   const drugNameText = (
     <div
       className="drug-title"
-      style={{ color: isRelevantTask ? "#393939" : "#A9A9A9" }}
+      style={{
+        color: isRelevantTask ? "#393939" : "#525252",
+        fontWeight: isRelevantTask ? 500 : 400,
+      }}
     >
       {drugName}
     </div>
@@ -82,7 +85,7 @@ export default function TaskTile(props) {
           </div>
           <div
             className="tile-content-subtext"
-            style={{ color: isRelevantTask ? "#393939" : "#A9A9A9" }}
+            style={{ color: isRelevantTask ? "#393939" : "#525252" }}
           >
             <span>{dosage}</span>
             {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
