@@ -1,0 +1,57 @@
+.update-nursing-tasks {
+  padding: 0 20px 120px;
+  color: #393939;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  .task-heading {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .medication-name {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    line-height: 1.5;
+    gap: 6px;
+    .name {
+      text-align: left;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  }
+  .medication-details {
+    font-size: 12px;
+  }
+  .nursing-task-section {
+    background-color: #f4f4f4;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .bx--toggle-input--small + .bx--toggle-input__label > .bx--toggle__switch {
+    margin-top: 0;
+  }
+  .medication-status {
+    display: flex;
+    align-items: center;
+  }
+  .error {
+    color: #da1e28;
+    font-size: 12px;
+    padding-top: 4px;
+  }
+  .notes-text-area {
+    margin: 0 10px;
+    textarea {
+      padding: 0.6rem 1rem;
+    }
+  }
+  .bx--tag {
+    margin: 0;
+  }
+}
