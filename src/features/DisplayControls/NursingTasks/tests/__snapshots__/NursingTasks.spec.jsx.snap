@@ -15,150 +15,145 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
         class="nursing-task-tiles-container"
       >
         <div>
-          <div
-            class="tile-parent-container"
-          >
+          <div>
             <div
-              class="nursing-tasks-tile"
-              style="background-color: rgb(237, 248, 230);"
+              class="tile-parent-container"
             >
               <div
-                class="tile-content"
+                class="nursing-tasks-tile false"
               >
                 <div
-                  class="tile-title"
+                  class="tile-content"
                 >
                   <div
-                    class="nursing-task-icon-container"
+                    class="tile-title"
                   >
-                    <div>
-                      <test-file-stub />
-                    </div>
-                  </div>
-                  <span
-                    class="bx--tooltip--definition bx--tooltip--a11y"
-                  >
-                    <button
-                      aria-describedby="definition-tooltip-1"
-                      class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
-                      type="button"
+                    <div
+                      class="nursing-task-icon-container"
                     >
-                      <div
-                        class="drug-title"
-                        style="color: rgb(82, 82, 82); font-weight: 400;"
+                      <div>
+                        <test-file-stub />
+                      </div>
+                    </div>
+                    <span
+                      class="bx--tooltip--definition bx--tooltip--a11y"
+                    >
+                      <button
+                        aria-describedby="definition-tooltip-1"
+                        class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                        type="button"
+                      >
+                        <div
+                          class="drug-title"
+                          style="color: rgb(82, 82, 82); font-weight: 400;"
+                        >
+                          Paracetamol 120 mg/5 mL Suspension (Liquid)
+                        </div>
+                      </button>
+                      <span
+                        class="bx--assistive-text"
+                        id="definition-tooltip-1"
+                        role="tooltip"
                       >
                         Paracetamol 120 mg/5 mL Suspension (Liquid)
-                      </div>
-                    </button>
-                    <span
-                      class="bx--assistive-text"
-                      id="definition-tooltip-1"
-                      role="tooltip"
-                    >
-                      Paracetamol 120 mg/5 mL Suspension (Liquid)
+                      </span>
                     </span>
-                  </span>
-                </div>
-                <div
-                  class="tile-content-subtext"
-                  style="color: rgb(82, 82, 82);"
-                >
-                  <span>
-                    25
-                  </span>
-                  <span>
-                     - mg
-                  </span>
-                  <span>
-                     - Oral
-                  </span>
-                </div>
-                <div
-                  class="tile-content-subtext"
-                >
-                  <test-file-stub />
-                  <div>
-                     16:15
+                  </div>
+                  <div
+                    class="tile-content-subtext"
+                    style="color: rgb(82, 82, 82);"
+                  >
+                    <span>
+                      25mg
+                    </span>
+                    <span>
+                       - Oral
+                    </span>
+                  </div>
+                  <div
+                    class="tile-content-subtext"
+                  >
+                    <test-file-stub />
+                    <div>
+                       16:15
+                    </div>
+                  </div>
+                  <div
+                    class="more-info"
+                  >
+                    (1 more)
                   </div>
                 </div>
-                <div
-                  class="more-info"
-                >
-                  (1 more)
-                </div>
               </div>
+              <div
+                class="nursing-tasks-tile stacked-tile false"
+              />
             </div>
-            <div
-              class="nursing-tasks-tile stacked-tile"
-              style="background-color: rgb(237, 248, 230);"
-            />
           </div>
         </div>
         <div>
-          <div
-            class="tile-parent-container"
-          >
+          <div>
             <div
-              class="nursing-tasks-tile"
-              style="background-color: rgb(237, 248, 230);"
+              class="tile-parent-container"
             >
               <div
-                class="tile-content"
+                class="nursing-tasks-tile false"
               >
                 <div
-                  class="tile-title"
+                  class="tile-content"
                 >
                   <div
-                    class="nursing-task-icon-container"
+                    class="tile-title"
                   >
-                    <div>
-                      <test-file-stub />
-                    </div>
-                  </div>
-                  <span
-                    class="bx--tooltip--definition bx--tooltip--a11y"
-                  >
-                    <button
-                      aria-describedby="definition-tooltip-2"
-                      class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
-                      type="button"
+                    <div
+                      class="nursing-task-icon-container"
                     >
-                      <div
-                        class="drug-title"
-                        style="color: rgb(82, 82, 82); font-weight: 400;"
+                      <div>
+                        <test-file-stub />
+                      </div>
+                    </div>
+                    <span
+                      class="bx--tooltip--definition bx--tooltip--a11y"
+                    >
+                      <button
+                        aria-describedby="definition-tooltip-2"
+                        class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                        type="button"
+                      >
+                        <div
+                          class="drug-title"
+                          style="color: rgb(82, 82, 82); font-weight: 400;"
+                        >
+                          Paracetamol 120 mg (Tablet)
+                        </div>
+                      </button>
+                      <span
+                        class="bx--assistive-text"
+                        id="definition-tooltip-2"
+                        role="tooltip"
                       >
                         Paracetamol 120 mg (Tablet)
-                      </div>
-                    </button>
-                    <span
-                      class="bx--assistive-text"
-                      id="definition-tooltip-2"
-                      role="tooltip"
-                    >
-                      Paracetamol 120 mg (Tablet)
+                      </span>
                     </span>
-                  </span>
-                </div>
-                <div
-                  class="tile-content-subtext"
-                  style="color: rgb(82, 82, 82);"
-                >
-                  <span>
-                    25
-                  </span>
-                  <span>
-                     - mg
-                  </span>
-                  <span>
-                     - Oral
-                  </span>
-                </div>
-                <div
-                  class="tile-content-subtext"
-                >
-                  <test-file-stub />
-                  <div>
-                     16:32
+                  </div>
+                  <div
+                    class="tile-content-subtext"
+                    style="color: rgb(82, 82, 82);"
+                  >
+                    <span>
+                      25mg
+                    </span>
+                    <span>
+                       - Oral
+                    </span>
+                  </div>
+                  <div
+                    class="tile-content-subtext"
+                  >
+                    <test-file-stub />
+                    <div>
+                       16:32
+                    </div>
                   </div>
                 </div>
               </div>

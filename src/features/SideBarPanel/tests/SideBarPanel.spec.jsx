@@ -11,10 +11,10 @@ describe("SideBarPanel", () => {
 
   it("should call closeSideBar function when close icon is clicked", () => {
     const closeSideBar = jest.fn();
-    render(
+    const { container } = render(
       <SideBarPanel title="Add to Drug Chart" closeSideBar={closeSideBar} />
     );
-    const closeIcon = screen.getByLabelText("Close");
+    const closeIcon = container.querySelector(".close-icon");
     fireEvent.click(closeIcon);
     expect(closeSideBar).toHaveBeenCalled();
   });
