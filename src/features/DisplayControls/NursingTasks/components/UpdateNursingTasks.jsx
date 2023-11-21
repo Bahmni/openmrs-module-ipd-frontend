@@ -126,7 +126,7 @@ const UpdateNursingTasks = (props) => {
 
   return (
     <SideBarPanel
-      title={<FormattedMessage id="TASK(S)" defaultMessage={"Task(s)"} />}
+      title={<FormattedMessage id="TASKS" defaultMessage={"Task(s)"} />}
       closeSideBar={() => {
         updateNursingTasksSlider(false);
       }}
