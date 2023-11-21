@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
-
 .nursing-tasks-tile {
   border: 1px solid #007d79;
   background-color: #e3fed1;
@@ -12,7 +10,6 @@
   margin-bottom: 20px;
   margin-right: 20px;
   height: 90px;
-  font-family: "Inter", sans-serif;
 }
 
 .stacked-tile {
@@ -35,7 +32,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-wrap: wrap;
-  font-weight: 500;
   color: #393939;
   font-style: normal;
   padding-left: 4px;

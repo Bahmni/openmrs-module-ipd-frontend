@@ -1,0 +1,51 @@
+.side-bar-header {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  h1 {
+    color: #393939;
+  }
+}
+
+.close-icon {
+  position: absolute;
+  right: 16px;
+  top: 8px;
+  border: none;
+}
+
+.side-bar-nav {
+  background: white;
+  position: fixed;
+  right: 0 !important;
+  height: 100%;
+  z-index: 9999;
+  overflow: scroll;
+  box-shadow: -1px 2px 3px 0px #aaa;
+}
+
+@media screen and (min-width: 1024px) {
+  .side-bar-nav {
+    width: 30%;
+    min-width: 540px;
+  }
+}
+
+@media screen and (min-width: 640px) and (max-width: 1024px) {
+  .side-bar-nav {
+    width: 30%;
+    min-width: 540px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .side-bar-nav {
+    width: 100%;
+  }
+}
+
+.side-bar-nav {
+  top: 48px;
+}

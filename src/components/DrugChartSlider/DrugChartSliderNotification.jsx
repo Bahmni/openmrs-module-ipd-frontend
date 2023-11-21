@@ -4,7 +4,7 @@ import { NotificationCarbon } from "bahmni-carbon-ui";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 
-export default function DrugChartModalNotification(props) {
+export default function DrugChartSliderNotification(props) {
   const { hostData, hostApi } = props;
   const getMessage = () => {
     switch (hostData?.notificationKind) {
@@ -38,7 +38,7 @@ export default function DrugChartModalNotification(props) {
   );
 }
 
-DrugChartModalNotification.propTypes = {
+DrugChartSliderNotification.propTypes = {
   hostData: PropTypes.shape({
     notificationKind: PropTypes.string.isRequired,
   }),
