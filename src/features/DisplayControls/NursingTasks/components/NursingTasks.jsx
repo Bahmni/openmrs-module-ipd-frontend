@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import "../styles/NursingTasks.scss";
@@ -10,12 +10,23 @@ import {
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
 import { formatDate } from "../../../../utils/DateTimeUtils";
+import { SliderContext } from "../../../../context/SliderContext";
+import UpdateNursingTasks from "./UpdateNursingTasks";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const { isSliderOpen, updateSliderOpen } = useContext(SliderContext);
+  const [selectedMedicationTask, setSelectedMedicationTask] = useState([]);
+  const updateNursingTasksSlider = (value) => {
+    updateSliderOpen((prev) => {
+      return {
+        ...prev,
+        nursingTasks: value,
+      };
+    });
+  };
   const NoNursingTasksMessage = (
     <FormattedMessage
       id={"NO_NURSING_TASKS_MESSAGE"}
@@ -48,7 +59,16 @@ export default function NursingTasks(props) {
     return medicationNursingTasks.map((medicationNursingTask, index) => {
       return (
         <div key={index}>
-          <TaskTile medicationNursingTask={medicationNursingTask} />
+          <div
+            onClick={() => {
+              if (!isSliderOpen.nursingTasks) {
+                setSelectedMedicationTask(medicationNursingTask);
+                updateNursingTasksSlider(true);
+              }
+            }}
+          >
+            <TaskTile medicationNursingTask={medicationNursingTask} />
+          </div>
         </div>
       );
     });
@@ -65,6 +85,12 @@ export default function NursingTasks(props) {
     return (
       <div className="nursing-tasks-content-container">
         {showCurrentDate()}
+        {isSliderOpen.nursingTasks && (
+          <UpdateNursingTasks
+            medicationTasks={selectedMedicationTask}
+            updateNursingTasksSlider={updateNursingTasksSlider}
+          />
+        )}
         <div className="nursing-task-tiles-container">{showTaskTiles()}</div>
       </div>
     );

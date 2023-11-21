@@ -1,5 +1,4 @@
-import { Close } from "@carbon/icons-react/next";
-import { Button } from "carbon-components-react";
+import { Close24 } from "@carbon/icons-react";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -11,17 +10,9 @@ export default function SideBarPanel(props) {
   return (
     <div className="side-bar-nav">
       <div className="side-bar-header">
-        <div>
-          <h1>{title}</h1>
-        </div>
-        <div className="close-icon">
-          <Button
-            renderIcon={Close}
-            hasIconOnly
-            iconDescription="Close"
-            kind="ghost"
-            onClick={closeSideBar}
-          />
+        <div>{title}</div>
+        <div className="close-icon" onClick={closeSideBar}>
+          <Close24 />
         </div>
       </div>
       <div className="side-bar-children">{children}</div>

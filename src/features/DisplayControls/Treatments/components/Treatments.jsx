@@ -35,18 +35,26 @@ const Treatments = (props) => {
   const [showWarningNotification, setShowWarningNotification] = useState(false);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [drugChartNotes, setDrugChartNotes] = useState("");
+  const updateTreatmentsSlider = (value) => {
+    updateSliderOpen((prev) => {
+      return {
+        ...prev,
+        treatments: value,
+      };
+    });
+  };
   var drugOrderList = {};
   const DrugChartSliderActions = {
     onModalClose: () => {
-      updateSliderOpen(false);
+      updateTreatmentsSlider(false);
     },
     onModalCancel: () => {
       setShowWarningNotification(true);
-      updateSliderOpen(false);
+      updateTreatmentsSlider(false);
     },
     onModalSave: () => {
       setShowSuccessNotification(true);
-      updateSliderOpen(false);
+      updateTreatmentsSlider(false);
     },
   };
 
@@ -64,10 +72,10 @@ const Treatments = (props) => {
         (drugOrder) => drugOrder.uuid === drugOrderId
       ),
     }));
-    if (isSliderOpen) {
+    if (isSliderOpen.treatments) {
       return;
     }
-    updateSliderOpen(true);
+    updateTreatmentsSlider(true);
     setDrugChartNotes("");
   };
 
@@ -151,7 +159,7 @@ const Treatments = (props) => {
 
   return (
     <>
-      {isSliderOpen && (
+      {isSliderOpen.treatments && (
         <DrugChartSlider
           title={AddToDrugChart}
           hostData={selectedDrugOrder}
