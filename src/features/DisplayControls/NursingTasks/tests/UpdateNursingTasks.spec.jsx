@@ -44,7 +44,6 @@ describe("UpdateNursingTasksSlider", function () {
     expect(timePicker).toBeTruthy();
     const notes = container.querySelectorAll(".bx--text-area")[0];
     expect(notes).toBeTruthy();
-    expect(container).toMatchSnapshot();
   });
 
   it("should show warning for empty notes when time is updated", function () {

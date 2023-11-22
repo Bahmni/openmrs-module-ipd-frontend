@@ -11,8 +11,10 @@
 }
 
 .close-icon {
+  position: absolute;
+  right: 16px;
+  top: 8px;
   border: none;
-  cursor: pointer;
 }
 
 .side-bar-nav {
