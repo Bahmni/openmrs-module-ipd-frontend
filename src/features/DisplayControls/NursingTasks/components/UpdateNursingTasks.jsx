@@ -66,7 +66,6 @@ const UpdateNursingTasks = (props) => {
   const checkFormStatus = () => {
     let saveDisabled = true;
     Object.keys(tasks).forEach((key) => {
-      console.log("key", key, tasks[key]);
       if (tasks[key].isSelected) {
         saveDisabled = false;
       }
@@ -86,7 +85,6 @@ const UpdateNursingTasks = (props) => {
   };
 
   const handleTimeChange = (time, id) => {
-    console.log(time, id);
     updateTasks({
       ...tasks,
       [id]: {
@@ -102,7 +100,6 @@ const UpdateNursingTasks = (props) => {
   };
 
   const handleNotes = (e, id) => {
-    console.log(e.target.value, id);
     updateTasks({
       ...tasks,
       [id]: {
@@ -121,8 +118,6 @@ const UpdateNursingTasks = (props) => {
       }
     }
   };
-
-  console.log("tasks", tasks, errors);
 
   return (
     <SideBarPanel
@@ -203,7 +198,6 @@ const UpdateNursingTasks = (props) => {
       <SaveAndCloseButtons
         onSave={() => {
           updateShowErrors(true);
-          console.log("Updated Tasks");
         }}
         onClose={() => {
           updateNursingTasksSlider(false);
