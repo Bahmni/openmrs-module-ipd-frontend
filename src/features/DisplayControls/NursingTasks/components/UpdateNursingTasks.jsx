@@ -7,7 +7,7 @@ import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAnd
 import Clock from "../../../../icons/clock.svg";
 import { Toggle, Tag, TextArea } from "carbon-components-react";
 import moment from "moment";
-import { TimePicker24Hour } from "bahmni-carbon-ui";
+import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
 
 const UpdateNursingTasks = (props) => {
   const { medicationTasks, updateNursingTasksSlider } = props;
@@ -23,18 +23,13 @@ const UpdateNursingTasks = (props) => {
   );
   const getLabel = (time) => {
     return (
-      <div className={"medication-status"}>
+      <div>
         <FormattedMessage id={"DONE"} defaultMessage={"Done"} />
         &nbsp;
-        {time ? (
+        {time && (
           <>
             <FormattedMessage id={"AT"} defaultMessage={"at"} />
             &nbsp;{time.format("HH:mm")}
-          </>
-        ) : (
-          <>
-            <Clock />
-            &nbsp;{medicationTasks[0].startTime}
           </>
         )}
       </div>
@@ -171,7 +166,12 @@ const UpdateNursingTasks = (props) => {
                   />
                   <div className={"notes-text-area"}>
                     <TextArea
-                      labelText={"Notes"}
+                      labelText={
+                        <Title
+                          text={"Notes"}
+                          isRequired={tasks[medicationTask.uuid].isTimeUpdated}
+                        />
+                      }
                       onChange={(e) => {
                         handleNotes(e, medicationTask.uuid);
                       }}

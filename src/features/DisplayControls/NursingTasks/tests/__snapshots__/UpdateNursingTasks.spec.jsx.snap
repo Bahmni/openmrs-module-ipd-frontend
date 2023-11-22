@@ -76,28 +76,18 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
                   aria-hidden="true"
                   class="bx--toggle__text--off"
                 >
-                  <div
-                    class="medication-status"
-                  >
+                  <div>
                     Done
                      
-                    <test-file-stub />
-                     
-                    08:00
                   </div>
                 </span>
                 <span
                   aria-hidden="true"
                   class="bx--toggle__text--on"
                 >
-                  <div
-                    class="medication-status"
-                  >
+                  <div>
                     Done
                      
-                    <test-file-stub />
-                     
-                    08:00
                   </div>
                 </span>
               </span>
@@ -168,28 +158,18 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
                   aria-hidden="true"
                   class="bx--toggle__text--off"
                 >
-                  <div
-                    class="medication-status"
-                  >
+                  <div>
                     Done
                      
-                    <test-file-stub />
-                     
-                    08:00
                   </div>
                 </span>
                 <span
                   aria-hidden="true"
                   class="bx--toggle__text--on"
                 >
-                  <div
-                    class="medication-status"
-                  >
+                  <div>
                     Done
                      
-                    <test-file-stub />
-                     
-                    08:00
                   </div>
                 </span>
               </span>
@@ -244,6 +224,317 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
         <button
           class="save-button-slider bx--btn bx--btn--primary bx--btn--disabled"
           disabled=""
+          tabindex="0"
+          type="button"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`UpdateNursingTasksSlider should show notes and time when toggle switch is On 1`] = `
+<div>
+  <div
+    class="side-bar-nav"
+  >
+    <div
+      class="side-bar-header"
+    >
+      <div>
+        Task(s)
+      </div>
+      <div
+        class="close-icon"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          focusable="false"
+          height="24"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 32 32"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      class="side-bar-children"
+    >
+      <div
+        class="update-nursing-tasks"
+      >
+        <div
+          class="task-heading"
+        >
+          Scheduled for
+          <test-file-stub />
+          08:00
+        </div>
+        <div
+          class="nursing-task-section"
+        >
+          <div
+            class="bx--form-item"
+          >
+            <input
+              class="bx--toggle-input bx--toggle-input--small"
+              id="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
+              type="checkbox"
+            />
+            <label
+              aria-label="Toggle"
+              class="bx--toggle-input__label"
+              for="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
+            >
+              <span
+                class="bx--toggle__switch"
+              >
+                <svg
+                  class="bx--toggle__check"
+                  height="5px"
+                  viewBox="0 0 6 5"
+                  width="6px"
+                >
+                  <path
+                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
+                  />
+                </svg>
+                <span
+                  aria-hidden="true"
+                  class="bx--toggle__text--off"
+                >
+                  <div>
+                    Done
+                     
+                    at
+                     
+                    14:04
+                  </div>
+                </span>
+                <span
+                  aria-hidden="true"
+                  class="bx--toggle__text--on"
+                >
+                  <div>
+                    Done
+                     
+                    at
+                     
+                    14:04
+                  </div>
+                </span>
+              </span>
+            </label>
+          </div>
+          <div
+            class="medication-name"
+          >
+            <div
+              class="name"
+            >
+              Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
+            </div>
+            <div
+              class="bx--tag bx--tag--blue"
+              id="tag-19"
+            >
+              
+              <span
+                title="Rx"
+              >
+                Rx
+              </span>
+            </div>
+          </div>
+          <div
+            class="medication-details"
+          >
+            <span>
+              30mg
+            </span>
+            <span>
+               - 
+              Topical
+            </span>
+          </div>
+          <div
+            style="display: flex;"
+          >
+            <div
+              class="bx--form-item"
+            >
+              <label
+                class="bx--label"
+                for="time-selector"
+              >
+                <div
+                  class="titleText"
+                >
+                  <span>
+                    Task Time 
+                  </span>
+                </div>
+              </label>
+              <div
+                class="bx--time-picker bx--time-picker--light"
+              >
+                <div
+                  class="bx--time-picker__input"
+                >
+                  <input
+                    autocomplete="off"
+                    class="bx--time-picker__input-field bx--text-input bx--text-input--light"
+                    id="time-selector"
+                    maxlength="5"
+                    pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
+                    placeholder="hh:mm"
+                    style="width: 72px; padding: 0px 0px 0px 1rem;"
+                    type="text"
+                    value="14:04"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="notes-text-area"
+            >
+              <div
+                class="bx--form-item"
+              >
+                <div
+                  class="bx--text-area__label-wrapper"
+                >
+                  <label
+                    class="bx--label"
+                  >
+                    <div
+                      class="titleText"
+                    >
+                      <span>
+                        Notes 
+                      </span>
+                    </div>
+                  </label>
+                </div>
+                <div
+                  class="bx--text-area__wrapper"
+                >
+                  <textarea
+                    class="bx--text-area bx--text-area--light"
+                    cols="50"
+                    rows="1"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="nursing-task-section"
+        >
+          <div
+            class="bx--form-item"
+          >
+            <input
+              class="bx--toggle-input bx--toggle-input--small"
+              id="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
+              type="checkbox"
+            />
+            <label
+              aria-label="Toggle"
+              class="bx--toggle-input__label"
+              for="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
+            >
+              <span
+                class="bx--toggle__switch"
+              >
+                <svg
+                  class="bx--toggle__check"
+                  height="5px"
+                  viewBox="0 0 6 5"
+                  width="6px"
+                >
+                  <path
+                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
+                  />
+                </svg>
+                <span
+                  aria-hidden="true"
+                  class="bx--toggle__text--off"
+                >
+                  <div>
+                    Done
+                     
+                  </div>
+                </span>
+                <span
+                  aria-hidden="true"
+                  class="bx--toggle__text--on"
+                >
+                  <div>
+                    Done
+                     
+                  </div>
+                </span>
+              </span>
+            </label>
+          </div>
+          <div
+            class="medication-name"
+          >
+            <div
+              class="name"
+            >
+              Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
+            </div>
+            <div
+              class="bx--tag bx--tag--blue"
+              id="tag-20"
+            >
+              
+              <span
+                title="Rx"
+              >
+                Rx
+              </span>
+            </div>
+          </div>
+          <div
+            class="medication-details"
+          >
+            <span>
+              25mg
+            </span>
+            <span>
+               - 
+              Intravenous
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="footer"
+      >
+        <button
+          class="cancel-button-slider bx--btn bx--btn--secondary"
+          data-testid="cancel"
+          tabindex="0"
+          type="button"
+        >
+          <span>
+            Cancel
+          </span>
+        </button>
+        <button
+          class="save-button-slider bx--btn bx--btn--primary"
           tabindex="0"
           type="button"
         >
