@@ -57,7 +57,6 @@ export const ExtractMedicationNursingTasksData = (
     });
   });
   extractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
-  console.log("extractedData", extractedData);
 
   const groupedData = [];
   let currentStartTime = null;
