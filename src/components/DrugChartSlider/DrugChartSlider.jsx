@@ -17,6 +17,13 @@ import SideBarPanel from "../../features/SideBarPanel/components/SideBarPanel";
 import "./DrugChartSlider.scss";
 import { medicationFrequency } from "../../constants";
 import { SaveAndCloseButtons } from "../../features/SaveAndCloseButtons/components/SaveAndCloseButtons";
+import {
+  isInvalidTimeTextPresent,
+  isTimePassed,
+  updateStartTimeBasedOnFrequency,
+  getUTCTimeEpoch,
+  validateSchedules,
+} from "./DrugChartSliderUtils";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
@@ -29,25 +36,6 @@ const DrugChartSlider = (props) => {
   );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
   const isAutoFill = !!enableSchedule?.scheduleTiming;
-
-  useEffect(() => {
-    if (isAutoFill) {
-      if (enable24HourTimers) {
-        setSchedules(enableSchedule?.scheduleTiming || []);
-      } else {
-        const parsedTimings = enableSchedule?.scheduleTiming.map((time) =>
-          moment(time, "hh:mm A")
-        );
-        setSchedules(parsedTimings || []);
-      }
-    } else {
-      const defaultSchedules = Array.from(
-        { length: enableSchedule?.frequencyPerDay },
-        () => ""
-      );
-      setSchedules(defaultSchedules);
-    }
-  }, [isAutoFill, enable24HourTimers, enableSchedule]);
 
   const [schedules, setSchedules] = useState([]);
   const [startTime, setStartTime] = useState("");
@@ -69,21 +57,24 @@ const DrugChartSlider = (props) => {
   const invalidTimeText24Hour = "Please enter in 24-hr format";
   const invalidTimeText12Hour = "Please enter in 12-hr format";
 
-  const isInvalidTimeTextPresent = () => {
-    const screenContent = document.body.textContent;
-    const invalidTimeText = enable24HourTimers
-      ? invalidTimeText24Hour
-      : invalidTimeText12Hour;
-    return screenContent.includes(invalidTimeText);
-  };
-
-  const isTimePassed = (newTime) => {
-    const currentTime = moment();
-    const enteredTime = enable24HourTimers
-      ? moment(newTime, "HH:mm")
-      : moment(newTime, "hh:mm A");
-    return currentTime.isAfter(enteredTime);
-  };
+  useEffect(() => {
+    if (isAutoFill) {
+      if (enable24HourTimers) {
+        setSchedules(enableSchedule?.scheduleTiming || []);
+      } else {
+        const parsedTimings = enableSchedule?.scheduleTiming.map((time) =>
+          moment(time, "hh:mm A")
+        );
+        setSchedules(parsedTimings || []);
+      }
+    } else {
+      const defaultSchedules = Array.from(
+        { length: enableSchedule?.frequencyPerDay },
+        () => ""
+      );
+      setSchedules(defaultSchedules);
+    }
+  }, [isAutoFill, enable24HourTimers, enableSchedule]);
 
   const handleSchedule = (newSchedule, index) => {
     const newScheduleArray = [...schedules];
@@ -91,33 +82,21 @@ const DrugChartSlider = (props) => {
       ? newSchedule
       : moment(newSchedule, "hh:mm A");
     setSchedules(newScheduleArray);
-    if (!isInvalidTimeTextPresent()) {
+    if (
+      !isInvalidTimeTextPresent(
+        enable24HourTimers,
+        invalidTimeText12Hour,
+        invalidTimeText24Hour
+      )
+    ) {
       setShowSchedulePassedWarning((prevScheduleWarnings) => {
         const newSchedulePassedWarnings = [...prevScheduleWarnings];
-        newSchedulePassedWarnings[index] = isTimePassed(newSchedule);
+        newSchedulePassedWarnings[index] = isTimePassed(
+          newSchedule,
+          enable24HourTimers
+        );
         return newSchedulePassedWarnings;
       });
-    }
-  };
-
-  const areSchedulesInOrder = (allSchedule) => {
-    return allSchedule.every((schedule, index) => {
-      if (index === 0) return true;
-      const currentTime = moment(schedule, "HH:mm");
-      const prevTime = moment(allSchedule[index - 1], "HH:mm");
-      return currentTime.isAfter(prevTime);
-    });
-  };
-
-  const validateSchedules = async (schedules) => {
-    if (schedules.some((schedule) => schedule === "")) {
-      return { isValid: false, warningType: "empty" };
-    }
-
-    if (areSchedulesInOrder(schedules)) {
-      return { isValid: true, warningType: "" };
-    } else {
-      return { isValid: false, warningType: "passed" };
     }
   };
 
@@ -133,44 +112,6 @@ const DrugChartSlider = (props) => {
     if (!isValid && (warningType === "empty" || warningType === "passed"))
       return false;
     return true;
-  };
-
-  const updateStartTimeBasedOnFrequency = (frequency, time) => {
-    switch (frequency) {
-      case "Every Hour":
-        time.add(1, "hour");
-        break;
-      case "Every 2 hours":
-        time.add(2, "hours");
-        break;
-      case "Every 3 hours":
-        time.add(3, "hours");
-        break;
-      case "Every 4 hours":
-        time.add(4, "hours");
-        break;
-      case "Every 6 hours":
-        time.add(6, "hours");
-        break;
-      case "Every 8 hours":
-        time.add(8, "hours");
-        break;
-      case "Every 12 hours":
-        time.add(12, "hours");
-        break;
-      case "Once a day":
-        time.add(1, "day");
-        break;
-      case "Nocte (At Night)":
-        time.set({ hour: 23, minute: 59, second: 59 });
-        break;
-      case "Every 30 minutes":
-        time.add(30, "minutes");
-        break;
-      default:
-        break;
-    }
-    return time;
   };
 
   const isStartTimeExceedingFrequency = (time, frequency) => {
@@ -204,28 +145,13 @@ const DrugChartSlider = (props) => {
     )
       ? setShowStartTimeBeyondNextDoseWarning(true)
       : setShowStartTimeBeyondNextDoseWarning(false);
-    isTimePassed(time)
+    isTimePassed(time, enable24HourTimers)
       ? setShowStartTimePassedWarning(true)
       : setShowStartTimePassedWarning(false);
 
     enable24HourTimers
       ? setStartTime(time)
       : setStartTime(moment(time, "hh:mm A"));
-  };
-
-  const getUTCTimeEpoch = (time) => {
-    const [hours, minutes] = enable24HourTimers
-      ? time.split(":")
-      : moment(time, "hh:mm A").format("HH:mm").split(":");
-    const [day, month, year] = moment(hostData?.drugOrder?.scheduledDate)
-      .format("DD-MM-YYYY")
-      .split("-");
-    const localTime = moment(
-      `${year}-${month}-${day} ${hours}:${minutes}`,
-      "YYYY-MM-DD HH:mm"
-    );
-    const utcTimeEpoch = moment.utc(localTime).unix();
-    return utcTimeEpoch;
   };
 
   const createDrugChartPayload = () => {
@@ -240,14 +166,18 @@ const DrugChartSlider = (props) => {
       medicationFrequency: "",
     };
     if (enableStartTime) {
-      const startTimeUTCEpoch = getUTCTimeEpoch(startTime);
+      const startTimeUTCEpoch = getUTCTimeEpoch(
+        startTime,
+        enable24HourTimers,
+        hostData
+      );
       payload.slotStartTime = startTimeUTCEpoch;
       payload.medicationFrequency =
         medicationFrequency.START_TIME_DURATION_FREQUENCY;
     }
     if (enableSchedule) {
       const schedulesUTCTimeEpoch = schedules.map((schedule) => {
-        return getUTCTimeEpoch(schedule);
+        return getUTCTimeEpoch(schedule, enable24HourTimers, hostData);
       });
       payload.dayWiseSlotsStartTime = schedulesUTCTimeEpoch;
       payload.firstDaySlotsStartTime = [];
@@ -258,7 +188,14 @@ const DrugChartSlider = (props) => {
   };
 
   const validateSave = async () => {
-    if (isInvalidTimeTextPresent()) return false;
+    if (
+      isInvalidTimeTextPresent(
+        enable24HourTimers,
+        invalidTimeText12Hour,
+        invalidTimeText24Hour
+      )
+    )
+      return false;
     if (enableSchedule) {
       return await isValidSchedule();
     }
