@@ -34,5 +34,11 @@
   "YEARS": "Years",
   "SHOW_DETAILS": "Show Details",
   "NO_NURSING_TASKS_MESSAGE": "No nursing task is scheduled for the patient",
-  "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard"
+  "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard",
+  "INVALID_TIME": "Please enter valid time",
+  "DONE": "Done",
+  "AT": "at",
+  "TASKS": "Task(s)",
+  "SCHEDULED_FOR_KEY": "Scheduled for",
+  "NOTES_ERROR_MESSAGE": "Please enter notes"
 }

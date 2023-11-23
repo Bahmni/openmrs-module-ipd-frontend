@@ -13,7 +13,9 @@ jest.mock("../utils/TreatmentsUtils", () => {
 });
 
 const mockProviderValue = {
-  isSliderOpen: false,
+  isSliderOpen: {
+    treatments: false,
+  },
   updateSliderOpen: jest.fn(),
 };
 
