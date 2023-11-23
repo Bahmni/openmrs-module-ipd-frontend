@@ -1,0 +1,250 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
+<div>
+  <div
+    class="side-bar-nav"
+  >
+    <div
+      class="side-bar-header"
+    >
+      <div>
+        Task(s)
+      </div>
+      <div
+        class="close-icon"
+      >
+        <button
+          class="bx--btn bx--btn--ghost bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+          tabindex="0"
+          type="button"
+        >
+          <div
+            class="bx--assistive-text"
+          >
+            Close
+          </div>
+          <svg
+            aria-hidden="true"
+            aria-label="Close"
+            class="bx--btn__icon"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            role="img"
+            viewBox="0 0 32 32"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="side-bar-children"
+    >
+      <div
+        class="update-nursing-tasks"
+      >
+        <div
+          class="task-heading"
+        >
+          Scheduled for
+          <test-file-stub />
+          08:00
+        </div>
+        <div
+          class="nursing-task-section"
+        >
+          <div
+            class="bx--form-item"
+          >
+            <input
+              class="bx--toggle-input bx--toggle-input--small"
+              id="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
+              type="checkbox"
+            />
+            <label
+              aria-label="Toggle"
+              class="bx--toggle-input__label"
+              for="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
+            >
+              <span
+                class="bx--toggle__switch"
+              >
+                <svg
+                  class="bx--toggle__check"
+                  height="5px"
+                  viewBox="0 0 6 5"
+                  width="6px"
+                >
+                  <path
+                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
+                  />
+                </svg>
+                <span
+                  aria-hidden="true"
+                  class="bx--toggle__text--off"
+                >
+                  <div>
+                    Done
+                     
+                  </div>
+                </span>
+                <span
+                  aria-hidden="true"
+                  class="bx--toggle__text--on"
+                >
+                  <div>
+                    Done
+                     
+                  </div>
+                </span>
+              </span>
+            </label>
+          </div>
+          <div
+            class="medication-name"
+          >
+            <div
+              class="name"
+            >
+              Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
+            </div>
+            <div
+              class="bx--tag bx--tag--blue"
+              id="tag-3"
+            >
+              
+              <span
+                title="Rx"
+              >
+                Rx
+              </span>
+            </div>
+          </div>
+          <div
+            class="medication-details"
+          >
+            <span>
+              30mg
+            </span>
+            <span>
+               - 
+              Topical
+            </span>
+          </div>
+        </div>
+        <div
+          class="nursing-task-section"
+        >
+          <div
+            class="bx--form-item"
+          >
+            <input
+              class="bx--toggle-input bx--toggle-input--small"
+              id="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
+              type="checkbox"
+            />
+            <label
+              aria-label="Toggle"
+              class="bx--toggle-input__label"
+              for="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
+            >
+              <span
+                class="bx--toggle__switch"
+              >
+                <svg
+                  class="bx--toggle__check"
+                  height="5px"
+                  viewBox="0 0 6 5"
+                  width="6px"
+                >
+                  <path
+                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
+                  />
+                </svg>
+                <span
+                  aria-hidden="true"
+                  class="bx--toggle__text--off"
+                >
+                  <div>
+                    Done
+                     
+                  </div>
+                </span>
+                <span
+                  aria-hidden="true"
+                  class="bx--toggle__text--on"
+                >
+                  <div>
+                    Done
+                     
+                  </div>
+                </span>
+              </span>
+            </label>
+          </div>
+          <div
+            class="medication-name"
+          >
+            <div
+              class="name"
+            >
+              Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
+            </div>
+            <div
+              class="bx--tag bx--tag--blue"
+              id="tag-4"
+            >
+              
+              <span
+                title="Rx"
+              >
+                Rx
+              </span>
+            </div>
+          </div>
+          <div
+            class="medication-details"
+          >
+            <span>
+              25mg
+            </span>
+            <span>
+               - 
+              Intravenous
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="footer"
+      >
+        <button
+          class="cancel-button-slider bx--btn bx--btn--secondary"
+          data-testid="cancel"
+          tabindex="0"
+          type="button"
+        >
+          <span>
+            Cancel
+          </span>
+        </button>
+        <button
+          class="save-button-slider bx--btn bx--btn--primary bx--btn--disabled"
+          disabled=""
+          tabindex="0"
+          type="button"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

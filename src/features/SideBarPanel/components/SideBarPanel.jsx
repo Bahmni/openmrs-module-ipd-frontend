@@ -11,9 +11,7 @@ export default function SideBarPanel(props) {
   return (
     <div className="side-bar-nav">
       <div className="side-bar-header">
-        <div>
-          <h1>{title}</h1>
-        </div>
+        <div>{title}</div>
         <div className="close-icon">
           <Button
             renderIcon={Close}

@@ -152,19 +152,21 @@ export const mockExtractedMedicationNursingTasksData = [
       drugName: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
       drugRoute: "Oral",
       duration: "3 Day(s)",
-      dosage: 25,
-      doseType: "mg",
+      dosage: "25mg",
+      doseType: undefined,
       startTimeInEpochSeconds: 1690906550,
       startTime: "16:15",
+      uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
     },
     {
       drugName: "Paracetamol 120 mg (Tablet)",
       drugRoute: "Oral",
       duration: "3 Day(s)",
-      dosage: 25,
-      doseType: "mg",
+      dosage: "25mg",
+      doseType: undefined,
       startTimeInEpochSeconds: 1690906550,
       startTime: "16:15",
+      uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
     },
   ],
   [
@@ -172,10 +174,11 @@ export const mockExtractedMedicationNursingTasksData = [
       drugName: "Paracetamol 120 mg (Tablet)",
       drugRoute: "Oral",
       duration: "3 Day(s)",
-      dosage: 25,
-      doseType: "mg",
+      dosage: "25mg",
+      doseType: undefined,
       startTimeInEpochSeconds: 1690907550,
       startTime: "16:32",
+      uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
     },
   ],
 ];
@@ -217,4 +220,26 @@ export const mockTaskTileDataForGroupedTask = [
       startTime: "16:15",
     },
   ],
+];
+
+export const mockMedicationTasks = [
+  {
+    drugName:
+      "Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension",
+    drugRoute: "Topical",
+    duration: "4 Day(s)",
+    dosage: "30mg",
+    uuid: "d9ae1992-63ac-4e05-8dfb-13f021102ec6",
+    startTimeInEpochSeconds: 1700620200,
+    startTime: "08:00",
+  },
+  {
+    drugName: "Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)",
+    drugRoute: "Intravenous",
+    duration: "6 Day(s)",
+    dosage: "25mg",
+    uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
+    startTimeInEpochSeconds: 1700620200,
+    startTime: "08:00",
+  },
 ];

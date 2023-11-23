@@ -41,6 +41,16 @@
 
 .schedule-time {
   margin-right: 5px;
+  input#time-selector,
+  textarea.bx--text-area.notes-section {
+    background-color: #efefef;
+  }
+}
+.start-time {
+  input#time-selector,
+  textarea.bx--text-area.notes-section {
+    background-color: #efefef;
+  }
 }
 
 .schedule-section,
@@ -165,11 +175,6 @@ button[class*="bx--"]:disabled {
 
 .bx--number input[type="number"]:disabled ~ .bx--number__controls {
   width: 55%;
-}
-
-input#time-selector,
-textarea.bx--text-area.notes-section {
-  background-color: #efefef;
 }
 
 .bx--time-picker .bx--select-input {

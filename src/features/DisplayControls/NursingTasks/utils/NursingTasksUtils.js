@@ -12,10 +12,7 @@ export const fetchMedicationNursingTasks = async (patientUuid, forDate) => {
   }
 };
 
-export const GetUTCEpochForDate = (viewDate) => {
-  const utcTimeEpoch = moment.utc(viewDate).unix();
-  return utcTimeEpoch;
-};
+export const GetUTCEpochForDate = (viewDate) => moment.utc(viewDate).unix();
 
 export const ExtractMedicationNursingTasksData = (
   medicationNursingTasksData
@@ -25,21 +22,22 @@ export const ExtractMedicationNursingTasksData = (
     const { slots } = item;
 
     slots.forEach((slot) => {
-      const { order } = slot;
+      const { startTime, uuid, order } = slot;
       const drugName = order.drug.display;
       const drugRoute = order.route.display;
       let duration, dosage, doseType;
       if (order.duration) {
         duration = order.duration + " " + order.durationUnits.display;
       }
-      if (order.doseUnits.display !== "ml") {
+      if (
+        order.doseUnits.display !== "ml" &&
+        order.doseUnits.display !== "mg"
+      ) {
         dosage = order.dose;
         doseType = order.doseUnits.display;
       } else {
         dosage = order.dose + order.doseUnits.display;
       }
-
-      const { startTime } = slot;
       const startTimeInDate = new Date(startTime * 1000);
       extractedData.push({
         drugName,
@@ -47,6 +45,7 @@ export const ExtractMedicationNursingTasksData = (
         duration,
         dosage,
         doseType,
+        uuid,
         startTimeInEpochSeconds: startTime,
         startTime: startTimeInDate.toLocaleTimeString([], {
           hour: "2-digit",
