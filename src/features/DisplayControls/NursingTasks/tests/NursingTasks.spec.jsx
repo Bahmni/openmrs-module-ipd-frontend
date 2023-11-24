@@ -50,7 +50,7 @@ describe("NursingTasks", () => {
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
       expect(
-        getByText("No nursing task is scheduled for the patient")
+        getByText("No Nursing Task is scheduled for the patient")
       ).toBeTruthy();
     });
   });

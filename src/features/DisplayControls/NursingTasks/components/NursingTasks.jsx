@@ -30,7 +30,7 @@ export default function NursingTasks(props) {
   const NoNursingTasksMessage = (
     <FormattedMessage
       id={"NO_NURSING_TASKS_MESSAGE"}
-      defaultMessage={"No nursing task is scheduled for the patient"}
+      defaultMessage={"No Nursing Task is scheduled for the patient"}
     />
   );
 
