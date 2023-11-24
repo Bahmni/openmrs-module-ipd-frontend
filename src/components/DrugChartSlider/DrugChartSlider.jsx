@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DatePickerCarbon,
   DropdownCarbon,
@@ -55,31 +55,28 @@ const DrugChartSlider = (props) => {
     }
   }, [isAutoFill, enable24HourTimers, enableSchedule]);
 
-  // useEffect(() => {
-  //   console.log("inside useeffect", firstDaySchedules);
-  //   firstDaySchedules.forEach((schedule) => {
-  //     if (isTimePassed(schedule)) {
-  //       setFirstDaySlotNumber((prevSlotNumber) => prevSlotNumber + 1);
-  //     }
-  //   });
-  // },[firstDaySchedules]);
-
-  const firstDaySchedulesRef = useRef(firstDaySchedules);
-
   useEffect(() => {
-    firstDaySchedulesRef.current = firstDaySchedules;
-  }, [firstDaySchedules]);
-
-  // Now you can use firstDaySchedulesRef.current in other parts of your component
-
-  useEffect(() => {
-    // Your code that depends on firstDaySchedules
-    firstDaySchedulesRef.current.forEach((schedule) => {
+    console.log("inside useeffect", firstDaySchedules);
+    firstDaySchedules.forEach((schedule) => {
       if (isTimePassed(schedule)) {
         setFirstDaySlotNumber((prevSlotNumber) => prevSlotNumber + 1);
       }
     });
-  }, []);
+  }, [firstDaySchedules]);
+
+  // const firstDaySchedulesRef = useRef(firstDaySchedules);
+
+  // useEffect(() => {
+  //   firstDaySchedulesRef.current = firstDaySchedules;
+  // }, [firstDaySchedules]);
+
+  // useEffect(() => {
+  //   firstDaySchedulesRef.current.forEach((schedule) => {
+  //     if (isTimePassed(schedule)) {
+  //       setFirstDaySlotNumber((prevSlotNumber) => prevSlotNumber + 1);
+  //     }
+  //   });
+  // }, []);
 
   const [schedules, setSchedules] = useState([]);
   const [firstDaySchedules, setFirstDaySchedules] = useState([]);
