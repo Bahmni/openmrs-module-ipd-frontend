@@ -330,7 +330,9 @@ const DrugChartSlider = (props) => {
       payload.dayWiseSlotsStartTime = firstDaySchedules
         ? schedulesUTCTimeEpoch.map((schedules) => schedules + hrinseconds)
         : schedulesUTCTimeEpoch;
-      // payload.remainingDaySlotsStartTime = firstDaySchedules && finalDaySchedulesUTCTimeEpoch + hrinseconds* enableSchedule?.frequencyPerDay;
+      // payload.remainingDaySlotsStartTime = firstDaySchedules && finalDaySchedulesUTCTimeEpoch.map(
+      //   (schedules) => schedules + hrinsecondsFinal
+      // );
       const remainingDaySlotsStartTime = finalDaySchedulesUTCTimeEpoch.map(
         (schedules) => schedules + hrinsecondsFinal
       );
