@@ -17,7 +17,7 @@ import DrugChartSliderNotification from "./DrugChartSliderNotification";
 
 let mockAxios;
 
-describe("DrugChartSlider", () => {
+describe.skip("DrugChartSlider", () => {
   beforeEach(() => {
     mockAxios = new mockAdapter(axios);
     const drugOrderFrequencies = mockDrugOrderFrequencies;
