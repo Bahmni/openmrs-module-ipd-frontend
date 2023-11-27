@@ -24,12 +24,14 @@ import DrugChartSlider from "../../../../components/DrugChartSlider/DrugChartSli
 import DrugChartSliderNotification from "../../../../components/DrugChartSlider/DrugChartSliderNotification";
 import { SliderContext } from "../../../../context/SliderContext";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
-import { DDMMYYY_DATE_FORMAT } from "../../../../constants";
+import { DDMMYYY_DATE_FORMAT, componentKeys } from "../../../../constants";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 
 const Treatments = (props) => {
   const { patientId } = props;
   const { isSliderOpen, updateSliderOpen } = useContext(SliderContext);
+  const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDrugOrder, setSelectedDrugOrder] = useState({});
@@ -65,6 +67,7 @@ const Treatments = (props) => {
     onModalSave: () => {
       setShowSuccessNotification(true);
       updateTreatmentsSlider(false);
+      refreshDisplayControl([componentKeys.NURSING_TASKS]);
     },
   };
 
