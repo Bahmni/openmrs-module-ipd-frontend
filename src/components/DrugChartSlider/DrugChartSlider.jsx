@@ -68,10 +68,6 @@ const DrugChartSlider = (props) => {
   ] = useState(false);
 
   const [
-    showFinalDaySchedulePassedWarning,
-    setShowFinalDaySchedulePassedWarning,
-  ] = useState([]);
-  const [
     showFinalDayScheduleOrderWarning,
     setShowFinalDayScheduleOrderWarning,
   ] = useState(false);
@@ -135,13 +131,6 @@ const DrugChartSlider = (props) => {
       ? newSchedule
       : moment(newSchedule, "hh:mm A");
     setFinalDaySchedules(newScheduleArray);
-    if (!isInvalidTimeTextPresent()) {
-      setShowFinalDaySchedulePassedWarning((prevScheduleWarnings) => {
-        const newSchedulePassedWarnings = [...prevScheduleWarnings];
-        newSchedulePassedWarnings[index] = isTimePassed(newSchedule);
-        return newSchedulePassedWarnings;
-      });
-    }
   };
 
   const areSchedulesInOrder = (allSchedule) => {
@@ -325,7 +314,7 @@ const DrugChartSlider = (props) => {
     if (enableSchedule) {
       const nextScheduleDate = 24 * 60 * 60;
       const finalScheduleDate =
-        nextScheduleDate * enableSchedule?.frequencyPerDay;
+        nextScheduleDate * hostData?.drugOrder?.duration;
 
       const firstDaySchedulesUTCTimeEpoch = firstDaySchedules
         .filter((schedule) => schedule !== "hh:mm")
@@ -339,17 +328,22 @@ const DrugChartSlider = (props) => {
         getUTCTimeEpoch(schedule)
       );
 
-      payload.firstDaySlotsStartTime = firstDaySchedulesUTCTimeEpoch;
+      payload.firstDaySlotsStartTime =
+        firstDaySlotsMissed > 0 ? firstDaySchedulesUTCTimeEpoch : [];
       payload.dayWiseSlotsStartTime = firstDaySchedules.some(
-        (schedule) => schedule != "hh:mm"
+        (schedule) => schedule == "hh:mm"
       )
         ? schedulesUTCTimeEpoch.map((schedules) => schedules + nextScheduleDate)
         : schedulesUTCTimeEpoch;
       const remainingDaySlotsStartTime = finalDaySchedulesUTCTimeEpoch.map(
         (schedules) => schedules + finalScheduleDate
       );
-      remainingDaySlotsStartTime.slice(0, firstDaySlotsMissed);
-      payload.remainingDaySlotsStartTime = remainingDaySlotsStartTime;
+
+      const remainingDaySlotsTime = remainingDaySlotsStartTime.slice(
+        0,
+        firstDaySlotsMissed
+      );
+      payload.remainingDaySlotsStartTime = remainingDaySlotsTime;
       payload.medicationFrequency =
         medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
       console.log("payload", payload);
@@ -515,7 +509,7 @@ const DrugChartSlider = (props) => {
               isDisabled={true}
             />
           </div>
-          {enableSchedule && (
+          {enableSchedule && firstDaySlotsMissed > 0 && (
             <div>
               <div className="schedule-section">
                 <Title text="Schedule time (start date)" isRequired={true} />
@@ -619,13 +613,6 @@ const DrugChartSlider = (props) => {
                     <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
                   </p>
                 )}
-                {showSchedulePassedWarning.some(
-                  (showSchedulePassed) => showSchedulePassed === true
-                ) && (
-                  <p className="time-warning">
-                    <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
-                  </p>
-                )}
               </div>
               <div className="schedule-section">
                 <Title text="Schedule time (remainder)" isRequired={true} />
@@ -676,13 +663,64 @@ const DrugChartSlider = (props) => {
                   <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
                 </p>
               )}
-              {showFinalDaySchedulePassedWarning.some(
-                (showSchedulePassed) => showSchedulePassed === true
-              ) && (
-                <p className="time-warning">
-                  <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
-                </p>
-              )}
+            </div>
+          )}
+          {enableSchedule && firstDaySlotsMissed == 0 && (
+            <div>
+              <div className="schedule-section">
+                <Title text="Schedule(s)" isRequired={true} />
+                <div className="inline-field" id="schedule">
+                  {Array.from(
+                    { length: enableSchedule?.frequencyPerDay },
+                    (_, index) =>
+                      enable24HourTimers ? (
+                        <div className="schedule-time" key={index}>
+                          <TimePicker24Hour
+                            key={index}
+                            id={`schedule-${index}`}
+                            defaultTime={schedules[index]}
+                            onChange={(time) => {
+                              handleSubsequentDaySchedule(time, index);
+                            }}
+                            labelText=" "
+                            width="70%"
+                            invalidText={invalidTimeText24Hour}
+                          />
+                        </div>
+                      ) : (
+                        <div className="schedule-time" key={index}>
+                          <TimePicker
+                            key={index}
+                            labelText=" "
+                            defaultTime={schedules[index]}
+                            onChange={(time) => {
+                              handleSubsequentDaySchedule(time, index);
+                            }}
+                            id={`schedule-${index}`}
+                            invalidText={invalidTimeText12Hour}
+                          />
+                        </div>
+                      )
+                  )}
+                </div>
+                {showScheduleOrderWarning && (
+                  <p className="time-error">
+                    <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
+                  </p>
+                )}
+                {showEmptyScheduleWarning && (
+                  <p className="time-error">
+                    <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
+                  </p>
+                )}
+                {showSchedulePassedWarning.some(
+                  (showSchedulePassed) => showSchedulePassed === true
+                ) && (
+                  <p className="time-warning">
+                    <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
+                  </p>
+                )}
+              </div>
             </div>
           )}
           {enableStartTime && (
