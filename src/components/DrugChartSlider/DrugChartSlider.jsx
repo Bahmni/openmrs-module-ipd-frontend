@@ -20,78 +20,32 @@ import { SaveAndCloseButtons } from "../../features/SaveAndCloseButtons/componen
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
-  console.log("hostData", hostData);
   const enableSchedule = hostData?.scheduleFrequencies.find(
     (frequency) =>
       frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
   );
-  console.log("enableSchedule", enableSchedule);
   const enableStartTime = hostData?.startTimeFrequencies.includes(
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
-  const isAutoFill = !!enableSchedule?.scheduleTiming;
+  const isAutoFill = Boolean(enableSchedule?.scheduleTiming);
 
-  useEffect(() => {
-    if (isAutoFill) {
-      if (enable24HourTimers) {
-        setSchedules(enableSchedule?.scheduleTiming || []);
-        setFinalDaySchedules(enableSchedule?.scheduleTiming || []);
-        setFirstDaySchedules(enableSchedule?.scheduleTiming || []);
-      } else {
-        const parsedTimings = enableSchedule?.scheduleTiming.map((time) =>
-          moment(time, "hh:mm A")
-        );
-        setSchedules(parsedTimings || []);
-        setFinalDaySchedules(parsedTimings || []);
-        setFirstDaySchedules(parsedTimings || []);
-      }
-    } else {
-      const defaultSchedules = Array.from(
-        { length: enableSchedule?.frequencyPerDay },
-        () => ""
-      );
-      setSchedules(defaultSchedules);
-    }
-  }, [isAutoFill, enable24HourTimers, enableSchedule]);
-
-  useEffect(() => {
-    console.log("inside useeffect", firstDaySchedules);
-    firstDaySchedules.forEach((schedule) => {
-      if (isTimePassed(schedule)) {
-        setFirstDaySlotNumber((prevSlotNumber) => prevSlotNumber + 1);
-      }
-    });
-  }, [firstDaySchedules]);
-
-  // const firstDaySchedulesRef = useRef(firstDaySchedules);
-
-  // useEffect(() => {
-  //   firstDaySchedulesRef.current = firstDaySchedules;
-  // }, [firstDaySchedules]);
-
-  // useEffect(() => {
-  //   firstDaySchedulesRef.current.forEach((schedule) => {
-  //     if (isTimePassed(schedule)) {
-  //       setFirstDaySlotNumber((prevSlotNumber) => prevSlotNumber + 1);
-  //     }
-  //   });
-  // }, []);
-
-  const [schedules, setSchedules] = useState([]);
-  const [firstDaySchedules, setFirstDaySchedules] = useState([]);
-  const [finalDaySchedules, setFinalDaySchedules] = useState([]);
-  const [firstDaySlotNumber, setFirstDaySlotNumber] = useState(0);
-
-  console.log("firstDaySlotNumber", firstDaySlotNumber);
-
+  const [firstDaySlotsMissed, setFirstDaySlotsMissed] = useState(0);
   const [startTime, setStartTime] = useState("");
+
   const [
     showStartTimeBeyondNextDoseWarning,
     setShowStartTimeBeyondNextDoseWarning,
   ] = useState(false);
   const [showStartTimePassedWarning, setShowStartTimePassedWarning] =
     useState(false);
+  const [showEmptyStartTimeWarning, setShowEmptyStartTimeWarning] =
+    useState(false);
+
+  const [schedules, setSchedules] = useState([]);
+  const [firstDaySchedules, setFirstDaySchedules] = useState([]);
+  const [finalDaySchedules, setFinalDaySchedules] = useState([]);
+
   const [showSchedulePassedWarning, setShowSchedulePassedWarning] = useState(
     []
   );
@@ -99,8 +53,33 @@ const DrugChartSlider = (props) => {
     useState(false);
   const [showEmptyScheduleWarning, setShowEmptyScheduleWarning] =
     useState(false);
-  const [showEmptyStartTimeWarning, setShowEmptyStartTimeWarning] =
-    useState(false);
+
+  const [
+    showFirstDaySchedulePassedWarning,
+    setShowFirstDaySchedulePassedWarning,
+  ] = useState([]);
+  const [
+    showFirstDayScheduleOrderWarning,
+    setShowFirstDayScheduleOrderWarning,
+  ] = useState(false);
+  const [
+    showEmptyFirstDayScheduleWarning,
+    setShowEmptyFirstDayScheduleWarning,
+  ] = useState(false);
+
+  const [
+    showFinalDaySchedulePassedWarning,
+    setShowFinalDaySchedulePassedWarning,
+  ] = useState([]);
+  const [
+    showFinalDayScheduleOrderWarning,
+    setShowFinalDayScheduleOrderWarning,
+  ] = useState(false);
+  const [
+    showEmptyFinalDayScheduleWarning,
+    setShowEmptyFinalDayScheduleWarning,
+  ] = useState(false);
+
   const invalidTimeText24Hour = "Please enter in 24-hr format";
   const invalidTimeText12Hour = "Please enter in 12-hr format";
 
@@ -127,7 +106,7 @@ const DrugChartSlider = (props) => {
       : moment(newSchedule, "hh:mm A");
     setFirstDaySchedules(newScheduleArray);
     if (!isInvalidTimeTextPresent()) {
-      setShowSchedulePassedWarning((prevScheduleWarnings) => {
+      setShowFirstDaySchedulePassedWarning((prevScheduleWarnings) => {
         const newSchedulePassedWarnings = [...prevScheduleWarnings];
         newSchedulePassedWarnings[index] = isTimePassed(newSchedule);
         return newSchedulePassedWarnings;
@@ -141,6 +120,13 @@ const DrugChartSlider = (props) => {
       ? newSchedule
       : moment(newSchedule, "hh:mm A");
     setSchedules(newScheduleArray);
+    if (!isInvalidTimeTextPresent()) {
+      setShowSchedulePassedWarning((prevScheduleWarnings) => {
+        const newSchedulePassedWarnings = [...prevScheduleWarnings];
+        newSchedulePassedWarnings[index] = isTimePassed(newSchedule);
+        return newSchedulePassedWarnings;
+      });
+    }
   };
 
   const handleFinalDaySchedule = (newSchedule, index) => {
@@ -149,6 +135,13 @@ const DrugChartSlider = (props) => {
       ? newSchedule
       : moment(newSchedule, "hh:mm A");
     setFinalDaySchedules(newScheduleArray);
+    if (!isInvalidTimeTextPresent()) {
+      setShowFinalDaySchedulePassedWarning((prevScheduleWarnings) => {
+        const newSchedulePassedWarnings = [...prevScheduleWarnings];
+        newSchedulePassedWarnings[index] = isTimePassed(newSchedule);
+        return newSchedulePassedWarnings;
+      });
+    }
   };
 
   const areSchedulesInOrder = (allSchedule) => {
@@ -181,6 +174,38 @@ const DrugChartSlider = (props) => {
 
   const isValidSchedule = async () => {
     const { isValid, warningType } = await handleScheduleWarnings();
+    if (!isValid && (warningType === "empty" || warningType === "passed"))
+      return false;
+    return true;
+  };
+
+  const handleFirstDayScheduleWarnings = async () => {
+    const { isValid, warningType } = await validateSchedules(
+      firstDaySchedules.filter(
+        (firstDaySchedule) => firstDaySchedule != "hh:mm"
+      )
+    );
+    setShowEmptyFirstDayScheduleWarning(!isValid && warningType === "empty");
+    setShowFirstDayScheduleOrderWarning(!isValid && warningType === "passed");
+    return { isValid, warningType };
+  };
+
+  const isValidFirstDaySchedule = async () => {
+    const { isValid, warningType } = await handleFirstDayScheduleWarnings();
+    if (!isValid && (warningType === "empty" || warningType === "passed"))
+      return false;
+    return true;
+  };
+
+  const handleFinalDayScheduleWarnings = async () => {
+    const { isValid, warningType } = await validateSchedules(finalDaySchedules);
+    setShowEmptyFinalDayScheduleWarning(!isValid && warningType === "empty");
+    setShowFinalDayScheduleOrderWarning(!isValid && warningType === "passed");
+    return { isValid, warningType };
+  };
+
+  const isValidFinalDaySchedule = async () => {
+    const { isValid, warningType } = await handleFinalDayScheduleWarnings();
     if (!isValid && (warningType === "empty" || warningType === "passed"))
       return false;
     return true;
@@ -287,6 +312,7 @@ const DrugChartSlider = (props) => {
       slotStartTime: null,
       firstDaySlotsStartTime: null,
       dayWiseSlotsStartTime: null,
+      remainingDaySlotsStartTime: null,
       comments: drugChartNotes,
       medicationFrequency: "",
     };
@@ -297,46 +323,36 @@ const DrugChartSlider = (props) => {
         medicationFrequency.START_TIME_DURATION_FREQUENCY;
     }
     if (enableSchedule) {
-      const schedulesUTCTimeEpoch = schedules.map((schedule) => {
-        return getUTCTimeEpoch(schedule);
-      });
+      const nextScheduleDate = 24 * 60 * 60;
+      const finalScheduleDate =
+        nextScheduleDate * enableSchedule?.frequencyPerDay;
+
       const firstDaySchedulesUTCTimeEpoch = firstDaySchedules
-        .filter((schedule) => !isTimePassed(schedule))
-        .map((schedule) => {
-          return getUTCTimeEpoch(schedule);
-        });
+        .filter((schedule) => schedule !== "hh:mm")
+        .map((schedule) => getUTCTimeEpoch(schedule));
 
-      const finalDaySchedulesUTCTimeEpoch = finalDaySchedules.map(
-        (schedule) => {
-          return getUTCTimeEpoch(schedule);
-        }
+      const schedulesUTCTimeEpoch = schedules.map((schedule) =>
+        getUTCTimeEpoch(schedule)
       );
 
-      console.log("schedulesUTCTimeEpoch", schedulesUTCTimeEpoch);
-      console.log(
-        "firstDaySchedulesUTCTimeEpoch",
-        firstDaySchedulesUTCTimeEpoch
+      const finalDaySchedulesUTCTimeEpoch = finalDaySchedules.map((schedule) =>
+        getUTCTimeEpoch(schedule)
       );
-      const hrinseconds = 24 * 60 * 60;
-      console.log(
-        "enableSchedule?.frequencyPerDay",
-        enableSchedule?.frequencyPerDay
-      );
-      const hrinsecondsFinal = 24 * 60 * 60 * enableSchedule?.frequencyPerDay;
-      console.log("hrinsecondsFinal", hrinsecondsFinal);
-      payload.dayWiseSlotsStartTime = firstDaySchedules
-        ? schedulesUTCTimeEpoch.map((schedules) => schedules + hrinseconds)
-        : schedulesUTCTimeEpoch;
-      // payload.remainingDaySlotsStartTime = firstDaySchedules && finalDaySchedulesUTCTimeEpoch.map(
-      //   (schedules) => schedules + hrinsecondsFinal
-      // );
-      const remainingDaySlotsStartTime = finalDaySchedulesUTCTimeEpoch.map(
-        (schedules) => schedules + hrinsecondsFinal
-      );
-      console.log("remainingDaySlotsStartTime", remainingDaySlotsStartTime);
+
       payload.firstDaySlotsStartTime = firstDaySchedulesUTCTimeEpoch;
+      payload.dayWiseSlotsStartTime = firstDaySchedules.some(
+        (schedule) => schedule != "hh:mm"
+      )
+        ? schedulesUTCTimeEpoch.map((schedules) => schedules + nextScheduleDate)
+        : schedulesUTCTimeEpoch;
+      const remainingDaySlotsStartTime = finalDaySchedulesUTCTimeEpoch.map(
+        (schedules) => schedules + finalScheduleDate
+      );
+      remainingDaySlotsStartTime.slice(0, firstDaySlotsMissed);
+      payload.remainingDaySlotsStartTime = remainingDaySlotsStartTime;
       payload.medicationFrequency =
         medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
+      console.log("payload", payload);
     }
     return payload;
   };
@@ -344,7 +360,12 @@ const DrugChartSlider = (props) => {
   const validateSave = async () => {
     if (isInvalidTimeTextPresent()) return false;
     if (enableSchedule) {
-      return await isValidSchedule();
+      const validFirstDaySchedules = await isValidFirstDaySchedule();
+      const validSchedules = await isValidSchedule();
+      const validFinalDaySchedules = await isValidFinalDaySchedule();
+      if (!validFirstDaySchedules || !validSchedules || !validFinalDaySchedules)
+        return false;
+      return true;
     }
     if (enableStartTime) {
       if (!startTime) {
@@ -355,7 +376,40 @@ const DrugChartSlider = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (isAutoFill) {
+      const scheduleTimings = enable24HourTimers
+        ? enableSchedule?.scheduleTiming
+        : enableSchedule?.scheduleTiming.map((time) => moment(time, "hh:mm A"));
+      let finalScheduleCount = 0;
+      scheduleTimings.forEach((schedule) => {
+        if (isTimePassed(schedule)) {
+          setFirstDaySchedules((prevSchedules) => [...prevSchedules, "hh:mm"]);
+          finalScheduleCount = finalScheduleCount + 1;
+          setFirstDaySlotsMissed((prevSlotNumber) => prevSlotNumber + 1);
+        } else {
+          setFirstDaySchedules((prevSchedules) => [...prevSchedules, schedule]);
+        }
+      });
+      setSchedules(scheduleTimings || []);
+      finalScheduleCount > 0 &&
+        setFinalDaySchedules(scheduleTimings.slice(firstDaySlotsMissed) || []);
+      if (finalScheduleCount == enableSchedule?.frequencyPerDay) {
+        setFirstDaySchedules([]);
+        setFinalDaySchedules([]);
+        setFirstDaySlotsMissed(0);
+      }
+    } else {
+      const defaultSchedules = Array.from(
+        { length: enableSchedule?.frequencyPerDay },
+        () => ""
+      );
+      setSchedules(defaultSchedules);
+    }
+  }, [isAutoFill, enable24HourTimers, enableSchedule]);
+
   const handleSave = async () => {
+    console.log("handleSave", firstDaySchedules, schedules, finalDaySchedules);
     const performSave = await validateSave();
     if (performSave) {
       const medication = createDrugChartPayload();
@@ -474,18 +528,14 @@ const DrugChartSlider = (props) => {
                           <TimePicker24Hour
                             key={index}
                             id={`schedule-${index}`}
-                            defaultTime={
-                              isTimePassed(firstDaySchedules[index])
-                                ? "hh:mm"
-                                : firstDaySchedules[index]
-                            }
+                            defaultTime={firstDaySchedules[index]}
                             onChange={(time) => {
                               handleFirstDaySchedule(time, index);
                             }}
                             labelText=" "
                             width="70%"
                             invalidText={invalidTimeText24Hour}
-                            isDisabled={isTimePassed(firstDaySchedules[index])}
+                            isDisabled={firstDaySchedules[index] == "hh:mm"}
                           />
                         </div>
                       ) : (
@@ -493,33 +543,29 @@ const DrugChartSlider = (props) => {
                           <TimePicker
                             key={index}
                             labelText=" "
-                            defaultTime={
-                              isTimePassed(firstDaySchedules[index])
-                                ? "hh:mm"
-                                : firstDaySchedules[index]
-                            }
+                            defaultTime={firstDaySchedules[index]}
                             onChange={(time) => {
                               handleFirstDaySchedule(time, index);
                             }}
                             id={`schedule-${index}`}
-                            isDisabled={isTimePassed(firstDaySchedules[index])}
+                            isDisabled={firstDaySchedules[index] == "hh:mm"}
                             invalidText={invalidTimeText12Hour}
                           />
                         </div>
                       )
                   )}
                 </div>
-                {showScheduleOrderWarning && (
+                {showFirstDayScheduleOrderWarning && (
                   <p className="time-error">
                     <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
                   </p>
                 )}
-                {showEmptyScheduleWarning && (
+                {showEmptyFirstDayScheduleWarning && (
                   <p className="time-error">
                     <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
                   </p>
                 )}
-                {showSchedulePassedWarning.some(
+                {showFirstDaySchedulePassedWarning.some(
                   (showSchedulePassed) => showSchedulePassed === true
                 ) && (
                   <p className="time-warning">
@@ -573,16 +619,21 @@ const DrugChartSlider = (props) => {
                     <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
                   </p>
                 )}
+                {showSchedulePassedWarning.some(
+                  (showSchedulePassed) => showSchedulePassed === true
+                ) && (
+                  <p className="time-warning">
+                    <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
+                  </p>
+                )}
               </div>
               <div className="schedule-section">
                 <Title text="Schedule time (remainder)" isRequired={true} />
                 <div className="inline-field" id="schedule">
                   {Array.from(
                     {
-                      length:
-                        enableSchedule?.frequencyPerDay - firstDaySlotNumber,
+                      length: firstDaySlotsMissed,
                     },
-                    // { length: finalDaySlotNumber },
                     (_, index) =>
                       enable24HourTimers ? (
                         <div className="schedule-time" key={index}>
@@ -615,14 +666,21 @@ const DrugChartSlider = (props) => {
                   )}
                 </div>
               </div>
-              {showScheduleOrderWarning && (
+              {showFinalDayScheduleOrderWarning && (
                 <p className="time-error">
                   <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
                 </p>
               )}
-              {showEmptyScheduleWarning && (
+              {showEmptyFinalDayScheduleWarning && (
                 <p className="time-error">
                   <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
+                </p>
+              )}
+              {showFinalDaySchedulePassedWarning.some(
+                (showSchedulePassed) => showSchedulePassed === true
+              ) && (
+                <p className="time-warning">
+                  <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
                 </p>
               )}
             </div>

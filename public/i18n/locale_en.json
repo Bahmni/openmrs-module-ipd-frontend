@@ -40,5 +40,8 @@
   "AT": "at",
   "TASKS": "Task(s)",
   "SCHEDULED_FOR_KEY": "Scheduled for",
-  "NOTES_ERROR_MESSAGE": "Please enter notes"
+  "NOTES_ERROR_MESSAGE": "Please enter notes",
+  "YES": "Yes",
+  "NO": "No",
+  "TREATEMENTS_WARNING_MESSAGE": "You will lose the details entered. Do you want to continue?"
 }

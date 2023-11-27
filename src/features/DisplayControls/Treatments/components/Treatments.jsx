@@ -25,6 +25,7 @@ import DrugChartSliderNotification from "../../../../components/DrugChartSlider/
 import { SliderContext } from "../../../../context/SliderContext";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { DDMMYYY_DATE_FORMAT } from "../../../../constants";
+import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -44,13 +45,22 @@ const Treatments = (props) => {
     });
   };
   var drugOrderList = {};
+  const sliderCloseActions = {
+    onCancel: () => {
+      setShowWarningNotification(false);
+      updateTreatmentsSlider(false);
+    },
+    onClose: () => {
+      setShowWarningNotification(false);
+    },
+  };
+
   const DrugChartSliderActions = {
     onModalClose: () => {
-      updateTreatmentsSlider(false);
+      setShowWarningNotification(true);
     },
     onModalCancel: () => {
       setShowWarningNotification(true);
-      updateTreatmentsSlider(false);
     },
     onModalSave: () => {
       setShowSuccessNotification(true);
@@ -169,9 +179,21 @@ const Treatments = (props) => {
         />
       )}
       {showWarningNotification && (
-        <DrugChartSliderNotification
-          hostData={{ notificationKind: "warning" }}
-          hostApi={{ onClose: () => setShowWarningNotification(false) }}
+        <SideBarPanelClose
+          className="warning-notification"
+          open={true}
+          message={
+            <FormattedMessage
+              id="TREATMENTS_WARNING_TEXT"
+              defaultMessage="You will lose the details entered. Do you want to continue?"
+            />
+          }
+          label={""}
+          primaryButtonText={<FormattedMessage id="YES" defaultMessage="Yes" />}
+          secondaryButtonText={<FormattedMessage id="NO" defaultMessage="No" />}
+          onSubmit={sliderCloseActions.onCancel}
+          onSecondarySubmit={sliderCloseActions.onClose}
+          onClose={sliderCloseActions.onClose}
         />
       )}
       {showSuccessNotification && (
