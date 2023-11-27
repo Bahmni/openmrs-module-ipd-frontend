@@ -15,8 +15,16 @@ import axios from "axios";
 import { DRUG_ORDERS_CONFIG_URL } from "../../constants";
 import DrugChartSliderNotification from "./DrugChartSliderNotification";
 import MockDate from "mockdate";
+import { SliderContext } from "../../context/SliderContext";
 
 let mockAxios;
+
+const mockSliderContext = {
+  sliderContentModified: {
+    treatments: false,
+  },
+  setSliderContentModified: jest.fn(),
+};
 
 describe("DrugChartSlider", () => {
   beforeEach(() => {
@@ -33,14 +41,16 @@ describe("DrugChartSlider", () => {
 
   it("Component renders successfully", async () => {
     render(
-      <DrugChartSlider
-        hostData={{
-          drugOrder: mockStartTimeDrugOrder,
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            drugOrder: mockStartTimeDrugOrder,
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       expect(screen.getByText("Add to Drug Chart")).toBeTruthy();
@@ -49,14 +59,16 @@ describe("DrugChartSlider", () => {
 
   it("should show drug name field to be disabled", async () => {
     render(
-      <DrugChartSlider
-        hostData={{
-          drugOrder: mockScheduleDrugOrder,
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            drugOrder: mockScheduleDrugOrder,
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       const inputElement = screen.getByLabelText("Drug Name");
@@ -67,14 +79,16 @@ describe("DrugChartSlider", () => {
 
   it("should show dose field to be disabled", async () => {
     render(
-      <DrugChartSlider
-        hostData={{
-          drugOrder: mockScheduleDrugOrder,
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            drugOrder: mockScheduleDrugOrder,
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       const inputElement = screen.getByLabelText("Dose");
@@ -85,14 +99,16 @@ describe("DrugChartSlider", () => {
 
   it("should show duration field to be disabled", async () => {
     render(
-      <DrugChartSlider
-        hostData={{
-          drugOrder: mockScheduleDrugOrder,
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            drugOrder: mockScheduleDrugOrder,
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       const inputElement = screen.getByLabelText("Duration");
@@ -103,14 +119,16 @@ describe("DrugChartSlider", () => {
 
   it("should show start date field to be disabled", async () => {
     render(
-      <DrugChartSlider
-        hostData={{
-          drugOrder: mockScheduleDrugOrder,
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            drugOrder: mockScheduleDrugOrder,
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       const inputElement = screen.getByLabelText("Start Date");
@@ -121,14 +139,16 @@ describe("DrugChartSlider", () => {
 
   it("should show notes field to be enabled", async () => {
     render(
-      <DrugChartSlider
-        hostData={{
-          drugOrder: mockStartTimeDrugOrder,
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            drugOrder: mockStartTimeDrugOrder,
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       const inputElement = screen.getByTestId("notes-section");
@@ -139,14 +159,16 @@ describe("DrugChartSlider", () => {
 
   it("should enable schedule when frequency is present in scheduleFrequencies", async () => {
     render(
-      <DrugChartSlider
-        hostData={{
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-          drugOrder: mockScheduleDrugOrder,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockScheduleDrugOrder,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       const inputElement = screen.getByText("Schedule(s)");
@@ -156,14 +178,16 @@ describe("DrugChartSlider", () => {
 
   it("should enable start time when frequency is present in scheduleFrequencies", async () => {
     render(
-      <DrugChartSlider
-        hostData={{
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-          drugOrder: mockStartTimeDrugOrder,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockStartTimeDrugOrder,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       const inputElement = screen.getByText("Start Time");
@@ -173,14 +197,16 @@ describe("DrugChartSlider", () => {
 
   it("should show Please select Schedule(s) when save is clicked without entering schedule", async () => {
     render(
-      <DrugChartSlider
-        hostData={{
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-          drugOrder: mockScheduleDrugOrder,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockScheduleDrugOrder,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       const saveButton = screen.getByRole("button", { name: "Save" });
@@ -191,14 +217,16 @@ describe("DrugChartSlider", () => {
 
   it("should show Please select Start Time when save is clicked without entering start time", async () => {
     render(
-      <DrugChartSlider
-        hostData={{
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-          drugOrder: mockStartTimeDrugOrder,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockStartTimeDrugOrder,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       const saveButton = screen.getByRole("button", { name: "Save" });
@@ -209,15 +237,17 @@ describe("DrugChartSlider", () => {
 
   it("Should show invalid time format error message when wrong time is entered in the field", async () => {
     render(
-      <DrugChartSlider
-        hostData={{
-          enable24HourTimers: true,
-          scheduleFrequencies: mockScheduleFrequencies,
-          startTimeFrequencies: mockStartTimeFrequencies,
-          drugOrder: mockStartTimeDrugOrder,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            enable24HourTimers: true,
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockStartTimeDrugOrder,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
 
     await waitFor(() => {
@@ -235,15 +265,17 @@ describe("DrugChartSlider", () => {
   it("Should show pre-filled timing in the schedule fields if the schedule time is provided from config", async () => {
     MockDate.set("2010-12-22T00:00:00.000+0530");
     render(
-      <DrugChartSlider
-        hostData={{
-          enable24HourTimers: true,
-          scheduleFrequencies: mockScheduleFrequenciesWithTimings,
-          startTimeFrequencies: mockStartTimeFrequencies,
-          drugOrder: mockScheduleDrugOrder,
-        }}
-        hostApi={{}}
-      />
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            enable24HourTimers: true,
+            scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockScheduleDrugOrder,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
     );
 
     await waitFor(() => {

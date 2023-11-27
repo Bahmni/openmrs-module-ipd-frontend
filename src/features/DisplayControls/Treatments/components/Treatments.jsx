@@ -30,7 +30,8 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 
 const Treatments = (props) => {
   const { patientId } = props;
-  const { isSliderOpen, updateSliderOpen } = useContext(SliderContext);
+  const { isSliderOpen, updateSliderOpen, sliderContentModified } =
+    useContext(SliderContext);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -59,10 +60,14 @@ const Treatments = (props) => {
 
   const DrugChartSliderActions = {
     onModalClose: () => {
-      setShowWarningNotification(true);
+      sliderContentModified.treatments
+        ? setShowWarningNotification(true)
+        : updateTreatmentsSlider(false);
     },
     onModalCancel: () => {
-      setShowWarningNotification(true);
+      sliderContentModified.treatments
+        ? setShowWarningNotification(true)
+        : updateTreatmentsSlider(false);
     },
     onModalSave: () => {
       setShowSuccessNotification(true);
@@ -192,10 +197,12 @@ const Treatments = (props) => {
             />
           }
           label={""}
-          primaryButtonText={<FormattedMessage id="YES" defaultMessage="Yes" />}
-          secondaryButtonText={<FormattedMessage id="NO" defaultMessage="No" />}
-          onSubmit={sliderCloseActions.onCancel}
-          onSecondarySubmit={sliderCloseActions.onClose}
+          primaryButtonText={<FormattedMessage id="NO" defaultMessage="No" />}
+          secondaryButtonText={
+            <FormattedMessage id="YES" defaultMessage="Yes" />
+          }
+          onSubmit={sliderCloseActions.onClose}
+          onSecondarySubmit={sliderCloseActions.onCancel}
           onClose={sliderCloseActions.onClose}
         />
       )}

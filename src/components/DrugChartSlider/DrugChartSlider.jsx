@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   DatePickerCarbon,
   DropdownCarbon,
@@ -17,6 +17,7 @@ import SideBarPanel from "../../features/SideBarPanel/components/SideBarPanel";
 import "./DrugChartSlider.scss";
 import { medicationFrequency } from "../../constants";
 import { SaveAndCloseButtons } from "../../features/SaveAndCloseButtons/components/SaveAndCloseButtons";
+import { SliderContext } from "../../context/SliderContext";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
@@ -30,6 +31,15 @@ const DrugChartSlider = (props) => {
   const enable24HourTimers = hostData?.enable24HourTimers || false;
   const isAutoFill = Boolean(enableSchedule?.scheduleTiming);
 
+  const { setSliderContentModified } = useContext(SliderContext);
+  const updateSliderContentModified = (value) => {
+    setSliderContentModified((prev) => {
+      return {
+        ...prev,
+        treatments: value,
+      };
+    });
+  };
   const [firstDaySlotsMissed, setFirstDaySlotsMissed] = useState(0);
   const [startTime, setStartTime] = useState("");
 
@@ -96,6 +106,7 @@ const DrugChartSlider = (props) => {
   };
 
   const handleFirstDaySchedule = (newSchedule, index) => {
+    updateSliderContentModified(true);
     const newScheduleArray = [...firstDaySchedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
@@ -111,6 +122,7 @@ const DrugChartSlider = (props) => {
   };
 
   const handleSubsequentDaySchedule = (newSchedule, index) => {
+    updateSliderContentModified(true);
     const newScheduleArray = [...schedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
@@ -126,6 +138,7 @@ const DrugChartSlider = (props) => {
   };
 
   const handleFinalDaySchedule = (newSchedule, index) => {
+    updateSliderContentModified(true);
     const newScheduleArray = [...finalDaySchedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
@@ -248,6 +261,7 @@ const DrugChartSlider = (props) => {
   };
 
   const handleStartTime = async (time) => {
+    updateSliderContentModified(true);
     if (time === "") {
       setShowEmptyStartTimeWarning(true);
       setShowStartTimeBeyondNextDoseWarning(false);
@@ -418,6 +432,11 @@ const DrugChartSlider = (props) => {
 
   const handleClose = () => {
     hostApi.onModalClose?.();
+  };
+
+  const handleNotes = (e) => {
+    updateSliderContentModified(true);
+    setDrugChartNotes(e.target.value);
   };
 
   return (
@@ -825,7 +844,7 @@ const DrugChartSlider = (props) => {
               type="text"
               rows={3}
               value={drugChartNotes}
-              onChange={(e) => setDrugChartNotes(e.target.value)}
+              onChange={(e) => handleNotes(e)}
               labelText="Notes"
             />
           </div>
