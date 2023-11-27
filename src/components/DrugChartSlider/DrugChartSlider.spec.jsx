@@ -14,10 +14,11 @@ import mockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import { DRUG_ORDERS_CONFIG_URL } from "../../constants";
 import DrugChartSliderNotification from "./DrugChartSliderNotification";
+import MockDate from "mockdate";
 
 let mockAxios;
 
-describe.skip("DrugChartSlider", () => {
+describe("DrugChartSlider", () => {
   beforeEach(() => {
     mockAxios = new mockAdapter(axios);
     const drugOrderFrequencies = mockDrugOrderFrequencies;
@@ -232,6 +233,7 @@ describe.skip("DrugChartSlider", () => {
   });
 
   it("Should show pre-filled timing in the schedule fields if the schedule time is provided from config", async () => {
+    MockDate.set("2010-12-22T00:00:00.000+0530");
     render(
       <DrugChartSlider
         hostData={{
@@ -250,6 +252,7 @@ describe.skip("DrugChartSlider", () => {
       expect(startTimeInputs[0].value).toBe("8:00");
       expect(startTimeInputs[1].value).toBe("16:00");
     });
+    MockDate.reset();
   });
 });
 

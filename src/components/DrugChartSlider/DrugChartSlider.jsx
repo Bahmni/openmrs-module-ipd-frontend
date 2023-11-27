@@ -623,7 +623,14 @@ const DrugChartSlider = (props) => {
                     },
                     (_, index) =>
                       enable24HourTimers ? (
-                        <div className="schedule-time" key={index}>
+                        <div
+                          className={
+                            enableSchedule?.frequencyPerDay == 4
+                              ? "schedule-time-remainder"
+                              : "schedule-time"
+                          }
+                          key={index}
+                        >
                           <TimePicker24Hour
                             key={index}
                             id={`schedule-${index}`}
@@ -637,7 +644,14 @@ const DrugChartSlider = (props) => {
                           />
                         </div>
                       ) : (
-                        <div className="schedule-time" key={index}>
+                        <div
+                          className={
+                            enableSchedule?.frequencyPerDay == 4
+                              ? "schedule-time-remainder"
+                              : "schedule-time"
+                          }
+                          key={index}
+                        >
                           <TimePicker
                             key={index}
                             labelText=" "
