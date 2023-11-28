@@ -18,24 +18,26 @@ export const ExtractMedicationNursingTasksData = (
   medicationNursingTasksData
 ) => {
   const extractedData = [];
-
   medicationNursingTasksData.forEach((item) => {
-    const { order, slots } = item;
-    const drugName = order.drug.display;
-    const drugRoute = order.route.display;
-    let duration, dosage, doseType;
-    if (order.duration) {
-      duration = order.duration + " " + order.durationUnits.display;
-    }
-    if (order.doseUnits.display !== "ml" && order.doseUnits.display !== "mg") {
-      dosage = order.dose;
-      doseType = order.doseUnits.display;
-    } else {
-      dosage = order.dose + order.doseUnits.display;
-    }
+    const { slots } = item;
 
     slots.forEach((slot) => {
-      const { startTime, uuid } = slot;
+      const { startTime, uuid, order } = slot;
+      const drugName = order.drug.display;
+      const drugRoute = order.route.display;
+      let duration, dosage, doseType;
+      if (order.duration) {
+        duration = order.duration + " " + order.durationUnits.display;
+      }
+      if (
+        order.doseUnits.display !== "ml" &&
+        order.doseUnits.display !== "mg"
+      ) {
+        dosage = order.dose;
+        doseType = order.doseUnits.display;
+      } else {
+        dosage = order.dose + order.doseUnits.display;
+      }
       const startTimeInDate = new Date(startTime * 1000);
       extractedData.push({
         drugName,

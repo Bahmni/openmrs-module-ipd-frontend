@@ -5,28 +5,34 @@ import DrugChart from "../DrugChart";
 import { useFetchMedications } from "../../../hooks/useFetchMedications";
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
-  const transformedDrugChartData = drugChartData.map((schedule) => {
-    const { slots, order } = schedule;
-    const slotData = {};
-    const drugOrder = {
-      drugName: order.drug.display,
-      drugRoute: order.route.display,
-      administrationInfo: [],
-    };
-    if (order.duration) {
-      drugOrder.duration = order.duration + " " + order.durationUnits.display;
-    }
-    if (order.doseUnits.display !== "ml") {
-      drugOrder.dosage = order.dose;
-      drugOrder.doseType = order.doseUnits.display;
-    } else {
-      drugOrder.dosage = order.dose + order.doseUnits.display;
-    }
-    if (order.duration) {
-      drugOrder.duration = order.duration + " " + order.durationUnits.display;
-    }
+  const slotDataByOrder = [];
+
+  drugChartData.map((schedule) => {
+    const { slots } = schedule;
+
     slots.forEach((slot) => {
-      const { startTime, status } = slot;
+      const slotData = {};
+      const { startTime, status, order } = slot;
+      const drugOrder = {
+        uuid: order.uuid,
+        drugName: order.drug.display,
+        drugRoute: order.route.display,
+        administrationInfo: [],
+      };
+
+      if (order.duration) {
+        drugOrder.duration = order.duration + " " + order.durationUnits.display;
+      }
+      if (order.doseUnits.display !== "ml") {
+        drugOrder.dosage = order.dose;
+        drugOrder.doseType = order.doseUnits.display;
+      } else {
+        drugOrder.dosage = order.dose + order.doseUnits.display;
+      }
+      if (order.duration) {
+        drugOrder.duration = order.duration + " " + order.durationUnits.display;
+      }
+
       const startDateTimeObj = new Date(startTime * 1000);
       let adminInfo, administeredTime;
       if (slot.admin) {
@@ -49,11 +55,29 @@ export const TransformDrugChartData = (drugChartData) => {
           time: administeredTime,
         });
       }
+      if (
+        !drugOrderData.some(
+          (existingOrder) =>
+            existingOrder.drugName === drugOrder.drugName &&
+            existingOrder.uuid === drugOrder.uuid
+        )
+      ) {
+        drugOrderData.push(drugOrder);
+        slotDataByOrder.push(slotData);
+      } else {
+        const index = drugOrderData.findIndex(
+          (existingOrder) =>
+            existingOrder.drugName === drugOrder.drugName &&
+            existingOrder.uuid === drugOrder.uuid
+        );
+        slotDataByOrder[index] = {
+          ...slotDataByOrder[index],
+          ...slotData,
+        };
+      }
     });
-    drugOrderData.push(drugOrder);
-    return slotData;
   });
-  return [transformedDrugChartData, drugOrderData];
+  return [slotDataByOrder, drugOrderData];
 };
 export const GetUTCEpochForDate = (viewDate) => {
   const utcTimeEpoch = moment.utc(viewDate).unix();
