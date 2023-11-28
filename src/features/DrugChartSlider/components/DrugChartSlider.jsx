@@ -11,11 +11,11 @@ import { TextArea, TextInput } from "carbon-components-react";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
-import { I18nProvider } from "../../../features/i18n/I18nProvider";
-import SideBarPanel from "../../../features/SideBarPanel/components/SideBarPanel";
+import { I18nProvider } from "../../i18n/I18nProvider";
+import SideBarPanel from "../../SideBarPanel/components/SideBarPanel";
 import "../styles/DrugChartSlider.scss";
 import { medicationFrequency } from "../../../constants";
-import { SaveAndCloseButtons } from "../../../features/SaveAndCloseButtons/components/SaveAndCloseButtons";
+import { SaveAndCloseButtons } from "../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import { SliderContext } from "../../../context/SliderContext";
 import {
   isTimePassed,
