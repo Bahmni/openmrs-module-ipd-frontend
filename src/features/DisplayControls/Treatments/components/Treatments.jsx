@@ -209,8 +209,8 @@ const Treatments = (props) => {
           secondaryButtonText={
             <FormattedMessage id="YES" defaultMessage="Yes" />
           }
-          onSubmit={sliderCloseActions.onCancel}
-          onSecondarySubmit={sliderCloseActions.onClose}
+          onSubmit={sliderCloseActions.onClose}
+          onSecondarySubmit={sliderCloseActions.onCancel}
           onClose={sliderCloseActions.onClose}
         />
       )}
