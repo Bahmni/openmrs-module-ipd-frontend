@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import DrugChartSlider from "./DrugChartSlider";
+import DrugChartSlider from "../components/DrugChartSlider";
 import {
   mockStartTimeDrugOrder,
   mockScheduleDrugOrder,
@@ -8,14 +8,14 @@ import {
   mockStartTimeFrequencies,
   mockDrugOrderFrequencies,
   mockScheduleFrequenciesWithTimings,
-} from "./DrugChartSliderTestUtils";
+} from "../utils/DrugChartSliderTestUtils";
 import "@testing-library/jest-dom";
 import mockAdapter from "axios-mock-adapter";
 import axios from "axios";
-import { DRUG_ORDERS_CONFIG_URL } from "../../constants";
-import DrugChartSliderNotification from "./DrugChartSliderNotification";
+import { DRUG_ORDERS_CONFIG_URL } from "../../../constants";
+import DrugChartSliderNotification from "../components/DrugChartSliderNotification";
 import MockDate from "mockdate";
-import { SliderContext } from "../../context/SliderContext";
+import { SliderContext } from "../../../context/SliderContext";
 
 let mockAxios;
 

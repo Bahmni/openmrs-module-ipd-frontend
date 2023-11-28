@@ -11,13 +11,18 @@ import { TextArea, TextInput } from "carbon-components-react";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
-import { I18nProvider } from "../../features/i18n/I18nProvider";
-import { saveMedication } from "../../utils/DrugChartSliderUtils";
-import SideBarPanel from "../../features/SideBarPanel/components/SideBarPanel";
-import "./DrugChartSlider.scss";
-import { medicationFrequency } from "../../constants";
-import { SaveAndCloseButtons } from "../../features/SaveAndCloseButtons/components/SaveAndCloseButtons";
-import { SliderContext } from "../../context/SliderContext";
+import { I18nProvider } from "../../../features/i18n/I18nProvider";
+import SideBarPanel from "../../../features/SideBarPanel/components/SideBarPanel";
+import "../styles/DrugChartSlider.scss";
+import { medicationFrequency } from "../../../constants";
+import { SaveAndCloseButtons } from "../../../features/SaveAndCloseButtons/components/SaveAndCloseButtons";
+import { SliderContext } from "../../../context/SliderContext";
+import {
+  isTimePassed,
+  areSchedulesInOrder,
+  saveMedication,
+  updateStartTimeBasedOnFrequency,
+} from "../utils/DrugChartSliderUtils";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
@@ -97,14 +102,6 @@ const DrugChartSlider = (props) => {
     return screenContent.includes(invalidTimeText);
   };
 
-  const isTimePassed = (newTime) => {
-    const currentTime = moment();
-    const enteredTime = enable24HourTimers
-      ? moment(newTime, "HH:mm")
-      : moment(newTime, "hh:mm A");
-    return currentTime.isAfter(enteredTime);
-  };
-
   const handleFirstDaySchedule = (newSchedule, index) => {
     updateSliderContentModified(true);
     const newScheduleArray = [...firstDaySchedules];
@@ -144,15 +141,6 @@ const DrugChartSlider = (props) => {
       ? newSchedule
       : moment(newSchedule, "hh:mm A");
     setFinalDaySchedules(newScheduleArray);
-  };
-
-  const areSchedulesInOrder = (allSchedule) => {
-    return allSchedule.every((schedule, index) => {
-      if (index === 0) return true;
-      const currentTime = moment(schedule, "HH:mm");
-      const prevTime = moment(allSchedule[index - 1], "HH:mm");
-      return currentTime.isAfter(prevTime);
-    });
   };
 
   const validateSchedules = async (schedules) => {
@@ -211,44 +199,6 @@ const DrugChartSlider = (props) => {
     if (!isValid && (warningType === "empty" || warningType === "passed"))
       return false;
     return true;
-  };
-
-  const updateStartTimeBasedOnFrequency = (frequency, time) => {
-    switch (frequency) {
-      case "Every Hour":
-        time.add(1, "hour");
-        break;
-      case "Every 2 hours":
-        time.add(2, "hours");
-        break;
-      case "Every 3 hours":
-        time.add(3, "hours");
-        break;
-      case "Every 4 hours":
-        time.add(4, "hours");
-        break;
-      case "Every 6 hours":
-        time.add(6, "hours");
-        break;
-      case "Every 8 hours":
-        time.add(8, "hours");
-        break;
-      case "Every 12 hours":
-        time.add(12, "hours");
-        break;
-      case "Once a day":
-        time.add(1, "day");
-        break;
-      case "Nocte (At Night)":
-        time.set({ hour: 23, minute: 59, second: 59 });
-        break;
-      case "Every 30 minutes":
-        time.add(30, "minutes");
-        break;
-      default:
-        break;
-    }
-    return time;
   };
 
   const isStartTimeExceedingFrequency = (time, frequency) => {
