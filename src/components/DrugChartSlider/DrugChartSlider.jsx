@@ -330,9 +330,15 @@ const DrugChartSlider = (props) => {
       const finalScheduleDate =
         nextScheduleDate * hostData?.drugOrder?.duration;
 
-      const firstDaySchedulesUTCTimeEpoch = firstDaySchedules
-        .filter((schedule) => schedule !== "hh:mm")
-        .map((schedule) => getUTCTimeEpoch(schedule));
+      const firstDaySchedulesUTCTimeEpoch = firstDaySchedules.reduce(
+        (result, schedule) => {
+          if (schedule !== "hh:mm") {
+            result.push(getUTCTimeEpoch(schedule));
+          }
+          return result;
+        },
+        []
+      );
 
       const schedulesUTCTimeEpoch = schedules.map((schedule) =>
         getUTCTimeEpoch(schedule)
@@ -360,7 +366,6 @@ const DrugChartSlider = (props) => {
       payload.remainingDaySlotsStartTime = remainingDaySlotsTime;
       payload.medicationFrequency =
         medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
-      console.log("payload", payload);
     }
     return payload;
   };
@@ -417,7 +422,6 @@ const DrugChartSlider = (props) => {
   }, [isAutoFill, enable24HourTimers, enableSchedule]);
 
   const handleSave = async () => {
-    console.log("handleSave", firstDaySchedules, schedules, finalDaySchedules);
     const performSave = await validateSave();
     if (performSave) {
       const medication = createDrugChartPayload();

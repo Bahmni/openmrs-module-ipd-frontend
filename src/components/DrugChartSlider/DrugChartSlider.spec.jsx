@@ -286,6 +286,54 @@ describe("DrugChartSlider", () => {
     });
     MockDate.reset();
   });
+
+  it("Should render Drug Chart Slider for schedules with start, subsequent and remainder slots", async () => {
+    MockDate.set("2010-12-22T11:08:00.000");
+    const { container } = render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            enable24HourTimers: true,
+            scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockScheduleDrugOrder,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Schedule time (start date)")
+      ).toBeInTheDocument();
+      expect(container).toMatchSnapshot();
+    });
+    MockDate.reset();
+  });
+
+  it("Should render Drug Chart Slider for schedules with schedules fields", async () => {
+    MockDate.set("2010-12-22T07:08:00.000");
+    const { container } = render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            enable24HourTimers: true,
+            scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockScheduleDrugOrder,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Schedule(s)")).toBeInTheDocument();
+      expect(container).toMatchSnapshot();
+    });
+    MockDate.reset();
+  });
 });
 
 describe("DrugChartSliderNotification", () => {

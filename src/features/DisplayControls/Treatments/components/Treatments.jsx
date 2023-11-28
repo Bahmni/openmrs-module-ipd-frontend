@@ -30,8 +30,12 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 
 const Treatments = (props) => {
   const { patientId } = props;
-  const { isSliderOpen, updateSliderOpen, sliderContentModified } =
-    useContext(SliderContext);
+  const {
+    isSliderOpen,
+    updateSliderOpen,
+    sliderContentModified,
+    setSliderContentModified,
+  } = useContext(SliderContext);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,6 +88,10 @@ const Treatments = (props) => {
   );
 
   const handleAddToDrugChartClick = (drugOrderId) => {
+    setSliderContentModified((prevState) => ({
+      ...prevState,
+      treatments: false,
+    }));
     setSelectedDrugOrder((prevState) => ({
       ...prevState,
       drugOrder: drugOrderList.visitDrugOrders.find(
@@ -201,8 +209,8 @@ const Treatments = (props) => {
           secondaryButtonText={
             <FormattedMessage id="YES" defaultMessage="Yes" />
           }
-          onSubmit={sliderCloseActions.onClose}
-          onSecondarySubmit={sliderCloseActions.onCancel}
+          onSubmit={sliderCloseActions.onCancel}
+          onSecondarySubmit={sliderCloseActions.onClose}
           onClose={sliderCloseActions.onClose}
         />
       )}
