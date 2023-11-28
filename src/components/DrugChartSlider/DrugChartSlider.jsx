@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   DatePickerCarbon,
   DropdownCarbon,
@@ -17,6 +17,7 @@ import SideBarPanel from "../../features/SideBarPanel/components/SideBarPanel";
 import "./DrugChartSlider.scss";
 import { medicationFrequency } from "../../constants";
 import { SaveAndCloseButtons } from "../../features/SaveAndCloseButtons/components/SaveAndCloseButtons";
+import { SliderContext } from "../../context/SliderContext";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
@@ -28,35 +29,33 @@ const DrugChartSlider = (props) => {
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
-  const isAutoFill = !!enableSchedule?.scheduleTiming;
+  const isAutoFill = Boolean(enableSchedule?.scheduleTiming);
 
-  useEffect(() => {
-    if (isAutoFill) {
-      if (enable24HourTimers) {
-        setSchedules(enableSchedule?.scheduleTiming || []);
-      } else {
-        const parsedTimings = enableSchedule?.scheduleTiming.map((time) =>
-          moment(time, "hh:mm A")
-        );
-        setSchedules(parsedTimings || []);
-      }
-    } else {
-      const defaultSchedules = Array.from(
-        { length: enableSchedule?.frequencyPerDay },
-        () => ""
-      );
-      setSchedules(defaultSchedules);
-    }
-  }, [isAutoFill, enable24HourTimers, enableSchedule]);
-
-  const [schedules, setSchedules] = useState([]);
+  const { setSliderContentModified } = useContext(SliderContext);
+  const updateSliderContentModified = (value) => {
+    setSliderContentModified((prev) => {
+      return {
+        ...prev,
+        treatments: value,
+      };
+    });
+  };
+  const [firstDaySlotsMissed, setFirstDaySlotsMissed] = useState(0);
   const [startTime, setStartTime] = useState("");
+
   const [
     showStartTimeBeyondNextDoseWarning,
     setShowStartTimeBeyondNextDoseWarning,
   ] = useState(false);
   const [showStartTimePassedWarning, setShowStartTimePassedWarning] =
     useState(false);
+  const [showEmptyStartTimeWarning, setShowEmptyStartTimeWarning] =
+    useState(false);
+
+  const [schedules, setSchedules] = useState([]);
+  const [firstDaySchedules, setFirstDaySchedules] = useState([]);
+  const [finalDaySchedules, setFinalDaySchedules] = useState([]);
+
   const [showSchedulePassedWarning, setShowSchedulePassedWarning] = useState(
     []
   );
@@ -64,8 +63,29 @@ const DrugChartSlider = (props) => {
     useState(false);
   const [showEmptyScheduleWarning, setShowEmptyScheduleWarning] =
     useState(false);
-  const [showEmptyStartTimeWarning, setShowEmptyStartTimeWarning] =
-    useState(false);
+
+  const [
+    showFirstDaySchedulePassedWarning,
+    setShowFirstDaySchedulePassedWarning,
+  ] = useState([]);
+  const [
+    showFirstDayScheduleOrderWarning,
+    setShowFirstDayScheduleOrderWarning,
+  ] = useState(false);
+  const [
+    showEmptyFirstDayScheduleWarning,
+    setShowEmptyFirstDayScheduleWarning,
+  ] = useState(false);
+
+  const [
+    showFinalDayScheduleOrderWarning,
+    setShowFinalDayScheduleOrderWarning,
+  ] = useState(false);
+  const [
+    showEmptyFinalDayScheduleWarning,
+    setShowEmptyFinalDayScheduleWarning,
+  ] = useState(false);
+
   const invalidTimeText24Hour = "Please enter in 24-hr format";
   const invalidTimeText12Hour = "Please enter in 12-hr format";
 
@@ -85,7 +105,24 @@ const DrugChartSlider = (props) => {
     return currentTime.isAfter(enteredTime);
   };
 
-  const handleSchedule = (newSchedule, index) => {
+  const handleFirstDaySchedule = (newSchedule, index) => {
+    updateSliderContentModified(true);
+    const newScheduleArray = [...firstDaySchedules];
+    newScheduleArray[index] = enable24HourTimers
+      ? newSchedule
+      : moment(newSchedule, "hh:mm A");
+    setFirstDaySchedules(newScheduleArray);
+    if (!isInvalidTimeTextPresent()) {
+      setShowFirstDaySchedulePassedWarning((prevScheduleWarnings) => {
+        const newSchedulePassedWarnings = [...prevScheduleWarnings];
+        newSchedulePassedWarnings[index] = isTimePassed(newSchedule);
+        return newSchedulePassedWarnings;
+      });
+    }
+  };
+
+  const handleSubsequentDaySchedule = (newSchedule, index) => {
+    updateSliderContentModified(true);
     const newScheduleArray = [...schedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
@@ -98,6 +135,15 @@ const DrugChartSlider = (props) => {
         return newSchedulePassedWarnings;
       });
     }
+  };
+
+  const handleFinalDaySchedule = (newSchedule, index) => {
+    updateSliderContentModified(true);
+    const newScheduleArray = [...finalDaySchedules];
+    newScheduleArray[index] = enable24HourTimers
+      ? newSchedule
+      : moment(newSchedule, "hh:mm A");
+    setFinalDaySchedules(newScheduleArray);
   };
 
   const areSchedulesInOrder = (allSchedule) => {
@@ -130,6 +176,38 @@ const DrugChartSlider = (props) => {
 
   const isValidSchedule = async () => {
     const { isValid, warningType } = await handleScheduleWarnings();
+    if (!isValid && (warningType === "empty" || warningType === "passed"))
+      return false;
+    return true;
+  };
+
+  const handleFirstDayScheduleWarnings = async () => {
+    const { isValid, warningType } = await validateSchedules(
+      firstDaySchedules.filter(
+        (firstDaySchedule) => firstDaySchedule != "hh:mm"
+      )
+    );
+    setShowEmptyFirstDayScheduleWarning(!isValid && warningType === "empty");
+    setShowFirstDayScheduleOrderWarning(!isValid && warningType === "passed");
+    return { isValid, warningType };
+  };
+
+  const isValidFirstDaySchedule = async () => {
+    const { isValid, warningType } = await handleFirstDayScheduleWarnings();
+    if (!isValid && (warningType === "empty" || warningType === "passed"))
+      return false;
+    return true;
+  };
+
+  const handleFinalDayScheduleWarnings = async () => {
+    const { isValid, warningType } = await validateSchedules(finalDaySchedules);
+    setShowEmptyFinalDayScheduleWarning(!isValid && warningType === "empty");
+    setShowFinalDayScheduleOrderWarning(!isValid && warningType === "passed");
+    return { isValid, warningType };
+  };
+
+  const isValidFinalDaySchedule = async () => {
+    const { isValid, warningType } = await handleFinalDayScheduleWarnings();
     if (!isValid && (warningType === "empty" || warningType === "passed"))
       return false;
     return true;
@@ -183,6 +261,7 @@ const DrugChartSlider = (props) => {
   };
 
   const handleStartTime = async (time) => {
+    updateSliderContentModified(true);
     if (time === "") {
       setShowEmptyStartTimeWarning(true);
       setShowStartTimeBeyondNextDoseWarning(false);
@@ -236,6 +315,7 @@ const DrugChartSlider = (props) => {
       slotStartTime: null,
       firstDaySlotsStartTime: null,
       dayWiseSlotsStartTime: null,
+      remainingDaySlotsStartTime: null,
       comments: drugChartNotes,
       medicationFrequency: "",
     };
@@ -246,11 +326,44 @@ const DrugChartSlider = (props) => {
         medicationFrequency.START_TIME_DURATION_FREQUENCY;
     }
     if (enableSchedule) {
-      const schedulesUTCTimeEpoch = schedules.map((schedule) => {
-        return getUTCTimeEpoch(schedule);
-      });
-      payload.dayWiseSlotsStartTime = schedulesUTCTimeEpoch;
-      payload.firstDaySlotsStartTime = [];
+      const nextScheduleDate = 24 * 60 * 60;
+      const finalScheduleDate =
+        nextScheduleDate * hostData?.drugOrder?.duration;
+
+      const firstDaySchedulesUTCTimeEpoch = firstDaySchedules.reduce(
+        (result, schedule) => {
+          if (schedule !== "hh:mm") {
+            result.push(getUTCTimeEpoch(schedule));
+          }
+          return result;
+        },
+        []
+      );
+
+      const schedulesUTCTimeEpoch = schedules.map((schedule) =>
+        getUTCTimeEpoch(schedule)
+      );
+
+      const finalDaySchedulesUTCTimeEpoch = finalDaySchedules.map((schedule) =>
+        getUTCTimeEpoch(schedule)
+      );
+
+      payload.firstDaySlotsStartTime =
+        firstDaySlotsMissed > 0 ? firstDaySchedulesUTCTimeEpoch : [];
+      payload.dayWiseSlotsStartTime = firstDaySchedules.some(
+        (schedule) => schedule == "hh:mm"
+      )
+        ? schedulesUTCTimeEpoch.map((schedules) => schedules + nextScheduleDate)
+        : schedulesUTCTimeEpoch;
+      const remainingDaySlotsStartTime = finalDaySchedulesUTCTimeEpoch.map(
+        (schedules) => schedules + finalScheduleDate
+      );
+
+      const remainingDaySlotsTime = remainingDaySlotsStartTime.slice(
+        0,
+        firstDaySlotsMissed
+      );
+      payload.remainingDaySlotsStartTime = remainingDaySlotsTime;
       payload.medicationFrequency =
         medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
     }
@@ -260,7 +373,12 @@ const DrugChartSlider = (props) => {
   const validateSave = async () => {
     if (isInvalidTimeTextPresent()) return false;
     if (enableSchedule) {
-      return await isValidSchedule();
+      const validFirstDaySchedules = await isValidFirstDaySchedule();
+      const validSchedules = await isValidSchedule();
+      const validFinalDaySchedules = await isValidFinalDaySchedule();
+      if (!validFirstDaySchedules || !validSchedules || !validFinalDaySchedules)
+        return false;
+      return true;
     }
     if (enableStartTime) {
       if (!startTime) {
@@ -270,6 +388,38 @@ const DrugChartSlider = (props) => {
       return true;
     }
   };
+
+  useEffect(() => {
+    if (isAutoFill) {
+      const scheduleTimings = enable24HourTimers
+        ? enableSchedule?.scheduleTiming
+        : enableSchedule?.scheduleTiming.map((time) => moment(time, "hh:mm A"));
+      let finalScheduleCount = 0;
+      scheduleTimings.forEach((schedule) => {
+        if (isTimePassed(schedule)) {
+          setFirstDaySchedules((prevSchedules) => [...prevSchedules, "hh:mm"]);
+          finalScheduleCount = finalScheduleCount + 1;
+          setFirstDaySlotsMissed((prevSlotNumber) => prevSlotNumber + 1);
+        } else {
+          setFirstDaySchedules((prevSchedules) => [...prevSchedules, schedule]);
+        }
+      });
+      setSchedules(scheduleTimings || []);
+      finalScheduleCount > 0 &&
+        setFinalDaySchedules(scheduleTimings.slice(firstDaySlotsMissed) || []);
+      if (finalScheduleCount == enableSchedule?.frequencyPerDay) {
+        setFirstDaySchedules([]);
+        setFinalDaySchedules([]);
+        setFirstDaySlotsMissed(0);
+      }
+    } else {
+      const defaultSchedules = Array.from(
+        { length: enableSchedule?.frequencyPerDay },
+        () => ""
+      );
+      setSchedules(defaultSchedules);
+    }
+  }, [isAutoFill, enable24HourTimers, enableSchedule]);
 
   const handleSave = async () => {
     const performSave = await validateSave();
@@ -286,6 +436,11 @@ const DrugChartSlider = (props) => {
 
   const handleClose = () => {
     hostApi.onModalClose?.();
+  };
+
+  const handleNotes = (e) => {
+    updateSliderContentModified(true);
+    setDrugChartNotes(e.target.value);
   };
 
   return (
@@ -377,60 +532,232 @@ const DrugChartSlider = (props) => {
               isDisabled={true}
             />
           </div>
-          {enableSchedule && (
-            <div className="schedule-section">
-              <Title text="Schedule(s)" isRequired={true} />
-              <div className="inline-field" id="schedule">
-                {Array.from(
-                  { length: enableSchedule?.frequencyPerDay },
-                  (_, index) =>
-                    enable24HourTimers ? (
-                      <div className="schedule-time" key={index}>
-                        <TimePicker24Hour
-                          key={index}
-                          id={`schedule-${index}`}
-                          defaultTime={schedules[index]}
-                          onChange={(time) => {
-                            handleSchedule(time, index);
-                          }}
-                          labelText=" "
-                          width="70%"
-                          invalidText={invalidTimeText24Hour}
-                        />
-                      </div>
-                    ) : (
-                      <div className="schedule-time" key={index}>
-                        <TimePicker
-                          key={index}
-                          labelText=" "
-                          defaultTime={schedules[index]}
-                          onChange={(time) => {
-                            handleSchedule(time, index);
-                          }}
-                          id={`schedule-${index}`}
-                          invalidText={invalidTimeText12Hour}
-                        />
-                      </div>
-                    )
+          {enableSchedule && firstDaySlotsMissed > 0 && (
+            <div>
+              <div className="schedule-section">
+                <Title text="Schedule time (start date)" isRequired={true} />
+                <div className="inline-field" id="schedule">
+                  {Array.from(
+                    { length: enableSchedule?.frequencyPerDay },
+                    (_, index) =>
+                      enable24HourTimers ? (
+                        <div className="schedule-time" key={index}>
+                          <TimePicker24Hour
+                            key={index}
+                            id={`schedule-${index}`}
+                            defaultTime={firstDaySchedules[index]}
+                            onChange={(time) => {
+                              handleFirstDaySchedule(time, index);
+                            }}
+                            labelText=" "
+                            width="70%"
+                            invalidText={invalidTimeText24Hour}
+                            isDisabled={firstDaySchedules[index] == "hh:mm"}
+                          />
+                        </div>
+                      ) : (
+                        <div className="schedule-time" key={index}>
+                          <TimePicker
+                            key={index}
+                            labelText=" "
+                            defaultTime={firstDaySchedules[index]}
+                            onChange={(time) => {
+                              handleFirstDaySchedule(time, index);
+                            }}
+                            id={`schedule-${index}`}
+                            isDisabled={firstDaySchedules[index] == "hh:mm"}
+                            invalidText={invalidTimeText12Hour}
+                          />
+                        </div>
+                      )
+                  )}
+                </div>
+                {showFirstDayScheduleOrderWarning && (
+                  <p className="time-error">
+                    <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
+                  </p>
+                )}
+                {showEmptyFirstDayScheduleWarning && (
+                  <p className="time-error">
+                    <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
+                  </p>
+                )}
+                {showFirstDaySchedulePassedWarning.some(
+                  (showSchedulePassed) => showSchedulePassed === true
+                ) && (
+                  <p className="time-warning">
+                    <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
+                  </p>
                 )}
               </div>
-              {showScheduleOrderWarning && (
+              <div className="schedule-section">
+                <Title text="Schedule time (subsequent)" isRequired={true} />
+                <div className="inline-field" id="schedule">
+                  {Array.from(
+                    { length: enableSchedule?.frequencyPerDay },
+                    (_, index) =>
+                      enable24HourTimers ? (
+                        <div className="schedule-time" key={index}>
+                          <TimePicker24Hour
+                            key={index}
+                            id={`schedule-${index}`}
+                            defaultTime={schedules[index]}
+                            onChange={(time) => {
+                              handleSubsequentDaySchedule(time, index);
+                            }}
+                            labelText=" "
+                            width="70%"
+                            invalidText={invalidTimeText24Hour}
+                          />
+                        </div>
+                      ) : (
+                        <div className="schedule-time" key={index}>
+                          <TimePicker
+                            key={index}
+                            labelText=" "
+                            defaultTime={schedules[index]}
+                            onChange={(time) => {
+                              handleSubsequentDaySchedule(time, index);
+                            }}
+                            id={`schedule-${index}`}
+                            invalidText={invalidTimeText12Hour}
+                          />
+                        </div>
+                      )
+                  )}
+                </div>
+                {showScheduleOrderWarning && (
+                  <p className="time-error">
+                    <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
+                  </p>
+                )}
+                {showEmptyScheduleWarning && (
+                  <p className="time-error">
+                    <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
+                  </p>
+                )}
+              </div>
+              <div className="schedule-section">
+                <Title text="Schedule time (remainder)" isRequired={true} />
+                <div className="inline-field" id="schedule">
+                  {Array.from(
+                    {
+                      length: firstDaySlotsMissed,
+                    },
+                    (_, index) =>
+                      enable24HourTimers ? (
+                        <div
+                          className={
+                            enableSchedule?.frequencyPerDay == 4
+                              ? "schedule-time-remainder"
+                              : "schedule-time"
+                          }
+                          key={index}
+                        >
+                          <TimePicker24Hour
+                            key={index}
+                            id={`schedule-${index}`}
+                            defaultTime={finalDaySchedules[index]}
+                            onChange={(time) => {
+                              handleFinalDaySchedule(time, index);
+                            }}
+                            labelText=" "
+                            width="70%"
+                            invalidText={invalidTimeText24Hour}
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          className={
+                            enableSchedule?.frequencyPerDay == 4
+                              ? "schedule-time-remainder"
+                              : "schedule-time"
+                          }
+                          key={index}
+                        >
+                          <TimePicker
+                            key={index}
+                            labelText=" "
+                            defaultTime={finalDaySchedules[index]}
+                            onChange={(time) => {
+                              handleFinalDaySchedule(time, index);
+                            }}
+                            id={`schedule-${index}`}
+                            invalidText={invalidTimeText12Hour}
+                          />
+                        </div>
+                      )
+                  )}
+                </div>
+              </div>
+              {showFinalDayScheduleOrderWarning && (
                 <p className="time-error">
                   <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
                 </p>
               )}
-              {showEmptyScheduleWarning && (
+              {showEmptyFinalDayScheduleWarning && (
                 <p className="time-error">
                   <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
                 </p>
               )}
-              {showSchedulePassedWarning.some(
-                (showSchedulePassed) => showSchedulePassed === true
-              ) && (
-                <p className="time-warning">
-                  <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
-                </p>
-              )}
+            </div>
+          )}
+          {enableSchedule && firstDaySlotsMissed == 0 && (
+            <div>
+              <div className="schedule-section">
+                <Title text="Schedule(s)" isRequired={true} />
+                <div className="inline-field" id="schedule">
+                  {Array.from(
+                    { length: enableSchedule?.frequencyPerDay },
+                    (_, index) =>
+                      enable24HourTimers ? (
+                        <div className="schedule-time" key={index}>
+                          <TimePicker24Hour
+                            key={index}
+                            id={`schedule-${index}`}
+                            defaultTime={schedules[index]}
+                            onChange={(time) => {
+                              handleSubsequentDaySchedule(time, index);
+                            }}
+                            labelText=" "
+                            width="70%"
+                            invalidText={invalidTimeText24Hour}
+                          />
+                        </div>
+                      ) : (
+                        <div className="schedule-time" key={index}>
+                          <TimePicker
+                            key={index}
+                            labelText=" "
+                            defaultTime={schedules[index]}
+                            onChange={(time) => {
+                              handleSubsequentDaySchedule(time, index);
+                            }}
+                            id={`schedule-${index}`}
+                            invalidText={invalidTimeText12Hour}
+                          />
+                        </div>
+                      )
+                  )}
+                </div>
+                {showScheduleOrderWarning && (
+                  <p className="time-error">
+                    <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
+                  </p>
+                )}
+                {showEmptyScheduleWarning && (
+                  <p className="time-error">
+                    <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
+                  </p>
+                )}
+                {showSchedulePassedWarning.some(
+                  (showSchedulePassed) => showSchedulePassed === true
+                ) && (
+                  <p className="time-warning">
+                    <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
+                  </p>
+                )}
+              </div>
             </div>
           )}
           {enableStartTime && (
@@ -521,7 +848,7 @@ const DrugChartSlider = (props) => {
               type="text"
               rows={3}
               value={drugChartNotes}
-              onChange={(e) => setDrugChartNotes(e.target.value)}
+              onChange={(e) => handleNotes(e)}
               labelText="Notes"
             />
           </div>

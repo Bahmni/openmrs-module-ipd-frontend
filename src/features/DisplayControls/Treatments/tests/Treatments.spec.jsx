@@ -17,6 +17,7 @@ const mockProviderValue = {
     treatments: false,
   },
   updateSliderOpen: jest.fn(),
+  setSliderContentModified: jest.fn(),
 };
 
 describe("Treatments", () => {

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { NotificationCarbon } from "bahmni-carbon-ui";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
+import "./DrugChartSliderNotification.scss";
 
 export default function DrugChartSliderNotification(props) {
   const { hostData, hostApi } = props;
