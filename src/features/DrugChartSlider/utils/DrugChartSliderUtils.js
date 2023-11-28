@@ -2,6 +2,17 @@ import axios from "axios";
 import { MEDICATIONS_BASE_URL } from "../../../constants";
 import moment from "moment";
 
+export const invalidTimeText24Hour = "Please enter in 24-hr format";
+export const invalidTimeText12Hour = "Please enter in 12-hr format";
+
+export const isInvalidTimeTextPresent = (enable24HourTimers) => {
+  const screenContent = document.body.textContent;
+  const invalidTimeText = enable24HourTimers
+    ? invalidTimeText24Hour
+    : invalidTimeText12Hour;
+  return screenContent.includes(invalidTimeText);
+};
+
 export const isTimePassed = (newTime) => {
   const currentTime = moment();
   const enteredTime = moment(newTime, "HH:mm");

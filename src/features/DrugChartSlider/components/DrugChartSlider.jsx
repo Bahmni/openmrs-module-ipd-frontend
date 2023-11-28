@@ -1,13 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  DatePickerCarbon,
-  DropdownCarbon,
-  NumberInputCarbon,
-  TimePicker,
-  TimePicker24Hour,
-  Title,
-} from "bahmni-carbon-ui";
-import { TextArea, TextInput } from "carbon-components-react";
+import { TimePicker, TimePicker24Hour, Title } from "bahmni-carbon-ui";
+import { TextArea } from "carbon-components-react";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
@@ -22,7 +15,12 @@ import {
   areSchedulesInOrder,
   saveMedication,
   updateStartTimeBasedOnFrequency,
+  isInvalidTimeTextPresent,
+  invalidTimeText24Hour,
+  invalidTimeText12Hour,
 } from "../utils/DrugChartSliderUtils";
+import { DrugDetails } from "./DrugDetails";
+import { DrugInstructions } from "./DrugInstructions";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
@@ -91,17 +89,6 @@ const DrugChartSlider = (props) => {
     setShowEmptyFinalDayScheduleWarning,
   ] = useState(false);
 
-  const invalidTimeText24Hour = "Please enter in 24-hr format";
-  const invalidTimeText12Hour = "Please enter in 12-hr format";
-
-  const isInvalidTimeTextPresent = () => {
-    const screenContent = document.body.textContent;
-    const invalidTimeText = enable24HourTimers
-      ? invalidTimeText24Hour
-      : invalidTimeText12Hour;
-    return screenContent.includes(invalidTimeText);
-  };
-
   const handleFirstDaySchedule = (newSchedule, index) => {
     updateSliderContentModified(true);
     const newScheduleArray = [...firstDaySchedules];
@@ -109,7 +96,7 @@ const DrugChartSlider = (props) => {
       ? newSchedule
       : moment(newSchedule, "hh:mm A");
     setFirstDaySchedules(newScheduleArray);
-    if (!isInvalidTimeTextPresent()) {
+    if (!isInvalidTimeTextPresent(enable24HourTimers)) {
       setShowFirstDaySchedulePassedWarning((prevScheduleWarnings) => {
         const newSchedulePassedWarnings = [...prevScheduleWarnings];
         newSchedulePassedWarnings[index] = isTimePassed(newSchedule);
@@ -125,7 +112,7 @@ const DrugChartSlider = (props) => {
       ? newSchedule
       : moment(newSchedule, "hh:mm A");
     setSchedules(newScheduleArray);
-    if (!isInvalidTimeTextPresent()) {
+    if (!isInvalidTimeTextPresent(enable24HourTimers)) {
       setShowSchedulePassedWarning((prevScheduleWarnings) => {
         const newSchedulePassedWarnings = [...prevScheduleWarnings];
         newSchedulePassedWarnings[index] = isTimePassed(newSchedule);
@@ -321,7 +308,7 @@ const DrugChartSlider = (props) => {
   };
 
   const validateSave = async () => {
-    if (isInvalidTimeTextPresent()) return false;
+    if (isInvalidTimeTextPresent(enable24HourTimers)) return false;
     if (enableSchedule) {
       const validFirstDaySchedules = await isValidFirstDaySchedule();
       const validSchedules = await isValidSchedule();
@@ -402,86 +389,7 @@ const DrugChartSlider = (props) => {
         closeSideBar={handleClose}
       >
         <div style={{ padding: "20px", paddingBottom: "120px" }}>
-          <TextInput
-            id="drug-name"
-            className="drug-name"
-            type="text"
-            value={hostData?.drugOrder?.drug?.name}
-            labelText="Drug Name"
-            disabled
-          />
-          <div className="inline-field">
-            <div className="dose-field-with-units">
-              <NumberInputCarbon
-                id={"Dropdown"}
-                onChange={() => {}}
-                style={{ width: "50%" }}
-                label={"Dose"}
-                value={hostData?.drugOrder?.uniformDosingType?.dose}
-                isDisabled={true}
-              />
-              <DropdownCarbon
-                id={"Dropdown"}
-                onChange={() => {}}
-                titleText={" "}
-                style={{ paddingLeft: "10px" }}
-                selectedValue={
-                  hostData?.drugOrder?.uniformDosingType?.doseUnits
-                }
-                options={[]}
-                isDisabled={true}
-              />
-            </div>
-            <div className="route">
-              <DropdownCarbon
-                id={"Dropdown"}
-                onChange={() => {}}
-                titleText={"Route"}
-                selectedValue={hostData?.drugOrder?.route}
-                options={[]}
-                isDisabled={true}
-              />
-            </div>
-          </div>
-          <div className="inline-field">
-            <div className="duration-field-with-units">
-              <NumberInputCarbon
-                id={"Dropdown"}
-                onChange={() => {}}
-                label={"Duration"}
-                value={hostData?.drugOrder?.duration}
-                isDisabled={true}
-              />
-              <DropdownCarbon
-                id={"Dropdown"}
-                onChange={() => {}}
-                titleText={" "}
-                selectedValue={hostData?.drugOrder?.durationUnit}
-                options={[]}
-                isDisabled={true}
-              />
-            </div>
-            <DatePickerCarbon
-              id={"Dropdown"}
-              onChange={() => {}}
-              titleText={"Start Date"}
-              title={"Start Date"}
-              value={moment(hostData?.drugOrder?.scheduledDate).format(
-                "MM/DD/YYYY"
-              )}
-              isDisabled={true}
-            />
-          </div>
-          <div className="frequency">
-            <DropdownCarbon
-              id={"DropdownFrequency"}
-              onChange={() => {}}
-              titleText={"Frequency"}
-              selectedValue={hostData?.drugOrder?.uniformDosingType?.frequency}
-              options={[]}
-              isDisabled={true}
-            />
-          </div>
+          <DrugDetails hostData={hostData} />
           {enableSchedule && firstDaySlotsMissed > 0 && (
             <div>
               <div className="schedule-section">
@@ -769,28 +677,7 @@ const DrugChartSlider = (props) => {
               )}
             </div>
           )}
-          <div className="instructions">
-            <TextArea
-              className="instruction"
-              readOnly
-              type="text"
-              rows={1}
-              value={hostData?.drugOrder?.instructions}
-              labelText="Instruction"
-              disabled
-            />
-          </div>
-          <div className="additional-instructions">
-            <TextArea
-              className="additional-instruction"
-              readOnly
-              type="text"
-              rows={1}
-              value={hostData?.drugOrder?.additionalInstructions}
-              labelText="Additional Instruction"
-              disabled
-            />
-          </div>
+          <DrugInstructions hostData={hostData} />
           <div className="notes-sections">
             <TextArea
               data-testid="notes-section"
