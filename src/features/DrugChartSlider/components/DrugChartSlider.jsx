@@ -12,15 +12,17 @@ import { SaveAndCloseButtons } from "../../SaveAndCloseButtons/components/SaveAn
 import { SliderContext } from "../../../context/SliderContext";
 import {
   isTimePassed,
-  areSchedulesInOrder,
+  validateSchedules,
   saveMedication,
   updateStartTimeBasedOnFrequency,
   isInvalidTimeTextPresent,
   invalidTimeText24Hour,
   invalidTimeText12Hour,
+  getUTCTimeEpoch,
 } from "../utils/DrugChartSliderUtils";
 import { DrugDetails } from "./DrugDetails";
 import { DrugInstructions } from "./DrugInstructions";
+import { StartTimeSection } from "./StartTimeSection";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
@@ -130,18 +132,6 @@ const DrugChartSlider = (props) => {
     setFinalDaySchedules(newScheduleArray);
   };
 
-  const validateSchedules = async (schedules) => {
-    if (schedules.some((schedule) => schedule === "")) {
-      return { isValid: false, warningType: "empty" };
-    }
-
-    if (areSchedulesInOrder(schedules)) {
-      return { isValid: true, warningType: "" };
-    } else {
-      return { isValid: false, warningType: "passed" };
-    }
-  };
-
   const handleScheduleWarnings = async () => {
     const { isValid, warningType } = await validateSchedules(schedules);
     setShowEmptyScheduleWarning(!isValid && warningType === "empty");
@@ -229,21 +219,6 @@ const DrugChartSlider = (props) => {
       : setStartTime(moment(time, "hh:mm A"));
   };
 
-  const getUTCTimeEpoch = (time) => {
-    const [hours, minutes] = enable24HourTimers
-      ? time.split(":")
-      : moment(time, "hh:mm A").format("HH:mm").split(":");
-    const [day, month, year] = moment(hostData?.drugOrder?.scheduledDate)
-      .format("DD-MM-YYYY")
-      .split("-");
-    const localTime = moment(
-      `${year}-${month}-${day} ${hours}:${minutes}`,
-      "YYYY-MM-DD HH:mm"
-    );
-    const utcTimeEpoch = moment.utc(localTime).unix();
-    return utcTimeEpoch;
-  };
-
   const createDrugChartPayload = () => {
     var payload = {
       providerUuid: hostData?.drugOrder?.provider?.uuid,
@@ -257,7 +232,11 @@ const DrugChartSlider = (props) => {
       medicationFrequency: "",
     };
     if (enableStartTime) {
-      const startTimeUTCEpoch = getUTCTimeEpoch(startTime);
+      const startTimeUTCEpoch = getUTCTimeEpoch(
+        startTime,
+        enable24HourTimers,
+        hostData?.drugOrder?.scheduledDate
+      );
       payload.slotStartTime = startTimeUTCEpoch;
       payload.medicationFrequency =
         medicationFrequency.START_TIME_DURATION_FREQUENCY;
@@ -270,7 +249,13 @@ const DrugChartSlider = (props) => {
       const firstDaySchedulesUTCTimeEpoch = firstDaySchedules.reduce(
         (result, schedule) => {
           if (schedule !== "hh:mm") {
-            result.push(getUTCTimeEpoch(schedule));
+            result.push(
+              getUTCTimeEpoch(
+                schedule,
+                enable24HourTimers,
+                hostData?.drugOrder?.scheduledDate
+              )
+            );
           }
           return result;
         },
@@ -278,11 +263,19 @@ const DrugChartSlider = (props) => {
       );
 
       const schedulesUTCTimeEpoch = schedules.map((schedule) =>
-        getUTCTimeEpoch(schedule)
+        getUTCTimeEpoch(
+          schedule,
+          enable24HourTimers,
+          hostData?.drugOrder?.scheduledDate
+        )
       );
 
       const finalDaySchedulesUTCTimeEpoch = finalDaySchedules.map((schedule) =>
-        getUTCTimeEpoch(schedule)
+        getUTCTimeEpoch(
+          schedule,
+          enable24HourTimers,
+          hostData?.drugOrder?.scheduledDate
+        )
       );
 
       payload.firstDaySlotsStartTime =
@@ -619,63 +612,16 @@ const DrugChartSlider = (props) => {
             </div>
           )}
           {enableStartTime && (
-            <div className="start-time">
-              {enable24HourTimers ? (
-                <>
-                  <TimePicker24Hour
-                    data-modal-primary-focus
-                    labelText={"Start Time"}
-                    id={"start-time"}
-                    onChange={(time) => handleStartTime(time)}
-                    isRequired={true}
-                    defaultTime={startTime}
-                    width="80%"
-                    invalidText={invalidTimeText24Hour}
-                  />
-                  {showStartTimePassedWarning && (
-                    <p className="time-warning">
-                      <FormattedMessage id="DRUG_CHART_MODAL_START_TIME_PASSED"></FormattedMessage>
-                    </p>
-                  )}
-                  {showStartTimeBeyondNextDoseWarning && (
-                    <p className="time-warning">
-                      <FormattedMessage id="DRUG_CHART_MODAL_START_TIME_BEYOND_NEXT_DOSE"></FormattedMessage>
-                    </p>
-                  )}
-                  {showEmptyStartTimeWarning && (
-                    <p className="time-error">
-                      <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_START_TIME_WARNING"></FormattedMessage>
-                    </p>
-                  )}
-                </>
-              ) : (
-                <>
-                  <TimePicker
-                    id={"start-time"}
-                    onChange={(time) => handleStartTime(time)}
-                    defaultTime={startTime}
-                    labelText={"Start Time"}
-                    isRequired={true}
-                    invalidText={invalidTimeText12Hour}
-                  />
-                  {showStartTimePassedWarning && (
-                    <p className="time-warning">
-                      <FormattedMessage id="DRUG_CHART_MODAL_START_TIME_PASSED"></FormattedMessage>
-                    </p>
-                  )}
-                  {showStartTimeBeyondNextDoseWarning && (
-                    <p className="time-warning">
-                      <FormattedMessage id="DRUG_CHART_MODAL_START_TIME_BEYOND_NEXT_DOSE"></FormattedMessage>
-                    </p>
-                  )}
-                  {showEmptyStartTimeWarning && (
-                    <p className="time-error">
-                      <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_START_TIME_WARNING"></FormattedMessage>
-                    </p>
-                  )}
-                </>
-              )}
-            </div>
+            <StartTimeSection
+              startTime={startTime}
+              handleStartTime={handleStartTime}
+              showEmptyStartTimeWarning={showEmptyStartTimeWarning}
+              showStartTimeBeyondNextDoseWarning={
+                showStartTimeBeyondNextDoseWarning
+              }
+              showStartTimePassedWarning={showStartTimePassedWarning}
+              enable24HourTimers={enable24HourTimers}
+            />
           )}
           <DrugInstructions hostData={hostData} />
           <div className="notes-sections">

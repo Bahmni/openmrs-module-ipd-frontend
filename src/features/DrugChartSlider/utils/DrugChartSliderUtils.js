@@ -19,13 +19,25 @@ export const isTimePassed = (newTime) => {
   return currentTime.isAfter(enteredTime);
 };
 
-export const areSchedulesInOrder = (allSchedule) => {
+const areSchedulesInOrder = (allSchedule) => {
   return allSchedule.every((schedule, index) => {
     if (index === 0) return true;
     const currentTime = moment(schedule, "HH:mm");
     const prevTime = moment(allSchedule[index - 1], "HH:mm");
     return currentTime.isAfter(prevTime);
   });
+};
+
+export const validateSchedules = async (schedules) => {
+  if (schedules.some((schedule) => schedule === "")) {
+    return { isValid: false, warningType: "empty" };
+  }
+
+  if (areSchedulesInOrder(schedules)) {
+    return { isValid: true, warningType: "" };
+  } else {
+    return { isValid: false, warningType: "passed" };
+  }
 };
 
 export const updateStartTimeBasedOnFrequency = (frequency, time) => {
@@ -73,4 +85,19 @@ export const saveMedication = async (medication) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+export const getUTCTimeEpoch = (time, enable24HourTimers, scheduledDate) => {
+  const [hours, minutes] = enable24HourTimers
+    ? time.split(":")
+    : moment(time, "hh:mm A").format("HH:mm").split(":");
+  const [day, month, year] = moment(scheduledDate)
+    .format("DD-MM-YYYY")
+    .split("-");
+  const localTime = moment(
+    `${year}-${month}-${day} ${hours}:${minutes}`,
+    "YYYY-MM-DD HH:mm"
+  );
+  const utcTimeEpoch = moment.utc(localTime).unix();
+  return utcTimeEpoch;
 };
