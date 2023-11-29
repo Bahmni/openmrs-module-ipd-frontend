@@ -1,0 +1,597 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DrugDetails should match snapshot 1`] = `
+<div>
+  <div
+    class="bx--form-item bx--text-input-wrapper"
+  >
+    <label
+      class="bx--label bx--label--disabled"
+      for="drug-name"
+    >
+      Drug Name
+    </label>
+    <div
+      class="bx--text-input__field-outer-wrapper"
+    >
+      <div
+        class="bx--text-input__field-wrapper"
+      >
+        <input
+          class="bx--text-input drug-name bx--text-input--md"
+          disabled=""
+          id="drug-name"
+          type="text"
+          value="drugName"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    class="inline-field"
+  >
+    <div
+      class="dose-field-with-units"
+    >
+      <div
+        class="-TaKcdG2c0NUzkYaFWOzlQ=="
+      >
+        <div
+          class="bx--form-item"
+        >
+          <div
+            class="bx--number bx--number--helpertext"
+          >
+            <label
+              class="bx--label bx--label--disabled"
+              for="Dropdown"
+            >
+              <div
+                class="titleText"
+              >
+                <span>
+                  Dose 
+                </span>
+              </div>
+            </label>
+            <div
+              class="bx--number__input-wrapper"
+            >
+              <input
+                disabled=""
+                id="Dropdown"
+                pattern="[0-9]*"
+                step="1"
+                type="number"
+                value="dose"
+              />
+              <div
+                class="bx--number__controls"
+              >
+                <button
+                  aria-label="Decrement number"
+                  class="bx--number__control-btn down-icon"
+                  disabled=""
+                  tabindex="-1"
+                  title="Decrement number"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="down-icon"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 15H24V17H8z"
+                    />
+                  </svg>
+                </button>
+                <div
+                  class="bx--number__rule-divider"
+                />
+                <button
+                  aria-label="Increment number"
+                  class="bx--number__control-btn up-icon"
+                  disabled=""
+                  tabindex="-1"
+                  title="Increment number"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="up-icon"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+                    />
+                  </svg>
+                </button>
+                <div
+                  class="bx--number__rule-divider"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="dropdown"
+        data-testid="select dropdown"
+        style="margin-right: 5px;"
+      >
+        <div
+          class="bx--dropdown__wrapper bx--list-box__wrapper"
+        >
+          <label
+            class="bx--label bx--label--disabled"
+            for="downshift-0-toggle-button"
+            id="downshift-0-label"
+          >
+            <div
+              class="titleText"
+            >
+              <span>
+                  
+              </span>
+            </div>
+          </label>
+          <div
+            class="bx--dropdown bx--dropdown--disabled bx--list-box"
+            id="Dropdown"
+          >
+            <button
+              aria-disabled="true"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-labelledby="downshift-0-label downshift-0-toggle-button"
+              class="bx--list-box__field"
+              disabled=""
+              id="downshift-0-toggle-button"
+              title="doseUnits"
+              type="button"
+            >
+              <span
+                class="bx--list-box__label"
+              >
+                doseUnits
+              </span>
+              <div
+                class="bx--list-box__menu-icon"
+              >
+                <svg
+                  aria-label="Open menu"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  name="chevron--down"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="img"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  />
+                  <title>
+                    Open menu
+                  </title>
+                </svg>
+              </div>
+            </button>
+            <div
+              aria-labelledby="downshift-0-label"
+              class="bx--list-box__menu"
+              id="downshift-0-menu"
+              role="listbox"
+              tabindex="-1"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="route"
+    >
+      <div
+        class="dropdown"
+        data-testid="select dropdown"
+        style="margin-right: 5px;"
+      >
+        <div
+          class="bx--dropdown__wrapper bx--list-box__wrapper"
+        >
+          <label
+            class="bx--label bx--label--disabled"
+            for="downshift-1-toggle-button"
+            id="downshift-1-label"
+          >
+            <div
+              class="titleText"
+            >
+              <span>
+                Route 
+              </span>
+            </div>
+          </label>
+          <div
+            class="bx--dropdown bx--dropdown--disabled bx--list-box"
+            id="Dropdown"
+          >
+            <button
+              aria-disabled="true"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-labelledby="downshift-1-label downshift-1-toggle-button"
+              class="bx--list-box__field"
+              disabled=""
+              id="downshift-1-toggle-button"
+              title="route"
+              type="button"
+            >
+              <span
+                class="bx--list-box__label"
+              >
+                route
+              </span>
+              <div
+                class="bx--list-box__menu-icon"
+              >
+                <svg
+                  aria-label="Open menu"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  name="chevron--down"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="img"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  />
+                  <title>
+                    Open menu
+                  </title>
+                </svg>
+              </div>
+            </button>
+            <div
+              aria-labelledby="downshift-1-label"
+              class="bx--list-box__menu"
+              id="downshift-1-menu"
+              role="listbox"
+              tabindex="-1"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="inline-field"
+  >
+    <div
+      class="duration-field-with-units"
+    >
+      <div
+        class="-TaKcdG2c0NUzkYaFWOzlQ=="
+      >
+        <div
+          class="bx--form-item"
+        >
+          <div
+            class="bx--number bx--number--helpertext"
+          >
+            <label
+              class="bx--label bx--label--disabled"
+              for="Dropdown"
+            >
+              <div
+                class="titleText"
+              >
+                <span>
+                  Duration 
+                </span>
+              </div>
+            </label>
+            <div
+              class="bx--number__input-wrapper"
+            >
+              <input
+                disabled=""
+                id="Dropdown"
+                pattern="[0-9]*"
+                step="1"
+                type="number"
+                value="duration"
+              />
+              <div
+                class="bx--number__controls"
+              >
+                <button
+                  aria-label="Decrement number"
+                  class="bx--number__control-btn down-icon"
+                  disabled=""
+                  tabindex="-1"
+                  title="Decrement number"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="down-icon"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 15H24V17H8z"
+                    />
+                  </svg>
+                </button>
+                <div
+                  class="bx--number__rule-divider"
+                />
+                <button
+                  aria-label="Increment number"
+                  class="bx--number__control-btn up-icon"
+                  disabled=""
+                  tabindex="-1"
+                  title="Increment number"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="up-icon"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+                    />
+                  </svg>
+                </button>
+                <div
+                  class="bx--number__rule-divider"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="dropdown"
+        data-testid="select dropdown"
+        style="margin-right: 5px;"
+      >
+        <div
+          class="bx--dropdown__wrapper bx--list-box__wrapper"
+        >
+          <label
+            class="bx--label bx--label--disabled"
+            for="downshift-2-toggle-button"
+            id="downshift-2-label"
+          >
+            <div
+              class="titleText"
+            >
+              <span>
+                  
+              </span>
+            </div>
+          </label>
+          <div
+            class="bx--dropdown bx--dropdown--disabled bx--list-box"
+            id="Dropdown"
+          >
+            <button
+              aria-disabled="true"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-labelledby="downshift-2-label downshift-2-toggle-button"
+              class="bx--list-box__field"
+              disabled=""
+              id="downshift-2-toggle-button"
+              type="button"
+            >
+              <span
+                class="bx--list-box__label"
+              />
+              <div
+                class="bx--list-box__menu-icon"
+              >
+                <svg
+                  aria-label="Open menu"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  name="chevron--down"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="img"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  />
+                  <title>
+                    Open menu
+                  </title>
+                </svg>
+              </div>
+            </button>
+            <div
+              aria-labelledby="downshift-2-label"
+              class="bx--list-box__menu"
+              id="downshift-2-menu"
+              role="listbox"
+              tabindex="-1"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="date-picker-carbon"
+      data-testid="datePicker"
+    >
+      <div
+        class="bx--form-item"
+      >
+        <div
+          class="bx--date-picker bx--date-picker--single"
+          disabled=""
+        >
+          <div
+            class="bx--date-picker-container"
+          >
+            <label
+              class="bx--label bx--label--disabled"
+              for="Dropdown"
+            >
+              <div
+                class="titleText"
+              >
+                <span>
+                  Start Date 
+                </span>
+              </div>
+            </label>
+            <div
+              class="bx--date-picker-input__wrapper"
+            >
+              <input
+                autocomplete="off"
+                class="bx--date-picker__input bx--date-picker__input--md flatpickr-input"
+                disabled=""
+                id="Dropdown"
+                pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
+                placeholder="mm/dd/yyyy"
+                style="width: 250px;"
+                type="text"
+              />
+              <svg
+                aria-hidden="true"
+                class="bx--date-picker__icon"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                role="img"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20	V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="frequency"
+  >
+    <div
+      class="dropdown"
+      data-testid="select dropdown"
+      style="margin-right: 5px;"
+    >
+      <div
+        class="bx--dropdown__wrapper bx--list-box__wrapper"
+      >
+        <label
+          class="bx--label bx--label--disabled"
+          for="downshift-3-toggle-button"
+          id="downshift-3-label"
+        >
+          <div
+            class="titleText"
+          >
+            <span>
+              Frequency 
+            </span>
+          </div>
+        </label>
+        <div
+          class="bx--dropdown bx--dropdown--disabled bx--list-box"
+          id="DropdownFrequency"
+        >
+          <button
+            aria-disabled="true"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-labelledby="downshift-3-label downshift-3-toggle-button"
+            class="bx--list-box__field"
+            disabled=""
+            id="downshift-3-toggle-button"
+            type="button"
+          >
+            <span
+              class="bx--list-box__label"
+            />
+            <div
+              class="bx--list-box__menu-icon"
+            >
+              <svg
+                aria-label="Open menu"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                name="chevron--down"
+                preserveAspectRatio="xMidYMid meet"
+                role="img"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                />
+                <title>
+                  Open menu
+                </title>
+              </svg>
+            </div>
+          </button>
+          <div
+            aria-labelledby="downshift-3-label"
+            class="bx--list-box__menu"
+            id="downshift-3-menu"
+            role="listbox"
+            tabindex="-1"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

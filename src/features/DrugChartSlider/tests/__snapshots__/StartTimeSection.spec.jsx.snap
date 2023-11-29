@@ -1,0 +1,94 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StartTimeSection should match snapshot 1`] = `
+<div>
+  <div
+    class="start-time"
+  >
+    <div
+      class="bx--form-item"
+    >
+      <label
+        class="bx--label"
+        for="time-selector"
+      >
+        <div
+          class="titleText"
+        >
+          <span>
+            Start Time 
+          </span>
+          <span
+            class="required"
+          >
+            *
+          </span>
+        </div>
+      </label>
+      <div
+        class="bx--time-picker"
+      >
+        <div
+          class="bx--time-picker__input"
+        >
+          <input
+            autocomplete="off"
+            class="bx--time-picker__input-field bx--text-input"
+            id="time-selector"
+            maxlength="5"
+            pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
+            placeholder="hh:mm"
+            style="width: 72px; padding: 0px 0px 0px 1rem;"
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          class="bx--select bx--time-picker__select"
+        >
+          <label
+            class="bx--label bx--visually-hidden"
+            for="time-picker-select-1"
+          >
+            Choose a time
+          </label>
+          <select
+            aria-label="open list of options"
+            class="bx--select-input"
+            id="time-picker-select-1"
+          >
+            <option
+              class="bx--select-option"
+              value="AM"
+            >
+              AM
+            </option>
+            <option
+              class="bx--select-option"
+              value="PM"
+            >
+              PM
+            </option>
+          </select>
+          <svg
+            aria-label="open list of options"
+            class="bx--select__arrow"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            role="img"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
