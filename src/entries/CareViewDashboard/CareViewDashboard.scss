@@ -1,0 +1,29 @@
+.care-view-page {
+    color: #393939;
+  font-family: "IBM Plex Sans", sans-serif;
+  .main {
+    background-color: white;
+    transition: margin-left 0.5s;
+    padding: 16px;
+    position: relative;
+    margin-left: 16rem;
+  }
+  .border-bottom-0 {
+    border-bottom: 0;
+  }
+
+  .header-bg-color {
+    background: #004144;
+  }
+
+  .header-nav-toggle-btn {
+    border: none;
+  }
+
+  .header-nav-toggle-btn:hover {
+    background-color: #004144;
+    fill: #ffffff;
+    outline: none;
+    border: none;
+  }
+}
