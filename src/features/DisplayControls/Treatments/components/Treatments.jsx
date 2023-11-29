@@ -20,8 +20,8 @@ import {
   updateDrugOrderList,
 } from "../utils/TreatmentsUtils";
 import "../styles/Treatments.scss";
-import DrugChartSlider from "../../../../components/DrugChartSlider/DrugChartSlider";
-import DrugChartSliderNotification from "../../../../components/DrugChartSlider/DrugChartSliderNotification";
+import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
+import DrugChartSliderNotification from "../../../DrugChartSlider/components/DrugChartSliderNotification";
 import { SliderContext } from "../../../../context/SliderContext";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { DDMMYYY_DATE_FORMAT, componentKeys } from "../../../../constants";
