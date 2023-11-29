@@ -26,6 +26,8 @@ export const ScheduleSection = ({
   showSchedulePassedWarning,
   enable24HourTimers,
 }) => {
+  console.log("enableSchedule", enableSchedule);
+  console.log("firstDaySlotsMissed", firstDaySlotsMissed);
   return (
     <>
       {enableSchedule && firstDaySlotsMissed > 0 && (
