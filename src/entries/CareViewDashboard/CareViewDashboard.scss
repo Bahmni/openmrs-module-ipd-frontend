@@ -1,13 +1,25 @@
 .care-view-page {
-    color: #393939;
+  color: #393939;
   font-family: "IBM Plex Sans", sans-serif;
   .main {
     background-color: white;
     transition: margin-left 0.5s;
-    padding: 16px;
-    position: relative;
-    margin-left: 16rem;
+    width: 100%;
+    top: 48px;
+    left: 0;
+    z-index: 1000;
+    position: absolute;
+    height: 100%;
   }
+
+  .home {
+    background-color: #004144;
+    fill: #ffffff;
+    outline: none;
+    border: none;
+    margin-left: 10px;
+  }
+
   .border-bottom-0 {
     border-bottom: 0;
   }

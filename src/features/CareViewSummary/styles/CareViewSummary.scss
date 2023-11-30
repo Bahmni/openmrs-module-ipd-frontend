@@ -1,0 +1,17 @@
+.care-view-summary {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-evenly;
+  align-items: baseline;
+  padding: 20px;
+
+  .summary-tiles {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+
+    .summary-tile {
+      margin: 10px;
+    }
+  }
+}
