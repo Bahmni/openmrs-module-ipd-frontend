@@ -20,33 +20,63 @@ import {
   updateDrugOrderList,
 } from "../utils/TreatmentsUtils";
 import "../styles/Treatments.scss";
-import DrugChartSlider from "../../../../components/DrugChartSlider/DrugChartSlider";
-import DrugChartSliderNotification from "../../../../components/DrugChartSlider/DrugChartSliderNotification";
+import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
+import DrugChartSliderNotification from "../../../DrugChartSlider/components/DrugChartSliderNotification";
 import { SliderContext } from "../../../../context/SliderContext";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
-import { DDMMYYY_DATE_FORMAT } from "../../../../constants";
+import { DDMMYYY_DATE_FORMAT, componentKeys } from "../../../../constants";
+import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 
 const Treatments = (props) => {
   const { patientId } = props;
-  const { isSliderOpen, updateSliderOpen } = useContext(SliderContext);
+  const {
+    isSliderOpen,
+    updateSliderOpen,
+    sliderContentModified,
+    setSliderContentModified,
+  } = useContext(SliderContext);
+  const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDrugOrder, setSelectedDrugOrder] = useState({});
   const [showWarningNotification, setShowWarningNotification] = useState(false);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [drugChartNotes, setDrugChartNotes] = useState("");
+  const updateTreatmentsSlider = (value) => {
+    updateSliderOpen((prev) => {
+      return {
+        ...prev,
+        treatments: value,
+      };
+    });
+  };
   var drugOrderList = {};
+  const sliderCloseActions = {
+    onCancel: () => {
+      setShowWarningNotification(false);
+      updateTreatmentsSlider(false);
+    },
+    onClose: () => {
+      setShowWarningNotification(false);
+    },
+  };
+
   const DrugChartSliderActions = {
     onModalClose: () => {
-      updateSliderOpen(false);
+      sliderContentModified.treatments
+        ? setShowWarningNotification(true)
+        : updateTreatmentsSlider(false);
     },
     onModalCancel: () => {
-      setShowWarningNotification(true);
-      updateSliderOpen(false);
+      sliderContentModified.treatments
+        ? setShowWarningNotification(true)
+        : updateTreatmentsSlider(false);
     },
     onModalSave: () => {
       setShowSuccessNotification(true);
-      updateSliderOpen(false);
+      updateTreatmentsSlider(false);
+      refreshDisplayControl([componentKeys.NURSING_TASKS]);
     },
   };
 
@@ -58,16 +88,20 @@ const Treatments = (props) => {
   );
 
   const handleAddToDrugChartClick = (drugOrderId) => {
+    setSliderContentModified((prevState) => ({
+      ...prevState,
+      treatments: false,
+    }));
     setSelectedDrugOrder((prevState) => ({
       ...prevState,
       drugOrder: drugOrderList.visitDrugOrders.find(
         (drugOrder) => drugOrder.uuid === drugOrderId
       ),
     }));
-    if (isSliderOpen) {
+    if (isSliderOpen.treatments) {
       return;
     }
-    updateSliderOpen(true);
+    updateTreatmentsSlider(true);
     setDrugChartNotes("");
   };
 
@@ -151,7 +185,7 @@ const Treatments = (props) => {
 
   return (
     <>
-      {isSliderOpen && (
+      {isSliderOpen.treatments && (
         <DrugChartSlider
           title={AddToDrugChart}
           hostData={selectedDrugOrder}
@@ -161,9 +195,23 @@ const Treatments = (props) => {
         />
       )}
       {showWarningNotification && (
-        <DrugChartSliderNotification
-          hostData={{ notificationKind: "warning" }}
-          hostApi={{ onClose: () => setShowWarningNotification(false) }}
+        <SideBarPanelClose
+          className="warning-notification"
+          open={true}
+          message={
+            <FormattedMessage
+              id="TREATMENTS_WARNING_TEXT"
+              defaultMessage="You will lose the details entered. Do you want to continue?"
+            />
+          }
+          label={""}
+          primaryButtonText={<FormattedMessage id="NO" defaultMessage="No" />}
+          secondaryButtonText={
+            <FormattedMessage id="YES" defaultMessage="Yes" />
+          }
+          onSubmit={sliderCloseActions.onClose}
+          onSecondarySubmit={sliderCloseActions.onCancel}
+          onClose={sliderCloseActions.onClose}
         />
       )}
       {showSuccessNotification && (

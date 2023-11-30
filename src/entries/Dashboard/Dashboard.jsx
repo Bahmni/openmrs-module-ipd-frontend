@@ -24,7 +24,14 @@ import { SliderContext } from "../../context/SliderContext";
 export default function Dashboard(props) {
   const { hostData } = props;
   const { patient } = hostData;
-  const [isSliderOpen, updateSliderOpen] = useState(false);
+  const [sliderContentModified, setSliderContentModified] = useState({
+    treatments: false,
+    nursingTasks: false,
+  });
+  const [isSliderOpen, updateSliderOpen] = useState({
+    treatments: false,
+    nursingTasks: false,
+  });
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
@@ -63,6 +70,10 @@ export default function Dashboard(props) {
     });
   };
 
+  const checkSliderStatus = () => {
+    return Object.values(isSliderOpen).includes(true);
+  };
+
   const refreshDisplayControl = (componentKeyArray) => {
     const updatedSections = sections.map((el) => {
       return componentKeyArray.includes(el.componentKey)
@@ -73,7 +84,14 @@ export default function Dashboard(props) {
   };
 
   return (
-    <SliderContext.Provider value={{ isSliderOpen, updateSliderOpen }}>
+    <SliderContext.Provider
+      value={{
+        isSliderOpen,
+        updateSliderOpen,
+        sliderContentModified,
+        setSliderContentModified,
+      }}
+    >
       <main className="ipd-page">
         <Header
           className="border-bottom-0 header-bg-color"
@@ -108,7 +126,7 @@ export default function Dashboard(props) {
           </SideNav>
         </Header>
 
-        <section className={isSliderOpen ? "main-with-slider" : "main"}>
+        <section className={checkSliderStatus() ? "main-with-slider" : "main"}>
           <div className={"navigation-buttons"}>
             <ArrowLeft
               data-testid={"Back button"}

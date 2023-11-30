@@ -69,10 +69,9 @@ export default function TaskTile(props) {
   return (
     <div className="tile-parent-container">
       <div
-        className="nursing-tasks-tile"
-        style={{
-          backgroundColor: isRelevantTask ? "#e3fed1" : "#EDF8E6",
-        }}
+        className={`nursing-tasks-tile ${
+          isRelevantTask && "relevant-task-tile"
+        }`}
       >
         <div className="tile-content">
           <div className="tile-title">
@@ -100,10 +99,9 @@ export default function TaskTile(props) {
       </div>
       {isGroupedTask && (
         <div
-          className="nursing-tasks-tile stacked-tile"
-          style={{
-            backgroundColor: isRelevantTask ? "#e3fed1" : "#EDF8E6",
-          }}
+          className={`nursing-tasks-tile stacked-tile ${
+            isRelevantTask && "relevant-task-tile"
+          }`}
         ></div>
       )}
     </div>

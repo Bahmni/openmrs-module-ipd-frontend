@@ -3,6 +3,7 @@ import { render, waitFor } from "@testing-library/react";
 import NursingTasks from "../components/NursingTasks";
 import { mockNursingTasksResponse } from "./NursingTasksUtilsMockData";
 import MockDate from "mockdate";
+import { SliderContext } from "../../../../context/SliderContext";
 
 const mockFetchMedicationNursingTasks = jest.fn();
 
@@ -14,6 +15,12 @@ jest.mock("../utils/NursingTasksUtils", () => {
   };
 });
 
+const mockProviderValue = {
+  isSliderOpen: {
+    treatments: false,
+  },
+  updateSliderOpen: jest.fn(),
+};
 describe("NursingTasks", () => {
   afterEach(() => {
     jest.resetAllMocks();
@@ -21,7 +28,11 @@ describe("NursingTasks", () => {
   });
 
   it("should show loading state", async () => {
-    const { getByText } = render(<NursingTasks patientId="patientid" />);
+    const { getByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <NursingTasks patientId="patientid" />
+      </SliderContext.Provider>
+    );
 
     await waitFor(() => {
       expect(getByText("Loading...")).toBeTruthy();
@@ -30,12 +41,16 @@ describe("NursingTasks", () => {
 
   it("should show no nursing tasks message when nursing task reponse is empty", async () => {
     mockFetchMedicationNursingTasks.mockResolvedValueOnce([]);
-    const { getByText } = render(<NursingTasks patientId="patientid" />);
+    const { getByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <NursingTasks patientId="patientid" />
+      </SliderContext.Provider>
+    );
 
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
       expect(
-        getByText("No nursing task is scheduled for the patient")
+        getByText("No Nursing Task is scheduled for the patient")
       ).toBeTruthy();
     });
   });
@@ -46,7 +61,9 @@ describe("NursingTasks", () => {
       mockNursingTasksResponse
     );
     const { getAllByText, asFragment } = render(
-      <NursingTasks patientId="patientid" />
+      <SliderContext.Provider value={mockProviderValue}>
+        <NursingTasks patientId="patientid" />
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
@@ -63,7 +80,11 @@ describe("NursingTasks", () => {
     mockFetchMedicationNursingTasks.mockResolvedValueOnce(
       mockNursingTasksResponse
     );
-    const { getByText } = render(<NursingTasks patientId="patientid" />);
+    const { getByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <NursingTasks patientId="patientid" />
+      </SliderContext.Provider>
+    );
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
       expect(getByText("11/08/2023")).toBeTruthy();

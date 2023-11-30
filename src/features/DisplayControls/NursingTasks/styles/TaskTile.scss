@@ -1,9 +1,22 @@
 .nursing-tasks-tile {
   border: 1px solid #007d79;
-  background-color: #e3fed1;
+  background-color: #edf8e6;
   width: 323px;
   height: 90px;
   position: relative;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #d2e1c9;
+  }
+}
+
+.relevant-task-tile {
+  background-color: #e3fed1;
+
+  &:hover {
+    background-color: #c5eea9;
+  }
 }
 
 .tile-parent-container {
@@ -26,6 +39,10 @@
 .tile-title {
   flex-direction: row;
   display: flex;
+
+  .bx--tooltip__trigger.bx--tooltip__trigger--definition.bx--tooltip--bottom {
+    cursor: pointer;
+  }
 }
 
 .drug-title {
@@ -41,9 +58,9 @@
   text-align: left;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  overflow: hidden;
   -webkit-line-clamp: 2;
 }
+
 .tile-content-subtext {
   margin-top: 4px;
   font-size: 12px;
@@ -70,8 +87,9 @@
 }
 
 .bx--tooltip__trigger.bx--tooltip__trigger--definition {
-  border-bottom: 0px;
+  border-bottom: 0;
 }
+
 .bx--tooltip__trigger.bx--tooltip__trigger--definition.bx--tooltip--bottom.bx--tooltip--align-start.bx--tooltip--a11y
   + .bx--assistive-text {
   color: #fff;
