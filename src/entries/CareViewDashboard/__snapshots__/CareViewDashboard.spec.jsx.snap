@@ -1,0 +1,271 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CareViewDashboard should match the snapshot 1`] = `
+<div>
+  <main
+    class="care-view-page"
+  >
+    <header
+      aria-label="IBM Platform Name"
+      class="bx--header border-bottom-0 header-bg-color"
+    >
+      <a
+        class="bx--link"
+      >
+        <svg
+          aria-label="home-button"
+          class="home"
+          fill="currentColor"
+          focusable="false"
+          height="24"
+          preserveAspectRatio="xMidYMid meet"
+          role="img"
+          viewBox="0 0 32 32"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M16.6123,2.2138a1.01,1.01,0,0,0-1.2427,0L1,13.4194l1.2427,1.5717L4,13.6209V26a2.0041,2.0041,0,0,0,2,2H26a2.0037,2.0037,0,0,0,2-2V13.63L29.7573,15,31,13.4282ZM18,26H14V18h4Zm2,0V18a2.0023,2.0023,0,0,0-2-2H14a2.002,2.002,0,0,0-2,2v8H6V12.0615l10-7.79,10,7.8005V26Z"
+          />
+        </svg>
+      </a>
+    </header>
+    <section
+      class="main"
+    >
+      <div
+        class="care-view-summary"
+      >
+        <div
+          class="bx--dropdown__wrapper bx--list-box__wrapper"
+        >
+          
+          <div
+            class="bx--dropdown bx--list-box"
+            id="default"
+          >
+            <button
+              aria-disabled="false"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-labelledby="downshift-0-label downshift-0-toggle-button"
+              class="bx--list-box__field"
+              id="downshift-0-toggle-button"
+              title="Dropdown menu options"
+              type="button"
+            >
+              <span
+                class="bx--list-box__label"
+              >
+                Dropdown menu options
+              </span>
+              <div
+                class="bx--list-box__menu-icon"
+              >
+                <svg
+                  aria-label="Open menu"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  name="chevron--down"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="img"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  />
+                  <title>
+                    Open menu
+                  </title>
+                </svg>
+              </div>
+            </button>
+            <div
+              aria-labelledby="downshift-0-label"
+              class="bx--list-box__menu"
+              id="downshift-0-menu"
+              role="listbox"
+              tabindex="-1"
+            />
+          </div>
+        </div>
+        <div
+          class="summary-tiles"
+        >
+          <div
+            class="bx--tile summary-tile"
+          >
+            Patient Tile 1
+          </div>
+          <div
+            class="bx--tile summary-tile"
+          >
+            Patient Tile 2
+          </div>
+          <div
+            class="bx--tile summary-tile"
+          >
+            Patient Tile 3
+          </div>
+          <div
+            class="bx--tile summary-tile"
+          >
+            Patient Tile 4
+          </div>
+        </div>
+      </div>
+      <div
+        class="care-view-patients"
+      >
+        <div
+          style="width: 80%;"
+        >
+          <div
+            class="task-type"
+          >
+            <div
+              class="bx--dropdown__wrapper bx--list-box__wrapper"
+            >
+              
+              <div
+                class="bx--dropdown bx--list-box"
+                id="default"
+              >
+                <button
+                  aria-disabled="false"
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-labelledby="downshift-1-label downshift-1-toggle-button"
+                  class="bx--list-box__field"
+                  id="downshift-1-toggle-button"
+                  title="Dropdown menu options"
+                  type="button"
+                >
+                  <span
+                    class="bx--list-box__label"
+                  >
+                    Dropdown menu options
+                  </span>
+                  <div
+                    class="bx--list-box__menu-icon"
+                  >
+                    <svg
+                      aria-label="Open menu"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      name="chevron--down"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      />
+                      <title>
+                        Open menu
+                      </title>
+                    </svg>
+                  </div>
+                </button>
+                <div
+                  aria-labelledby="downshift-1-label"
+                  class="bx--list-box__menu"
+                  id="downshift-1-menu"
+                  role="listbox"
+                  tabindex="-1"
+                />
+              </div>
+            </div>
+          </div>
+          <ul
+            class="bx--accordion patient-section bx--accordion--end bx--accordion--md"
+          >
+            <li
+              class="bx--accordion__item"
+            >
+              <button
+                aria-controls="accordion-item-1"
+                aria-expanded="false"
+                class="bx--accordion__heading"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="bx--accordion__arrow"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                  />
+                </svg>
+                <div
+                  class="bx--accordion__title"
+                  dir="auto"
+                >
+                  Patient 1
+                </div>
+              </button>
+              <div
+                class="bx--accordion__content"
+                id="accordion-item-1"
+              >
+                Patient 1
+              </div>
+            </li>
+            <li
+              class="bx--accordion__item"
+            >
+              <button
+                aria-controls="accordion-item-2"
+                aria-expanded="false"
+                class="bx--accordion__heading"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="bx--accordion__arrow"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                  />
+                </svg>
+                <div
+                  class="bx--accordion__title"
+                  dir="auto"
+                >
+                  Patient 2
+                </div>
+              </button>
+              <div
+                class="bx--accordion__content"
+                id="accordion-item-2"
+              >
+                Patient 2
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+`;
