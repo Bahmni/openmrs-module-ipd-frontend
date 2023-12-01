@@ -8,12 +8,19 @@
   text-align: left;
   background-color: whitesmoke;
   justify-content: space-between;
+  min-width: fit-content;
 }
 
 .vital-values {
   font-size: 16px;
+  min-width: max-content;
 }
-
+.vital-headers {
+  font-size: 12px;
+}
+.vital-units {
+  font-size: 14px;
+}
 .vital-value-and-unit {
   display: flex;
   flex-flow: row;
@@ -25,4 +32,9 @@
 }
 .no-vitals-message {
   padding-top: 10px;
+}
+
+.vital-table{
+  overflow: visible;
+  overflow-x: auto;
 }

@@ -8,6 +8,7 @@
   }
   .patient-details {
     align-items: center;
+    position: static;
   }
 
   .patient-image {
@@ -27,6 +28,10 @@
     min-width: fit-content;
     color: #525252;
     font-size: 14px;
+  }
+  .details-tile {
+    display: flex;
+    flex-flow: column;
   }
 }
 

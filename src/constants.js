@@ -24,6 +24,7 @@ export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
 export const CLINICAL_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/clinical/app.json";
+  export const PATIENT_PROFILE = RESTWS_V1 + "/patientprofile"
 
 export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
