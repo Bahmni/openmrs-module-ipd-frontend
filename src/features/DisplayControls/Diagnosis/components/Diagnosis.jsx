@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import "../styles/Diagnosis.scss";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
+import DiagnosisExpandableRow from "./DiagnosisExpandableRow";
 
 const Diagnosis = (props) => {
   const { patientId } = props;
@@ -43,7 +44,7 @@ const Diagnosis = (props) => {
             let diagnosisName = diagnosis.codedAnswer
               ? diagnosis.codedAnswer.name
               : diagnosis.freeTextAnswer;
-            let diagnosisNotes = diagnosis.comments;
+            let diagnosisNotes = diagnosis.comments ? diagnosis.comments : "";
             return {
               id: diagnosisId,
               diagnosis: diagnosisName,
@@ -53,7 +54,6 @@ const Diagnosis = (props) => {
               diagnosedBy: diagnosis.providers[0].name,
               diagnosisDate: diagnosisDate,
               additionalData: {
-                id: diagnosisId,
                 diagnosisTime: diagnosisTime,
                 diagnosisNotes: diagnosisNotes,
               },
@@ -61,15 +61,14 @@ const Diagnosis = (props) => {
           });
 
     setDiagnosis(mappedDiagnoses);
-    console.log("mappedDiagnoses", mappedDiagnoses);
     const additionalMappedData = mappedDiagnoses.map((diagnosis) => {
       return {
-        id: diagnosis.additionalData.id,
+        id: diagnosis.id,
         diagnosisTime: diagnosis.additionalData.diagnosisTime,
         diagnosisNotes: diagnosis.additionalData.diagnosisNotes,
+        provider: diagnosis.diagnosedBy,
       };
     });
-    console.log("additionalMappedData", additionalMappedData);
     setAdditionalData(additionalMappedData);
     setIsLoading(false);
   };
@@ -93,6 +92,9 @@ const Diagnosis = (props) => {
           rows={diagnosis}
           headers={diagnosisHeaders}
           additionalData={additionalData}
+          component={(additionalData) => {
+            return <DiagnosisExpandableRow data={additionalData} />;
+          }}
           useZebraStyles={true}
         />
       )}

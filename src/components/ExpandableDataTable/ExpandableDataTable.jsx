@@ -12,13 +12,15 @@ import {
   TableExpandRow,
 } from "carbon-components-react";
 import PropTypes from "prop-types";
-import DiagnosisExpandableRow from "../../features/DisplayControls/Diagnosis/components/DiagnosisExpandableRow";
 
 const ExpandableDataTable = (props) => {
-  const { rows, headers, additionalData } = props;
+  const { rows, headers, additionalData, component } = props;
 
-  console.log("rows", rows);
-  console.log("additionalData", additionalData);
+  const renderExpandableRowComponent = (row, additionalData) => {
+    const filteredData = additionalData.filter((data) => row.id === data.id);
+    return filteredData.map((data) => component(data));
+  };
+
   return (
     <DataTable
       rows={rows}
@@ -32,8 +34,6 @@ const ExpandableDataTable = (props) => {
         getTableProps,
       }) => (
         <>
-          {console.log("rows inside DT", rows)}
-          {console.log("additionalData inside DT", additionalData)}
           <Table {...getTableProps()}>
             <TableHead>
               <TableRow>
@@ -56,7 +56,7 @@ const ExpandableDataTable = (props) => {
                   {/* toggle based off of if the row is expanded. If it is, render TableExpandedRow */}
                   {row.isExpanded && (
                     <TableExpandedRow colSpan={headers.length + 1}>
-                      {<DiagnosisExpandableRow row={row} additionalData={additionalData} />}
+                      {renderExpandableRowComponent(row, additionalData)}
                     </TableExpandedRow>
                   )}
                 </React.Fragment>
@@ -70,9 +70,10 @@ const ExpandableDataTable = (props) => {
 };
 
 ExpandableDataTable.propTypes = {
-    rows: PropTypes.array.isRequired,
-    headers: PropTypes.array.isRequired,
-    additionalData: PropTypes.array,
+  rows: PropTypes.array.isRequired,
+  headers: PropTypes.array.isRequired,
+  additionalData: PropTypes.array,
+  component: PropTypes.func.isRequired,
 };
 export default ExpandableDataTable;
 
