@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "carbon-components/css/carbon-components.min.css";
+import "./VerticalTabs.scss";
 
 const VerticalTabs = (props) => {
   const { tabData } = props;
@@ -10,41 +11,33 @@ const VerticalTabs = (props) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          marginRight: "20px",
-        }}
-      >
+      <div className="tabs-container">
         {Object.keys(tabData).map((key, index) => {
-            return (
-                <div
-                onClick={() => handleTabChange(index)}
-                style={{
-                    cursor: "pointer",
-                    marginBottom: "8px",
-                    backgroundColor:
-                    selectedTabIndex === index ? "#ececec" : "transparent",
-                    padding: "8px",
-                }}
-                >
-                {key}
-                </div>
-            );
+          return (
+            <div
+              onClick={() => handleTabChange(index)}
+              className={`tab ${selectedTabIndex === index ? "active" : ""}`}
+            >
+              {key}
+            </div>
+          );
         })}
       </div>
       <div>
         {Object.keys(tabData).map((key, index) => {
-            return (
-                <div
-                style={{
-                    display: selectedTabIndex === index ? "block" : "none",
-                }}
-                >
-                {tabData[key]}
-                </div>
-            );
+          return (
+            <div
+              className={`tab-content ${
+                selectedTabIndex === index ? "active" : ""
+              }`}
+            >
+              {tabData[key]?.data}
+              {console.log("tabData[key]", tabData[key])}
+              {tabData[key].additionalData?.map((data) => {
+                return <div className="tab-additional-content">{data}</div>;
+              })}
+            </div>
+          );
         })}
       </div>
     </div>

@@ -1,0 +1,38 @@
+.tabs-container {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+.tab {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  transition: background-color 0.3s;
+  padding: 8px;
+}
+
+.tab:hover {
+  background-color: #f0f0f0;
+}
+
+.tab.active {
+  background-color: #ddd;
+  border-left: 2px solid #007d79;
+}
+
+.tab-content {
+  display: none;
+  padding-top: 8px;
+}
+
+.tab-content.active {
+  display: block;
+  background: none;
+  border: none;
+}
+
+.tab-additional-content {
+  padding-top: 12px;
+}

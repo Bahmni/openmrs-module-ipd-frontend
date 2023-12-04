@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   DataTable,
   Table,
@@ -14,7 +14,7 @@ import {
 import PropTypes from "prop-types";
 
 const ExpandableDataTable = (props) => {
-  const { rows, headers, additionalData, component } = props;
+  const { rows, headers, additionalData, component, useZebraStyles } = props;
 
   const renderExpandableRowComponent = (row, additionalData) => {
     const filteredData = additionalData.filter((data) => row.id === data.id);
@@ -26,6 +26,7 @@ const ExpandableDataTable = (props) => {
       rows={rows}
       headers={headers}
       additionalData={additionalData}
+      useZebraStyles={useZebraStyles}
       render={({
         rows,
         headers,
@@ -76,4 +77,3 @@ ExpandableDataTable.propTypes = {
   component: PropTypes.func.isRequired,
 };
 export default ExpandableDataTable;
-
