@@ -50,6 +50,7 @@
     "carbon-components": "^10.19.0",
     "carbon-components-react": "^7.25.0",
     "carbon-icons": "^7.0.7",
+    "lodash": "^4.17.21",
     "mockdate": "^3.0.5",
     "moment": "^2.29.4",
     "prop-types": "^15.8.1",
