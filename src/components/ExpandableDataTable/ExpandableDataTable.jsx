@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   DataTable,
   Table,
@@ -55,11 +55,9 @@ const ExpandableDataTable = (props) => {
                     ))}
                   </TableExpandRow>
                   {/* toggle based off of if the row is expanded. If it is, render TableExpandedRow */}
-                  {row.isExpanded && (
-                    <TableExpandedRow colSpan={headers.length + 1}>
-                      {renderExpandableRowComponent(row, additionalData)}
-                    </TableExpandedRow>
-                  )}
+                  <TableExpandedRow colSpan={headers.length + 1}>
+                    {renderExpandableRowComponent(row, additionalData)}
+                  </TableExpandedRow>
                 </React.Fragment>
               ))}
             </TableBody>
