@@ -19,7 +19,7 @@ export const PatientHeader = (props) => {
   const [patientContact, setPatientContactConfig] = useState([]);
 
   const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
-  const showDetails = <FormattedMessage id="SHOW_DETAILS" defaultMessage="Show Details" />;
+  // const showDetails = <FormattedMessage id="SHOW_DETAILS" defaultMessage="Show Details" />;
 
   const[buttonLabel, setButtonLabel] =useState("Show details");
 
@@ -92,6 +92,7 @@ export const PatientHeader = (props) => {
       const patientProfile = await fetchPatientProfile(patientId);
       const patientRelatives = extractPatientRelationships(patientProfile);
       console.log("patient relatives", patientRelatives);
+      console.log("contact configs", contactConfigs);
       setMappedContacts(mapContact(patientAttributes , contactConfigs.contactDetails));
       setMappedRelationships(mapRelationships(patientRelatives));
     };

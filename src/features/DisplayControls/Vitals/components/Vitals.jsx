@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
-import { Column, Row, Tile, SkeletonText,Button,DataTable } from "carbon-components-react";
-import { getPatientVitals, getPatientVitalsHistory, mapVitalsData, mapVitalsHistory, mapBiometricsHistory} from "../utils/VitalsUtils";
+import { Column, Row, Tile, SkeletonText,Button,DataTable, TableCell,
+  TableHead,
+  TableHeader,
+  TableBody,
+  Table,
+  TableRow } from "carbon-components-react";
+import { getPatientVitals, getPatientVitalsHistory, mapVitalsData, mapVitalsHistory, mapBiometricsHistory, vitalsHistoryHeaders, biometricsHistoryHeaders } from "../utils/VitalsUtils";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import "../styles/Vitals.scss";
@@ -11,7 +16,7 @@ const Vitals = (props) => {
   const [flag,setFlag] =useState(true);
   const [Vitals, setVitals] = useState({});
   const [vitalsHistory, setVitalsHistory] = useState([]);
-  const [biometrics, setBiometricsHistory] = useState([]);
+  const [biometricsHistory, setBiometricsHistory] = useState([]);
   const [VitalUnits, setVitalUnits] = useState({});
   const [VitalsDate, setVitalsDate] = useState(null);
   const [VitalsTime, setVitalsTime] = useState(null);
@@ -246,12 +251,84 @@ const Vitals = (props) => {
           </Row>
           {flag ? "":(<Tile className="Vitals-Table-view">
                <Tile>
-                
-               </Tile>
-               <Tile>
-          
-               </Tile>
-           </Tile>)}
+               <DataTable
+                  rows= {vitalsHistory}
+                  headers={vitalsHistoryHeaders}
+                  useZebraStyles={true} >
+          {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
+            <Table
+              {...getTableProps()}
+              useZebraStyles
+              data-testid="vitals-datatable"
+            >
+              <TableHead>
+                <TableRow>
+                  {headers.map((header) => (
+                    <TableHeader
+                      key={header.id}
+                      {...getHeaderProps({
+                        header,
+                        isSortable: header.isSortable,
+                      })}
+                    >
+                      {header.header}
+                    </TableHeader>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow key={row.id} {...getRowProps({ row })}>
+                    {row.cells.map((cell) => (
+                      <TableCell key={cell.id}>{cell.value}</TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </DataTable>
+      </Tile>
+      <Tile>
+        <DataTable
+          rows= {biometricsHistory}
+          headers={biometricsHistoryHeaders}
+          useZebraStyles={true} >
+          {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
+            <Table
+              {...getTableProps()}
+              useZebraStyles
+              data-testid="biometrics-datatable"
+            >
+              <TableHead>
+                <TableRow>
+                  {headers.map((header) => (
+                    <TableHeader
+                      key={header.id}
+                      {...getHeaderProps({
+                        header,
+                        isSortable: header.isSortable,
+                      })}
+                    >
+                      {header.header}
+                    </TableHeader>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow key={row.id} {...getRowProps({ row })}>
+                    {row.cells.map((cell) => (
+                      <TableCell key={cell.id}>{cell.value}</TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </DataTable>
+       </Tile>
+     </Tile>)}
         </Tile>
       )}
     </>

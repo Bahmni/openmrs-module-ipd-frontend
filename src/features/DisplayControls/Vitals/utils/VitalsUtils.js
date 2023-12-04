@@ -55,6 +55,7 @@ export const getPatientVitalsHistory = async (patientUuid) => {
     "Temperature",
     "Pulse",
     "Height",
+    "Mid-upper+arm+circumference"
   ];
   const queryParams = conceptValues.map((concept) => `obsConcepts=${concept}`);
   const conceptParams = queryParams.join("&");
@@ -138,8 +139,10 @@ let vitalsHistory = [];
 const vitalsValue = vitalsHistoryList.tabularData;
 for (const date in vitalsValue){
   const innerMappedVitals = vitalsValue[date];
+  const dateAndTime = formatDate(date).split(" ");
   const pairedVital = {
-    date: date,
+    id: date,
+    date: formatDateAsString(new Date(date), "DD/MM/YYYY")+ " , "+ dateAndTime.slice(3).join(" ").toUpperCase(),
     pulse: innerMappedVitals?.Pulse  ? innerMappedVitals?.Pulse?.value : "--",
     pulseAbnormal: innerMappedVitals?.Pulse ? innerMappedVitals?.Pulse.abnormal : "--",
     spO2: innerMappedVitals?.SpO2  ? innerMappedVitals?.SpO2?.value : "--",
@@ -162,13 +165,96 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
   const biometricsValue = vitalsHistoryList.tabularData;
   for (const date in biometricsValue){
     const innerMappedbiometrics = biometricsValue[date];
+    const dateAndTime = formatDate(date).split(" ");
     const pairedBiometrics = {
-      date: date,
+      id : date,
+      date: formatDateAsString(new Date(date), "DD/MM/YYYY")+ " , "+ dateAndTime.slice(3).join(" ").toUpperCase(),
       height: innerMappedbiometrics?.HEIGHT  ? innerMappedbiometrics?.HEIGHT?.value : "--",
       heightAbnormal: innerMappedbiometrics?.Height ? innerMappedbiometrics?.HEIGHT.abnormal : "--",
-     
+      weight: innerMappedbiometrics?.WEIGHT  ? innerMappedbiometrics?.WEIGHT?.value : "--",
+      weightAbnormal: innerMappedbiometrics?.WEIGHT ? innerMappedbiometrics?.WEIGHT.abnormal : "--",
+      bmi: innerMappedbiometrics?.BMI  ? innerMappedbiometrics?.BMI?.value : "--",
+      bmiAbnormal: innerMappedbiometrics?.BMI ? innerMappedbiometrics?.BMI.abnormal : "--",
+      bmi: innerMappedbiometrics?.BMI  ? innerMappedbiometrics?.BMI?.value : "--",
+      bmiAbnormal: innerMappedbiometrics?.BMI ? innerMappedbiometrics?.BMI.abnormal : "--",
+      muac: innerMappedbiometrics?.["Mid-upper arm circumference"] ? innerMappedbiometrics?.["Mid-upper arm circumference"]?.value : "--",
+      muacAbnormal: innerMappedbiometrics?.["Mid-upper arm circumference"] ? innerMappedbiometrics?.["Mid-upper arm circumference"].abnormal : "--",
+
     }
   biometricsHistory.push(pairedBiometrics);
   }
    return biometricsHistory;
   }
+
+
+  export const vitalsHistoryHeaders = [
+    {
+      id: "1",
+      header:"Date and time",
+      key: "date",
+      isSortable: false,
+    },
+    {
+      id: "2",
+      header:"Temp (DEG C)",
+      key: "temperature",
+      isSortable: false,
+    },
+    {
+      id: "3",
+      header:"BP (mmHg)",
+      key: "bp",
+      isSortable: false,
+    },
+    {
+      id: "4",
+      header:"Pulse (beats/min)",
+      key: "pulse",
+      isSortable: false,
+    },
+    {
+      id: "5",
+      header:"R.rate (breaths/min)",
+      key: "respiratoryRate",
+      isSortable: false,
+    },
+    {
+      id: "6",
+      header:"SPO2 (%)",
+      key: "spO2",
+      isSortable: false,
+    }
+  ]
+
+  export const biometricsHistoryHeaders = [
+    {
+      id: "1",
+      header: "Date and time",
+      key: "date",
+      isSortable: false
+    },
+    {
+      id: "2",
+      header: "Weight (kg)",
+      key: "weight",
+      isSortable: false
+    },
+    {
+      id: "3",
+      header: "Height (cm)",
+      key: "height",
+      isSortable: false
+    },
+    {
+      id: "4",
+      header: "BMI (kg/m2)",
+      key: "bmi",
+      isSortable: false
+    },
+    {
+      id: "5",
+      header: "MUAC (cm)",
+      key: "muac",
+      isSortable: false
+    },
+  ]
