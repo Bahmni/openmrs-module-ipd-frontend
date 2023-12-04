@@ -1,24 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
-import MyTreeComponent from "./TreeComponent";
+import ExpandableRowData from "./ExpandableRowData";
 
 const TreatmentExpandableRow = (props) => {
   const { data } = props;
   return (
     <>
-      <h6>Treatments</h6>
-      <>
-        <div>{data.instructions}</div>
-        <div>{data.additionalInstructions}</div>
-        <div>{data.recordedDate}</div>
-        <div>{data.recordedTime}</div>
-        <div>{data.provider}</div>
-      </>
+      <ExpandableRowData data={data} />
     </>
   );
 };
 
 TreatmentExpandableRow.propTypes = {
-    data: PropTypes.object,
-}
+  data: PropTypes.object,
+};
 export default TreatmentExpandableRow;
