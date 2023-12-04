@@ -10,6 +10,7 @@
     z-index: 1000;
     position: absolute;
     height: 100%;
+    padding: 16px 0;
   }
 
   .home {
@@ -17,7 +18,7 @@
     fill: #ffffff;
     outline: none;
     border: none;
-    margin-left: 10px;
+    margin-left: 16px;
   }
 
   .border-bottom-0 {
@@ -37,5 +38,22 @@
     fill: #ffffff;
     outline: none;
     border: none;
+  }
+  .care-view-navigations {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: baseline;
+    color: rgb(15, 98, 254);
+    padding: 0 16px;
+  }
+
+  .ward-view-nav-link {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-right: 8px;
+    }
   }
 }

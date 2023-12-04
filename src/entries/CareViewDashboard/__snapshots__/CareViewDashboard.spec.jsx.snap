@@ -17,11 +17,11 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           class="home"
           fill="currentColor"
           focusable="false"
-          height="24"
+          height="20"
           preserveAspectRatio="xMidYMid meet"
           role="img"
           viewBox="0 0 32 32"
-          width="24"
+          width="20"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -33,6 +33,56 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
     <section
       class="main"
     >
+      <div
+        class="care-view-navigations"
+      >
+        <svg
+          aria-hidden="true"
+          data-testid="Back button"
+          fill="currentColor"
+          focusable="false"
+          height="20"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 32 32"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M14 26L15.41 24.59 7.83 17 28 17 28 15 7.83 15 15.41 7.41 14 6 4 16 14 26z"
+          />
+        </svg>
+        <a
+          class="bx--link ward-view-nav-link"
+        >
+          <svg
+            aria-hidden="true"
+            data-testid="List button"
+            fill="currentColor"
+            focusable="false"
+            height="24"
+            preserveAspectRatio="xMidYMid meet"
+            size="20"
+            viewBox="0 0 32 32"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="7"
+              cy="9"
+              r="3"
+            />
+            <circle
+              cx="7"
+              cy="23"
+              r="3"
+            />
+            <path
+              d="M16 22H30V24H16zM16 8H30V10H16z"
+            />
+          </svg>
+          Ward List View
+        </a>
+      </div>
       <div
         class="care-view-summary"
       >
@@ -51,13 +101,13 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
               aria-labelledby="downshift-0-label downshift-0-toggle-button"
               class="bx--list-box__field"
               id="downshift-0-toggle-button"
-              title="Dropdown menu options"
+              title="General Ward (A)"
               type="button"
             >
               <span
                 class="bx--list-box__label"
               >
-                Dropdown menu options
+                General Ward (A)
               </span>
               <div
                 class="bx--list-box__menu-icon"
@@ -98,30 +148,35 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           <div
             class="bx--tile summary-tile"
           >
-            Patient Tile 1
+            Total patients
           </div>
           <div
             class="bx--tile summary-tile"
           >
-            Patient Tile 2
+            My patients
           </div>
           <div
             class="bx--tile summary-tile"
           >
-            Patient Tile 3
+            New patients
           </div>
           <div
             class="bx--tile summary-tile"
           >
-            Patient Tile 4
+            Scheduled for OT
+          </div>
+          <div
+            class="bx--tile summary-tile"
+          >
+            To be discharged
           </div>
         </div>
       </div>
       <div
-        class="care-view-patients"
+        class="care-view-patients-container"
       >
         <div
-          style="width: 80%;"
+          class="care-view-patients"
         >
           <div
             class="task-type"
@@ -141,13 +196,13 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   aria-labelledby="downshift-1-label downshift-1-toggle-button"
                   class="bx--list-box__field"
                   id="downshift-1-toggle-button"
-                  title="Dropdown menu options"
+                  title="All tasks"
                   type="button"
                 >
                   <span
                     class="bx--list-box__label"
                   >
-                    Dropdown menu options
+                    All tasks
                   </span>
                   <div
                     class="bx--list-box__menu-icon"

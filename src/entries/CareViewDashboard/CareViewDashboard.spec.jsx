@@ -1,15 +1,20 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import CareViewDashboard from "./CareViewDashboard";
 
 describe("CareViewDashboard", () => {
-  it("should match the snapshot", () => {
-    const { container } = render(<CareViewDashboard />);
+  it("should match the snapshot", async () => {
+    const { container, getByLabelText } = render(<CareViewDashboard />);
+    await waitFor(() => {
+      expect(getByLabelText("home-button")).toBeTruthy();
+    });
     expect(container).toMatchSnapshot();
   });
 
-  it("should render the component", () => {
+  it("should render the component", async () => {
     const { getByLabelText } = render(<CareViewDashboard />);
-    expect(getByLabelText("home-button")).toBeTruthy();
+    await waitFor(() => {
+      expect(getByLabelText("home-button")).toBeTruthy();
+    });
   });
 });

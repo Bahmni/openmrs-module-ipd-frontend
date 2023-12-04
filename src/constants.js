@@ -12,6 +12,7 @@ const hostUrl = localStorage.getItem("host")
 const RESTWS_V1 = hostUrl + "/openmrs/ws/rest/v1";
 const FHIR2_R4 = hostUrl + "/openmrs/ws/fhir2/R4";
 const BAHMNI_CORE = RESTWS_V1 + "/bahmnicore";
+export const homePageUrl = "/bahmni/home/#/dashboard";
 
 export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
 export const PATIENT_URL = RESTWS_V1 + "/patient";

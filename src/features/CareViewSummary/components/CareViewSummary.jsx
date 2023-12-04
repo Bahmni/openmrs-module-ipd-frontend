@@ -8,14 +8,16 @@ export const CareViewSummary = () => {
       <Dropdown
         id="default"
         label="Dropdown menu options"
-        items={["Option 1", "Option 2", "Option 3"]}
-        itemToString={(item) => (item ? item.text : "")}
+        items={["General Ward (A)", "General Ward (B)", "General Ward (C)"]}
+        itemToString={(item) => (item ? item : "")}
+        selectedItem={"General Ward (A)"}
       />
       <div className="summary-tiles">
-        <Tile className="summary-tile">Patient Tile 1</Tile>
-        <Tile className="summary-tile">Patient Tile 2</Tile>
-        <Tile className="summary-tile">Patient Tile 3</Tile>
-        <Tile className="summary-tile">Patient Tile 4</Tile>
+        <Tile className="summary-tile">Total patients</Tile>
+        <Tile className="summary-tile">My patients</Tile>
+        <Tile className="summary-tile">New patients</Tile>
+        <Tile className="summary-tile">Scheduled for OT</Tile>
+        <Tile className="summary-tile">To be discharged</Tile>
       </div>
     </div>
   );
