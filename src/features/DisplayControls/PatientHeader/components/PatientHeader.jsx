@@ -55,11 +55,11 @@ export const PatientHeader = (props) => {
       ),
       attributes: patientInfo?.person?.attributes,
       address: patientInfo?.person?.preferredAddress.address5,
-      region: patientInfo?.person?.preferredAddress.display,
-      zone: patientInfo?.person?.preferredAddress.address2,
-      woreda: patientInfo?.person?.preferredAddress.address3,
-      kebele: patientInfo?.person?.preferredAddress.address4,
-      country: patientInfo?.person?.preferredAddress.country,
+      // region: patientInfo?.person?.preferredAddress.display,
+      // zone: patientInfo?.person?.preferredAddress.address2,
+      // woreda: patientInfo?.person?.preferredAddress.address3,
+      // kebele: patientInfo?.person?.preferredAddress.address4,
+      // country: patientInfo?.person?.preferredAddress.country,
       gender: getGender(patientInfo?.person?.gender),
       identifier: patientInfo?.identifiers[0]?.identifier,
     });
@@ -91,8 +91,6 @@ export const PatientHeader = (props) => {
       const contactConfigs = await getContactDetailsConfigs();
       const patientProfile = await fetchPatientProfile(patientId);
       const patientRelatives = extractPatientRelationships(patientProfile);
-      console.log("patient relatives", patientRelatives);
-      console.log("contact configs", contactConfigs);
       setMappedContacts(mapContact(patientAttributes , contactConfigs.contactDetails));
       setMappedRelationships(mapRelationships(patientRelatives));
     };

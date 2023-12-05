@@ -4,7 +4,7 @@ import { Column, Row, Tile, SkeletonText,Button,DataTable, TableCell,
   TableHeader,
   TableBody,
   Table,
-  TableRow } from "carbon-components-react";
+  TableRow,Pagination } from "carbon-components-react";
 import { getPatientVitals, getPatientVitalsHistory, mapVitalsData, mapVitalsHistory, mapBiometricsHistory, vitalsHistoryHeaders, biometricsHistoryHeaders } from "../utils/VitalsUtils";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -21,7 +21,12 @@ const Vitals = (props) => {
   const [VitalsDate, setVitalsDate] = useState(null);
   const [VitalsTime, setVitalsTime] = useState(null);
   const [isLoading, updateIsLoading] = useState(true);
-  const[buttonLabel, setButtonLabel] = useState("Vitals history");
+  const [buttonLabel, setButtonLabel] = useState("Vitals history");
+  const [vitalsHistoryPage, setVitalsHistoryPage] = useState(1);
+  const [vitalsHistoryPageSize, setVitalsHistoryPageSize] = useState(10);
+  const [biometricsHistoryPage, setBiometricsHistoryPage] = useState(1);
+  const [biometricsHistoryPageSize, setBiometricsHistoryPageSize] = useState(10);
+
 
   const NoVitalsMessage = (
     <FormattedMessage
@@ -37,7 +42,24 @@ const Vitals = (props) => {
        setFlag(!flag);
      }
  }
-
+ const changeVitalsPaginationState = (pageInfo) =>
+ {
+   if(vitalsHistoryPage != pageInfo.page){
+    setVitalsHistoryPage(pageInfo.page)
+   }
+   if(vitalsHistoryPageSize != pageInfo.pageSize){
+    setVitalsHistoryPageSize(pageInfo.pageSize)
+   }
+ }
+ const changeBiometricsPaginationState = (pageInfo) =>
+ {
+   if(biometricsHistoryPage != pageInfo.page){
+    setBiometricsHistoryPage(pageInfo.page)
+   }
+   if(biometricsHistoryPageSize != pageInfo.pageSize){
+    setBiometricsHistoryPageSize(pageInfo.pageSize)
+   }
+ }
   const vitalsHeaders = {
     temperature: (
       <FormattedMessage id={"Temperature"} defaultMessage={"Temp"} />
@@ -277,7 +299,7 @@ const Vitals = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.slice((vitalsHistoryPage - 1)*vitalsHistoryPageSize).slice(0,vitalsHistoryPageSize).map((row) => (
                   <TableRow key={row.id} {...getRowProps({ row })}>
                     {row.cells.map((cell) => (
                       <TableCell key={cell.id}>{cell.value}</TableCell>
@@ -288,6 +310,20 @@ const Vitals = (props) => {
             </Table>
           )}
         </DataTable>
+        <Pagination
+              backwardText="Previous page"
+              forwardText="Next page"
+              itemsPerPageText="Items per page:"
+              onChange={changeVitalsPaginationState}
+              page={vitalsHistoryPage}
+              pageSize={vitalsHistoryPageSize}
+              pageSizes={[
+                10,
+                20,
+                ]}
+                   size="md"
+                  totalItems={vitalsHistory.length}
+        />
       </Tile>
       <Tile>
         <DataTable
@@ -327,6 +363,20 @@ const Vitals = (props) => {
             </Table>
           )}
         </DataTable>
+        <Pagination
+              backwardText="Previous page"
+              forwardText="Next page"
+              itemsPerPageText="Items per page:"
+              onChange={changeBiometricsPaginationState}
+              page={biometricsHistoryPage}
+              pageSize={biometricsHistoryPageSize}
+              pageSizes={[
+                10,
+                20,
+                ]}
+                   size="md"
+                  totalItems={biometricsHistory.length}
+        />
        </Tile>
      </Tile>)}
         </Tile>

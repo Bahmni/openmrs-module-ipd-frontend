@@ -56,7 +56,6 @@ export const getGender = (gender) => {
 };
 export const mapContact = (attributes,contactTypes) => {
   let mappedContacts = [];
-  console.log("contactType ", contactTypes,attributes);
   contactTypes.map((contactType) => {
    const contactValue = attributes?.find((attribute) => attribute.attributeType?.display === contactType )?.value;
    const words = contactType.split(/(?=[A-Z])/);
