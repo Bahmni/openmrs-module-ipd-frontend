@@ -10,10 +10,14 @@ import {
   Pagination,
 } from "carbon-components-react";
 import PropTypes from "prop-types";
+import { FormattedMessage } from "react-intl";
 
 const VitalsHistory = ({ vitalsHistory, vitalsHistoryHeaders }) => {
   const [vitalsHistoryPage, setVitalsHistoryPage] = useState(1);
   const [vitalsHistoryPageSize, setVitalsHistoryPageSize] = useState(10);
+  const vitalsTitle = (
+    <FormattedMessage id={"VITALS_TITLE"} defaultMessage={"Vitals"} />
+  );
 
   const changeVitalsPaginationState = (pageInfo) => {
     if (vitalsHistoryPage != pageInfo.page) {
@@ -26,6 +30,7 @@ const VitalsHistory = ({ vitalsHistory, vitalsHistoryHeaders }) => {
 
   return (
     <>
+      <div className="vitals-history-title">{vitalsTitle}</div>
       <DataTable
         rows={vitalsHistory}
         headers={vitalsHistoryHeaders}

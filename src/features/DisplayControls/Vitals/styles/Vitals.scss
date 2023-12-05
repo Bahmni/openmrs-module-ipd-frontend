@@ -5,16 +5,24 @@
 .vital-table {
   overflow: visible;
   overflow-x: auto;
+  padding: 10px 0;
 
   .vital-date-time {
     display: flex;
     flex-flow: row;
     justify-content: flex-start;
     align-items: baseline;
-
+    margin-left: 10px;
     a {
       margin-left: 10px;
     }
+  }
+
+  .vitals-biometrics-history {
+    display: flex;
+    flex-flow: column;
+    padding: 0;
+    border-top: 1px solid #e5e5e5;
   }
 
   .vital-tiles,
@@ -54,5 +62,14 @@
   .biometrics-history-pagination {
     width: 100%;
     border: 1px solid #e0e0e0;
+  }
+
+  .vitals-history-title,
+  .biometrics-history-title {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    font-weight: 600;
+    font-size: 15px;
   }
 }

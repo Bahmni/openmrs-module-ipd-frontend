@@ -43,5 +43,7 @@
   "NOTES_ERROR_MESSAGE": "Please enter notes",
   "VITALS_HISTORY_MESSAGE": "Vitals History",
   "SHOW_PATIENT_DETAILS": "Show Details",
-  "HIDE_PATIENT_DETAILS": "Hide Details"
+  "HIDE_PATIENT_DETAILS": "Hide Details",
+  "VITALS_TITLE": "Vitals",
+  "BIOMETRICS_TITLE": "Biometrics"
 }

@@ -10,11 +10,15 @@ import {
   Pagination,
 } from "carbon-components-react";
 import PropTypes from "prop-types";
+import { FormattedMessage } from "react-intl";
 
 const BiometricsHistory = ({ biometricsHistory, biometricsHistoryHeaders }) => {
   const [biometricsHistoryPage, setBiometricsHistoryPage] = useState(1);
   const [biometricsHistoryPageSize, setBiometricsHistoryPageSize] =
     useState(10);
+  const biometricsTitle = (
+    <FormattedMessage id={"BIOMETRICS_TITLE"} defaultMessage={"Biometrics"} />
+  );
 
   const changeBiometricsPaginationState = (pageInfo) => {
     if (biometricsHistoryPage != pageInfo.page) {
@@ -27,6 +31,7 @@ const BiometricsHistory = ({ biometricsHistory, biometricsHistoryHeaders }) => {
 
   return (
     <>
+      <div className="biometrics-history-title">{biometricsTitle}</div>
       <DataTable
         rows={biometricsHistory}
         headers={biometricsHistoryHeaders}
