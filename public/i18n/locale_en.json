@@ -45,5 +45,12 @@
   "SHOW_PATIENT_DETAILS": "Show Details",
   "HIDE_PATIENT_DETAILS": "Hide Details",
   "VITALS_TITLE": "Vitals",
-  "BIOMETRICS_TITLE": "Biometrics"
+  "BIOMETRICS_TITLE": "Biometrics",
+  "PATIENT_ADDRESS": "Address",
+  "PATIENT_ZONE": "Zone",
+  "PATIENT_REGION": "Region",
+  "PATIENT_COUNTRY": "Country",
+  "ADDRESS_HEADER": "Address",
+  "RELATIONSHIPS_HEADER": "Relationships",
+  "CONTACT_DETAILS_HEADER": "Contact Details"
 }

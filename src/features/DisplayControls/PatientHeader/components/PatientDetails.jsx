@@ -1,6 +1,24 @@
 import React from 'react'
 import { Tile, Row, Column} from "carbon-components-react";
 import PropTypes from 'prop-types';
+import { FormattedMessage } from "react-intl";
+
+
+
+const addressHeaders = {
+    address: (
+      <FormattedMessage id={"PATIENT_ADDRESS"} defaultMessage={"Address"} />
+    ),
+    zone: (
+      <FormattedMessage id={"PATIENT_ZONE"} defaultMessage={"Zone"} />
+    ),
+    region: (
+      <FormattedMessage id={"PATIENT_REGION"} defaultMessage={"Region"} />
+    ),
+    country: (
+        <FormattedMessage id={"PATIENT_COUNTRY"} defaultMessage={"Country"} />
+      )
+  }
 
 const PatientDetails = ({patientDetails, patientDetailsHeaders, contacts, relationships}) => {
   return (
@@ -12,16 +30,16 @@ const PatientDetails = ({patientDetails, patientDetailsHeaders, contacts, relati
               {patientDetailsHeaders.address}
              </span>
              <span className="details-value">
-                Address : {patientDetails.address !=null ? patientDetails.address : "-"}
+                {addressHeaders.address} : {patientDetails.address !=null ? patientDetails.address : " "}
              </span>
              <span className="details-value">
-                Zone : {patientDetails.zone !=null ? patientDetails.zone : "-"}
+                {addressHeaders.zone} : {patientDetails.zone !=null ? patientDetails.zone : "-"}
              </span>
              <span className="details-value">
-                Region : {patientDetails.region !=null ? patientDetails.region : "-"}
+                {addressHeaders.region} : {patientDetails.region !=null ? patientDetails.region : "-"}
              </span>
              <span className="details-value">
-                Country : {patientDetails.country !=null ? patientDetails.country : "-"}
+                {addressHeaders.country} : {patientDetails.country !=null ? patientDetails.country : "-"}
              </span>
            </Tile>
           </Column>

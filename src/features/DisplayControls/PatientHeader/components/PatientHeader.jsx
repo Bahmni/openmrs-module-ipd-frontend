@@ -13,30 +13,27 @@ export const PatientHeader = (props) => {
   const { patientId } = props;
   const [showPatientDetails,togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
-  const [patientRelationships , updatePatienRelationships] = useState({});
   const [isLoading, updateIsLoading] = useState(true);
   const[contacts , setMappedContacts] = useState([]);
   const[relationships , setMappedRelationships] = useState([]);
-  const [patientContact, setPatientContactConfig] = useState([]);
 
   const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
   const showDetails = <FormattedMessage id="SHOW_PATIENT_DETAILS" defaultMessage="Show Details" />;
   const hideDetails = <FormattedMessage id="HIDE_PATIENT_DETAILS" defaultMessage="Hide Details" />;
   const patientDetailsHeaders = {
     address: (
-      <FormattedMessage id={"Address"} defaultMessage={"Address"} />
+      <FormattedMessage id={"Address_HEADER"} defaultMessage={"Address"} />
     ),
     contactDetails: (
-      <FormattedMessage id={"Contact Details"} defaultMessage={"Contact Details"} />
+      <FormattedMessage id={"CONTACT_DETAILS_HEADER"} defaultMessage={"Contact Details"} />
     ),
     relationships: (
-      <FormattedMessage id={"Relationships"} defaultMessage={"Relationships"} />
+      <FormattedMessage id={"RELATIONSHIPS_HEADER"} defaultMessage={"Relationships"} />
     )
   }
 
   const getContactDetailsConfigs = async () => {
     const patientContactConfigs = await getConfigsForPatientContactDetails();
-    setPatientContactConfig(patientContactConfigs.contactDetails);
     return patientContactConfigs;
   };
 
@@ -55,8 +52,6 @@ export const PatientHeader = (props) => {
       address: patientInfo?.person?.preferredAddress?.address5,
       region: patientInfo?.person?.preferredAddress?.display,
       zone: patientInfo?.person?.preferredAddress?.address2,
-      woreda: patientInfo?.person?.preferredAddress?.address3,
-      kebele: patientInfo?.person?.preferredAddress?.address4,
       country: patientInfo?.person?.preferredAddress?.country,
       gender: getGender(patientInfo?.person?.gender),
       identifier: patientInfo?.identifiers[0]?.identifier,
@@ -66,9 +61,6 @@ export const PatientHeader = (props) => {
   };
 
   const extractPatientRelationships = (patientProfile) => {
-    updatePatienRelationships ({
-      relationships : patientProfile?.relationships,
-  });
   return(patientProfile?.relationships);
 }
  

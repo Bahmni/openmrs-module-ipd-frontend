@@ -13,6 +13,7 @@
     padding: 0;
     align-items: center;
     position: static;
+    border-top: 1px solid #e5e5e5;
 
     .details-tile {
       display: flex;
@@ -22,6 +23,7 @@
     .details-headers{
       font-weight: 600;
       padding: 5px 0;
+      color: #393939;
     }
 
     .details-value{
