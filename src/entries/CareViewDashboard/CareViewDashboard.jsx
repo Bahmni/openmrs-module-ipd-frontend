@@ -10,7 +10,7 @@ import { goToHome } from "./CareViewDashboardUtils";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 
-export default function CareViewDashboard(props) {
+const CareViewDashboard = (props) => {
   const { hostData, hostApi } = props;
   console.log("hostData", hostData);
   console.log("hostApi", hostApi);
@@ -50,7 +50,9 @@ export default function CareViewDashboard(props) {
       </main>
     </I18nProvider>
   );
-}
+};
+
+export default CareViewDashboard;
 
 CareViewDashboard.propTypes = {
   hostData: PropTypes.object.isRequired,
