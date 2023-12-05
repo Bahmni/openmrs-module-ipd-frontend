@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+
     .bx--list-box__menu-item[disabled] .bx--list-box__menu-item__option {
       color: gray;
     }
@@ -13,6 +14,7 @@
   .administration-info {
     display: flex;
     gap: 10px;
+
     [class*="bx--time-picker"] {
       width: 100%;
     }
@@ -36,16 +38,8 @@
 
   .dosage-section-container {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .dosage-section-content {
-    display: flex;
-    flex-direction: row;
-    width: 65%;
-    justify-content: flex-start;
-    align-items: center;
+    align-items: end;
+    width: 59%;
   }
 
   .inline-field {
@@ -57,5 +51,19 @@
 
   .date-picker-carbon {
     width: 59%;
+  }
+
+  @media (max-width: 480px) {
+    .inline-field {
+      flex-direction: column;
+      align-items: unset;
+    }
+    .dosage-section-container {
+      width: 100%;
+
+      > * {
+        width: 100%;
+      }
+    }
   }
 }

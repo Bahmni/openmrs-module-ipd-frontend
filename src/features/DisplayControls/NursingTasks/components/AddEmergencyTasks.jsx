@@ -29,6 +29,7 @@ const AddEmergencyTasks = (props) => {
   const [routeOptions, setRouteOptions] = useState([]);
   const [providerOptions, setProviderOptions] = useState([]);
 
+  const [selectedDrug, setSelectedDrug] = useState({});
   const [doseUnits, setDoseUnits] = useState({});
   const [administrationDate, setAdministrationDate] = useState();
   const [administrationTime, setAdministrationTime] = useState("");
@@ -104,6 +105,7 @@ const AddEmergencyTasks = (props) => {
       updateIsSaveDisabled(true);
     }
   }, [
+    selectedDrug,
     dosage,
     doseUnits,
     routes,
@@ -112,17 +114,6 @@ const AddEmergencyTasks = (props) => {
     requestedProvider,
     notes,
   ]);
-  console.log(
-    "isLoading",
-    isLoading,
-    dosage,
-    doseUnits,
-    routes,
-    administrationDate,
-    administrationTime,
-    requestedProvider,
-    notes
-  );
   return (
     <SideBarPanel
       title={
@@ -155,6 +146,7 @@ const AddEmergencyTasks = (props) => {
               <SearchDrug
                 onChange={(item) => {
                   if (item) {
+                    setSelectedDrug(item.value);
                     const {
                       dosageForm: { display },
                     } = item.value;
@@ -178,20 +170,24 @@ const AddEmergencyTasks = (props) => {
                     label={"Dose"}
                     isRequired={true}
                   />
+                  <Dropdown
+                    id={"Dosage Dropdown"}
+                    onChange={(e) => {
+                      if (e) setDoseUnits(e);
+                    }}
+                    placeholder={"Select Unit"}
+                    titleText={""}
+                    width={window.innerWidth > 480 ? "170px" : "100%"}
+                    style={{ paddingLeft: "10px", marginRight: 0 }}
+                    options={unitOptions}
+                    selectedValue={doseUnits}
+                  />
                 </div>
                 <Dropdown
-                  id={"Dosage Dropdown"}
-                  onChange={setDoseUnits}
-                  placeholder={"Select Unit"}
-                  titleText={""}
-                  width={"160px"}
-                  style={{ paddingLeft: "10px", marginRight: 0 }}
-                  options={unitOptions}
-                  selectedValue={doseUnits}
-                />
-                <Dropdown
                   id={"Route-Dropdown"}
-                  onChange={setRoutes}
+                  onChange={(e) => {
+                    if (e) setRoutes(e);
+                  }}
                   placeholder={"Select Route"}
                   titleText={"Route"}
                   isRequired={true}

@@ -32,7 +32,6 @@ export const fetchMedicationConfig = async () => {
           },
         },
       } = configResponse.data;
-      console.log("drugFormDefaults", drugFormDefaults);
       return drugFormDefaults;
     }
   } catch (e) {
