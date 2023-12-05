@@ -1,53 +1,58 @@
-
 .no-vitals-message {
   padding-top: 10px;
 }
 
-.vital-table{
+.vital-table {
   overflow: visible;
   overflow-x: auto;
 
-  .vital-date-time{
+  .vital-date-time {
     display: flex;
     flex-flow: row;
     justify-content: flex-start;
     align-items: baseline;
 
-    a{
+    a {
       margin-left: 10px;
     }
   }
 
   .vital-tiles,
-.abnormal-tiles {
-  margin: 3px;
-  padding: 10px;
-  display: flex;
-  flex-flow: column;
-  align-items: normal;
-  text-align: left;
-  background-color: whitesmoke;
-  justify-content: space-between;
-  min-width: fit-content;
-}
+  .abnormal-tiles {
+    margin: 3px;
+    padding: 10px;
+    display: flex;
+    flex-flow: column;
+    align-items: normal;
+    text-align: left;
+    background-color: whitesmoke;
+    justify-content: space-between;
+    min-width: fit-content;
+  }
 
-.vital-values {
-  font-size: 16px;
-  min-width: max-content;
-}
-.vital-headers {
-  font-size: 12px;
-}
-.vital-units {
-  font-size: 14px;
-}
-.vital-value-and-unit {
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-}
+  .vital-values {
+    font-size: 16px;
+    min-width: max-content;
+  }
+  .vital-headers {
+    font-size: 12px;
+  }
+  .vital-units {
+    font-size: 14px;
+  }
+  .vital-value-and-unit {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+  }
 
-.abnormal-tiles {
-  color: #da1e28;
-}
+  .abnormal-tiles {
+    color: #da1e28;
+  }
+
+  .vitals-history-pagination,
+  .biometrics-history-pagination {
+    width: 100%;
+    border: 1px solid #e0e0e0;
+  }
 }
