@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import { PatientHeader } from "../components/PatientHeader";
-import { fetchPatientInfo } from "../utils/PatientHeaderUtils";
+import { fetchPatientInfo, getConfigsForPatientContactDetails } from "../utils/PatientHeaderUtils";
 
 jest.mock("../utils/PatientHeaderUtils");
 
@@ -21,6 +21,15 @@ describe("PatientHeader", () => {
           identifier: "12345",
         },
       ],
+    });
+    getConfigsForPatientContactDetails.mockResolvedValue({
+      contactDetails: [
+        "residencePhone",
+        "mobilePhone",
+        "workPhone",
+        "otherPhone",
+        "email"
+    ]
     });
   });
 

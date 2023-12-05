@@ -1,4 +1,24 @@
-.vital-tiles,
+
+.no-vitals-message {
+  padding-top: 10px;
+}
+
+.vital-table{
+  overflow: visible;
+  overflow-x: auto;
+
+  .vital-date-time{
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    align-items: baseline;
+
+    a{
+      margin-left: 10px;
+    }
+  }
+
+  .vital-tiles,
 .abnormal-tiles {
   margin: 3px;
   padding: 10px;
@@ -30,11 +50,4 @@
 .abnormal-tiles {
   color: #da1e28;
 }
-.no-vitals-message {
-  padding-top: 10px;
-}
-
-.vital-table{
-  overflow: visible;
-  overflow-x: auto;
 }

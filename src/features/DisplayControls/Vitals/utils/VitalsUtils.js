@@ -1,7 +1,20 @@
 import axios from "axios";
+import React from "react";
 import { PATIENT_VITALS_URL } from "../../../../constants";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
+import { FormattedMessage } from "react-intl";
+
+export const vitalsHeaders = {
+  temperature: <FormattedMessage id={"Temperature"} defaultMessage={"Temp"} />,
+  bloodPressure: <FormattedMessage id={"BLOOD_PRESSURE"} defaultMessage={"BP"} />,
+  heartRate: <FormattedMessage id={"HEART_RATE"} defaultMessage={"Heart rate"} />,
+  respiratoryRate: <FormattedMessage id={"RESPIRATORY_RATE"} defaultMessage={"R.rate"} />,
+  weight: <FormattedMessage id={"WEIGHT"} defaultMessage={"Weight"} />,
+  height: <FormattedMessage id={"HEIGHT"} defaultMessage={"Height"} />,
+  spO2: <FormattedMessage id={"SPO2"} defaultMessage={"SpO2"} />,
+  BMI: <FormattedMessage id={"BMI"} defaultMessage={"BMI"} />,
+};
 
 const getLatestDate = (tabularData) => {
   let latestDate = null;

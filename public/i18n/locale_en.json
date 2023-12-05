@@ -40,5 +40,8 @@
   "AT": "at",
   "TASKS": "Task(s)",
   "SCHEDULED_FOR_KEY": "Scheduled for",
-  "NOTES_ERROR_MESSAGE": "Please enter notes"
+  "NOTES_ERROR_MESSAGE": "Please enter notes",
+  "VITALS_HISTORY_MESSAGE": "Vitals History",
+  "SHOW_PATIENT_DETAILS": "Show Details",
+  "HIDE_PATIENT_DETAILS": "Hide Details"
 }

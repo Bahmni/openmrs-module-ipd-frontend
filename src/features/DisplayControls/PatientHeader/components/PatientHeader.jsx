@@ -1,16 +1,17 @@
 import React, { useEffect, useState }  from "react";
 import PropTypes from "prop-types";
 import { fetchPatientInfo, getGender, mapContact,getConfigsForPatientContactDetails , fetchPatientProfile, mapRelationships } from "../utils/PatientHeaderUtils";
-import { Tile, Grid, Row, Column, SkeletonText,Button } from "carbon-components-react";
+import { Tile, Grid, Row, Column, SkeletonText,Button, Link } from "carbon-components-react";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { FormattedMessage } from "react-intl";
 import { DDMMYYY_DATE_FORMAT } from "../../../../constants";
 import "../styles/PatientHeader.scss";
 import { ChevronDown20,ChevronUp20 } from "@carbon/icons-react";
+import PatientDetails from "./PatientDetails";
 
 export const PatientHeader = (props) => {
   const { patientId } = props;
-  const [flag,setFlag] =useState(true);
+  const [showPatientDetails,togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
   const [patientRelationships , updatePatienRelationships] = useState({});
   const [isLoading, updateIsLoading] = useState(true);
@@ -19,11 +20,9 @@ export const PatientHeader = (props) => {
   const [patientContact, setPatientContactConfig] = useState([]);
 
   const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
-  // const showDetails = <FormattedMessage id="SHOW_DETAILS" defaultMessage="Show Details" />;
-
-  const[buttonLabel, setButtonLabel] =useState("Show details");
-
-  const PatientDetailsHeaders = {
+  const showDetails = <FormattedMessage id="SHOW_PATIENT_DETAILS" defaultMessage="Show Details" />;
+  const hideDetails = <FormattedMessage id="HIDE_PATIENT_DETAILS" defaultMessage="Hide Details" />;
+  const patientDetailsHeaders = {
     address: (
       <FormattedMessage id={"Address"} defaultMessage={"Address"} />
     ),
@@ -37,9 +36,8 @@ export const PatientHeader = (props) => {
 
   const getContactDetailsConfigs = async () => {
     const patientContactConfigs = await getConfigsForPatientContactDetails();
-    console.log("getcontctdetail",patientContactConfigs.contactDetails);
     setPatientContactConfig(patientContactConfigs.contactDetails);
-       return patientContactConfigs;
+    return patientContactConfigs;
   };
 
   const extractPatientInfo = (patientInfo) => {
@@ -47,19 +45,19 @@ export const PatientHeader = (props) => {
       fullName: patientInfo?.person?.preferredName.display,
       givenName: patientInfo?.person?.preferredName.givenName,
       familyName: patientInfo?.person?.preferredName.familyName,
-      middleName: patientInfo?.person?.preferredName.middleName,
+      middleName: patientInfo?.person?.preferredName?.middleName,
       age: patientInfo?.person?.age,
       birthDate: formatDateAsString(
         new Date(patientInfo?.person?.birthdate),
         DDMMYYY_DATE_FORMAT
       ),
       attributes: patientInfo?.person?.attributes,
-      address: patientInfo?.person?.preferredAddress.address5,
-      // region: patientInfo?.person?.preferredAddress.display,
-      // zone: patientInfo?.person?.preferredAddress.address2,
-      // woreda: patientInfo?.person?.preferredAddress.address3,
-      // kebele: patientInfo?.person?.preferredAddress.address4,
-      // country: patientInfo?.person?.preferredAddress.country,
+      address: patientInfo?.person?.preferredAddress?.address5,
+      region: patientInfo?.person?.preferredAddress?.display,
+      zone: patientInfo?.person?.preferredAddress?.address2,
+      woreda: patientInfo?.person?.preferredAddress?.address3,
+      kebele: patientInfo?.person?.preferredAddress?.address4,
+      country: patientInfo?.person?.preferredAddress?.country,
       gender: getGender(patientInfo?.person?.gender),
       identifier: patientInfo?.identifiers[0]?.identifier,
     });
@@ -74,16 +72,7 @@ export const PatientHeader = (props) => {
   return(patientProfile?.relationships);
 }
  
-  const handleClick = () =>{
-     if( flag === true){
-      setFlag(!flag);
-     setButtonLabel("Hide Details");}
-     else if(flag === false)
-      {
-        setFlag(!flag);
-        setButtonLabel("Show Details");
-      }
-  }
+  const toggleDetailsView = () => togglePatientDetails(!showPatientDetails);
   useEffect(() => {
     const getPatientInfo = async () => {
       const patientInfo = await fetchPatientInfo(patientId);
@@ -118,84 +107,35 @@ export const PatientHeader = (props) => {
                   </Row>
                   <Row>
                     <div className="other-info">
-                      <h3 className="patient-info">{patientDetails?.gender}</h3>
-                      <h3 className="patient-info">
-                        {patientDetails?.age} {years}
-                      </h3>
-                      <h3 className="patient-info">
-                        {patientDetails?.birthDate}
-                      </h3>
-                      <h3 className="patient-info">
-                        {patientDetails?.identifier}
-                      </h3>
-                      { flag ? (<Button kind="tertiary" className="show-more" size="sm" onClick={handleClick}>{buttonLabel} <ChevronDown20 /> </Button>) : (
-                       <Button kind="tertiary" className="show-more" size="sm" onClick={handleClick}>{buttonLabel} <ChevronUp20/> </Button>)}
+                      <div className="patient-basic-info">
+                        <h3 className="patient-info">{patientDetails?.gender}</h3>
+                        <h3 className="patient-info">
+                          {patientDetails?.age} {years}
+                        </h3>
+                        <h3 className="patient-info">
+                          {patientDetails?.birthDate}
+                        </h3>
+                        <h3 className="patient-info">
+                          {patientDetails?.identifier}
+                        </h3>
+                      </div>
+                      {showPatientDetails ? (<Link kind="tertiary" className="show-more" size="sm" onClick={toggleDetailsView}>
+                          {hideDetails} <ChevronUp20/> </Link>
+                      ) : (
+                        <Link kind="tertiary" className="show-more" size="sm" onClick={toggleDetailsView}>
+                          {showDetails} <ChevronDown20 /> 
+                        </Link>)}
                     </div>
                   </Row>
                 </Column>
               </Row>
-              {flag ? "":(
-      <Tile className="patient-details">
-        <Row>
-          <Column>
-           <Tile className="details-tile">
-             <span className="details-headers">
-              {PatientDetailsHeaders.address}
-             </span>
-             <span className="address-type">
-              Address : 
-             </span>
-             <span className="address-value">
-              {patientDetails.address !=null ? patientDetails.address : "-"}
-             </span>
-             <span className="address-type">
-              Zone : 
-             </span>
-             <span className="address-value">
-              {patientDetails.zone !=null ? patientDetails.zone : "-"}
-             </span>
-             <span className="address-type">
-              Region : 
-             </span>
-             <span className="address-value">
-              {patientDetails.region !=null ? patientDetails.region : "-"}
-             </span>
-             <span className="address-type">
-              Country : 
-             </span>
-             <span className="address-value">
-              {patientDetails.country !=null ? patientDetails.country : "-"}
-             </span>
-           </Tile>
-          </Column>
-          <Column>
-           <Tile className="details-tile">
-             <span className="details-headers">
-              {PatientDetailsHeaders.contactDetails}
-             </span>
-              {
-                contacts.map((contact)=> { return(
-                  <span>{contact.name} : {contact.value}</span>)
-                })
-              }
-           </Tile>
-          </Column>
-          <Column>
-           <Tile className="details-tile">
-             <span className="details-headers">
-              {PatientDetailsHeaders.relationships}
-             </span>
-             {
-              relationships.map((relationship)=> { return(
-                  <span>{relationship.relationshipType} : {relationship.name}</span>)
-                })
-              }
-           </Tile>
-          </Column>
-        </Row>
-       </Tile>
-       )}
             </Grid>
+            {showPatientDetails && 
+              <PatientDetails 
+              patientDetails={patientDetails}
+              patientDetailsHeaders={patientDetailsHeaders}
+              contacts={contacts}
+              relationships={relationships}/>}
           </>
         )}
       </Tile>
