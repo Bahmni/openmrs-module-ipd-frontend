@@ -82,6 +82,22 @@ const AddEmergencyTasks = (props) => {
     setDosageConfig(await fetchMedicationConfig());
   };
 
+  const drugSearchHandler = (item) => {
+    if (item) {
+      setSelectedDrug(item.value);
+      const {
+        dosageForm: { display },
+      } = item.value;
+      if (Object.keys(dosageConfig).includes(display)) {
+        const { doseUnits, route } = dosageConfig[display];
+        if (doseUnits) {
+          setDoseUnits({ label: doseUnits, value: doseUnits });
+        }
+        setRoutes({ label: route, value: route });
+      }
+    }
+  };
+
   useEffect(() => {
     fetchDrugOrderConfig();
     fetchDrugFormDefaults();
@@ -143,23 +159,7 @@ const AddEmergencyTasks = (props) => {
               </div>
             )}
             <div className={"emergency-task-slider-content"}>
-              <SearchDrug
-                onChange={(item) => {
-                  if (item) {
-                    setSelectedDrug(item.value);
-                    const {
-                      dosageForm: { display },
-                    } = item.value;
-                    if (Object.keys(dosageConfig).includes(display)) {
-                      const { doseUnits, route } = dosageConfig[display];
-                      if (doseUnits) {
-                        setDoseUnits({ label: doseUnits, value: doseUnits });
-                      }
-                      setRoutes({ label: route, value: route });
-                    }
-                  }
-                }}
-              />
+              <SearchDrug onChange={drugSearchHandler} />
               <div className="inline-field">
                 <div className="dosage-section-container">
                   <NumberInputCarbon

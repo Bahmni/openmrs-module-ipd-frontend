@@ -9,7 +9,7 @@ export const getDrugOrdersConfig = async () => {
   try {
     return await axios.get(DRUG_ORDERS_CONFIG_URL);
   } catch (e) {
-    console.error(e);
+    return e;
   }
 };
 
@@ -21,7 +21,7 @@ export const getProviders = async () => {
       )
     );
   } catch (e) {
-    console.error(e);
+    return e;
   }
 };
 
@@ -39,6 +39,6 @@ export const fetchMedicationConfig = async () => {
       return drugFormDefaults;
     }
   } catch (e) {
-    console.error(e);
+    return e;
   }
 };

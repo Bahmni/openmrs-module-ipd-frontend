@@ -8,6 +8,34 @@ const SearchDrug = (props) => {
   const { onChange } = props;
   const [items, setItems] = useState([]);
 
+  const onChangeHandler = async (searchStr) => {
+    if (searchStr.length > 1) {
+      const response = await searchDrugsByName(searchStr);
+      if (response.status === 200) {
+        const drugs = response.data.results;
+        if (drugs.length === 0) {
+          setItems([
+            {
+              label: "No Drugs Found",
+              disabled: true,
+            },
+          ]);
+        } else {
+          setItems(
+            drugs.map((drug) => {
+              return {
+                label: drug.name,
+                value: drug,
+              };
+            })
+          );
+        }
+      }
+    } else {
+      setItems([]);
+    }
+  };
+
   return (
     <div>
       <ComboBox
@@ -19,33 +47,7 @@ const SearchDrug = (props) => {
         }}
         size={"xl"}
         titleText={<Title text={"Drug Name"} isRequired={true} />}
-        onInputChange={async (searchStr) => {
-          if (searchStr.length > 1) {
-            const response = await searchDrugsByName(searchStr);
-            if (response.status === 200) {
-              const drugs = response.data.results;
-              if (drugs.length === 0) {
-                setItems([
-                  {
-                    label: "No Drugs Found",
-                    disabled: true,
-                  },
-                ]);
-              } else {
-                setItems(
-                  drugs.map((drug) => {
-                    return {
-                      label: drug.name,
-                      value: drug,
-                    };
-                  })
-                );
-              }
-            }
-          } else {
-            setItems([]);
-          }
-        }}
+        onInputChange={onChangeHandler}
       />
     </div>
   );
