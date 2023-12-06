@@ -15,7 +15,11 @@ export const getDrugOrdersConfig = async () => {
 
 export const getProviders = async () => {
   try {
-    return await axios.get(GET_ALL_PROVIDERS_URL);
+    return await axios.get(
+      GET_ALL_PROVIDERS_URL.concat(
+        "&attrName=practitioner_type&attrValue=Doctor"
+      )
+    );
   } catch (e) {
     console.error(e);
   }
