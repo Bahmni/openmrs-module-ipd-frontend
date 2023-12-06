@@ -24,15 +24,18 @@
 
 .tab-content {
   display: none;
-  padding-top: 8px;
+  padding: 8px;
+  color: #161616;
 }
 
 .tab-content.active {
   display: block;
-  background: none;
+  background-color: #ddd;
+  padding: 8px;
   border: none;
 }
 
 .tab-additional-content {
-  padding-top: 12px;
+  padding: 12px 0 8px;
+  color: #525252;
 }

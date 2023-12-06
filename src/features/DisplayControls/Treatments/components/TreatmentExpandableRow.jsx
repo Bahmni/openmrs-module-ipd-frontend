@@ -5,7 +5,7 @@ import ExpandableRowData from "./ExpandableRowData";
 const TreatmentExpandableRow = (props) => {
   const { data } = props;
   console.log("TreatmentExpandableRow data", data);
-  return <ExpandableRowData data={data} />;
+  return <ExpandableRowData expandTreatmentData={data} />;
 };
 
 TreatmentExpandableRow.propTypes = {

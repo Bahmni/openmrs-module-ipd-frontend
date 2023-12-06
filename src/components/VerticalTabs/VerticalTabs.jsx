@@ -9,6 +9,8 @@ const VerticalTabs = (props) => {
     setSelectedTabIndex(index);
   };
 
+  console.log("tabData inside verticalTabs component", tabData);
+
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
       <div className="tabs-container">
@@ -28,11 +30,12 @@ const VerticalTabs = (props) => {
           return (
             <div
               className={`tab-content ${
-                selectedTabIndex === index ? "active" : ""
+                selectedTabIndex === index && tabData[key]?.data !== ""
+                  ? "active"
+                  : ""
               }`}
             >
               {tabData[key]?.data}
-              {console.log("tabData[key]", tabData[key])}
               {tabData[key].additionalData?.map((data) => {
                 return <div className="tab-additional-content">{data}</div>;
               })}

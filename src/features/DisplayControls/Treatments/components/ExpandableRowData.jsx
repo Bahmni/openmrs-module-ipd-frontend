@@ -1,26 +1,31 @@
 import React from "react";
-// import "carbon-components/css/carbon-components.min.css";
 import VerticalTabs from "../../../../components/VerticalTabs/VerticalTabs";
 
 const ExpandableRowData = (props) => {
-  const { data } = props;
-  console.log("ExpandableRowData data", data);
+  const { expandTreatmentData } = props;
+
   const verticalTabsData = {
     Instructions: {
-      data: data.instructions,
+      data: expandTreatmentData.instructions,
       additionalData: [
-        data.provider + " | " + data.recordedDate + " | " + data.recordedTime,
+        expandTreatmentData.instructions
+          ? expandTreatmentData.provider +
+            " | " +
+            expandTreatmentData.recordedDate +
+            " | " +
+            expandTreatmentData.recordedTime
+          : null,
       ],
     },
     "Additional Instructions": {
-      data: data.additionalInstructions,
+      data: expandTreatmentData.additionalInstructions,
       additionalData: [
-        data.additionalInstructions
-          ? data.provider +
+        expandTreatmentData.additionalInstructions
+          ? expandTreatmentData.provider +
             " | " +
-            data.recordedDate +
+            expandTreatmentData.recordedDate +
             " | " +
-            data.recordedTime
+            expandTreatmentData.recordedTime
           : null,
       ],
     },

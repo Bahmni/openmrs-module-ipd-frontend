@@ -62,12 +62,18 @@ const Diagnosis = (props) => {
 
     setDiagnosis(mappedDiagnoses);
     const additionalMappedData = mappedDiagnoses.map((diagnosis) => {
-      return {
-        id: diagnosis.id,
-        diagnosisTime: diagnosis.additionalData.diagnosisTime,
-        diagnosisNotes: diagnosis.additionalData.diagnosisNotes,
-        provider: diagnosis.diagnosedBy,
-      };
+      if (diagnosis.additionalData.diagnosisNotes === "")
+        return {
+          id: diagnosis.id,
+          disableExpand: true,
+        };
+      else
+        return {
+          id: diagnosis.id,
+          diagnosisTime: diagnosis.additionalData.diagnosisTime,
+          diagnosisNotes: diagnosis.additionalData.diagnosisNotes,
+          provider: diagnosis.diagnosedBy,
+        };
     });
     setAdditionalData(additionalMappedData);
     setIsLoading(false);
