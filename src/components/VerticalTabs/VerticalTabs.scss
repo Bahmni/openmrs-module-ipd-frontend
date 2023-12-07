@@ -1,7 +1,15 @@
+.vertical-tabs-parent {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: flex-start;
+}
+
 .tabs-container {
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
+  flex: 0 0 auto;
+  
 }
 
 .tab {
@@ -11,6 +19,7 @@
   outline: none;
   transition: background-color 0.3s;
   padding: 8px;
+  border-left: 2px solid #ddd;
 }
 
 .tab:hover {
@@ -20,6 +29,7 @@
 .tab.active {
   background-color: #ddd;
   border-left: 2px solid #007d79;
+  padding-bottom: 12px;
 }
 
 .tab-content {
@@ -31,11 +41,18 @@
 .tab-content.active {
   display: block;
   background-color: #ddd;
-  padding: 8px;
   border: none;
+  border-radius: 0;
+  padding: 8px 16px;
+  margin-top: 0;
 }
 
 .tab-additional-content {
   padding: 12px 0 8px;
   color: #525252;
+}
+
+.tab-content-parent {
+  flex: 0.74;
+  margin-bottom: 12px;
 }

@@ -12,7 +12,7 @@ const VerticalTabs = (props) => {
   console.log("tabData inside verticalTabs component", tabData);
 
   return (
-    <div style={{ display: "flex", flexDirection: "row" }}>
+    <div className="vertical-tabs-parent">
       <div className="tabs-container">
         {Object.keys(tabData).map((key, index) => {
           return (
@@ -25,7 +25,7 @@ const VerticalTabs = (props) => {
           );
         })}
       </div>
-      <div>
+      <div className="tab-content-parent">
         {Object.keys(tabData).map((key, index) => {
           return (
             <div
