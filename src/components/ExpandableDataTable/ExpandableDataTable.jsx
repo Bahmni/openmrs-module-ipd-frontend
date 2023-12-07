@@ -12,6 +12,7 @@ import {
   TableExpandRow,
 } from "carbon-components-react";
 import PropTypes from "prop-types";
+import "./ExpandableDataTable.scss";
 
 const ExpandableDataTable = (props) => {
   const { rows, headers, additionalData, component, useZebraStyles } = props;
