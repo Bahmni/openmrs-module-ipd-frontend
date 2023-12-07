@@ -11,6 +11,7 @@ import {
 } from "carbon-components-react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
+import { abnormalHeader } from "../utils/VitalsUtils";
 
 const VitalsHistory = ({ vitalsHistory, vitalsHistoryHeaders }) => {
   const [vitalsHistoryPage, setVitalsHistoryPage] = useState(1);
@@ -60,9 +61,12 @@ const VitalsHistory = ({ vitalsHistory, vitalsHistoryHeaders }) => {
             <TableBody>
               {rows.map((row) => (
                 <TableRow key={row.id} {...getRowProps({ row })}>
-                  {row.cells.map((cell) => (
-                    <TableCell key={cell.id}>{cell.value}</TableCell>
-                  ))}
+                  {row.cells.map((cell) => {
+                    if ( abnormalHeader.includes(cell.info.header))
+                     return <TableCell className={ cell.value.abnormal ? "history-abnormal-tile" : "history-tile"} key={cell.id}>{cell.value.value}</TableCell>
+                    else
+                    return <TableCell key={cell.id}>{cell.value}</TableCell>
+})}
                 </TableRow>
               ))}
             </TableBody>

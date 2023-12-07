@@ -156,16 +156,22 @@ for (const date in vitalsValue){
   const pairedVital = {
     id: date,
     date: formatDateAsString(new Date(date), "DD/MM/YYYY")+ " , "+ dateAndTime.slice(3).join(" ").toUpperCase(),
-    pulse: innerMappedVitals?.Pulse  ? innerMappedVitals?.Pulse?.value : "--",
-    pulseAbnormal: innerMappedVitals?.Pulse ? innerMappedVitals?.Pulse.abnormal : "--",
-    spO2: innerMappedVitals?.SpO2  ? innerMappedVitals?.SpO2?.value : "--",
-    spO2Abnormal: innerMappedVitals?.SpO2 ? innerMappedVitals?.SpO2.abnormal : "--",
-    temperature: innerMappedVitals?.Temperature  ? innerMappedVitals?.Temperature?.value : "--",
-    temperatureAbnormal: innerMappedVitals?.Temperature ? innerMappedVitals?.Temperature.abnormal : "--",
-    respiratoryRate: innerMappedVitals?.["Respiratory Rate"] ? innerMappedVitals?.["Respiratory Rate"].value : "--", 
-    respiratoryRateAbnormal: innerMappedVitals?.["Respiratory Rate"] ? innerMappedVitals?.["Respiratory Rate"].abnormal : "--", 
-    bp: (innerMappedVitals?.["Systolic Blood Pressure"] ? innerMappedVitals?.["Systolic Blood Pressure"]?.value : "-") + "/" + (innerMappedVitals?.["Diastolic Blood Pressure"] ? innerMappedVitals?.["Diastolic Blood Pressure"]?.value : "-"),
-    bpAbnormal: (innerMappedVitals?.["Systolic Blood Pressure"]?.abnormal || innerMappedVitals?.["Diastolic Blood Pressure"]?.abnormal ) ? true : false ,
+    pulse: {
+      value:innerMappedVitals?.Pulse  ? innerMappedVitals?.Pulse?.value : "--",
+      abnormal:innerMappedVitals?.Pulse ? innerMappedVitals?.Pulse.abnormal : false},
+    spO2: {
+      value : innerMappedVitals?.SpO2  ? innerMappedVitals?.SpO2?.value : "--",
+      abnormal: innerMappedVitals?.SpO2 ? innerMappedVitals?.SpO2.abnormal : false},
+
+    temperature: {
+      value: innerMappedVitals?.Temperature  ? innerMappedVitals?.Temperature?.value : "--",
+      abnormal: innerMappedVitals?.Temperature ? innerMappedVitals?.Temperature.abnormal : false},
+    respiratoryRate: {
+      value: innerMappedVitals?.["Respiratory Rate"] ? innerMappedVitals?.["Respiratory Rate"].value : "--", 
+    abnormal: innerMappedVitals?.["Respiratory Rate"] ? innerMappedVitals?.["Respiratory Rate"].abnormal : false}, 
+    bp: {
+      value: (innerMappedVitals?.["Systolic Blood Pressure"] ? innerMappedVitals?.["Systolic Blood Pressure"]?.value : "-") + "/" + (innerMappedVitals?.["Diastolic Blood Pressure"] ? innerMappedVitals?.["Diastolic Blood Pressure"]?.value : "-"),
+     abnormal: (innerMappedVitals?.["Systolic Blood Pressure"]?.abnormal || innerMappedVitals?.["Diastolic Blood Pressure"]?.abnormal ) ? true : false },
 
   }
 vitalsHistory.push(pairedVital);
@@ -182,16 +188,21 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
     const pairedBiometrics = {
       id : date,
       date: formatDateAsString(new Date(date), "DD/MM/YYYY")+ " , "+ dateAndTime.slice(3).join(" ").toUpperCase(),
-      height: innerMappedbiometrics?.HEIGHT  ? innerMappedbiometrics?.HEIGHT?.value : "--",
-      heightAbnormal: innerMappedbiometrics?.Height ? innerMappedbiometrics?.HEIGHT.abnormal : "--",
-      weight: innerMappedbiometrics?.WEIGHT  ? innerMappedbiometrics?.WEIGHT?.value : "--",
-      weightAbnormal: innerMappedbiometrics?.WEIGHT ? innerMappedbiometrics?.WEIGHT.abnormal : "--",
-      bmi: innerMappedbiometrics?.BMI  ? innerMappedbiometrics?.BMI?.value : "--",
-      bmiAbnormal: innerMappedbiometrics?.BMI ? innerMappedbiometrics?.BMI.abnormal : "--",
-      bmi: innerMappedbiometrics?.BMI  ? innerMappedbiometrics?.BMI?.value : "--",
-      bmiAbnormal: innerMappedbiometrics?.BMI ? innerMappedbiometrics?.BMI.abnormal : "--",
-      muac: innerMappedbiometrics?.["Mid-upper arm circumference"] ? innerMappedbiometrics?.["Mid-upper arm circumference"]?.value : "--",
-      muacAbnormal: innerMappedbiometrics?.["Mid-upper arm circumference"] ? innerMappedbiometrics?.["Mid-upper arm circumference"].abnormal : "--",
+      height: {
+        value: innerMappedbiometrics?.HEIGHT  ? innerMappedbiometrics?.HEIGHT?.value : "--",
+        abnormal: innerMappedbiometrics?.Height ? innerMappedbiometrics?.HEIGHT.abnormal : false},
+      weight: {
+        value: innerMappedbiometrics?.WEIGHT  ? innerMappedbiometrics?.WEIGHT?.value : "--",
+        abnormal: innerMappedbiometrics?.WEIGHT ? innerMappedbiometrics?.WEIGHT.abnormal : false},
+      bmi: {
+         value: innerMappedbiometrics?.BMI  ? innerMappedbiometrics?.BMI?.value : "--",
+         abnormal: innerMappedbiometrics?.BMI ? innerMappedbiometrics?.BMI.abnormal : false},
+      bmi: {
+        value: innerMappedbiometrics?.BMI  ? innerMappedbiometrics?.BMI?.value : "--",
+        abnormal: innerMappedbiometrics?.BMI ? innerMappedbiometrics?.BMI.abnormal : false},
+      muac: {
+        value : innerMappedbiometrics?.["Mid-upper arm circumference"] ? innerMappedbiometrics?.["Mid-upper arm circumference"]?.value : "--",
+        abnormal: innerMappedbiometrics?.["Mid-upper arm circumference"] ? innerMappedbiometrics?.["Mid-upper arm circumference"].abnormal : false}
 
     }
   biometricsHistory.push(pairedBiometrics);
@@ -270,4 +281,7 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
       key: "muac",
       isSortable: false
     },
+  ]
+  export const abnormalHeader = [
+    "temperature","spO2","bmi","pulse","bp","weight","height","muac","respiratoryRate"
   ]

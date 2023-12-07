@@ -12,6 +12,7 @@ const hostUrl = localStorage.getItem("host")
 const RESTWS_V1 = hostUrl + "/openmrs/ws/rest/v1";
 const FHIR2_R4 = hostUrl + "/openmrs/ws/fhir2/R4";
 const BAHMNI_CORE = RESTWS_V1 + "/bahmnicore";
+export const ADDRESS_HEIRARCHY = hostUrl + "/openmrs/module/addresshierarchy/ajax/getOrderedAddressHierarchyLevels.form";
 
 export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
 export const PATIENT_URL = RESTWS_V1 + "/patient";
@@ -42,3 +43,5 @@ export const componentKeys = {
   TREATMENTS: "TR",
   NURSING_TASKS: "NT",
 };
+
+// /openmrs/module/addresshierarchy/ajax/getOrderedAddressHierarchyLevels.form

@@ -1,6 +1,6 @@
 import React, { useEffect, useState }  from "react";
 import PropTypes from "prop-types";
-import { fetchPatientInfo, getGender, mapContact,getConfigsForPatientContactDetails , fetchPatientProfile, mapRelationships } from "../utils/PatientHeaderUtils";
+import { fetchPatientInfo, getGender, mapContact,getConfigsForPatientContactDetails , fetchPatientProfile, mapRelationships, fetchAddressMapping } from "../utils/PatientHeaderUtils";
 import { Tile, Grid, Row, Column, SkeletonText,Button, Link } from "carbon-components-react";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { FormattedMessage } from "react-intl";
@@ -13,31 +13,34 @@ export const PatientHeader = (props) => {
   const { patientId } = props;
   const [showPatientDetails,togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
+  const [patientRelationships , updatePatienRelationships] = useState({});
   const [isLoading, updateIsLoading] = useState(true);
   const[contacts , setMappedContacts] = useState([]);
   const[relationships , setMappedRelationships] = useState([]);
+  const [patientContact, setPatientContactConfig] = useState([]);
 
   const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
   const showDetails = <FormattedMessage id="SHOW_PATIENT_DETAILS" defaultMessage="Show Details" />;
   const hideDetails = <FormattedMessage id="HIDE_PATIENT_DETAILS" defaultMessage="Hide Details" />;
   const patientDetailsHeaders = {
     address: (
-      <FormattedMessage id={"Address_HEADER"} defaultMessage={"Address"} />
+      <FormattedMessage id={"Address"} defaultMessage={"Address"} />
     ),
     contactDetails: (
-      <FormattedMessage id={"CONTACT_DETAILS_HEADER"} defaultMessage={"Contact Details"} />
+      <FormattedMessage id={"Contact Details"} defaultMessage={"Contact Details"} />
     ),
     relationships: (
-      <FormattedMessage id={"RELATIONSHIPS_HEADER"} defaultMessage={"Relationships"} />
+      <FormattedMessage id={"Relationships"} defaultMessage={"Relationships"} />
     )
   }
 
   const getContactDetailsConfigs = async () => {
     const patientContactConfigs = await getConfigsForPatientContactDetails();
+    setPatientContactConfig(patientContactConfigs.contactDetails);
     return patientContactConfigs;
   };
 
-  const extractPatientInfo = (patientInfo) => {
+  const extractPatientInfo = (patientInfo, locationMap) => {
     updatePatientDetails({
       fullName: patientInfo?.person?.preferredName.display,
       givenName: patientInfo?.person?.preferredName.givenName,
@@ -49,18 +52,20 @@ export const PatientHeader = (props) => {
         DDMMYYY_DATE_FORMAT
       ),
       attributes: patientInfo?.person?.attributes,
-      address: patientInfo?.person?.preferredAddress?.address5,
-      region: patientInfo?.person?.preferredAddress?.display,
-      zone: patientInfo?.person?.preferredAddress?.address2,
-      country: patientInfo?.person?.preferredAddress?.country,
       gender: getGender(patientInfo?.person?.gender),
       identifier: patientInfo?.identifiers[0]?.identifier,
     });
+    locationMap.map((location)=> {
+      updatePatientDetails((patientDetails) => { ...patientDetails, (location.name = patientInfo.person.preferredAddress[location.addressField])})
+   })
     updateIsLoading(false);
     return(patientInfo?.person?.attributes);
   };
 
   const extractPatientRelationships = (patientProfile) => {
+    updatePatienRelationships ({
+      relationships : patientProfile?.relationships,
+  });
   return(patientProfile?.relationships);
 }
  
@@ -68,7 +73,10 @@ export const PatientHeader = (props) => {
   useEffect(() => {
     const getPatientInfo = async () => {
       const patientInfo = await fetchPatientInfo(patientId);
-     const patientAttributes = extractPatientInfo(patientInfo);
+      const locationMap = await fetchAddressMapping();
+      console.log("location Map", locationMap);
+      const patientAttributes = extractPatientInfo(patientInfo, locationMap);
+      console.log("Patient Attribute ", patientAttributes);
       const contactConfigs = await getContactDetailsConfigs();
       const patientProfile = await fetchPatientProfile(patientId);
       const patientRelatives = extractPatientRelationships(patientProfile);
@@ -138,3 +146,13 @@ export const PatientHeader = (props) => {
 PatientHeader.propTypes = {
   patientId: PropTypes.string.isRequired,
 };
+
+
+
+
+// address: patientInfo?.person?.preferredAddress?.address5,
+// region: patientInfo?.person?.preferredAddress?.display,
+// zone: patientInfo?.person?.preferredAddress?.address2,
+// woreda: patientInfo?.person?.preferredAddress?.address3,
+// kebele: patientInfo?.person?.preferredAddress?.address4,  
+// country: patientInfo?.person?.preferredAddress?.country,
