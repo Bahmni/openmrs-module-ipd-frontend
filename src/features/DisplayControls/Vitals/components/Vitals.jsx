@@ -16,6 +16,7 @@ import { FormattedMessage } from "react-intl";
 import VitalsHistory from "./VitalsHistory";
 import BiometricsHistory from "./BiometricsHistory";
 import { vitalsHeaders } from "../utils/VitalsUtils";
+import { ChevronDown20,ChevronUp20 } from "@carbon/icons-react";
 
 const Vitals = (props) => {
   const { patientId } = props;
@@ -27,6 +28,8 @@ const Vitals = (props) => {
   const [vitalsDate, setVitalsDate] = useState(null);
   const [vitalsTime, setVitalsTime] = useState(null);
   const [isLoading, updateIsLoading] = useState(true);
+
+
 
   const NoVitalsMessage = (
     <FormattedMessage
@@ -83,14 +86,21 @@ const Vitals = (props) => {
           <div className="vital-date-time">
             {vitalsDate ? vitalsDate : "-"}
             {vitalsTime ? ", " + vitalsTime + "  " : "-"}
-            <Link
+           {showMore ? (<Link
               kind="tertiary"
               className="show-more"
               size="sm"
               onClick={handleShowMore}
             >
-              {vitalsHistoryMessage}
-            </Link>
+              {vitalsHistoryMessage}<ChevronUp20/>
+            </Link>) : (<Link
+              kind="tertiary"
+              className="show-more"
+              size="sm"
+              onClick={handleShowMore}
+            >
+              {vitalsHistoryMessage}<ChevronDown20/>
+            </Link>)}
           </div>
           <Row>
             <Column>

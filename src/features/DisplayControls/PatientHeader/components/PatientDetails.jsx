@@ -1,7 +1,6 @@
 import React from 'react'
 import { Tile, Row, Column} from "carbon-components-react";
 import PropTypes from 'prop-types';
-import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { useEffect } from 'react';
 
@@ -12,6 +11,7 @@ import { useEffect } from 'react';
 const PatientDetails = ({patientDetails, patientDetailsHeaders, contacts, relationships}) => {
     const [locationComponent, setLocationComponents]= useState([]);
     const locationMapping = ()=> {
+        let reveresdAddress = [];
         for (const key in patientDetails.locations) {
             if (patientDetails.locations.hasOwnProperty(key)) {
               let value =  <span className="details-value">

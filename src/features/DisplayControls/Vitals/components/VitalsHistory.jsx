@@ -42,6 +42,7 @@ const VitalsHistory = ({ vitalsHistory, vitalsHistoryHeaders }) => {
             {...getTableProps()}
             useZebraStyles
             data-testid="vitals-datatable"
+            className="history-data-table"
           >
             <TableHead>
               <TableRow>

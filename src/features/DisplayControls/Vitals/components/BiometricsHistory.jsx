@@ -43,6 +43,7 @@ const BiometricsHistory = ({ biometricsHistory, biometricsHistoryHeaders }) => {
             {...getTableProps()}
             useZebraStyles
             data-testid="biometrics-datatable"
+            className = "history-data-table"
           >
             <TableHead>
               <TableRow>
