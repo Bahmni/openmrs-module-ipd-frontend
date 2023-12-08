@@ -90,9 +90,6 @@ export default function NursingTasks(props) {
     if (isLoading) {
       return <div>Loading...</div>;
     }
-    if (medicationNursingTasks && medicationNursingTasks.length === 0) {
-      return <div className="no-nursing-tasks">{NoNursingTasksMessage}</div>;
-    }
 
     return (
       <div className="nursing-tasks-content-container">
@@ -127,7 +124,11 @@ export default function NursingTasks(props) {
             updateEmergencyTasksSlider={updateEmergencyTasksSlider}
           />
         )}
-        <div className="nursing-task-tiles-container">{showTaskTiles()}</div>
+        {medicationNursingTasks && medicationNursingTasks.length === 0 ? (
+          <div className="no-nursing-tasks">{NoNursingTasksMessage}</div>
+        ) : (
+          <div className="nursing-task-tiles-container">{showTaskTiles()}</div>
+        )}
       </div>
     );
   };
