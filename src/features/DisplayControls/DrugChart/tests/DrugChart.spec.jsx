@@ -29,6 +29,17 @@ jest.mock("react-scroll-sync-hook", () => {
   };
 });
 
+const MockTooltipCarbon = jest.fn();
+
+jest.mock("bahmni-carbon-ui", () => {
+  return {
+    TooltipCarbon: (props) => {
+      MockTooltipCarbon(props);
+      return <div>TooltipCarbon</div>;
+    },
+  };
+});
+
 describe("DrugChart", () => {
   it("should match snapshot", () => {
     const { asFragment } = render(<DrugChart drugChartData={drugChartData} />);

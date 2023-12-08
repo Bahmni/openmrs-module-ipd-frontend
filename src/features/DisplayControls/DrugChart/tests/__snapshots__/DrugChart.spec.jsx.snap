@@ -7,6 +7,7 @@ exports[`DrugChart should match snapshot 1`] = `
   >
     <div
       class="drug-chart"
+      style="height: 264px;"
     >
       <div
         class="drug-chart-left-panel"
@@ -26,6 +27,9 @@ exports[`DrugChart should match snapshot 1`] = `
                     class="drug-name"
                   >
                     Suxamethonium Chloride 100 mg/2 mL Ampoule (50 mg/mL )
+                    <div>
+                      TooltipCarbon
+                    </div>
                   </div>
                   <div
                     class="dosage"
@@ -51,6 +55,9 @@ exports[`DrugChart should match snapshot 1`] = `
                     class="drug-name"
                   >
                     Enalapril 5 mg Tablet
+                    <div>
+                      TooltipCarbon
+                    </div>
                   </div>
                   <div
                     class="dosage"

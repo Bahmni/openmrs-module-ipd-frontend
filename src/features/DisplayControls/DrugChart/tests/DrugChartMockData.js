@@ -41,6 +41,8 @@ export const drugChartData = [
       duration: "4 Day(s)",
       dosage: 2,
       doseType: "mg",
+      dosingInstructions:
+        '{"instructions":"Before meals","additionalInstructions":"sample additional instruction"}',
     },
     {
       drugName: "Enalapril 5 mg Tablet",
@@ -49,6 +51,8 @@ export const drugChartData = [
       duration: "4 Day(s)",
       dosage: 1,
       doseType: "Tablet(s)",
+      dosingInstructions:
+        '{"instructions":"Before meals","additionalInstructions":"sample additional instruction"}',
     },
   ],
 ];

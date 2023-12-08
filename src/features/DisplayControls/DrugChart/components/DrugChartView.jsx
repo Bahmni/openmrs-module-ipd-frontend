@@ -26,6 +26,8 @@ export const TransformDrugChartData = (drugChartData) => {
   AdminMedicationData.map((schedule) => {
     const { slots } = schedule;
 
+    const administeredTimeInfo = [];
+
     slots.forEach((slot) => {
       const slotData = {};
       const { startTime, status, order, medicationAdministration } = slot;
@@ -56,7 +58,7 @@ export const TransformDrugChartData = (drugChartData) => {
         uuid: order.uuid,
         drugName: order.drug.display,
         drugRoute: order.route.display,
-        administrationInfo: [],
+        administrationInfo: administeredTimeInfo,
         dosingInstructions: order.dosingInstructions,
       };
 

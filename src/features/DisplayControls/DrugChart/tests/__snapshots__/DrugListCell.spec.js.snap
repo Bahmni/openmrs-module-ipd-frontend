@@ -7,6 +7,9 @@ exports[`DrugListCell should  match snapshot 1`] = `
       class="drug-name"
     >
       Suxamethonium Chloride 100 mg/2 mL Ampoule (50 mg/mL )
+      <div>
+        TooltipCarbon
+      </div>
     </div>
     <div
       class="dosage"
@@ -38,6 +41,9 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
       class="drug-name"
     >
       Enalapril 5 mg Tablet
+      <div>
+        TooltipCarbon
+      </div>
     </div>
     <div
       class="dosage"

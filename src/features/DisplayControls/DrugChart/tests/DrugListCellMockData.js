@@ -5,6 +5,7 @@ export const testDrugInfo = {
   duration: "4 Day(s)",
   dosage: 2,
   doseType: "mg",
+  dosingInstructions: '{"instructions":"Before meals"}',
 };
 
 export const testDrugInfoWithAdministeredLateStatus = {
@@ -35,4 +36,5 @@ export const testDrugInfoWithAdministeredStatus = {
   duration: "4 Day(s)",
   dosage: 1,
   doseType: "Tablet(s)",
+  dosingInstructions: '{"instructions":"Before meals"}',
 };

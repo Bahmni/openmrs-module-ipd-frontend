@@ -6,9 +6,7 @@
   --half-hour-width: 21px;
   --line-width: 1px;
 
-  height: calc(
-    7 * var(--time-cell-height)
-  ); //TODO: Update the fixed height once the full dashboard is completed
+  max-height: calc(8 * var(--time-cell-height));
   display: grid;
   grid-template-columns: 3fr 7fr;
   width: 100%;
