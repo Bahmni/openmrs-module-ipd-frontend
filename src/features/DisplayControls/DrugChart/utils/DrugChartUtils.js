@@ -21,3 +21,10 @@ export const isLateTask = (startTime) => {
 
   return startTime < currentTime - lateTaskStatusWindowInSeconds;
 };
+
+export const isAdministeredLateTask = (startTime, effectiveStartDate) => {
+  const lateTaskStatusWindowInSeconds =
+    drugChart.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
+
+  return effectiveStartDate - startTime > lateTaskStatusWindowInSeconds;
+};

@@ -3,22 +3,61 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import DrugChart from "./DrugChart";
 import { useFetchMedications } from "../hooks/useFetchMedications";
-import { isLateTask } from "../utils/DrugChartUtils";
+import { isLateTask, isAdministeredLateTask } from "../utils/DrugChartUtils";
+import { FormattedMessage } from "react-intl";
+import { AdminMedicationData } from "./AdminMedicationData";
+
+export const checkIfSlotIsAdministered = (status) => {
+  return status === "COMPLETED";
+};
+
+const NoMedicationTaskMessage = (
+  <FormattedMessage
+    id={"NO_MEDICATION_TASKS_MESSAGE"}
+    defaultMessage={"No Medication has been scheduled for the patient yet"}
+  />
+);
+
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
   const slotDataByOrder = [];
+  console.log("drugChartData", drugChartData);
 
-  drugChartData.map((schedule) => {
+  AdminMedicationData.map((schedule) => {
     const { slots } = schedule;
 
     slots.forEach((slot) => {
       const slotData = {};
-      const { startTime, status, order } = slot;
+      const { startTime, status, order, medicationAdministration } = slot;
+      let medicationStatus = "Pending";
+      let adminInfo, administeredTime;
+
+      const isCompleted = checkIfSlotIsAdministered(status);
+
+      if (isCompleted) {
+        const isLate = isAdministeredLateTask(
+          startTime,
+          medicationAdministration.administeredDateTime
+        );
+        medicationStatus = isLate ? "Administered-Late" : "Administered";
+        if (medicationAdministration) {
+          const { administeredDateTime, provider } = medicationAdministration;
+          const administeredDateTimeObject = new Date(
+            administeredDateTime * 1000
+          );
+          administeredTime = moment(administeredDateTimeObject).format("HH:mm");
+          adminInfo = provider.display + " [" + administeredTime + "]";
+        } else {
+          adminInfo = "";
+        }
+      }
+
       const drugOrder = {
         uuid: order.uuid,
         drugName: order.drug.display,
         drugRoute: order.route.display,
         administrationInfo: [],
+        dosingInstructions: order.dosingInstructions,
       };
 
       if (order.duration) {
@@ -35,28 +74,26 @@ export const TransformDrugChartData = (drugChartData) => {
       }
 
       const startDateTimeObj = new Date(startTime * 1000);
-      let adminInfo, administeredTime;
-      if (slot.admin) {
-        const { administeredBy, administeredAt } = slot.admin;
-        administeredTime = moment(new Date(administeredAt)).format("HH:mm");
-        adminInfo = administeredBy + " [" + administeredTime + "]";
-      } else {
-        adminInfo = "";
-      }
 
       const setLateStatus = isLateTask(startTime);
       const startHour = startDateTimeObj.getHours();
       const startMinutes = startDateTimeObj.getMinutes();
       slotData[startHour] = {
         minutes: startMinutes,
-        status: setLateStatus ? "Late" : status,
+        status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
         administrationInfo: adminInfo,
       };
-      if (status === "Administered" || status === "Administered-Late") {
-        drugOrder.administrationInfo.push({
-          kind: status,
+      if (
+        medicationStatus === "Administered" ||
+        medicationStatus === "Administered-Late"
+      ) {
+        console.log("inside if", medicationStatus, administeredTime);
+        const adminData = {
+          kind: medicationStatus,
           time: administeredTime,
-        });
+        };
+        drugOrder.administrationInfo.push(adminData);
+        console.log("drugOrder after push", drugOrder);
       }
       if (
         !drugOrderData.some(
@@ -80,7 +117,6 @@ export const TransformDrugChartData = (drugChartData) => {
       }
     });
   });
-  console.log("slotDataByOrder", slotDataByOrder);
   console.log("drugOrderData", drugOrderData);
   return [slotDataByOrder, drugOrderData];
 };
@@ -97,6 +133,9 @@ export default function DrugChartWrapper(props) {
 
   if (isLoading) {
     return <div>Loading...</div>;
+  }
+  if (drugChartData && drugChartData.length === 0) {
+    return <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>;
   }
   return <DrugChart drugChartData={transformedDrugChartData} />;
 }

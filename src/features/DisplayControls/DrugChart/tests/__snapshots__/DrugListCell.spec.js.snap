@@ -79,6 +79,9 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
       class="drug-name"
     >
       Enalapril 5 mg Tablet
+      <div>
+        TooltipCarbon
+      </div>
     </div>
     <div
       class="dosage"

@@ -7,6 +7,18 @@ import {
   testDrugInfoWithAdministeredStatus,
 } from "./DrugListCellMockData";
 
+const MockTooltipCarbon = jest.fn();
+jest.mock("../../../../icons/note.svg");
+
+jest.mock("bahmni-carbon-ui", () => {
+  return {
+    TooltipCarbon: (props) => {
+      MockTooltipCarbon(props);
+      return <div>TooltipCarbon</div>;
+    },
+  };
+});
+
 describe("DrugListCell", () => {
   it("should  match snapshot", () => {
     const { container } = render(<DrugListCell drugInfo={testDrugInfo} />);

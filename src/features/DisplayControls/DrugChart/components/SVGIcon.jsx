@@ -6,6 +6,7 @@ import LateIcon from "../../../../icons/late.svg";
 import NotAdministeredIcon from "../../../../icons/not-administered.svg";
 import PendingIcon from "../../../../icons/pending.svg";
 import { TooltipCarbon } from "bahmni-carbon-ui";
+import "../styles/SVGIcon.scss";
 
 export default function SVGIcon(props) {
   const { iconType, info } = props;
