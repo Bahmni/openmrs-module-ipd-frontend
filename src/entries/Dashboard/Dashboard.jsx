@@ -27,10 +27,12 @@ export default function Dashboard(props) {
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
     nursingTasks: false,
+    emergencyTasks: false,
   });
   const [isSliderOpen, updateSliderOpen] = useState({
     treatments: false,
     nursingTasks: false,
+    emergencyTasks: false,
   });
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);

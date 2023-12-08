@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import "../styles/NursingTasks.scss";
+import { Add16 } from "@carbon/icons-react";
 
 import {
   fetchMedicationNursingTasks,
@@ -12,6 +13,8 @@ import TaskTile from "./TaskTile";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { SliderContext } from "../../../../context/SliderContext";
 import UpdateNursingTasks from "./UpdateNursingTasks";
+import { Button } from "carbon-components-react";
+import AddEmergencyTasks from "./AddEmergencyTasks";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
@@ -24,6 +27,15 @@ export default function NursingTasks(props) {
       return {
         ...prev,
         nursingTasks: value,
+      };
+    });
+  };
+
+  const updateEmergencyTasksSlider = (value) => {
+    updateSliderOpen((prev) => {
+      return {
+        ...prev,
+        emergencyTasks: value,
       };
     });
   };
@@ -84,11 +96,35 @@ export default function NursingTasks(props) {
 
     return (
       <div className="nursing-tasks-content-container">
-        {showCurrentDate()}
+        <div className={"nursing-task-navigation"}>
+          {showCurrentDate()}
+          <div>
+            <Button
+              kind={"tertiary"}
+              isExpressive
+              size="default"
+              renderIcon={Add16}
+              onClick={() => {
+                if (!isSliderOpen.emergencyTasks) {
+                  updateEmergencyTasksSlider(true);
+                }
+              }}
+            >
+              <FormattedMessage id={"ADD_TASK"} defaultMessage={"Add Task"} />
+            </Button>
+          </div>
+        </div>
+
         {isSliderOpen.nursingTasks && (
           <UpdateNursingTasks
             medicationTasks={selectedMedicationTask}
             updateNursingTasksSlider={updateNursingTasksSlider}
+          />
+        )}
+        {isSliderOpen.emergencyTasks && (
+          <AddEmergencyTasks
+            patientId={"uuid"}
+            updateEmergencyTasksSlider={updateEmergencyTasksSlider}
           />
         )}
         <div className="nursing-task-tiles-container">{showTaskTiles()}</div>

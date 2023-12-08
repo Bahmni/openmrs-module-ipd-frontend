@@ -12,6 +12,7 @@ const hostUrl = localStorage.getItem("host")
 const RESTWS_V1 = hostUrl + "/openmrs/ws/rest/v1";
 const FHIR2_R4 = hostUrl + "/openmrs/ws/fhir2/R4";
 const BAHMNI_CORE = RESTWS_V1 + "/bahmnicore";
+export const homePageUrl = "/bahmni/home/#/dashboard";
 
 export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
 export const PATIENT_URL = RESTWS_V1 + "/patient";
@@ -24,6 +25,14 @@ export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
 export const CLINICAL_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/clinical/app.json";
+export const MEDICATION_CONFIG_URL =
+  hostUrl + "/bahmni_config/openmrs/apps/clinical/medication.json";
+export const DRUG_ORDERS_CONFIG_URL = BAHMNI_CORE + "/config/drugOrders";
+export const GET_ALL_PROVIDERS_URL =
+  RESTWS_V1 + "/provider?v=custom:(person,uuid,retired)";
+export const SEARCH_DRUG_URL =
+  RESTWS_V1 +
+  "/drug?q={queryString}&s=ordered&v=custom:(uuid,strength,name,dosageForm)";
 
 export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",

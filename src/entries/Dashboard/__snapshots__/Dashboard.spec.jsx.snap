@@ -49,6 +49,19 @@ exports[`Dashboard should match snapshot 1`] = `
               <span
                 class="bx--side-nav__link-text"
               >
+                Vitals and Biometrics
+              </span>
+            </a>
+          </li>
+          <li
+            class="bx--side-nav__item"
+          >
+            <a
+              class="bx--side-nav__link cursor-pointer"
+            >
+              <span
+                class="bx--side-nav__link-text"
+              >
                 Allergies
               </span>
             </a>
@@ -76,6 +89,19 @@ exports[`Dashboard should match snapshot 1`] = `
                 class="bx--side-nav__link-text"
               >
                 Treatments
+              </span>
+            </a>
+          </li>
+          <li
+            class="bx--side-nav__item"
+          >
+            <a
+              class="bx--side-nav__link cursor-pointer"
+            >
+              <span
+                class="bx--side-nav__link-text"
+              >
+                Nursing Tasks
               </span>
             </a>
           </li>
@@ -108,6 +134,15 @@ exports[`Dashboard should match snapshot 1`] = `
         >
           View Clinical Dashboard
         </a>
+      </div>
+      <div
+        class="bx--tile patient-header"
+      >
+        <p
+          class="bx--skeleton__text is-loading"
+          data-testid="header-loading"
+          style="width: 100%;"
+        />
       </div>
       <ul
         class="bx--accordion accordion bx--accordion--end bx--accordion--md"
@@ -143,7 +178,7 @@ exports[`Dashboard should match snapshot 1`] = `
                 class="bx--accordion__title"
                 dir="auto"
               >
-                Allergies
+                Vitals and Biometrics
               </div>
             </button>
             <div
@@ -185,7 +220,7 @@ exports[`Dashboard should match snapshot 1`] = `
                 class="bx--accordion__title"
                 dir="auto"
               >
-                Diagnosis
+                Allergies
               </div>
             </button>
             <div
@@ -227,12 +262,96 @@ exports[`Dashboard should match snapshot 1`] = `
                 class="bx--accordion__title"
                 dir="auto"
               >
-                Treatments
+                Diagnosis
               </div>
             </button>
             <div
               class="bx--accordion__content"
               id="accordion-item-3"
+            >
+              <div />
+            </div>
+          </li>
+        </section>
+        <section
+          style="margin-bottom: 40px;"
+        >
+          <li
+            class="bx--accordion__item bx--accordion__item--active"
+          >
+            <button
+              aria-controls="accordion-item-4"
+              aria-expanded="true"
+              class="bx--accordion__heading"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="bx--accordion__arrow"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                />
+              </svg>
+              <div
+                class="bx--accordion__title"
+                dir="auto"
+              >
+                Treatments
+              </div>
+            </button>
+            <div
+              class="bx--accordion__content"
+              id="accordion-item-4"
+            >
+              <div />
+            </div>
+          </li>
+        </section>
+        <section
+          style="margin-bottom: 40px;"
+        >
+          <li
+            class="bx--accordion__item bx--accordion__item--active"
+          >
+            <button
+              aria-controls="accordion-item-5"
+              aria-expanded="true"
+              class="bx--accordion__heading"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="bx--accordion__arrow"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                />
+              </svg>
+              <div
+                class="bx--accordion__title"
+                dir="auto"
+              >
+                Nursing Tasks
+              </div>
+            </button>
+            <div
+              class="bx--accordion__content"
+              id="accordion-item-5"
             >
               <div />
             </div>
