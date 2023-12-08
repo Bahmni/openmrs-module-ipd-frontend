@@ -2,25 +2,27 @@ import React from 'react'
 import { Tile, Row, Column} from "carbon-components-react";
 import PropTypes from 'prop-types';
 import { FormattedMessage } from "react-intl";
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 
 
-const addressHeaders = {
-    address: (
-      <FormattedMessage id={"PATIENT_ADDRESS"} defaultMessage={"Address"} />
-    ),
-    zone: (
-      <FormattedMessage id={"PATIENT_ZONE"} defaultMessage={"Zone"} />
-    ),
-    region: (
-      <FormattedMessage id={"PATIENT_REGION"} defaultMessage={"Region"} />
-    ),
-    country: (
-        <FormattedMessage id={"PATIENT_COUNTRY"} defaultMessage={"Country"} />
-      )
-  }
+
 
 const PatientDetails = ({patientDetails, patientDetailsHeaders, contacts, relationships}) => {
+    const [locationComponent, setLocationComponents]= useState([]);
+    const locationMapping = ()=> {
+        for (const key in patientDetails.locations) {
+            if (patientDetails.locations.hasOwnProperty(key)) {
+              let value =  <span className="details-value">
+              {key} : {patientDetails.locations[key] !=null ? patientDetails.locations[key] : " "}
+           </span>
+         setLocationComponents( (locationComponent) => [...locationComponent, value])
+            }
+    }}
+    useEffect(()=>{
+        locationMapping();
+    },[])
   return (
     <Tile className="patient-details">
         <Row>
@@ -29,18 +31,11 @@ const PatientDetails = ({patientDetails, patientDetailsHeaders, contacts, relati
              <span className="details-headers">
               {patientDetailsHeaders.address}
              </span>
-             <span className="details-value">
-                {addressHeaders.address} : {patientDetails.address !=null ? patientDetails.address : " "}
-             </span>
-             <span className="details-value">
-                {addressHeaders.zone} : {patientDetails.zone !=null ? patientDetails.zone : "-"}
-             </span>
-             <span className="details-value">
-                {addressHeaders.region} : {patientDetails.region !=null ? patientDetails.region : "-"}
-             </span>
-             <span className="details-value">
-                {addressHeaders.country} : {patientDetails.country !=null ? patientDetails.country : "-"}
-             </span>
+           {
+            locationComponent.map((location)=>{
+             return location
+            })
+            }
            </Tile>
           </Column>
           <Column>

@@ -155,7 +155,7 @@ for (const date in vitalsValue){
   const dateAndTime = formatDate(date).split(" ");
   const pairedVital = {
     id: date,
-    date: formatDateAsString(new Date(date), "DD/MM/YYYY")+ " , "+ dateAndTime.slice(3).join(" ").toUpperCase(),
+    date: formatDateAsString(new Date(date), "DD/MM/YYYY")+ ", "+ dateAndTime.slice(3).join(" ").toUpperCase(),
     pulse: {
       value:innerMappedVitals?.Pulse  ? innerMappedVitals?.Pulse?.value : "--",
       abnormal:innerMappedVitals?.Pulse ? innerMappedVitals?.Pulse.abnormal : false},
@@ -187,7 +187,7 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
     const dateAndTime = formatDate(date).split(" ");
     const pairedBiometrics = {
       id : date,
-      date: formatDateAsString(new Date(date), "DD/MM/YYYY")+ " , "+ dateAndTime.slice(3).join(" ").toUpperCase(),
+      date: formatDateAsString(new Date(date), "DD/MM/YYYY")+ ", "+ dateAndTime.slice(3).join(" ").toUpperCase(),
       height: {
         value: innerMappedbiometrics?.HEIGHT  ? innerMappedbiometrics?.HEIGHT?.value : "--",
         abnormal: innerMappedbiometrics?.Height ? innerMappedbiometrics?.HEIGHT.abnormal : false},
@@ -214,7 +214,7 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
   export const vitalsHistoryHeaders = [
     {
       id: "1",
-      header:"Date and time",
+      header:"Date and Time",
       key: "date",
       isSortable: false,
     },
@@ -253,7 +253,7 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
   export const biometricsHistoryHeaders = [
     {
       id: "1",
-      header: "Date and time",
+      header: "Date and Time",
       key: "date",
       isSortable: false
     },

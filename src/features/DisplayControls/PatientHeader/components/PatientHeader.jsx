@@ -13,11 +13,9 @@ export const PatientHeader = (props) => {
   const { patientId } = props;
   const [showPatientDetails,togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
-  const [patientRelationships , updatePatienRelationships] = useState({});
   const [isLoading, updateIsLoading] = useState(true);
   const[contacts , setMappedContacts] = useState([]);
   const[relationships , setMappedRelationships] = useState([]);
-  const [patientContact, setPatientContactConfig] = useState([]);
 
   const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
   const showDetails = <FormattedMessage id="SHOW_PATIENT_DETAILS" defaultMessage="Show Details" />;
@@ -36,11 +34,11 @@ export const PatientHeader = (props) => {
 
   const getContactDetailsConfigs = async () => {
     const patientContactConfigs = await getConfigsForPatientContactDetails();
-    setPatientContactConfig(patientContactConfigs.contactDetails);
     return patientContactConfigs;
   };
 
   const extractPatientInfo = (patientInfo, locationMap) => {
+    let locations = [];
     updatePatientDetails({
       fullName: patientInfo?.person?.preferredName.display,
       givenName: patientInfo?.person?.preferredName.givenName,
@@ -55,17 +53,16 @@ export const PatientHeader = (props) => {
       gender: getGender(patientInfo?.person?.gender),
       identifier: patientInfo?.identifiers[0]?.identifier,
     });
-    locationMap.map((location)=> {
-      updatePatientDetails((patientDetails) => { ...patientDetails, (location.name = patientInfo.person.preferredAddress[location.addressField])})
-   })
+    locationMap.map((location) => {
+         locations = {...locations,[location.name]: patientInfo.person.preferredAddress[location.addressField]}
+      });    
+    updatePatientDetails((patientDetails) => ({...patientDetails, locations})
+    )  
     updateIsLoading(false);
     return(patientInfo?.person?.attributes);
   };
 
   const extractPatientRelationships = (patientProfile) => {
-    updatePatienRelationships ({
-      relationships : patientProfile?.relationships,
-  });
   return(patientProfile?.relationships);
 }
  
@@ -74,9 +71,7 @@ export const PatientHeader = (props) => {
     const getPatientInfo = async () => {
       const patientInfo = await fetchPatientInfo(patientId);
       const locationMap = await fetchAddressMapping();
-      console.log("location Map", locationMap);
       const patientAttributes = extractPatientInfo(patientInfo, locationMap);
-      console.log("Patient Attribute ", patientAttributes);
       const contactConfigs = await getContactDetailsConfigs();
       const patientProfile = await fetchPatientProfile(patientId);
       const patientRelatives = extractPatientRelationships(patientProfile);
@@ -84,7 +79,6 @@ export const PatientHeader = (props) => {
       setMappedRelationships(mapRelationships(patientRelatives));
     };
     getPatientInfo();
-      console.log("contacts",contacts);
   }, []);
 
   return (
@@ -146,13 +140,3 @@ export const PatientHeader = (props) => {
 PatientHeader.propTypes = {
   patientId: PropTypes.string.isRequired,
 };
-
-
-
-
-// address: patientInfo?.person?.preferredAddress?.address5,
-// region: patientInfo?.person?.preferredAddress?.display,
-// zone: patientInfo?.person?.preferredAddress?.address2,
-// woreda: patientInfo?.person?.preferredAddress?.address3,
-// kebele: patientInfo?.person?.preferredAddress?.address4,  
-// country: patientInfo?.person?.preferredAddress?.country,
