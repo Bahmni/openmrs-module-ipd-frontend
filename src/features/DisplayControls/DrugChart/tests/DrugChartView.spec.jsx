@@ -1,8 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import DrugChartView, {
-  TransformDrugChartData,
-} from "../components/DrugChartView";
+import DrugChartView from "../components/DrugChartView";
 import { drugChartData } from "./DrugChartViewMockData";
 
 const mockUseFetchMedications = jest.fn();
@@ -33,37 +31,5 @@ describe("DrugChartWrapper", () => {
       <DrugChartView patientId="test-id" viewDate={mockDate} />
     );
     expect(container).toMatchSnapshot();
-  });
-});
-
-describe("TransformDrugChartData", () => {
-  it.skip("should transform drug chart data", () => {
-    const TransformedDrugChartData = TransformDrugChartData(drugChartData);
-    expect(TransformedDrugChartData).toEqual([
-      [
-        {
-          16: {
-            administrationInfo: "",
-            minutes: 15,
-            status: "Late",
-          },
-          19: {
-            administrationInfo: "",
-            minutes: 35,
-            status: "Late",
-          },
-        },
-      ],
-      [
-        {
-          administrationInfo: [],
-          dosage: "25ml",
-          drugName: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
-          drugRoute: "Oral",
-          duration: "3 Day(s)",
-          uuid: "9d7437a9-3f10-11e4-abcd-0800271c1b75",
-        },
-      ],
-    ]);
   });
 });

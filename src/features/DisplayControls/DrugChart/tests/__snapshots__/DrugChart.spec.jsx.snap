@@ -24,9 +24,13 @@ exports[`DrugChart should match snapshot 1`] = `
               <tr>
                 <td>
                   <div
-                    class="drug-name"
+                    class="drug-name-container"
                   >
-                    Suxamethonium Chloride 100 mg/2 mL Ampoule (50 mg/mL )
+                    <div
+                      class="drug-chart-drug-name"
+                    >
+                      Suxamethonium Chloride 100 mg/2 mL Ampoule (50 mg/mL )
+                    </div>
                     <div>
                       TooltipCarbon
                     </div>
@@ -52,9 +56,13 @@ exports[`DrugChart should match snapshot 1`] = `
               <tr>
                 <td>
                   <div
-                    class="drug-name"
+                    class="drug-name-container"
                   >
-                    Enalapril 5 mg Tablet
+                    <div
+                      class="drug-chart-drug-name"
+                    >
+                      Enalapril 5 mg Tablet
+                    </div>
                     <div>
                       TooltipCarbon
                     </div>

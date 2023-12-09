@@ -13,7 +13,8 @@ export default function DrugChart(props) {
   const { registerPane, unregisterPane } = useScrollSync({
     vertical: true,
   });
-  const drugChartHeight = (drugChartData[0].length + 2) * 66;
+  const drugChartRowHeight = 66;
+  const drugChartHeight = (drugChartData[0].length + 2) * drugChartRowHeight;
   useEffect(() => {
     if (leftPane.current) {
       registerPane(leftPane.current);

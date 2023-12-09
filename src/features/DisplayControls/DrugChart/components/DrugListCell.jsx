@@ -19,7 +19,6 @@ export default function DrugListCell(props) {
     dosingInstructions,
   } = drugInfo;
 
-  console.log("druginfo", drugInfo);
   let parsedDosingInstructions;
   if (dosingInstructions !== null && dosingInstructions !== undefined) {
     parsedDosingInstructions = JSON.parse(dosingInstructions);
@@ -30,18 +29,8 @@ export default function DrugListCell(props) {
       Instructions:&nbsp;{parsedDosingInstructions.instructions}
       <br />
       {parsedDosingInstructions.additionalInstructions && (
-        <div
-          style={{
-            height: "1px",
-            background: "#BBB8B8",
-            width: "100%",
-            marginTop: "10px",
-            marginBottom: "10px",
-          }}
-        />
-      )}
-      {parsedDosingInstructions.additionalInstructions && (
         <>
+          <div className="tooltip-content-separater" />
           Additional Instructions:&nbsp;
           {parsedDosingInstructions.additionalInstructions}
         </>
@@ -49,8 +38,8 @@ export default function DrugListCell(props) {
     </div>
   );
   const drugNameText = (
-    <div className={"drug-name"}>
-      {drugName}
+    <div className="drug-name-container">
+      <div className={"drug-chart-drug-name"}>{drugName}</div>
       {dosingInstructions && (
         <TooltipCarbon icon={() => icon} content={toolTipContent} />
       )}
