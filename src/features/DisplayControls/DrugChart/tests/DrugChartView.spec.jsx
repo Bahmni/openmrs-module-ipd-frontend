@@ -32,4 +32,17 @@ describe("DrugChartWrapper", () => {
     );
     expect(container).toMatchSnapshot();
   });
+
+  it("should render no medication task message when drugChartData is empty", () => {
+    mockUseFetchMedications.mockReturnValue({
+      isLoading: false,
+      drugChartData: [],
+    });
+    const { getByText } = render(
+      <DrugChartView patientId="test-id" viewDate={mockDate} />
+    );
+    expect(
+      getByText("No Medication has been scheduled for the patient yet")
+    ).toBeTruthy();
+  });
 });
