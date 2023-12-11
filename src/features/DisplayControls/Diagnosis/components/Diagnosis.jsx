@@ -101,7 +101,7 @@ const Diagnosis = (props) => {
           component={(additionalData) => {
             return <DiagnosisExpandableRow data={additionalData} />;
           }}
-          useZebraStyles={true}
+          useZebraStyles={false}
         />
       )}
     </>

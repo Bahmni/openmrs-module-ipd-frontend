@@ -37,7 +37,7 @@ const ExpandableDataTable = (props) => {
         getExpandHeaderProps,
       }) => (
         <>
-          <Table {...getTableProps()}>
+          <Table {...getTableProps()} data-testid="expandable-datatable">
             <TableHead>
               <TableRow>
                 <TableExpandHeader
