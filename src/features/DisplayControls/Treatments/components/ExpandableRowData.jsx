@@ -4,29 +4,27 @@ import VerticalTabs from "../../../../components/VerticalTabs/VerticalTabs";
 const ExpandableRowData = (props) => {
   const { expandTreatmentData } = props;
 
+  const fetchAdditionalData = (additionalData) => {
+    return additionalData
+      ? expandTreatmentData.provider +
+          " | " +
+          expandTreatmentData.recordedDate +
+          " | " +
+          expandTreatmentData.recordedTime
+      : null;
+  };
+
   const verticalTabsData = {
     Instructions: {
       data: expandTreatmentData.instructions,
       additionalData: [
-        expandTreatmentData.instructions
-          ? expandTreatmentData.provider +
-            " | " +
-            expandTreatmentData.recordedDate +
-            " | " +
-            expandTreatmentData.recordedTime
-          : null,
+        fetchAdditionalData(expandTreatmentData.instructions),
       ],
     },
     "Additional Instructions": {
       data: expandTreatmentData.additionalInstructions,
       additionalData: [
-        expandTreatmentData.additionalInstructions
-          ? expandTreatmentData.provider +
-            " | " +
-            expandTreatmentData.recordedDate +
-            " | " +
-            expandTreatmentData.recordedTime
-          : null,
+        fetchAdditionalData(expandTreatmentData.additionalInstructions),
       ],
     },
   };

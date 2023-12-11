@@ -58,7 +58,10 @@ const ExpandableDataTable = (props) => {
                   if (data.id == row.id && data?.disableExpand)
                     return (
                       <React.Fragment key={row.id}>
-                        <TableRow {...getRowProps({ row })}>
+                        <TableRow
+                          {...getRowProps({ row })}
+                          data-testid="non-expandable-row"
+                        >
                           <TableCell></TableCell>
                           {row.cells.map((cell) => (
                             <TableCell key={cell.id}>{cell.value}</TableCell>
@@ -69,7 +72,10 @@ const ExpandableDataTable = (props) => {
                   else if (data.id == row.id)
                     return (
                       <React.Fragment key={row.id}>
-                        <TableExpandRow {...getRowProps({ row })}>
+                        <TableExpandRow
+                          {...getRowProps({ row })}
+                          data-testid="expandable-row"
+                        >
                           {row.cells.map((cell) => (
                             <TableCell key={cell.id}>{cell.value}</TableCell>
                           ))}
