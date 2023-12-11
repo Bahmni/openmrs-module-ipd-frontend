@@ -2043,7 +2043,7 @@ export const AdminMedicationData = [
           },
           drug: {
             uuid: "476cf744-2d07-4e95-8486-676f8637f5db",
-            display: "Enalapril2 5 mg Tablet",
+            display: "Diazepam 5 mg Tablet",
             links: [
               {
                 rel: "self",
@@ -2525,7 +2525,7 @@ export const AdminMedicationData = [
           },
           drug: {
             uuid: "476cf744-2d07-4e95-8486-676f8637f5db",
-            display: "Enalapril2 5 mg Tablet",
+            display: "Diazepam 5 mg Tablet",
             links: [
               {
                 rel: "self",
@@ -3007,7 +3007,7 @@ export const AdminMedicationData = [
           },
           drug: {
             uuid: "476cf744-2d07-4e95-8486-676f8637f5db",
-            display: "Enalapril2 5 mg Tablet",
+            display: "Diazepam 5 mg Tablet",
             links: [
               {
                 rel: "self",
@@ -3468,7 +3468,7 @@ export const AdminMedicationData = [
           },
           drug: {
             uuid: "476cf744-2d07-4e95-8486-676f8637f5db",
-            display: "Enalapril2 5 mg Tablet",
+            display: "Diazepam 5 mg Tablet",
             links: [
               {
                 rel: "self",
