@@ -201,8 +201,8 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
         value: innerMappedbiometrics?.BMI  ? innerMappedbiometrics?.BMI?.value : "--",
         abnormal: innerMappedbiometrics?.BMI ? innerMappedbiometrics?.BMI.abnormal : false},
       muac: {
-        value : innerMappedbiometrics?.["Mid-upper arm circumference"] ? innerMappedbiometrics?.["Mid-upper arm circumference"]?.value : "--",
-        abnormal: innerMappedbiometrics?.["Mid-upper arm circumference"] ? innerMappedbiometrics?.["Mid-upper arm circumference"].abnormal : false}
+        value : innerMappedbiometrics?.MUAC ? innerMappedbiometrics?.MUAC?.value : "--",
+        abnormal: innerMappedbiometrics?.MUAC ? innerMappedbiometrics?.MUAC.abnormal : false}
 
     }
   biometricsHistory.push(pairedBiometrics);
