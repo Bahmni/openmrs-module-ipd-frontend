@@ -5,8 +5,6 @@ import "../styles/DrugListCell.scss";
 import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
 
-// import { TooltipDefinitionCarbon } from "bahmni-carbon-ui";
-
 export default function DrugListCell(props) {
   const { drugInfo } = props;
   const {
@@ -50,10 +48,8 @@ export default function DrugListCell(props) {
       <NoteIcon />
     </div>
   );
-  //TODO: Add tooltip for drug name
   return (
     <td>
-      {/*<TooltipDefinitionCarbon tooltipText={drugName} content={drugNameText}/>*/}
       {drugNameText}
 
       <div className={"dosage"}>

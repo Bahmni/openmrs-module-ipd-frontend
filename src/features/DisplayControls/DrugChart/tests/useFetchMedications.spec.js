@@ -37,4 +37,16 @@ describe("useFetchMedications", () => {
     await waitForNextUpdate();
     expect(result.current.isLoading).toEqual(false);
   });
+
+  it("should return error state", async () => {
+    const errorMessage = "An error occurred during fetch";
+    mockFetchMedications.mockRejectedValueOnce(new Error(errorMessage));
+
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useFetchMedications()
+    );
+    await waitForNextUpdate();
+
+    expect(result.current.error).toBeTruthy();
+  });
 });
