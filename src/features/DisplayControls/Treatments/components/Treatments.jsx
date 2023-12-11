@@ -77,6 +77,7 @@ const Treatments = (props) => {
       setShowSuccessNotification(true);
       updateTreatmentsSlider(false);
       refreshDisplayControl([componentKeys.NURSING_TASKS]);
+      refreshDisplayControl([componentKeys.DRUG_CHART]);
     },
   };
 

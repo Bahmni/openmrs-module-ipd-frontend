@@ -49,4 +49,5 @@ export const componentKeys = {
   DIAGNOSIS: "DG",
   TREATMENTS: "TR",
   NURSING_TASKS: "NT",
+  DRUG_CHART: "DC",
 };

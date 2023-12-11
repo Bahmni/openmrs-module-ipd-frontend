@@ -1,0 +1,30 @@
+.drug-chart-drug-name {
+  max-width: 85%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+  color: #393939;
+  font-style: normal;
+}
+.drug-name-container {
+  display: flex;
+}
+.dosage {
+  font-size: 12px;
+  font-weight: 400;
+  color: #393939;
+  > * {
+    display: inline-block;
+  }
+}
+.note-icon-container {
+  margin-left: 5px;
+}
+.tooltip-content-separater {
+  height: 1px;
+  background-color: #bbb8b8;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
