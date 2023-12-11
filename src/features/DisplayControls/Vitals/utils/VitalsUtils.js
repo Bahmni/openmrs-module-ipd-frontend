@@ -170,7 +170,7 @@ for (const date in vitalsValue){
       value: innerMappedVitals?.["Respiratory Rate"] ? innerMappedVitals?.["Respiratory Rate"].value : "--", 
     abnormal: innerMappedVitals?.["Respiratory Rate"] ? innerMappedVitals?.["Respiratory Rate"].abnormal : false}, 
     bp: {
-      value: (innerMappedVitals?.["Systolic Blood Pressure"] ? innerMappedVitals?.["Systolic Blood Pressure"]?.value : "-") + "/" + (innerMappedVitals?.["Diastolic Blood Pressure"] ? innerMappedVitals?.["Diastolic Blood Pressure"]?.value : "-"),
+      value: (innerMappedVitals?.["Systolic Blood Pressure"] ? parseInt(innerMappedVitals?.["Systolic Blood Pressure"]?.value, 10) : "-") + "/" + (innerMappedVitals?.["Diastolic Blood Pressure"] ? parseInt(innerMappedVitals?.["Diastolic Blood Pressure"]?.value, 10) : "-"),
      abnormal: (innerMappedVitals?.["Systolic Blood Pressure"]?.abnormal || innerMappedVitals?.["Diastolic Blood Pressure"]?.abnormal ) ? true : false },
 
   }
