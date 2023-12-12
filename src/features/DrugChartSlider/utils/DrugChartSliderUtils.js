@@ -73,6 +73,7 @@ export const updateStartTimeBasedOnFrequency = (frequency, time) => {
       time.add(30, "minutes");
       break;
     default:
+      time.add(1, "day");
       break;
   }
   return time;
