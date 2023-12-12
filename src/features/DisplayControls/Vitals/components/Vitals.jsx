@@ -29,8 +29,6 @@ const Vitals = (props) => {
   const [vitalsTime, setVitalsTime] = useState(null);
   const [isLoading, updateIsLoading] = useState(true);
 
-
-
   const NoVitalsMessage = (
     <FormattedMessage
       id={"NO_VITALS_MESSAGE"}

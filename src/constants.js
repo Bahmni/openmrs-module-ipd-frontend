@@ -53,5 +53,3 @@ export const componentKeys = {
   NURSING_TASKS: "NT",
   DRUG_CHART: "DC",
 };
-
-// /openmrs/module/addresshierarchy/ajax/getOrderedAddressHierarchyLevels.form

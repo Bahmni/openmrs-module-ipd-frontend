@@ -4,10 +4,6 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-
-
-
-
 const PatientDetails = ({patientDetails, patientDetailsHeaders, contacts, relationships}) => {
     const [locationComponent, setLocationComponents]= useState([]);
     const locationMapping = ()=> {
