@@ -15,7 +15,7 @@ describe("ExpandableDataTable", () => {
     );
   });
 
-  it("should not render expandable row if disableExpand is true", () => {
+  it("should render expandable row on clicking the icon", () => {
     const { queryByTestId } = render(
       <ExpandableDataTable
         rows={[
@@ -42,37 +42,6 @@ describe("ExpandableDataTable", () => {
         useZebraStyles={true}
       />
     );
-    expect(queryByTestId("non-expandable-row")).toBeTruthy();
-    expect(queryByTestId("expandable-row")).toBeFalsy();
-  });
-
-  it("should render expandable row if disableExpand is false or not passed", () => {
-    const { queryByTestId } = render(
-      <ExpandableDataTable
-        rows={[
-          {
-            id: "1",
-            name: "test",
-          },
-        ]}
-        headers={[
-          {
-            id: "1",
-            header: "Name",
-            key: "name",
-            isSortable: false,
-          },
-        ]}
-        additionalData={[
-          {
-            id: "1",
-          },
-        ]}
-        component={() => {}}
-        useZebraStyles={true}
-      />
-    );
-    expect(queryByTestId("non-expandable-row")).toBeFalsy();
     expect(queryByTestId("expandable-row")).toBeTruthy();
   });
 });

@@ -9,8 +9,6 @@ const VerticalTabs = (props) => {
     setSelectedTabIndex(index);
   };
 
-  console.log("tabData inside verticalTabs component", tabData);
-
   return (
     <div className="vertical-tabs-parent">
       <div className="tabs-container">

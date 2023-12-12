@@ -36,60 +36,47 @@ const ExpandableDataTable = (props) => {
         getTableProps,
         getExpandHeaderProps,
       }) => (
-        <>
-          <Table {...getTableProps()} data-testid="expandable-datatable">
-            <TableHead>
-              <TableRow>
-                <TableExpandHeader
-                  id="expand"
-                  enableToggle
-                  {...getExpandHeaderProps()}
-                />
-                {headers.map((header) => (
-                  <TableHeader key={header.key} {...getHeaderProps({ header })}>
-                    {header.header}
-                  </TableHeader>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => {
-                return additionalData.map((data) => {
-                  if (data.id == row.id && data?.disableExpand)
-                    return (
-                      <React.Fragment key={row.id}>
-                        <TableRow
-                          {...getRowProps({ row })}
-                          data-testid="non-expandable-row"
-                        >
-                          <TableCell></TableCell>
-                          {row.cells.map((cell) => (
-                            <TableCell key={cell.id}>{cell.value}</TableCell>
-                          ))}
-                        </TableRow>
-                      </React.Fragment>
-                    );
-                  else if (data.id == row.id)
-                    return (
-                      <React.Fragment key={row.id}>
-                        <TableExpandRow
-                          {...getRowProps({ row })}
-                          data-testid="expandable-row"
-                        >
-                          {row.cells.map((cell) => (
-                            <TableCell key={cell.id}>{cell.value}</TableCell>
-                          ))}
-                        </TableExpandRow>
-                        <TableExpandedRow colSpan={headers.length + 1}>
-                          {renderExpandableRowComponent(row, additionalData)}
-                        </TableExpandedRow>
-                      </React.Fragment>
-                    );
-                });
-              })}
-            </TableBody>
-          </Table>
-        </>
+        <Table {...getTableProps()} data-testid="expandable-datatable">
+          <TableHead>
+            <TableRow>
+              <TableExpandHeader
+                style={{ padding: "0px" }}
+                id="expand"
+                enableToggle
+                {...getExpandHeaderProps()}
+              />
+              {headers.map((header) => (
+                <TableHeader key={header.key} {...getHeaderProps({ header })}>
+                  {header.header}
+                </TableHeader>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => {
+              return additionalData.map((data) => {
+                if (data.id == row.id)
+                  return (
+                    <React.Fragment key={row.id}>
+                      <TableExpandRow
+                        {...getRowProps({ row })}
+                        data-testid="expandable-row"
+                      >
+                        {row.cells.map((cell) => (
+                          <TableCell key={cell.id}>
+                            {cell.value}
+                          </TableCell>
+                        ))}
+                      </TableExpandRow>
+                      <TableExpandedRow colSpan={headers.length + 1}>
+                        {renderExpandableRowComponent(row, additionalData)}
+                      </TableExpandedRow>
+                    </React.Fragment>
+                  );
+              });
+            })}
+          </TableBody>
+        </Table>
       )}
     />
   );

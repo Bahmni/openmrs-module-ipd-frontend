@@ -8,6 +8,7 @@ import "../styles/Diagnosis.scss";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import DiagnosisExpandableRow from "./DiagnosisExpandableRow";
+import NotesIcon from "../../../../icons/notes.svg";
 
 const Diagnosis = (props) => {
   const { patientId } = props;
@@ -41,10 +42,8 @@ const Diagnosis = (props) => {
             let diagnosisId = diagnosis.codedAnswer
               ? diagnosis.codedAnswer.uuid
               : diagnosis.freeTextAnswer + diagnosis.diagnosisDateTime;
-            let diagnosisName = diagnosis.codedAnswer
-              ? diagnosis.codedAnswer.name
-              : diagnosis.freeTextAnswer;
             let diagnosisNotes = diagnosis.comments ? diagnosis.comments : "";
+            let diagnosisName = getDrugName(diagnosis);
             return {
               id: diagnosisId,
               diagnosis: diagnosisName,
@@ -62,22 +61,31 @@ const Diagnosis = (props) => {
 
     setDiagnosis(mappedDiagnoses);
     const additionalMappedData = mappedDiagnoses.map((diagnosis) => {
-      if (diagnosis.additionalData.diagnosisNotes === "")
-        return {
-          id: diagnosis.id,
-          disableExpand: true,
-        };
-      else
-        return {
-          id: diagnosis.id,
-          diagnosisTime: diagnosis.additionalData.diagnosisTime,
-          diagnosisNotes: diagnosis.additionalData.diagnosisNotes,
-          provider: diagnosis.diagnosedBy,
-        };
+      return {
+        id: diagnosis.id,
+        diagnosisTime: diagnosis.additionalData.diagnosisTime,
+        diagnosisNotes: diagnosis.additionalData.diagnosisNotes,
+        provider: diagnosis.diagnosedBy,
+      };
     });
     setAdditionalData(additionalMappedData);
     setIsLoading(false);
   };
+
+  const getDrugName = (diagnosis) => {
+    if (diagnosis.codedAnswer && diagnosis.comments !== "") {
+      return (
+        <div className="notes-icon-div">
+          <NotesIcon className="notes-icon" />
+          <span className="drug-name">{diagnosis.codedAnswer.name}</span>
+        </div>
+      );
+    } else if (diagnosis.codedAnswer) {
+      return diagnosis.codedAnswer.name;
+    }
+    return diagnosis.freeTextAnswer;
+  };
+
   const getDiagnosis = async () => {
     const diagnosisList = await getPatientDiagnosis(patientId);
     mapDiagnosisData(diagnosisList);
@@ -101,7 +109,7 @@ const Diagnosis = (props) => {
           component={(additionalData) => {
             return <DiagnosisExpandableRow data={additionalData} />;
           }}
-          useZebraStyles={false}
+          useZebraStyles={true}
         />
       )}
     </>

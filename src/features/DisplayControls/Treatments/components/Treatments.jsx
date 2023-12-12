@@ -19,6 +19,7 @@ import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanel
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import TreatmentExpandableRow from "./TreatmentExpandableRow";
+import NotesIcon from "../../../../icons/notes.svg";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -133,7 +134,7 @@ const Treatments = (props) => {
         return {
           id: drugOrder.uuid,
           startDate: formatDate(drugOrder.effectiveStartDate, "DD/MM/YYYY"),
-          drugName: drugOrder.drug.name,
+          drugName: getDrugName(drugOrder),
           dosageDetails: setDosingInstructions(drugOrder),
           prescribedBy: drugOrder.provider.name,
           actions: (
@@ -164,6 +165,21 @@ const Treatments = (props) => {
     });
     setTreatments(treatments);
     setAdditionalData(additionalMappedData);
+  };
+
+  const getDrugName = (drugOrder) => {
+    if (
+      drugOrder.drug &&
+      (drugOrder.instructions || drugOrder.additionalInstructions)
+    ) {
+      return (
+        <div className="notes-icon-div">
+          <NotesIcon className="notes-icon" />
+          <span className="drug-name">{drugOrder.drug.name}</span>
+        </div>
+      );
+    } else if (drugOrder.drug) return drugOrder.drug.name;
+    return drugOrder.freeTextAnswer;
   };
 
   useEffect(() => {
