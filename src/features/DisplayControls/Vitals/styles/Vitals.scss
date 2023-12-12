@@ -1,28 +1,84 @@
-.vital-tiles,
-.abnormal-tiles {
-  margin: 3px;
-  padding: 10px;
-  display: flex;
-  flex-flow: column;
-  align-items: normal;
-  text-align: left;
-  background-color: whitesmoke;
-  justify-content: space-between;
-}
-
-.vital-values {
-  font-size: 16px;
-}
-
-.vital-value-and-unit {
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-}
-
-.abnormal-tiles {
-  color: #da1e28;
-}
 .no-vitals-message {
   padding-top: 10px;
+}
+
+.vital-table {
+  overflow: visible;
+  overflow-x: auto;
+  padding: 10px 0;
+
+  .vital-date-time {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    align-items: baseline;
+    margin-left: 10px;
+    a {
+      margin-left: 10px;
+    }
+  }
+
+  .vitals-biometrics-history {
+    display: flex;
+    flex-flow: column;
+    padding: 0;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .vital-tiles,
+  .abnormal-tiles {
+    margin: 3px;
+    padding: 10px;
+    display: flex;
+    flex-flow: column;
+    align-items: normal;
+    text-align: left;
+    background-color: whitesmoke;
+    justify-content: space-between;
+    min-width: fit-content;
+  }
+
+  .vital-values {
+    font-size: 16px;
+    min-width: max-content;
+  }
+  .vital-headers {
+    font-size: 12px;
+  }
+  .vital-units {
+    font-size: 14px;
+  }
+  .vital-value-and-unit {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+  }
+
+  .abnormal-tiles {
+    color: #da1e28;
+  }
+
+  .vitals-history-pagination,
+  .biometrics-history-pagination {
+    width: 100%;
+    border: 1px solid #e0e0e0;
+  }
+
+  .vitals-history-title,
+  .biometrics-history-title {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .history-abnormal-tile{
+    color: #da1e28;
+  }
+  .history-tile{
+    color: #525252;
+  }
+  .history-data-table{
+      pointer-events: none;
+  }
 }

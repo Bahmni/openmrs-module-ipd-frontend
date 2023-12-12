@@ -12,6 +12,7 @@ const hostUrl = localStorage.getItem("host")
 const RESTWS_V1 = hostUrl + "/openmrs/ws/rest/v1";
 const FHIR2_R4 = hostUrl + "/openmrs/ws/fhir2/R4";
 const BAHMNI_CORE = RESTWS_V1 + "/bahmnicore";
+export const ADDRESS_HEIRARCHY = hostUrl + "/openmrs/module/addresshierarchy/ajax/getOrderedAddressHierarchyLevels.form";
 export const homePageUrl = "/bahmni/home/#/dashboard";
 
 export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
@@ -25,6 +26,7 @@ export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
 export const CLINICAL_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/clinical/app.json";
+  export const PATIENT_PROFILE = RESTWS_V1 + "/patientprofile"
 export const MEDICATION_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/clinical/medication.json";
 export const DRUG_ORDERS_CONFIG_URL = BAHMNI_CORE + "/config/drugOrders";

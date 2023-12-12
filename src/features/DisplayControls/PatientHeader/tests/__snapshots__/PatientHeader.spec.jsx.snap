@@ -1,0 +1,232 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PatientHeader should display all details of the patient 1`] = `
+<div>
+  <div
+    class="bx--tile patient-header"
+  >
+    <div
+      class="bx--grid"
+    >
+      <div
+        class="patient-image-and-details bx--row"
+      >
+        <div
+          class="patient-image"
+        />
+        <div
+          class="bx--col"
+        >
+          <div
+            class="bx--row"
+          >
+            <div
+              class="bx--col"
+            >
+              <h1
+                class="patient-name"
+              >
+                John Doe
+              </h1>
+            </div>
+          </div>
+          <div
+            class="bx--row"
+          >
+            <div
+              class="other-info"
+            >
+              <div
+                class="patient-basic-info"
+              >
+                <h3
+                  class="patient-info"
+                >
+                  Male
+                </h3>
+                <h3
+                  class="patient-info"
+                >
+                  30
+                   
+                  Years
+                </h3>
+                <h3
+                  class="patient-info"
+                >
+                  01/01/1991
+                </h3>
+                <h3
+                  class="patient-info"
+                >
+                  12345
+                </h3>
+              </div>
+              <a
+                class="bx--link show-more bx--link--sm"
+                kind="tertiary"
+              >
+                Hide Details
+                 
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="20"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M16 10L26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
+                  />
+                </svg>
+                 
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="bx--tile patient-details"
+    >
+      <div
+        class="bx--row"
+      >
+        <div
+          class="bx--col"
+        >
+          <div
+            class="bx--tile details-tile"
+          >
+            <span
+              class="details-headers"
+            >
+              Address
+            </span>
+            <span
+              class="details-value"
+            >
+              Country
+               : 
+              Ethiopia
+            </span>
+            <span
+              class="details-value"
+            >
+              Region
+               : 
+              Region test
+            </span>
+            <span
+              class="details-value"
+            >
+              Zone
+               : 
+              zone test
+            </span>
+            <span
+              class="details-value"
+            >
+              Woreda
+               : 
+              W
+            </span>
+            <span
+              class="details-value"
+            >
+              Kebele
+               : 
+              Kebele
+            </span>
+            <span
+              class="details-value"
+            >
+              Address
+               : 
+              13-899
+            </span>
+          </div>
+        </div>
+        <div
+          class="bx--col"
+        >
+          <div
+            class="bx--tile details-tile"
+          >
+            <span
+              class="details-headers"
+            >
+              Contact Details
+            </span>
+            <span
+              class="details-value"
+            >
+              Residence Phone
+               : 
+              22222222
+            </span>
+            <span
+              class="details-value"
+            >
+              Mobile Phone
+               : 
+              999999999
+            </span>
+            <span
+              class="details-value"
+            >
+              Work Phone
+               : 
+              34567890
+            </span>
+            <span
+              class="details-value"
+            >
+              Other Phone
+               : 
+              99999999
+            </span>
+            <span
+              class="details-value"
+            >
+              Email
+               : 
+              samuel email
+            </span>
+          </div>
+        </div>
+        <div
+          class="bx--col"
+        >
+          <div
+            class="bx--tile details-tile"
+          >
+            <span
+              class="details-headers"
+            >
+              Relationships
+            </span>
+            <span
+              class="details-value"
+            >
+              Father
+               : 
+              Test Father
+            </span>
+            <span
+              class="details-value"
+            >
+              Mother
+               : 
+              Mother Test
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
