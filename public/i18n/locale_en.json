@@ -33,7 +33,7 @@
   "BMI": "BMI",
   "YEARS": "Years",
   "SHOW_DETAILS": "Show Details",
-  "NO_NURSING_TASKS_MESSAGE": "No nursing task is scheduled for the patient",
+  "NO_NURSING_TASKS_MESSAGE": "No Nursing Task is scheduled for the patient",
   "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard",
   "INVALID_TIME": "Please enter valid time",
   "DONE": "Done",
@@ -52,5 +52,9 @@
   "PATIENT_COUNTRY": "Country",
   "ADDRESS_HEADER": "Address",
   "RELATIONSHIPS_HEADER": "Relationships",
-  "CONTACT_DETAILS_HEADER": "Contact Details"
+  "CONTACT_DETAILS_HEADER": "Contact Details",
+  "YES": "Yes",
+  "NO": "No",
+  "TREATEMENTS_WARNING_MESSAGE": "You will lose the details entered. Do you want to continue?",
+  "WARD_LIST_VIEW_TEXT": "Ward List View"
 }

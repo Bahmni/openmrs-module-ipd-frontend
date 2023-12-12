@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DrugInstructions should match snapshot 1`] = `
+<div>
+  <div
+    class="instructions"
+  >
+    <div
+      class="bx--form-item"
+    >
+      <div
+        class="bx--text-area__label-wrapper"
+      >
+        <label
+          class="bx--label bx--label--disabled"
+        >
+          Instruction
+        </label>
+      </div>
+      <div
+        class="bx--text-area__wrapper"
+      >
+        <textarea
+          class="bx--text-area instruction"
+          cols="50"
+          disabled=""
+          readonly=""
+          rows="1"
+          type="text"
+        >
+          instructions
+        </textarea>
+      </div>
+    </div>
+  </div>
+  <div
+    class="additional-instructions"
+  >
+    <div
+      class="bx--form-item"
+    >
+      <div
+        class="bx--text-area__label-wrapper"
+      >
+        <label
+          class="bx--label bx--label--disabled"
+        >
+          Additional Instruction
+        </label>
+      </div>
+      <div
+        class="bx--text-area__wrapper"
+      >
+        <textarea
+          class="bx--text-area additional-instruction"
+          cols="50"
+          disabled=""
+          readonly=""
+          rows="1"
+          type="text"
+        >
+          additionalInstructions
+        </textarea>
+      </div>
+    </div>
+  </div>
+</div>
+`;

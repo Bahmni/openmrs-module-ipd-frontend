@@ -7,9 +7,37 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
       class="nursing-tasks-content-container"
     >
       <div
-        class="date-text"
+        class="nursing-task-navigation"
       >
-        11/08/2023
+        <div
+          class="date-text"
+        >
+          11/08/2023
+        </div>
+        <div>
+          <button
+            class="bx--btn bx--btn--tertiary bx--btn--expressive"
+            tabindex="0"
+            type="button"
+          >
+            Add Task
+            <svg
+              aria-hidden="true"
+              class="bx--btn__icon"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
       <div
         class="nursing-task-tiles-container"

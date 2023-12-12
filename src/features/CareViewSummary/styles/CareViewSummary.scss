@@ -1,0 +1,21 @@
+.care-view-summary {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: baseline;
+  padding: 20px;
+
+  .bx--dropdown__wrapper.bx--list-box__wrapper {
+    padding: 0 20px;
+  }
+
+  .summary-tiles {
+    display: flex;
+    flex-flow: row wrap;
+
+    .summary-tile {
+      margin: 10px;
+      font-weight: 600;
+    }
+  }
+}

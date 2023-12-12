@@ -5,6 +5,22 @@
 .nursing-tasks-content-container {
   display: flex;
   flex-direction: column;
+  position: relative;
+
+  .bx--btn--expressive {
+    font-size: 14px;
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
+  }
+
+  .nursing-task-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+  }
 }
 
 .nursing-task-tiles-container {
@@ -19,6 +35,4 @@
   font-weight: 400;
   line-height: 14px;
   letter-spacing: 0.14px;
-  margin-top: 16px;
-  margin-bottom: 16px;
 }

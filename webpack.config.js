@@ -117,6 +117,7 @@ const federationConfig = {
       exposes: {
         "./Dashboard": "./src/entries/Dashboard.jsx",
         "./IpdDashboard": "./src/entries/Dashboard/Dashboard.jsx",
+        "./CareViewDashboard": "./src/entries/CareViewDashboard/CareViewDashboard.jsx",
       },
       shared: {
         // ...dependencies,

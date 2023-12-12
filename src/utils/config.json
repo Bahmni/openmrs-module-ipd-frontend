@@ -30,11 +30,21 @@
         "componentKey": "NT",
         "displayOrder": 5,
         "refreshKey": 5
+      },
+      {
+        "title": "Drug Chart",
+        "componentKey": "DC",
+        "displayOrder": 6,
+        "refreshKey": 6
       }
     ],
     "nursingTasks": {
       "timeInMinutesFromNowToShowTaskAsRelevant": 60,
       "timeInMinutesFromNowToShowPastTaskAsLate": 60
+    },
+    "drugChart": {
+      "timeInMinutesFromNowToShowPastTaskAsLate": 60,
+      "timeInMinutesFromStartTimeToShowAdministeredTaskAsLate": 30
     }
   }
 }

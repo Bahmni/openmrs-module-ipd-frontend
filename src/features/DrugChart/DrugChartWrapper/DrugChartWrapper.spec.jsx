@@ -59,6 +59,7 @@ describe("TransformDrugChartData", () => {
           drugName: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
           drugRoute: "Oral",
           duration: "3 Day(s)",
+          uuid: "9d7437a9-3f10-11e4-abcd-0800271c1b75",
         },
       ],
     ]);

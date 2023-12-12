@@ -19,4 +19,7 @@ export const componentMapping = {
       "../../features/DisplayControls/NursingTasks/components/NursingTasks"
     )
   ),
+  [componentKeys.DRUG_CHART]: lazy(() =>
+    import("../../features/DisplayControls/DrugChart/components/DrugChartView")
+  ),
 };

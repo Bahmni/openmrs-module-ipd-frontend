@@ -24,9 +24,15 @@ import { SliderContext } from "../../context/SliderContext";
 export default function Dashboard(props) {
   const { hostData } = props;
   const { patient } = hostData;
+  const [sliderContentModified, setSliderContentModified] = useState({
+    treatments: false,
+    nursingTasks: false,
+    emergencyTasks: false,
+  });
   const [isSliderOpen, updateSliderOpen] = useState({
     treatments: false,
     nursingTasks: false,
+    emergencyTasks: false,
   });
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(true);
@@ -80,7 +86,14 @@ export default function Dashboard(props) {
   };
 
   return (
-    <SliderContext.Provider value={{ isSliderOpen, updateSliderOpen }}>
+    <SliderContext.Provider
+      value={{
+        isSliderOpen,
+        updateSliderOpen,
+        sliderContentModified,
+        setSliderContentModified,
+      }}
+    >
       <main className="ipd-page">
         <Header
           className="border-bottom-0 header-bg-color"

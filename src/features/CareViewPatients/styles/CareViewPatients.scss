@@ -1,0 +1,20 @@
+.care-view-patients-container {
+  border: 1px solid #e0e0e0;
+  background-color: #f4f4f4;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+
+  .care-view-patients {
+    width: 80%;
+  }
+
+  .patient-section {
+    padding: 10px 0 10px 0;
+  }
+  .task-type {
+    display: flex;
+    flex-flow: row;
+    justify-content: end;
+  }
+}

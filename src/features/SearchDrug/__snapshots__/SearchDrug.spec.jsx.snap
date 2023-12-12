@@ -1,0 +1,132 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search Drug Should allow drug search 1`] = `
+<div>
+  <div>
+    <div
+      class="bx--list-box__wrapper"
+    >
+      <label
+        class="bx--label"
+        dir="auto"
+        for="SearchDrug"
+        id="downshift-0-label"
+      >
+        <div
+          class="titleText"
+        >
+          <span>
+            Drug Name 
+          </span>
+          <span
+            class="required"
+          >
+            *
+          </span>
+        </div>
+      </label>
+      <div
+        class="bx--combo-box bx--list-box bx--list-box--xl bx--list-box--expanded"
+      >
+        <div
+          class="bx--list-box__field"
+        >
+          <input
+            aria-autocomplete="list"
+            aria-controls="downshift-0-menu"
+            aria-expanded="true"
+            aria-haspopup="listbox"
+            autocomplete="off"
+            class="bx--text-input"
+            id="SearchDrug"
+            placeholder="Type to Search Drug"
+            role="combobox"
+            tabindex="0"
+            title="Para"
+            type="text"
+            value="Para"
+          />
+          <button
+            aria-label="Clear selected item"
+            class="bx--list-box__selection"
+            tabindex="0"
+            title="Clear selected item"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
+              />
+            </svg>
+          </button>
+          <button
+            aria-haspopup="true"
+            aria-label="Close"
+            class="bx--list-box__menu-icon bx--list-box__menu-icon--open"
+            data-toggle="true"
+            role="button"
+            tabindex="-1"
+            title="Close"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          aria-label="Choose an item"
+          class="bx--list-box__menu"
+          id="downshift-0-menu"
+          role="listbox"
+        >
+          <div
+            class="bx--list-box__menu-item"
+            id="downshift-0-item-0"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="bx--list-box__menu-item__option"
+            >
+              Paracetamol 250 mg Suppository
+            </div>
+          </div>
+          <div
+            class="bx--list-box__menu-item"
+            id="downshift-0-item-1"
+            role="option"
+            tabindex="-1"
+          >
+            <div
+              class="bx--list-box__menu-item__option"
+            >
+              Combintation Chlorpheniramine, Paracetamol and Pseudophedrine 100 mL Syrup (Cough and Cold Syrup)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
