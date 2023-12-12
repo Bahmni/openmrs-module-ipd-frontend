@@ -1,6 +1,6 @@
 import { render, waitFor, screen } from "@testing-library/react";
 import React from "react";
-import Diagnosis from "./Diagnosis";
+import Diagnosis from "../components/Diagnosis";
 import { getPatientDiagnosis } from "../utils/DiagnosisUtils";
 
 const headers = [
@@ -86,7 +86,7 @@ describe("Diagnosis", () => {
     expect(screen.getByTestId("diagnosis-datatable-skeleton")).toBeTruthy();
 
     await waitFor(() => {
-      expect(screen.getByTestId("diagnosis-datatable")).toBeTruthy();
+      expect(screen.getByTestId("expandable-datatable")).toBeTruthy();
     });
 
     expect(screen.queryByTestId("diagnosis-datatable-skeleton")).toBeFalsy();
@@ -132,7 +132,7 @@ describe("Diagnosis", () => {
     render(<Diagnosis patientId={"__test_patient_uuid__"} />);
 
     await waitFor(() => {
-      expect(screen.getByTestId("diagnosis-datatable")).toBeTruthy();
+      expect(screen.getByTestId("expandable-datatable")).toBeTruthy();
     });
     expect(screen.getByText("Arthropathy")).toBeTruthy();
     expect(screen.getByText("Inactive")).toBeTruthy();

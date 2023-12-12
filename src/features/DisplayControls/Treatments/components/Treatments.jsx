@@ -1,15 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import {
-  DataTable,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableBody,
-  Table,
-  TableRow,
-  Link,
-  DataTableSkeleton,
-} from "carbon-components-react";
+import { Link, DataTableSkeleton } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -23,10 +13,13 @@ import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
 import DrugChartSliderNotification from "../../../DrugChartSlider/components/DrugChartSliderNotification";
 import { SliderContext } from "../../../../context/SliderContext";
-import { formatDateAsString } from "../../../../utils/DateFormatter";
-import { DDMMYYY_DATE_FORMAT, componentKeys } from "../../../../constants";
+import { formatDate } from "../../../../utils/DateTimeUtils";
+import { componentKeys } from "../../../../constants";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
+import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
+import TreatmentExpandableRow from "./TreatmentExpandableRow";
+import NotesIcon from "../../../../icons/notes.svg";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -43,6 +36,7 @@ const Treatments = (props) => {
   const [showWarningNotification, setShowWarningNotification] = useState(false);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [drugChartNotes, setDrugChartNotes] = useState("");
+  const [additionalData, setAdditionalData] = useState([]);
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -140,11 +134,8 @@ const Treatments = (props) => {
       .map((drugOrder) => {
         return {
           id: drugOrder.uuid,
-          startDate: formatDateAsString(
-            new Date(drugOrder.effectiveStartDate),
-            DDMMYYY_DATE_FORMAT
-          ),
-          drugName: drugOrder.drug.name,
+          startDate: formatDate(drugOrder.effectiveStartDate, "DD/MM/YYYY"),
+          drugName: getDrugName(drugOrder),
           dosageDetails: setDosingInstructions(drugOrder),
           prescribedBy: drugOrder.provider.name,
           actions: (
@@ -152,9 +143,44 @@ const Treatments = (props) => {
               {AddToDrugChart}
             </Link>
           ),
+          additionalData: {
+            instructions: drugOrder.instructions ? drugOrder.instructions : "",
+            additionalInstructions: drugOrder.additionalInstructions
+              ? drugOrder.additionalInstructions
+              : "",
+            recordedDate: formatDate(drugOrder.dateActivated, "DD/MM/YYYY"),
+            recordedTime: formatDate(drugOrder.dateActivated, "HH:mm"),
+          },
         };
       });
+
+    const additionalMappedData = treatments.map((treatment) => {
+      return {
+        id: treatment.id,
+        instructions: treatment.additionalData.instructions,
+        additionalInstructions: treatment.additionalData.additionalInstructions,
+        recordedDate: treatment.additionalData.recordedDate,
+        recordedTime: treatment.additionalData.recordedTime,
+        provider: treatment.prescribedBy,
+      };
+    });
     setTreatments(treatments);
+    setAdditionalData(additionalMappedData);
+  };
+
+  const getDrugName = (drugOrder) => {
+    if (
+      drugOrder.drug &&
+      (drugOrder.instructions || drugOrder.additionalInstructions)
+    ) {
+      return (
+        <div className="notes-icon-div">
+          <NotesIcon className="notes-icon" />
+          <span className="drug-name">{drugOrder.drug.name}</span>
+        </div>
+      );
+    } else if (drugOrder.drug) return drugOrder.drug.name;
+    return drugOrder.freeTextAnswer;
   };
 
   useEffect(() => {
@@ -226,36 +252,15 @@ const Treatments = (props) => {
       ) : treatments && treatments.length === 0 ? (
         <div className="no-treatments">{NoTreatmentsMessage}</div>
       ) : (
-        <DataTable rows={treatments} headers={treatmentHeaders}>
-          {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-            <Table {...getTableProps()} useZebraStyles>
-              <TableHead>
-                <TableRow>
-                  {headers.map((header) => (
-                    <TableHeader
-                      key={header.key}
-                      {...getHeaderProps({
-                        header,
-                        isSortable: header.isSortable,
-                      })}
-                    >
-                      {header.header}
-                    </TableHeader>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.id} {...getRowProps({ row })}>
-                    {row.cells.map((cell) => (
-                      <TableCell key={cell.id}>{cell.value}</TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </DataTable>
+        <ExpandableDataTable
+          rows={treatments}
+          headers={treatmentHeaders}
+          additionalData={additionalData}
+          component={(additionalData) => {
+            return <TreatmentExpandableRow data={additionalData} />;
+          }}
+          useZebraStyles={true}
+        />
       )}
     </>
   );
