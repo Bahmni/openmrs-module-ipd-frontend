@@ -8,7 +8,7 @@ import { FormattedMessage } from "react-intl";
 export const vitalsHeaders = {
   temperature: <FormattedMessage id={"Temperature"} defaultMessage={"Temp"} />,
   bloodPressure: <FormattedMessage id={"BLOOD_PRESSURE"} defaultMessage={"BP"} />,
-  heartRate: <FormattedMessage id={"HEART_RATE"} defaultMessage={"Heart rate"} />,
+  pulse: <FormattedMessage id={"PULSE"} defaultMessage={"Pulse"} />,
   respiratoryRate: <FormattedMessage id={"RESPIRATORY_RATE"} defaultMessage={"R.rate"} />,
   weight: <FormattedMessage id={"WEIGHT"} defaultMessage={"Weight"} />,
   height: <FormattedMessage id={"HEIGHT"} defaultMessage={"Height"} />,
@@ -149,7 +149,8 @@ export const mapVitalsData = (VitalsList, setVitalsDate, setVitalsTime) => {
 
 export const mapVitalsHistory = (vitalsHistoryList) => {
 let vitalsHistory = [];
-const vitalsValue = vitalsHistoryList.tabularData;
+console.log("Vitals lsit",vitalsHistoryList); 
+const vitalsValue = vitalsHistoryList.tabularData ;
 for (const date in vitalsValue){
   const innerMappedVitals = vitalsValue[date];
   const dateAndTime = formatDate(date).split(" ");
@@ -220,32 +221,32 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
     },
     {
       id: "2",
-      header:"Temp (DEG C)",
-      key: "temperature",
-      isSortable: false,
-    },
-    {
-      id: "3",
-      header:"BP (mmHg)",
-      key: "bp",
-      isSortable: false,
-    },
-    {
-      id: "4",
       header:"Pulse (beats/min)",
       key: "pulse",
       isSortable: false,
     },
     {
-      id: "5",
+      id: "3",
+      header:"SPO2 (%)",
+      key: "spO2",
+      isSortable: false,
+    },
+    {
+      id: "4",
       header:"R.rate (breaths/min)",
       key: "respiratoryRate",
       isSortable: false,
     },
     {
+      id: "5",
+      header:"Temp (DEG C)",
+      key: "temperature",
+      isSortable: false,
+    },
+    {
       id: "6",
-      header:"SPO2 (%)",
-      key: "spO2",
+      header:"BP (mmHg)",
+      key: "bp",
       isSortable: false,
     }
   ]
@@ -259,14 +260,14 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
     },
     {
       id: "2",
-      header: "Weight (kg)",
-      key: "weight",
+      header: "Height (cm)",
+      key: "height",
       isSortable: false
     },
     {
       id: "3",
-      header: "Height (cm)",
-      key: "height",
+      header: "Weight (kg)",
+      key: "weight",
       isSortable: false
     },
     {

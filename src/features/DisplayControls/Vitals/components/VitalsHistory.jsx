@@ -15,7 +15,7 @@ import { abnormalHeader } from "../utils/VitalsUtils";
 
 const VitalsHistory = ({ vitalsHistory, vitalsHistoryHeaders }) => {
   const [vitalsHistoryPage, setVitalsHistoryPage] = useState(1);
-  const [vitalsHistoryPageSize, setVitalsHistoryPageSize] = useState(10);
+  const [vitalsHistoryPageSize, setVitalsHistoryPageSize] = useState(5);
   const vitalsTitle = (
     <FormattedMessage id={"VITALS_TITLE"} defaultMessage={"Vitals"} />
   );
@@ -82,7 +82,7 @@ const VitalsHistory = ({ vitalsHistory, vitalsHistoryHeaders }) => {
         onChange={changeVitalsPaginationState}
         page={vitalsHistoryPage}
         pageSize={vitalsHistoryPageSize}
-        pageSizes={[10, 20]}
+        pageSizes={[5, 10, 20]}
         size="md"
         totalItems={vitalsHistory.length}
       />

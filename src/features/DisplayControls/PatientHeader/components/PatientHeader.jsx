@@ -1,6 +1,6 @@
 import React, { useEffect, useState }  from "react";
 import PropTypes from "prop-types";
-import { fetchPatientInfo, getGender, mapContact,getConfigsForPatientContactDetails , fetchPatientProfile, mapRelationships, fetchAddressMapping } from "../utils/PatientHeaderUtils";
+import { getGender, mapContact,getConfigsForPatientContactDetails , fetchPatientProfile, mapRelationships, fetchAddressMapping } from "../utils/PatientHeaderUtils";
 import { Tile, Grid, Row, Column, SkeletonText,Button, Link } from "carbon-components-react";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { FormattedMessage } from "react-intl";
@@ -54,7 +54,7 @@ export const PatientHeader = (props) => {
       identifier: patientInfo?.identifiers[0]?.identifier,
     });
     locationMap.map((location) => {
-         locations = {...locations,[location.name]: patientInfo.person.preferredAddress[location.addressField]}
+         locations = {...locations,[location.name]: patientInfo.person.preferredAddress && patientInfo.person.preferredAddress[location.addressField]}
       });    
     updatePatientDetails((patientDetails) => ({...patientDetails, locations})
     )  
@@ -69,11 +69,11 @@ export const PatientHeader = (props) => {
   const toggleDetailsView = () => togglePatientDetails(!showPatientDetails);
   useEffect(() => {
     const getPatientInfo = async () => {
-      const patientInfo = await fetchPatientInfo(patientId);
+      const patientProfile = await fetchPatientProfile(patientId);
+      const patientInfo = patientProfile?.patient;
       const locationMap = await fetchAddressMapping();
       const patientAttributes = extractPatientInfo(patientInfo, locationMap);
       const contactConfigs = await getContactDetailsConfigs();
-      const patientProfile = await fetchPatientProfile(patientId);
       const patientRelatives = extractPatientRelationships(patientProfile);
       setMappedContacts(mapContact(patientAttributes , contactConfigs.contactDetails));
       setMappedRelationships(mapRelationships(patientRelatives));

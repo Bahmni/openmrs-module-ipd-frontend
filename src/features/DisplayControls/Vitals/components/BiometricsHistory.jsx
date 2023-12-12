@@ -16,9 +16,9 @@ import { abnormalHeader } from "../utils/VitalsUtils";
 const BiometricsHistory = ({ biometricsHistory, biometricsHistoryHeaders }) => {
   const [biometricsHistoryPage, setBiometricsHistoryPage] = useState(1);
   const [biometricsHistoryPageSize, setBiometricsHistoryPageSize] =
-    useState(10);
+    useState(5);
   const biometricsTitle = (
-    <FormattedMessage id={"BIOMETRICS_TITLE"} defaultMessage={"Biometrics"} />
+    <FormattedMessage id={"NUTRITIONAL_VALUES"} defaultMessage={"Nutritional Values"} />
   );
 
   const changeBiometricsPaginationState = (pageInfo) => {
@@ -83,7 +83,7 @@ const BiometricsHistory = ({ biometricsHistory, biometricsHistoryHeaders }) => {
         onChange={changeBiometricsPaginationState}
         page={biometricsHistoryPage}
         pageSize={biometricsHistoryPageSize}
-        pageSizes={[10, 20]}
+        pageSizes={[5, 10, 20]}
         size="md"
         totalItems={biometricsHistory.length}
       />

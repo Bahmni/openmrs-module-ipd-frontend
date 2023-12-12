@@ -2,7 +2,7 @@
   "config": {
     "sections": [
       {
-        "title": "Vitals and Biometrics",
+        "title": "Vitals and Nutritional Values",
         "componentKey": "VT",
         "displayOrder": 1,
         "refreshKey": 1

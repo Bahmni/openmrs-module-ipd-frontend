@@ -1,18 +1,6 @@
 import axios from "axios";
 import { PATIENT_URL ,CLINICAL_CONFIG_URL,PATIENT_PROFILE, ADDRESS_HEIRARCHY} from "../../../../constants";
 
-export const fetchPatientInfo = async (patientUuid) => {
-  const url = `${PATIENT_URL}/${patientUuid}?v=full`;
-  try {
-    const response = await axios.get(url, {
-      withCredentials: true,
-    });
-    if (response.status !== 200) throw new Error(response.statusText);
-    return response.data;
-  } catch (error) {
-    return error;
-  }
-};
 export const fetchPatientProfile= async (patientUuid) => {
   const url = `${PATIENT_PROFILE}/${patientUuid}?v=full`;
   try {

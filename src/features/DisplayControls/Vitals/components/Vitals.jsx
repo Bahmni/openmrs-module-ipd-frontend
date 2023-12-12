@@ -89,20 +89,71 @@ const Vitals = (props) => {
            {showMore ? (<Link
               kind="tertiary"
               className="show-more"
-              size="sm"
               onClick={handleShowMore}
             >
               {vitalsHistoryMessage}<ChevronUp20/>
             </Link>) : (<Link
               kind="tertiary"
               className="show-more"
-              size="sm"
               onClick={handleShowMore}
             >
               {vitalsHistoryMessage}<ChevronDown20/>
             </Link>)}
           </div>
           <Row>
+            <Column>
+              <Tile
+                className={
+                  vitals.HeartRate?.abnormal ? "abnormal-tiles" : "vital-tiles"
+                }
+              >
+                <span className="vital-headers">{vitalsHeaders.pulse}</span>
+                <span className="vital-values">
+                  {vitals.HeartRate?.value ? vitals.HeartRate?.value : "-"}{" "}
+                  <span className="vital-units">
+                    {vitals.HeartRate?.value ? vitalUnits.Pulse : " "}
+                  </span>{" "}
+                </span>
+              </Tile>
+            </Column>
+            <Column>
+              <Tile
+                className={
+                  vitals.SpO2?.abnormal ? "abnormal-tiles" : "vital-tiles"
+                }
+              >
+                <span className="vitsal-headers">{vitalsHeaders.spO2}</span>
+                <span className="vital-values">
+                  {vitals.SpO2?.value ? vitals.SpO2?.value : "-"}{" "}
+                  <span className="vital-units">
+                    {vitals.SpO2?.value ? vitalUnits.SpO2 : " "}
+                  </span>{" "}
+                </span>
+              </Tile>
+            </Column>
+            <Column>
+              <Tile
+                className={
+                  vitals.RespiratoryRate?.abnormal
+                    ? "abnormal-tiles"
+                    : "vital-tiles"
+                }
+              >
+                <span className="vital-headers">
+                  {vitalsHeaders.respiratoryRate}
+                </span>
+                <span className="vital-values">
+                  {vitals.RespiratoryRate?.value
+                    ? vitals.RespiratoryRate?.value
+                    : "-"}{" "}
+                  <span className="vital-units">
+                    {vitals.RespiratoryRate?.value
+                      ? vitalUnits["Respiratory Rate"]
+                      : " "}
+                  </span>{" "}
+                </span>
+              </Tile>
+            </Column>
             <Column>
               <Tile
                 className={
@@ -150,59 +201,6 @@ const Vitals = (props) => {
             <Column>
               <Tile
                 className={
-                  vitals.HeartRate?.abnormal ? "abnormal-tiles" : "vital-tiles"
-                }
-              >
-                <span className="vital-headers">{vitalsHeaders.heartRate}</span>
-                <span className="vital-values">
-                  {vitals.HeartRate?.value ? vitals.HeartRate?.value : "-"}{" "}
-                  <span className="vital-units">
-                    {vitals.HeartRate?.value ? vitalUnits.Pulse : " "}
-                  </span>{" "}
-                </span>
-              </Tile>
-            </Column>
-            <Column>
-              <Tile
-                className={
-                  vitals.RespiratoryRate?.abnormal
-                    ? "abnormal-tiles"
-                    : "vital-tiles"
-                }
-              >
-                <span className="vital-headers">
-                  {vitalsHeaders.respiratoryRate}
-                </span>
-                <span className="vital-values">
-                  {vitals.RespiratoryRate?.value
-                    ? vitals.RespiratoryRate?.value
-                    : "-"}{" "}
-                  <span className="vital-units">
-                    {vitals.RespiratoryRate?.value
-                      ? vitalUnits["Respiratory Rate"]
-                      : " "}
-                  </span>{" "}
-                </span>
-              </Tile>
-            </Column>
-            <Column>
-              <Tile
-                className={
-                  vitals.Weight?.abnormal ? "abnormal-tiles" : "vital-tiles"
-                }
-              >
-                <span className="vital-headers">{vitalsHeaders.weight}</span>
-                <span className="vital-values">
-                  {vitals.Weight?.value ? vitals.Weight?.value : "-"}{" "}
-                  <span className="vital-units">
-                    {vitals.Weight?.value ? vitalUnits.WEIGHT : " "}
-                  </span>{" "}
-                </span>
-              </Tile>
-            </Column>
-            <Column>
-              <Tile
-                className={
                   vitals.Height?.abnormal ? "abnormal-tiles" : "vital-tiles"
                 }
               >
@@ -218,14 +216,14 @@ const Vitals = (props) => {
             <Column>
               <Tile
                 className={
-                  vitals.SpO2?.abnormal ? "abnormal-tiles" : "vital-tiles"
+                  vitals.Weight?.abnormal ? "abnormal-tiles" : "vital-tiles"
                 }
               >
-                <span className="vitsal-headers">{vitalsHeaders.spO2}</span>
+                <span className="vital-headers">{vitalsHeaders.weight}</span>
                 <span className="vital-values">
-                  {vitals.SpO2?.value ? vitals.SpO2?.value : "-"}{" "}
+                  {vitals.Weight?.value ? vitals.Weight?.value : "-"}{" "}
                   <span className="vital-units">
-                    {vitals.SpO2?.value ? vitalUnits.SpO2 : " "}
+                    {vitals.Weight?.value ? vitalUnits.WEIGHT : " "}
                   </span>{" "}
                 </span>
               </Tile>
