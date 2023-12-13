@@ -23,6 +23,18 @@
       overflow: hidden;
     }
   }
+  .actionable-section {
+    display: flex;
+    align-items: center;
+  }
+  .red-tag {
+    color: #fff;
+    background-color: #da1e28;
+    min-width: 64px;
+  }
+  .red-text {
+    color: #da1e28;
+  }
   .medication-details {
     font-size: 12px;
   }
@@ -43,11 +55,14 @@
   }
   .notes-text-area {
     margin: 0 10px;
-    textarea {
-      padding: 0.6rem 1rem;
-    }
+  }
+  textarea {
+    padding: 0.6rem 1rem;
   }
   .bx--tag {
     margin: 0;
   }
+}
+.bx--overflow-menu-options {
+  z-index: 10000;
 }

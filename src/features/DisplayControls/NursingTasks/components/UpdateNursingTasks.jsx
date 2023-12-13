@@ -5,7 +5,14 @@ import "../styles/UpdateNursingTasks.scss";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
 import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import Clock from "../../../../icons/clock.svg";
-import { Toggle, Tag, TextArea } from "carbon-components-react";
+import {
+  Modal,
+  OverflowMenu,
+  OverflowMenuItem,
+  Toggle,
+  Tag,
+  TextArea,
+} from "carbon-components-react";
 import moment from "moment";
 import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
 
@@ -15,6 +22,11 @@ const UpdateNursingTasks = (props) => {
   const [errors, updateErrors] = useState({});
   const [showErrors, updateShowErrors] = useState(false);
   const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
+  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const [isAnyMedicationStopped, setIsAnyMedicationStopped] = useState(false);
+  const closeModal = () => {
+    setOpenConfirmationModal(false);
+  };
   const invalidTimeText24Hour = (
     <FormattedMessage
       id={"INVALID_TIME"}
@@ -64,6 +76,10 @@ const UpdateNursingTasks = (props) => {
       if (tasks[key].isSelected) {
         saveDisabled = false;
       }
+      if (tasks[key].stopped) {
+        saveDisabled = false;
+        setIsAnyMedicationStopped(true);
+      }
     });
     updateIsSaveDisabled(saveDisabled);
   };
@@ -105,7 +121,7 @@ const UpdateNursingTasks = (props) => {
     if (e.target.value) {
       delete errors[id];
     } else {
-      if (tasks[id].isTimeUpdated) {
+      if (tasks[id].isTimeUpdated || tasks[id].stopped) {
         updateErrors({
           ...errors,
           [id]: true,
@@ -131,18 +147,50 @@ const UpdateNursingTasks = (props) => {
           {medicationTasks[0].startTime}
         </div>
         {medicationTasks.map((medicationTask, index) => {
+          console.log(medicationTask);
           return (
             <div key={index} className={"nursing-task-section"}>
-              <Toggle
-                id={medicationTask.uuid}
-                size={"sm"}
-                labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
-                labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
-                onToggle={handleToggle}
-              />
+              <div className={"actionable-section"}>
+                <Toggle
+                  id={medicationTask.uuid}
+                  size={"sm"}
+                  labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
+                  labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
+                  onToggle={handleToggle}
+                />
+                <OverflowMenu flipped={true}>
+                  <OverflowMenuItem
+                    itemText={"Stop Drug"}
+                    onClick={() => {
+                      updateTasks({
+                        ...tasks,
+                        [medicationTask.uuid]: {
+                          ...tasks[medicationTask.uuid],
+                          stopped: true,
+                        },
+                      });
+                      if (!tasks[medicationTask.uuid].notes) {
+                        updateErrors({
+                          ...errors,
+                          [medicationTask.uuid]: true,
+                        });
+                      }
+                    }}
+                  />
+                </OverflowMenu>
+              </div>
               <div className={"medication-name"}>
-                <div className={"name"}>{medicationTask.drugName}</div>
+                <div
+                  className={`name ${
+                    tasks[medicationTask.uuid]?.stopped && "red-text"
+                  }`}
+                >
+                  {medicationTask.drugName}
+                </div>
                 <Tag type={"blue"}>Rx</Tag>
+                {tasks[medicationTask.uuid]?.stopped && (
+                  <Tag className={"red-tag"}>Stopped</Tag>
+                )}
               </div>
               <div className="medication-details">
                 <span>{medicationTask.dosage}</span>
@@ -151,25 +199,36 @@ const UpdateNursingTasks = (props) => {
                 )}
                 <span>&nbsp;-&nbsp;{medicationTask.drugRoute}</span>
               </div>
-              {tasks[medicationTask.uuid]?.actualTime && (
+              {(tasks[medicationTask.uuid]?.actualTime ||
+                tasks[medicationTask.uuid]?.stopped) && (
                 <div style={{ display: "flex" }}>
-                  <TimePicker24Hour
-                    defaultTime={tasks[medicationTask.uuid]?.actualTime.format(
-                      "HH:mm"
-                    )}
-                    onChange={(time) => {
-                      handleTimeChange(time, medicationTask.uuid);
-                    }}
-                    labelText="Task Time"
-                    invalidText={invalidTimeText24Hour}
-                    light={true}
-                  />
-                  <div className={"notes-text-area"}>
+                  {tasks[medicationTask.uuid]?.actualTime && (
+                    <TimePicker24Hour
+                      defaultTime={tasks[
+                        medicationTask.uuid
+                      ]?.actualTime.format("HH:mm")}
+                      onChange={(time) => {
+                        handleTimeChange(time, medicationTask.uuid);
+                      }}
+                      labelText="Task Time"
+                      invalidText={invalidTimeText24Hour}
+                      light={true}
+                    />
+                  )}
+                  <div
+                    className={`${
+                      Boolean(tasks[medicationTask.uuid]?.actualTime) &&
+                      "notes-text-area"
+                    }`}
+                  >
                     <TextArea
                       labelText={
                         <Title
                           text={"Notes"}
-                          isRequired={tasks[medicationTask.uuid].isTimeUpdated}
+                          isRequired={
+                            tasks[medicationTask.uuid].isTimeUpdated ||
+                            tasks[medicationTask.uuid].stopped
+                          }
                         />
                       }
                       onChange={(e) => {
@@ -177,7 +236,7 @@ const UpdateNursingTasks = (props) => {
                       }}
                       maxCount={250}
                       rows={1}
-                      cols={50}
+                      cols={60}
                       light={true}
                     />
                     {showErrors && errors[medicationTask.uuid] && (
@@ -195,9 +254,40 @@ const UpdateNursingTasks = (props) => {
           );
         })}
       </div>
+      <Modal
+        open={isAnyMedicationStopped && openConfirmationModal}
+        danger
+        onRequestClose={closeModal}
+        onSecondarySubmit={closeModal}
+        preventCloseOnClickOutside={true}
+        modalHeading={
+          <FormattedMessage
+            id={"STOP_DRUG_CONFIRMATION_TITLE"}
+            defaultMessage={"Stop Drug?"}
+          />
+        }
+        primaryButtonText={
+          <FormattedMessage id={"YES"} defaultMessage={"Stop Drug"} />
+        }
+        secondaryButtonText={
+          <FormattedMessage id={"NO"} defaultMessage={"Cancel"} />
+        }
+        onRequestSubmit={closeModal}
+      >
+        <FormattedMessage
+          id={"STOP_DRUG_CONFIRMATION_MESSAGE"}
+          defaultMessage={"Stop drug action cannot be reversed."}
+        />
+      </Modal>
       <SaveAndCloseButtons
         onSave={() => {
+          if (Object.keys(errors).length === 0) {
+            setOpenConfirmationModal(true);
+          }
           updateShowErrors(true);
+          setTimeout(() => {
+            updateShowErrors(false);
+          }, 3000);
         }}
         onClose={() => {
           updateNursingTasksSlider(false);
