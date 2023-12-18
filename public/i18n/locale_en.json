@@ -60,5 +60,6 @@
   "NO": "No",
   "TREATEMENTS_WARNING_MESSAGE": "You will lose the details entered. Do you want to continue?",
   "WARD_LIST_VIEW_TEXT": "Ward List View",
-  "STOPPED": "Stopped"
+  "STOPPED": "Stopped",
+  "NURSING_TASKS_CONFIRMATION": "Please confirm your nursing tasks"
 }

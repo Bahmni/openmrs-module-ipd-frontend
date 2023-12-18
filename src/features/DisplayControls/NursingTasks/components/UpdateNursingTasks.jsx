@@ -5,9 +5,10 @@ import "../styles/UpdateNursingTasks.scss";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
 import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import Clock from "../../../../icons/clock.svg";
-import { Toggle, Tag, TextArea } from "carbon-components-react";
+import { Toggle, Tag, TextArea, Modal, Notification } from "carbon-components-react";
 import moment from "moment";
 import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
+import SimpleStructuredList from "./StructuredList";
 
 const UpdateNursingTasks = (props) => {
   const { medicationTasks, updateNursingTasksSlider } = props;
@@ -15,12 +16,20 @@ const UpdateNursingTasks = (props) => {
   const [errors, updateErrors] = useState({});
   const [showErrors, updateShowErrors] = useState(false);
   const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
+  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const [isAnyMedicationAdministered, setIsAnyMedicationAdministered] =
+    useState(false);
+  const [administeredTasks, setAdministeredTasks] = useState({});
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const invalidTimeText24Hour = (
     <FormattedMessage
       id={"INVALID_TIME"}
       defaultMessage={"Please enter valid time"}
     />
   );
+  const closeModal = () => {
+    setOpenConfirmationModal(false);
+  };
   const getLabel = (time) => {
     return (
       <div>
@@ -35,8 +44,8 @@ const UpdateNursingTasks = (props) => {
       </div>
     );
   };
-
   useEffect(() => {
+    console.log("medication tasks", medicationTasks);
     medicationTasks.map((medicationTask) => {
       updateTasks((prev) => {
         return {
@@ -44,6 +53,7 @@ const UpdateNursingTasks = (props) => {
           [medicationTask.uuid]: {
             displayName: medicationTask.drugName,
             doseType: medicationTask.doseType,
+            dosage: medicationTask.dosage,
             route: medicationTask.drugRoute,
             startTime: medicationTask.startTime,
             isSelected: false,
@@ -63,12 +73,14 @@ const UpdateNursingTasks = (props) => {
     Object.keys(tasks).forEach((key) => {
       if (tasks[key].isSelected) {
         saveDisabled = false;
+        setIsAnyMedicationAdministered(true);
       }
     });
     updateIsSaveDisabled(saveDisabled);
   };
 
   const handleToggle = (checked, id) => {
+    console.log("tasks", tasks);
     updateTasks({
       ...tasks,
       [id]: {
@@ -113,6 +125,33 @@ const UpdateNursingTasks = (props) => {
       }
     }
   };
+
+  const handleSave = () => {
+    if (Object.keys(errors).length === 0) {
+      setOpenConfirmationModal(true);
+    }
+
+    updateShowErrors(true);
+
+    setTimeout(() => {
+      updateShowErrors(false);
+    }, 3000);
+
+    Object.keys(tasks).forEach((key) => {
+      if (tasks[key].isSelected) {
+        setAdministeredTasks((prev) => ({
+          ...prev,
+          [key]: { ...tasks[key], status: "COMPLETED" },
+        }));
+      }
+    });
+  };
+
+  const handlePrimaryButtonClick = () => {
+    setIsNotificationOpen(true);
+  };
+
+  console.log("administeredTasks", administeredTasks);
 
   return (
     <SideBarPanel
@@ -195,14 +234,51 @@ const UpdateNursingTasks = (props) => {
           );
         })}
       </div>
+      <Modal
+        open={isAnyMedicationAdministered && openConfirmationModal}
+        onRequestClose={closeModal}
+        onSecondarySubmit={closeModal}
+        preventCloseOnClickOutside={true}
+        modalHeading={
+          <FormattedMessage
+            id={"NURSING_TASKS_CONFIRMATION"}
+            defaultMessage={"Please confirm your nursing tasks"}
+          />
+        }
+        primaryButtonText={
+          <FormattedMessage
+            id={"DRUG_CHART_MODAL_SAVE"}
+            defaultMessage={"Save"}
+          />
+        }
+        secondaryButtonText={
+          <FormattedMessage
+            id={"DRUG_CHART_MODAL_CANCEL"}
+            defaultMessage={"Cancel"}
+          />
+        }
+        onRequestSubmit={handlePrimaryButtonClick}
+        // onRequestSubmit={closeModal}
+      >
+        <div className="divider"></div>
+        <SimpleStructuredList list={administeredTasks} />
+      </Modal>
       <SaveAndCloseButtons
-        onSave={() => {
-          updateShowErrors(true);
-        }}
+        onSave={handleSave}
         onClose={() => {
           updateNursingTasksSlider(false);
         }}
         isSaveDisabled={isSaveDisabled}
+      />
+      <Notification
+        kind="success" // Adjust the kind based on your notification type (success, error, etc.)
+        title="Notification Title"
+        subtitle="Notification Subtitle"
+        caption="Additional caption information"
+        onClose={handleNotificationClose}
+        timeout={3000} // Set the timeout for auto-closing the notification (optional)
+        hideCloseButton={false} // Set to true if you want to hide the close button
+        open={isNotificationOpen}
       />
     </SideBarPanel>
   );

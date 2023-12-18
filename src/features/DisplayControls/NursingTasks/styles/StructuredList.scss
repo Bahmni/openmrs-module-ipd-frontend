@@ -1,0 +1,21 @@
+.bx--structured-list{
+    margin: 0;
+}
+
+.bx--structured-list-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.bx--structured-list-td {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-cell {
+  --day-border: 0px !important;
+}
+
