@@ -11,6 +11,13 @@
   }
 }
 
+.no-hover {
+  cursor: not-allowed;
+  &:hover {
+    background-color: #edf8e6;
+  }
+}
+
 .relevant-task-tile {
   background-color: #e3fed1;
 
@@ -34,6 +41,17 @@
 
 .tile-content {
   padding: 10px;
+}
+
+.red-text {
+  color: #da1e28;
+}
+
+.red-tag {
+  color: #fff;
+  background-color: #da1e28;
+  min-width: 64px;
+  margin: 4px 0;
 }
 
 .tile-title {

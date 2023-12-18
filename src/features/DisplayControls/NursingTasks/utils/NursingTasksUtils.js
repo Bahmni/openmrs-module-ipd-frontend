@@ -47,6 +47,7 @@ export const ExtractMedicationNursingTasksData = (
         doseType,
         uuid,
         startTimeInEpochSeconds: startTime,
+        stopTime: order.dateStopped,
         startTime: startTimeInDate.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -62,7 +63,7 @@ export const ExtractMedicationNursingTasksData = (
   let currentGroup = [];
 
   extractedData.forEach((item) => {
-    if (item.startTime !== currentStartTime) {
+    if (item.startTime !== currentStartTime && !item.stopTime) {
       if (currentGroup.length > 0) {
         groupedData.push(currentGroup);
       }

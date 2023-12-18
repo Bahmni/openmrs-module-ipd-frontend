@@ -113,32 +113,41 @@ const Treatments = (props) => {
 
   const setDosingInstructions = (drugOrder) => {
     return (
-      drugOrder.dosingInstructions.dose +
-      " " +
-      drugOrder.dosingInstructions.doseUnits +
-      " - " +
-      drugOrder.dosingInstructions.route +
-      " - " +
-      drugOrder.dosingInstructions.frequency +
-      " - for " +
-      drugOrder.duration +
-      " " +
-      drugOrder.durationUnits
+      <div className={`${drugOrder.dateStopped && "strike-through"}`}>
+        {drugOrder.dosingInstructions.dose +
+          " " +
+          drugOrder.dosingInstructions.doseUnits +
+          " - " +
+          drugOrder.dosingInstructions.route +
+          " - " +
+          drugOrder.dosingInstructions.frequency +
+          " - for " +
+          drugOrder.duration +
+          " " +
+          drugOrder.durationUnits}
+      </div>
     );
   };
 
   const modifyTreatmentData = (drugOrders) => {
     const treatments = drugOrders.visitDrugOrders
       .filter((drugOrder) => isIPDDrugOrder(drugOrder))
-      .filter((drugOrder) => drugOrder.dateStopped === null)
+      // .filter((drugOrder) => drugOrder.dateStopped === null)
       .map((drugOrder) => {
         return {
           id: drugOrder.uuid,
           startDate: formatDate(drugOrder.effectiveStartDate, "DD/MM/YYYY"),
           drugName: getDrugName(drugOrder),
           dosageDetails: setDosingInstructions(drugOrder),
-          prescribedBy: drugOrder.provider.name,
-          actions: (
+          providerName: drugOrder.provider.name,
+          status: (
+            <span className={`${drugOrder.dateStopped && "red-text"}`}>
+              {drugOrder.dateStopped && (
+                <FormattedMessage id="STOPPED" defaultMessage="Stopped" />
+              )}
+            </span>
+          ),
+          actions: !drugOrder.dateStopped && (
             <Link onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}>
               {AddToDrugChart}
             </Link>
@@ -161,7 +170,7 @@ const Treatments = (props) => {
         additionalInstructions: treatment.additionalData.additionalInstructions,
         recordedDate: treatment.additionalData.recordedDate,
         recordedTime: treatment.additionalData.recordedTime,
-        provider: treatment.prescribedBy,
+        provider: treatment.providerName,
       };
     });
     setTreatments(treatments);
@@ -169,6 +178,7 @@ const Treatments = (props) => {
   };
 
   const getDrugName = (drugOrder) => {
+    // console.log(drugOrder);
     if (
       drugOrder.drug &&
       (drugOrder.instructions || drugOrder.additionalInstructions)
@@ -176,7 +186,11 @@ const Treatments = (props) => {
       return (
         <div className="notes-icon-div">
           <NotesIcon className="notes-icon" />
-          <span className="drug-name">{drugOrder.drug.name}</span>
+          <span
+            className={`drug-name ${drugOrder.dateStopped && "strike-through"}`}
+          >
+            {drugOrder.drug.name}
+          </span>
         </div>
       );
     } else if (drugOrder.drug) return drugOrder.drug.name;
