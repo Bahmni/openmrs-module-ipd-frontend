@@ -66,6 +66,7 @@ export const ExtractMedicationNursingTasksData = (
           minute: "2-digit",
           hourCycle: "h23",
         }),
+        orderId: order.orderId,
       };
 
       if (order.dateStopped) {
@@ -96,7 +97,7 @@ export const ExtractMedicationNursingTasksData = (
       ) {
         pendingExtractedData.push(slotInfo);
       }
-    });
+      });
   });
 
   pendingExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));

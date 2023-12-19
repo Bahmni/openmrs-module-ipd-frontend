@@ -173,6 +173,7 @@ export default function NursingTasks(props) {
           <UpdateNursingTasks
             medicationTasks={selectedMedicationTask}
             updateNursingTasksSlider={updateNursingTasksSlider}
+            patientId={patientId}
           />
         )}
         {isSliderOpen.emergencyTasks && (

@@ -5,13 +5,14 @@ import "../styles/UpdateNursingTasks.scss";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
 import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import Clock from "../../../../icons/clock.svg";
-import { Toggle, Tag, TextArea, Modal, Notification } from "carbon-components-react";
+import { Toggle, Tag, TextArea, Modal } from "carbon-components-react";
 import moment from "moment";
 import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
 import SimpleStructuredList from "./StructuredList";
+import DrugChartSliderNotification from "../../../DrugChartSlider/components/DrugChartSliderNotification";
 
 const UpdateNursingTasks = (props) => {
-  const { medicationTasks, updateNursingTasksSlider } = props;
+  const { medicationTasks, updateNursingTasksSlider, patientId } = props;
   const [tasks, updateTasks] = useState({});
   const [errors, updateErrors] = useState({});
   const [showErrors, updateShowErrors] = useState(false);
@@ -30,6 +31,33 @@ const UpdateNursingTasks = (props) => {
   const closeModal = () => {
     setOpenConfirmationModal(false);
   };
+
+  const handlePrimaryButtonClick = () => {
+    setIsNotificationOpen(true);
+    setOpenConfirmationModal(false);
+    createAdministeredTasksPayload();
+  };
+
+  const createAdministeredTasksPayload = () => {
+    const administeredTasksPayload = [];
+    Object.keys(administeredTasks).forEach((key) => {
+      const time = new Date(tasks[key].actualTime);
+      const utcTimeEpoch = moment.utc(time).unix();
+
+      administeredTasksPayload.push({
+        patientUuid: patientId,
+        orderUuid: administeredTasks[key].orderId,
+        providerUuid: administeredTasks[key].providerId,
+        notes: administeredTasks[key]?.notes,
+        status: administeredTasks[key].status,
+        slotUuid: key,
+        effectiveDateTime: utcTimeEpoch,
+      });
+    });
+    console.log("administeredTasksPayload", administeredTasksPayload);
+    return administeredTasksPayload;
+  };
+
   const getLabel = (time) => {
     return (
       <div>
@@ -58,6 +86,8 @@ const UpdateNursingTasks = (props) => {
             startTime: medicationTask.startTime,
             isSelected: false,
             actualTime: null,
+            providerId: medicationTask.providerId,
+            orderId: medicationTask.orderId,
           },
         };
       });
@@ -141,146 +171,142 @@ const UpdateNursingTasks = (props) => {
       if (tasks[key].isSelected) {
         setAdministeredTasks((prev) => ({
           ...prev,
-          [key]: { ...tasks[key], status: "COMPLETED" },
+          [key]: { ...tasks[key], status: "completed" },
         }));
       }
     });
   };
 
-  const handlePrimaryButtonClick = () => {
-    setIsNotificationOpen(true);
-  };
-
   console.log("administeredTasks", administeredTasks);
 
   return (
-    <SideBarPanel
-      title={<FormattedMessage id="TASKS" defaultMessage={"Task(s)"} />}
-      closeSideBar={() => {
-        updateNursingTasksSlider(false);
-      }}
-    >
-      <div className={"update-nursing-tasks"}>
-        <div className={"task-heading"}>
-          <FormattedMessage
-            id={"SCHEDULED_FOR_KEY"}
-            defaultMessage={"Scheduled for"}
-          />
-          <Clock />
-          {medicationTasks[0].startTime}
-        </div>
-        {medicationTasks.map((medicationTask, index) => {
-          return (
-            <div key={index} className={"nursing-task-section"}>
-              <Toggle
-                id={medicationTask.uuid}
-                size={"sm"}
-                labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
-                labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
-                onToggle={handleToggle}
-              />
-              <div className={"medication-name"}>
-                <div className={"name"}>{medicationTask.drugName}</div>
-                <Tag type={"blue"}>Rx</Tag>
-              </div>
-              <div className="medication-details">
-                <span>{medicationTask.dosage}</span>
-                {medicationTask.doseType && (
-                  <span>&nbsp;-&nbsp;{medicationTask.doseType}</span>
-                )}
-                <span>&nbsp;-&nbsp;{medicationTask.drugRoute}</span>
-              </div>
-              {tasks[medicationTask.uuid]?.actualTime && (
-                <div style={{ display: "flex" }}>
-                  <TimePicker24Hour
-                    defaultTime={tasks[medicationTask.uuid]?.actualTime.format(
-                      "HH:mm"
-                    )}
-                    onChange={(time) => {
-                      handleTimeChange(time, medicationTask.uuid);
-                    }}
-                    labelText="Task Time"
-                    invalidText={invalidTimeText24Hour}
-                    light={true}
-                  />
-                  <div className={"notes-text-area"}>
-                    <TextArea
-                      labelText={
-                        <Title
-                          text={"Notes"}
-                          isRequired={tasks[medicationTask.uuid].isTimeUpdated}
-                        />
-                      }
-                      onChange={(e) => {
-                        handleNotes(e, medicationTask.uuid);
-                      }}
-                      maxCount={250}
-                      rows={1}
-                      cols={50}
-                      light={true}
-                    />
-                    {showErrors && errors[medicationTask.uuid] && (
-                      <div className={"error"}>
-                        <FormattedMessage
-                          id={"NOTES_ERROR_MESSAGE"}
-                          defaultMessage={"Please enter notes"}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-      <Modal
-        open={isAnyMedicationAdministered && openConfirmationModal}
-        onRequestClose={closeModal}
-        onSecondarySubmit={closeModal}
-        preventCloseOnClickOutside={true}
-        modalHeading={
-          <FormattedMessage
-            id={"NURSING_TASKS_CONFIRMATION"}
-            defaultMessage={"Please confirm your nursing tasks"}
-          />
-        }
-        primaryButtonText={
-          <FormattedMessage
-            id={"DRUG_CHART_MODAL_SAVE"}
-            defaultMessage={"Save"}
-          />
-        }
-        secondaryButtonText={
-          <FormattedMessage
-            id={"DRUG_CHART_MODAL_CANCEL"}
-            defaultMessage={"Cancel"}
-          />
-        }
-        onRequestSubmit={handlePrimaryButtonClick}
-        // onRequestSubmit={closeModal}
-      >
-        <div className="divider"></div>
-        <SimpleStructuredList list={administeredTasks} />
-      </Modal>
-      <SaveAndCloseButtons
-        onSave={handleSave}
-        onClose={() => {
+    <>
+      <SideBarPanel
+        title={<FormattedMessage id="TASKS" defaultMessage={"Task(s)"} />}
+        closeSideBar={() => {
           updateNursingTasksSlider(false);
         }}
-        isSaveDisabled={isSaveDisabled}
-      />
-      <Notification
-        kind="success" // Adjust the kind based on your notification type (success, error, etc.)
-        title="Notification Title"
-        subtitle="Notification Subtitle"
-        caption="Additional caption information"
-        onClose={handleNotificationClose}
-        timeout={3000} // Set the timeout for auto-closing the notification (optional)
-        hideCloseButton={false} // Set to true if you want to hide the close button
-        open={isNotificationOpen}
-      />
-    </SideBarPanel>
+      >
+        <div className={"update-nursing-tasks"}>
+          <div className={"task-heading"}>
+            <FormattedMessage
+              id={"SCHEDULED_FOR_KEY"}
+              defaultMessage={"Scheduled for"}
+            />
+            <Clock />
+            {medicationTasks[0].startTime}
+          </div>
+          {medicationTasks.map((medicationTask, index) => {
+            return (
+              <div key={index} className={"nursing-task-section"}>
+                <Toggle
+                  id={medicationTask.uuid}
+                  size={"sm"}
+                  labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
+                  labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
+                  onToggle={handleToggle}
+                />
+                <div className={"medication-name"}>
+                  <div className={"name"}>{medicationTask.drugName}</div>
+                  <Tag type={"blue"}>Rx</Tag>
+                </div>
+                <div className="medication-details">
+                  <span>{medicationTask.dosage}</span>
+                  {medicationTask.doseType && (
+                    <span>&nbsp;-&nbsp;{medicationTask.doseType}</span>
+                  )}
+                  <span>&nbsp;-&nbsp;{medicationTask.drugRoute}</span>
+                </div>
+                {tasks[medicationTask.uuid]?.actualTime && (
+                  <div style={{ display: "flex" }}>
+                    <TimePicker24Hour
+                      defaultTime={tasks[
+                        medicationTask.uuid
+                      ]?.actualTime.format("HH:mm")}
+                      onChange={(time) => {
+                        handleTimeChange(time, medicationTask.uuid);
+                      }}
+                      labelText="Task Time"
+                      invalidText={invalidTimeText24Hour}
+                      light={true}
+                    />
+                    <div className={"notes-text-area"}>
+                      <TextArea
+                        labelText={
+                          <Title
+                            text={"Notes"}
+                            isRequired={
+                              tasks[medicationTask.uuid].isTimeUpdated
+                            }
+                          />
+                        }
+                        onChange={(e) => {
+                          handleNotes(e, medicationTask.uuid);
+                        }}
+                        maxCount={250}
+                        rows={1}
+                        cols={50}
+                        light={true}
+                      />
+                      {showErrors && errors[medicationTask.uuid] && (
+                        <div className={"error"}>
+                          <FormattedMessage
+                            id={"NOTES_ERROR_MESSAGE"}
+                            defaultMessage={"Please enter notes"}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <Modal
+          open={isAnyMedicationAdministered && openConfirmationModal}
+          onRequestClose={closeModal}
+          onSecondarySubmit={closeModal}
+          preventCloseOnClickOutside={true}
+          modalHeading={
+            <FormattedMessage
+              id={"NURSING_TASKS_CONFIRMATION"}
+              defaultMessage={"Please confirm your nursing tasks"}
+            />
+          }
+          primaryButtonText={
+            <FormattedMessage
+              id={"DRUG_CHART_MODAL_SAVE"}
+              defaultMessage={"Save"}
+            />
+          }
+          secondaryButtonText={
+            <FormattedMessage
+              id={"DRUG_CHART_MODAL_CANCEL"}
+              defaultMessage={"Cancel"}
+            />
+          }
+          onRequestSubmit={handlePrimaryButtonClick}
+          // onRequestSubmit={closeModal}
+        >
+          <div className="divider"></div>
+          <SimpleStructuredList list={administeredTasks} />
+        </Modal>
+        <SaveAndCloseButtons
+          onSave={handleSave}
+          onClose={() => {
+            updateNursingTasksSlider(false);
+          }}
+          isSaveDisabled={isSaveDisabled}
+        />
+      </SideBarPanel>
+      {isNotificationOpen && (
+        <DrugChartSliderNotification
+          hostData={{ notificationKind: "success" }}
+          hostApi={{ onClose: () => setIsNotificationOpen(false) }}
+        />
+      )}
+    </>
   );
 };
 UpdateNursingTasks.propTypes = {

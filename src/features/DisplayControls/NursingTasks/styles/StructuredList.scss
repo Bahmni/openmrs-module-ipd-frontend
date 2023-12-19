@@ -1,11 +1,12 @@
-.bx--structured-list{
-    margin: 0;
+.bx--structured-list {
+  margin: 0;
 }
 
 .bx--structured-list-row {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 }
 
 .bx--structured-list-td {
@@ -19,3 +20,9 @@
   --day-border: 0px !important;
 }
 
+.drug-name-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px !important;
+}

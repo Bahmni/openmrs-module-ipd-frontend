@@ -21,7 +21,7 @@ const SimpleStructuredList = ({ list }) => {
       startTime: "16:00",
       isSelected: true,
       actualTime: "2023-12-15T12:30:21.731Z",
-      status: "COMPLETED",
+      status: "completed",
     },
     "c5b7f756-52a9-4eda-80c5-672272487a44": {
       displayName: "Liquid Paraffin",
@@ -31,7 +31,7 @@ const SimpleStructuredList = ({ list }) => {
       startTime: "16:00",
       isSelected: true,
       actualTime: "2023-12-15T12:30:20.785Z",
-      status: "COMPLETED",
+      status: "completed",
     },
   };
 
@@ -46,11 +46,11 @@ const SimpleStructuredList = ({ list }) => {
   };
 
   const getMedicationStatus = (status) => {
-    return status === "COMPLETED" ? "Done" : "";
+    return status === "completed" ? "Done" : "";
   };
 
   const getStatusIcon = (status) => {
-    return status === "COMPLETED" ? <DoneIcon className="done-icon" /> : "";
+    return status === "completed" ? <DoneIcon className="done-icon" /> : "";
   };
 
   return (
@@ -59,7 +59,7 @@ const SimpleStructuredList = ({ list }) => {
         {Object.keys(list).map((key, index) => {
           return (
             <StructuredListRow key={index}>
-              <StructuredListCell>
+              <StructuredListCell className="drug-name-cell">
                 <div>{list[key].displayName}</div>
                 <div>{getMedicationDetails(list[key])}</div>
               </StructuredListCell>
