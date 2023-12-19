@@ -319,11 +319,8 @@ const DrugChartSlider = (props) => {
 
   useEffect(() => {
     if (isAutoFill) {
-      // const newScheduleTiming = ["8:00", "8:30","9:00","9:30"];
       const scheduleTimings = enable24HourTimers
-        ? // ? newScheduleTiming
-          // : newScheduleTiming.map((time) => moment(time, "hh:mm A"));
-          enableSchedule?.scheduleTiming
+        ? enableSchedule?.scheduleTiming
         : enableSchedule?.scheduleTiming.map((time) => moment(time, "hh:mm A"));
       let finalScheduleCount = 0;
       scheduleTimings.forEach((schedule) => {
