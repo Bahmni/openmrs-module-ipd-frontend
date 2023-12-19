@@ -1,5 +1,8 @@
 import axios from "axios";
-import { MEDICATIONS_BASE_URL } from "../../../../constants";
+import {
+  MEDICATIONS_BASE_URL,
+  ADMINISTERED_MEDICATIONS_BASE_URL,
+} from "../../../../constants";
 import moment from "moment";
 
 export const fetchMedicationNursingTasks = async (patientUuid, forDate) => {
@@ -67,6 +70,7 @@ export const ExtractMedicationNursingTasksData = (
           hourCycle: "h23",
         }),
         orderId: order.orderId,
+        // order: order,
       };
 
       if (order.dateStopped) {
@@ -130,4 +134,17 @@ export const ExtractMedicationNursingTasksData = (
     groupedData.push(...stoppedExtractedData.map((item) => [item]));
   }
   return groupedData;
+};
+
+export const saveAdministeredMedication = async (administeredMedication) => {
+  try {
+    console.log("try method")
+    const response = await axios.post(
+      ADMINISTERED_MEDICATIONS_BASE_URL,
+      administeredMedication
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
 };
