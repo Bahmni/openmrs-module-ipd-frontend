@@ -341,18 +341,16 @@ const DrugChartSlider = (props) => {
         finalScheduleCount === enableSchedule?.frequencyPerDay
       ) {
         const currentTime = moment().format("HH:mm");
-        const getUpdatedFirstDaySchedules = (num) => {
+        const getUpdatedFirstDaySchedules = () => {
           const updatedSchedule = Array.from(
-            { length: num - 1 },
+            { length: finalScheduleCount - 1 },
             () => "hh:mm"
           );
           updatedSchedule.push(currentTime.toString());
           return updatedSchedule;
         };
-        const updatedFirstDaySchedules = getUpdatedFirstDaySchedules(
-          enableSchedule?.frequencyPerDay
-        );
-        setFirstDaySlotsMissed(enableSchedule?.frequencyPerDay - 1);
+        const updatedFirstDaySchedules = getUpdatedFirstDaySchedules();
+        setFirstDaySlotsMissed(finalScheduleCount - 1);
         setFirstDaySchedules(updatedFirstDaySchedules);
 
         setFinalDaySchedules(scheduleTimings.slice(firstDaySlotsMissed) || []);
