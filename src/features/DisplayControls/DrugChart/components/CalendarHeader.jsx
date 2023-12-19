@@ -1,8 +1,9 @@
 import React from "react";
 import "../styles/CalendarHeader.scss";
+import { currentShiftHoursArray } from "../utils/DrugChartUtils";
 
 export default function CalendarHeader() {
-  const hours = [...Array(24).keys()];
+  const hours = currentShiftHoursArray();
 
   return (
     <div className="calendar-header">

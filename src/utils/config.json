@@ -44,7 +44,8 @@
     },
     "drugChart": {
       "timeInMinutesFromNowToShowPastTaskAsLate": 60,
-      "timeInMinutesFromStartTimeToShowAdministeredTaskAsLate": 30
+      "timeInMinutesFromStartTimeToShowAdministeredTaskAsLate": 30,
+      "shiftHours": 8
     }
   }
 }

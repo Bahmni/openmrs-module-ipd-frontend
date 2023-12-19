@@ -142,3 +142,32 @@ export const TransformDrugChartData = (drugChartData) => {
   });
   return [slotDataByOrder, drugOrderData];
 };
+
+export const currentShiftHoursArray = () => {
+  const shiftTimeInHours = drugChart.shiftHours;
+  const rangeArray = [];
+  for (let i = 0; i < 24; i += shiftTimeInHours) {
+    rangeArray.push(`${i}-${i + (shiftTimeInHours - 1)}`);
+  }
+
+  // finding the current hour range
+  const currentDate = new Date();
+  const currentHour = currentDate.getHours();
+  let currentRange = rangeArray[0];
+  rangeArray.forEach((range) => {
+    const rangeLimits = range.split("-");
+    if (currentHour >= rangeLimits[0] && currentHour <= rangeLimits[1]) {
+      currentRange = range;
+    }
+  });
+
+  const currentShiftHoursArray = [];
+  const currentRangeArray = currentRange.split("-");
+  const lowestHour = parseInt(currentRangeArray[0]);
+  const highestHour = parseInt(currentRangeArray[1]);
+
+  for (let i = lowestHour; i <= highestHour; i++) {
+    currentShiftHoursArray.push(i);
+  }
+  return currentShiftHoursArray;
+};

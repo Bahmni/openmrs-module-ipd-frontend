@@ -12,54 +12,6 @@ exports[`CalendarHeader should match snapshot 1`] = `
         class="hour-header"
         data-testid="hour"
       >
-        00:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        01:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        02:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        03:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        04:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        05:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        06:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        07:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
         08:00
       </div>
       <div
@@ -103,54 +55,6 @@ exports[`CalendarHeader should match snapshot 1`] = `
         data-testid="hour"
       >
         15:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        16:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        17:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        18:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        19:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        20:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        21:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        22:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        23:00
       </div>
     </div>
   </div>

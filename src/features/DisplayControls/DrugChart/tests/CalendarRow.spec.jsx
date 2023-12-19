@@ -20,6 +20,8 @@ describe("CalendarRow", () => {
         minutes: 0,
         status: "Late",
         administrationInfo: "Dr. Jane Doe [14:00]",
+        doHighlightCell: false,
+        highlightedCell: "right",
       },
     };
     render(<CalendarRow rowData={rowData} />);
@@ -28,6 +30,8 @@ describe("CalendarRow", () => {
       minutes: 0,
       status: "Late",
       administrationInfo: "Dr. Jane Doe [14:00]",
+      doHighlightCell: false,
+      highlightedCell: "right",
     });
   });
 });
