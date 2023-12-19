@@ -263,7 +263,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("Should show pre-filled timing in the schedule fields if the schedule time is provided from config", async () => {
-    MockDate.set("2010-12-22T00:00:00.000+0530");
+    MockDate.set("2010-12-22T00:00:00+00:00");
     render(
       <SliderContext.Provider value={mockSliderContext}>
         <DrugChartSlider
@@ -283,6 +283,32 @@ describe("DrugChartSlider", () => {
       expect(startTimeInputs).toBeDefined();
       expect(startTimeInputs[0].value).toBe("8:00");
       expect(startTimeInputs[1].value).toBe("16:00");
+    });
+    MockDate.reset();
+  });
+
+  it("Should show timing in the schedule fields as hh:mm if the schedule time provided from config is passed", async () => {
+    MockDate.set("2010-12-22T00:00:00.000+0530");
+    render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            enable24HourTimers: true,
+            scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockScheduleDrugOrder,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      const startTimeInputs = document.querySelectorAll("#time-selector");
+      expect(startTimeInputs).toBeDefined();
+      expect(startTimeInputs[0].value).toBe("hh:mm");
+      expect(startTimeInputs[0]).not.toHaveStyle("cursor: pointer");
+      expect(startTimeInputs[1].value).toBe("18:30");
     });
     MockDate.reset();
   });

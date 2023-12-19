@@ -334,11 +334,26 @@ const DrugChartSlider = (props) => {
       });
       setSchedules(scheduleTimings || []);
       finalScheduleCount > 0 &&
+        finalScheduleCount !== enableSchedule?.frequencyPerDay &&
         setFinalDaySchedules(scheduleTimings.slice(firstDaySlotsMissed) || []);
-      if (finalScheduleCount == enableSchedule?.frequencyPerDay) {
-        setFirstDaySchedules([]);
-        setFinalDaySchedules([]);
-        setFirstDaySlotsMissed(0);
+      if (
+        finalScheduleCount > 0 &&
+        finalScheduleCount === enableSchedule?.frequencyPerDay
+      ) {
+        const currentTime = moment().format("HH:mm");
+        const getUpdatedFirstDaySchedules = () => {
+          const updatedSchedule = Array.from(
+            { length: finalScheduleCount - 1 },
+            () => "hh:mm"
+          );
+          updatedSchedule.push(currentTime.toString());
+          return updatedSchedule;
+        };
+        const updatedFirstDaySchedules = getUpdatedFirstDaySchedules();
+        setFirstDaySlotsMissed(finalScheduleCount - 1);
+        setFirstDaySchedules(updatedFirstDaySchedules);
+
+        setFinalDaySchedules(scheduleTimings.slice(firstDaySlotsMissed) || []);
       }
     } else {
       const defaultSchedules = Array.from(
