@@ -319,8 +319,11 @@ const DrugChartSlider = (props) => {
 
   useEffect(() => {
     if (isAutoFill) {
+      // const newScheduleTiming = ["8:00", "8:30","9:00","9:30"];
       const scheduleTimings = enable24HourTimers
-        ? enableSchedule?.scheduleTiming
+        ? // ? newScheduleTiming
+          // : newScheduleTiming.map((time) => moment(time, "hh:mm A"));
+          enableSchedule?.scheduleTiming
         : enableSchedule?.scheduleTiming.map((time) => moment(time, "hh:mm A"));
       let finalScheduleCount = 0;
       scheduleTimings.forEach((schedule) => {
@@ -334,11 +337,28 @@ const DrugChartSlider = (props) => {
       });
       setSchedules(scheduleTimings || []);
       finalScheduleCount > 0 &&
+        finalScheduleCount !== enableSchedule?.frequencyPerDay &&
         setFinalDaySchedules(scheduleTimings.slice(firstDaySlotsMissed) || []);
-      if (finalScheduleCount == enableSchedule?.frequencyPerDay) {
-        setFirstDaySchedules([]);
-        setFinalDaySchedules([]);
-        setFirstDaySlotsMissed(0);
+      if (
+        finalScheduleCount > 0 &&
+        finalScheduleCount === enableSchedule?.frequencyPerDay
+      ) {
+        const currentTime = moment().format("HH:mm");
+        const getUpdatedFirstDaySchedules = (num) => {
+          const updatedSchedule = Array.from(
+            { length: num - 1 },
+            () => "hh:mm"
+          );
+          updatedSchedule.push(currentTime.toString());
+          return updatedSchedule;
+        };
+        const updatedFirstDaySchedules = getUpdatedFirstDaySchedules(
+          enableSchedule?.frequencyPerDay
+        );
+        setFirstDaySlotsMissed(enableSchedule?.frequencyPerDay - 1);
+        setFirstDaySchedules(updatedFirstDaySchedules);
+
+        setFinalDaySchedules(scheduleTimings.slice(firstDaySlotsMissed) || []);
       }
     } else {
       const defaultSchedules = Array.from(
