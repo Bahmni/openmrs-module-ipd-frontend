@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import "../styles/NursingTasks.scss";
 import { Add16 } from "@carbon/icons-react";
+import { items } from "../../../../constants";
 
 import {
   fetchMedicationNursingTasks,
@@ -23,11 +24,6 @@ export default function NursingTasks(props) {
   const [isLoading, setIsLoading] = useState(true);
   const { isSliderOpen, updateSliderOpen } = useContext(SliderContext);
   const [selectedMedicationTask, setSelectedMedicationTask] = useState([]);
-  const items = [
-    { id: "allTasks", text: "All Tasks" },
-    { id: "completed", text: "Completed" },
-    { id: "pending", text: "Pending" }
-  ];
   const [filterValue, setFilterValue] = useState(items[2]);
   const updateNursingTasksSlider = (value) => {
     updateSliderOpen((prev) => {
@@ -71,7 +67,10 @@ export default function NursingTasks(props) {
     const nursingTasks = await fetchMedicationNursingTasks(patientId, forDate);
     setNursingTasks(nursingTasks);
     if (nursingTasks) {
-      const extractedData = ExtractMedicationNursingTasksData(nursingTasks, filterValue);
+      const extractedData = ExtractMedicationNursingTasksData(
+        nursingTasks,
+        filterValue
+      );
       setMedicationNursingTasks(extractedData);
       setIsLoading(false);
     }
@@ -81,7 +80,9 @@ export default function NursingTasks(props) {
   }, []);
 
   useEffect(() => {
-    setMedicationNursingTasks(ExtractMedicationNursingTasksData(nursingTasks, filterValue));
+    setMedicationNursingTasks(
+      ExtractMedicationNursingTasksData(nursingTasks, filterValue)
+    );
   }, [filterValue]);
   const showCurrentDate = () => {
     var currentDate = new Date();
@@ -125,8 +126,12 @@ export default function NursingTasks(props) {
               size="lg"
               selectedItem={filterValue}
               items={items}
-              itemToString={item => (item ? item.text : '')}
-              onChange={(event) => {event.selectedItem ? setFilterValue(event.selectedItem) : setFilterValue(items[2])}}
+              itemToString={(item) => (item ? item.text : "")}
+              onChange={(event) => {
+                event.selectedItem
+                  ? setFilterValue(event.selectedItem)
+                  : setFilterValue(items[2]);
+              }}
             />
             <Button
               kind={"tertiary"}
@@ -157,9 +162,13 @@ export default function NursingTasks(props) {
           />
         )}
         {medicationNursingTasks && medicationNursingTasks.length === 0 ? (
-          <div className="no-nursing-tasks">{ filterValue.id === "completed" ?  NoNursingTasksMessageForCompleted : 
-            (filterValue.id === "pending" ? NoNursingTasksMessageForPending : NoNursingTasksMessage)
-          }</div>
+          <div className="no-nursing-tasks">
+            {filterValue.id === "completed"
+              ? NoNursingTasksMessageForCompleted
+              : filterValue.id === "pending"
+              ? NoNursingTasksMessageForPending
+              : NoNursingTasksMessage}
+          </div>
         ) : (
           <div className="nursing-task-tiles-container">{showTaskTiles()}</div>
         )}
