@@ -15,14 +15,23 @@ export const fetchMedicationNursingTasks = async (patientUuid, forDate) => {
 export const GetUTCEpochForDate = (viewDate) => moment.utc(viewDate).unix();
 
 export const ExtractMedicationNursingTasksData = (
-  medicationNursingTasksData
+  medicationNursingTasksData,
+  filterValue
 ) => {
-  const extractedData = [];
+  const extractedData = [],
+    pendingExtractedData = [],
+    completedExtractedData = [];
   medicationNursingTasksData.forEach((item) => {
     const { slots } = item;
 
     slots.forEach((slot) => {
-      const { startTime, uuid, order } = slot;
+      const { startTime, uuid, order, medicationAdministration } = slot;
+      const administeredDateTime =
+        slot.status === "COMPLETED"
+          ? medicationAdministration.administeredDateTime !== null
+            ? medicationAdministration.administeredDateTime
+            : ""
+          : "";
       const drugName = order.drug.display;
       const drugRoute = order.route.display;
       let duration, dosage, doseType;
@@ -39,7 +48,11 @@ export const ExtractMedicationNursingTasksData = (
         dosage = order.dose + order.doseUnits.display;
       }
       const startTimeInDate = new Date(startTime * 1000);
-      extractedData.push({
+      let administeredTimeInDate = "";
+      if (administeredDateTime !== "")
+        administeredTimeInDate = new Date(administeredDateTime * 1000);
+
+      const slotInfo = {
         drugName,
         drugRoute,
         duration,
@@ -53,10 +66,38 @@ export const ExtractMedicationNursingTasksData = (
           minute: "2-digit",
           hourCycle: "h23",
         }),
-      });
+      };
+
+      if (
+        (filterValue.id === "completed" && slot.status === "COMPLETED") ||
+        (filterValue.id === "allTasks" && slot.status === "COMPLETED")
+      ) {
+        completedExtractedData.push({
+          ...slotInfo,
+          administeredTimeInEpochSeconds: administeredDateTime,
+          administeredTime:
+            administeredTimeInDate !== ""
+              ? administeredTimeInDate.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hourCycle: "h23",
+                })
+              : "",
+        });
+      } else if (
+        (filterValue.id === "pending" && slot.status === "SCHEDULED") ||
+        (filterValue.id === "allTasks" && slot.status === "SCHEDULED")
+      ) {
+        pendingExtractedData.push(slotInfo);
+      }
     });
   });
-  extractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+  pendingExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
+  completedExtractedData.sort((a, b) =>
+    a.administeredTime.localeCompare(b.administeredTime)
+  );
+  extractedData.push(...pendingExtractedData, ...completedExtractedData);
 
   const groupedData = [];
   let currentStartTime = null;

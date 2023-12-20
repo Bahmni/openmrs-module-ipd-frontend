@@ -8,6 +8,10 @@ import {
   mockResponse,
   mockNursingTasksResponse,
   mockExtractedMedicationNursingTasksData,
+  mockNursingTasksResponseForCompleted,
+  mockExtractedMedicationNursingTasksDataForCompleted,
+  mockNursingTasksResponseForAllTasks,
+  mockExtractedMedicationNursingTasksDataForAllTasks
 } from "./NursingTasksUtilsMockData";
 
 jest.mock("axios");
@@ -62,7 +66,34 @@ describe("NursingTasksUtils", () => {
       const medicationNursingTasksData = mockNursingTasksResponse;
       const expectedData = mockExtractedMedicationNursingTasksData;
       const extractedData = ExtractMedicationNursingTasksData(
-        medicationNursingTasksData
+        medicationNursingTasksData, { id: "pending", text: "Pending" }
+      );
+      expect(extractedData).toEqual(expectedData);
+    });
+
+    it("should return extracted data for completed as empty", () => {
+      const medicationNursingTasksData = mockNursingTasksResponse;
+      const expectedData = [];
+      const extractedData = ExtractMedicationNursingTasksData(
+        medicationNursingTasksData, { id: "completed", text: "Completed"}
+      );
+      expect(extractedData).toEqual(expectedData);
+    });
+
+    it("should return extracted data for completed sorted in ascending order", () => {
+      const medicationNursingTasksData = mockNursingTasksResponseForCompleted;
+      const expectedData = mockExtractedMedicationNursingTasksDataForCompleted;
+      const extractedData = ExtractMedicationNursingTasksData(
+        medicationNursingTasksData, { id: "completed", text: "Completed"}
+      );
+      expect(extractedData).toEqual(expectedData);
+    });
+
+    it("should return extracted data for all task", () => {
+      const medicationNursingTasksData = mockNursingTasksResponseForAllTasks;
+      const expectedData = mockExtractedMedicationNursingTasksDataForAllTasks;
+      const extractedData = ExtractMedicationNursingTasksData(
+        medicationNursingTasksData, { id: "allTasks", text: "All Tasks" }
       );
       expect(extractedData).toEqual(expectedData);
     });
