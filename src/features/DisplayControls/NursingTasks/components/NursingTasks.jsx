@@ -13,15 +13,22 @@ import TaskTile from "./TaskTile";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { SliderContext } from "../../../../context/SliderContext";
 import UpdateNursingTasks from "./UpdateNursingTasks";
-import { Button } from "carbon-components-react";
+import { Button, Dropdown } from "carbon-components-react";
 import AddEmergencyTasks from "./AddEmergencyTasks";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
+  const [nursingTasks, setNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { isSliderOpen, updateSliderOpen } = useContext(SliderContext);
   const [selectedMedicationTask, setSelectedMedicationTask] = useState([]);
+  const items = [
+    { id: "allTasks", text: "All Tasks" },
+    { id: "completed", text: "Completed" },
+    { id: "pending", text: "Pending" }
+  ];
+  const [filterValue, setFilterValue] = useState(items[2]);
   const updateNursingTasksSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -45,13 +52,26 @@ export default function NursingTasks(props) {
       defaultMessage={"No Nursing Task is scheduled for the patient"}
     />
   );
+  const NoNursingTasksMessageForCompleted = (
+    <FormattedMessage
+      id={"NO_NURSING_TASKS_MESSAGE_COMPLETED"}
+      defaultMessage={"No Completed Task is available for the patient"}
+    />
+  );
+  const NoNursingTasksMessageForPending = (
+    <FormattedMessage
+      id={"NO_NURSING_TASKS_MESSAGE_PENDING"}
+      defaultMessage={"No Pending Task is available for the patient"}
+    />
+  );
 
   const fetchNursingTasks = async () => {
     setIsLoading(true);
     const forDate = GetUTCEpochForDate(new Date().toUTCString());
     const nursingTasks = await fetchMedicationNursingTasks(patientId, forDate);
+    setNursingTasks(nursingTasks);
     if (nursingTasks) {
-      const extractedData = ExtractMedicationNursingTasksData(nursingTasks);
+      const extractedData = ExtractMedicationNursingTasksData(nursingTasks, filterValue);
       setMedicationNursingTasks(extractedData);
       setIsLoading(false);
     }
@@ -60,6 +80,9 @@ export default function NursingTasks(props) {
     fetchNursingTasks();
   }, []);
 
+  useEffect(() => {
+    setMedicationNursingTasks(ExtractMedicationNursingTasksData(nursingTasks, filterValue));
+  }, [filterValue]);
   const showCurrentDate = () => {
     var currentDate = new Date();
 
@@ -95,7 +118,16 @@ export default function NursingTasks(props) {
       <div className="nursing-tasks-content-container">
         <div className={"nursing-task-navigation"}>
           {showCurrentDate()}
-          <div>
+          <div className="nursing-task-actions">
+            <Dropdown
+              id="filter-task"
+              className="nursing-task-dropdown"
+              size="lg"
+              selectedItem={filterValue}
+              items={items}
+              itemToString={item => (item ? item.text : '')}
+              onChange={(event) => {event.selectedItem ? setFilterValue(event.selectedItem) : setFilterValue(items[2])}}
+            />
             <Button
               kind={"tertiary"}
               isExpressive
@@ -125,7 +157,9 @@ export default function NursingTasks(props) {
           />
         )}
         {medicationNursingTasks && medicationNursingTasks.length === 0 ? (
-          <div className="no-nursing-tasks">{NoNursingTasksMessage}</div>
+          <div className="no-nursing-tasks">{ filterValue.id === "completed" ?  NoNursingTasksMessageForCompleted : 
+            (filterValue.id === "pending" ? NoNursingTasksMessageForPending : NoNursingTasksMessage)
+          }</div>
         ) : (
           <div className="nursing-task-tiles-container">{showTaskTiles()}</div>
         )}

@@ -21,6 +21,15 @@
     justify-content: space-between;
     margin: 10px 0;
   }
+
+  .nursing-task-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .nursing-task-dropdown {
+    min-width: 130px;
+  }
 }
 
 .nursing-task-tiles-container {
