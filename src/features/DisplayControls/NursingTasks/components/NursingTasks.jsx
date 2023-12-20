@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import "../styles/NursingTasks.scss";
 import { Add16 } from "@carbon/icons-react";
-import { items } from "../../../../constants";
+import { items } from "../utils/constants";
 
 import {
   fetchMedicationNursingTasks,
