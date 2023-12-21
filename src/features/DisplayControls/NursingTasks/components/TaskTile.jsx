@@ -82,9 +82,7 @@ export default function TaskTile(props) {
               </div>
               <TooltipDefinition
                 tooltipText={drugName}
-                className={`${
-                  stopTime ? "cursor-not-allowed" : "cursor-pointer"
-                }`}
+                className={stopTime ? "cursor-not-allowed" : "cursor-pointer"}
               >
                 {drugNameText}
               </TooltipDefinition>

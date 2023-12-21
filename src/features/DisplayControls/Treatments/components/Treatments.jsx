@@ -113,7 +113,7 @@ const Treatments = (props) => {
 
   const setDosingInstructions = (drugOrder) => {
     return (
-      <div className={`${drugOrder.dateStopped && "strike-through"}`}>
+      <div className={drugOrder.dateStopped && "strike-through"}>
         {drugOrder.dosingInstructions.dose +
           " " +
           drugOrder.dosingInstructions.doseUnits +
@@ -141,7 +141,7 @@ const Treatments = (props) => {
           dosageDetails: setDosingInstructions(drugOrder),
           providerName: drugOrder.provider.name,
           status: (
-            <span className={`${drugOrder.dateStopped && "red-text"}`}>
+            <span className={drugOrder.dateStopped && "red-text"}>
               {drugOrder.dateStopped && (
                 <FormattedMessage id="STOPPED" defaultMessage="Stopped" />
               )}
