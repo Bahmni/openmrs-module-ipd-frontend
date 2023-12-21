@@ -14,6 +14,9 @@ exports[`DrugListCell should  match snapshot 1`] = `
       <div>
         TooltipCarbon
       </div>
+      <div
+        class="drug-name-cell"
+      />
     </div>
     <div
       class="dosage"
@@ -52,6 +55,9 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
       <div>
         TooltipCarbon
       </div>
+      <div
+        class="drug-name-cell"
+      />
     </div>
     <div
       class="dosage"
@@ -100,6 +106,9 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
       <div>
         TooltipCarbon
       </div>
+      <div
+        class="drug-name-cell"
+      />
     </div>
     <div
       class="dosage"

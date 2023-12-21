@@ -251,7 +251,7 @@ export const AdminMedicationData = [
               },
             ],
           },
-          asNeeded: false,
+          asNeeded: true,
           asNeededCondition: null,
           quantity: 30,
           quantityUnits: {
@@ -724,7 +724,7 @@ export const AdminMedicationData = [
           },
           frequency: {
             uuid: "9d838148-3f10-11e4-adec-0800271c1b75",
-            display: "Thrice a day",
+            display: "STAT (Immediately)",
             links: [
               {
                 rel: "self",

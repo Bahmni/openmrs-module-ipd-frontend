@@ -115,17 +115,6 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             >
               Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
             </div>
-            <div
-              class="bx--tag bx--tag--blue"
-              id="tag-3"
-            >
-              
-              <span
-                title="Rx"
-              >
-                Rx
-              </span>
-            </div>
           </div>
           <div
             class="medication-details"
@@ -196,17 +185,6 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
               class="name"
             >
               Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
-            </div>
-            <div
-              class="bx--tag bx--tag--blue"
-              id="tag-4"
-            >
-              
-              <span
-                title="Rx"
-              >
-                Rx
-              </span>
             </div>
           </div>
           <div

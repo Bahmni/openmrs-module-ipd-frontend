@@ -20,6 +20,8 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import TreatmentExpandableRow from "./TreatmentExpandableRow";
 import NotesIcon from "../../../../icons/notes.svg";
+import { getTagForTheDrugOrder } from "../../../../utils/DisplayTags";
+import { useFetchIpdConfig } from "../../../../entries/Dashboard/hooks/useFetchIpdConfig";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -37,6 +39,8 @@ const Treatments = (props) => {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [drugChartNotes, setDrugChartNotes] = useState("");
   const [additionalData, setAdditionalData] = useState([]);
+  const { configData, isConfigLoading } = useFetchIpdConfig();
+  const [ipdConfig, setIpdConfig] = useState();
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -55,6 +59,12 @@ const Treatments = (props) => {
       setShowWarningNotification(false);
     },
   };
+
+  useEffect(() => {
+    if (configData && ipdConfig === undefined) {
+      setIpdConfig(configData);
+    }
+  }, [configData]);
 
   const DrugChartSliderActions = {
     onModalClose: () => {
@@ -171,12 +181,24 @@ const Treatments = (props) => {
   const getDrugName = (drugOrder) => {
     if (
       drugOrder.drug &&
-      (drugOrder.instructions || drugOrder.additionalInstructions)
+      (drugOrder.instructions || drugOrder.additionalInstructions) &&
+      configData
     ) {
       return (
         <div className="notes-icon-div">
           <NotesIcon className="notes-icon" />
-          <span className="drug-name">{drugOrder.drug.name}</span>
+          <span
+            className={
+              isSliderOpen.treatments
+                ? "treatments-drug-name-slider-open"
+                : "treatments-drug-name"
+            }
+          >
+            {drugOrder.drug.name}
+            <span>
+              {getTagForTheDrugOrder(drugOrder.dosingInstructions, ipdConfig)}
+            </span>
+          </span>
         </div>
       );
     } else if (drugOrder.drug) return drugOrder.drug.name;
@@ -208,7 +230,7 @@ const Treatments = (props) => {
         setIsLoading(false);
       });
     });
-  }, []);
+  }, [ipdConfig, isSliderOpen.treatments]);
 
   return (
     <>
@@ -252,15 +274,17 @@ const Treatments = (props) => {
       ) : treatments && treatments.length === 0 ? (
         <div className="no-treatments">{NoTreatmentsMessage}</div>
       ) : (
-        <ExpandableDataTable
-          rows={treatments}
-          headers={treatmentHeaders}
-          additionalData={additionalData}
-          component={(additionalData) => {
-            return <TreatmentExpandableRow data={additionalData} />;
-          }}
-          useZebraStyles={true}
-        />
+        configData && (
+          <ExpandableDataTable
+            rows={treatments}
+            headers={treatmentHeaders}
+            additionalData={additionalData}
+            component={(additionalData) => {
+              return <TreatmentExpandableRow data={additionalData} />;
+            }}
+            useZebraStyles={true}
+          />
+        )
       )}
     </>
   );

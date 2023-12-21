@@ -26,6 +26,12 @@ export const mockResponse = {
             uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
             display: "ml",
           },
+          dosingInstructions: {
+            asNeeded: false,
+            frequency: {
+              display: "Once a day",
+            },
+          },
           duration: 3,
           durationUnits: {
             uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
@@ -76,6 +82,8 @@ export const mockNursingTasksResponse = [
             uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
             display: "Day(s)",
           },
+          asNeeded: false,
+          frequency: { display: "Once a day" },
         },
       },
     ],
@@ -115,6 +123,8 @@ export const mockNursingTasksResponse = [
             uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
             display: "Day(s)",
           },
+          asNeeded: false,
+          frequency: { display: "Once a day" },
         },
       },
       {
@@ -138,6 +148,8 @@ export const mockNursingTasksResponse = [
             uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
             display: "Day(s)",
           },
+          asNeeded: false,
+          frequency: { display: "Once a day" },
         },
         serviceType: "MedicationRequest",
         status: "SCHEDULED",
@@ -157,6 +169,7 @@ export const mockExtractedMedicationNursingTasksData = [
       startTimeInEpochSeconds: 1690906550,
       startTime: "16:15",
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+      dosingInstructions: { asNeeded: false, frequency: 'Once a day' },
     },
     {
       drugName: "Paracetamol 120 mg (Tablet)",
@@ -167,6 +180,7 @@ export const mockExtractedMedicationNursingTasksData = [
       startTimeInEpochSeconds: 1690906550,
       startTime: "16:15",
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+      dosingInstructions: { asNeeded: false, frequency: 'Once a day' },
     },
   ],
   [
@@ -179,6 +193,7 @@ export const mockExtractedMedicationNursingTasksData = [
       startTimeInEpochSeconds: 1690907550,
       startTime: "16:32",
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+      dosingInstructions: { asNeeded: false, frequency: 'Once a day' },
     },
   ],
 ];

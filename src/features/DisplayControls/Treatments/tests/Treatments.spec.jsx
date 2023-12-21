@@ -12,6 +12,30 @@ jest.mock("../utils/TreatmentsUtils", () => {
   };
 });
 
+jest.mock("../../../../entries/Dashboard/hooks/useFetchIpdConfig", () => {
+  const originalModule = jest.requireActual(
+    "../../../../entries/Dashboard/hooks/useFetchIpdConfig"
+  );
+  return {
+    ...originalModule,
+    useFetchIpdConfig: () => {
+      return {
+        configData: {
+          config: {
+            medicationTags: {
+              asNeeded: "Rx-PRN",
+              "STAT (Immediately)": "Rx-STAT",
+              default: "Rx",
+              emergency: "EMERG",
+            },
+          },
+        },
+        isConfigLoading: false,
+      };
+    },
+  };
+});
+
 const mockProviderValue = {
   isSliderOpen: {
     treatments: false,
@@ -144,6 +168,7 @@ describe("Treatments", () => {
         dosingInstructions: {
           dose: 1,
           doseUnits: "mg",
+          asNeeded: false,
           route: "Oral",
           frequency: "Once a day",
           administrationInstructions:
@@ -190,6 +215,7 @@ describe("Treatments", () => {
           dose: 1,
           doseUnits: "mg",
           route: "Oral",
+          asNeeded: false,
           frequency: "Once a day",
           administrationInstructions:
             '{"instructions":"As directed","additionalInstructions":"all good"}',
@@ -221,5 +247,48 @@ describe("Treatments", () => {
       expect(getByText("Add to Drug Chart")).toBeTruthy();
       expect(mockProviderValue.updateSliderOpen).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it("should render Tags near Drug Name", async () => {
+    const treatments = [
+      {
+        uuid: "1",
+        effectiveStartDate: new Date("01/01/2022"),
+        dateStopped: null,
+        drug: {
+          name: "Drug 1",
+        },
+        dosingInstructions: {
+          dose: 1,
+          doseUnits: "mg",
+          route: "Oral",
+          asNeede: true,
+          frequency: "Once a day",
+          administrationInstructions:
+            '{"instructions":"As directed","additionalInstructions":"all good"}',
+        },
+        duration: 7,
+        durationUnits: "days",
+        provider: {
+          name: "Dr. John Doe",
+        },
+        careSetting: "INPATIENT",
+      },
+    ];
+    getPrescribedAndActiveDrugOrders.mockImplementation(() => {
+      return Promise.resolve({
+        visitDrugOrders: treatments,
+        activeDrugOrders: [],
+      });
+    });
+    const { getByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+      </SliderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(getByText(/drug 1/i)).toBeTruthy();
+    });
+    expect(getByText(/Rx/i)).toBeTruthy();
   });
 });

@@ -34,6 +34,9 @@ exports[`DrugChart should match snapshot 1`] = `
                     <div>
                       TooltipCarbon
                     </div>
+                    <div
+                      class="drug-name-cell"
+                    />
                   </div>
                   <div
                     class="dosage"
@@ -66,6 +69,9 @@ exports[`DrugChart should match snapshot 1`] = `
                     <div>
                       TooltipCarbon
                     </div>
+                    <div
+                      class="drug-name-cell"
+                    />
                   </div>
                   <div
                     class="dosage"

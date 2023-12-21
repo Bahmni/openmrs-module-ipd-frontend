@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Clock from "../../../../icons/clock.svg";
 import "../styles/DrugListCell.scss";
 import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
+import { getTagForTheDrugOrder } from "../../../../utils/DisplayTags";
+import { useFetchIpdConfig } from "../../../../entries/Dashboard/hooks/useFetchIpdConfig";
 
 export default function DrugListCell(props) {
   const { drugInfo } = props;
@@ -15,7 +17,16 @@ export default function DrugListCell(props) {
     duration,
     administrationInfo,
     dosingInstructions,
+    dosingTagInfo,
   } = drugInfo;
+  const { configData, isConfigLoading } = useFetchIpdConfig();
+  const [ipdConfig, setIpdConfig] = useState();
+
+  useEffect(() => {
+    if (configData) {
+      setIpdConfig(configData);
+    }
+  }, [configData]);
 
   let parsedDosingInstructions;
   if (dosingInstructions !== null && dosingInstructions !== undefined) {
@@ -41,6 +52,11 @@ export default function DrugListCell(props) {
       {dosingInstructions && (
         <TooltipCarbon icon={() => icon} content={toolTipContent} />
       )}
+      <div
+        className="drug-name-cell"
+      >
+        {getTagForTheDrugOrder(dosingTagInfo, ipdConfig)}
+      </div>
     </div>
   );
   const icon = (

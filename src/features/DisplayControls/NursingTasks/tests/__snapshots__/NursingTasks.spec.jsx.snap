@@ -88,6 +88,9 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
                     </span>
                   </div>
                   <div
+                    class="tile-name-cell"
+                  />
+                  <div
                     class="tile-content-subtext"
                     style="color: rgb(82, 82, 82);"
                   >
@@ -164,6 +167,9 @@ exports[`NursingTasks should show nursing tasks when nursing task reponse is not
                       </span>
                     </span>
                   </div>
+                  <div
+                    class="tile-name-cell"
+                  />
                   <div
                     class="tile-content-subtext"
                     style="color: rgb(82, 82, 82);"

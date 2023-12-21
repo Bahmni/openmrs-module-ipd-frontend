@@ -8,6 +8,7 @@ import Clock from "../../../../icons/clock.svg";
 import { Toggle, Tag, TextArea } from "carbon-components-react";
 import moment from "moment";
 import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
+import { getTagForTheDrugOrder } from "../../../../utils/DisplayTags";
 
 const UpdateNursingTasks = (props) => {
   const { medicationTasks, updateNursingTasksSlider } = props;
@@ -46,6 +47,7 @@ const UpdateNursingTasks = (props) => {
             doseType: medicationTask.doseType,
             route: medicationTask.drugRoute,
             startTime: medicationTask.startTime,
+            dosingInstructions: medicationTask.dosingInstructions,
             isSelected: false,
             actualTime: null,
           },
@@ -142,7 +144,7 @@ const UpdateNursingTasks = (props) => {
               />
               <div className={"medication-name"}>
                 <div className={"name"}>{medicationTask.drugName}</div>
-                <Tag type={"blue"}>Rx</Tag>
+                {getTagForTheDrugOrder(medicationTask.dosingInstructions)}
               </div>
               <div className="medication-details">
                 <span>{medicationTask.dosage}</span>
