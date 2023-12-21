@@ -7,6 +7,9 @@
   height: var(--time-cell-height);
   align-items: center;
   align-items: stretch;
+  .note-icon-container {
+    margin: 0;
+  }
 
   &:first-child {
     border-left: 2px solid #c6c6c6;

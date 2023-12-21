@@ -2,21 +2,40 @@ import React from "react";
 import PropTypes from "prop-types";
 import "../styles/TimeCell.scss";
 import SVGIcon from "./SVGIcon.jsx";
+import { TooltipCarbon } from "bahmni-carbon-ui";
+import NoteIcon from "../../../../icons/note.svg";
+import { ifMedicationNotesPresent } from "../utils/DrugChartUtils";
 
 export default function TimeCell(props) {
   const {
     minutes,
     status,
     administrationInfo,
+    medicationNotes,
     doHighlightCell,
     highlightedCell,
   } = props;
   let left, right;
+    
+
+  const toolTipContent = (
+    <div>
+      {medicationNotes}
+    </div>
+  );
+   
   if (+minutes < 30) {
     left = status;
   } else {
     right = status;
   }
+
+  const icon = (
+    <div className="note-icon-container">
+      <NoteIcon />
+    </div>
+  );
+
   return (
     <div className="time-cell">
       <div
@@ -26,6 +45,7 @@ export default function TimeCell(props) {
         }
       >
         {left && <SVGIcon iconType={left} info={administrationInfo} />}
+        { ifMedicationNotesPresent(medicationNotes, left) && <span data-testid="left-notes" ><TooltipCarbon icon={() => icon} content={toolTipContent} /></span>}
       </div>
       <div
         data-testid="right-icon"
@@ -34,6 +54,7 @@ export default function TimeCell(props) {
         }
       >
         {right && <SVGIcon iconType={right} info={administrationInfo} />}
+        {ifMedicationNotesPresent(medicationNotes, right) && <span data-testid="right-notes"><TooltipCarbon  icon={() => icon} content={toolTipContent} /></span>}
       </div>
     </div>
   );

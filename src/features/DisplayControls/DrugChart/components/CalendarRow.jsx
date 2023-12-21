@@ -15,7 +15,7 @@ export default function CalendarRow(props) {
         const highlightedCell = currentMinute < 30 ? "left" : "right";
 
         if (rowData[hour]) {
-          const { minutes, status, administrationInfo } = rowData[hour];
+          const { minutes, status, administrationInfo, notes } = rowData[hour];
 
           return (
             <TimeCell
@@ -23,6 +23,7 @@ export default function CalendarRow(props) {
               status={status}
               key={hour}
               administrationInfo={administrationInfo}
+              medicationNotes={notes}
               doHighlightCell={isCurrentHour}
               highlightedCell={highlightedCell}
             />
