@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import PropTypes from "prop-types";
 import "../styles/UpdateNursingTasks.scss";
@@ -9,8 +9,6 @@ import { Toggle, Tag, TextArea, Modal } from "carbon-components-react";
 import moment from "moment";
 import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
 import SimpleStructuredList from "./StructuredList";
-import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
-import DrugChartSliderNotification from "../../../DrugChartSlider/components/DrugChartSliderNotification";
 import { saveAdministeredMedication } from "../utils/NursingTasksUtils";
 
 const UpdateNursingTasks = (props) => {
@@ -29,7 +27,6 @@ const UpdateNursingTasks = (props) => {
   const [isAnyMedicationAdministered, setIsAnyMedicationAdministered] =
     useState(false);
   const [administeredTasks, setAdministeredTasks] = useState({});
-  const refreshDisplayControl = useContext(RefreshDisplayControl);
   const invalidTimeText24Hour = (
     <FormattedMessage
       id={"INVALID_TIME"}
@@ -44,8 +41,6 @@ const UpdateNursingTasks = (props) => {
     setShowSuccessNotification(true);
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
-    refreshDisplayControl([componentKeys.NURSING_TASKS]);
-    refreshDisplayControl([componentKeys.DRUG_CHART]);
   };
 
   const handlePrimaryButtonClick = async () => {
@@ -301,7 +296,6 @@ const UpdateNursingTasks = (props) => {
           />
         }
         onRequestSubmit={handlePrimaryButtonClick}
-        // onRequestSubmit={closeModal}
       >
         <div className="divider"></div>
         <SimpleStructuredList list={administeredTasks} />

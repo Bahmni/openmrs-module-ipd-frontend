@@ -17,6 +17,8 @@ import UpdateNursingTasks from "./UpdateNursingTasks";
 import { Button, Dropdown } from "carbon-components-react";
 import AddEmergencyTasks from "./AddEmergencyTasks";
 import Notification from "../../../../components/Notification/Notification";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
+import { componentKeys } from "../../../../constants";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
@@ -28,6 +30,7 @@ export default function NursingTasks(props) {
   const [selectedMedicationTask, setSelectedMedicationTask] = useState([]);
   const [filterValue, setFilterValue] = useState(items[2]);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const refreshDisplayControl = useContext(RefreshDisplayControl);
   const updateNursingTasksSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -198,7 +201,13 @@ export default function NursingTasks(props) {
               notificationKind: "success",
               messageId: "DRUG_CHART_MODAL_SAVE_MESSAGE",
             }}
-            hostApi={{ onClose: () => setShowSuccessNotification(false) }}
+            hostApi={{
+              onClose: () => {
+                setShowSuccessNotification(false);
+                refreshDisplayControl([componentKeys.NURSING_TASKS]);
+                refreshDisplayControl([componentKeys.DRUG_CHART]);
+              },
+            }}
           />
         )}
       </div>
