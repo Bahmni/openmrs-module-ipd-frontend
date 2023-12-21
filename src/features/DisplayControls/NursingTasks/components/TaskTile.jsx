@@ -76,12 +76,19 @@ export default function TaskTile(props) {
       >
         <div className="tile-content">
           <div className={`tile-title ${stopTime && "red-text"}`}>
-            <div className="nursing-task-icon-container">
-              <SVGIcon iconType={iconType} />
+            <div>
+              <div className="nursing-task-icon-container">
+                <SVGIcon iconType={iconType} />
+              </div>
+              <TooltipDefinition
+                tooltipText={drugName}
+                className={`${
+                  stopTime ? "cursor-not-allowed" : "cursor-pointer"
+                }`}
+              >
+                {drugNameText}
+              </TooltipDefinition>
             </div>
-            <TooltipDefinition tooltipText={drugName}>
-              {drugNameText}
-            </TooltipDefinition>
             {stopTime && (
               <Tag className={"red-tag"}>
                 <FormattedMessage id={"STOPPED"} defaultMessage={"Stopped"} />

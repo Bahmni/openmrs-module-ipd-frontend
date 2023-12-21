@@ -20,7 +20,8 @@ export const ExtractMedicationNursingTasksData = (
 ) => {
   const extractedData = [],
     pendingExtractedData = [],
-    completedExtractedData = [];
+    completedExtractedData = [],
+    stoppedExtractedData = [];
   medicationNursingTasksData.forEach((item) => {
     const { slots } = item;
 
@@ -60,7 +61,6 @@ export const ExtractMedicationNursingTasksData = (
         doseType,
         uuid,
         startTimeInEpochSeconds: startTime,
-        stopTime: order.dateStopped,
         startTime: startTimeInDate.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -68,7 +68,13 @@ export const ExtractMedicationNursingTasksData = (
         }),
       };
 
-      if (
+      if (order.dateStopped) {
+        if (filterValue.id === "stopped" || filterValue.id === "allTasks")
+          stoppedExtractedData.push({
+            ...slotInfo,
+            stopTime: order.dateStopped,
+          });
+      } else if (
         (filterValue.id === "completed" && slot.status === "COMPLETED") ||
         (filterValue.id === "allTasks" && slot.status === "COMPLETED")
       ) {
@@ -97,6 +103,7 @@ export const ExtractMedicationNursingTasksData = (
   completedExtractedData.sort((a, b) =>
     a.administeredTime.localeCompare(b.administeredTime)
   );
+  stoppedExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
   extractedData.push(...pendingExtractedData, ...completedExtractedData);
 
   const groupedData = [];
@@ -118,6 +125,8 @@ export const ExtractMedicationNursingTasksData = (
   if (currentGroup.length > 0) {
     groupedData.push(currentGroup);
   }
-
+  if (stoppedExtractedData.length > 0) {
+    groupedData.push(...stoppedExtractedData.map((item) => [item]));
+  }
   return groupedData;
 };

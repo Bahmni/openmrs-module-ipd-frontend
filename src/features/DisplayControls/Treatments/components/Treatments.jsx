@@ -178,7 +178,6 @@ const Treatments = (props) => {
   };
 
   const getDrugName = (drugOrder) => {
-    // console.log(drugOrder);
     if (
       drugOrder.drug &&
       (drugOrder.instructions || drugOrder.additionalInstructions)

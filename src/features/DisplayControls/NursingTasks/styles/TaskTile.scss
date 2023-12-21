@@ -57,9 +57,16 @@
 .tile-title {
   flex-direction: row;
   display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  > * {
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+  }
 
   .bx--tooltip__trigger.bx--tooltip__trigger--definition.bx--tooltip--bottom {
-    cursor: pointer;
+    cursor: unset;
   }
 }
 
