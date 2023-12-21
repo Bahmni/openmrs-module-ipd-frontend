@@ -110,7 +110,11 @@ export default function NursingTasks(props) {
           <div
             onClick={() => {
               const isStoppedSlot = medicationNursingTask[0]?.stopTime;
-              if (!isSliderOpen.nursingTasks && !isStoppedSlot) {
+              if (
+                !isSliderOpen.nursingTasks &&
+                !medicationNursingTask[0].isDisabled &&
+                !isStoppedSlot
+              ) {
                 setSelectedMedicationTask(medicationNursingTask);
                 updateNursingTasksSlider(true);
               }

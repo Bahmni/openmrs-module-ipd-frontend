@@ -12,6 +12,7 @@ import { FormattedMessage } from "react-intl";
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
+  const isDisabled = newMedicationNursingTask.isDisabled;
 
   let isGroupedTask, taskCount;
   if (medicationNursingTask.length > 1) {
@@ -54,7 +55,38 @@ export default function TaskTile(props) {
     );
   };
 
-  const iconType = isLateTask() ? "Late" : "Pending";
+  const iconType = () => {
+    if (newMedicationNursingTask.administeredTimeInEpochSeconds) {
+      const administeredLateWindowInSeconds =
+        startTimeInEpochSeconds +
+        nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate *
+          60;
+      const administeredTimeInSeconds =
+        newMedicationNursingTask.administeredTimeInEpochSeconds / 1000;
+      const isLate =
+        administeredTimeInSeconds > administeredLateWindowInSeconds;
+
+      return isLate ? "Administered-Late" : "Administered";
+    }
+
+    return isLateTask() ? "Late" : "Pending";
+  };
+
+  const getTime = () => {
+    if (newMedicationNursingTask.administeredTimeInEpochSeconds) {
+      const administeredTimeInSeconds =
+        newMedicationNursingTask.administeredTimeInEpochSeconds / 1000;
+      const administeredTime = new Date(
+        administeredTimeInSeconds * 1000
+      ).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      return startTime + " - " + administeredTime + "(actual)";
+    }
+    return startTime;
+  };
+
   const isRelevantTask = getRelevantTaskStatus();
 
   const drugNameText = (
@@ -72,7 +104,7 @@ export default function TaskTile(props) {
     <div className="tile-parent-container">
       <div
         className={`nursing-tasks-tile ${stopTime && "no-hover"}
-        ${isRelevantTask && !stopTime && "relevant-task-tile"}`}
+        ${isRelevantTask && !stopTime && "relevant-task-tile"} ${isDisabled ? "disabled-tile" : ""}`}
       >
         <div className="tile-content">
           <div className={`tile-title ${stopTime && "red-text"}`}>
@@ -103,7 +135,7 @@ export default function TaskTile(props) {
           </div>
           <div className="tile-content-subtext">
             <Clock />
-            <div>&nbsp;{startTime}</div>
+            <div>&nbsp;{getTime()}</div>
           </div>
           {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
         </div>

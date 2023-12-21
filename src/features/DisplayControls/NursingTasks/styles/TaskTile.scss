@@ -5,6 +5,7 @@
   height: 90px;
   position: relative;
   cursor: pointer;
+  transition: opacity 0.3s ease;
 
   &:hover {
     background-color: #d2e1c9;
@@ -30,6 +31,11 @@
   margin-bottom: 20px;
   margin-right: 20px;
   height: 90px;
+}
+
+.disabled-tile {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .stacked-tile {

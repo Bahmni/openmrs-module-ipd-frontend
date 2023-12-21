@@ -69,8 +69,9 @@ export const ExtractMedicationNursingTasksData = (
           minute: "2-digit",
           hourCycle: "h23",
         }),
-        orderId: order.orderId,
+        orderId: order.uuid,
         // order: order,
+        isDisabled: administeredDateTime ? true : false,
       };
 
       if (order.dateStopped) {
@@ -101,7 +102,7 @@ export const ExtractMedicationNursingTasksData = (
       ) {
         pendingExtractedData.push(slotInfo);
       }
-      });
+    });
   });
 
   pendingExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
@@ -138,7 +139,7 @@ export const ExtractMedicationNursingTasksData = (
 
 export const saveAdministeredMedication = async (administeredMedication) => {
   try {
-    console.log("try method")
+    console.log("try method");
     const response = await axios.post(
       ADMINISTERED_MEDICATIONS_BASE_URL,
       administeredMedication
