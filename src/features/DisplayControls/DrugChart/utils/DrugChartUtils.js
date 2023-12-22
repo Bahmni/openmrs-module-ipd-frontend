@@ -43,7 +43,6 @@ export const getUTCEpochForDate = (viewDate) => {
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
   const slotDataByOrder = [];
-  console.log("drugChartData", drugChartData);
 
   AdminMedicationData.map((schedule) => {
     const { slots } = schedule;
@@ -51,11 +50,12 @@ export const TransformDrugChartData = (drugChartData) => {
     const administeredTimeInfo = [];
 
     slots.forEach((slot) => {
+      let administeredStartHour, administeredStartMinutes, medicationNotes;
       const slotData = {};
       const { startTime, status, order, medicationAdministration } = slot;
       let medicationStatus = "Pending";
       let adminInfo = "",
-        administeredTime;
+        administeredTime,startActualTime;
 
       const isCompleted = checkIfSlotIsAdministered(status);
 
@@ -66,16 +66,21 @@ export const TransformDrugChartData = (drugChartData) => {
         );
         medicationStatus = isLate ? "Administered-Late" : "Administered";
         if (medicationAdministration) {
-          const { administeredDateTime, provider } = medicationAdministration;
+          const { administeredDateTime, provider, notes } = medicationAdministration;
           const administeredDateTimeObject = new Date(
             administeredDateTime * 1000
           );
           administeredTime = moment(administeredDateTimeObject).format("HH:mm");
           adminInfo = provider.display + " [" + administeredTime + "]";
+          administeredStartHour = administeredDateTimeObject.getHours();
+          administeredStartMinutes = administeredDateTimeObject.getMinutes();
+          medicationNotes = notes;
         } else {
           adminInfo = "";
         }
       }
+      const startDateTimeObj = new Date(startTime * 1000);
+      startActualTime = moment(startDateTimeObj).format("HH:mm");
 
       const drugOrder = {
         uuid: order.uuid,
@@ -98,23 +103,35 @@ export const TransformDrugChartData = (drugChartData) => {
         drugOrder.duration = order.duration + " " + order.durationUnits.display;
       }
 
-      const startDateTimeObj = new Date(startTime * 1000);
+
 
       const setLateStatus = isLateTask(startTime);
       const startHour = startDateTimeObj.getHours();
       const startMinutes = startDateTimeObj.getMinutes();
+     if (isCompleted) 
+       {
+            slotData[administeredStartHour] = {
+            minutes: administeredStartMinutes,
+            status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
+            administrationInfo: adminInfo,
+            notes: medicationNotes
+            };
+      }
+     else {
       slotData[startHour] = {
         minutes: startMinutes,
         status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
         administrationInfo: adminInfo,
-      };
+        notes: medicationNotes
+     } }
       if (
         medicationStatus === "Administered" ||
         medicationStatus === "Administered-Late"
       ) {
         const adminData = {
           kind: medicationStatus,
-          time: administeredTime,
+          time: startActualTime,
+          timeAdministered: administeredTime
         };
         drugOrder.administrationInfo.push(adminData);
       }
@@ -141,4 +158,46 @@ export const TransformDrugChartData = (drugChartData) => {
     });
   });
   return [slotDataByOrder, drugOrderData];
+};
+
+export const ifMedicationNotesPresent = (medicationNotes,side) =>{
+  let notesIcon;
+  if(!medicationNotes)
+   {
+    notesIcon = false;
+   }
+   else {
+     notesIcon = true;
+   }
+   return((side === "Administered-Late" || side === "Administered" || side === "Not-Administered") && notesIcon);
+
+}
+
+export const currentShiftHoursArray = () => {
+  const shiftTimeInHours = drugChart.shiftHours;
+  const rangeArray = [];
+  for (let i = 0; i < 24; i += shiftTimeInHours) {
+    rangeArray.push(`${i}-${i + (shiftTimeInHours - 1)}`);
+  }
+
+  // finding the current hour range
+  const currentDate = new Date();
+  const currentHour = currentDate.getHours();
+  let currentRange = rangeArray[0];
+  rangeArray.forEach((range) => {
+    const rangeLimits = range.split("-");
+    if (currentHour >= rangeLimits[0] && currentHour <= rangeLimits[1]) {
+      currentRange = range;
+    }
+  });
+
+  const currentShiftHoursArray = [];
+  const currentRangeArray = currentRange.split("-");
+  const lowestHour = parseInt(currentRangeArray[0]);
+  const highestHour = parseInt(currentRangeArray[1]);
+
+  for (let i = lowestHour; i <= highestHour; i++) {
+    currentShiftHoursArray.push(i);
+  }
+  return currentShiftHoursArray;
 };

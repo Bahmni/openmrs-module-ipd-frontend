@@ -149,7 +149,6 @@ export const mapVitalsData = (VitalsList, setVitalsDate, setVitalsTime) => {
 
 export const mapVitalsHistory = (vitalsHistoryList) => {
 let vitalsHistory = [];
-console.log("Vitals lsit",vitalsHistoryList); 
 const vitalsValue = vitalsHistoryList.tabularData ;
 for (const date in vitalsValue){
   const innerMappedVitals = vitalsValue[date];
