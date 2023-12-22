@@ -19,9 +19,7 @@ export default function TimeCell(props) {
     
 
   const toolTipContent = (
-    <div>
-      {medicationNotes}
-    </div>
+      medicationNotes
   );
    
   if (+minutes < 30) {
