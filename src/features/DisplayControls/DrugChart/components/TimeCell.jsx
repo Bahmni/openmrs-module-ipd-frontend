@@ -18,10 +18,7 @@ export default function TimeCell(props) {
   let left, right;
     
 
-  const toolTipContent = (
-      medicationNotes
-  );
-   
+  
   if (+minutes < 30) {
     left = status;
   } else {
@@ -43,7 +40,7 @@ export default function TimeCell(props) {
         }
       >
         {left && <SVGIcon iconType={left} info={administrationInfo} />}
-        { ifMedicationNotesPresent(medicationNotes, left) && <span data-testid="left-notes" ><TooltipCarbon icon={() => icon} content={toolTipContent} /></span>}
+        { ifMedicationNotesPresent(medicationNotes, left) && <span data-testid="left-notes" ><TooltipCarbon icon={() => icon} content={medicationNotes} /></span>}
       </div>
       <div
         data-testid="right-icon"
@@ -52,7 +49,7 @@ export default function TimeCell(props) {
         }
       >
         {right && <SVGIcon iconType={right} info={administrationInfo} />}
-        {ifMedicationNotesPresent(medicationNotes, right) && <span data-testid="right-notes"><TooltipCarbon  icon={() => icon} content={toolTipContent} /></span>}
+        {ifMedicationNotesPresent(medicationNotes, right) && <span data-testid="right-notes"><TooltipCarbon  icon={() => icon} content={medicationNotes} /></span>}
       </div>
     </div>
   );
