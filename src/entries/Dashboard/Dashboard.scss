@@ -38,6 +38,10 @@
     cursor: pointer;
   }
 
+  .cursor-not-allowed {
+    cursor: not-allowed;
+  }
+
   a.bx--side-nav__link--current::before {
     background-color: #007d79;
   }

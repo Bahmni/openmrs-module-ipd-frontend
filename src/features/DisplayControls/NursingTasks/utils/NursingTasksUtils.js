@@ -20,7 +20,8 @@ export const ExtractMedicationNursingTasksData = (
 ) => {
   const extractedData = [],
     pendingExtractedData = [],
-    completedExtractedData = [];
+    completedExtractedData = [],
+    stoppedExtractedData = [];
   medicationNursingTasksData.forEach((item) => {
     const { slots } = item;
 
@@ -67,7 +68,13 @@ export const ExtractMedicationNursingTasksData = (
         }),
       };
 
-      if (
+      if (order.dateStopped) {
+        if (filterValue.id === "stopped" || filterValue.id === "allTasks")
+          stoppedExtractedData.push({
+            ...slotInfo,
+            stopTime: order.dateStopped,
+          });
+      } else if (
         (filterValue.id === "completed" && slot.status === "COMPLETED") ||
         (filterValue.id === "allTasks" && slot.status === "COMPLETED")
       ) {
@@ -96,6 +103,7 @@ export const ExtractMedicationNursingTasksData = (
   completedExtractedData.sort((a, b) =>
     a.administeredTime.localeCompare(b.administeredTime)
   );
+  stoppedExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
   extractedData.push(...pendingExtractedData, ...completedExtractedData);
 
   const groupedData = [];
@@ -103,7 +111,7 @@ export const ExtractMedicationNursingTasksData = (
   let currentGroup = [];
 
   extractedData.forEach((item) => {
-    if (item.startTime !== currentStartTime) {
+    if (item.startTime !== currentStartTime && !item.stopTime) {
       if (currentGroup.length > 0) {
         groupedData.push(currentGroup);
       }
@@ -117,6 +125,8 @@ export const ExtractMedicationNursingTasksData = (
   if (currentGroup.length > 0) {
     groupedData.push(currentGroup);
   }
-
+  if (stoppedExtractedData.length > 0) {
+    groupedData.push(...stoppedExtractedData.map((item) => [item]));
+  }
   return groupedData;
 };

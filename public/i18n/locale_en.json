@@ -36,6 +36,7 @@
   "NO_NURSING_TASKS_MESSAGE": "No Nursing Task is scheduled for the patient",
   "NO_NURSING_TASKS_MESSAGE_COMPLETED": "No Completed Task is available for the patient",
   "NO_NURSING_TASKS_MESSAGE_PENDING": "No Pending Task is available for the patient",
+  "NO_NURSING_TASKS_MESSAGE_STOPPED": "No Stopped Task is available for the patient",
   "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard",
   "INVALID_TIME": "Please enter valid time",
   "DONE": "Done",
@@ -58,5 +59,6 @@
   "YES": "Yes",
   "NO": "No",
   "TREATEMENTS_WARNING_MESSAGE": "You will lose the details entered. Do you want to continue?",
-  "WARD_LIST_VIEW_TEXT": "Ward List View"
+  "WARD_LIST_VIEW_TEXT": "Ward List View",
+  "STOPPED": "Stopped"
 }

@@ -6,40 +6,43 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
     class="tile-parent-container"
   >
     <div
-      class="nursing-tasks-tile false"
+      class="nursing-tasks-tile undefined
+        false"
     >
       <div
         class="tile-content"
       >
         <div
-          class="tile-title"
+          class="tile-title undefined"
         >
-          <div
-            class="nursing-task-icon-container"
-          >
-            <div>
-              <test-file-stub />
-            </div>
-          </div>
-          <span
-            class="bx--tooltip--definition bx--tooltip--a11y"
-          >
-            <button
-              aria-describedby="definition-tooltip-2"
-              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
-              type="button"
+          <div>
+            <div
+              class="nursing-task-icon-container"
             >
-              <div
-                class="drug-title"
-                style="color: rgb(82, 82, 82); font-weight: 400;"
-              />
-            </button>
+              <div>
+                <test-file-stub />
+              </div>
+            </div>
             <span
-              class="bx--assistive-text"
-              id="definition-tooltip-2"
-              role="tooltip"
-            />
-          </span>
+              class="bx--tooltip--definition bx--tooltip--a11y cursor-pointer"
+            >
+              <button
+                aria-describedby="definition-tooltip-2"
+                class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                type="button"
+              >
+                <div
+                  class="drug-title"
+                  style="color: rgb(82, 82, 82); font-weight: 400;"
+                />
+              </button>
+              <span
+                class="bx--assistive-text"
+                id="definition-tooltip-2"
+                role="tooltip"
+              />
+            </span>
+          </div>
         </div>
         <div
           class="tile-content-subtext"
@@ -78,40 +81,43 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
     class="tile-parent-container"
   >
     <div
-      class="nursing-tasks-tile false"
+      class="nursing-tasks-tile undefined
+        false"
     >
       <div
         class="tile-content"
       >
         <div
-          class="tile-title"
+          class="tile-title undefined"
         >
-          <div
-            class="nursing-task-icon-container"
-          >
-            <div>
-              <test-file-stub />
-            </div>
-          </div>
-          <span
-            class="bx--tooltip--definition bx--tooltip--a11y"
-          >
-            <button
-              aria-describedby="definition-tooltip-1"
-              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
-              type="button"
+          <div>
+            <div
+              class="nursing-task-icon-container"
             >
-              <div
-                class="drug-title"
-                style="color: rgb(82, 82, 82); font-weight: 400;"
-              />
-            </button>
+              <div>
+                <test-file-stub />
+              </div>
+            </div>
             <span
-              class="bx--assistive-text"
-              id="definition-tooltip-1"
-              role="tooltip"
-            />
-          </span>
+              class="bx--tooltip--definition bx--tooltip--a11y cursor-pointer"
+            >
+              <button
+                aria-describedby="definition-tooltip-1"
+                class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                type="button"
+              >
+                <div
+                  class="drug-title"
+                  style="color: rgb(82, 82, 82); font-weight: 400;"
+                />
+              </button>
+              <span
+                class="bx--assistive-text"
+                id="definition-tooltip-1"
+                role="tooltip"
+              />
+            </span>
+          </div>
         </div>
         <div
           class="tile-content-subtext"

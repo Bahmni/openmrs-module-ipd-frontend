@@ -22,8 +22,13 @@ export const treatmentHeaders = [
     isSortable: false,
   },
   {
-    header: "Prescribed By",
-    key: "prescribedBy",
+    header: "Status",
+    key: "status",
+    isSortable: false,
+  },
+  {
+    header: "Provider Name",
+    key: "providerName",
     isSortable: true,
   },
   {

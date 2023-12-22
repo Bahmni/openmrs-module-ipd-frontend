@@ -11,7 +11,9 @@ import {
   mockNursingTasksResponseForCompleted,
   mockExtractedMedicationNursingTasksDataForCompleted,
   mockNursingTasksResponseForAllTasks,
-  mockExtractedMedicationNursingTasksDataForAllTasks
+  mockExtractedMedicationNursingTasksDataForAllTasks,
+  mockNursingTasksResponseForStopped,
+  mockExtractedMedicationNursingTasksDataForStopped,
 } from "./NursingTasksUtilsMockData";
 
 jest.mock("axios");
@@ -66,7 +68,8 @@ describe("NursingTasksUtils", () => {
       const medicationNursingTasksData = mockNursingTasksResponse;
       const expectedData = mockExtractedMedicationNursingTasksData;
       const extractedData = ExtractMedicationNursingTasksData(
-        medicationNursingTasksData, { id: "pending", text: "Pending" }
+        medicationNursingTasksData,
+        { id: "pending", text: "Pending" }
       );
       expect(extractedData).toEqual(expectedData);
     });
@@ -75,7 +78,8 @@ describe("NursingTasksUtils", () => {
       const medicationNursingTasksData = mockNursingTasksResponse;
       const expectedData = [];
       const extractedData = ExtractMedicationNursingTasksData(
-        medicationNursingTasksData, { id: "completed", text: "Completed"}
+        medicationNursingTasksData,
+        { id: "completed", text: "Completed" }
       );
       expect(extractedData).toEqual(expectedData);
     });
@@ -84,7 +88,18 @@ describe("NursingTasksUtils", () => {
       const medicationNursingTasksData = mockNursingTasksResponseForCompleted;
       const expectedData = mockExtractedMedicationNursingTasksDataForCompleted;
       const extractedData = ExtractMedicationNursingTasksData(
-        medicationNursingTasksData, { id: "completed", text: "Completed"}
+        medicationNursingTasksData,
+        { id: "completed", text: "Completed" }
+      );
+      expect(extractedData).toEqual(expectedData);
+    });
+
+    it("should return extracted data for stopped sorted in ascending order", () => {
+      const medicationNursingTasksData = mockNursingTasksResponseForStopped;
+      const expectedData = mockExtractedMedicationNursingTasksDataForStopped;
+      const extractedData = ExtractMedicationNursingTasksData(
+        medicationNursingTasksData,
+        { id: "stopped", text: "Stopped" }
       );
       expect(extractedData).toEqual(expectedData);
     });
@@ -93,7 +108,8 @@ describe("NursingTasksUtils", () => {
       const medicationNursingTasksData = mockNursingTasksResponseForAllTasks;
       const expectedData = mockExtractedMedicationNursingTasksDataForAllTasks;
       const extractedData = ExtractMedicationNursingTasksData(
-        medicationNursingTasksData, { id: "allTasks", text: "All Tasks" }
+        medicationNursingTasksData,
+        { id: "allTasks", text: "All Tasks" }
       );
       expect(extractedData).toEqual(expectedData);
     });

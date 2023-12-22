@@ -11,6 +11,13 @@
   }
 }
 
+.no-hover {
+  cursor: not-allowed;
+  &:hover {
+    background-color: #edf8e6;
+  }
+}
+
 .relevant-task-tile {
   background-color: #e3fed1;
 
@@ -36,12 +43,30 @@
   padding: 10px;
 }
 
+.red-text {
+  color: #da1e28;
+}
+
+.red-tag {
+  color: #fff;
+  background-color: #da1e28;
+  min-width: 64px;
+  margin: 4px 0;
+}
+
 .tile-title {
   flex-direction: row;
   display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  > * {
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+  }
 
   .bx--tooltip__trigger.bx--tooltip__trigger--definition.bx--tooltip--bottom {
-    cursor: pointer;
+    cursor: unset;
   }
 }
 
