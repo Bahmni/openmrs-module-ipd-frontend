@@ -60,6 +60,12 @@ export default function NursingTasks(props) {
       defaultMessage={"No Pending Task is available for the patient"}
     />
   );
+  const NoNursingTasksMessageForStopped = (
+    <FormattedMessage
+      id={"NO_NURSING_TASKS_MESSAGE_STOPPED"}
+      defaultMessage={"No Stopped Task is available for the patient"}
+    />
+  );
 
   const fetchNursingTasks = async () => {
     setIsLoading(true);
@@ -109,6 +115,19 @@ export default function NursingTasks(props) {
         </div>
       );
     });
+  };
+
+  const getNoTaskMessage = () => {
+    switch (filterValue.id) {
+      case "completed":
+        return NoNursingTasksMessageForCompleted;
+      case "pending":
+        return NoNursingTasksMessageForPending;
+      case "stopped":
+        return NoNursingTasksMessageForStopped;
+      default:
+        return NoNursingTasksMessage;
+    }
   };
 
   const showMedicationNursingTasks = () => {
@@ -163,13 +182,7 @@ export default function NursingTasks(props) {
           />
         )}
         {medicationNursingTasks && medicationNursingTasks.length === 0 ? (
-          <div className="no-nursing-tasks">
-            {filterValue.id === "completed"
-              ? NoNursingTasksMessageForCompleted
-              : filterValue.id === "pending"
-              ? NoNursingTasksMessageForPending
-              : NoNursingTasksMessage}
-          </div>
+          <div className="no-nursing-tasks">{getNoTaskMessage()}</div>
         ) : (
           <div className="nursing-task-tiles-container">{showTaskTiles()}</div>
         )}

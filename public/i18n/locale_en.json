@@ -36,6 +36,7 @@
   "NO_NURSING_TASKS_MESSAGE": "No Nursing Task is scheduled for the patient",
   "NO_NURSING_TASKS_MESSAGE_COMPLETED": "No Completed Task is available for the patient",
   "NO_NURSING_TASKS_MESSAGE_PENDING": "No Pending Task is available for the patient",
+  "NO_NURSING_TASKS_MESSAGE_STOPPED": "No Stopped Task is available for the patient",
   "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard",
   "INVALID_TIME": "Please enter valid time",
   "DONE": "Done",
