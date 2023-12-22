@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AdministeredMedicationList should render AdministeredMedicationList 1`] = `
+<div>
+  <div
+    aria-label="Structured list section"
+    class="bx--structured-list"
+    role="table"
+  >
+    <div
+      class="bx--structured-list-tbody"
+      role="rowgroup"
+    >
+      <div
+        class="bx--structured-list-row"
+        role="row"
+      >
+        <div
+          class="drug-name-cell bx--structured-list-td"
+          role="cell"
+        >
+          <div>
+            Liquid Paraffin
+          </div>
+          <span>
+            2 - Drop - Topical
+          </span>
+        </div>
+        <div
+          class="time-cell bx--structured-list-td"
+          role="cell"
+        >
+          <test-file-stub
+            classname="clock-icon"
+          />
+          <span
+            class="time"
+          >
+            12:30
+          </span>
+        </div>
+        <div
+          class="bx--structured-list-td"
+          role="cell"
+        >
+          <test-file-stub
+            classname="done-icon"
+          />
+          <span
+            class="status"
+            data-testid="status-name-cell"
+          >
+            Done
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -203,7 +203,7 @@ export default function NursingTasks(props) {
           <Notification
             hostData={{
               notificationKind: "success",
-              messageId: "DRUG_CHART_MODAL_SAVE_MESSAGE",
+              messageId: "NURSING_TASKS_SAVE_MESSAGE",
             }}
             hostApi={{
               onClose: () => {

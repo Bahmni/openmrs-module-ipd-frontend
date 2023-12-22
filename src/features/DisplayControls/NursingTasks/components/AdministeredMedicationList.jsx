@@ -7,9 +7,9 @@ import {
 } from "carbon-components-react";
 import ClockIcon from "../../../../icons/clock.svg";
 import DoneIcon from "../../../../icons/done.svg";
-import "../styles/StructuredList.scss";
+import "../styles/AdministeredMedicationList.scss";
 
-const SimpleStructuredList = ({ list }) => {
+const AdministeredMedicationList = ({ list }) => {
   const getAdministeredTime = (date) => {
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -46,7 +46,7 @@ const SimpleStructuredList = ({ list }) => {
               </StructuredListCell>
               <StructuredListCell>
                 {getStatusIcon(list[key].status)}
-                <span className="status">
+                <span className="status" data-testid="status-name-cell">
                   {getMedicationStatus(list[key].status)}
                 </span>
               </StructuredListCell>
@@ -58,4 +58,4 @@ const SimpleStructuredList = ({ list }) => {
   );
 };
 
-export default SimpleStructuredList;
+export default AdministeredMedicationList;
