@@ -32,7 +32,7 @@ export default function DrugListCell(props) {
   if (dosingInstructions !== null && dosingInstructions !== undefined) {
     parsedDosingInstructions = JSON.parse(dosingInstructions);
   }
-
+  
   const toolTipContent = (
     <div>
       Instructions:&nbsp;{parsedDosingInstructions.instructions}

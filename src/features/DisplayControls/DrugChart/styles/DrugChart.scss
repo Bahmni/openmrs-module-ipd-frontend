@@ -3,10 +3,10 @@
 }
 .drug-chart {
   --time-cell-height: 66px;
-  --half-hour-width: 21px;
+  --half-hour-width: 50px;
   --line-width: 1px;
 
-  max-height: calc(8 * var(--time-cell-height));
+  max-height: calc(11 * var(--time-cell-height));
   display: grid;
   grid-template-columns: 3fr 7fr;
   width: 100%;
@@ -57,4 +57,5 @@
 .drug-chart-content {
   overflow: auto;
   height: 100%;
+  margin-left: 6px;
 }

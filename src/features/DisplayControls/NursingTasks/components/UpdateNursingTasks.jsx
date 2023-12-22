@@ -9,6 +9,7 @@ import { Toggle, Tag, TextArea } from "carbon-components-react";
 import moment from "moment";
 import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
 import { getTagForTheDrugOrder } from "../../../../utils/DisplayTags";
+import { useFetchIpdConfig } from "../../../../entries/Dashboard/hooks/useFetchIpdConfig";
 
 const UpdateNursingTasks = (props) => {
   const { medicationTasks, updateNursingTasksSlider } = props;
@@ -16,6 +17,15 @@ const UpdateNursingTasks = (props) => {
   const [errors, updateErrors] = useState({});
   const [showErrors, updateShowErrors] = useState(false);
   const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
+  const { configData, isConfigLoading } = useFetchIpdConfig();
+  const [ipdConfig, setIpdConfig] = useState();
+
+  useEffect(() => {
+    if (configData && ipdConfig === undefined) {
+      setIpdConfig(configData);
+    }
+  }, [configData]);
+
   const invalidTimeText24Hour = (
     <FormattedMessage
       id={"INVALID_TIME"}
@@ -144,7 +154,7 @@ const UpdateNursingTasks = (props) => {
               />
               <div className={"medication-name"}>
                 <div className={"name"}>{medicationTask.drugName}</div>
-                {getTagForTheDrugOrder(medicationTask.dosingInstructions)}
+                {getTagForTheDrugOrder(medicationTask.dosingInstructions, ipdConfig)}
               </div>
               <div className="medication-details">
                 <span>{medicationTask.dosage}</span>

@@ -4,11 +4,12 @@ import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
 import data from "../../../../utils/config.json";
 
-import { TooltipDefinition } from "carbon-components-react";
+import { Tag, TooltipDefinition } from "carbon-components-react";
 
 import "../styles/TaskTile.scss";
 import { getTagForTheDrugOrder } from "../../../../utils/DisplayTags";
 import { useFetchIpdConfig } from "../../../../entries/Dashboard/hooks/useFetchIpdConfig";
+import { FormattedMessage } from "react-intl";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
@@ -30,6 +31,7 @@ export default function TaskTile(props) {
     startTime,
     startTimeInEpochSeconds,
     dosingInstructions,
+    stopTime,
   } = newMedicationNursingTask;
 
   const { config: { nursingTasks = {} } = {} } = data;
@@ -70,7 +72,7 @@ export default function TaskTile(props) {
     <div
       className="drug-title"
       style={{
-        color: isRelevantTask ? "#393939" : "#525252",
+        color: stopTime ? "#da1e28" : isRelevantTask ? "#393939" : "#525252",
         fontWeight: isRelevantTask ? 500 : 400,
       }}
     >
@@ -80,18 +82,27 @@ export default function TaskTile(props) {
   return (
     <div className="tile-parent-container">
       <div
-        className={`nursing-tasks-tile ${
-          isRelevantTask && "relevant-task-tile"
-        }`}
+        className={`nursing-tasks-tile ${stopTime && "no-hover"}
+        ${isRelevantTask && !stopTime && "relevant-task-tile"}`}
       >
         <div className="tile-content">
-          <div className="tile-title">
-            <div className="nursing-task-icon-container">
-              <SVGIcon iconType={iconType} />
+          <div className={`tile-title ${stopTime && "red-text"}`}>
+            <div>
+              <div className="nursing-task-icon-container">
+                <SVGIcon iconType={iconType} />
+              </div>
+              <TooltipDefinition
+                tooltipText={drugName}
+                className={stopTime ? "cursor-not-allowed" : "cursor-pointer"}
+              >
+                {drugNameText}
+              </TooltipDefinition>
             </div>
-            <TooltipDefinition tooltipText={drugName}>
-              {drugNameText}
-            </TooltipDefinition>
+            {stopTime && (
+              <Tag className={"red-tag"}>
+                <FormattedMessage id={"STOPPED"} defaultMessage={"Stopped"} />
+              </Tag>
+            )}
           </div>
           <div
             className="tile-name-cell"

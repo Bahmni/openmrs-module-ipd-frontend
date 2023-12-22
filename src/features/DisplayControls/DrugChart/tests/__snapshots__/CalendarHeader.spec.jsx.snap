@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CalendarHeader should match snapshot 1`] = `
-<DocumentFragment>
+<div>
   <div
     class="calendar-header"
   >
@@ -12,147 +12,59 @@ exports[`CalendarHeader should match snapshot 1`] = `
         class="hour-header"
         data-testid="hour"
       >
-        00:00
+        16
+        :00
       </div>
       <div
         class="hour-header"
         data-testid="hour"
       >
-        01:00
+        17
+        :00
       </div>
       <div
         class="hour-header"
         data-testid="hour"
       >
-        02:00
+        18
+        :00
       </div>
       <div
         class="hour-header"
         data-testid="hour"
       >
-        03:00
+        19
+        :00
       </div>
       <div
         class="hour-header"
         data-testid="hour"
       >
-        04:00
+        20
+        :00
       </div>
       <div
         class="hour-header"
         data-testid="hour"
       >
-        05:00
+        21
+        :00
       </div>
       <div
         class="hour-header"
         data-testid="hour"
       >
-        06:00
+        22
+        :00
       </div>
       <div
         class="hour-header"
         data-testid="hour"
       >
-        07:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        08:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        09:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        10:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        11:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        12:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        13:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        14:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        15:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        16:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        17:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        18:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        19:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        20:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        21:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        22:00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        23:00
+        23
+        :00
       </div>
     </div>
   </div>
-</DocumentFragment>
+</div>
 `;

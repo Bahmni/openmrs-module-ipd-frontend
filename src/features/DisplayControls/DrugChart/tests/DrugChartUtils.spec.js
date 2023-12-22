@@ -1,16 +1,22 @@
 import {
   fetchMedications,
   TransformDrugChartData,
+  currentShiftHoursArray,
 } from "../utils/DrugChartUtils";
 import axios from "axios";
 import { mockResponse } from "./DrugChartUtilsMockData";
 import { drugChartData } from "./DrugChartUtilsMockData";
+import MockDate from "mockdate";
 
 jest.mock("axios");
 
 describe("DrugChartUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    MockDate.reset();
   });
 
   describe("fetchMedications", () => {
@@ -76,5 +82,11 @@ describe("DrugChartUtils", () => {
         ],
       ]);
     });
+  });
+
+  it("should test currentShiftHoursArray method", () => {
+    // mock current date to 19 December 2023 16:59:39 IST
+    MockDate.set(1702985379);
+    expect(currentShiftHoursArray()).toEqual([16, 17, 18, 19, 20, 21, 22, 23]);
   });
 });

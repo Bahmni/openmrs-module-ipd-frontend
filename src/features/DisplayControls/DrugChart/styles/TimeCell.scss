@@ -7,6 +7,13 @@
   height: var(--time-cell-height);
   align-items: center;
   align-items: stretch;
+  .note-icon-container {
+    margin: 0;
+  }
+
+  &:first-child {
+    border-left: 2px solid #c6c6c6;
+  }
 
   &:last-child {
     border-right: var(--day-border);
@@ -26,5 +33,9 @@
     &:last-child {
       border-left: 1px dashed #c6c6c6;
     }
+  }
+
+  .highligtedCell {
+    background-color: #e3f1fa;
   }
 }

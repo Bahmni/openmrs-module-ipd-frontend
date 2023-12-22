@@ -6,6 +6,7 @@
   font-weight: 500;
   color: #393939;
   font-style: normal;
+  display: contents;
 }
 .drug-name-container {
   display: block;
@@ -30,7 +31,5 @@
 }
 
 .drug-name-cell {
-  position: relative;
   float: inline-end;
-  top: -22px;
 }
