@@ -12,8 +12,7 @@ import { FormattedMessage } from "react-intl";
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
-  const isDisabled = newMedicationNursingTask.isDisabled;
-
+  console.log("newMedicationNursingTask", newMedicationNursingTask);
   let isGroupedTask, taskCount;
   if (medicationNursingTask.length > 1) {
     isGroupedTask = true;
@@ -28,6 +27,7 @@ export default function TaskTile(props) {
     startTime,
     startTimeInEpochSeconds,
     stopTime,
+    isDisabled,
   } = newMedicationNursingTask;
 
   const { config: { nursingTasks = {} } = {} } = data;
@@ -104,13 +104,18 @@ export default function TaskTile(props) {
     <div className="tile-parent-container">
       <div
         className={`nursing-tasks-tile ${stopTime && "no-hover"}
-        ${isRelevantTask && !stopTime && "relevant-task-tile"} ${isDisabled ? "disabled-tile" : ""}`}
+        ${isRelevantTask && !stopTime && "relevant-task-tile"} ${
+          isDisabled ? "disabled-tile" : ""
+        }`}
       >
         <div className="tile-content">
           <div className={`tile-title ${stopTime && "red-text"}`}>
             <div>
-              <div className="nursing-task-icon-container">
-                <SVGIcon iconType={iconType} />
+              <div
+                className="nursing-task-icon-container"
+                data-testid={iconType()}
+              >
+                <SVGIcon iconType={iconType()} />
               </div>
               <TooltipDefinition
                 tooltipText={drugName}

@@ -666,19 +666,6 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
   ],
 ];
 
-export const mockTaskTileData = [
-  [
-    {
-      drugName: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
-      drugRoute: "Oral",
-      duration: "3 Day(s)",
-      dosage: 25,
-      doseType: "mg",
-      startTimeInEpochSeconds: 1690906550,
-      startTime: "16:15",
-    },
-  ],
-];
 
 export const mockTaskTileDataForGroupedTask = [
   [
@@ -724,5 +711,36 @@ export const mockMedicationTasks = [
     uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
     startTimeInEpochSeconds: 1700620200,
     startTime: "08:00",
+  },
+];
+
+export const mockCompletedTaskTileData = [
+  {
+    drugName: "Halothane/Fluothane 250 mL Inhalation Anesthetic Liquid",
+    drugRoute: "Oral",
+    duration: "2 Day(s)",
+    dosage: "1ml",
+    uuid: "f2959937-691a-4f52-82e9-4879ac7eff4b",
+    startTimeInEpochSeconds: 1703586600,
+    startTime: "16:00",
+    orderId: "5a893957-b535-431c-a2be-3e37406f941a",
+    isDisabled: true,
+    administeredTimeInEpochSeconds: 1703575408,
+    administeredTime: "04:36",
+  },
+];
+
+export const mockPendingTaskTileData = [
+  {
+    drugName: "Paracetamol 500 mg Tablet",
+    drugRoute: "Oral",
+    duration: "3 Day(s)",
+    dosage: 1,
+    doseType: "Tablet(s)",
+    uuid: "72af0cfa-be74-42a8-b650-45f6978314dd",
+    startTimeInEpochSeconds: 1703601000,
+    startTime: "20:00",
+    orderId: "703ce1a1-8839-44ab-a349-8a6ca758f6b8",
+    isDisabled: false,
   },
 ];

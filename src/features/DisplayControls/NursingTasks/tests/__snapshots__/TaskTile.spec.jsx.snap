@@ -7,7 +7,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
   >
     <div
       class="nursing-tasks-tile undefined
-        false"
+        false "
     >
       <div
         class="tile-content"
@@ -18,6 +18,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
           <div>
             <div
               class="nursing-task-icon-container"
+              data-testid="Pending"
             >
               <div>
                 <test-file-stub />
@@ -82,7 +83,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
   >
     <div
       class="nursing-tasks-tile undefined
-        false"
+        false disabled-tile"
     >
       <div
         class="tile-content"
@@ -93,6 +94,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
           <div>
             <div
               class="nursing-task-icon-container"
+              data-testid="Administered"
             >
               <div>
                 <test-file-stub />
@@ -109,13 +111,17 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
                 <div
                   class="drug-title"
                   style="color: rgb(82, 82, 82); font-weight: 400;"
-                />
+                >
+                  Halothane/Fluothane 250 mL Inhalation Anesthetic Liquid
+                </div>
               </button>
               <span
                 class="bx--assistive-text"
                 id="definition-tooltip-1"
                 role="tooltip"
-              />
+              >
+                Halothane/Fluothane 250 mL Inhalation Anesthetic Liquid
+              </span>
             </span>
           </div>
         </div>
@@ -123,9 +129,11 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
           class="tile-content-subtext"
           style="color: rgb(82, 82, 82);"
         >
-          <span />
           <span>
-             - 
+            1ml
+          </span>
+          <span>
+             - Oral
           </span>
         </div>
         <div
@@ -133,7 +141,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
         >
           <test-file-stub />
           <div>
-             
+             16:00 - 05:12 PM(actual)
           </div>
         </div>
       </div>

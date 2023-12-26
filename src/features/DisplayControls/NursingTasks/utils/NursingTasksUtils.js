@@ -139,7 +139,6 @@ export const ExtractMedicationNursingTasksData = (
 
 export const saveAdministeredMedication = async (administeredMedication) => {
   try {
-    console.log("try method");
     const response = await axios.post(
       ADMINISTERED_MEDICATIONS_BASE_URL,
       administeredMedication
