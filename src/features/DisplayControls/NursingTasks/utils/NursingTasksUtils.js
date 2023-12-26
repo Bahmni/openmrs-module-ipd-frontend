@@ -110,7 +110,7 @@ export const ExtractMedicationNursingTasksData = (
     a.administeredTime.localeCompare(b.administeredTime)
   );
   stoppedExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
-  extractedData.push(...pendingExtractedData, ...completedExtractedData);
+  extractedData.push(...pendingExtractedData);
 
   const groupedData = [];
   let currentStartTime = null;
@@ -133,6 +133,9 @@ export const ExtractMedicationNursingTasksData = (
   }
   if (stoppedExtractedData.length > 0) {
     groupedData.push(...stoppedExtractedData.map((item) => [item]));
+  }
+  if (completedExtractedData.length > 0) {
+    groupedData.push(...completedExtractedData.map((item) => [item]));
   }
   return groupedData;
 };
