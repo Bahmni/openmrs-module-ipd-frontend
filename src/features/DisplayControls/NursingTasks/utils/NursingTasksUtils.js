@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
-  MEDICATIONS_BASE_URL,
   ADMINISTERED_MEDICATIONS_BASE_URL,
+  MEDICATIONS_BASE_URL,
 } from "../../../../constants";
 import moment from "moment";
 
@@ -24,7 +24,8 @@ export const ExtractMedicationNursingTasksData = (
   const extractedData = [],
     pendingExtractedData = [],
     completedExtractedData = [],
-    stoppedExtractedData = [];
+    stoppedExtractedData = [],
+    skippedExtractedData = [];
   medicationNursingTasksData.forEach((item) => {
     const { slots } = item;
 
@@ -71,15 +72,23 @@ export const ExtractMedicationNursingTasksData = (
         }),
         orderId: order.uuid,
         // order: order,
-        isDisabled: administeredDateTime ? true : false,
+        isDisabled:
+          Boolean(administeredDateTime) ||
+          slot.medicationAdministration?.status === "Not Done",
       };
-
+      console.log("skipped", slot.medicationAdministration?.status, slotInfo);
       if (order.dateStopped) {
         if (filterValue.id === "stopped" || filterValue.id === "allTasks")
           stoppedExtractedData.push({
             ...slotInfo,
             stopTime: order.dateStopped,
           });
+      } else if (
+        (filterValue.id === "skipped" || filterValue.id === "allTasks") &&
+        slot.medicationAdministration?.status === "Not Done"
+      ) {
+        console.log("Came Inside here");
+        skippedExtractedData.push({ ...slotInfo, status: "Not Done" });
       } else if (
         (filterValue.id === "completed" && slot.status === "COMPLETED") ||
         (filterValue.id === "allTasks" && slot.status === "COMPLETED")
@@ -131,22 +140,20 @@ export const ExtractMedicationNursingTasksData = (
   if (currentGroup.length > 0) {
     groupedData.push(currentGroup);
   }
-  if (stoppedExtractedData.length > 0) {
-    groupedData.push(...stoppedExtractedData.map((item) => [item]));
-  }
-  if (completedExtractedData.length > 0) {
+  if (filterValue.id !== "pending") {
     groupedData.push(...completedExtractedData.map((item) => [item]));
+    groupedData.push(...stoppedExtractedData.map((item) => [item]));
+    groupedData.push(...skippedExtractedData.map((item) => [item]));
   }
   return groupedData;
 };
 
 export const saveAdministeredMedication = async (administeredMedication) => {
   try {
-    const response = await axios.post(
+    return await axios.post(
       ADMINISTERED_MEDICATIONS_BASE_URL,
       administeredMedication
     );
-    return response;
   } catch (error) {
     console.error(error);
   }

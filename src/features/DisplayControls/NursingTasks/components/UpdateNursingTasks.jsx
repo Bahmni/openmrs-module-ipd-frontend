@@ -5,7 +5,14 @@ import "../styles/UpdateNursingTasks.scss";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
 import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import Clock from "../../../../icons/clock.svg";
-import { Toggle, Tag, TextArea, Modal } from "carbon-components-react";
+import {
+  Modal,
+  OverflowMenu,
+  OverflowMenuItem,
+  Tag,
+  TextArea,
+  Toggle,
+} from "carbon-components-react";
 import moment from "moment";
 import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
 import AdministeredMedicationList from "./AdministeredMedicationList";
@@ -25,10 +32,12 @@ const UpdateNursingTasks = (props) => {
   const [errors, updateErrors] = useState({});
   const [showErrors, updateShowErrors] = useState(false);
   const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
+  const [isAnyMedicationSkipped, setIsAnyMedicationSkipped] = useState(false);
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
   const [isAnyMedicationAdministered, setIsAnyMedicationAdministered] =
     useState(false);
   const [administeredTasks, setAdministeredTasks] = useState({});
+  const [skippedTasks, setSkippedTasks] = useState({});
   const [showWarningNotification, setShowWarningNotification] = useState(false);
   const invalidTimeText24Hour = (
     <FormattedMessage
@@ -56,21 +65,30 @@ const UpdateNursingTasks = (props) => {
 
   const createAdministeredTasksPayload = () => {
     const administeredTasksPayload = [];
+    console.log("Skipped Tasks", skippedTasks);
     Object.keys(administeredTasks).forEach((key) => {
       const time = new Date(tasks[key].actualTime);
       const utcTimeEpoch = moment.utc(time).unix();
-
       administeredTasksPayload.push({
         patientUuid: patientId,
         orderUuid: administeredTasks[key].orderId,
         providerUuid: providerId,
-        notes: administeredTasks[key].notes ? administeredTasks[key].notes : "",
+        notes: administeredTasks[key].notes || "",
         status: administeredTasks[key]?.status,
         slotUuid: key,
         effectiveDateTime: utcTimeEpoch,
       });
     });
-    console.log("administeredTasksPayload", administeredTasksPayload);
+    Object.keys(skippedTasks).forEach((key) => {
+      administeredTasksPayload.push({
+        patientUuid: patientId,
+        orderUuid: skippedTasks[key].orderId,
+        providerUuid: providerId,
+        notes: skippedTasks[key].notes || "",
+        status: skippedTasks[key]?.status,
+        slotUuid: key,
+      });
+    });
     return administeredTasksPayload;
   };
 
@@ -89,7 +107,6 @@ const UpdateNursingTasks = (props) => {
     );
   };
   useEffect(() => {
-    console.log("medication tasks", medicationTasks);
     medicationTasks.map((medicationTask) => {
       updateTasks((prev) => {
         return {
@@ -121,12 +138,15 @@ const UpdateNursingTasks = (props) => {
         saveDisabled = false;
         setIsAnyMedicationAdministered(true);
       }
+      if (tasks[key].skipped) {
+        saveDisabled = false;
+        setIsAnyMedicationSkipped(true);
+      }
     });
     updateIsSaveDisabled(saveDisabled);
   };
 
   const handleToggle = (checked, id) => {
-    console.log("tasks", tasks);
     updateTasks({
       ...tasks,
       [id]: {
@@ -141,28 +161,25 @@ const UpdateNursingTasks = (props) => {
     const [hours, minutes] = time.split(":").map(Number);
     const specificTime = new Date();
     specificTime.setHours(hours, minutes, 0, 0);
-    const epochTimeInSeconds = Math.floor(specificTime.getTime() / 1000);
-    return epochTimeInSeconds;
+    return Math.floor(specificTime.getTime() / 1000);
   }
 
   const handleTimeChange = (time, id, index) => {
-    // const currentTimeInEpochSeconds = moment().unix();
+    // console.log("Inputs", time, id, index);
     const enteredTimeInEpochSeconds = timeToEpoch(time);
     const timeWithinWindowInEpochSeconds =
       medicationTasks[index].startTimeInEpochSeconds +
       nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
-
-    // if (enteredTimeInEpochSeconds > currentTimeInEpochSeconds) {
-    // }
+    // console.log("Time", enteredTimeInEpochSeconds, timeWithinWindowInEpochSeconds);
+    updateTasks({
+      ...tasks,
+      [id]: {
+        ...tasks[id],
+        isTimeUpdated: true,
+        actualTime: moment(time, "HH:mm"),
+      },
+    });
     if (enteredTimeInEpochSeconds > timeWithinWindowInEpochSeconds) {
-      updateTasks({
-        ...tasks,
-        [id]: {
-          ...tasks[id],
-          isTimeUpdated: true,
-          actualTime: moment(time, "HH:mm"),
-        },
-      });
       updateErrors({
         ...errors,
         [id]: Boolean(!tasks[id].notes),
@@ -181,7 +198,7 @@ const UpdateNursingTasks = (props) => {
     if (e.target.value) {
       delete errors[id];
     } else {
-      if (tasks[id].isTimeUpdated) {
+      if (tasks[id].isTimeUpdated || tasks[id].skipped) {
         updateErrors({
           ...errors,
           [id]: true,
@@ -202,11 +219,17 @@ const UpdateNursingTasks = (props) => {
     }, 3000);
 
     setAdministeredTasks({});
+    setSkippedTasks({});
     Object.keys(tasks).forEach((key) => {
       if (tasks[key].isSelected) {
         setAdministeredTasks((prev) => ({
           ...prev,
           [key]: { ...tasks[key], status: "completed" },
+        }));
+      } else if (tasks[key].skipped) {
+        setSkippedTasks((prev) => ({
+          ...prev,
+          [key]: { ...tasks[key], status: "not-done" },
         }));
       }
     });
@@ -221,6 +244,24 @@ const UpdateNursingTasks = (props) => {
     }
   };
 
+  const handleSkipDrug = (medicationTask, skipped) => {
+    updateTasks({
+      ...tasks,
+      [medicationTask.uuid]: {
+        ...tasks[medicationTask.uuid],
+        skipped: skipped,
+      },
+    });
+    if (skipped && !tasks[medicationTask.uuid].notes) {
+      updateErrors({
+        ...errors,
+        [medicationTask.uuid]: skipped,
+      });
+    } else {
+      delete errors[medicationTask.uuid];
+    }
+  };
+
   const sliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -230,9 +271,6 @@ const UpdateNursingTasks = (props) => {
       setShowWarningNotification(false);
     },
   };
-
-  console.log("administeredTasks", administeredTasks);
-
   return (
     <>
       <SideBarPanel
@@ -251,15 +289,46 @@ const UpdateNursingTasks = (props) => {
           {medicationTasks.map((medicationTask, index) => {
             return (
               <div key={index} className={"nursing-task-section"}>
-                <Toggle
-                  id={medicationTask.uuid}
-                  size={"sm"}
-                  labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
-                  labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
-                  onToggle={handleToggle}
-                />
+                <div className={"actionable-section"}>
+                  {!tasks[medicationTask.uuid]?.skipped && (
+                    <Toggle
+                      id={medicationTask.uuid}
+                      size={"sm"}
+                      labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
+                      labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
+                      onToggle={handleToggle}
+                    />
+                  )}
+                  <OverflowMenu
+                    flipped={true}
+                    disabled={tasks[medicationTask.uuid]?.isSelected}
+                    className={"overflowMenu"}
+                  >
+                    {tasks[medicationTask.uuid]?.skipped ? (
+                      <OverflowMenuItem
+                        itemText={"Un-Skip Drug"}
+                        onClick={() => {
+                          handleSkipDrug(medicationTask, false);
+                        }}
+                      />
+                    ) : (
+                      <OverflowMenuItem
+                        itemText={"Skip Drug"}
+                        onClick={() => {
+                          handleSkipDrug(medicationTask, true);
+                        }}
+                      />
+                    )}
+                  </OverflowMenu>
+                </div>
                 <div className={"medication-name"}>
-                  <div className={"name"}>{medicationTask.drugName}</div>
+                  <div
+                    className={`name ${
+                      tasks[medicationTask.uuid]?.skipped && "red-text"
+                    }`}
+                  >
+                    {medicationTask.drugName}
+                  </div>
                   <Tag type={"blue"}>Rx</Tag>
                 </div>
                 <div className="medication-details">
@@ -269,26 +338,36 @@ const UpdateNursingTasks = (props) => {
                   )}
                   <span>&nbsp;-&nbsp;{medicationTask.drugRoute}</span>
                 </div>
-                {tasks[medicationTask.uuid]?.actualTime && (
+                {(tasks[medicationTask.uuid]?.actualTime ||
+                  tasks[medicationTask.uuid]?.skipped) && (
                   <div style={{ display: "flex" }}>
-                    <TimePicker24Hour
-                      defaultTime={tasks[
-                        medicationTask.uuid
-                      ]?.actualTime.format("HH:mm")}
-                      onChange={(time) => {
-                        handleTimeChange(time, medicationTask.uuid, index);
-                      }}
-                      labelText="Task Time"
-                      invalidText={invalidTimeText24Hour}
-                      light={true}
-                    />
-                    <div className={"notes-text-area"}>
+                    {tasks[medicationTask.uuid]?.actualTime && (
+                      <TimePicker24Hour
+                        defaultTime={tasks[
+                          medicationTask.uuid
+                        ]?.actualTime.format("HH:mm")}
+                        onChange={(time) => {
+                          handleTimeChange(time, medicationTask.uuid, index);
+                        }}
+                        labelText="Task Time"
+                        invalidText={invalidTimeText24Hour}
+                        light={true}
+                      />
+                    )}
+                    <div
+                      className={`${
+                        Boolean(tasks[medicationTask.uuid]?.actualTime) &&
+                        "notes-text-area"
+                      }`}
+                      style={{ width: "100%" }}
+                    >
                       <TextArea
                         labelText={
                           <Title
                             text={"Notes"}
                             isRequired={
-                              tasks[medicationTask.uuid].isTimeUpdated
+                              tasks[medicationTask.uuid].isTimeUpdated ||
+                              tasks[medicationTask.uuid].skipped
                             }
                           />
                         }
@@ -316,7 +395,10 @@ const UpdateNursingTasks = (props) => {
           })}
         </div>
         <Modal
-          open={isAnyMedicationAdministered && openConfirmationModal}
+          open={
+            (isAnyMedicationAdministered || isAnyMedicationSkipped) &&
+            openConfirmationModal
+          }
           onRequestClose={closeModal}
           onSecondarySubmit={closeModal}
           preventCloseOnClickOutside={true}
@@ -376,5 +458,8 @@ const UpdateNursingTasks = (props) => {
 UpdateNursingTasks.propTypes = {
   medicationTasks: PropTypes.array.isRequired,
   updateNursingTasksSlider: PropTypes.func.isRequired,
+  patientId: PropTypes.string,
+  providerId: PropTypes.string,
+  setShowSuccessNotification: PropTypes.func,
 };
 export default UpdateNursingTasks;

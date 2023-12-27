@@ -56,6 +56,10 @@ export default function TaskTile(props) {
   };
 
   const iconType = () => {
+    console.log("In ICON TYPE", newMedicationNursingTask);
+    if (newMedicationNursingTask.status === "Not Done") {
+      return "Not-Administered";
+    }
     if (newMedicationNursingTask.administeredTimeInEpochSeconds) {
       const administeredLateWindowInSeconds =
         startTimeInEpochSeconds +

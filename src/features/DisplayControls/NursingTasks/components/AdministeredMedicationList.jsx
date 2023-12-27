@@ -5,6 +5,7 @@ import {
   StructuredListRow,
   StructuredListCell,
 } from "carbon-components-react";
+import PropTypes from "prop-types";
 import ClockIcon from "../../../../icons/clock.svg";
 import DoneIcon from "../../../../icons/done.svg";
 import "../styles/AdministeredMedicationList.scss";
@@ -58,4 +59,7 @@ const AdministeredMedicationList = ({ list }) => {
   );
 };
 
+AdministeredMedicationList.propTypes = {
+  list: PropTypes.object,
+};
 export default AdministeredMedicationList;

@@ -14,6 +14,7 @@
   "DRUG_CHART_MODAL_START_TIME_BEYOND_NEXT_DOSE": "Start Time does not match with the frequency",
   "ADMINISTERED_LATE": "Administered Late",
   "NOT_ADMINISTERED": "Not Administered",
+  "NOT_ADMINISTERED_TAG": "Skipped",
   "LATE": "Late",
   "ADMINISTERED": "Administered",
   "PENDING": "Pending",
