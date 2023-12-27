@@ -140,22 +140,13 @@ const UpdateNursingTasks = (props) => {
       timeToEpoch(tasks[id].startTime) +
       nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
 
-    console.log("enteredTimeInEpochSeconds", enteredTimeInEpochSeconds);
-    console.log(
-      "timeWithinWindowInEpochSeconds",
-      timeWithinWindowInEpochSeconds
-    );
     if (enteredTimeInEpochSeconds > timeWithinWindowInEpochSeconds) {
-      console.log("Inside if of isTimeWithinAdministeredWindow");
       return false;
     } else return true;
   };
 
   const handleTimeChange = (time, id) => {
-    console.log("inside handleTimeChange");
-    console.log("time", time);
     if (!isTimeWithinAdministeredWindow(time, id)) {
-      console.log("Inside if of handleTimeChange");
       updateTasks({
         ...tasks,
         [id]: {
@@ -168,14 +159,22 @@ const UpdateNursingTasks = (props) => {
         ...errors,
         [id]: Boolean(!tasks[id].notes),
       });
+    } else {
+      updateTasks({
+        ...tasks,
+        [id]: {
+          ...tasks[id],
+          isTimeOutOfWindow: false,
+          actualTime: moment(time, "HH:mm"),
+        },
+      });
+      delete errors[id];
     }
   };
 
   const handleToggle = (checked, id) => {
-    console.log("inside handleToggle");
     const time = moment().format("HH:mm");
     if (!isTimeWithinAdministeredWindow(time, id)) {
-      console.log("Inside if of handleToggle");
       updateTasks({
         ...tasks,
         [id]: {
@@ -262,11 +261,6 @@ const UpdateNursingTasks = (props) => {
       setShowWarningNotification(false);
     },
   };
-
-  useEffect(() => {
-    console.log("INFOOOO");
-    console.log("tasks", tasks);
-  }, [tasks]);
 
   return (
     <>
