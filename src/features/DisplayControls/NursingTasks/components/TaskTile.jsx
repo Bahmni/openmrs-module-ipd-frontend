@@ -12,7 +12,6 @@ import { FormattedMessage } from "react-intl";
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
-  console.log("newMedicationNursingTask", newMedicationNursingTask);
   let isGroupedTask, taskCount;
   if (medicationNursingTask.length > 1) {
     isGroupedTask = true;

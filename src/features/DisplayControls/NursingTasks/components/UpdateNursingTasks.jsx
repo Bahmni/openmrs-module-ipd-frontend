@@ -73,7 +73,6 @@ const UpdateNursingTasks = (props) => {
         administeredDateTime: utcTimeEpoch,
       });
     });
-    console.log("administeredTasksPayload", administeredTasksPayload);
     return administeredTasksPayload;
   };
 
@@ -92,7 +91,6 @@ const UpdateNursingTasks = (props) => {
     );
   };
   useEffect(() => {
-    console.log("medication tasks", medicationTasks);
     medicationTasks.map((medicationTask) => {
       updateTasks((prev) => {
         return {
@@ -142,9 +140,15 @@ const UpdateNursingTasks = (props) => {
       timeToEpoch(tasks[id].startTime) +
       nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
 
-    if (enteredTimeInEpochSeconds > timeWithinWindowInEpochSeconds)
+    console.log("enteredTimeInEpochSeconds", enteredTimeInEpochSeconds);
+    console.log(
+      "timeWithinWindowInEpochSeconds",
+      timeWithinWindowInEpochSeconds
+    );
+    if (enteredTimeInEpochSeconds > timeWithinWindowInEpochSeconds) {
+      console.log("Inside if of isTimeWithinAdministeredWindow");
       return false;
-    else return true;
+    } else return true;
   };
 
   const handleTimeChange = (time, id) => {
@@ -259,7 +263,10 @@ const UpdateNursingTasks = (props) => {
     },
   };
 
-  console.log("administeredTasks", administeredTasks);
+  useEffect(() => {
+    console.log("INFOOOO");
+    console.log("tasks", tasks);
+  }, [tasks]);
 
   return (
     <>
