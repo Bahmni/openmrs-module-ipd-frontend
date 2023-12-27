@@ -12,6 +12,7 @@ import AdministeredMedicationList from "./AdministeredMedicationList";
 import { saveAdministeredMedication } from "../utils/NursingTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import data from "../../../../utils/config.json";
+import { performerFunction } from "../utils/constants";
 
 const UpdateNursingTasks = (props) => {
   const {
@@ -63,11 +64,13 @@ const UpdateNursingTasks = (props) => {
       administeredTasksPayload.push({
         patientUuid: patientId,
         orderUuid: administeredTasks[key].orderId,
-        providerUuid: providerId,
-        notes: administeredTasks[key].notes ? administeredTasks[key].notes : "",
+        providers: [{ providerUuid: providerId, function: performerFunction }],
+        notes: administeredTasks[key].notes
+          ? [{ authorUuid: providerId, text: administeredTasks[key]?.notes }]
+          : [],
         status: administeredTasks[key]?.status,
         slotUuid: key,
-        effectiveDateTime: utcTimeEpoch,
+        administeredDateTime: utcTimeEpoch,
       });
     });
     console.log("administeredTasksPayload", administeredTasksPayload);
@@ -125,47 +128,72 @@ const UpdateNursingTasks = (props) => {
     updateIsSaveDisabled(saveDisabled);
   };
 
-  const handleToggle = (checked, id) => {
-    console.log("tasks", tasks);
-    updateTasks({
-      ...tasks,
-      [id]: {
-        ...tasks[id],
-        isSelected: checked,
-        actualTime: checked ? moment() : null,
-      },
-    });
-  };
-
-  function timeToEpoch(time) {
+  const timeToEpoch = (time) => {
     const [hours, minutes] = time.split(":").map(Number);
     const specificTime = new Date();
     specificTime.setHours(hours, minutes, 0, 0);
     const epochTimeInSeconds = Math.floor(specificTime.getTime() / 1000);
     return epochTimeInSeconds;
-  }
+  };
 
-  const handleTimeChange = (time, id, index) => {
-    // const currentTimeInEpochSeconds = moment().unix();
+  const isTimeWithinAdministeredWindow = (time, id, index) => {
     const enteredTimeInEpochSeconds = timeToEpoch(time);
     const timeWithinWindowInEpochSeconds =
-      medicationTasks[index].startTimeInEpochSeconds +
+      timeToEpoch(tasks[id].startTime) +
       nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
 
-    // if (enteredTimeInEpochSeconds > currentTimeInEpochSeconds) {
-    // }
-    if (enteredTimeInEpochSeconds > timeWithinWindowInEpochSeconds) {
+    if (enteredTimeInEpochSeconds > timeWithinWindowInEpochSeconds)
+      return false;
+    else return true;
+  };
+
+  const handleTimeChange = (time, id) => {
+    console.log("inside handleTimeChange");
+    console.log("time", time);
+    if (!isTimeWithinAdministeredWindow(time, id)) {
+      console.log("Inside if of handleTimeChange");
       updateTasks({
         ...tasks,
         [id]: {
           ...tasks[id],
-          isTimeUpdated: true,
+          isTimeOutOfWindow: true,
           actualTime: moment(time, "HH:mm"),
         },
       });
       updateErrors({
         ...errors,
         [id]: Boolean(!tasks[id].notes),
+      });
+    }
+  };
+
+  const handleToggle = (checked, id) => {
+    console.log("inside handleToggle");
+    const time = moment().format("HH:mm");
+    if (!isTimeWithinAdministeredWindow(time, id)) {
+      console.log("Inside if of handleToggle");
+      updateTasks({
+        ...tasks,
+        [id]: {
+          ...tasks[id],
+          isTimeOutOfWindow: true,
+          isSelected: checked,
+          actualTime: checked ? moment() : null,
+        },
+      });
+      updateErrors({
+        ...errors,
+        [id]: Boolean(!tasks[id].notes),
+      });
+    } else {
+      updateTasks({
+        ...tasks,
+        [id]: {
+          ...tasks[id],
+          isTimeOutOfWindow: false,
+          isSelected: checked,
+          actualTime: checked ? moment() : null,
+        },
       });
     }
   };
@@ -181,7 +209,7 @@ const UpdateNursingTasks = (props) => {
     if (e.target.value) {
       delete errors[id];
     } else {
-      if (tasks[id].isTimeUpdated) {
+      if (tasks[id].isTimeOutOfWindow) {
         updateErrors({
           ...errors,
           [id]: true,
@@ -276,7 +304,7 @@ const UpdateNursingTasks = (props) => {
                         medicationTask.uuid
                       ]?.actualTime.format("HH:mm")}
                       onChange={(time) => {
-                        handleTimeChange(time, medicationTask.uuid, index);
+                        handleTimeChange(time, medicationTask.uuid);
                       }}
                       labelText="Task Time"
                       invalidText={invalidTimeText24Hour}
@@ -288,7 +316,7 @@ const UpdateNursingTasks = (props) => {
                           <Title
                             text={"Notes"}
                             isRequired={
-                              tasks[medicationTask.uuid].isTimeUpdated
+                              tasks[medicationTask.uuid].isTimeOutOfWindow
                             }
                           />
                         }
@@ -373,8 +401,12 @@ const UpdateNursingTasks = (props) => {
     </>
   );
 };
+
 UpdateNursingTasks.propTypes = {
   medicationTasks: PropTypes.array.isRequired,
   updateNursingTasksSlider: PropTypes.func.isRequired,
+  patientId: PropTypes.string.isRequired,
+  providerId: PropTypes.string.isRequired,
+  setShowSuccessNotification: PropTypes.func.isRequired,
 };
 export default UpdateNursingTasks;

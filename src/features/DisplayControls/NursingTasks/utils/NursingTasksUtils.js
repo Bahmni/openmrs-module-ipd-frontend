@@ -70,7 +70,6 @@ export const ExtractMedicationNursingTasksData = (
           hourCycle: "h23",
         }),
         orderId: order.uuid,
-        // order: order,
         isDisabled: administeredDateTime ? true : false,
       };
 
@@ -111,7 +110,7 @@ export const ExtractMedicationNursingTasksData = (
   );
   stoppedExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
   extractedData.push(...pendingExtractedData);
-
+  
   const groupedData = [];
   let currentStartTime = null;
   let currentGroup = [];
@@ -137,6 +136,9 @@ export const ExtractMedicationNursingTasksData = (
   if (completedExtractedData.length > 0) {
     groupedData.push(...completedExtractedData.map((item) => [item]));
   }
+  console.log("extractedData in utils", extractedData);
+  console.log("completedEctracted in utils", completedExtractedData);
+  console.log("pendingExtracted in utils", pendingExtractedData);
   return groupedData;
 };
 

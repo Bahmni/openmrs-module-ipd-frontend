@@ -83,7 +83,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
   >
     <div
       class="nursing-tasks-tile undefined
-        false disabled-tile"
+        false disabled-tile no-hover"
     >
       <div
         class="tile-content"
@@ -141,7 +141,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
         >
           <test-file-stub />
           <div>
-             16:00 - 05:12 PM(actual)
+             16:00 - 05:12 PM (actual)
           </div>
         </div>
       </div>

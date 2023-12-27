@@ -82,7 +82,7 @@ export default function TaskTile(props) {
         hour: "2-digit",
         minute: "2-digit",
       });
-      return startTime + " - " + administeredTime + "(actual)";
+      return startTime + " - " + administeredTime + " (actual)";
     }
     return startTime;
   };
@@ -105,7 +105,7 @@ export default function TaskTile(props) {
       <div
         className={`nursing-tasks-tile ${stopTime && "no-hover"}
         ${isRelevantTask && !stopTime && "relevant-task-tile"} ${
-          isDisabled ? "disabled-tile" : ""
+          isDisabled ? "disabled-tile no-hover" : ""
         }`}
       >
         <div className="tile-content">
