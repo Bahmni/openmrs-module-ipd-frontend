@@ -71,7 +71,6 @@ export const ExtractMedicationNursingTasksData = (
           hourCycle: "h23",
         }),
         orderId: order.uuid,
-        // order: order,
         isDisabled:
           Boolean(administeredDateTime) ||
           slot.medicationAdministration?.status === "Not Done",

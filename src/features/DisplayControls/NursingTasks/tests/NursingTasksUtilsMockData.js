@@ -59,6 +59,7 @@ export const mockNursingTasksResponse = [
         status: "SCHEDULED",
         startTime: 1690906550,
         order: {
+          uuid: "1e9d8a0f-fac8-46bc-a229-7e2345750884",
           drug: {
             display: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
           },
@@ -98,6 +99,7 @@ export const mockNursingTasksResponse = [
         status: "SCHEDULED",
         startTime: 1690906550,
         order: {
+          uuid: "1e9d8a0f-fac8-46bc-a229-7e2345750885",
           drug: {
             display: "Paracetamol 120 mg (Tablet)",
           },
@@ -121,6 +123,7 @@ export const mockNursingTasksResponse = [
         id: 2,
         uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
         order: {
+          uuid: "1e9d8a0f-fac8-46bc-a229-7e2345750885",
           drug: {
             display: "Paracetamol 120 mg (Tablet)",
           },
@@ -163,6 +166,7 @@ export const mockNursingTasksResponseForCompleted = [
         status: "COMPLETED",
         startTime: 1702650600,
         order: {
+          uuid: "paracetamol-120mg-tablet-uuid",
           drug: {
             display: "Paracetamol 120 mg (Tablet)",
           },
@@ -208,6 +212,7 @@ export const mockNursingTasksResponseForCompleted = [
         status: "COMPLETED",
         startTime: 1702650600,
         order: {
+          uuid: "paracetamol-125mg-tablet-uuid",
           drug: {
             display: "Paracetamol 125 mg (Tablet)",
           },
@@ -255,6 +260,7 @@ export const mockNursingTasksResponseForStopped = [
         status: "COMPLETED",
         startTime: 1702650600,
         order: {
+          uuid: "paracetamol-120mg-tablet-uuid",
           drug: {
             display: "Paracetamol 120 mg (Tablet)",
           },
@@ -301,6 +307,7 @@ export const mockNursingTasksResponseForStopped = [
         status: "COMPLETED",
         startTime: 1702650600,
         order: {
+          uuid: "paracetamol-125mg-tablet-uuid",
           dateStopped: 1234567890,
           drug: {
             display: "Paracetamol 125 mg (Tablet)",
@@ -350,6 +357,7 @@ export const mockNursingTasksResponseForAllTasks = [
         status: "COMPLETED",
         startTime: 1702650700,
         order: {
+          uuid: "paracetamol-120mg-tablet-uuid",
           drug: {
             display: "Paracetamol 120 mg (Tablet)",
           },
@@ -382,6 +390,7 @@ export const mockNursingTasksResponseForAllTasks = [
         id: 17,
         uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
         order: {
+          uuid: "paracetamol-125mg-tablet-uuid",
           drug: {
             display: "Paracetamol 125 mg (Tablet)",
           },
@@ -408,6 +417,7 @@ export const mockNursingTasksResponseForAllTasks = [
         id: 18,
         uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
         order: {
+          uuid: "paracetamol-200mg-tablet-uuid",
           drug: {
             display: "Paracetamol 200 mg (Tablet)",
           },
@@ -444,6 +454,7 @@ export const mockNursingTasksResponseForAllTasks = [
         id: 2,
         uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
         order: {
+          uuid: "paracetamol-500mg-tablet-uuid",
           drug: {
             display: "Paracetamol 500 mg (Tablet)",
           },
@@ -473,6 +484,7 @@ export const mockNursingTasksResponseForAllTasks = [
         status: "COMPLETED",
         startTime: 1702650600,
         order: {
+          uuid: "paracetamol-125mg-tablet-uuid",
           drug: {
             display: "Paracetamol 125 mg (Tablet)",
           },
@@ -516,6 +528,8 @@ export const mockExtractedMedicationNursingTasksData = [
       startTimeInEpochSeconds: 1690906550,
       startTime: "16:15",
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+      isDisabled: false,
+      orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750884",
     },
     {
       drugName: "Paracetamol 120 mg (Tablet)",
@@ -526,6 +540,8 @@ export const mockExtractedMedicationNursingTasksData = [
       startTimeInEpochSeconds: 1690906550,
       startTime: "16:15",
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+      isDisabled: false,
+      orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750885",
     },
   ],
   [
@@ -538,6 +554,8 @@ export const mockExtractedMedicationNursingTasksData = [
       startTimeInEpochSeconds: 1690907550,
       startTime: "16:32",
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+      orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750885",
+      isDisabled: false,
     },
   ],
 ];
@@ -555,7 +573,11 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       startTime: "14:30",
       startTimeInEpochSeconds: 1702650600,
       uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
+      isDisabled: true,
+      orderId: "paracetamol-125mg-tablet-uuid",
     },
+  ],
+  [
     {
       administeredTime: "20:05",
       administeredTimeInEpochSeconds: 1702670700,
@@ -567,6 +589,8 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       startTime: "14:30",
       startTimeInEpochSeconds: 1702650600,
       uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
+      isDisabled: true,
+      orderId: "paracetamol-120mg-tablet-uuid",
     },
   ],
 ];
@@ -582,6 +606,8 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
       stopTime: 1234567890,
       startTimeInEpochSeconds: 1702650600,
       uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
+      orderId: "paracetamol-120mg-tablet-uuid",
+      isDisabled: true,
     },
   ],
   [
@@ -595,6 +621,8 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
       stopTime: 1234567890,
       startTimeInEpochSeconds: 1702650600,
       uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
+      orderId: "paracetamol-125mg-tablet-uuid",
+      isDisabled: true,
     },
   ],
 ];
@@ -610,6 +638,8 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
       startTimeInEpochSeconds: 1690937550,
       startTime: "00:52",
+      orderId: "paracetamol-200mg-tablet-uuid",
+      isDisabled: false,
     },
   ],
   [
@@ -622,6 +652,8 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
       startTimeInEpochSeconds: 1690997550,
       startTime: "17:32",
+      orderId: "paracetamol-500mg-tablet-uuid",
+      isDisabled: false,
     },
   ],
   [
@@ -634,6 +666,8 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
       startTimeInEpochSeconds: 1690917550,
       startTime: "19:19",
+      orderId: "paracetamol-125mg-tablet-uuid",
+      isDisabled: false,
     },
   ],
   [
@@ -648,6 +682,8 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       startTime: "14:30",
       administeredTimeInEpochSeconds: 1702650700,
       administeredTime: "14:31",
+      orderId: "paracetamol-125mg-tablet-uuid",
+      isDisabled: true,
     },
   ],
   [
@@ -662,10 +698,11 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       startTime: "14:31",
       administeredTimeInEpochSeconds: 1702670800,
       administeredTime: "20:06",
+      orderId: "paracetamol-120mg-tablet-uuid",
+      isDisabled: true,
     },
   ],
 ];
-
 
 export const mockTaskTileDataForGroupedTask = [
   [

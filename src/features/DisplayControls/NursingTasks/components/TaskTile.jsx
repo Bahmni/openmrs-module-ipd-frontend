@@ -12,7 +12,6 @@ import { FormattedMessage } from "react-intl";
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
-  console.log("newMedicationNursingTask", newMedicationNursingTask);
   let isGroupedTask, taskCount;
   if (medicationNursingTask.length > 1) {
     isGroupedTask = true;
@@ -86,7 +85,7 @@ export default function TaskTile(props) {
         hour: "2-digit",
         minute: "2-digit",
       });
-      return startTime + " - " + administeredTime + "(actual)";
+      return startTime + " - " + administeredTime + " (actual)";
     }
     return startTime;
   };
@@ -109,7 +108,7 @@ export default function TaskTile(props) {
       <div
         className={`nursing-tasks-tile ${stopTime && "no-hover"}
         ${isRelevantTask && !stopTime && "relevant-task-tile"} ${
-          isDisabled ? "disabled-tile" : ""
+          isDisabled ? "disabled-tile no-hover" : ""
         }`}
       >
         <div className="tile-content">

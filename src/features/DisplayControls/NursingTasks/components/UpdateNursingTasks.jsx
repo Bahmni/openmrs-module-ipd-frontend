@@ -19,6 +19,7 @@ import AdministeredMedicationList from "./AdministeredMedicationList";
 import { saveAdministeredMedication } from "../utils/NursingTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import data from "../../../../utils/config.json";
+import { performerFunction } from "../utils/constants";
 
 const UpdateNursingTasks = (props) => {
   const {
@@ -72,19 +73,23 @@ const UpdateNursingTasks = (props) => {
       administeredTasksPayload.push({
         patientUuid: patientId,
         orderUuid: administeredTasks[key].orderId,
-        providerUuid: providerId,
-        notes: administeredTasks[key].notes || "",
+        providers: [{ providerUuid: providerId, function: performerFunction }],
+        notes: administeredTasks[key].notes
+          ? [{ authorUuid: providerId, text: administeredTasks[key]?.notes }]
+          : [],
         status: administeredTasks[key]?.status,
         slotUuid: key,
-        effectiveDateTime: utcTimeEpoch,
+        administeredDateTime: utcTimeEpoch,
       });
     });
     Object.keys(skippedTasks).forEach((key) => {
       administeredTasksPayload.push({
         patientUuid: patientId,
         orderUuid: skippedTasks[key].orderId,
-        providerUuid: providerId,
-        notes: skippedTasks[key].notes || "",
+        providers: [{ providerUuid: providerId, function: performerFunction }],
+        notes: administeredTasks[key].notes
+          ? [{ authorUuid: providerId, text: administeredTasks[key]?.notes }]
+          : [],
         status: skippedTasks[key]?.status,
         slotUuid: key,
       });
@@ -146,17 +151,6 @@ const UpdateNursingTasks = (props) => {
     updateIsSaveDisabled(saveDisabled);
   };
 
-  const handleToggle = (checked, id) => {
-    updateTasks({
-      ...tasks,
-      [id]: {
-        ...tasks[id],
-        isSelected: checked,
-        actualTime: checked ? moment() : null,
-      },
-    });
-  };
-
   function timeToEpoch(time) {
     const [hours, minutes] = time.split(":").map(Number);
     const specificTime = new Date();
@@ -164,25 +158,66 @@ const UpdateNursingTasks = (props) => {
     return Math.floor(specificTime.getTime() / 1000);
   }
 
-  const handleTimeChange = (time, id, index) => {
-    // console.log("Inputs", time, id, index);
+  const isTimeWithinAdministeredWindow = (time, id) => {
     const enteredTimeInEpochSeconds = timeToEpoch(time);
     const timeWithinWindowInEpochSeconds =
-      medicationTasks[index].startTimeInEpochSeconds +
+      timeToEpoch(tasks[id].startTime) +
       nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
-    // console.log("Time", enteredTimeInEpochSeconds, timeWithinWindowInEpochSeconds);
-    updateTasks({
-      ...tasks,
-      [id]: {
-        ...tasks[id],
-        isTimeUpdated: true,
-        actualTime: moment(time, "HH:mm"),
-      },
-    });
-    if (enteredTimeInEpochSeconds > timeWithinWindowInEpochSeconds) {
+    return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
+  };
+
+  const handleTimeChange = (time, id) => {
+    if (!isTimeWithinAdministeredWindow(time, id)) {
+      updateTasks({
+        ...tasks,
+        [id]: {
+          ...tasks[id],
+          isTimeOutOfWindow: true,
+          actualTime: moment(time, "HH:mm"),
+        },
+      });
       updateErrors({
         ...errors,
         [id]: Boolean(!tasks[id].notes),
+      });
+    } else {
+      updateTasks({
+        ...tasks,
+        [id]: {
+          ...tasks[id],
+          isTimeOutOfWindow: false,
+          actualTime: moment(time, "HH:mm"),
+        },
+      });
+      delete errors[id];
+    }
+  };
+
+  const handleToggle = (checked, id) => {
+    const time = moment().format("HH:mm");
+    if (!isTimeWithinAdministeredWindow(time, id)) {
+      updateTasks({
+        ...tasks,
+        [id]: {
+          ...tasks[id],
+          isTimeOutOfWindow: true,
+          isSelected: checked,
+          actualTime: checked ? moment() : null,
+        },
+      });
+      updateErrors({
+        ...errors,
+        [id]: Boolean(!tasks[id].notes),
+      });
+    } else {
+      updateTasks({
+        ...tasks,
+        [id]: {
+          ...tasks[id],
+          isTimeOutOfWindow: false,
+          isSelected: checked,
+          actualTime: checked ? moment() : null,
+        },
       });
     }
   };
@@ -198,7 +233,7 @@ const UpdateNursingTasks = (props) => {
     if (e.target.value) {
       delete errors[id];
     } else {
-      if (tasks[id].isTimeUpdated || tasks[id].skipped) {
+      if (tasks[id].isTimeOutOfWindow || tasks[id].skipped) {
         updateErrors({
           ...errors,
           [id]: true,
@@ -271,6 +306,7 @@ const UpdateNursingTasks = (props) => {
       setShowWarningNotification(false);
     },
   };
+
   return (
     <>
       <SideBarPanel
@@ -347,7 +383,7 @@ const UpdateNursingTasks = (props) => {
                           medicationTask.uuid
                         ]?.actualTime.format("HH:mm")}
                         onChange={(time) => {
-                          handleTimeChange(time, medicationTask.uuid, index);
+                          handleTimeChange(time, medicationTask.uuid);
                         }}
                         labelText="Task Time"
                         invalidText={invalidTimeText24Hour}
@@ -366,7 +402,7 @@ const UpdateNursingTasks = (props) => {
                           <Title
                             text={"Notes"}
                             isRequired={
-                              tasks[medicationTask.uuid].isTimeUpdated ||
+                              tasks[medicationTask.uuid].isTimeOutOfWindow ||
                               tasks[medicationTask.uuid].skipped
                             }
                           />
@@ -455,11 +491,12 @@ const UpdateNursingTasks = (props) => {
     </>
   );
 };
+
 UpdateNursingTasks.propTypes = {
   medicationTasks: PropTypes.array.isRequired,
   updateNursingTasksSlider: PropTypes.func.isRequired,
-  patientId: PropTypes.string,
-  providerId: PropTypes.string,
-  setShowSuccessNotification: PropTypes.func,
+  patientId: PropTypes.string.isRequired,
+  providerId: PropTypes.string.isRequired,
+  setShowSuccessNotification: PropTypes.func.isRequired,
 };
 export default UpdateNursingTasks;

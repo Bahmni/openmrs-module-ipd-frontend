@@ -5,3 +5,5 @@ export const items = [
   { id: "stopped", text: "Stopped" },
   { id: "skipped", text: "Skipped" },
 ];
+
+export const performerFunction = "Performer";

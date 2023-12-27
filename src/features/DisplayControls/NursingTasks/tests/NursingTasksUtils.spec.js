@@ -64,7 +64,7 @@ describe("NursingTasksUtils", () => {
     });
   });
 
-  describe.skip("ExtractMedicationNursingTasksData", () => {
+  describe("ExtractMedicationNursingTasksData", () => {
     it("should return extracted data", () => {
       const medicationNursingTasksData = mockNursingTasksResponse;
       const expectedData = mockExtractedMedicationNursingTasksData;
@@ -120,13 +120,18 @@ describe("NursingTasksUtils", () => {
     it("should save administered medication successfully", async () => {
       const administeredMedication = [
         {
-          patientUuid: "dc9528ec-ff90-4820-9941-34ecbf8b27c1",
-          orderUuid: "ce7e4b9b-4376-415a-bc10-dfb015826a31",
-          providerUuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
-          notes: "Temp Notes",
+          patientUuid: "4399dcf6-0e47-42a0-8eb1-ee5b06de4bdc",
+          orderUuid: "e19c0bbf-a960-4ccc-8f82-923be87c5784",
+          providers: [
+            {
+              providerUuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
+              function: "Performer",
+            },
+          ],
+          notes: [],
           status: "completed",
-          slotUuid: "73b8f395-6acf-491c-977f-3f6b3e7060dc",
-          effectiveDateTime: "1701268200",
+          slotUuid: "f22b1b11-ae2f-40d9-bc25-a0233ffd9435",
+          administeredDateTime: 1703670985,
         },
       ];
 
@@ -142,27 +147,32 @@ describe("NursingTasksUtils", () => {
         message: "Medication task(s) updated successfully",
       });
     });
-  });
 
-  it("should handle error during medication save", async () => {
-    const administeredMedication = [
-      {
-        patientUuid: "dc9528ec-ff90-4820-9941-34ecbf8b27c1",
-        orderUuid: "ce7e4b9b-4376-415a-bc10-dfb015826a31",
-        providerUuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
-        notes: "Temp Notes",
-        status: "completed",
-        slotUuid: "73b8f395-6acf-491c-977f-3f6b3e7060dc",
-        effectiveDateTime: "1701268200",
-      },
-    ];
+    it("should handle error during medication save", async () => {
+      const administeredMedication = [
+        {
+          patientUuid: "4399dcf6-0e47-42a0-8eb1-ee5b06de4bdc",
+          orderUuid: "e19c0bbf-a960-4ccc-8f82-923be87c5784",
+          providers: [
+            {
+              providerUuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
+              function: "Performer",
+            },
+          ],
+          notes: [],
+          status: "completed",
+          slotUuid: "f22b1b11-ae2f-40d9-bc25-a0233ffd9435",
+          administeredDateTime: 1703670985,
+        },
+      ];
 
-    axios.post.mockRejectedValueOnce({
-      response: { status: 500, data: { error: "Internal Server Error" } },
+      axios.post.mockRejectedValueOnce({
+        response: { status: 500, data: { error: "Internal Server Error" } },
+      });
+
+      const response = await saveAdministeredMedication(administeredMedication);
+
+      expect(response).toBeUndefined();
     });
-
-    const response = await saveAdministeredMedication(administeredMedication);
-
-    expect(response).toBeUndefined();
   });
 });
