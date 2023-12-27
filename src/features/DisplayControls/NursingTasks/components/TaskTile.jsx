@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
@@ -7,16 +7,12 @@ import data from "../../../../utils/config.json";
 import { Tag, TooltipDefinition } from "carbon-components-react";
 
 import "../styles/TaskTile.scss";
-import { getTagForTheDrugOrder } from "../../../../utils/DisplayTags";
-import { useFetchIpdConfig } from "../../../../entries/Dashboard/hooks/useFetchIpdConfig";
 import { FormattedMessage } from "react-intl";
+import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
-  const { configData } = useFetchIpdConfig();
-  const [ipdConfig, setIpdConfig] = useState();
-
   let isGroupedTask, taskCount;
   if (medicationNursingTask.length > 1) {
     isGroupedTask = true;
@@ -35,12 +31,6 @@ export default function TaskTile(props) {
   } = newMedicationNursingTask;
 
   const { config: { nursingTasks = {} } = {} } = data;
-
-  useEffect(() => {
-    if (configData) {
-      setIpdConfig(configData);
-    }
-  }, [configData]);
 
   const getRelevantTaskStatus = () => {
     const currentTimeInSeconds = Math.floor(new Date().getTime() / 1000);
@@ -104,10 +94,8 @@ export default function TaskTile(props) {
               </Tag>
             )}
           </div>
-          <div
-            className="tile-name-cell"
-          >
-            {getTagForTheDrugOrder(dosingInstructions, ipdConfig)}
+          <div className="tile-name-cell">
+            <DisplayTags drugOrder={dosingInstructions} />
           </div>
           <div
             className="tile-content-subtext"

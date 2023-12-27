@@ -12,30 +12,6 @@ jest.mock("../utils/TreatmentsUtils", () => {
   };
 });
 
-jest.mock("../../../../entries/Dashboard/hooks/useFetchIpdConfig", () => {
-  const originalModule = jest.requireActual(
-    "../../../../entries/Dashboard/hooks/useFetchIpdConfig"
-  );
-  return {
-    ...originalModule,
-    useFetchIpdConfig: () => {
-      return {
-        configData: {
-          config: {
-            medicationTags: {
-              asNeeded: "Rx-PRN",
-              "STAT (Immediately)": "Rx-STAT",
-              default: "Rx",
-              emergency: "EMERG",
-            },
-          },
-        },
-        isConfigLoading: false,
-      };
-    },
-  };
-});
-
 const mockProviderValue = {
   isSliderOpen: {
     treatments: false,

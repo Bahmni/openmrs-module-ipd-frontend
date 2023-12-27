@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Clock from "../../../../icons/clock.svg";
 import "../styles/DrugListCell.scss";
 import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
-import { getTagForTheDrugOrder } from "../../../../utils/DisplayTags";
-import { useFetchIpdConfig } from "../../../../entries/Dashboard/hooks/useFetchIpdConfig";
+import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 
 export default function DrugListCell(props) {
   const { drugInfo } = props;
@@ -19,20 +18,12 @@ export default function DrugListCell(props) {
     dosingInstructions,
     dosingTagInfo,
   } = drugInfo;
-  const { configData, isConfigLoading } = useFetchIpdConfig();
-  const [ipdConfig, setIpdConfig] = useState();
-
-  useEffect(() => {
-    if (configData) {
-      setIpdConfig(configData);
-    }
-  }, [configData]);
 
   let parsedDosingInstructions;
   if (dosingInstructions !== null && dosingInstructions !== undefined) {
     parsedDosingInstructions = JSON.parse(dosingInstructions);
   }
-  
+
   const toolTipContent = (
     <div>
       Instructions:&nbsp;{parsedDosingInstructions.instructions}
@@ -52,10 +43,8 @@ export default function DrugListCell(props) {
       {dosingInstructions && (
         <TooltipCarbon icon={() => icon} content={toolTipContent} />
       )}
-      <div
-        className="drug-name-cell"
-      >
-        {getTagForTheDrugOrder(dosingTagInfo, ipdConfig)}
+      <div className="drug-name-cell">
+        <DisplayTags drugOrder={dosingTagInfo} />
       </div>
     </div>
   );

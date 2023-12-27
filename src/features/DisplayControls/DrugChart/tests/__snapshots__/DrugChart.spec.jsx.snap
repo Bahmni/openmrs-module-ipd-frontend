@@ -36,7 +36,18 @@ exports[`DrugChart should match snapshot 1`] = `
                     </div>
                     <div
                       class="drug-name-cell"
-                    />
+                    >
+                      <div
+                        class="bx--tag bx--tag--blue"
+                        id="tag-1"
+                      >
+                        <span
+                          title="Rx"
+                        >
+                          Rx
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <div
                     class="dosage"
@@ -71,7 +82,18 @@ exports[`DrugChart should match snapshot 1`] = `
                     </div>
                     <div
                       class="drug-name-cell"
-                    />
+                    >
+                      <div
+                        class="bx--tag bx--tag--blue"
+                        id="tag-2"
+                      >
+                        <span
+                          title="Rx"
+                        >
+                          Rx
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <div
                     class="dosage"

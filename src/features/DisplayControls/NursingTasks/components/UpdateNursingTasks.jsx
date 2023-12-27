@@ -5,11 +5,10 @@ import "../styles/UpdateNursingTasks.scss";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
 import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import Clock from "../../../../icons/clock.svg";
-import { Toggle, Tag, TextArea } from "carbon-components-react";
+import { Toggle, TextArea } from "carbon-components-react";
 import moment from "moment";
 import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
-import { getTagForTheDrugOrder } from "../../../../utils/DisplayTags";
-import { useFetchIpdConfig } from "../../../../entries/Dashboard/hooks/useFetchIpdConfig";
+import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 
 const UpdateNursingTasks = (props) => {
   const { medicationTasks, updateNursingTasksSlider } = props;
@@ -17,14 +16,6 @@ const UpdateNursingTasks = (props) => {
   const [errors, updateErrors] = useState({});
   const [showErrors, updateShowErrors] = useState(false);
   const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
-  const { configData, isConfigLoading } = useFetchIpdConfig();
-  const [ipdConfig, setIpdConfig] = useState();
-
-  useEffect(() => {
-    if (configData && ipdConfig === undefined) {
-      setIpdConfig(configData);
-    }
-  }, [configData]);
 
   const invalidTimeText24Hour = (
     <FormattedMessage
@@ -154,7 +145,7 @@ const UpdateNursingTasks = (props) => {
               />
               <div className={"medication-name"}>
                 <div className={"name"}>{medicationTask.drugName}</div>
-                {getTagForTheDrugOrder(medicationTask.dosingInstructions, ipdConfig)}
+                <DisplayTags drugOrder={medicationTask.dosingInstructions} />
               </div>
               <div className="medication-details">
                 <span>{medicationTask.dosage}</span>

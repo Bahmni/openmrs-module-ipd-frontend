@@ -20,8 +20,7 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import TreatmentExpandableRow from "./TreatmentExpandableRow";
 import NotesIcon from "../../../../icons/notes.svg";
-import { getTagForTheDrugOrder } from "../../../../utils/DisplayTags";
-import { useFetchIpdConfig } from "../../../../entries/Dashboard/hooks/useFetchIpdConfig";
+import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -39,8 +38,6 @@ const Treatments = (props) => {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [drugChartNotes, setDrugChartNotes] = useState("");
   const [additionalData, setAdditionalData] = useState([]);
-  const { configData, isConfigLoading } = useFetchIpdConfig();
-  const [ipdConfig, setIpdConfig] = useState();
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -59,12 +56,6 @@ const Treatments = (props) => {
       setShowWarningNotification(false);
     },
   };
-
-  useEffect(() => {
-    if (configData && ipdConfig === undefined) {
-      setIpdConfig(configData);
-    }
-  }, [configData]);
 
   const DrugChartSliderActions = {
     onModalClose: () => {
@@ -185,12 +176,10 @@ const Treatments = (props) => {
     setTreatments(treatments);
     setAdditionalData(additionalMappedData);
   };
-
   const getDrugName = (drugOrder) => {
     if (
       drugOrder.drug &&
-      (drugOrder.instructions || drugOrder.additionalInstructions) &&
-      configData
+      (drugOrder.instructions || drugOrder.additionalInstructions)
     ) {
       return (
         <div className="notes-icon-div">
@@ -202,7 +191,7 @@ const Treatments = (props) => {
           >
             {drugOrder.drug.name}
             <span>
-              {getTagForTheDrugOrder(drugOrder.dosingInstructions, ipdConfig)}
+              <DisplayTags drugOrder={drugOrder.dosingInstructions} />
             </span>
           </span>
         </div>
@@ -236,7 +225,7 @@ const Treatments = (props) => {
         setIsLoading(false);
       });
     });
-  }, [ipdConfig]);
+  }, []);
 
   return (
     <>
@@ -280,17 +269,15 @@ const Treatments = (props) => {
       ) : treatments && treatments.length === 0 ? (
         <div className="no-treatments">{NoTreatmentsMessage}</div>
       ) : (
-        configData && (
-          <ExpandableDataTable
-            rows={treatments}
-            headers={treatmentHeaders}
-            additionalData={additionalData}
-            component={(additionalData) => {
-              return <TreatmentExpandableRow data={additionalData} />;
-            }}
-            useZebraStyles={true}
-          />
-        )
+        <ExpandableDataTable
+          rows={treatments}
+          headers={treatmentHeaders}
+          additionalData={additionalData}
+          component={(additionalData) => {
+            return <TreatmentExpandableRow data={additionalData} />;
+          }}
+          useZebraStyles={true}
+        />
       )}
     </>
   );
