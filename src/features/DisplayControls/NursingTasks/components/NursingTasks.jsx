@@ -16,15 +16,21 @@ import { SliderContext } from "../../../../context/SliderContext";
 import UpdateNursingTasks from "./UpdateNursingTasks";
 import { Button, Dropdown } from "carbon-components-react";
 import AddEmergencyTasks from "./AddEmergencyTasks";
+import Notification from "../../../../components/Notification/Notification";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
+import { componentKeys } from "../../../../constants";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
   const [nursingTasks, setNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { isSliderOpen, updateSliderOpen } = useContext(SliderContext);
+  const { isSliderOpen, updateSliderOpen, provider } =
+    useContext(SliderContext);
   const [selectedMedicationTask, setSelectedMedicationTask] = useState([]);
   const [filterValue, setFilterValue] = useState(items[2]);
+  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const refreshDisplayControl = useContext(RefreshDisplayControl);
   const updateNursingTasksSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -104,7 +110,11 @@ export default function NursingTasks(props) {
           <div
             onClick={() => {
               const isStoppedSlot = medicationNursingTask[0]?.stopTime;
-              if (!isSliderOpen.nursingTasks && !isStoppedSlot) {
+              if (
+                !isSliderOpen.nursingTasks &&
+                !medicationNursingTask[0].isDisabled &&
+                !isStoppedSlot
+              ) {
                 setSelectedMedicationTask(medicationNursingTask);
                 updateNursingTasksSlider(true);
               }
@@ -173,6 +183,9 @@ export default function NursingTasks(props) {
           <UpdateNursingTasks
             medicationTasks={selectedMedicationTask}
             updateNursingTasksSlider={updateNursingTasksSlider}
+            patientId={patientId}
+            providerId={provider.uuid}
+            setShowSuccessNotification={setShowSuccessNotification}
           />
         )}
         {isSliderOpen.emergencyTasks && (
@@ -185,6 +198,20 @@ export default function NursingTasks(props) {
           <div className="no-nursing-tasks">{getNoTaskMessage()}</div>
         ) : (
           <div className="nursing-task-tiles-container">{showTaskTiles()}</div>
+        )}
+        {showSuccessNotification && (
+          <Notification
+            hostData={{
+              notificationKind: "success",
+              messageId: "NURSING_TASKS_SAVE_MESSAGE",
+            }}
+            hostApi={{
+              onClose: () => {
+                setShowSuccessNotification(false);
+                refreshDisplayControl([componentKeys.NURSING_TASKS]);
+              },
+            }}
+          />
         )}
       </div>
     );

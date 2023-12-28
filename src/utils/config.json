@@ -40,7 +40,8 @@
     ],
     "nursingTasks": {
       "timeInMinutesFromNowToShowTaskAsRelevant": 60,
-      "timeInMinutesFromNowToShowPastTaskAsLate": 60
+      "timeInMinutesFromNowToShowPastTaskAsLate": 60,
+      "timeInMinutesFromStartTimeToShowAdministeredTaskAsLate": 30
     },
     "drugChart": {
       "timeInMinutesFromNowToShowPastTaskAsLate": 60,

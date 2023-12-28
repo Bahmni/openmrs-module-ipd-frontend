@@ -1,6 +1,12 @@
 import axios from "axios";
-import { MEDICATIONS_BASE_URL } from "../../../../constants";
+import {
+  MEDICATIONS_BASE_URL,
+  ADMINISTERED_MEDICATIONS_BASE_URL,
+} from "../../../../constants";
 import moment from "moment";
+import data from "../../../../utils/config.json";
+
+const { config: { nursingTasks = {} } = {} } = data;
 
 export const fetchMedicationNursingTasks = async (patientUuid, forDate) => {
   const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&forDate=${forDate}`;
@@ -66,6 +72,8 @@ export const ExtractMedicationNursingTasksData = (
           minute: "2-digit",
           hourCycle: "h23",
         }),
+        orderId: order.uuid,
+        isDisabled: administeredDateTime ? true : false,
       };
 
       if (order.dateStopped) {
@@ -104,7 +112,7 @@ export const ExtractMedicationNursingTasksData = (
     a.administeredTime.localeCompare(b.administeredTime)
   );
   stoppedExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
-  extractedData.push(...pendingExtractedData, ...completedExtractedData);
+  extractedData.push(...pendingExtractedData);
 
   const groupedData = [];
   let currentStartTime = null;
@@ -128,5 +136,42 @@ export const ExtractMedicationNursingTasksData = (
   if (stoppedExtractedData.length > 0) {
     groupedData.push(...stoppedExtractedData.map((item) => [item]));
   }
+  if (completedExtractedData.length > 0) {
+    groupedData.push(...completedExtractedData.map((item) => [item]));
+  }
   return groupedData;
+};
+
+export const saveAdministeredMedication = async (administeredMedication) => {
+  try {
+    const response = await axios.post(
+      ADMINISTERED_MEDICATIONS_BASE_URL,
+      administeredMedication
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const timeToEpoch = (time) => {
+  const [hours, minutes] = time.split(":").map(Number);
+  const specificTime = new Date();
+  specificTime.setHours(hours, minutes, 0, 0);
+  const epochTimeInSeconds = Math.floor(specificTime.getTime() / 1000);
+  return epochTimeInSeconds;
+};
+
+export const isTimeWithinAdministeredWindow = (
+  taskTime,
+  scheduledStartTime
+) => {
+  const enteredTimeInEpochSeconds = timeToEpoch(taskTime);
+  const timeWithinWindowInEpochSeconds =
+    timeToEpoch(scheduledStartTime) +
+    nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
+
+  if (enteredTimeInEpochSeconds > timeWithinWindowInEpochSeconds) {
+    return false;
+  } else return true;
 };
