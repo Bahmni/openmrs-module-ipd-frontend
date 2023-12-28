@@ -4,7 +4,7 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
 <div>
   <div
     aria-label="Structured list section"
-    class="bx--structured-list"
+    class="bx--structured-list administered-list-body"
     role="table"
   >
     <div

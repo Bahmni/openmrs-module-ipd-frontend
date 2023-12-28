@@ -31,7 +31,7 @@ const AdministeredMedicationList = ({ list }) => {
   };
 
   return (
-    <StructuredListWrapper>
+    <StructuredListWrapper className="administered-list-body">
       <StructuredListBody>
         {Object.keys(list).map((key, index) => {
           return (

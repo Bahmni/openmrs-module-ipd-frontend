@@ -1,25 +1,26 @@
 .bx--structured-list {
   margin: 0;
 }
+.administered-list-body {
+  .time,
+  .status {
+    position: relative;
+    padding-left: 8px;
+  }
 
-.time,
-.status {
-  position: relative;
-  padding-left: 8px;
-}
+  .time {
+    top: -3px;
+  }
 
-.time {
-  top: -3px;
-}
+  .status {
+    top: -4px;
+  }
 
-.status {
-  top: -4px;
-}
+  .drug-name-cell {
+    width: 55%;
+  }
 
-.drug-name-cell {
-  width: 55%;
-}
-
-.administered-time-cell {
-  --day-border: 0px !important;
+  .administered-time-cell {
+    --day-border: 0px !important;
+  }
 }

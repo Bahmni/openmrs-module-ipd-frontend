@@ -280,7 +280,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             <hr />
             <div
               aria-label="Structured list section"
-              class="bx--structured-list"
+              class="bx--structured-list administered-list-body"
               role="table"
             >
               <div
@@ -623,7 +623,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             <hr />
             <div
               aria-label="Structured list section"
-              class="bx--structured-list"
+              class="bx--structured-list administered-list-body"
               role="table"
             >
               <div
