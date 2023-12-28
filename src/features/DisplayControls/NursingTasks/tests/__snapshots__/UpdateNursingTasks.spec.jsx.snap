@@ -277,9 +277,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             class="bx--modal-content"
             id="bx--modal-body--modal-6"
           >
-            <div
-              class="divider"
-            />
+            <hr />
             <div
               aria-label="Structured list section"
               class="bx--structured-list"
@@ -622,9 +620,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             class="bx--modal-content"
             id="bx--modal-body--modal-1"
           >
-            <div
-              class="divider"
-            />
+            <hr />
             <div
               aria-label="Structured list section"
               class="bx--structured-list"

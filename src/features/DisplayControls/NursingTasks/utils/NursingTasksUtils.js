@@ -4,6 +4,9 @@ import {
   ADMINISTERED_MEDICATIONS_BASE_URL,
 } from "../../../../constants";
 import moment from "moment";
+import data from "../../../../utils/config.json";
+
+const { config: { nursingTasks = {} } = {} } = data;
 
 export const fetchMedicationNursingTasks = async (patientUuid, forDate) => {
   const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&forDate=${forDate}`;
@@ -110,7 +113,7 @@ export const ExtractMedicationNursingTasksData = (
   );
   stoppedExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
   extractedData.push(...pendingExtractedData);
-  
+
   const groupedData = [];
   let currentStartTime = null;
   let currentGroup = [];
@@ -149,4 +152,26 @@ export const saveAdministeredMedication = async (administeredMedication) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+const timeToEpoch = (time) => {
+  const [hours, minutes] = time.split(":").map(Number);
+  const specificTime = new Date();
+  specificTime.setHours(hours, minutes, 0, 0);
+  const epochTimeInSeconds = Math.floor(specificTime.getTime() / 1000);
+  return epochTimeInSeconds;
+};
+
+export const isTimeWithinAdministeredWindow = (
+  taskTime,
+  scheduledStartTime
+) => {
+  const enteredTimeInEpochSeconds = timeToEpoch(taskTime);
+  const timeWithinWindowInEpochSeconds =
+    timeToEpoch(scheduledStartTime) +
+    nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
+
+  if (enteredTimeInEpochSeconds > timeWithinWindowInEpochSeconds) {
+    return false;
+  } else return true;
 };

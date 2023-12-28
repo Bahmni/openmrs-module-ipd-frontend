@@ -27,7 +27,7 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
           </span>
         </div>
         <div
-          class="time-cell bx--structured-list-td"
+          class="administered-time-cell bx--structured-list-td"
           role="cell"
         >
           <test-file-stub
@@ -43,9 +43,7 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
           class="bx--structured-list-td"
           role="cell"
         >
-          <test-file-stub
-            classname="done-icon"
-          />
+          <test-file-stub />
           <span
             class="status"
             data-testid="status-name-cell"

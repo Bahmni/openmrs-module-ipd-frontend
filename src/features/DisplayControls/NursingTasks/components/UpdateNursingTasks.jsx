@@ -9,9 +9,11 @@ import { Toggle, Tag, TextArea, Modal } from "carbon-components-react";
 import moment from "moment";
 import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
 import AdministeredMedicationList from "./AdministeredMedicationList";
-import { saveAdministeredMedication } from "../utils/NursingTasksUtils";
+import {
+  saveAdministeredMedication,
+  isTimeWithinAdministeredWindow,
+} from "../utils/NursingTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
-import data from "../../../../utils/config.json";
 import { performerFunction } from "../utils/constants";
 
 const UpdateNursingTasks = (props) => {
@@ -40,8 +42,6 @@ const UpdateNursingTasks = (props) => {
   const closeModal = () => {
     setOpenConfirmationModal(false);
   };
-
-  const { config: { nursingTasks = {} } = {} } = data;
 
   const saveAdministeredTasks = () => {
     setShowSuccessNotification(true);
@@ -126,27 +126,8 @@ const UpdateNursingTasks = (props) => {
     updateIsSaveDisabled(saveDisabled);
   };
 
-  const timeToEpoch = (time) => {
-    const [hours, minutes] = time.split(":").map(Number);
-    const specificTime = new Date();
-    specificTime.setHours(hours, minutes, 0, 0);
-    const epochTimeInSeconds = Math.floor(specificTime.getTime() / 1000);
-    return epochTimeInSeconds;
-  };
-
-  const isTimeWithinAdministeredWindow = (time, id, index) => {
-    const enteredTimeInEpochSeconds = timeToEpoch(time);
-    const timeWithinWindowInEpochSeconds =
-      timeToEpoch(tasks[id].startTime) +
-      nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
-
-    if (enteredTimeInEpochSeconds > timeWithinWindowInEpochSeconds) {
-      return false;
-    } else return true;
-  };
-
   const handleTimeChange = (time, id) => {
-    if (!isTimeWithinAdministeredWindow(time, id)) {
+    if (!isTimeWithinAdministeredWindow(time, tasks[id].startTime)) {
       updateTasks({
         ...tasks,
         [id]: {
@@ -174,7 +155,7 @@ const UpdateNursingTasks = (props) => {
 
   const handleToggle = (checked, id) => {
     const time = moment().format("HH:mm");
-    if (!isTimeWithinAdministeredWindow(time, id)) {
+    if (checked && !isTimeWithinAdministeredWindow(time, tasks[id].startTime)) {
       updateTasks({
         ...tasks,
         [id]: {
@@ -198,6 +179,7 @@ const UpdateNursingTasks = (props) => {
           actualTime: checked ? moment() : null,
         },
       });
+      delete errors[id];
     }
   };
 
@@ -369,7 +351,7 @@ const UpdateNursingTasks = (props) => {
           }
           onRequestSubmit={handlePrimaryButtonClick}
         >
-          <div className="divider"></div>
+          <hr />
           <AdministeredMedicationList list={administeredTasks} />
         </Modal>
         <SaveAndCloseButtons

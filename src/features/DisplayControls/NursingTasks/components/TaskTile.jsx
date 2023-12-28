@@ -2,10 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
-import data from "../../../../utils/config.json";
-
+import {
+  getTime,
+  getRelevantTaskStatus,
+  iconType,
+} from "../utils/TaskTileUtils";
 import { Tag, TooltipDefinition } from "carbon-components-react";
-
 import "../styles/TaskTile.scss";
 import { FormattedMessage } from "react-intl";
 
@@ -27,66 +29,10 @@ export default function TaskTile(props) {
     startTimeInEpochSeconds,
     stopTime,
     isDisabled,
+    administeredTimeInEpochSeconds,
   } = newMedicationNursingTask;
 
-  const { config: { nursingTasks = {} } = {} } = data;
-
-  const getRelevantTaskStatus = () => {
-    const currentTimeInSeconds = Math.floor(new Date().getTime() / 1000);
-    const relevantTaskStatusWindowInSeconds =
-      nursingTasks &&
-      nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
-
-    return (
-      startTimeInEpochSeconds >= currentTimeInSeconds &&
-      startTimeInEpochSeconds <=
-        currentTimeInSeconds + relevantTaskStatusWindowInSeconds
-    );
-  };
-
-  const isLateTask = () => {
-    const currentTime = Math.floor(new Date().getTime() / 1000);
-    const lateTaskStatusWindowInSeconds =
-      nursingTasks.timeInMinutesFromNowToShowPastTaskAsLate * 60;
-
-    return (
-      startTimeInEpochSeconds < currentTime - lateTaskStatusWindowInSeconds
-    );
-  };
-
-  const iconType = () => {
-    if (newMedicationNursingTask.administeredTimeInEpochSeconds) {
-      const administeredLateWindowInSeconds =
-        startTimeInEpochSeconds +
-        nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate *
-          60;
-      const administeredTimeInSeconds =
-        newMedicationNursingTask.administeredTimeInEpochSeconds / 1000;
-      const isLate =
-        administeredTimeInSeconds > administeredLateWindowInSeconds;
-
-      return isLate ? "Administered-Late" : "Administered";
-    }
-
-    return isLateTask() ? "Late" : "Pending";
-  };
-
-  const getTime = () => {
-    if (newMedicationNursingTask.administeredTimeInEpochSeconds) {
-      const administeredTimeInSeconds =
-        newMedicationNursingTask.administeredTimeInEpochSeconds / 1000;
-      const administeredTime = new Date(
-        administeredTimeInSeconds * 1000
-      ).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      return startTime + " - " + administeredTime + " (actual)";
-    }
-    return startTime;
-  };
-
-  const isRelevantTask = getRelevantTaskStatus();
+  const isRelevantTask = getRelevantTaskStatus(startTimeInEpochSeconds);
 
   const drugNameText = (
     <div
@@ -112,9 +58,17 @@ export default function TaskTile(props) {
             <div>
               <div
                 className="nursing-task-icon-container"
-                data-testid={iconType()}
+                data-testid={iconType(
+                  administeredTimeInEpochSeconds,
+                  startTimeInEpochSeconds
+                )}
               >
-                <SVGIcon iconType={iconType()} />
+                <SVGIcon
+                  iconType={iconType(
+                    administeredTimeInEpochSeconds,
+                    startTimeInEpochSeconds
+                  )}
+                />
               </div>
               <TooltipDefinition
                 tooltipText={drugName}
@@ -139,7 +93,9 @@ export default function TaskTile(props) {
           </div>
           <div className="tile-content-subtext">
             <Clock />
-            <div>&nbsp;{getTime()}</div>
+            <div>
+              &nbsp;{getTime(administeredTimeInEpochSeconds, startTime)}
+            </div>
           </div>
           {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
         </div>

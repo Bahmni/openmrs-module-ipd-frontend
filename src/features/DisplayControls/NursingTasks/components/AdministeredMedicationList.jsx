@@ -5,8 +5,10 @@ import {
   StructuredListRow,
   StructuredListCell,
 } from "carbon-components-react";
+import PropTypes from "prop-types";
 import ClockIcon from "../../../../icons/clock.svg";
-import DoneIcon from "../../../../icons/done.svg";
+import Administered from "../../../../icons/administered.svg";
+
 import "../styles/AdministeredMedicationList.scss";
 
 const AdministeredMedicationList = ({ list }) => {
@@ -25,7 +27,7 @@ const AdministeredMedicationList = ({ list }) => {
   };
 
   const getStatusIcon = (status) => {
-    return status === "completed" ? <DoneIcon className="done-icon" /> : "";
+    return status === "completed" ? <Administered /> : "";
   };
 
   return (
@@ -38,7 +40,7 @@ const AdministeredMedicationList = ({ list }) => {
                 <div>{list[key].displayName}</div>
                 <span>{getMedicationDetails(list[key])}</span>
               </StructuredListCell>
-              <StructuredListCell className="time-cell">
+              <StructuredListCell className="administered-time-cell">
                 <ClockIcon className="clock-icon" />
                 <span className="time">
                   {getAdministeredTime(new Date(list[key].actualTime))}
@@ -58,4 +60,7 @@ const AdministeredMedicationList = ({ list }) => {
   );
 };
 
+AdministeredMedicationList.propTypes = {
+  list: PropTypes.object.isRequired,
+};
 export default AdministeredMedicationList;

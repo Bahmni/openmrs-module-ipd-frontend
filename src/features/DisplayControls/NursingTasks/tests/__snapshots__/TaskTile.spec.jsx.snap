@@ -141,7 +141,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
         >
           <test-file-stub />
           <div>
-             16:00 - 05:12 PM (actual)
+             16:00 - 17:12 (actual)
           </div>
         </div>
       </div>
