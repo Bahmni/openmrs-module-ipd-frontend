@@ -1,7 +1,7 @@
 .nursing-tasks-tile {
   border: 2px solid #007d79;
   background-color: #e3fed1;
-  width: 500px;;
+  width: 500px;
   height: 90px;
   position: relative;
   cursor: pointer;
@@ -13,8 +13,8 @@
 }
 
 .disabled-tile {
-    border: 1px solid #92c4c3;
-    background-color: #edf8e6;
+  border: 1px solid #92c4c3;
+  background-color: #edf8e6;
 }
 
 .no-hover {
@@ -135,4 +135,5 @@
   position: absolute;
   right: 0px;
   padding-top: 5px;
+  display: flex;
 }

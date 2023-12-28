@@ -15,7 +15,7 @@ exports[`DrugListCell should  match snapshot 1`] = `
         TooltipCarbon
       </div>
       <div
-        class="drug-name-cell"
+        class="drug-list-drug-name-cell"
       >
         <div
           class="bx--tag bx--tag--blue"
@@ -68,7 +68,7 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
         TooltipCarbon
       </div>
       <div
-        class="drug-name-cell"
+        class="drug-list-drug-name-cell"
       >
         <div
           class="bx--tag bx--tag--blue"
@@ -131,7 +131,7 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
         TooltipCarbon
       </div>
       <div
-        class="drug-name-cell"
+        class="drug-list-drug-name-cell"
       >
         <div
           class="bx--tag bx--tag--blue"
