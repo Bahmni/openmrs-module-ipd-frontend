@@ -22,7 +22,7 @@ import RefreshDisplayControl from "../../context/RefreshDisplayControl";
 import { SliderContext } from "../../context/SliderContext";
 
 export default function Dashboard(props) {
-  const { hostData } = props;
+  const { hostData, hostApi } = props;
   const { patient } = hostData;
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
@@ -74,6 +74,10 @@ export default function Dashboard(props) {
 
   const checkSliderStatus = () => {
     return Object.values(isSliderOpen).includes(true);
+  };
+
+  const handleDischargeSummaryNavigation = () => {
+    hostApi?.navigation?.dischargeSummary?.();
   };
 
   const refreshDisplayControl = (componentKeyArray) => {
@@ -147,7 +151,10 @@ export default function Dashboard(props) {
               />
             </Link>
           </div>
-          <PatientHeader patientId={patient?.uuid} />
+          <PatientHeader
+            patientId={patient?.uuid}
+            openDischargeSummary={handleDischargeSummaryNavigation}
+          />
           <Accordion className={"accordion"}>
             {sections?.map((el) => {
               const DisplayControl = componentMapping[el.componentKey];
@@ -182,4 +189,5 @@ export default function Dashboard(props) {
 }
 Dashboard.propTypes = {
   hostData: PropTypes.object.isRequired,
+  hostApi: PropTypes.object.isRequired,
 };

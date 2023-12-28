@@ -63,4 +63,6 @@
   "STOPPED": "Stopped",
   "NURSING_TASKS_CONFIRMATION": "Please confirm your nursing tasks",
   "NURSING_TASKS_SAVE_MESSAGE": "Medication task(s) updated successfully"
+  "PATIENT_DASHBOARD": "Patient Dashboard",
+  "DISCHARGE_SUMMARY": "Discharge Summary"
 }
