@@ -1,8 +1,10 @@
 import { Tag } from "carbon-components-react";
 import React from "react";
 import data from "../../utils/config.json";
+import PropTypes from "prop-types";
 
-const DisplayTags = ({ drugOrder }) => {
+const DisplayTags = (props) => {
+  const { drugOrder } = props;
   const { config: { medicationTags = {} } = {} } = data;
 
   if (
@@ -25,5 +27,12 @@ const DisplayTags = ({ drugOrder }) => {
   }
   return <Tag type="blue">{medicationTags.default}</Tag>;
 };
+
 export default DisplayTags;
 
+DisplayTags.propTypes = {
+  drugOrder: PropTypes.exact({
+    asNeeded: PropTypes.bool,
+    frequency: PropTypes.string,
+  }).isRequired,
+};
