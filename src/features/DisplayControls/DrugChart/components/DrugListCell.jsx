@@ -4,6 +4,7 @@ import Clock from "../../../../icons/clock.svg";
 import "../styles/DrugListCell.scss";
 import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
+import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 
 export default function DrugListCell(props) {
   const { drugInfo } = props;
@@ -15,13 +16,14 @@ export default function DrugListCell(props) {
     duration,
     administrationInfo,
     dosingInstructions,
+    dosingTagInfo,
   } = drugInfo;
 
   let parsedDosingInstructions;
   if (dosingInstructions !== null && dosingInstructions !== undefined) {
     parsedDosingInstructions = JSON.parse(dosingInstructions);
   }
-  
+
   const toolTipContent = (
     <div>
       Instructions:&nbsp;{parsedDosingInstructions.instructions}
@@ -41,6 +43,9 @@ export default function DrugListCell(props) {
       {dosingInstructions && (
         <TooltipCarbon icon={() => icon} content={toolTipContent} />
       )}
+      <div className="drug-name-cell">
+        <DisplayTags drugOrder={dosingTagInfo} />
+      </div>
     </div>
   );
   const icon = (

@@ -21,6 +21,7 @@ const mockProviderValue = {
   },
   updateSliderOpen: jest.fn(),
 };
+
 describe("NursingTasks", () => {
   afterEach(() => {
     jest.resetAllMocks();

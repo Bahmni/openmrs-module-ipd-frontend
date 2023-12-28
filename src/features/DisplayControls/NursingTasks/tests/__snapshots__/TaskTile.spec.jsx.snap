@@ -46,6 +46,20 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
           </div>
         </div>
         <div
+          class="tile-name-cell"
+        >
+          <div
+            class="bx--tag bx--tag--blue"
+            id="tag-1"
+          >
+            <span
+              title="Rx"
+            >
+              Rx
+            </span>
+          </div>
+        </div>
+        <div
           class="tile-content-subtext"
           style="color: rgb(82, 82, 82);"
         >

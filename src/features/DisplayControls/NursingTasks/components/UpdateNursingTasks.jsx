@@ -15,6 +15,7 @@ import {
 } from "../utils/NursingTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import { performerFunction } from "../utils/constants";
+import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 
 const UpdateNursingTasks = (props) => {
   const {
@@ -101,6 +102,7 @@ const UpdateNursingTasks = (props) => {
             dosage: medicationTask.dosage,
             route: medicationTask.drugRoute,
             startTime: medicationTask.startTime,
+            dosingInstructions: medicationTask.dosingInstructions,
             isSelected: false,
             actualTime: null,
             providerId: medicationTask.providerId,
@@ -271,7 +273,7 @@ const UpdateNursingTasks = (props) => {
                 />
                 <div className={"medication-name"}>
                   <div className={"name"}>{medicationTask.drugName}</div>
-                  <Tag type={"blue"}>Rx</Tag>
+                  <DisplayTags drugOrder={medicationTask.dosingInstructions} />
                 </div>
                 <div className="medication-details">
                   <span>{medicationTask.dosage}</span>

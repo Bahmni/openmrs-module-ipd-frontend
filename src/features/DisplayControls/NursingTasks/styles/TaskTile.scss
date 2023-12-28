@@ -1,7 +1,7 @@
 .nursing-tasks-tile {
   border: 2px solid #007d79;
   background-color: #e3fed1;
-  width: 323px;
+  width: 500px;;
   height: 90px;
   position: relative;
   cursor: pointer;
@@ -129,4 +129,10 @@
   font-weight: 400;
   line-height: 15px;
   letter-spacing: 0.16px;
+}
+.tile-name-cell {
+  top: 0px;
+  position: absolute;
+  right: 0px;
+  padding-top: 5px;
 }

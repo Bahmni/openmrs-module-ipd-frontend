@@ -10,6 +10,7 @@ import {
 import { Tag, TooltipDefinition } from "carbon-components-react";
 import "../styles/TaskTile.scss";
 import { FormattedMessage } from "react-intl";
+import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
@@ -27,6 +28,7 @@ export default function TaskTile(props) {
     drugRoute,
     startTime,
     startTimeInEpochSeconds,
+    dosingInstructions,
     stopTime,
     isDisabled,
     administeredTimeInEpochSeconds,
@@ -82,6 +84,9 @@ export default function TaskTile(props) {
                 <FormattedMessage id={"STOPPED"} defaultMessage={"Stopped"} />
               </Tag>
             )}
+          </div>
+          <div className="tile-name-cell">
+            <DisplayTags drugOrder={dosingInstructions} />
           </div>
           <div
             className="tile-content-subtext"

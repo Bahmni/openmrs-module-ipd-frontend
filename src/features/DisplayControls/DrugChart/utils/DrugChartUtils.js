@@ -88,6 +88,10 @@ export const TransformDrugChartData = (drugChartData) => {
         drugRoute: order.route.display,
         administrationInfo: administeredTimeInfo,
         dosingInstructions: order.dosingInstructions,
+        dosingTagInfo: {
+        asNeeded: order.asNeeded,
+        frequency: order.frequency.display,
+      }
       };
 
       if (order.duration) {

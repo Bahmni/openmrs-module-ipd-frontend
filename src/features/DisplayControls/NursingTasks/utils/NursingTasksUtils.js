@@ -67,6 +67,10 @@ export const ExtractMedicationNursingTasksData = (
         doseType,
         uuid,
         startTimeInEpochSeconds: startTime,
+        dosingInstructions : {
+          asNeeded: order?.asNeeded,
+          frequency: order.frequency?.display,
+        },
         startTime: startTimeInDate.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
