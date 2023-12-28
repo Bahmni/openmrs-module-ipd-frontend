@@ -11,7 +11,6 @@ import {
 } from "../utils/TreatmentsUtils";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
-import DrugChartSliderNotification from "../../../DrugChartSlider/components/DrugChartSliderNotification";
 import { SliderContext } from "../../../../context/SliderContext";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { componentKeys } from "../../../../constants";
@@ -21,6 +20,7 @@ import ExpandableDataTable from "../../../../components/ExpandableDataTable/Expa
 import TreatmentExpandableRow from "./TreatmentExpandableRow";
 import NotesIcon from "../../../../icons/notes.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
+import Notification from "../../../../components/Notification/Notification";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -259,8 +259,11 @@ const Treatments = (props) => {
         />
       )}
       {showSuccessNotification && (
-        <DrugChartSliderNotification
-          hostData={{ notificationKind: "success" }}
+        <Notification
+          hostData={{
+            notificationKind: "success",
+            messageId: "DRUG_CHART_MODAL_SAVE_MESSAGE",
+          }}
           hostApi={{ onClose: () => setShowSuccessNotification(false) }}
         />
       )}

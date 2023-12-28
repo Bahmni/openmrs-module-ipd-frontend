@@ -1,14 +1,20 @@
 .nursing-tasks-tile {
-  border: 1px solid #007d79;
-  background-color: #edf8e6;
-  width: 500px;
+  border: 2px solid #007d79;
+  background-color: #e3fed1;
+  width: 500px;;
   height: 90px;
   position: relative;
   cursor: pointer;
+  transition: opacity 0.3s ease;
 
   &:hover {
     background-color: #d2e1c9;
   }
+}
+
+.disabled-tile {
+    border: 1px solid #92c4c3;
+    background-color: #edf8e6;
 }
 
 .no-hover {

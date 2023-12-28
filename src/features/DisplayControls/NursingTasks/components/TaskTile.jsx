@@ -2,10 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
-import data from "../../../../utils/config.json";
-
+import {
+  getTime,
+  getRelevantTaskStatus,
+  iconType,
+} from "../utils/TaskTileUtils";
 import { Tag, TooltipDefinition } from "carbon-components-react";
-
 import "../styles/TaskTile.scss";
 import { FormattedMessage } from "react-intl";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
@@ -28,35 +30,11 @@ export default function TaskTile(props) {
     startTimeInEpochSeconds,
     dosingInstructions,
     stopTime,
+    isDisabled,
+    administeredTimeInEpochSeconds,
   } = newMedicationNursingTask;
 
-  const { config: { nursingTasks = {} } = {} } = data;
-
-  const getRelevantTaskStatus = () => {
-    const currentTimeInSeconds = Math.floor(new Date().getTime() / 1000);
-    const relevantTaskStatusWindowInSeconds =
-      nursingTasks &&
-      nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
-
-    return (
-      startTimeInEpochSeconds >= currentTimeInSeconds &&
-      startTimeInEpochSeconds <=
-        currentTimeInSeconds + relevantTaskStatusWindowInSeconds
-    );
-  };
-
-  const isLateTask = () => {
-    const currentTime = Math.floor(new Date().getTime() / 1000);
-    const lateTaskStatusWindowInSeconds =
-      nursingTasks.timeInMinutesFromNowToShowPastTaskAsLate * 60;
-
-    return (
-      startTimeInEpochSeconds < currentTime - lateTaskStatusWindowInSeconds
-    );
-  };
-
-  const iconType = isLateTask() ? "Late" : "Pending";
-  const isRelevantTask = getRelevantTaskStatus();
+  const isRelevantTask = getRelevantTaskStatus(startTimeInEpochSeconds);
 
   const drugNameText = (
     <div
@@ -73,13 +51,26 @@ export default function TaskTile(props) {
     <div className="tile-parent-container">
       <div
         className={`nursing-tasks-tile ${stopTime && "no-hover"}
-        ${isRelevantTask && !stopTime && "relevant-task-tile"}`}
+        ${isRelevantTask && !stopTime && "relevant-task-tile"} ${
+          isDisabled ? "disabled-tile no-hover" : ""
+        }`}
       >
         <div className="tile-content">
           <div className={`tile-title ${stopTime && "red-text"}`}>
             <div>
-              <div className="nursing-task-icon-container">
-                <SVGIcon iconType={iconType} />
+              <div
+                className="nursing-task-icon-container"
+                data-testid={iconType(
+                  administeredTimeInEpochSeconds,
+                  startTimeInEpochSeconds
+                )}
+              >
+                <SVGIcon
+                  iconType={iconType(
+                    administeredTimeInEpochSeconds,
+                    startTimeInEpochSeconds
+                  )}
+                />
               </div>
               <TooltipDefinition
                 tooltipText={drugName}
@@ -107,7 +98,9 @@ export default function TaskTile(props) {
           </div>
           <div className="tile-content-subtext">
             <Clock />
-            <div>&nbsp;{startTime}</div>
+            <div>
+              &nbsp;{getTime(administeredTimeInEpochSeconds, startTime)}
+            </div>
           </div>
           {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
         </div>

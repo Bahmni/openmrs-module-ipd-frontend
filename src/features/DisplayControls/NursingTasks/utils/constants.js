@@ -4,3 +4,5 @@ export const items = [
   { id: "pending", text: "Pending" },
   { id: "stopped", text: "Stopped" },
 ];
+
+export const performerFunction = "Performer";

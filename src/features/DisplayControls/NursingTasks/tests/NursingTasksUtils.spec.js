@@ -2,6 +2,7 @@ import {
   fetchMedicationNursingTasks,
   GetUTCEpochForDate,
   ExtractMedicationNursingTasksData,
+  saveAdministeredMedication,
 } from "../utils/NursingTasksUtils";
 import axios from "axios";
 import {
@@ -112,6 +113,66 @@ describe("NursingTasksUtils", () => {
         { id: "allTasks", text: "All Tasks" }
       );
       expect(extractedData).toEqual(expectedData);
+    });
+  });
+
+  describe("saveMedicationNursingTask", () => {
+    it("should save administered medication successfully", async () => {
+      const administeredMedication = [
+        {
+          patientUuid: "4399dcf6-0e47-42a0-8eb1-ee5b06de4bdc",
+          orderUuid: "e19c0bbf-a960-4ccc-8f82-923be87c5784",
+          providers: [
+            {
+              providerUuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
+              function: "Performer",
+            },
+          ],
+          notes: [],
+          status: "completed",
+          slotUuid: "f22b1b11-ae2f-40d9-bc25-a0233ffd9435",
+          administeredDateTime: 1703670985,
+        },
+      ];
+
+      axios.post.mockResolvedValueOnce({
+        status: 200,
+        data: { message: "Medication task(s) updated successfully" },
+      });
+
+      const response = await saveAdministeredMedication(administeredMedication);
+
+      expect(response.status).toBe(200);
+      expect(response.data).toEqual({
+        message: "Medication task(s) updated successfully",
+      });
+    });
+
+    it("should handle error during medication save", async () => {
+      const administeredMedication = [
+        {
+          patientUuid: "4399dcf6-0e47-42a0-8eb1-ee5b06de4bdc",
+          orderUuid: "e19c0bbf-a960-4ccc-8f82-923be87c5784",
+          providers: [
+            {
+              providerUuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
+              function: "Performer",
+            },
+          ],
+          notes: [],
+          status: "completed",
+          slotUuid: "f22b1b11-ae2f-40d9-bc25-a0233ffd9435",
+          administeredDateTime: 1703670985,
+        },
+      ];
+
+      axios.post.mockRejectedValueOnce({
+        response: { status: 500, data: { error: "Internal Server Error" } },
+      });
+
+      const response = await saveAdministeredMedication(administeredMedication);
+
+      expect(response).toBeUndefined();
     });
   });
 });
