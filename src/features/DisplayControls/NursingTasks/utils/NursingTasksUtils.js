@@ -4,6 +4,9 @@ import {
   MEDICATIONS_BASE_URL,
 } from "../../../../constants";
 import moment from "moment";
+import data from "../../../../utils/config.json";
+
+const { config: { nursingTasks = {} } = {} } = data;
 
 export const fetchMedicationNursingTasks = async (patientUuid, forDate) => {
   const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&forDate=${forDate}`;
@@ -73,7 +76,8 @@ export const ExtractMedicationNursingTasksData = (
         orderId: order.uuid,
         isDisabled:
           Boolean(administeredDateTime) ||
-          slot.medicationAdministration?.status === "Not Done",
+          slot.medicationAdministration?.status === "Not Done" ||
+          order.dateStopped,
       };
       console.log("skipped", slot.medicationAdministration?.status, slotInfo);
       if (order.dateStopped) {
@@ -144,6 +148,9 @@ export const ExtractMedicationNursingTasksData = (
     groupedData.push(...stoppedExtractedData.map((item) => [item]));
     groupedData.push(...skippedExtractedData.map((item) => [item]));
   }
+  if (completedExtractedData.length > 0) {
+    groupedData.push(...completedExtractedData.map((item) => [item]));
+  }
   return groupedData;
 };
 
@@ -156,4 +163,23 @@ export const saveAdministeredMedication = async (administeredMedication) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+const timeToEpoch = (time) => {
+  const [hours, minutes] = time.split(":").map(Number);
+  const specificTime = new Date();
+  specificTime.setHours(hours, minutes, 0, 0);
+  return Math.floor(specificTime.getTime() / 1000);
+};
+
+export const isTimeWithinAdministeredWindow = (
+  taskTime,
+  scheduledStartTime
+) => {
+  const enteredTimeInEpochSeconds = timeToEpoch(taskTime);
+  const timeWithinWindowInEpochSeconds =
+    timeToEpoch(scheduledStartTime) +
+    nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
+
+  return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
 };

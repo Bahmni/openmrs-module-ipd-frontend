@@ -1,36 +1,68 @@
-import React, { useEffect, useState }  from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { getGender, mapContact,getConfigsForPatientContactDetails , fetchPatientProfile, mapRelationships, fetchAddressMapping } from "../utils/PatientHeaderUtils";
-import { Tile, Grid, Row, Column, SkeletonText,Button, Link } from "carbon-components-react";
+import {
+  getGender,
+  mapContact,
+  getConfigsForPatientContactDetails,
+  fetchPatientProfile,
+  mapRelationships,
+  fetchAddressMapping,
+} from "../utils/PatientHeaderUtils";
+import {
+  Tile,
+  Grid,
+  Row,
+  Column,
+  SkeletonText,
+  Link,
+} from "carbon-components-react";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { FormattedMessage } from "react-intl";
 import { DDMMYYY_DATE_FORMAT } from "../../../../constants";
 import "../styles/PatientHeader.scss";
-import { ChevronDown20,ChevronUp20 } from "@carbon/icons-react";
+import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
+import { getPatientDashboardUrl } from "../../../../utils/CommonUtils";
 import PatientDetails from "./PatientDetails";
 
 export const PatientHeader = (props) => {
-  const { patientId } = props;
-  const [showPatientDetails,togglePatientDetails] = useState(false);
+  const { patientId, openDischargeSummary } = props;
+  const [showPatientDetails, togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
   const [isLoading, updateIsLoading] = useState(true);
-  const[contacts , setMappedContacts] = useState([]);
-  const[relationships , setMappedRelationships] = useState([]);
+  const [contacts, setMappedContacts] = useState([]);
+  const [relationships, setMappedRelationships] = useState([]);
 
   const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
-  const showDetails = <FormattedMessage id="SHOW_PATIENT_DETAILS" defaultMessage="Show Details" />;
-  const hideDetails = <FormattedMessage id="HIDE_PATIENT_DETAILS" defaultMessage="Hide Details" />;
+  const showDetails = (
+    <FormattedMessage id="SHOW_PATIENT_DETAILS" defaultMessage="Show Details" />
+  );
+  const hideDetails = (
+    <FormattedMessage id="HIDE_PATIENT_DETAILS" defaultMessage="Hide Details" />
+  );
   const patientDetailsHeaders = {
-    address: (
-      <FormattedMessage id={"Address"} defaultMessage={"Address"} />
-    ),
+    address: <FormattedMessage id={"Address"} defaultMessage={"Address"} />,
     contactDetails: (
-      <FormattedMessage id={"Contact Details"} defaultMessage={"Contact Details"} />
+      <FormattedMessage
+        id={"Contact Details"}
+        defaultMessage={"Contact Details"}
+      />
     ),
     relationships: (
       <FormattedMessage id={"Relationships"} defaultMessage={"Relationships"} />
-    )
-  }
+    ),
+  };
+  const patientDashboard = (
+    <FormattedMessage
+      id="PATIENT_DASHBOARD"
+      defaultMessage="Patient Dashboard"
+    />
+  );
+  const dischargeSummary = (
+    <FormattedMessage
+      id="DISCHARGE_SUMMARY"
+      defaultMessage="Discharge Summary"
+    />
+  );
 
   const getContactDetailsConfigs = async () => {
     const patientContactConfigs = await getConfigsForPatientContactDetails();
@@ -54,18 +86,25 @@ export const PatientHeader = (props) => {
       identifier: patientInfo?.identifiers[0]?.identifier,
     });
     locationMap.map((location) => {
-         locations = {...locations,[location.name]: patientInfo.person.preferredAddress && patientInfo.person.preferredAddress[location.addressField]}
-      });    
-    updatePatientDetails((patientDetails) => ({...patientDetails, locations})
-    )  
+      locations = {
+        ...locations,
+        [location.name]:
+          patientInfo.person.preferredAddress &&
+          patientInfo.person.preferredAddress[location.addressField],
+      };
+    });
+    updatePatientDetails((patientDetails) => ({
+      ...patientDetails,
+      locations,
+    }));
     updateIsLoading(false);
-    return(patientInfo?.person?.attributes);
+    return patientInfo?.person?.attributes;
   };
 
   const extractPatientRelationships = (patientProfile) => {
-  return(patientProfile?.relationships);
-}
- 
+    return patientProfile?.relationships;
+  };
+
   const toggleDetailsView = () => togglePatientDetails(!showPatientDetails);
   useEffect(() => {
     const getPatientInfo = async () => {
@@ -75,7 +114,9 @@ export const PatientHeader = (props) => {
       const patientAttributes = extractPatientInfo(patientInfo, locationMap);
       const contactConfigs = await getContactDetailsConfigs();
       const patientRelatives = extractPatientRelationships(patientProfile);
-      setMappedContacts(mapContact(patientAttributes , contactConfigs.contactDetails));
+      setMappedContacts(
+        mapContact(patientAttributes, contactConfigs.contactDetails)
+      );
       setMappedRelationships(mapRelationships(patientRelatives));
     };
     getPatientInfo();
@@ -93,16 +134,31 @@ export const PatientHeader = (props) => {
                 <div className={"patient-image"} />
                 <Column>
                   <Row>
-                    <Column>
+                    <div className="patient-name-and-navigations">
                       <h1 className="patient-name">
                         {patientDetails?.fullName}
                       </h1>
-                    </Column>
+                      <Link
+                        onClick={() =>
+                          window.open(
+                            getPatientDashboardUrl(patientId),
+                            "_blank"
+                          )
+                        }
+                      >
+                        {patientDashboard}
+                      </Link>
+                      <Link onClick={() => openDischargeSummary()}>
+                        {dischargeSummary}
+                      </Link>
+                    </div>
                   </Row>
                   <Row>
                     <div className="other-info">
                       <div className="patient-basic-info">
-                        <h3 className="patient-info">{patientDetails?.gender}</h3>
+                        <h3 className="patient-info">
+                          {patientDetails?.gender}
+                        </h3>
                         <h3 className="patient-info">
                           {patientDetails?.age} {years}
                         </h3>
@@ -113,23 +169,38 @@ export const PatientHeader = (props) => {
                           {patientDetails?.identifier}
                         </h3>
                       </div>
-                      {showPatientDetails ? (<Link kind="tertiary" className="show-more" size="sm" onClick={toggleDetailsView}>
-                          {hideDetails} <ChevronUp20/> </Link>
+                      {showPatientDetails ? (
+                        <Link
+                          kind="tertiary"
+                          className="show-more"
+                          size="sm"
+                          onClick={toggleDetailsView}
+                        >
+                          {hideDetails} <ChevronUp20 />{" "}
+                        </Link>
                       ) : (
-                        <Link kind="tertiary" className="show-more" size="sm" onClick={toggleDetailsView}>
-                          {showDetails} <ChevronDown20 /> 
-                        </Link>)}
+                        <Link
+                          kind="tertiary"
+                          className="show-more"
+                          size="sm"
+                          onClick={toggleDetailsView}
+                        >
+                          {showDetails} <ChevronDown20 />
+                        </Link>
+                      )}
                     </div>
                   </Row>
                 </Column>
               </Row>
             </Grid>
-            {showPatientDetails && 
-              <PatientDetails 
-              patientDetails={patientDetails}
-              patientDetailsHeaders={patientDetailsHeaders}
-              contacts={contacts}
-              relationships={relationships}/>}
+            {showPatientDetails && (
+              <PatientDetails
+                patientDetails={patientDetails}
+                patientDetailsHeaders={patientDetailsHeaders}
+                contacts={contacts}
+                relationships={relationships}
+              />
+            )}
           </>
         )}
       </Tile>
@@ -139,4 +210,5 @@ export const PatientHeader = (props) => {
 
 PatientHeader.propTypes = {
   patientId: PropTypes.string.isRequired,
+  openDischargeSummary: PropTypes.func.isRequired,
 };

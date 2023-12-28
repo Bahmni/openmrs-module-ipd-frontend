@@ -16,9 +16,11 @@ import {
 import moment from "moment";
 import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
 import AdministeredMedicationList from "./AdministeredMedicationList";
-import { saveAdministeredMedication } from "../utils/NursingTasksUtils";
+import {
+  saveAdministeredMedication,
+  isTimeWithinAdministeredWindow,
+} from "../utils/NursingTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
-import data from "../../../../utils/config.json";
 import { performerFunction } from "../utils/constants";
 
 const UpdateNursingTasks = (props) => {
@@ -50,8 +52,6 @@ const UpdateNursingTasks = (props) => {
     setOpenConfirmationModal(false);
   };
 
-  const { config: { nursingTasks = {} } = {} } = data;
-
   const saveAdministeredTasks = () => {
     setShowSuccessNotification(true);
     setOpenConfirmationModal(false);
@@ -66,10 +66,10 @@ const UpdateNursingTasks = (props) => {
 
   const createAdministeredTasksPayload = () => {
     const administeredTasksPayload = [];
-    console.log("Skipped Tasks", skippedTasks);
     Object.keys(administeredTasks).forEach((key) => {
       const time = new Date(tasks[key].actualTime);
       const utcTimeEpoch = moment.utc(time).unix();
+
       administeredTasksPayload.push({
         patientUuid: patientId,
         orderUuid: administeredTasks[key].orderId,
@@ -151,23 +151,8 @@ const UpdateNursingTasks = (props) => {
     updateIsSaveDisabled(saveDisabled);
   };
 
-  function timeToEpoch(time) {
-    const [hours, minutes] = time.split(":").map(Number);
-    const specificTime = new Date();
-    specificTime.setHours(hours, minutes, 0, 0);
-    return Math.floor(specificTime.getTime() / 1000);
-  }
-
-  const isTimeWithinAdministeredWindow = (time, id) => {
-    const enteredTimeInEpochSeconds = timeToEpoch(time);
-    const timeWithinWindowInEpochSeconds =
-      timeToEpoch(tasks[id].startTime) +
-      nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
-    return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
-  };
-
   const handleTimeChange = (time, id) => {
-    if (!isTimeWithinAdministeredWindow(time, id)) {
+    if (!isTimeWithinAdministeredWindow(time, tasks[id].startTime)) {
       updateTasks({
         ...tasks,
         [id]: {
@@ -195,7 +180,7 @@ const UpdateNursingTasks = (props) => {
 
   const handleToggle = (checked, id) => {
     const time = moment().format("HH:mm");
-    if (!isTimeWithinAdministeredWindow(time, id)) {
+    if (checked && !isTimeWithinAdministeredWindow(time, tasks[id].startTime)) {
       updateTasks({
         ...tasks,
         [id]: {
@@ -219,6 +204,7 @@ const UpdateNursingTasks = (props) => {
           actualTime: checked ? moment() : null,
         },
       });
+      delete errors[id];
     }
   };
 
@@ -458,7 +444,7 @@ const UpdateNursingTasks = (props) => {
           }
           onRequestSubmit={handlePrimaryButtonClick}
         >
-          <div className="divider"></div>
+          <hr />
           <AdministeredMedicationList list={administeredTasks} />
         </Modal>
         <SaveAndCloseButtons

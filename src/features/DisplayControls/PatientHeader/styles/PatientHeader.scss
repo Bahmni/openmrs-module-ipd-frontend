@@ -7,7 +7,7 @@
     font-size: 20px;
     margin: 10px 0 10px 0;
   }
-  
+
   .patient-details {
     width: 100%;
     padding: 0;
@@ -20,16 +20,26 @@
       flex-flow: column;
     }
 
-    .details-headers{
+    .details-headers {
       font-weight: 600;
       padding: 5px 0;
       color: #393939;
     }
 
-    .details-value{
+    .details-value {
       display: flex;
       flex-flow: row;
       padding: 3px;
+    }
+  }
+
+  .patient-name-and-navigations {
+    display: flex;
+    align-items: baseline;
+    padding: 0 0 0 10px;
+
+    .bx--link {
+      padding: 0 0 0 10px;
     }
   }
 
@@ -52,7 +62,7 @@
     font-size: 14px;
   }
 
-  .patient-basic-info{
+  .patient-basic-info {
     display: flex;
   }
 
@@ -65,7 +75,7 @@
     padding: 0 0 0 10px;
     width: 100%;
 
-    a{
+    a {
       font-size: 0.875rem;
     }
   }
@@ -74,7 +84,6 @@
 .is-loading {
   height: 64px;
 }
-
 
 .bx--row.patient-image-and-details {
   align-items: center;

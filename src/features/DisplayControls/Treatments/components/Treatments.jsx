@@ -11,7 +11,6 @@ import {
 } from "../utils/TreatmentsUtils";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
-// import DrugChartSliderNotification from "../../../DrugChartSlider/components/DrugChartSliderNotification";
 import { SliderContext } from "../../../../context/SliderContext";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { componentKeys } from "../../../../constants";

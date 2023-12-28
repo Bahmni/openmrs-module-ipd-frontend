@@ -119,7 +119,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
               class="bx--tag bx--tag--blue"
               id="tag-49"
             >
-              
+
               <span
                 title="Rx"
               >
@@ -201,7 +201,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
               class="bx--tag bx--tag--blue"
               id="tag-50"
             >
-              
+
               <span
                 title="Rx"
               >
@@ -243,7 +243,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
           <div
             class="bx--modal-header"
           >
-            
+
             <h3
               class="bx--modal-header__heading"
               id="bx--modal-header__heading--modal-6"
@@ -277,12 +277,10 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             class="bx--modal-content"
             id="bx--modal-body--modal-6"
           >
-            <div
-              class="divider"
-            />
+            <hr />
             <div
               aria-label="Structured list section"
-              class="bx--structured-list"
+              class="bx--structured-list administered-list-body"
               role="table"
             >
               <div
@@ -588,7 +586,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
           <div
             class="bx--modal-header"
           >
-            
+
             <h3
               class="bx--modal-header__heading"
               id="bx--modal-header__heading--modal-1"
@@ -622,12 +620,10 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             class="bx--modal-content"
             id="bx--modal-body--modal-1"
           >
-            <div
-              class="divider"
-            />
+            <hr />
             <div
               aria-label="Structured list section"
-              class="bx--structured-list"
+              class="bx--structured-list administered-list-body"
               role="table"
             >
               <div
