@@ -28,7 +28,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
               class="bx--tooltip--definition bx--tooltip--a11y cursor-pointer"
             >
               <button
-                aria-describedby="definition-tooltip-2"
+                aria-describedby="definition-tooltip-1"
                 class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
                 type="button"
               >
@@ -39,7 +39,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
               </button>
               <span
                 class="bx--assistive-text"
-                id="definition-tooltip-2"
+                id="definition-tooltip-1"
                 role="tooltip"
               />
             </span>
