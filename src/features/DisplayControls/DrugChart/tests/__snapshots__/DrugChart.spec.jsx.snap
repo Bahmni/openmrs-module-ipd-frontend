@@ -152,6 +152,10 @@ exports[`DrugChart should match snapshot 1`] = `
         <test-file-stub />
         Not Administered
       </div>
+      <div>
+        <test-file-stub />
+        Stopped
+      </div>
     </div>
   </div>
 </DocumentFragment>

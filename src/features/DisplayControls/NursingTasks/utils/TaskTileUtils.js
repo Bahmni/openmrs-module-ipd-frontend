@@ -30,7 +30,6 @@ export const iconType = (task) => {
     startTimeInEpochSeconds,
     status,
   } = task;
-  console.log("task", task);
   if (stopTime) return "Stopped";
   if (status === "Not Done") return "Not-Administered";
   if (administeredTimeInEpochSeconds) {

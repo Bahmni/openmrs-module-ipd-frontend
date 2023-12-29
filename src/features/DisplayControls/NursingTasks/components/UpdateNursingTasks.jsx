@@ -66,7 +66,6 @@ const UpdateNursingTasks = (props) => {
 
   const createAdministeredTasksPayload = () => {
     const administeredTasksPayload = [];
-    console.log(administeredTasks, skippedTasks);
     Object.keys(administeredTasks).forEach((key) => {
       const time = new Date(tasks[key].actualTime);
       const utcTimeEpoch = moment.utc(time).unix();

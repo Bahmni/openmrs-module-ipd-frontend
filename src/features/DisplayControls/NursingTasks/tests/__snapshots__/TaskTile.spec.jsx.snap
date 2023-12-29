@@ -6,8 +6,8 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
     class="tile-parent-container"
   >
     <div
-      class="nursing-tasks-tile undefined
-        false "
+      class="nursing-tasks-tile false 
+        undefined"
     >
       <div
         class="tile-content"

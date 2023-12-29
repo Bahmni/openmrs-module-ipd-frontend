@@ -4,7 +4,6 @@ import { FormattedMessage } from "react-intl";
 import "../styles/NursingTasks.scss";
 import { Add16 } from "@carbon/icons-react";
 import { items } from "../utils/constants";
-
 import {
   fetchMedicationNursingTasks,
   ExtractMedicationNursingTasksData,
@@ -198,8 +197,10 @@ export default function NursingTasks(props) {
         {medicationNursingTasks && medicationNursingTasks.length === 0 ? (
           <div className="no-nursing-tasks">{getNoTaskMessage()}</div>
         ) : (
-          <div className="nursing-task-tiles-container">
-            {showTaskTiles()}
+          <div>
+            <div className="nursing-task-tiles-container">
+              {showTaskTiles()}
+            </div>
             <AdministrationLegend />
           </div>
         )}

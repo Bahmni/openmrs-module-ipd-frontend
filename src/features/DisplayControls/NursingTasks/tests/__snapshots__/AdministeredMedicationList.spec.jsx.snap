@@ -23,7 +23,18 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
             Liquid Paraffin
           </div>
           <span>
-            2 - Drop - Topical
+            <div>
+              <span>
+                2
+              </span>
+              <span>
+                 - 
+                Drop
+              </span>
+              <span>
+                 - 
+              </span>
+            </div>
           </span>
         </div>
         <div

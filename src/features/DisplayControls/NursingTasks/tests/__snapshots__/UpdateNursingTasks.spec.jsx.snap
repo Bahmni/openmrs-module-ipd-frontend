@@ -111,7 +111,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             class="medication-name"
           >
             <div
-              class="name"
+              class="name undefined"
             >
               Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
             </div>
@@ -138,6 +138,45 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
               Topical
             </span>
           </div>
+          <button
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-label="Open and close list of options"
+            class="overflowMenu bx--overflow-menu bx--overflow-menu--md"
+            type="button"
+          >
+            <svg
+              aria-label="Open and close list of options"
+              class="bx--overflow-menu__icon"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="16"
+                cy="8"
+                r="2"
+              />
+              <circle
+                cx="16"
+                cy="16"
+                r="2"
+              />
+              <circle
+                cx="16"
+                cy="24"
+                r="2"
+              />
+              <title>
+                Open and close list of options
+              </title>
+            </svg>
+          </button>
         </div>
         <div
           class="nursing-task-section"
@@ -193,7 +232,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             class="medication-name"
           >
             <div
-              class="name"
+              class="name undefined"
             >
               Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
             </div>
@@ -220,6 +259,45 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
               Intravenous
             </span>
           </div>
+          <button
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-label="Open and close list of options"
+            class="overflowMenu bx--overflow-menu bx--overflow-menu--md"
+            type="button"
+          >
+            <svg
+              aria-label="Open and close list of options"
+              class="bx--overflow-menu__icon"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="16"
+                cy="8"
+                r="2"
+              />
+              <circle
+                cx="16"
+                cy="16"
+                r="2"
+              />
+              <circle
+                cx="16"
+                cy="24"
+                r="2"
+              />
+              <title>
+                Open and close list of options
+              </title>
+            </svg>
+          </button>
         </div>
       </div>
       <div
@@ -454,7 +532,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             class="medication-name"
           >
             <div
-              class="name"
+              class="name undefined"
             >
               Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
             </div>
@@ -481,6 +559,45 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
               Topical
             </span>
           </div>
+          <button
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-label="Open and close list of options"
+            class="overflowMenu bx--overflow-menu bx--overflow-menu--md"
+            type="button"
+          >
+            <svg
+              aria-label="Open and close list of options"
+              class="bx--overflow-menu__icon"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="16"
+                cy="8"
+                r="2"
+              />
+              <circle
+                cx="16"
+                cy="16"
+                r="2"
+              />
+              <circle
+                cx="16"
+                cy="24"
+                r="2"
+              />
+              <title>
+                Open and close list of options
+              </title>
+            </svg>
+          </button>
         </div>
         <div
           class="nursing-task-section"
@@ -536,7 +653,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             class="medication-name"
           >
             <div
-              class="name"
+              class="name undefined"
             >
               Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
             </div>
@@ -563,6 +680,45 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
               Intravenous
             </span>
           </div>
+          <button
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-label="Open and close list of options"
+            class="overflowMenu bx--overflow-menu bx--overflow-menu--md"
+            type="button"
+          >
+            <svg
+              aria-label="Open and close list of options"
+              class="bx--overflow-menu__icon"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="16"
+                cy="8"
+                r="2"
+              />
+              <circle
+                cx="16"
+                cy="16"
+                r="2"
+              />
+              <circle
+                cx="16"
+                cy="24"
+                r="2"
+              />
+              <title>
+                Open and close list of options
+              </title>
+            </svg>
+          </button>
         </div>
       </div>
       <div
