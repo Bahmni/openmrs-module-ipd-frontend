@@ -5,7 +5,7 @@ import Calendar from "./Calendar";
 import CalendarHeader from "./CalendarHeader";
 import "../styles/DrugChart.scss";
 import DrugList from "./DrugList";
-import DrugChartLegend from "./DrugChartLegend";
+import DrugChartLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 export default function DrugChart(props) {
   const { drugChartData } = props;
   const leftPane = useRef(null);

@@ -46,11 +46,7 @@ export default function TaskTile(props) {
       {drugName}
     </div>
   );
-  const statusIcon = iconType(
-    administeredTimeInEpochSeconds,
-    startTimeInEpochSeconds,
-    stopTime
-  );
+  const statusIcon = iconType(newMedicationNursingTask);
   return (
     <div className="tile-parent-container">
       <div
@@ -70,7 +66,7 @@ export default function TaskTile(props) {
               </div>
               <TooltipDefinition
                 tooltipText={drugName}
-                className={stopTime ? "cursor-not-allowed" : "cursor-pointer"}
+                className={isDisabled ? "cursor-not-allowed" : "cursor-pointer"}
               >
                 {drugNameText}
               </TooltipDefinition>

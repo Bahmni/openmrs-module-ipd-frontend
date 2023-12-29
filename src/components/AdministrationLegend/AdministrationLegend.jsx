@@ -1,14 +1,15 @@
 import React from "react";
-import AdministeredIcon from "../../../../icons/administered.svg";
+import AdministeredIcon from "../../icons/Administered.svg";
 
-import AdministeredLateIcon from "../../../../icons/administered-late.svg";
-import LateIcon from "../../../../icons/late.svg";
-import NotAdministeredIcon from "../../../../icons/not-administered.svg";
-import PendingIcon from "../../../../icons/pending.svg";
-import "../styles/DrugChartLegend.scss";
+import AdministeredLateIcon from "../../icons/administered-late.svg";
+import LateIcon from "../../icons/late.svg";
+import NotAdministeredIcon from "../../icons/not-administered.svg";
+import PendingIcon from "../../icons/pending.svg";
+import StoppedIcon from "../../icons/stopped.svg";
+import "./AdministrationLegend.scss";
 import { FormattedMessage } from "react-intl";
 
-export default function DrugChartLegend() {
+export default function AdministrationLegend() {
   return (
     <div className={"drug-chart-legend"}>
       <div>
@@ -36,6 +37,10 @@ export default function DrugChartLegend() {
           id="NOT_ADMINISTERED"
           defaultMessage={"Not Administered"}
         />
+      </div>
+      <div>
+        <StoppedIcon />
+        <FormattedMessage id="STOPPED" defaultMessage={"Stopped"} />
       </div>
     </div>
   );

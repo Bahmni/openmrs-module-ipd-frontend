@@ -27,7 +27,8 @@ export const ExtractMedicationNursingTasksData = (
   const extractedData = [],
     pendingExtractedData = [],
     completedExtractedData = [],
-    stoppedExtractedData = [];
+    stoppedExtractedData = [],
+    skippedExtractedData = [];
   medicationNursingTasksData.forEach((item) => {
     const { slots } = item;
 
@@ -77,7 +78,10 @@ export const ExtractMedicationNursingTasksData = (
           hourCycle: "h23",
         }),
         orderId: order.uuid,
-        isDisabled: administeredDateTime || order.dateStopped,
+        isDisabled:
+          !!administeredDateTime ||
+          order.dateStopped ||
+          slot.medicationAdministration?.status === "Not Done",
       };
 
       if (order.dateStopped) {
@@ -87,8 +91,13 @@ export const ExtractMedicationNursingTasksData = (
             stopTime: order.dateStopped,
           });
       } else if (
-        (filterValue.id === "completed" && slot.status === "COMPLETED") ||
-        (filterValue.id === "allTasks" && slot.status === "COMPLETED")
+        (filterValue.id === "skipped" || filterValue.id === "allTasks") &&
+        slot.medicationAdministration?.status === "Not Done"
+      ) {
+        skippedExtractedData.push({ ...slotInfo, status: "Not Done" });
+      } else if (
+        (filterValue.id === "completed" || filterValue.id === "allTasks") &&
+        slot.status === "COMPLETED"
       ) {
         completedExtractedData.push({
           ...slotInfo,
@@ -103,8 +112,9 @@ export const ExtractMedicationNursingTasksData = (
               : "",
         });
       } else if (
-        (filterValue.id === "pending" && slot.status === "SCHEDULED") ||
-        (filterValue.id === "allTasks" && slot.status === "SCHEDULED")
+        (filterValue.id === "pending" || filterValue.id === "allTasks") &&
+        slot.status === "SCHEDULED" &&
+        !slot.medicationAdministration
       ) {
         pendingExtractedData.push(slotInfo);
       }
@@ -137,22 +147,20 @@ export const ExtractMedicationNursingTasksData = (
   if (currentGroup.length > 0) {
     groupedData.push(currentGroup);
   }
-  if (stoppedExtractedData.length > 0) {
-    groupedData.push(...stoppedExtractedData.map((item) => [item]));
-  }
-  if (completedExtractedData.length > 0) {
+  if (filterValue.id !== "pending") {
     groupedData.push(...completedExtractedData.map((item) => [item]));
+    groupedData.push(...stoppedExtractedData.map((item) => [item]));
+    groupedData.push(...skippedExtractedData.map((item) => [item]));
   }
   return groupedData;
 };
 
 export const saveAdministeredMedication = async (administeredMedication) => {
   try {
-    const response = await axios.post(
+    return await axios.post(
       ADMINISTERED_MEDICATIONS_BASE_URL,
       administeredMedication
     );
-    return response;
   } catch (error) {
     console.error(error);
   }
@@ -162,8 +170,7 @@ const timeToEpoch = (time) => {
   const [hours, minutes] = time.split(":").map(Number);
   const specificTime = new Date();
   specificTime.setHours(hours, minutes, 0, 0);
-  const epochTimeInSeconds = Math.floor(specificTime.getTime() / 1000);
-  return epochTimeInSeconds;
+  return Math.floor(specificTime.getTime() / 1000);
 };
 
 export const isTimeWithinAdministeredWindow = (
@@ -175,7 +182,5 @@ export const isTimeWithinAdministeredWindow = (
     timeToEpoch(scheduledStartTime) +
     nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
 
-  if (enteredTimeInEpochSeconds > timeWithinWindowInEpochSeconds) {
-    return false;
-  } else return true;
+  return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
 };

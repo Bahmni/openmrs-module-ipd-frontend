@@ -6,9 +6,10 @@ import {
   StructuredListCell,
 } from "carbon-components-react";
 import PropTypes from "prop-types";
+import { getMedicationDetails } from "../utils/TaskTileUtils";
 import ClockIcon from "../../../../icons/clock.svg";
 import Administered from "../../../../icons/administered.svg";
-
+import NotAdministered from "../../../../icons/not-administered.svg";
 import "../styles/AdministeredMedicationList.scss";
 
 const AdministeredMedicationList = ({ list }) => {
@@ -18,16 +19,12 @@ const AdministeredMedicationList = ({ list }) => {
     return `${hours}:${minutes}`;
   };
 
-  const getMedicationDetails = (medication) => {
-    return `${medication.dosage} - ${medication.doseType} - ${medication.route}`;
-  };
-
   const getMedicationStatus = (status) => {
-    return status === "completed" ? "Done" : "";
+    return status === "completed" ? "Done" : "Skipped";
   };
 
   const getStatusIcon = (status) => {
-    return status === "completed" ? <Administered /> : "";
+    return status === "completed" ? <Administered /> : <NotAdministered />;
   };
 
   return (
