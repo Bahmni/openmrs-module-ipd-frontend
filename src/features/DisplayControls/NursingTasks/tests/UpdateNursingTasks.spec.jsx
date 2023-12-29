@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import UpdateNursingTasks from "../components/UpdateNursingTasks";
 import { mockMedicationTasks } from "./NursingTasksUtilsMockData";
@@ -174,5 +174,72 @@ describe("UpdateNursingTasksSlider", function () {
     fireEvent.click(saveButton);
 
     expect("Please enter notes").toBeTruthy();
+  });
+
+  it("should show OverflowMenu for a task", () => {
+    const { container } = render(
+      <UpdateNursingTasks
+        medicationTasks={mockMedicationTasks}
+        updateNursingTasksSlider={jest.fn}
+        patientId="test_patient_uuid"
+        providerId="test_provider_uuid"
+        setShowSuccessNotification={jest.fn}
+      />
+    );
+    expect(container.querySelectorAll(".bx--overflow-menu")).toBeTruthy();
+  });
+
+  it("should show Skip Drug option on click of Overflow menu button", () => {
+    const { container } = render(
+      <UpdateNursingTasks
+        medicationTasks={mockMedicationTasks}
+        updateNursingTasksSlider={jest.fn}
+        patientId="test_patient_uuid"
+        providerId="test_provider_uuid"
+        setShowSuccessNotification={jest.fn}
+      />
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Skip Drug")).toBeTruthy();
+  });
+
+  it("should hide the Administer Done toggle button on click of Skip Drug button", () => {
+    const { container } = render(
+      <UpdateNursingTasks
+        medicationTasks={[mockMedicationTasks[0]]}
+        updateNursingTasksSlider={jest.fn}
+        patientId="test_patient_uuid"
+        providerId="test_provider_uuid"
+        setShowSuccessNotification={jest.fn}
+      />
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    const skipDrugButton = screen.getByText("Skip Drug");
+    fireEvent.click(skipDrugButton);
+    expect(container.querySelectorAll(".bx--toggle__switch")).toHaveLength(0);
+  });
+
+  it("should show notes as mandatory when Skip Drug button is clicked", () => {
+    const { container } = render(
+      <UpdateNursingTasks
+        medicationTasks={[mockMedicationTasks[0]]}
+        updateNursingTasksSlider={jest.fn}
+        patientId="test_patient_uuid"
+        providerId="test_provider_uuid"
+        setShowSuccessNotification={jest.fn}
+      />
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    const skipDrugButton = screen.getByText("Skip Drug");
+    fireEvent.click(skipDrugButton);
+    const saveButton = screen.getAllByText("Save")[1];
+    fireEvent.click(saveButton);
+    expect(screen.getByText("Please enter notes")).toBeTruthy();
   });
 });

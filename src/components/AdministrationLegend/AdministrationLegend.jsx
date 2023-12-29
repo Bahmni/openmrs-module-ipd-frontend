@@ -1,5 +1,5 @@
 import React from "react";
-import AdministeredIcon from "../../icons/Administered.svg";
+import AdministeredIcon from "../../icons/administered.svg";
 
 import AdministeredLateIcon from "../../icons/administered-late.svg";
 import LateIcon from "../../icons/late.svg";
