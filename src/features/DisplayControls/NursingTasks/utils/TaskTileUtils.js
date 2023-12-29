@@ -24,8 +24,10 @@ const isLateTask = (startTimeInEpochSeconds) => {
 
 export const iconType = (
   administeredTimeInEpochmilliSeconds,
-  startTimeInEpochSeconds
+  startTimeInEpochSeconds,
+  stopTime
 ) => {
+  if (stopTime) return "Stopped";
   if (administeredTimeInEpochmilliSeconds) {
     const administeredLateWindowInSeconds =
       startTimeInEpochSeconds +

@@ -67,7 +67,7 @@ export const ExtractMedicationNursingTasksData = (
         doseType,
         uuid,
         startTimeInEpochSeconds: startTime,
-        dosingInstructions : {
+        dosingInstructions: {
           asNeeded: order?.asNeeded,
           frequency: order.frequency?.display,
         },
@@ -77,7 +77,7 @@ export const ExtractMedicationNursingTasksData = (
           hourCycle: "h23",
         }),
         orderId: order.uuid,
-        isDisabled: administeredDateTime ? true : false,
+        isDisabled: administeredDateTime || order.dateStopped,
       };
 
       if (order.dateStopped) {
