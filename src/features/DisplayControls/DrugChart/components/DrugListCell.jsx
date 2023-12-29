@@ -43,7 +43,7 @@ export default function DrugListCell(props) {
       {dosingInstructions && (
         <TooltipCarbon icon={() => icon} content={toolTipContent} />
       )}
-      <div className="drug-name-cell">
+      <div className="drug-list-drug-name-cell">
         <DisplayTags drugOrder={dosingTagInfo} />
       </div>
     </div>

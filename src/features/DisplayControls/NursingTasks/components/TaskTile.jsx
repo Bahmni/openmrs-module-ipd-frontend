@@ -79,13 +79,15 @@ export default function TaskTile(props) {
                 {drugNameText}
               </TooltipDefinition>
             </div>
-            {stopTime && (
-              <Tag className={"red-tag"}>
-                <FormattedMessage id={"STOPPED"} defaultMessage={"Stopped"} />
-              </Tag>
-            )}
           </div>
           <div className="tile-name-cell">
+            {stopTime && (
+              <div style={{ paddingRight: "5px" }}>
+                <Tag className={"red-tag"}>
+                  <FormattedMessage id={"STOPPED"} defaultMessage={"Stopped"} />
+                </Tag>
+              </div>
+            )}
             <DisplayTags drugOrder={dosingInstructions} />
           </div>
           <div
