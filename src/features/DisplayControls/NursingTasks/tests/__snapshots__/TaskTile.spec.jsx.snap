@@ -28,7 +28,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
               class="bx--tooltip--definition bx--tooltip--a11y cursor-pointer"
             >
               <button
-                aria-describedby="definition-tooltip-1"
+                aria-describedby="definition-tooltip-2"
                 class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
                 type="button"
               >
@@ -39,7 +39,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
               </button>
               <span
                 class="bx--assistive-text"
-                id="definition-tooltip-1"
+                id="definition-tooltip-2"
                 role="tooltip"
               />
             </span>
@@ -50,7 +50,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
         >
           <div
             class="bx--tag bx--tag--blue"
-            id="tag-1"
+            id="tag-2"
           >
             <span
               title="Rx"
@@ -96,8 +96,8 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
     class="tile-parent-container"
   >
     <div
-      class="nursing-tasks-tile undefined
-        false disabled-tile no-hover"
+      class="nursing-tasks-tile false 
+        disabled-tile"
     >
       <div
         class="tile-content"
@@ -115,7 +115,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
               </div>
             </div>
             <span
-              class="bx--tooltip--definition bx--tooltip--a11y cursor-pointer"
+              class="bx--tooltip--definition bx--tooltip--a11y cursor-not-allowed"
             >
               <button
                 aria-describedby="definition-tooltip-1"
@@ -136,6 +136,20 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
               >
                 Halothane/Fluothane 250 mL Inhalation Anesthetic Liquid
               </span>
+            </span>
+          </div>
+        </div>
+        <div
+          class="tile-name-cell"
+        >
+          <div
+            class="bx--tag bx--tag--blue"
+            id="tag-1"
+          >
+            <span
+              title="Rx"
+            >
+              Rx
             </span>
           </div>
         </div>
