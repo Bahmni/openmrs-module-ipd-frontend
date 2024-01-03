@@ -2,7 +2,6 @@ import axios from "axios";
 import moment from "moment";
 import { MEDICATIONS_BASE_URL } from "../../../../constants";
 import data from "../../../../utils/config.json";
-import { AdminMedicationData } from "../components/AdminMedicationData";
 
 const { config: { drugChart = {} } = {} } = data;
 
@@ -25,10 +24,14 @@ const isLateTask = (startTime) => {
 };
 
 const isAdministeredLateTask = (startTime, effectiveStartDate) => {
-  const lateTaskStatusWindowInSeconds =
-    drugChart.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
+  const lateTaskStatusWindowInMilliSeconds =
+    drugChart.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate *
+    60 *
+    1000;
 
-  return effectiveStartDate - startTime > lateTaskStatusWindowInSeconds;
+  return (
+    effectiveStartDate - startTime * 1000 > lateTaskStatusWindowInMilliSeconds
+  );
 };
 
 const checkIfSlotIsAdministered = (status) => {
@@ -44,10 +47,8 @@ export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
   const slotDataByOrder = [];
 
-  AdminMedicationData.map((schedule) => {
+  drugChartData.map((schedule) => {
     const { slots } = schedule;
-
-    const administeredTimeInfo = [];
 
     slots.forEach((slot) => {
       let administeredStartHour, administeredStartMinutes, medicationNotes;
@@ -55,7 +56,8 @@ export const TransformDrugChartData = (drugChartData) => {
       const { startTime, status, order, medicationAdministration } = slot;
       let medicationStatus = "Pending";
       let adminInfo = "",
-        administeredTime,startActualTime;
+        administeredTime,
+        startActualTime;
 
       const isCompleted = checkIfSlotIsAdministered(status);
 
@@ -66,15 +68,15 @@ export const TransformDrugChartData = (drugChartData) => {
         );
         medicationStatus = isLate ? "Administered-Late" : "Administered";
         if (medicationAdministration) {
-          const { administeredDateTime, provider, notes } = medicationAdministration;
-          const administeredDateTimeObject = new Date(
-            administeredDateTime * 1000
-          );
+          const { administeredDateTime, providers, notes } =
+            medicationAdministration;
+          const administeredDateTimeObject = new Date(administeredDateTime);
           administeredTime = moment(administeredDateTimeObject).format("HH:mm");
-          adminInfo = provider.display + " [" + administeredTime + "]";
+          adminInfo =
+            providers[0].provider.display + " [" + administeredTime + "]";
           administeredStartHour = administeredDateTimeObject.getHours();
           administeredStartMinutes = administeredDateTimeObject.getMinutes();
-          medicationNotes = notes;
+          medicationNotes = notes && notes.length > 0 ? notes[0].text : "";
         } else {
           adminInfo = "";
         }
@@ -86,12 +88,12 @@ export const TransformDrugChartData = (drugChartData) => {
         uuid: order.uuid,
         drugName: order.drug.display,
         drugRoute: order.route.display,
-        administrationInfo: administeredTimeInfo,
+        administrationInfo: [],
         dosingInstructions: order.dosingInstructions,
         dosingTagInfo: {
-        asNeeded: order.asNeeded,
-        frequency: order.frequency.display,
-      }
+          asNeeded: order.asNeeded,
+          frequency: order.frequency.display,
+        },
       };
 
       if (order.duration) {
@@ -107,27 +109,24 @@ export const TransformDrugChartData = (drugChartData) => {
         drugOrder.duration = order.duration + " " + order.durationUnits.display;
       }
 
-
-
       const setLateStatus = isLateTask(startTime);
       const startHour = startDateTimeObj.getHours();
       const startMinutes = startDateTimeObj.getMinutes();
-     if (isCompleted) 
-       {
-            slotData[administeredStartHour] = {
-            minutes: administeredStartMinutes,
-            status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
-            administrationInfo: adminInfo,
-            notes: medicationNotes
-            };
+      if (isCompleted) {
+        slotData[administeredStartHour] = {
+          minutes: administeredStartMinutes,
+          status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
+          administrationInfo: adminInfo,
+          notes: medicationNotes,
+        };
+      } else {
+        slotData[startHour] = {
+          minutes: startMinutes,
+          status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
+          administrationInfo: adminInfo,
+          notes: medicationNotes,
+        };
       }
-     else {
-      slotData[startHour] = {
-        minutes: startMinutes,
-        status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
-        administrationInfo: adminInfo,
-        notes: medicationNotes
-     } }
       if (
         medicationStatus === "Administered" ||
         medicationStatus === "Administered-Late"
@@ -135,9 +134,24 @@ export const TransformDrugChartData = (drugChartData) => {
         const adminData = {
           kind: medicationStatus,
           time: startActualTime,
-          timeAdministered: administeredTime
+          timeAdministered: administeredTime,
         };
-        drugOrder.administrationInfo.push(adminData);
+        if (
+          drugOrderData.some(
+            (existingOrder) =>
+              existingOrder.drugName === drugOrder.drugName &&
+              existingOrder.uuid === drugOrder.uuid
+          )
+        ) {
+          const index = drugOrderData.findIndex(
+            (existingOrder) =>
+              existingOrder.drugName === drugOrder.drugName &&
+              existingOrder.uuid === drugOrder.uuid
+          );
+          drugOrderData[index].administrationInfo.push(adminData);
+        } else {
+          drugOrder.administrationInfo.push(adminData);
+        }
       }
       if (
         !drugOrderData.some(
@@ -164,18 +178,20 @@ export const TransformDrugChartData = (drugChartData) => {
   return [slotDataByOrder, drugOrderData];
 };
 
-export const ifMedicationNotesPresent = (medicationNotes,side) =>{
+export const ifMedicationNotesPresent = (medicationNotes, side) => {
   let notesIcon;
-  if(!medicationNotes)
-   {
+  if (!medicationNotes) {
     notesIcon = false;
-   }
-   else {
-     notesIcon = true;
-   }
-   return((side === "Administered-Late" || side === "Administered" || side === "Not-Administered") && notesIcon);
-
-}
+  } else {
+    notesIcon = true;
+  }
+  return (
+    (side === "Administered-Late" ||
+      side === "Administered" ||
+      side === "Not-Administered") &&
+    notesIcon
+  );
+};
 
 export const currentShiftHoursArray = () => {
   const shiftTimeInHours = drugChart.shiftHours;

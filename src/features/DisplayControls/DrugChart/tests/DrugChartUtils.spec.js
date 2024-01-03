@@ -52,7 +52,7 @@ describe("DrugChartUtils", () => {
   });
 
   describe("TransformDrugChartData", () => {
-    it.skip("should transform drug chart data", () => {
+    it("should transform drug chart data", () => {
       const TransformedDrugChartData = TransformDrugChartData(drugChartData);
       expect(TransformedDrugChartData).toEqual([
         [
@@ -60,11 +60,13 @@ describe("DrugChartUtils", () => {
             16: {
               administrationInfo: "",
               minutes: 15,
+              notes: undefined,
               status: "Late",
             },
             19: {
               administrationInfo: "",
               minutes: 35,
+              notes: undefined,
               status: "Late",
             },
           },
@@ -74,6 +76,10 @@ describe("DrugChartUtils", () => {
             administrationInfo: [],
             dosage: "25ml",
             dosingInstructions: '{"Before meals"}',
+            dosingTagInfo: {
+              asNeeded: false,
+              frequency: "Once a day",
+            },
             drugName: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
             drugRoute: "Oral",
             duration: "3 Day(s)",

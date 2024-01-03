@@ -19,18 +19,37 @@ export default function DrugListCell(props) {
     dosingTagInfo,
   } = drugInfo;
 
-  let parsedDosingInstructions;
+  let parsedDosingInstructions,
+    showInstructionsIcon,
+    isInstructionsPresent,
+    isAdditionalInstructionsPresent;
   if (dosingInstructions !== null && dosingInstructions !== undefined) {
     parsedDosingInstructions = JSON.parse(dosingInstructions);
+    isInstructionsPresent =
+      parsedDosingInstructions.instructions !== null &&
+      parsedDosingInstructions.instructions !== undefined &&
+      parsedDosingInstructions.instructions !== "";
+    isAdditionalInstructionsPresent =
+      parsedDosingInstructions.additionalInstructions !== null &&
+      parsedDosingInstructions.additionalInstructions !== undefined &&
+      parsedDosingInstructions.additionalInstructions !== "";
+    showInstructionsIcon =
+      isInstructionsPresent || isAdditionalInstructionsPresent;
   }
 
   const toolTipContent = (
     <div>
-      Instructions:&nbsp;{parsedDosingInstructions.instructions}
-      <br />
-      {parsedDosingInstructions.additionalInstructions && (
+      {isInstructionsPresent && (
+        <>Instructions:&nbsp;{parsedDosingInstructions.instructions}</>
+      )}
+      {isAdditionalInstructionsPresent && (
         <>
-          <div className="tooltip-content-separater" />
+          {isInstructionsPresent && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
           Additional Instructions:&nbsp;
           {parsedDosingInstructions.additionalInstructions}
         </>
@@ -40,7 +59,7 @@ export default function DrugListCell(props) {
   const drugNameText = (
     <div className="drug-name-container">
       <div className={"drug-chart-drug-name"}>{drugName}</div>
-      {dosingInstructions && (
+      {showInstructionsIcon && (
         <TooltipCarbon icon={() => icon} content={toolTipContent} />
       )}
       <div className="drug-list-drug-name-cell">

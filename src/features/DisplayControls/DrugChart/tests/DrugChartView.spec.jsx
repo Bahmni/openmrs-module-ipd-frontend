@@ -2,16 +2,27 @@ import React from "react";
 import { render } from "@testing-library/react";
 import DrugChartView from "../components/DrugChartView";
 import { drugChartData } from "./DrugChartViewMockData";
+import MockDate from "mockdate";
 
 const mockUseFetchMedications = jest.fn();
+const MockTooltipCarbon = jest.fn();
 
 jest.mock("../hooks/useFetchMedications", () => ({
   useFetchMedications: () => mockUseFetchMedications(),
 }));
+jest.mock("bahmni-carbon-ui", () => {
+  return {
+    TooltipCarbon: (props) => {
+      MockTooltipCarbon(props);
+      return <div>TooltipCarbon</div>;
+    },
+  };
+});
 
 describe("DrugChartWrapper", () => {
   const mockDate = new Date(1466424490000);
-  it.skip("matches snapshot", () => {
+  MockDate.set(mockDate);
+  it("matches snapshot", () => {
     mockUseFetchMedications.mockReturnValue({
       isLoading: false,
       drugChartData,
@@ -20,6 +31,7 @@ describe("DrugChartWrapper", () => {
       <DrugChartView patientId="testid" viewDate={mockDate} />
     );
     expect(container).toMatchSnapshot();
+    MockDate.reset();
   });
 
   it("should render loading state when isLoading is true", () => {

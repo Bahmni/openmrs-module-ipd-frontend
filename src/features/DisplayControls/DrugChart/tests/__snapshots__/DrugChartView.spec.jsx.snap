@@ -7,6 +7,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
   >
     <div
       class="drug-chart"
+      style="height: 198px;"
     >
       <div
         class="drug-chart-left-panel"
@@ -23,9 +24,31 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
               <tr>
                 <td>
                   <div
-                    class="drug-name"
+                    class="drug-name-container"
                   >
-                    Paracetamol 120 mg/5 mL Suspension (Liquid)
+                    <div
+                      class="drug-chart-drug-name"
+                    >
+                      Paracetamol 120 mg/5 mL Suspension (Liquid)
+                    </div>
+                    <div>
+                      TooltipCarbon
+                    </div>
+                    <div
+                      class="drug-list-drug-name-cell"
+                    >
+                      <div
+                        class="bx--tag bx--tag--blue"
+                        id="tag-2"
+                      >
+                        
+                        <span
+                          title="Rx"
+                        >
+                          Rx
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <div
                     class="dosage"
@@ -58,62 +81,6 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
           <div
             style="display: flex;"
           >
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              00
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              01
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              02
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              03
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              04
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              05
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              06
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              07
-              :00
-            </div>
             <div
               class="hour-header"
               data-testid="hour"
@@ -170,62 +137,6 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
               15
               :00
             </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              16
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              17
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              18
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              19
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              20
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              21
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              22
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              23
-              :00
-            </div>
           </div>
         </div>
         <table
@@ -240,9 +151,11 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                   class="time-cell"
                 >
                   <div
+                    class=""
                     data-testid="left-icon"
                   />
                   <div
+                    class=""
                     data-testid="right-icon"
                   />
                 </div>
@@ -250,9 +163,11 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                   class="time-cell"
                 >
                   <div
+                    class=""
                     data-testid="left-icon"
                   />
                   <div
+                    class=""
                     data-testid="right-icon"
                   />
                 </div>
@@ -260,9 +175,11 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                   class="time-cell"
                 >
                   <div
+                    class=""
                     data-testid="left-icon"
                   />
                   <div
+                    class=""
                     data-testid="right-icon"
                   />
                 </div>
@@ -270,9 +187,11 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                   class="time-cell"
                 >
                   <div
+                    class=""
                     data-testid="left-icon"
                   />
                   <div
+                    class=""
                     data-testid="right-icon"
                   />
                 </div>
@@ -280,9 +199,11 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                   class="time-cell"
                 >
                   <div
+                    class="highligtedCell"
                     data-testid="left-icon"
                   />
                   <div
+                    class=""
                     data-testid="right-icon"
                   />
                 </div>
@@ -290,9 +211,11 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                   class="time-cell"
                 >
                   <div
+                    class=""
                     data-testid="left-icon"
                   />
                   <div
+                    class=""
                     data-testid="right-icon"
                   />
                 </div>
@@ -300,9 +223,11 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                   class="time-cell"
                 >
                   <div
+                    class=""
                     data-testid="left-icon"
                   />
                   <div
+                    class=""
                     data-testid="right-icon"
                   />
                 </div>
@@ -310,177 +235,11 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                   class="time-cell"
                 >
                   <div
+                    class=""
                     data-testid="left-icon"
                   />
                   <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  >
-                    <div>
-                      <test-file-stub />
-                    </div>
-                  </div>
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  >
-                    <div>
-                      <test-file-stub />
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    data-testid="left-icon"
-                  />
-                  <div
+                    class=""
                     data-testid="right-icon"
                   />
                 </div>
@@ -512,6 +271,10 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
       <div>
         <test-file-stub />
         Not Administered
+      </div>
+      <div>
+        <test-file-stub />
+        Stopped
       </div>
     </div>
   </div>
