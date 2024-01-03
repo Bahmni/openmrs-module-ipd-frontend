@@ -54,6 +54,7 @@ export const getTime = (administeredTimeInEpochmilliSeconds, startTime) => {
     ).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
+      hourCycle: "h23",
     });
     return startTime + " - " + administeredTime + " (actual)";
   }
