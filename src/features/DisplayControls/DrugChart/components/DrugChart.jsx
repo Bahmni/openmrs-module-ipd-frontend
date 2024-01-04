@@ -7,7 +7,7 @@ import "../styles/DrugChart.scss";
 import DrugList from "./DrugList";
 import DrugChartLegend from "./DrugChartLegend";
 export default function DrugChart(props) {
-  const { drugChartData, currentShiftArray } = props;
+  const { drugChartData, currentShiftArray, selectedDate } = props;
   const leftPane = useRef(null);
   const rightPane = useRef(null);
   const { registerPane, unregisterPane } = useScrollSync({
@@ -51,6 +51,7 @@ export default function DrugChart(props) {
           <Calendar
             calendarData={drugChartData[0]}
             currentShiftArray={currentShiftArray}
+            selectedDate={selectedDate}
           />
         </div>
       </div>
@@ -61,4 +62,5 @@ export default function DrugChart(props) {
 DrugChart.propTypes = {
   drugChartData: PropTypes.array.isRequired,
   currentShiftArray: PropTypes.array,
+  selectedDate: PropTypes.instanceOf(Date),
 };

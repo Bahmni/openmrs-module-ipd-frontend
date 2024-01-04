@@ -165,6 +165,7 @@ export default function DrugChartWrapper(props) {
         <DrugChart
           drugChartData={transformedDrugChartData}
           currentShiftArray={currentShiftArray}
+          selectedDate={date}
         />
       )}
     </div>
