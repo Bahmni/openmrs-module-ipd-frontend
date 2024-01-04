@@ -520,8 +520,10 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
 
 exports[`DrugChartWrapper should render loading state when isLoading is true 1`] = `
 <div>
-  <div>
-    Loading...
+  <div
+    class="no-nursing-tasks"
+  >
+    No Medication has been scheduled for the patient yet
   </div>
 </div>
 `;

@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import TimeCell from "./TimeCell.jsx";
-import { currentShiftHoursArray } from "../utils/DrugChartUtils.js";
 export default function CalendarRow(props) {
-  const { rowData } = props;
-  const hours = currentShiftHoursArray();
+  const { rowData, currentShiftArray } = props;
+  const hours = currentShiftArray;
+
   return (
     <div style={{ display: "flex" }}>
       {hours.map((hour) => {
@@ -43,4 +43,5 @@ export default function CalendarRow(props) {
 
 CalendarRow.propTypes = {
   rowData: PropTypes.object.isRequired,
+  currentShiftArray: PropTypes.array,
 };

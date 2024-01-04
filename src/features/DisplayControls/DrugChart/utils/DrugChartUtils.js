@@ -55,7 +55,8 @@ export const TransformDrugChartData = (drugChartData) => {
       const { startTime, status, order, medicationAdministration } = slot;
       let medicationStatus = "Pending";
       let adminInfo = "",
-        administeredTime,startActualTime;
+        administeredTime,
+        startActualTime;
 
       const isCompleted = checkIfSlotIsAdministered(status);
 
@@ -66,7 +67,8 @@ export const TransformDrugChartData = (drugChartData) => {
         );
         medicationStatus = isLate ? "Administered-Late" : "Administered";
         if (medicationAdministration) {
-          const { administeredDateTime, provider, notes } = medicationAdministration;
+          const { administeredDateTime, provider, notes } =
+            medicationAdministration;
           const administeredDateTimeObject = new Date(
             administeredDateTime * 1000
           );
@@ -103,27 +105,24 @@ export const TransformDrugChartData = (drugChartData) => {
         drugOrder.duration = order.duration + " " + order.durationUnits.display;
       }
 
-
-
       const setLateStatus = isLateTask(startTime);
       const startHour = startDateTimeObj.getHours();
       const startMinutes = startDateTimeObj.getMinutes();
-     if (isCompleted) 
-       {
-            slotData[administeredStartHour] = {
-            minutes: administeredStartMinutes,
-            status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
-            administrationInfo: adminInfo,
-            notes: medicationNotes
-            };
+      if (isCompleted) {
+        slotData[administeredStartHour] = {
+          minutes: administeredStartMinutes,
+          status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
+          administrationInfo: adminInfo,
+          notes: medicationNotes,
+        };
+      } else {
+        slotData[startHour] = {
+          minutes: startMinutes,
+          status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
+          administrationInfo: adminInfo,
+          notes: medicationNotes,
+        };
       }
-     else {
-      slotData[startHour] = {
-        minutes: startMinutes,
-        status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
-        administrationInfo: adminInfo,
-        notes: medicationNotes
-     } }
       if (
         medicationStatus === "Administered" ||
         medicationStatus === "Administered-Late"
@@ -131,7 +130,7 @@ export const TransformDrugChartData = (drugChartData) => {
         const adminData = {
           kind: medicationStatus,
           time: startActualTime,
-          timeAdministered: administeredTime
+          timeAdministered: administeredTime,
         };
         drugOrder.administrationInfo.push(adminData);
       }
@@ -160,24 +159,33 @@ export const TransformDrugChartData = (drugChartData) => {
   return [slotDataByOrder, drugOrderData];
 };
 
-export const ifMedicationNotesPresent = (medicationNotes,side) =>{
+export const ifMedicationNotesPresent = (medicationNotes, side) => {
   let notesIcon;
-  if(!medicationNotes)
-   {
+  if (!medicationNotes) {
     notesIcon = false;
-   }
-   else {
-     notesIcon = true;
-   }
-   return((side === "Administered-Late" || side === "Administered" || side === "Not-Administered") && notesIcon);
-
-}
+  } else {
+    notesIcon = true;
+  }
+  return (
+    (side === "Administered-Late" ||
+      side === "Administered" ||
+      side === "Not-Administered") &&
+    notesIcon
+  );
+};
 
 export const currentShiftHoursArray = () => {
   const shiftTimeInHours = drugChart.shiftHours;
+  let startTime = drugChart.startTime;
   const rangeArray = [];
-  for (let i = 0; i < 24; i += shiftTimeInHours) {
-    rangeArray.push(`${i}-${i + (shiftTimeInHours - 1)}`);
+
+  let i = 0;
+  while (i < 24 / shiftTimeInHours) {
+    rangeArray.push(
+      `${startTime}-${(startTime + (shiftTimeInHours - 1)) % 24}`
+    );
+    startTime = (startTime + shiftTimeInHours) % 24;
+    i++;
   }
 
   // finding the current hour range
@@ -200,4 +208,78 @@ export const currentShiftHoursArray = () => {
     currentShiftHoursArray.push(i);
   }
   return currentShiftHoursArray;
+};
+
+export const getDateTime = (date, hour) => {
+  let currentShiftStartTime = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  return currentShiftStartTime.setHours(hour);
+};
+
+export const getNextShiftDetails = (
+  shiftTimeArray = [],
+  shiftTimeInHours = 12,
+  date
+) => {
+  const shiftLastHour = shiftTimeArray[shiftTimeArray.length - 1];
+  const currentDate = date;
+
+  let currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+  const startDateTime = currentShiftStartTime.setHours(shiftLastHour + 1);
+  console.log("currentShiftStartTime - ", currentShiftStartTime);
+
+  currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+  const endDateTime = currentShiftStartTime.setHours(
+    shiftLastHour + 1 + shiftTimeInHours
+  );
+  console.log("currentShiftEndTime - ", currentShiftStartTime);
+
+  date = currentShiftStartTime;
+
+  return { startDateTime, endDateTime, nextDate: date };
+};
+
+export const getPreviousShiftDetails = (
+  shiftTimeArray = [],
+  shiftTimeInHours = 12,
+  date
+) => {
+  const shiftFirstHour = shiftTimeArray[0];
+  const currentDate = date;
+
+  let currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+
+  const endDateTime = currentShiftStartTime.setHours(shiftFirstHour);
+  console.log("currentShiftEndTime - ", currentShiftStartTime);
+
+  currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+
+  const startDateTime = currentShiftStartTime.setHours(
+    shiftFirstHour - shiftTimeInHours
+  );
+  console.log("currentShiftStartTime - ", currentShiftStartTime);
+
+  date = currentShiftStartTime;
+
+  return { startDateTime, endDateTime, nextDate: date };
 };

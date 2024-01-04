@@ -1,9 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 import "../styles/CalendarHeader.scss";
-import { currentShiftHoursArray } from "../utils/DrugChartUtils";
 
-export default function CalendarHeader() {
-  const hours = currentShiftHoursArray();
+export default function CalendarHeader(props) {
+  const { currentShiftArray } = props;
+  const hours = currentShiftArray;
 
   return (
     <div className="calendar-header">
@@ -20,3 +21,7 @@ export default function CalendarHeader() {
     </div>
   );
 }
+
+CalendarHeader.propTypes = {
+  currentShiftArray: PropTypes.array,
+};
