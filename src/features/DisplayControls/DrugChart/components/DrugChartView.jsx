@@ -5,7 +5,6 @@ import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import DrugChart from "./DrugChart";
 import { fetchMedications } from "../utils/DrugChartUtils";
 import {
-  getUTCEpochForDate,
   TransformDrugChartData,
   getDateTime,
   currentShiftHoursArray,
@@ -25,14 +24,15 @@ const NoMedicationTaskMessage = (
 );
 
 export default function DrugChartWrapper(props) {
-  const { patientId, viewDate } = props;
-  const forDate = getUTCEpochForDate(viewDate);
+  const { patientId } = props;
   const [drugChartData, setDrugChartData] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [date, updateDate] = useState(new Date());
   const [lastAction, updateLastActon] = useState("");
-  let startDate = date,
-    endDate = date;
+  const [startEndDates, updatedStartEndDates] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
 
   const { config: { drugChart = {} } = {} } = data;
 
@@ -57,12 +57,12 @@ export default function DrugChartWrapper(props) {
 
   useEffect(() => {
     const currentShift = currentShiftHoursArray();
-    // const nextDate = new Date();
     const startDateTime = getDateTime(new Date(), currentShift[0]);
     const endDateTime = getDateTime(
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
+    updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   }, []);
 
@@ -84,14 +84,11 @@ export default function DrugChartWrapper(props) {
       updatedHour = updatedHour < 0 ? 24 + updatedHour : updatedHour;
       return updatedHour;
     });
-    console.log("startDateTime -> ", startDateTime);
-    console.log("endDateTime -> ", endDateTime);
-    startDate = startDateTime;
-    endDate = endDateTime;
     updateShiftArray(previousShiftArray);
     updateDate(nextDate);
     updateLastActon("P");
     setLoading(true);
+    updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
 
@@ -101,7 +98,6 @@ export default function DrugChartWrapper(props) {
     if (lastHour < firstHour && lastAction === "P") {
       date.setDate(date.getDate() + 1);
     }
-    console.log("date in next -> ", date);
     const { startDateTime, endDateTime, nextDate } = getNextShiftDetails(
       currentShiftArray,
       drugChart.shiftHours,
@@ -110,14 +106,11 @@ export default function DrugChartWrapper(props) {
     const nextShiftArray = currentShiftArray.map(
       (hour) => (hour + drugChart.shiftHours) % 24
     );
-    console.log("startDateTime -> ", startDateTime);
-    console.log("endDateTime -> ", endDateTime);
-    startDate = startDateTime;
-    endDate = endDateTime;
     updateShiftArray(nextShiftArray);
     updateDate(nextDate);
     updateLastActon("N");
     setLoading(true);
+    updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
 
@@ -129,14 +122,11 @@ export default function DrugChartWrapper(props) {
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
-    console.log("startDateTime -> ", startDateTime);
-    console.log("endDateTime -> ", endDateTime);
-    startDate = startDateTime;
-    endDate = endDateTime;
     updateShiftArray(currentShift);
     updateDate(nextDate);
     updateLastActon("");
     setLoading(true);
+    updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
 
@@ -176,10 +166,12 @@ export default function DrugChartWrapper(props) {
           onClick={handleNext}
           className="margin-right-10"
         />
-        <span>{`${formatDate(startDate, "DD/MM/YYYY")} - ${formatDate(
-          endDate,
-          "DD/MM/YYYY"
-        )}`}</span>
+        <span>
+          {`${formatDate(
+            startEndDates.startDate,
+            "DD/MM/YYYY HH:mm"
+          )} - ${formatDate(startEndDates.endDate, "DD/MM/YYYY HH:mm")}`}
+        </span>
       </div>
       {isLoading ? (
         <div>Loading...</div>
@@ -197,5 +189,4 @@ export default function DrugChartWrapper(props) {
 }
 DrugChartWrapper.propTypes = {
   patientId: PropTypes.string.isRequired,
-  viewDate: PropTypes.instanceOf(Date),
 };
