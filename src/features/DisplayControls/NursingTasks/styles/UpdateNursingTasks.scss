@@ -15,6 +15,7 @@
     font-weight: 500;
     line-height: 1.5;
     gap: 6px;
+    max-width: 90%;
     .name {
       text-align: left;
       display: -webkit-box;
@@ -22,6 +23,9 @@
       -webkit-line-clamp: 2;
       overflow: hidden;
     }
+  }
+  .red-text {
+    color: #da1e28;
   }
   .medication-details {
     font-size: 12px;
@@ -47,7 +51,18 @@
       padding: 0.6rem 1rem;
     }
   }
-  .bx--tag {
+  .overflowMenu {
+    position: absolute;
+    margin: -8px !important;
+    right: 30px;
+    &:disabled {
+      opacity: 0.4;
+    }
+  }
+  hr {
     margin: 0;
   }
+}
+.bx--overflow-menu-options {
+  z-index: 10000;
 }

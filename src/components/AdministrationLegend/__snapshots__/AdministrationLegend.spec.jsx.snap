@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AdministrationLegend should render without crashing 1`] = `
+<div>
+  <div
+    class="drug-chart-legend"
+  >
+    <div>
+      <test-file-stub />
+      Pending
+    </div>
+    <div>
+      <test-file-stub />
+      Late
+    </div>
+    <div>
+      <test-file-stub />
+      Administered
+    </div>
+    <div>
+      <test-file-stub />
+      Administered Late
+    </div>
+    <div>
+      <test-file-stub />
+      Not Administered
+    </div>
+    <div>
+      <test-file-stub />
+      Stopped
+    </div>
+  </div>
+</div>
+`;

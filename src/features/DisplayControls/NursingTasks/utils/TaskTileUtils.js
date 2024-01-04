@@ -1,4 +1,5 @@
 import data from "../../../../utils/config.json";
+import React from "react";
 
 const { config: { nursingTasks = {} } = {} } = data;
 
@@ -22,16 +23,20 @@ const isLateTask = (startTimeInEpochSeconds) => {
   return startTimeInEpochSeconds < currentTime - lateTaskStatusWindowInSeconds;
 };
 
-export const iconType = (
-  administeredTimeInEpochmilliSeconds,
-  startTimeInEpochSeconds
-) => {
-  if (administeredTimeInEpochmilliSeconds) {
+export const iconType = (task) => {
+  const {
+    stopTime,
+    administeredTimeInEpochSeconds,
+    startTimeInEpochSeconds,
+    status,
+  } = task;
+  if (stopTime) return "Stopped";
+  if (status === "Not Done") return "Not-Administered";
+  if (administeredTimeInEpochSeconds) {
     const administeredLateWindowInSeconds =
       startTimeInEpochSeconds +
       nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
-    const administeredTimeInSeconds =
-      administeredTimeInEpochmilliSeconds / 1000;
+    const administeredTimeInSeconds = administeredTimeInEpochSeconds / 1000;
     const isLate = administeredTimeInSeconds > administeredLateWindowInSeconds;
 
     return isLate ? "Administered-Late" : "Administered";
@@ -49,8 +54,19 @@ export const getTime = (administeredTimeInEpochmilliSeconds, startTime) => {
     ).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
+      hourCycle: "h23",
     });
     return startTime + " - " + administeredTime + " (actual)";
   }
   return startTime;
+};
+
+export const getMedicationDetails = (medication) => {
+  return (
+    <div>
+      <span>{medication.dosage}</span>
+      {medication.doseType && <span>&nbsp;-&nbsp;{medication.doseType}</span>}
+      <span>&nbsp;-&nbsp;{medication.drugRoute}</span>
+    </div>
+  );
 };

@@ -34,6 +34,20 @@ exports[`DrugChart should match snapshot 1`] = `
                     <div>
                       TooltipCarbon
                     </div>
+                    <div
+                      class="drug-list-drug-name-cell"
+                    >
+                      <div
+                        class="bx--tag bx--tag--blue"
+                        id="tag-1"
+                      >
+                        <span
+                          title="Rx"
+                        >
+                          Rx
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <div
                     class="dosage"
@@ -65,6 +79,20 @@ exports[`DrugChart should match snapshot 1`] = `
                     </div>
                     <div>
                       TooltipCarbon
+                    </div>
+                    <div
+                      class="drug-list-drug-name-cell"
+                    >
+                      <div
+                        class="bx--tag bx--tag--blue"
+                        id="tag-2"
+                      >
+                        <span
+                          title="Rx"
+                        >
+                          Rx
+                        </span>
+                      </div>
                     </div>
                   </div>
                   <div
@@ -123,6 +151,10 @@ exports[`DrugChart should match snapshot 1`] = `
       <div>
         <test-file-stub />
         Not Administered
+      </div>
+      <div>
+        <test-file-stub />
+        Stopped
       </div>
     </div>
   </div>

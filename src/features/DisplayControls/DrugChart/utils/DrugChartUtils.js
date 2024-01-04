@@ -2,12 +2,16 @@ import axios from "axios";
 import moment from "moment";
 import { MEDICATIONS_BASE_URL } from "../../../../constants";
 import data from "../../../../utils/config.json";
-import { AdminMedicationData } from "../components/AdminMedicationData";
 
 const { config: { drugChart = {} } = {} } = data;
 
-export const fetchMedications = async (patientUuid, forDate) => {
-  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&forDate=${forDate}`;
+export const fetchMedications = async (
+  patientUuid,
+  startDateTime,
+  endDateTime
+) => {
+  // const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&forDate=${forDate}`;
+  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}`;
   try {
     const response = await axios.get(FETCH_MEDICATIONS_URL);
     return response;
@@ -25,10 +29,14 @@ const isLateTask = (startTime) => {
 };
 
 const isAdministeredLateTask = (startTime, effectiveStartDate) => {
-  const lateTaskStatusWindowInSeconds =
-    drugChart.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
+  const lateTaskStatusWindowInMilliSeconds =
+    drugChart.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate *
+    60 *
+    1000;
 
-  return effectiveStartDate - startTime > lateTaskStatusWindowInSeconds;
+  return (
+    effectiveStartDate - startTime * 1000 > lateTaskStatusWindowInMilliSeconds
+  );
 };
 
 const checkIfSlotIsAdministered = (status) => {
@@ -44,10 +52,8 @@ export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
   const slotDataByOrder = [];
 
-  AdminMedicationData.map((schedule) => {
+  drugChartData.map((schedule) => {
     const { slots } = schedule;
-
-    const administeredTimeInfo = [];
 
     slots.forEach((slot) => {
       let administeredStartHour, administeredStartMinutes, medicationNotes;
@@ -67,16 +73,15 @@ export const TransformDrugChartData = (drugChartData) => {
         );
         medicationStatus = isLate ? "Administered-Late" : "Administered";
         if (medicationAdministration) {
-          const { administeredDateTime, provider, notes } =
+          const { administeredDateTime, providers, notes } =
             medicationAdministration;
-          const administeredDateTimeObject = new Date(
-            administeredDateTime * 1000
-          );
+          const administeredDateTimeObject = new Date(administeredDateTime);
           administeredTime = moment(administeredDateTimeObject).format("HH:mm");
-          adminInfo = provider.display + " [" + administeredTime + "]";
+          adminInfo =
+            providers[0].provider.display + " [" + administeredTime + "]";
           administeredStartHour = administeredDateTimeObject.getHours();
           administeredStartMinutes = administeredDateTimeObject.getMinutes();
-          medicationNotes = notes;
+          medicationNotes = notes && notes.length > 0 ? notes[0].text : "";
         } else {
           adminInfo = "";
         }
@@ -88,8 +93,12 @@ export const TransformDrugChartData = (drugChartData) => {
         uuid: order.uuid,
         drugName: order.drug.display,
         drugRoute: order.route.display,
-        administrationInfo: administeredTimeInfo,
+        administrationInfo: [],
         dosingInstructions: order.dosingInstructions,
+        dosingTagInfo: {
+          asNeeded: order.asNeeded,
+          frequency: order.frequency.display,
+        },
       };
 
       if (order.duration) {
@@ -132,7 +141,22 @@ export const TransformDrugChartData = (drugChartData) => {
           time: startActualTime,
           timeAdministered: administeredTime,
         };
-        drugOrder.administrationInfo.push(adminData);
+        if (
+          drugOrderData.some(
+            (existingOrder) =>
+              existingOrder.drugName === drugOrder.drugName &&
+              existingOrder.uuid === drugOrder.uuid
+          )
+        ) {
+          const index = drugOrderData.findIndex(
+            (existingOrder) =>
+              existingOrder.drugName === drugOrder.drugName &&
+              existingOrder.uuid === drugOrder.uuid
+          );
+          drugOrderData[index].administrationInfo.push(adminData);
+        } else {
+          drugOrder.administrationInfo.push(adminData);
+        }
       }
       if (
         !drugOrderData.some(

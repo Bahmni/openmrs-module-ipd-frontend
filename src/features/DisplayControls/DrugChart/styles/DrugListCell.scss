@@ -6,9 +6,10 @@
   font-weight: 500;
   color: #393939;
   font-style: normal;
+  display: contents;
 }
 .drug-name-container {
-  display: flex;
+  display: block;
 }
 .dosage {
   font-size: 12px;
@@ -27,4 +28,8 @@
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.drug-list-drug-name-cell {
+  float: inline-end;
 }

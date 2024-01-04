@@ -48,6 +48,12 @@
       "timeInMinutesFromStartTimeToShowAdministeredTaskAsLate": 30,
       "shiftHours": 8,
       "startTime": 6
+    },
+    "medicationTags": {
+      "asNeeded": "Rx-PRN",
+      "STAT (Immediately)": "Rx-STAT",
+      "default": "Rx",
+      "emergency": "EMERG"
     }
   }
 }

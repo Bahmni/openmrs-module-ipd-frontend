@@ -17,7 +17,7 @@ describe("TaskTile", () => {
   afterEach(() => {
     MockDate.reset();
   });
-  it.skip("should match the snapshot for non grouped task", () => {
+  it("should match the snapshot for non grouped task", () => {
     const { asFragment } = render(
       <TaskTile medicationNursingTask={mockCompletedTaskTileData} />
     );

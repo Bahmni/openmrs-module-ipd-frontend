@@ -4,7 +4,6 @@ import { FormattedMessage } from "react-intl";
 import "../styles/NursingTasks.scss";
 import { Add16 } from "@carbon/icons-react";
 import { items } from "../utils/constants";
-
 import {
   fetchMedicationNursingTasks,
   ExtractMedicationNursingTasksData,
@@ -19,6 +18,7 @@ import AddEmergencyTasks from "./AddEmergencyTasks";
 import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import { componentKeys } from "../../../../constants";
+import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
@@ -197,7 +197,12 @@ export default function NursingTasks(props) {
         {medicationNursingTasks && medicationNursingTasks.length === 0 ? (
           <div className="no-nursing-tasks">{getNoTaskMessage()}</div>
         ) : (
-          <div className="nursing-task-tiles-container">{showTaskTiles()}</div>
+          <div>
+            <div className="nursing-task-tiles-container">
+              {showTaskTiles()}
+            </div>
+            <AdministrationLegend />
+          </div>
         )}
         {showSuccessNotification && (
           <Notification

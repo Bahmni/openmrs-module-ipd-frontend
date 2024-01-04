@@ -23,7 +23,18 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
             Liquid Paraffin
           </div>
           <span>
-            2 - Drop - Topical
+            <div>
+              <span>
+                2
+              </span>
+              <span>
+                 - 
+                Drop
+              </span>
+              <span>
+                 - 
+              </span>
+            </div>
           </span>
         </div>
         <div
@@ -49,6 +60,54 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
             data-testid="status-name-cell"
           >
             Done
+          </span>
+        </div>
+      </div>
+      <div
+        class="bx--structured-list-row"
+        role="row"
+      >
+        <div
+          class="drug-name-cell bx--structured-list-td"
+          role="cell"
+        >
+          <div>
+            Adenosine 3 mg/mL Ampoule/Vial
+          </div>
+          <span>
+            <div>
+              <span>
+                5mg
+              </span>
+              <span>
+                 - 
+              </span>
+            </div>
+          </span>
+        </div>
+        <div
+          class="administered-time-cell bx--structured-list-td"
+          role="cell"
+        >
+          <test-file-stub
+            classname="clock-icon"
+          />
+          <span
+            class="time"
+          >
+            00:00
+          </span>
+        </div>
+        <div
+          class="bx--structured-list-td"
+          role="cell"
+        >
+          <test-file-stub />
+          <span
+            class="status"
+            data-testid="status-name-cell"
+          >
+            Skipped
           </span>
         </div>
       </div>

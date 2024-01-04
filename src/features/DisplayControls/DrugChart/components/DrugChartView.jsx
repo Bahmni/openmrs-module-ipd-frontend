@@ -31,6 +31,8 @@ export default function DrugChartWrapper(props) {
   const [isLoading, setLoading] = useState(true);
   const [date, updateDate] = useState(new Date());
   const [lastAction, updateLastActon] = useState("");
+  let startDate = date,
+    endDate = date;
 
   const { config: { drugChart = {} } = {} } = data;
 
@@ -38,9 +40,13 @@ export default function DrugChartWrapper(props) {
     currentShiftHoursArray()
   );
 
-  const callFetchMedications = async () => {
+  const callFetchMedications = async (startDateTime, endDateTime) => {
     try {
-      const response = await fetchMedications(patientId, forDate);
+      const response = await fetchMedications(
+        patientId,
+        startDateTime / 1000,
+        endDateTime / 1000
+      );
       return setDrugChartData(response.data);
     } catch (e) {
       // setError(e);
@@ -50,7 +56,14 @@ export default function DrugChartWrapper(props) {
   };
 
   useEffect(() => {
-    callFetchMedications();
+    const currentShift = currentShiftHoursArray();
+    // const nextDate = new Date();
+    const startDateTime = getDateTime(new Date(), currentShift[0]);
+    const endDateTime = getDateTime(
+      new Date(),
+      currentShift[currentShift.length - 1] + 1
+    );
+    callFetchMedications(startDateTime, endDateTime);
   }, []);
 
   const transformedDrugChartData = TransformDrugChartData(drugChartData);
@@ -73,11 +86,13 @@ export default function DrugChartWrapper(props) {
     });
     console.log("startDateTime -> ", startDateTime);
     console.log("endDateTime -> ", endDateTime);
+    startDate = startDateTime;
+    endDate = endDateTime;
     updateShiftArray(previousShiftArray);
     updateDate(nextDate);
     updateLastActon("P");
     setLoading(true);
-    callFetchMedications();
+    callFetchMedications(startDateTime, endDateTime);
   };
 
   const handleNext = () => {
@@ -97,11 +112,13 @@ export default function DrugChartWrapper(props) {
     );
     console.log("startDateTime -> ", startDateTime);
     console.log("endDateTime -> ", endDateTime);
+    startDate = startDateTime;
+    endDate = endDateTime;
     updateShiftArray(nextShiftArray);
     updateDate(nextDate);
     updateLastActon("N");
     setLoading(true);
-    callFetchMedications();
+    callFetchMedications(startDateTime, endDateTime);
   };
 
   const handleCurrent = () => {
@@ -114,19 +131,21 @@ export default function DrugChartWrapper(props) {
     );
     console.log("startDateTime -> ", startDateTime);
     console.log("endDateTime -> ", endDateTime);
+    startDate = startDateTime;
+    endDate = endDateTime;
     updateShiftArray(currentShift);
     updateDate(nextDate);
     updateLastActon("");
     setLoading(true);
-    callFetchMedications();
+    callFetchMedications(startDateTime, endDateTime);
   };
 
   // if (isLoading) {
   //   return <div>Loading...</div>;
   // }
-  if (drugChartData && drugChartData.length === 0) {
-    return <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>;
-  }
+  // if (drugChartData && drugChartData.length === 0) {
+  //   return <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>;
+  // }
   return (
     <div className="drugchart-parent-container">
       <div className="drugchart-shift-header">
@@ -157,10 +176,15 @@ export default function DrugChartWrapper(props) {
           onClick={handleNext}
           className="margin-right-10"
         />
-        <span>{formatDate(date, "DD/MM/YYYY")}</span>
+        <span>{`${formatDate(startDate, "DD/MM/YYYY")} - ${formatDate(
+          endDate,
+          "DD/MM/YYYY"
+        )}`}</span>
       </div>
       {isLoading ? (
         <div>Loading...</div>
+      ) : drugChartData && drugChartData.length === 0 ? (
+        <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>
       ) : (
         <DrugChart
           drugChartData={transformedDrugChartData}

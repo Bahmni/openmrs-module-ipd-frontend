@@ -19,6 +19,7 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import TreatmentExpandableRow from "./TreatmentExpandableRow";
 import NotesIcon from "../../../../icons/notes.svg";
+import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import Notification from "../../../../components/Notification/Notification";
 
 const Treatments = (props) => {
@@ -175,7 +176,6 @@ const Treatments = (props) => {
     setTreatments(treatments);
     setAdditionalData(additionalMappedData);
   };
-
   const getDrugName = (drugOrder) => {
     if (
       drugOrder.drug &&
@@ -185,9 +185,14 @@ const Treatments = (props) => {
         <div className="notes-icon-div">
           <NotesIcon className="notes-icon" />
           <span
-            className={`drug-name ${drugOrder.dateStopped && "strike-through"}`}
+            className={`treatments-drug-name ${
+              drugOrder.dateStopped && "strike-through"
+            }`}
           >
             {drugOrder.drug.name}
+            <span>
+              <DisplayTags drugOrder={drugOrder.dosingInstructions} />
+            </span>
           </span>
         </div>
       );
