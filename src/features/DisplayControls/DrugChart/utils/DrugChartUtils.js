@@ -57,13 +57,14 @@ export const SortDrugChartData = (drugChartData) => {
 };
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
-  const slotDataByOrderArray = [];
+  const slotDataByOrder = [];
 
   drugChartData.map((schedule) => {
     const { slots } = schedule;
 
     slots.forEach((slot) => {
       let administeredStartHour, administeredStartMinutes, medicationNotes;
+      const slotData = {};
       const { startTime, status, order, medicationAdministration } = slot;
       let medicationStatus = "Pending";
       let adminInfo = "",
@@ -123,21 +124,15 @@ export const TransformDrugChartData = (drugChartData) => {
       const setLateStatus = isLateTask(startTime);
       const startHour = startDateTimeObj.getHours();
       const startMinutes = startDateTimeObj.getMinutes();
-      if (!slotDataByOrderArray[startHour]) {
-        slotDataByOrderArray[startHour] = [];
-      }
-      if (!slotDataByOrderArray[administeredStartHour]) {
-        slotDataByOrderArray[administeredStartHour] = [];
-      }
       if (isCompleted) {
-        slotDataByOrderArray[administeredStartHour] = {
+        slotData[administeredStartHour] = {
           minutes: administeredStartMinutes,
           status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
           administrationInfo: adminInfo,
           notes: medicationNotes,
         };
       } else {
-        slotDataByOrderArray[startHour] = {
+        slotData[startHour] = {
           minutes: startMinutes,
           status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
           administrationInfo: adminInfo,
@@ -178,23 +173,21 @@ export const TransformDrugChartData = (drugChartData) => {
         )
       ) {
         drugOrderData.push(drugOrder);
+        slotDataByOrder.push(slotData);
       } else {
         const index = drugOrderData.findIndex(
           (existingOrder) =>
             existingOrder.drugName === drugOrder.drugName &&
             existingOrder.uuid === drugOrder.uuid
         );
-        const indexHour = isCompleted ? administeredStartHour : startHour;
-        slotDataByOrderArray[indexHour][index] = {
-          ...slotDataByOrderArray[indexHour][index],
-          ...slotDataByOrderArray,
+        slotDataByOrder[index] = {
+          ...slotDataByOrder[index],
+          ...slotData,
         };
       }
     });
   });
-
-  console.log("slotDataByOrderArray - ", slotDataByOrderArray);
-  return [slotDataByOrderArray, drugOrderData];
+  return [slotDataByOrder, drugOrderData];
 };
 
 export const ifMedicationNotesPresent = (medicationNotes, side) => {
