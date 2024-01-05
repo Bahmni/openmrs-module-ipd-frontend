@@ -7,10 +7,6 @@ import { items } from "../utils/constants";
 import {
   fetchMedicationNursingTasks,
   ExtractMedicationNursingTasksData,
-  currentShiftHoursArray,
-  getDateTime,
-  getPreviousShiftDetails,
-  getNextShiftDetails,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
 import { formatDate } from "../../../../utils/DateTimeUtils";
@@ -24,6 +20,7 @@ import { componentKeys } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import data from "../../../../utils/config.json";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
+import { currentShiftHoursArray, getDateTime, getNextShiftDetails, getPreviousShiftDetails } from "../../DrugChart/utils/DrugChartUtils";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
@@ -240,6 +237,7 @@ export default function NursingTasks(props) {
               size="small"
               onClick={handleCurrent}
               className="margin-right-10"
+              data-testid="current-shift"
             >
               Current Shift
             </Button>

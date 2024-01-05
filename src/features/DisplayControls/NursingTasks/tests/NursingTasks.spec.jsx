@@ -134,14 +134,12 @@ describe("NursingTasks", () => {
     });
     expect(getByText("11/08/2023 06:00 - 11/08/2023 14:00")).toBeTruthy();
   });
-  it.skip("should show Correct Nursing Tasks when clicked on previous button", async () => {
+  it("should show Correct Nursing Tasks when clicked on previous button", async () => {
     MockDate.set("2024-01-05");
     mockFetchMedicationNursingTasks
-      .mockResolvedValueOnce(mockNursingTasksResponse)
-      .mockReturnValueOnce(
-        mockFetchMedicationNursingTasks.mockResolvedValueOnce(mockShiftResponse)
-      );
-    const { getAllByText, debug, getByTestId } = render(
+      .mockReturnValueOnce(mockNursingTasksResponse)
+      .mockReturnValue(mockShiftResponse);
+    const { getAllByText, getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
         <NursingTasks patientId="patientid" />
       </SliderContext.Provider>
@@ -156,9 +154,67 @@ describe("NursingTasks", () => {
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(2);
     });
-    debug();
     expect(
       getAllByText("Amoxicillin 250 mg/5 mL Powder for Oral Suspension")
+    ).toBeTruthy();
+  });
+  it("should show Correct Nursing Tasks when clicked on next button", async () => {
+    MockDate.set("2024-01-05");
+    mockFetchMedicationNursingTasks
+      .mockReturnValueOnce(mockNursingTasksResponse)
+      .mockReturnValue(mockShiftResponse);
+    const { getAllByText, getByTestId } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <NursingTasks patientId="patientid" />
+      </SliderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
+    });
+    expect(
+      getAllByText("Paracetamol 120 mg/5 mL Suspension (Liquid)")
+    ).toBeTruthy();
+    getByTestId("next-shift").click();
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(2);
+    });
+    expect(
+      getAllByText("Amoxicillin 250 mg/5 mL Powder for Oral Suspension")
+    ).toBeTruthy();
+  });
+  it("should show current shift when clicked on current shift button", async () => {
+    MockDate.set("2024-01-05");
+    mockFetchMedicationNursingTasks
+      .mockReturnValueOnce(mockNursingTasksResponse)
+      .mockReturnValueOnce(mockShiftResponse)
+      .mockReturnValue(mockNursingTasksResponse);
+    const { getAllByText, getByTestId, queryByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <NursingTasks patientId="patientid" />
+      </SliderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
+    });
+    expect(
+      getAllByText("Paracetamol 120 mg/5 mL Suspension (Liquid)")
+    ).toBeTruthy();
+    getByTestId("next-shift").click();
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(2);
+    });
+    expect(
+      getAllByText("Amoxicillin 250 mg/5 mL Powder for Oral Suspension")
+    ).toBeTruthy();
+    getByTestId("current-shift").click();
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(3);
+    });
+    expect(
+      queryByText("Amoxicillin 250 mg/5 mL Powder for Oral Suspension")
+    ).not.toBeTruthy();
+    expect(
+      getAllByText("Paracetamol 120 mg/5 mL Suspension (Liquid)")
     ).toBeTruthy();
   });
 });
