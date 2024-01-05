@@ -41,11 +41,13 @@ export default function DrugChartWrapper(props) {
   );
 
   const callFetchMedications = async (startDateTime, endDateTime) => {
+    const startDateTimeInSeconds = startDateTime / 1000;
+    const endDateTimeInSeconds = endDateTime / 1000 - 60;
     try {
       const response = await fetchMedications(
         patientId,
-        startDateTime / 1000,
-        endDateTime / 1000
+        startDateTimeInSeconds,
+        endDateTimeInSeconds
       );
       return setDrugChartData(response.data);
     } catch (e) {

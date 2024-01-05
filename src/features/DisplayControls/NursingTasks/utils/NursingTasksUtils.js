@@ -250,7 +250,6 @@ export const getNextShiftDetails = (
     currentDate.getDate()
   );
   const startDateTime = currentShiftStartTime.setHours(shiftLastHour + 1);
-  console.log("currentShiftStartTime - ", currentShiftStartTime);
 
   currentShiftStartTime = new Date(
     currentDate.getFullYear(),
@@ -260,7 +259,6 @@ export const getNextShiftDetails = (
   const endDateTime = currentShiftStartTime.setHours(
     shiftLastHour + 1 + shiftTimeInHours
   );
-  console.log("currentShiftEndTime - ", currentShiftStartTime);
 
   date = currentShiftStartTime;
 
@@ -282,7 +280,6 @@ export const getPreviousShiftDetails = (
   );
 
   const endDateTime = currentShiftStartTime.setHours(shiftFirstHour);
-  console.log("currentShiftEndTime - ", currentShiftStartTime);
 
   currentShiftStartTime = new Date(
     currentDate.getFullYear(),
@@ -293,7 +290,6 @@ export const getPreviousShiftDetails = (
   const startDateTime = currentShiftStartTime.setHours(
     shiftFirstHour - shiftTimeInHours
   );
-  console.log("currentShiftStartTime - ", currentShiftStartTime);
 
   date = currentShiftStartTime;
 

@@ -41,8 +41,10 @@ export default function NursingTasks(props) {
   const [currentShiftArray, updateShiftArray] = useState(
     currentShiftHoursArray()
   );
-  let startDate = date,
-    endDate = date;
+  const [startEndDates, updatedStartEndDates] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
   const { config: { drugChart = {} } = {} } = data;
 
   useEffect(() => {
@@ -52,6 +54,7 @@ export default function NursingTasks(props) {
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
+    updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   }, []);
 
@@ -79,24 +82,21 @@ export default function NursingTasks(props) {
     if (lastHour < firstHour && lastAction === "N") {
       date.setDate(date.getDate() - 1);
     }
-    console.log("currentShiftArray -> ", currentShiftArray);
     const { startDateTime, endDateTime, nextDate } = getPreviousShiftDetails(
       currentShiftArray,
       drugChart.shiftHours,
       date
     );
-    console.log("startDateTime -> ", startDateTime, endDateTime);
     const previousShiftArray = currentShiftArray.map((hour) => {
       let updatedHour = hour - drugChart.shiftHours;
       updatedHour = updatedHour < 0 ? 24 + updatedHour : updatedHour;
       return updatedHour;
     });
-    startDate = startDateTime;
-    endDate = endDateTime;
     updateShiftArray(previousShiftArray);
     updateDate(nextDate);
     updateLastActon("P");
     setIsLoading(true);
+    updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
 
@@ -114,11 +114,11 @@ export default function NursingTasks(props) {
     const nextShiftArray = currentShiftArray.map(
       (hour) => (hour + drugChart.shiftHours) % 24
     );
-    startDate = startDateTime;
-    endDate = endDateTime;
     updateShiftArray(nextShiftArray);
     updateDate(nextDate);
     updateLastActon("N");
+    setIsLoading(true);
+    updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
 
@@ -130,11 +130,11 @@ export default function NursingTasks(props) {
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
-    startDate = startDateTime;
-    endDate = endDateTime;
     updateShiftArray(currentShift);
     updateDate(nextDate);
     updateLastActon("");
+    setIsLoading(true);
+    updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
 
@@ -165,13 +165,14 @@ export default function NursingTasks(props) {
 
   const fetchNursingTasks = async (startDate, endDate) => {
     setIsLoading(true);
+    const startDateTimeInSeconds = startDate / 1000;
+    const endDateTimeInSeconds = endDate / 1000 - 60;
     const nursingTasks = await fetchMedicationNursingTasks(
       patientId,
-      startDate / 1000,
-      endDate / 1000
+      startDateTimeInSeconds,
+      endDateTimeInSeconds
     );
     setNursingTasks(nursingTasks);
-    console.log("NursingTasks -> ", nursingTasks);
     if (nursingTasks) {
       const extractedData = ExtractMedicationNursingTasksData(
         nursingTasks,
@@ -181,7 +182,6 @@ export default function NursingTasks(props) {
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
     setMedicationNursingTasks(
       ExtractMedicationNursingTasksData(nursingTasks, filterValue)
@@ -263,9 +263,12 @@ export default function NursingTasks(props) {
               className="margin-right-10"
               data-testid="next-shift"
             />
-            <span>{`${formatDate(startDate, "DD/MM/YYYY")} - ${formatDate(
-              endDate,
-              "DD/MM/YYYY"
+            <span>{`${formatDate(
+              startEndDates.startDate,
+              "DD/MM/YYYY HH:mm"
+            )} - ${formatDate(
+              startEndDates.endDate,
+              "DD/MM/YYYY HH:mm"
             )}`}</span>
           </div>
           <div className="nursing-task-actions">
