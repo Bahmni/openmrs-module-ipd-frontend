@@ -48,6 +48,13 @@ export const getUTCEpochForDate = (viewDate) => {
   return utcTimeEpoch;
 };
 
+const sortByStartTime = (a, b) => a.startTime - b.startTime;
+export const SortDrugChartData = (drugChartData) => {
+  drugChartData.forEach((item) => {
+    item.slots.sort(sortByStartTime);
+  });
+  return drugChartData;
+};
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
   const slotDataByOrder = [];

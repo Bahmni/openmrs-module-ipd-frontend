@@ -35,6 +35,8 @@ describe("DrugChartWrapper", () => {
   });
 
   it("should render loading state when isLoading is true", () => {
+    const mockDate = new Date(1466424490000);
+    MockDate.set(mockDate);
     mockUseFetchMedications.mockReturnValue({
       isLoading: true,
       drugChartData: [],
@@ -43,6 +45,7 @@ describe("DrugChartWrapper", () => {
       <DrugChartView patientId="test-id" viewDate={mockDate} />
     );
     expect(container).toMatchSnapshot();
+    MockDate.reset();
   });
 
   it.skip("should render no medication task message when drugChartData is empty", () => {

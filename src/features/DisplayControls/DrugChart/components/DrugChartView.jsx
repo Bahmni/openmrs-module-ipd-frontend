@@ -10,6 +10,7 @@ import {
   currentShiftHoursArray,
   getNextShiftDetails,
   getPreviousShiftDetails,
+  SortDrugChartData,
 } from "../utils/DrugChartUtils";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import data from "../../../../utils/config.json";
@@ -66,7 +67,8 @@ export default function DrugChartWrapper(props) {
     callFetchMedications(startDateTime, endDateTime);
   }, []);
 
-  const transformedDrugChartData = TransformDrugChartData(drugChartData);
+  const sortedDrugChartData = SortDrugChartData(drugChartData);
+  const transformedDrugChartData = TransformDrugChartData(sortedDrugChartData);
 
   const handlePrevious = () => {
     const firstHour = currentShiftArray[0];
