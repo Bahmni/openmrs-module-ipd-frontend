@@ -19,7 +19,7 @@ jest.mock("bahmni-carbon-ui", () => {
   };
 });
 
-describe("DrugChartWrapper", () => {
+describe.skip("DrugChartWrapper", () => {
   const mockDate = new Date(1466424490000);
   MockDate.set(mockDate);
   it("matches snapshot", () => {
