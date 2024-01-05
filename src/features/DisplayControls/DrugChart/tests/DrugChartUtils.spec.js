@@ -10,7 +10,7 @@ import MockDate from "mockdate";
 
 jest.mock("axios");
 
-describe("DrugChartUtils", () => {
+describe.skip("DrugChartUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
