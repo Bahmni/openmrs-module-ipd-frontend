@@ -7,9 +7,14 @@ import moment from "moment";
 import data from "../../../../utils/config.json";
 
 const { config: { nursingTasks = {} } = {} } = data;
+const { config: { drugChart = {} } = {} } = data;
 
-export const fetchMedicationNursingTasks = async (patientUuid, forDate) => {
-  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&forDate=${forDate}`;
+export const fetchMedicationNursingTasks = async (
+  patientUuid,
+  startTime,
+  endTime
+) => {
+  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}`;
   try {
     const response = await axios.get(FETCH_MEDICATIONS_URL);
     return response.data;

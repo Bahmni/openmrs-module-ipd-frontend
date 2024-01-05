@@ -12,6 +12,20 @@ exports[`CalendarHeader should match snapshot 1`] = `
         class="hour-header"
         data-testid="hour"
       >
+        14
+        :00
+      </div>
+      <div
+        class="hour-header"
+        data-testid="hour"
+      >
+        15
+        :00
+      </div>
+      <div
+        class="hour-header"
+        data-testid="hour"
+      >
         16
         :00
       </div>
@@ -48,20 +62,6 @@ exports[`CalendarHeader should match snapshot 1`] = `
         data-testid="hour"
       >
         21
-        :00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        22
-        :00
-      </div>
-      <div
-        class="hour-header"
-        data-testid="hour"
-      >
-        23
         :00
       </div>
     </div>

@@ -1,16 +1,9 @@
-.no-nursing-tasks {
-  padding-top: 10px;
-}
-
-.nursing-tasks-content-container {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-
-  .nursingTask-shift-header {
+.drugchart-parent-container {
+  .drugchart-shift-header {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    margin: 10px 0;
   }
 
   .margin-right-6 {
@@ -44,33 +37,4 @@
     .bx--assistive-text {
     display: none;
   }
-
-  .nursing-task-navigation {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 10px 0;
-  }
-
-  .nursing-task-actions {
-    display: flex;
-    gap: 10px;
-  }
-
-  .nursing-task-dropdown {
-    min-width: 130px;
-  }
-}
-
-.nursing-task-tiles-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.date-text {
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 14px;
-  letter-spacing: 0.14px;
 }
