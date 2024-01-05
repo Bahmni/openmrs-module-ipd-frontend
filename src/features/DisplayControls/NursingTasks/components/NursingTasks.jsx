@@ -178,7 +178,9 @@ export default function NursingTasks(props) {
             </Button>
           </div>
         </div>
-
+        {
+          console.log("Provider", provider)
+        }
         {isSliderOpen.nursingTasks && (
           <UpdateNursingTasks
             medicationTasks={selectedMedicationTask}
@@ -190,7 +192,8 @@ export default function NursingTasks(props) {
         )}
         {isSliderOpen.emergencyTasks && (
           <AddEmergencyTasks
-            patientId={"uuid"}
+            patientId={patientId}
+            providerId={provider.uuid}
             updateEmergencyTasksSlider={updateEmergencyTasksSlider}
           />
         )}

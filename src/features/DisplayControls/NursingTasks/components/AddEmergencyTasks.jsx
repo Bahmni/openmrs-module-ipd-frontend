@@ -9,6 +9,7 @@ import {
   fetchMedicationConfig,
   getDrugOrdersConfig,
   getProviders,
+  saveEmergencyMedication
 } from "../utils/EmergencyTasksUtils";
 import {
   NumberInputCarbon,
@@ -18,10 +19,12 @@ import {
   TimePicker24Hour,
 } from "bahmni-carbon-ui";
 import _ from "lodash";
+import { performerFunction, requesterFunction } from "../utils/constants";
 import SearchDrug from "../../../SearchDrug/SearchDrug";
+import moment from "moment/moment";
 
 const AddEmergencyTasks = (props) => {
-  const { updateEmergencyTasksSlider } = props;
+  const { patientId, providerId, updateEmergencyTasksSlider } = props;
   const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [dosageConfig, setDosageConfig] = useState({});
@@ -60,6 +63,27 @@ const AddEmergencyTasks = (props) => {
         })
       );
     }
+  };
+
+  const createEmergencyMedicationPayload = () => {
+      const dateTime = moment(administrationDate+" "+administrationTime); 
+      const utcTimeEpoch = moment.utc(dateTime).unix();
+      console.log("Date Time ", dateTime, " -------",utcTimeEpoch);
+      const emergencyMedicationPayload = {
+        patientUuid: patientId,
+        drugUuid: selectedDrug?.uuid,
+        dose:dosage,
+        doseUnitsUuid: doseUnits?.uuid, 
+        routeUuid: routes?.uuid,
+        providers: [{ providerUuid: providerId, function: performerFunction }
+         ,{
+          providerUuid: requestedProvider?.uuid,function: requesterFunction
+         }],
+        notes: [{ authorUuid: providerId, text: notes }],
+        status: "completed",
+        administeredDateTime: utcTimeEpoch,
+      };
+    return emergencyMedicationPayload;
   };
 
   const fetchAllProviders = async () => {
@@ -251,7 +275,9 @@ const AddEmergencyTasks = (props) => {
       </div>
       <SaveAndCloseButtons
         onSave={() => {
-          updateEmergencyTasksSlider(false);
+         const emergencyTask =  createEmergencyMedicationPayload();
+        const response =  saveEmergencyMedication(emergencyTask);
+          response === 200 ? updateEmergencyTasksSlider(true): null;
         }}
         onClose={() => {
           updateEmergencyTasksSlider(false);
