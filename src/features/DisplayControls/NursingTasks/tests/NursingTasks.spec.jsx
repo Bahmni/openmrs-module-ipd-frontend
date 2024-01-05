@@ -1,7 +1,10 @@
 import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import NursingTasks from "../components/NursingTasks";
-import { mockNursingTasksResponse } from "./NursingTasksUtilsMockData";
+import {
+  mockNursingTasksResponse,
+  mockShiftResponse,
+} from "./NursingTasksUtilsMockData";
 import MockDate from "mockdate";
 import { SliderContext } from "../../../../context/SliderContext";
 
@@ -128,7 +131,34 @@ describe("NursingTasks", () => {
     );
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
-      expect(getByText("11/08/2023")).toBeTruthy();
     });
+    expect(getByText("11/08/2023 - 11/08/2023")).toBeTruthy();
+  });
+  it.skip("should show Correct Nursing Tasks when clicked on previous button", async () => {
+    MockDate.set("2024-01-05");
+    mockFetchMedicationNursingTasks
+      .mockResolvedValueOnce(mockNursingTasksResponse)
+      .mockReturnValueOnce(
+        mockFetchMedicationNursingTasks.mockResolvedValueOnce(mockShiftResponse)
+      );
+    const { getAllByText, debug, getByTestId } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <NursingTasks patientId="patientid" />
+      </SliderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
+    });
+    expect(
+      getAllByText("Paracetamol 120 mg/5 mL Suspension (Liquid)")
+    ).toBeTruthy();
+    getByTestId("previous-shift").click();
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(2);
+    });
+    debug();
+    expect(
+      getAllByText("Amoxicillin 250 mg/5 mL Powder for Oral Suspension")
+    ).toBeTruthy();
   });
 });

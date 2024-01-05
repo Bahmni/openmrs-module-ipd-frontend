@@ -866,3 +866,294 @@ export const mockPendingTaskTileData = [
     isDisabled: false,
   },
 ];
+
+export const mockShiftResponse = [
+  {
+    id: 14,
+    uuid: "eda9afb2-11f6-4545-b8e2-12fbf12d7a6c",
+    serviceType: "MedicationRequest",
+    comments: null,
+    startDate: 1704375236,
+    endDate: null,
+    slots: [
+      {
+        id: 96,
+        uuid: "65aebc01-3f56-4e3b-bbd0-ff9572de8b99",
+        serviceType: "MedicationRequest",
+        status: "COMPLETED",
+        startTime: 1704375300,
+        order: {
+          uuid: "4174fbda-3bd5-4479-9a25-58209d001811",
+          orderNumber: "ORD-17503",
+          accessionNumber: null,
+          patient: {
+            uuid: "889f81f8-a5d1-4006-8092-ecd5d63e884c",
+            display: "ET54174 - new patient",
+          },
+          concept: {
+            uuid: "627a6041-ad81-4968-8adf-2f49aec4433b",
+            display: "Amoxicillin",
+          },
+          action: "NEW",
+          careSetting: {
+            uuid: "c365e560-c3ec-11e3-9c1a-0800200c9a66",
+            name: "Inpatient",
+            description: "In-patient care setting",
+            retired: false,
+            careSettingType: "INPATIENT",
+            display: "Inpatient",
+          },
+          previousOrder: null,
+          dateActivated: "2024-01-05T9:04:56.000+0530",
+          scheduledDate: "2024-01-05T9:04:55.000+0530",
+          dateStopped: null,
+          autoExpireDate: "2024-01-06T19:04:54.000+0530",
+          encounter: {
+            uuid: "44108a1e-ca87-484d-b0fa-67f3ea418eae",
+            display: "Consultation 01/04/2024",
+          },
+          orderer: {
+            uuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
+            display: "Bailly RURANGIRWA",
+          },
+          orderReason: null,
+          orderReasonNonCoded: null,
+          orderType: {
+            uuid: "131168f4-15f5-102d-96e4-000c29c2a5d7",
+            display: "Drug Order",
+            name: "Drug Order",
+            javaClassName: "org.openmrs.DrugOrder",
+            retired: false,
+            description: "An order for a medication to be given to the patient",
+            conceptClasses: [
+              {
+                uuid: "8d490dfc-c2cc-11de-8d13-0010c6dffd0f",
+                display: "Drug",
+              },
+            ],
+            parent: null,
+          },
+          urgency: "ON_SCHEDULED_DATE",
+          instructions: null,
+          commentToFulfiller: null,
+          display:
+            "(NEW) Amoxicillin 250 mg/5 mL Powder for Oral Suspension: null",
+          auditInfo: {
+            creator: {
+              uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
+              display: "bailly.rurangirwa",
+            },
+            dateCreated: "2024-01-04T19:04:56.000+0530",
+            changedBy: null,
+            dateChanged: null,
+          },
+          drug: {
+            uuid: "59cfab90-288c-43f4-a055-e57f30e30150",
+            display: "Amoxicillin 250 mg/5 mL Powder for Oral Suspension",
+          },
+          dosingType:
+            "org.openmrs.module.bahmniemrapi.drugorder.dosinginstructions.FlexibleDosingInstructions",
+          dose: 3,
+          doseUnits: {
+            uuid: "9d6691d8-3f10-11e4-adec-0800271c1b75",
+            display: "mg",
+            name: {
+              display: "mg",
+              uuid: "9d66b14e-3f10-11e4-adec-0800271c1b75",
+              name: "mg",
+              locale: "en",
+              localePreferred: true,
+              conceptNameType: "FULLY_SPECIFIED",
+            },
+            datatype: {
+              uuid: "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+              display: "N/A",
+            },
+            conceptClass: {
+              uuid: "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+              display: "Misc",
+            },
+            set: false,
+            version: null,
+            retired: false,
+            names: [
+              {
+                uuid: "9d6694d8-3f10-11e4-adec-0800271c1b75",
+                display: "mg",
+              },
+              {
+                uuid: "9d66b14e-3f10-11e4-adec-0800271c1b75",
+                display: "mg",
+                links: [
+                  {
+                    rel: "self",
+                    uri: "http://localhost/openmrs/ws/rest/v1/concept/9d6691d8-3f10-11e4-adec-0800271c1b75/name/9d66b14e-3f10-11e4-adec-0800271c1b75",
+                    resourceAlias: "name",
+                  },
+                ],
+              },
+            ],
+            descriptions: [],
+            mappings: [],
+            answers: [],
+            setMembers: [],
+            attributes: [],
+          },
+          frequency: {
+            uuid: "9d7d0641-3f10-11e4-adec-0800271c1b75",
+            display: "Twice a day",
+          },
+          asNeeded: false,
+          asNeededCondition: null,
+          quantity: 12,
+          quantityUnits: {
+            uuid: "9d6691d8-3f10-11e4-adec-0800271c1b75",
+            display: "mg",
+            name: {
+              display: "mg",
+              uuid: "9d66b14e-3f10-11e4-adec-0800271c1b75",
+              name: "mg",
+              locale: "en",
+              localePreferred: true,
+              conceptNameType: "FULLY_SPECIFIED",
+              links: [
+                {
+                  rel: "self",
+                  uri: "http://localhost/openmrs/ws/rest/v1/concept/9d6691d8-3f10-11e4-adec-0800271c1b75/name/9d66b14e-3f10-11e4-adec-0800271c1b75",
+                  resourceAlias: "name",
+                },
+                {
+                  rel: "full",
+                  uri: "http://localhost/openmrs/ws/rest/v1/concept/9d6691d8-3f10-11e4-adec-0800271c1b75/name/9d66b14e-3f10-11e4-adec-0800271c1b75?v=full",
+                  resourceAlias: "name",
+                },
+              ],
+              resourceVersion: "1.9",
+            },
+            datatype: {
+              uuid: "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+              display: "N/A",
+              links: [
+                {
+                  rel: "self",
+                  uri: "http://localhost/openmrs/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                  resourceAlias: "conceptdatatype",
+                },
+              ],
+            },
+            conceptClass: {
+              uuid: "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+              display: "Misc",
+              links: [
+                {
+                  rel: "self",
+                  uri: "http://localhost/openmrs/ws/rest/v1/conceptclass/8d492774-c2cc-11de-8d13-0010c6dffd0f",
+                  resourceAlias: "conceptclass",
+                },
+              ],
+            },
+            set: false,
+            version: null,
+            retired: false,
+            names: [
+              {
+                uuid: "9d6694d8-3f10-11e4-adec-0800271c1b75",
+                display: "mg",
+              },
+              {
+                uuid: "9d66b14e-3f10-11e4-adec-0800271c1b75",
+                display: "mg",
+              },
+            ],
+            descriptions: [],
+            mappings: [],
+            answers: [],
+            setMembers: [],
+            attributes: [],
+          },
+          numRefills: 0,
+          dosingInstructions: '{"instructions":"As directed"}',
+          duration: 2,
+          durationUnits: {
+            uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+            display: "Day(s)",
+            name: {
+              display: "Day(s)",
+              uuid: "9d743e1d-3f10-11e4-adec-0800271c1b75",
+              name: "Day(s)",
+              locale: "en",
+              localePreferred: true,
+              conceptNameType: "FULLY_SPECIFIED",
+            },
+            datatype: {
+              uuid: "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+              display: "N/A",
+            },
+            conceptClass: {
+              uuid: "8d492774-c2cc-11de-8d13-0010c6dffd0f",
+              display: "Misc",
+            },
+            set: false,
+            version: null,
+            retired: false,
+            names: [
+              {
+                uuid: "9d743b33-3f10-11e4-adec-0800271c1b75",
+                display: "day(s)",
+              },
+              {
+                uuid: "9d743e1d-3f10-11e4-adec-0800271c1b75",
+                display: "Day(s)",
+              },
+            ],
+            descriptions: [],
+            mappings: [
+              {
+                uuid: "e48507e5-d490-11e5-b193-0800270d80ce",
+                display: "SNOMED: 258703001 (Day(s))",
+              },
+            ],
+            answers: [],
+            setMembers: [],
+            attributes: [],
+          },
+          route: {
+            uuid: "33b16adb-8a92-11e4-977f-0800271c1b75",
+            display: "Topical",
+          },
+          brandName: null,
+          dispenseAsWritten: false,
+          drugNonCoded: null,
+          type: "drugorder",
+          resourceVersion: "1.10",
+        },
+        medicationAdministration: {
+          uuid: "79e5c6a0-bb8f-47ea-bfe3-ab7e866f7647",
+          patientUuid: "889f81f8-a5d1-4006-8092-ecd5d63e884c",
+          encounterUuid: null,
+          orderUuid: "4174fbda-3bd5-4479-9a25-58209d001811",
+          providers: [
+            {
+              uuid: "f137dda1-cd19-4ee3-8a09-a17395dbe84f",
+              provider: {
+                uuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
+                display: "Bailly RURANGIRWA",
+              },
+              function: "Performer",
+            },
+          ],
+          notes: [],
+          status: "Completed",
+          statusReason: null,
+          drug: null,
+          dosingInstructions: null,
+          dose: null,
+          doseUnits: null,
+          route: null,
+          site: null,
+          administeredDateTime: 1704375534000,
+        },
+      },
+    ],
+  },
+];
