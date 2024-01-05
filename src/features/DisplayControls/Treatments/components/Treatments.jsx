@@ -39,6 +39,7 @@ const Treatments = (props) => {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [drugChartNotes, setDrugChartNotes] = useState("");
   const [additionalData, setAdditionalData] = useState([]);
+  // const [isEditDisabled, setEditDisabled] = useState(false);
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -48,6 +49,8 @@ const Treatments = (props) => {
     });
   };
   var drugOrderList = {};
+  var showEditDrugChartLink = false;
+  var isEditDisabled = false;
   const sliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -74,6 +77,7 @@ const Treatments = (props) => {
       updateTreatmentsSlider(false);
       refreshDisplayControl([componentKeys.NURSING_TASKS]);
       refreshDisplayControl([componentKeys.DRUG_CHART]);
+      refreshDisplayControl([componentKeys.TREATMENTS]);
     },
   };
 
@@ -109,6 +113,10 @@ const Treatments = (props) => {
     />
   );
 
+  const EditDrugChart = (
+    <FormattedMessage id={"EDIT_DRUG_CHART"} defaultMessage={"Edit"} />
+  );
+
   const isIPDDrugOrder = (drugOrderObject) => {
     return drugOrderObject.drugOrder.careSetting === "INPATIENT";
   };
@@ -136,13 +144,27 @@ const Treatments = (props) => {
     const treatments = drugOrders.ipdDrugOrders
       .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
       .map((drugOrderObject) => {
+        if (drugOrderObject.drugOrderSchedule != null) {
+          showEditDrugChartLink = true;
+          if (
+            drugOrderObject.drugOrderSchedule.medicationAdministrationStarted
+          ) {
+            // setEditDisabled(true);
+            isEditDisabled = true;
+          } else {
+            // setEditDisabled(false);
+            isEditDisabled = false;
+          }
+        } else {
+          showEditDrugChartLink = false;
+        }
         const drugOrder = drugOrderObject.drugOrder;
         return {
           id: drugOrder.uuid,
           startDate: formatDate(drugOrder.effectiveStartDate, "DD/MM/YYYY"),
           drugName: getDrugName(drugOrderObject),
           dosageDetails: setDosingInstructions(drugOrder),
-          providerName: drugOrder?.provider?.name,
+          providerName: drugOrderObject.provider.name,
           status: (
             <span className={drugOrder.dateStopped && "red-text"}>
               {drugOrder.dateStopped && (
@@ -150,11 +172,20 @@ const Treatments = (props) => {
               )}
             </span>
           ),
-          actions: !drugOrder.dateStopped && (
-            <Link onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}>
-              {AddToDrugChart}
-            </Link>
-          ),
+          actions:
+            !drugOrder.dateStopped &&
+            (!showEditDrugChartLink ? (
+              <Link onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}>
+                {AddToDrugChart}
+              </Link>
+            ) : (
+              <Link
+                disabled={isEditDisabled}
+                onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}
+              >
+                {EditDrugChart}
+              </Link>
+            )),
           additionalData: {
             instructions: drugOrderObject.instructions
               ? drugOrderObject.instructions
