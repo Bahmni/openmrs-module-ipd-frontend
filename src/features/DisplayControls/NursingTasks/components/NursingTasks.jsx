@@ -213,7 +213,10 @@ export default function NursingTasks(props) {
             hostApi={{
               onClose: () => {
                 setShowSuccessNotification(false);
-                refreshDisplayControl([componentKeys.NURSING_TASKS]);
+                refreshDisplayControl([
+                  componentKeys.NURSING_TASKS,
+                  componentKeys.DRUG_CHART,
+                ]);
               },
             }}
           />

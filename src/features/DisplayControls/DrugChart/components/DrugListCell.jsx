@@ -5,6 +5,7 @@ import "../styles/DrugListCell.scss";
 import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
+import data from "../../../../utils/config.json";
 
 export default function DrugListCell(props) {
   const { drugInfo } = props;
@@ -18,6 +19,7 @@ export default function DrugListCell(props) {
     dosingInstructions,
     dosingTagInfo,
   } = drugInfo;
+  const enable24hour = data.config.drugChart.enable24HourTime;
 
   let parsedDosingInstructions,
     showInstructionsIcon,
@@ -72,6 +74,7 @@ export default function DrugListCell(props) {
       <NoteIcon />
     </div>
   );
+
   return (
     <td>
       {drugNameText}
@@ -86,10 +89,17 @@ export default function DrugListCell(props) {
         <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
           <Clock />
           {administrationInfo.map((adminInfo, index) => {
+            let adminInfoTime = adminInfo.time;
+            if (adminInfoTime && !enable24hour) {
+              const [hours, minutes] = adminInfoTime.split(":");
+              const hours12 = hours % 12 || 12;
+              adminInfoTime = `${hours12}:${minutes}`;
+            }
+
             if (adminInfo.kind === "Administered-Late") {
               return (
                 <span style={{ color: "#da1e28" }} key={index}>
-                  {adminInfo.time}
+                  {adminInfoTime}
                   {index !== administrationInfo.length - 1 && (
                     <span style={{ color: "#525252" }}>,</span>
                   )}
@@ -98,7 +108,7 @@ export default function DrugListCell(props) {
             } else {
               return (
                 <span style={{ color: "#525252" }} key={index}>
-                  {adminInfo.time}
+                  {adminInfoTime}
                   {index !== administrationInfo.length - 1 && <span>,</span>}
                 </span>
               );

@@ -42,6 +42,8 @@ export default function DrugChartWrapper(props) {
   );
 
   const callFetchMedications = async (startDateTime, endDateTime) => {
+    console.log("startDateTime", startDateTime);
+    console.log("endDateTime", endDateTime);
     try {
       const response = await fetchMedications(
         patientId,
@@ -138,6 +140,9 @@ export default function DrugChartWrapper(props) {
   // if (drugChartData && drugChartData.length === 0) {
   //   return <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>;
   // }
+  const dateFormatString = drugChart.enable24HourTime
+    ? "DD/MM/YYYY HH:mm"
+    : "DD/MM/YYYY hh:mm A";
   return (
     <div className="drugchart-parent-container">
       <div className="drugchart-shift-header">
@@ -171,8 +176,8 @@ export default function DrugChartWrapper(props) {
         <span>
           {`${formatDate(
             startEndDates.startDate,
-            "DD/MM/YYYY HH:mm"
-          )} - ${formatDate(startEndDates.endDate, "DD/MM/YYYY HH:mm")}`}
+            dateFormatString
+          )} - ${formatDate(startEndDates.endDate, dateFormatString)}`}
         </span>
       </div>
       {isLoading ? (
