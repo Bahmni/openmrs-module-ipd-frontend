@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import { Button } from "carbon-components-react";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import DrugChart from "./DrugChart";
-import { fetchMedications } from "../utils/DrugChartUtils";
 import {
+  fetchMedications,
   TransformDrugChartData,
   getDateTime,
   currentShiftHoursArray,
@@ -18,8 +18,8 @@ import "../styles/DrugChartView.scss";
 
 const NoMedicationTaskMessage = (
   <FormattedMessage
-    id={"NO_MEDICATION_TASKS_MESSAGE"}
-    defaultMessage={"No Medication has been scheduled for the patient yet"}
+    id={"NO_MEDICATION_DRUG_CHART_MESSAGE"}
+    defaultMessage={"No Medication has been scheduled in this shift"}
   />
 );
 
@@ -47,9 +47,9 @@ export default function DrugChartWrapper(props) {
         startDateTime / 1000,
         endDateTime / 1000
       );
-      return setDrugChartData(response.data);
+      setDrugChartData(response.data);
     } catch (e) {
-      // setError(e);
+      return e;
     } finally {
       setLoading(false);
     }
@@ -130,12 +130,6 @@ export default function DrugChartWrapper(props) {
     callFetchMedications(startDateTime, endDateTime);
   };
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-  // if (drugChartData && drugChartData.length === 0) {
-  //   return <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>;
-  // }
   return (
     <div className="drugchart-parent-container">
       <div className="drugchart-shift-header">
@@ -145,6 +139,7 @@ export default function DrugChartWrapper(props) {
           size="small"
           onClick={handleCurrent}
           className="margin-right-10"
+          data-testid="currentShift"
         >
           Current Shift
         </Button>
@@ -156,6 +151,7 @@ export default function DrugChartWrapper(props) {
           size="sm"
           onClick={handlePrevious}
           className="margin-right-6"
+          data-testid="previousButton"
         />
         <Button
           renderIcon={ChevronRight16}
@@ -165,6 +161,7 @@ export default function DrugChartWrapper(props) {
           size="sm"
           onClick={handleNext}
           className="margin-right-10"
+          data-testid="nextButton"
         />
         <span>
           {`${formatDate(

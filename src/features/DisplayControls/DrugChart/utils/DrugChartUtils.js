@@ -240,7 +240,6 @@ export const getDateTime = (date, hour) => {
     date.getMonth(),
     date.getDate()
   );
-
   return currentShiftStartTime.setHours(hour);
 };
 

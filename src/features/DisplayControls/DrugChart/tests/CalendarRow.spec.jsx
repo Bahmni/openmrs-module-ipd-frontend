@@ -27,15 +27,10 @@ describe("CalendarRow", () => {
       },
     };
     const currentShiftArray = [14, 15, 16, 17, 18, 19, 20, 21];
-    render(<CalendarRow rowData={rowData} currentShiftArray={currentShiftArray} />);
+    render(
+      <CalendarRow rowData={rowData} currentShiftArray={currentShiftArray} />
+    );
     expect(mockTimeCell).toHaveBeenCalled();
-    // expect(mockTimeCell).toHaveBeenCalledWith({
-    //   minutes: 0,
-    //   status: "Late",
-    //   administrationInfo: "Dr. Jane Doe [14:00]",
-    //   doHighlightCell: false,
-    //   highlightedCell: "right",
-    // });
     MockDate.reset();
   });
 });
