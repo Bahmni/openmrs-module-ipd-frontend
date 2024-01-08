@@ -11,6 +11,30 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+
+    .bx--btn--expressive {
+      min-height: 32px;
+      padding: 5px 10px;
+      font-size: 14px;
+      line-height: 18px;
+      &:hover,
+      &:focus {
+        color: #fff;
+      }
+    }
+
+    .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center::before {
+      display: none;
+    }
+
+    .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center::after {
+      display: none;
+    }
+
+    .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center
+      .bx--assistive-text {
+      display: none;
+    }
   }
 
   .margin-right-6 {
@@ -19,30 +43,6 @@
 
   .margin-right-10 {
     margin-right: 10px;
-  }
-
-  .bx--btn--expressive {
-    min-height: 32px;
-    padding: 5px 10px;
-    font-size: 14px;
-    line-height: 18px;
-    &:hover,
-    &:focus {
-      color: #fff;
-    }
-  }
-
-  .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center::before {
-    display: none;
-  }
-
-  .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center::after {
-    display: none;
-  }
-
-  .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center
-    .bx--assistive-text {
-    display: none;
   }
 
   .nursing-task-navigation {
