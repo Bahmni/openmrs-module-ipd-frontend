@@ -11,18 +11,14 @@ export default function CalendarHeader(props) {
     <div className="calendar-header">
       <div style={{ display: "flex" }}>
         {currentShiftArray.map((hour) => {
-          const formattedHour = enable24hour
-            ? hour.toLocaleString("en-US", {
-                hour: "2-digit",
-                minimumIntegerDigits: 2,
-              })
-            : (((hour + 11) % 12) + 1).toLocaleString("en-US", {
-                minimumIntegerDigits: 2,
-              });
+          const transformedHour = enable24hour ? hour : ((hour + 11) % 12) + 1;
+          const formattedHour = `${transformedHour.toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+          })}:00`;
 
           return (
             <div data-testid="hour" key={hour} className={"hour-header"}>
-              {formattedHour}:00
+              {formattedHour}
             </div>
           );
         })}

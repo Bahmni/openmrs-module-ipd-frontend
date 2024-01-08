@@ -50,6 +50,9 @@ export const SortDrugChartData = (drugChartData) => {
   return drugChartData;
 };
 
+export const getDateFormatString = () =>
+  drugChart.enable24HourTime ? "DD/MM/YYYY HH:mm" : "DD/MM/YYYY hh:mm A";
+
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
   const slotDataByOrder = [];

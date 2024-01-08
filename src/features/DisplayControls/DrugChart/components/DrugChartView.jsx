@@ -11,6 +11,7 @@ import {
   getNextShiftDetails,
   getPreviousShiftDetails,
   SortDrugChartData,
+  getDateFormatString,
 } from "../utils/DrugChartUtils";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import data from "../../../../utils/config.json";
@@ -133,9 +134,7 @@ export default function DrugChartWrapper(props) {
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
-  const dateFormatString = drugChart.enable24HourTime
-    ? "DD/MM/YYYY HH:mm"
-    : "DD/MM/YYYY hh:mm A";
+  const dateFormatString = getDateFormatString();
   return (
     <div className="drugchart-parent-container">
       <div className="drugchart-shift-header">
