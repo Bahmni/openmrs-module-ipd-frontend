@@ -16,9 +16,7 @@ export default function TimeCell(props) {
     highlightedCell,
   } = props;
   let left, right;
-    
 
-  
   if (+minutes < 30) {
     left = status;
   } else {
@@ -40,7 +38,11 @@ export default function TimeCell(props) {
         }
       >
         {left && <SVGIcon iconType={left} info={administrationInfo} />}
-        { ifMedicationNotesPresent(medicationNotes, left) && <span data-testid="left-notes" ><TooltipCarbon icon={() => icon} content={medicationNotes} /></span>}
+        {ifMedicationNotesPresent(medicationNotes, left) && (
+          <span data-testid="left-notes">
+            <TooltipCarbon icon={() => icon} content={medicationNotes} />
+          </span>
+        )}
       </div>
       <div
         data-testid="right-icon"
@@ -49,7 +51,11 @@ export default function TimeCell(props) {
         }
       >
         {right && <SVGIcon iconType={right} info={administrationInfo} />}
-        {ifMedicationNotesPresent(medicationNotes, right) && <span data-testid="right-notes"><TooltipCarbon  icon={() => icon} content={medicationNotes} /></span>}
+        {ifMedicationNotesPresent(medicationNotes, right) && (
+          <span data-testid="right-notes">
+            <TooltipCarbon icon={() => icon} content={medicationNotes} />
+          </span>
+        )}
       </div>
     </div>
   );
@@ -61,4 +67,5 @@ TimeCell.propTypes = {
   administrationInfo: PropTypes.string,
   doHighlightCell: PropTypes.bool,
   highlightedCell: PropTypes.string,
+  medicationNotes: PropTypes.string,
 };

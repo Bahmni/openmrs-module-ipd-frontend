@@ -42,9 +42,12 @@ const checkIfSlotIsAdministered = (status) => {
   return status === "COMPLETED";
 };
 
-export const getUTCEpochForDate = (viewDate) => {
-  const utcTimeEpoch = moment.utc(viewDate).unix();
-  return utcTimeEpoch;
+const sortByStartTime = (a, b) => a.startTime - b.startTime;
+export const SortDrugChartData = (drugChartData) => {
+  drugChartData.forEach((item) => {
+    item.slots.sort(sortByStartTime);
+  });
+  return drugChartData;
 };
 
 export const TransformDrugChartData = (drugChartData) => {
