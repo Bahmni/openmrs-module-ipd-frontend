@@ -13,6 +13,7 @@ import {
   isTimePassed,
   validateSchedules,
   saveMedication,
+  updateMedication,
   updateStartTimeBasedOnFrequency,
   isInvalidTimeTextPresent,
   getUTCTimeEpoch,
@@ -32,7 +33,9 @@ const DrugChartSlider = (props) => {
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
-  const isAutoFill = Boolean(enableSchedule?.scheduleTiming);
+  const isEdit = Boolean(hostData?.drugOrder?.drugOrderSchedule);
+  console.log("isEdit", isEdit);
+  const isAutoFill = Boolean(enableSchedule?.scheduleTiming) && !isEdit;
 
   const { setSliderContentModified } = useContext(SliderContext);
   const updateSliderContentModified = (value) => {
@@ -318,6 +321,64 @@ const DrugChartSlider = (props) => {
     }
   };
 
+  const epochTo24HourTime = (epochSeconds) => {
+    const date = new Date(epochSeconds * 1000);
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const formattedTime = `${hours}:${minutes}`;
+    return formattedTime;
+  };
+
+  const epochTo12HourTime = (epochSeconds) => {
+    const date = new Date(epochSeconds * 1000);
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const amOrPm = hours >= 12 ? "PM" : "AM";
+    const formattedHours = (hours % 12 || 12).toString().padStart(2, "0");
+    const formattedTime = `${formattedHours}:${minutes} ${amOrPm}`;
+    return formattedTime;
+  };
+
+  const setDrugOrderScheduleIn24HourFormat = (schedule) => {
+    const drugOrderSchduleIn24HourFormat = {};
+    Object.keys(schedule).forEach((key) => {
+      if (
+        key === "firstDaySlotsStartTime" ||
+        key === "dayWiseSlotsStartTime" ||
+        key === "remainingDaySlotsStartTime"
+      ) {
+        const scheduleArray = schedule[key];
+        if (scheduleArray) {
+          const formattedScheduleArray = scheduleArray.map((schedule) =>
+            epochTo24HourTime(schedule)
+          );
+          drugOrderSchduleIn24HourFormat[key] = formattedScheduleArray;
+        }
+      }
+    });
+    return drugOrderSchduleIn24HourFormat;
+  };
+
+  const setDrugOrderScheduleIn12HourFormat = (schedule) => {
+    const drugOrderSchduleIn12HourFormat = {};
+    Object.keys(schedule).forEach((key) => {
+      if (
+        key === "firstDaySlotsStartTime" ||
+        key === "dayWiseSlotsStartTime" ||
+        key === "remainingDaySlotsStartTime"
+      ) {
+        const scheduleArray = schedule[key];
+        if (scheduleArray) {
+          const formattedScheduleArray = scheduleArray.map((schedule) =>
+            epochTo12HourTime(schedule)
+          );
+          drugOrderSchduleIn12HourFormat[key] = formattedScheduleArray;
+        }
+      }
+    });
+    return drugOrderSchduleIn12HourFormat;
+  };
+
   useEffect(() => {
     if (isAutoFill) {
       const scheduleTimings = enable24HourTimers
@@ -365,11 +426,52 @@ const DrugChartSlider = (props) => {
     }
   }, [isAutoFill, enable24HourTimers, enableSchedule]);
 
+  useEffect(() => {
+    if (isEdit) {
+      const drugOrderSchedule = hostData?.drugOrder?.drugOrderSchedule;
+      const scheduleTimings = enable24HourTimers
+        ? setDrugOrderScheduleIn24HourFormat(drugOrderSchedule)
+        : setDrugOrderScheduleIn12HourFormat(drugOrderSchedule);
+
+      if (Object.keys(scheduleTimings).length === 0) {
+        const startTimeValue = enable24HourTimers
+          ? epochTo24HourTime(drugOrderSchedule.slotStartTime)
+          : epochTo12HourTime(drugOrderSchedule.slotStartTime);
+        setStartTime(startTimeValue);
+      }
+      console.log("scheduleTimings", scheduleTimings);
+      if (scheduleTimings.firstDaySlotsStartTime) {
+        setFirstDaySlotsMissed(1);
+        scheduleTimings.firstDaySlotsStartTime.forEach((schedule) => {
+          var frequency = enableSchedule?.frequencyPerDay;
+          while (scheduleTimings.firstDaySlotsStartTime.length < frequency) {
+            setFirstDaySchedules((prevSchedules) => [
+              ...prevSchedules,
+              "hh:mm",
+            ]);
+            frequency--;
+          }
+          setFirstDaySchedules((prevSchedules) => [...prevSchedules, schedule]);
+        });
+      }
+
+      if (scheduleTimings.dayWiseSlotsStartTime) {
+        setSchedules(scheduleTimings.dayWiseSlotsStartTime);
+      }
+
+      if (scheduleTimings.remainingDaySlotsStartTime) {
+        setFinalDaySchedules(scheduleTimings.remainingDaySlotsStartTime);
+      }
+    }
+  }, [isEdit, enable24HourTimers, enableSchedule]);
+
   const handleSave = async () => {
     const performSave = await validateSave();
     if (performSave) {
       const medication = createDrugChartPayload();
-      const response = await saveMedication(medication);
+      const response = isEdit
+        ? await updateMedication(medication)
+        : await saveMedication(medication);
       response.status === 200 ? hostApi.onModalSave?.() : null;
     }
   };

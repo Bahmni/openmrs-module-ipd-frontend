@@ -30,6 +30,7 @@ const Treatments = (props) => {
     sliderContentModified,
     setSliderContentModified,
     visitUuid,
+    visitSummary,
   } = useContext(SliderContext);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
@@ -39,7 +40,6 @@ const Treatments = (props) => {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [drugChartNotes, setDrugChartNotes] = useState("");
   const [additionalData, setAdditionalData] = useState([]);
-  // const [isEditDisabled, setEditDisabled] = useState(false);
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -51,6 +51,8 @@ const Treatments = (props) => {
   var drugOrderList = {};
   var showEditDrugChartLink = false;
   var isEditDisabled = false;
+  const isAddToDrugChartDisabled =
+    visitSummary.admissionDetails === null ? true : false;
   const sliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -88,7 +90,7 @@ const Treatments = (props) => {
     />
   );
 
-  const handleAddToDrugChartClick = (drugOrderId) => {
+  const handleEditAndAddToDrugChartClick = (drugOrderId) => {
     setSliderContentModified((prevState) => ({
       ...prevState,
       treatments: false,
@@ -114,7 +116,10 @@ const Treatments = (props) => {
   );
 
   const EditDrugChart = (
-    <FormattedMessage id={"EDIT_DRUG_CHART"} defaultMessage={"Edit"} />
+    <FormattedMessage
+      id={"EDIT_DRUG_CHART"}
+      defaultMessage={"Edit Drug Chart"}
+    />
   );
 
   const isIPDDrugOrder = (drugOrderObject) => {
@@ -149,10 +154,8 @@ const Treatments = (props) => {
           if (
             drugOrderObject.drugOrderSchedule.medicationAdministrationStarted
           ) {
-            // setEditDisabled(true);
             isEditDisabled = true;
           } else {
-            // setEditDisabled(false);
             isEditDisabled = false;
           }
         } else {
@@ -175,13 +178,23 @@ const Treatments = (props) => {
           actions:
             !drugOrder.dateStopped &&
             (!showEditDrugChartLink ? (
-              <Link onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}>
+              <Link
+                className={
+                  isAddToDrugChartDisabled && "drug-chart-link-disabled"
+                }
+                disabled={isAddToDrugChartDisabled}
+                onClick={() => handleEditAndAddToDrugChartClick(drugOrder.uuid)}
+              >
                 {AddToDrugChart}
               </Link>
             ) : (
               <Link
-                disabled={isEditDisabled}
-                onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}
+                className={
+                  (isEditDisabled || isAddToDrugChartDisabled) &&
+                  "drug-chart-link-disabled"
+                }
+                disabled={isEditDisabled || isAddToDrugChartDisabled}
+                onClick={() => handleEditAndAddToDrugChartClick(drugOrder.uuid)}
               >
                 {EditDrugChart}
               </Link>

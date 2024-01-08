@@ -18,6 +18,8 @@ export const ADDRESS_HEIRARCHY =
 export const homePageUrl = "/bahmni/home/#/dashboard";
 
 export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
+export const EDIT_MEDICATIONS_BASE_URL =
+  RESTWS_V1 + "/ipd/schedule/type/medication/edit";
 export const ADMINISTERED_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/scheduledMedicationAdministrations";
 export const PATIENT_URL = RESTWS_V1 + "/patient";

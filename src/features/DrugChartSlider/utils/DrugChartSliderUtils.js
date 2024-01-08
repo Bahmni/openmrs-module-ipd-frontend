@@ -1,5 +1,8 @@
 import axios from "axios";
-import { MEDICATIONS_BASE_URL } from "../../../constants";
+import {
+  MEDICATIONS_BASE_URL,
+  EDIT_MEDICATIONS_BASE_URL,
+} from "../../../constants";
 import moment from "moment";
 
 export const invalidTimeText24Hour = "Please enter in 24-hr format";
@@ -82,6 +85,15 @@ export const updateStartTimeBasedOnFrequency = (frequency, time) => {
 export const saveMedication = async (medication) => {
   try {
     const response = await axios.post(MEDICATIONS_BASE_URL, medication);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateMedication = async (medication) => {
+  try {
+    const response = await axios.post(EDIT_MEDICATIONS_BASE_URL, medication);
     return response;
   } catch (error) {
     console.error(error);

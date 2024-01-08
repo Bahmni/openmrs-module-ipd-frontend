@@ -98,6 +98,7 @@ export default function Dashboard(props) {
         setSliderContentModified,
         provider: hostData.provider,
         visitUuid: hostData.visitUuid,
+        visitSummary: hostData.visitSummary,
       }}
     >
       <main className="ipd-page">
