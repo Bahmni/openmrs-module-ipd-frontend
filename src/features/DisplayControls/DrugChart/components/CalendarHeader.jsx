@@ -11,7 +11,7 @@ export default function CalendarHeader(props) {
     <div className="calendar-header">
       <div style={{ display: "flex" }}>
         {currentShiftArray.map((hour) => {
-          const transformedHour = enable24hour ? hour : ((hour + 11) % 12) + 1;
+          const transformedHour = enable24hour ? hour : hour % 12 || 12;
           const formattedHour = `${transformedHour.toLocaleString("en-US", {
             minimumIntegerDigits: 2,
           })}:00`;
