@@ -866,3 +866,45 @@ export const mockPendingTaskTileData = [
     isDisabled: false,
   },
 ];
+
+export const mockShiftResponse = [
+  {
+    id: 14,
+    uuid: "eda9afb2-11f6-4545-b8e2-12fbf12d7a6c",
+    serviceType: "MedicationRequest",
+    comments: null,
+    startDate: 1704375236,
+    endDate: null,
+    slots: [
+      {
+        id: 1,
+        uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+        serviceType: "MedicationRequest",
+        status: "SCHEDULED",
+        startTime: 1690906550,
+        order: {
+          uuid: "1e9d8a0f-fac8-46bc-a229-7e2345750884",
+          drug: {
+            display: "Amoxicillin 250 mg/5 mL Powder for Oral Suspension",
+          },
+          route: {
+            uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+            display: "Oral",
+          },
+          dose: 25,
+          doseUnits: {
+            uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
+            display: "mg",
+          },
+          duration: 3,
+          durationUnits: {
+            uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+            display: "Day(s)",
+          },
+          asNeeded: false,
+          frequency: { display: "Once a day" },
+        },
+      },
+    ],
+  },
+];
