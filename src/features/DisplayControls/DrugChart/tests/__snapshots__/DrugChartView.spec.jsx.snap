@@ -3,279 +3,75 @@
 exports[`DrugChartWrapper matches snapshot 1`] = `
 <div>
   <div
-    class="drug-chart-dashboard"
+    class="drugchart-parent-container"
   >
     <div
-      class="drug-chart"
-      style="height: 198px;"
+      class="drugchart-shift-header"
     >
-      <div
-        class="drug-chart-left-panel"
-        data-testid="left-panel"
+      <button
+        class="margin-right-10 bx--btn bx--btn--tertiary bx--btn--expressive"
+        data-testid="currentShift"
+        tabindex="0"
+        type="button"
+      >
+        Current Shift
+      </button>
+      <button
+        class="margin-right-6 bx--btn bx--btn--tertiary bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+        data-testid="previousButton"
+        tabindex="0"
+        type="button"
       >
         <div
-          class="header"
+          class="bx--assistive-text"
         />
-        <div>
-          <table
-            style="overflow: hidden;"
-          >
-            <tbody>
-              <tr>
-                <td>
-                  <div
-                    class="drug-name-container"
-                  >
-                    <div
-                      class="drug-chart-drug-name"
-                    >
-                      Paracetamol 120 mg/5 mL Suspension (Liquid)
-                    </div>
-                    <div>
-                      TooltipCarbon
-                    </div>
-                    <div
-                      class="drug-list-drug-name-cell"
-                    >
-                      <div
-                        class="bx--tag bx--tag--blue"
-                        id="tag-2"
-                      >
-                        
-                        <span
-                          title="Rx"
-                        >
-                          Rx
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="dosage"
-                  >
-                    <span>
-                      25ml
-                    </span>
-                    <span>
-                       - 
-                      Oral
-                    </span>
-                    <span>
-                       - 
-                      3 Day(s)
-                    </span>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div
-        class="drug-chart-content"
-        data-testid="right-panel"
+        <svg
+          aria-hidden="true"
+          class="bx--btn__icon"
+          fill="currentColor"
+          focusable="false"
+          height="16"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 16 16"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 8L10 3 10.7 3.7 6.4 8 10.7 12.3 10 13z"
+          />
+        </svg>
+      </button>
+      <button
+        class="margin-right-10 bx--btn bx--btn--tertiary bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+        data-testid="nextButton"
+        tabindex="0"
+        type="button"
       >
         <div
-          class="calendar-header"
+          class="bx--assistive-text"
+        />
+        <svg
+          aria-hidden="true"
+          class="bx--btn__icon"
+          fill="currentColor"
+          focusable="false"
+          height="16"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 16 16"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          <div
-            style="display: flex;"
-          >
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              08
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              09
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              10
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              11
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              12
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              13
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              14
-              :00
-            </div>
-            <div
-              class="hour-header"
-              data-testid="hour"
-            >
-              15
-              :00
-            </div>
-          </div>
-        </div>
-        <table
-          class="drug-chart-calendar"
-        >
-          <tbody>
-            <tr>
-              <div
-                style="display: flex;"
-              >
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    class=""
-                    data-testid="left-icon"
-                  />
-                  <div
-                    class=""
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    class=""
-                    data-testid="left-icon"
-                  />
-                  <div
-                    class=""
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    class=""
-                    data-testid="left-icon"
-                  />
-                  <div
-                    class=""
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    class=""
-                    data-testid="left-icon"
-                  />
-                  <div
-                    class=""
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    class="highligtedCell"
-                    data-testid="left-icon"
-                  />
-                  <div
-                    class=""
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    class=""
-                    data-testid="left-icon"
-                  />
-                  <div
-                    class=""
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    class=""
-                    data-testid="left-icon"
-                  />
-                  <div
-                    class=""
-                    data-testid="right-icon"
-                  />
-                </div>
-                <div
-                  class="time-cell"
-                >
-                  <div
-                    class=""
-                    data-testid="left-icon"
-                  />
-                  <div
-                    class=""
-                    data-testid="right-icon"
-                  />
-                </div>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          <path
+            d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+          />
+        </svg>
+      </button>
+      <span>
+        05/01/2024 06:00 - 05/01/2024 14:00
+      </span>
     </div>
-    <div
-      class="drug-chart-legend"
-    >
-      <div>
-        <test-file-stub />
-        Pending
-      </div>
-      <div>
-        <test-file-stub />
-        Late
-      </div>
-      <div>
-        <test-file-stub />
-        Administered
-      </div>
-      <div>
-        <test-file-stub />
-        Administered Late
-      </div>
-      <div>
-        <test-file-stub />
-        Not Administered
-      </div>
-      <div>
-        <test-file-stub />
-        Stopped
-      </div>
+    <div>
+      Loading...
     </div>
   </div>
 </div>
@@ -283,8 +79,77 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
 
 exports[`DrugChartWrapper should render loading state when isLoading is true 1`] = `
 <div>
-  <div>
-    Loading...
+  <div
+    class="drugchart-parent-container"
+  >
+    <div
+      class="drugchart-shift-header"
+    >
+      <button
+        class="margin-right-10 bx--btn bx--btn--tertiary bx--btn--expressive"
+        data-testid="currentShift"
+        tabindex="0"
+        type="button"
+      >
+        Current Shift
+      </button>
+      <button
+        class="margin-right-6 bx--btn bx--btn--tertiary bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+        data-testid="previousButton"
+        tabindex="0"
+        type="button"
+      >
+        <div
+          class="bx--assistive-text"
+        />
+        <svg
+          aria-hidden="true"
+          class="bx--btn__icon"
+          fill="currentColor"
+          focusable="false"
+          height="16"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 16 16"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 8L10 3 10.7 3.7 6.4 8 10.7 12.3 10 13z"
+          />
+        </svg>
+      </button>
+      <button
+        class="margin-right-10 bx--btn bx--btn--tertiary bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+        data-testid="nextButton"
+        tabindex="0"
+        type="button"
+      >
+        <div
+          class="bx--assistive-text"
+        />
+        <svg
+          aria-hidden="true"
+          class="bx--btn__icon"
+          fill="currentColor"
+          focusable="false"
+          height="16"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 16 16"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+          />
+        </svg>
+      </button>
+      <span>
+        05/01/2024 06:00 - 05/01/2024 14:00
+      </span>
+    </div>
+    <div>
+      Loading...
+    </div>
   </div>
 </div>
 `;

@@ -5,8 +5,13 @@ import data from "../../../../utils/config.json";
 
 const { config: { drugChart = {} } = {} } = data;
 
-export const fetchMedications = async (patientUuid, forDate) => {
-  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&forDate=${forDate}`;
+export const fetchMedications = async (
+  patientUuid,
+  startDateTime,
+  endDateTime
+) => {
+  // const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&forDate=${forDate}`;
+  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}`;
   try {
     const response = await axios.get(FETCH_MEDICATIONS_URL);
     return response;
@@ -195,9 +200,16 @@ export const ifMedicationNotesPresent = (medicationNotes, side) => {
 
 export const currentShiftHoursArray = () => {
   const shiftTimeInHours = drugChart.shiftHours;
+  let startTime = drugChart.startTime;
   const rangeArray = [];
-  for (let i = 0; i < 24; i += shiftTimeInHours) {
-    rangeArray.push(`${i}-${i + (shiftTimeInHours - 1)}`);
+
+  let i = 0;
+  while (i < 24 / shiftTimeInHours) {
+    rangeArray.push(
+      `${startTime}-${(startTime + (shiftTimeInHours - 1)) % 24}`
+    );
+    startTime = (startTime + shiftTimeInHours) % 24;
+    i++;
   }
 
   // finding the current hour range
@@ -220,4 +232,67 @@ export const currentShiftHoursArray = () => {
     currentShiftHoursArray.push(i);
   }
   return currentShiftHoursArray;
+};
+
+export const getDateTime = (date, hour) => {
+  let currentShiftStartTime = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+  return currentShiftStartTime.setHours(hour);
+};
+
+export const getNextShiftDetails = (
+  shiftTimeArray = [],
+  shiftTimeInHours = 12,
+  date
+) => {
+  const shiftLastHour = shiftTimeArray[shiftTimeArray.length - 1];
+  const currentDate = date;
+  let currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+  const startDateTime = currentShiftStartTime.setHours(shiftLastHour + 1);
+
+  // reset the currentShiftStartTime value
+  currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+  const endDateTime = currentShiftStartTime.setHours(
+    shiftLastHour + 1 + shiftTimeInHours
+  );
+  date = currentShiftStartTime;
+  return { startDateTime, endDateTime, nextDate: date };
+};
+
+export const getPreviousShiftDetails = (
+  shiftTimeArray = [],
+  shiftTimeInHours = 12,
+  date
+) => {
+  const shiftFirstHour = shiftTimeArray[0];
+  const currentDate = date;
+  let currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+  const endDateTime = currentShiftStartTime.setHours(shiftFirstHour);
+
+  // reset the currentShiftStartTime value
+  currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+  const startDateTime = currentShiftStartTime.setHours(
+    shiftFirstHour - shiftTimeInHours
+  );
+  date = currentShiftStartTime;
+  return { startDateTime, endDateTime, nextDate: date };
 };
