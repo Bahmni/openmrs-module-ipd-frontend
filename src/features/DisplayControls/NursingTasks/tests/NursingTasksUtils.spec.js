@@ -28,9 +28,10 @@ describe("NursingTasksUtils", () => {
       axios.get.mockImplementation(() => Promise.resolve(mockResponse));
 
       const patientUuid = "test-uuid";
-      const forDate = "1690906550";
-      const expectedUrl = `/openmrs/ws/rest/v1/ipd/schedule/type/medication?patientUuid=${patientUuid}&forDate=${forDate}`;
-      await fetchMedicationNursingTasks(patientUuid, forDate);
+      const startTime = "1690906550";
+      const endTime = "1690906550";
+      const expectedUrl = `/openmrs/ws/rest/v1/ipd/schedule/type/medication?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}`;
+      await fetchMedicationNursingTasks(patientUuid, startTime, endTime);
       expect(axios.get).toHaveBeenCalledWith(expectedUrl);
     });
 

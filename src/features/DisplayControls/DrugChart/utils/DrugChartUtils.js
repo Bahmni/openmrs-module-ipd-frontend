@@ -10,7 +10,6 @@ export const fetchMedications = async (
   startDateTime,
   endDateTime
 ) => {
-  // const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&forDate=${forDate}`;
   const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}`;
   try {
     const response = await axios.get(FETCH_MEDICATIONS_URL);
