@@ -20,7 +20,12 @@ import { componentKeys } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import data from "../../../../utils/config.json";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
-import { currentShiftHoursArray, getDateTime, getNextShiftDetails, getPreviousShiftDetails } from "../../DrugChart/utils/DrugChartUtils";
+import {
+  currentShiftHoursArray,
+  getDateTime,
+  getNextShiftDetails,
+  getPreviousShiftDetails,
+} from "../../DrugChart/utils/DrugChartUtils";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
@@ -333,7 +338,10 @@ export default function NursingTasks(props) {
             hostApi={{
               onClose: () => {
                 setShowSuccessNotification(false);
-                refreshDisplayControl([componentKeys.NURSING_TASKS]);
+                refreshDisplayControl([
+                  componentKeys.NURSING_TASKS,
+                  componentKeys.DRUG_CHART,
+                ]);
               },
             }}
           />

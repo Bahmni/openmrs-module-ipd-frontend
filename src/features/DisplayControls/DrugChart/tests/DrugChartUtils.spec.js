@@ -23,7 +23,7 @@ describe("DrugChartUtils", () => {
   });
 
   describe("fetchMedications", () => {
-    it.skip("should make axios get call with url", async () => {
+    it("should make axios get call with url", async () => {
       axios.get.mockImplementation(() => Promise.resolve(mockResponse));
 
       const patientUuid = "test-uuid";
