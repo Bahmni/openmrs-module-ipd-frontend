@@ -133,7 +133,9 @@ export default function DrugChartWrapper(props) {
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
-
+  const dateFormatString = drugChart.enable24HourTime
+    ? "DD/MM/YYYY HH:mm"
+    : "DD/MM/YYYY hh:mm A";
   return (
     <div className="drugchart-parent-container">
       <div className="drugchart-shift-header">
@@ -173,8 +175,8 @@ export default function DrugChartWrapper(props) {
         <span>
           {`${formatDate(
             startEndDates.startDate,
-            "DD/MM/YYYY HH:mm"
-          )} - ${formatDate(startEndDates.endDate, "DD/MM/YYYY HH:mm")}`}
+            dateFormatString
+          )} - ${formatDate(startEndDates.endDate, dateFormatString)}`}
         </span>
       </div>
       {isLoading ? (

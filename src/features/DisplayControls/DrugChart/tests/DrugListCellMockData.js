@@ -13,7 +13,7 @@ export const testDrugInfoWithAdministeredLateStatus = {
   drugRoute: "Oral",
   administrationInfo: [
     {
-      time: 8.45,
+      time: "8:45",
       kind: "Administered-Late",
     },
   ],
@@ -29,7 +29,7 @@ export const testDrugInfoWithAdministeredStatus = {
   drugRoute: "Oral",
   administrationInfo: [
     {
-      time: 8.45,
+      time: "8:45",
       kind: "Administered",
     },
   ],
