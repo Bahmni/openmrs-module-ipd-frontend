@@ -244,7 +244,10 @@ export default function NursingTasks(props) {
               className="margin-right-10"
               data-testid="current-shift"
             >
-              Current Shift
+              <FormattedMessage
+                id={"CURRENT_SHIFT"}
+                defaultMessage={"Current Shift"}
+              />
             </Button>
             <Button
               renderIcon={ChevronLeft16}

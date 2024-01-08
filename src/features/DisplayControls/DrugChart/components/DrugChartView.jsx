@@ -41,11 +41,13 @@ export default function DrugChartWrapper(props) {
   );
 
   const callFetchMedications = async (startDateTime, endDateTime) => {
+    const startDateTimeInSeconds = startDateTime / 1000;
+    const endDateTimeInSeconds = endDateTime / 1000 - 60;
     try {
       const response = await fetchMedications(
         patientId,
-        startDateTime / 1000,
-        endDateTime / 1000
+        startDateTimeInSeconds,
+        endDateTimeInSeconds
       );
       setDrugChartData(response.data);
     } catch (e) {
@@ -141,7 +143,10 @@ export default function DrugChartWrapper(props) {
           className="margin-right-10"
           data-testid="currentShift"
         >
-          Current Shift
+          <FormattedMessage
+            id={"CURRENT_SHIFT"}
+            defaultMessage={"Current Shift"}
+          />
         </Button>
         <Button
           renderIcon={ChevronLeft16}
