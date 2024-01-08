@@ -66,24 +66,42 @@ const AddEmergencyTasks = (props) => {
   };
 
   const createEmergencyMedicationPayload = () => {
-      const dateTime = moment(administrationDate+" "+administrationTime); 
-      const utcTimeEpoch = moment.utc(dateTime).unix();
-      console.log("Date Time ", dateTime, " -------",utcTimeEpoch);
-      const emergencyMedicationPayload = {
-        patientUuid: patientId,
-        drugUuid: selectedDrug?.uuid,
-        dose:dosage,
-        doseUnitsUuid: doseUnits?.uuid, 
-        routeUuid: routes?.uuid,
-        providers: [{ providerUuid: providerId, function: performerFunction }
-         ,{
-          providerUuid: requestedProvider?.uuid,function: requesterFunction
-         }],
-        notes: [{ authorUuid: providerId, text: notes }],
-        status: "completed",
-        administeredDateTime: utcTimeEpoch,
-      };
+    const time = administrationTime.split(":");
+    const date = new Date(administrationDate);
+    date.setHours(time[0]);
+    date.setMinutes(time[1]);
+    // const dateTime = moment(administrationDate+" "+time); 
+    const utcTimeEpoch = moment.utc(date).unix();
+    console.log("Date Time -------",utcTimeEpoch);
+    const emergencyMedicationPayload = {
+      patientUuid: patientId,
+      drugUuid: selectedDrug?.uuid,
+      dose:dosage,
+      doseUnitsUuid: doseUnits?.uuid, 
+      routeUuid: routes?.uuid,
+      providers: [{ providerUuid: providerId, function: performerFunction }
+        ,{
+        providerUuid: requestedProvider?.uuid,function: requesterFunction
+        }],
+      notes: [{ authorUuid: providerId, text: notes }],
+      status: "completed",
+      administeredDateTime: utcTimeEpoch,
+    };
+    console.log("emergencyMedicationPayload --- ", emergencyMedicationPayload)
     return emergencyMedicationPayload;
+  };
+
+  const handleSaveEmergencyMedication = async () => {
+    console.log("in handleSaveEmergencyMedication")
+    const administeredTask = createEmergencyMedicationPayload();
+    const response = await saveEmergencyMedication(administeredTask);
+    console.log("response -- ", response);
+    response.status === 200 ? saveAdhocTasks() : null;
+  };
+
+  const saveAdhocTasks = () => {
+    setShowSuccessNotification(true);
+    updateEmergencyTasksSlider(false);
   };
 
   const fetchAllProviders = async () => {
@@ -274,11 +292,7 @@ const AddEmergencyTasks = (props) => {
         </Tabs>
       </div>
       <SaveAndCloseButtons
-        onSave={() => {
-         const emergencyTask =  createEmergencyMedicationPayload();
-        const response =  saveEmergencyMedication(emergencyTask);
-          response === 200 ? updateEmergencyTasksSlider(true): null;
-        }}
+        onSave={handleSaveEmergencyMedication}
         onClose={() => {
           updateEmergencyTasksSlider(false);
         }}

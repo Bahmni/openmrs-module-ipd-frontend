@@ -16,10 +16,10 @@ export const ADDRESS_HEIRARCHY =
   hostUrl +
   "/openmrs/module/addresshierarchy/ajax/getOrderedAddressHierarchyLevels.form";
 export const homePageUrl = "/bahmni/home/#/dashboard";
-export const EMERGENCY_MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/adhocMedicationAdministrations";
 
 export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
 export const ADMINISTERED_MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/scheduledMedicationAdministrations";
+export const EMERGENCY_MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/adhocMedicationAdministrations";
 export const PATIENT_URL = RESTWS_V1 + "/patient";
 
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";

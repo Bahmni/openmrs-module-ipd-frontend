@@ -195,6 +195,7 @@ export default function NursingTasks(props) {
             patientId={patientId}
             providerId={provider.uuid}
             updateEmergencyTasksSlider={updateEmergencyTasksSlider}
+            setShowSuccessNotification={setShowSuccessNotification}
           />
         )}
         {medicationNursingTasks && medicationNursingTasks.length === 0 ? (
