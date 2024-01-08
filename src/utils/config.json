@@ -46,7 +46,8 @@
     "drugChart": {
       "timeInMinutesFromNowToShowPastTaskAsLate": 60,
       "timeInMinutesFromStartTimeToShowAdministeredTaskAsLate": 30,
-      "shiftHours": 8
+      "shiftHours": 8,
+      "startTime": 6
     },
     "medicationTags": {
       "asNeeded": "Rx-PRN",

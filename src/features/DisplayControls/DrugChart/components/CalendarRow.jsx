@@ -1,17 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import TimeCell from "./TimeCell.jsx";
-import { currentShiftHoursArray } from "../utils/DrugChartUtils.js";
+import { areDatesSame } from "../../../../utils/DateTimeUtils.js";
 export default function CalendarRow(props) {
-  const { rowData } = props;
-  const hours = currentShiftHoursArray();
+  const { rowData, currentShiftArray, selectedDate } = props;
+  const hours = currentShiftArray;
+
   return (
     <div style={{ display: "flex" }}>
       {hours.map((hour) => {
         const date = new Date();
         const currentHour = date.getHours();
         const currentMinute = date.getMinutes();
-        const isCurrentHour = hour === currentHour;
+        const sameDate = areDatesSame(date, selectedDate);
+        const isCurrentHour = hour === currentHour && sameDate;
         const highlightedCell = currentMinute < 30 ? "left" : "right";
 
         if (rowData[hour]) {
@@ -43,4 +45,6 @@ export default function CalendarRow(props) {
 
 CalendarRow.propTypes = {
   rowData: PropTypes.object.isRequired,
+  currentShiftArray: PropTypes.array,
+  selectedDate: PropTypes.instanceOf(Date),
 };
