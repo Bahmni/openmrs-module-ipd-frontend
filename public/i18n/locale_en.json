@@ -66,5 +66,6 @@
   "PATIENT_DASHBOARD": "Patient Dashboard",
   "DISCHARGE_SUMMARY": "Discharge Summary",
   "NO_MEDICATION_DRUG_CHART_MESSAGE": "No Medication has been scheduled in this shift",
-  "CURRENT_SHIFT": "Current Shift"
+  "CURRENT_SHIFT": "Current Shift",
+  "EDIT_DRUG_CHART": "Edit"
 }

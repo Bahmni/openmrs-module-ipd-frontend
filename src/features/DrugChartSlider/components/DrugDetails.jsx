@@ -15,7 +15,7 @@ export const DrugDetails = ({ hostData }) => {
         id="drug-name"
         className="drug-name"
         type="text"
-        value={hostData?.drugOrder?.drug?.name}
+        value={hostData?.drugOrder?.drugOrder?.drug?.name}
         labelText="Drug Name"
         disabled
       />
@@ -56,14 +56,14 @@ export const DrugDetails = ({ hostData }) => {
             id={"Dropdown"}
             onChange={() => {}}
             label={"Duration"}
-            value={hostData?.drugOrder?.duration}
+            value={hostData?.drugOrder?.drugOrder?.duration}
             isDisabled={true}
           />
           <DropdownCarbon
             id={"Dropdown"}
             onChange={() => {}}
             titleText={" "}
-            selectedValue={hostData?.drugOrder?.durationUnit}
+            selectedValue={hostData?.drugOrder?.drugOrder?.durationUnits}
             options={[]}
             isDisabled={true}
           />
@@ -73,7 +73,7 @@ export const DrugDetails = ({ hostData }) => {
           onChange={() => {}}
           titleText={"Start Date"}
           title={"Start Date"}
-          value={moment(hostData?.drugOrder?.scheduledDate).format(
+          value={moment(hostData?.drugOrder?.drugOrder?.scheduledDate).format(
             "MM/DD/YYYY"
           )}
           isDisabled={true}

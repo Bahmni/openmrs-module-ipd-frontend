@@ -1,6 +1,7 @@
 import {
   PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL,
   CLINICAL_CONFIG_URL,
+  ALL_DRUG_ORDERS_URL,
 } from "../../../../constants";
 import { getLocale } from "../../../i18n/utils";
 import axios from "axios";
@@ -69,6 +70,19 @@ export const getPrescribedAndActiveDrugOrders = async (
   }
 };
 
+export const getAllDrugOrders = async (visitUuid) => {
+  try {
+    const response = await axios.get(ALL_DRUG_ORDERS_URL(visitUuid), {
+      withCredentials: true,
+    });
+    console.log("response", response);
+    if (response.status !== 200) throw new Error(response.statusText);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const getConfigsForTreatments = async () => {
   try {
     const response = await axios.get(CLINICAL_CONFIG_URL, {
@@ -88,21 +102,21 @@ export const getConfigsForTreatments = async () => {
 };
 
 export const updateDrugOrderList = (drugOrderList) => {
-  drugOrderList.visitDrugOrders.forEach((visitDrugOrder) => {
-    visitDrugOrder.uniformDosingType = {
-      dose: visitDrugOrder.dosingInstructions.dose,
-      doseUnits: visitDrugOrder.dosingInstructions.doseUnits,
-      frequency: visitDrugOrder.dosingInstructions.frequency,
+  drugOrderList.ipdDrugOrders.forEach((ipdDrugOrder) => {
+    ipdDrugOrder.uniformDosingType = {
+      dose: ipdDrugOrder.drugOrder.dosingInstructions.dose,
+      doseUnits: ipdDrugOrder.drugOrder.dosingInstructions.doseUnits,
+      frequency: ipdDrugOrder.drugOrder.dosingInstructions.frequency,
     };
-    visitDrugOrder.route = visitDrugOrder.dosingInstructions.route;
-    visitDrugOrder.durationUnit = visitDrugOrder.durationUnits;
+    ipdDrugOrder.route = ipdDrugOrder.drugOrder.dosingInstructions.route;
+    ipdDrugOrder.durationUnit = ipdDrugOrder.drugOrder.durationUnits;
     const administrationInstructions = JSON.parse(
-      visitDrugOrder.dosingInstructions.administrationInstructions
+      ipdDrugOrder.drugOrder.dosingInstructions.administrationInstructions
     );
-    visitDrugOrder.instructions = administrationInstructions.instructions
+    ipdDrugOrder.instructions = administrationInstructions.instructions
       ? administrationInstructions.instructions
       : "";
-    visitDrugOrder.additionalInstructions =
+    ipdDrugOrder.additionalInstructions =
       administrationInstructions.additionalInstructions
         ? administrationInstructions.additionalInstructions
         : "";

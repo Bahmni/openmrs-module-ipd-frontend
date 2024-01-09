@@ -4,7 +4,7 @@ import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import {
-  getPrescribedAndActiveDrugOrders,
+  getAllDrugOrders,
   treatmentHeaders,
   getConfigsForTreatments,
   updateDrugOrderList,
@@ -29,6 +29,7 @@ const Treatments = (props) => {
     updateSliderOpen,
     sliderContentModified,
     setSliderContentModified,
+    visitUuid,
   } = useContext(SliderContext);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
@@ -38,6 +39,7 @@ const Treatments = (props) => {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [drugChartNotes, setDrugChartNotes] = useState("");
   const [additionalData, setAdditionalData] = useState([]);
+  // const [isEditDisabled, setEditDisabled] = useState(false);
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -47,6 +49,8 @@ const Treatments = (props) => {
     });
   };
   var drugOrderList = {};
+  var showEditDrugChartLink = false;
+  var isEditDisabled = false;
   const sliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -73,6 +77,7 @@ const Treatments = (props) => {
       updateTreatmentsSlider(false);
       refreshDisplayControl([componentKeys.NURSING_TASKS]);
       refreshDisplayControl([componentKeys.DRUG_CHART]);
+      refreshDisplayControl([componentKeys.TREATMENTS]);
     },
   };
 
@@ -90,8 +95,8 @@ const Treatments = (props) => {
     }));
     setSelectedDrugOrder((prevState) => ({
       ...prevState,
-      drugOrder: drugOrderList.visitDrugOrders.find(
-        (drugOrder) => drugOrder.uuid === drugOrderId
+      drugOrder: drugOrderList.ipdDrugOrders.find(
+        (drugOrderObject) => drugOrderObject.drugOrder.uuid === drugOrderId
       ),
     }));
     if (isSliderOpen.treatments) {
@@ -108,8 +113,12 @@ const Treatments = (props) => {
     />
   );
 
-  const isIPDDrugOrder = (drugOrder) => {
-    return drugOrder.careSetting === "INPATIENT";
+  const EditDrugChart = (
+    <FormattedMessage id={"EDIT_DRUG_CHART"} defaultMessage={"Edit"} />
+  );
+
+  const isIPDDrugOrder = (drugOrderObject) => {
+    return drugOrderObject.drugOrder.careSetting === "INPATIENT";
   };
 
   const setDosingInstructions = (drugOrder) => {
@@ -131,15 +140,31 @@ const Treatments = (props) => {
   };
 
   const modifyTreatmentData = (drugOrders) => {
-    const treatments = drugOrders.visitDrugOrders
-      .filter((drugOrder) => isIPDDrugOrder(drugOrder))
-      .map((drugOrder) => {
+    console.log("ipdDrugOrders in modifyTreatmentData", drugOrders);
+    const treatments = drugOrders.ipdDrugOrders
+      .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
+      .map((drugOrderObject) => {
+        if (drugOrderObject.drugOrderSchedule != null) {
+          showEditDrugChartLink = true;
+          if (
+            drugOrderObject.drugOrderSchedule.medicationAdministrationStarted
+          ) {
+            // setEditDisabled(true);
+            isEditDisabled = true;
+          } else {
+            // setEditDisabled(false);
+            isEditDisabled = false;
+          }
+        } else {
+          showEditDrugChartLink = false;
+        }
+        const drugOrder = drugOrderObject.drugOrder;
         return {
           id: drugOrder.uuid,
           startDate: formatDate(drugOrder.effectiveStartDate, "DD/MM/YYYY"),
-          drugName: getDrugName(drugOrder),
+          drugName: getDrugName(drugOrderObject),
           dosageDetails: setDosingInstructions(drugOrder),
-          providerName: drugOrder.provider.name,
+          providerName: drugOrderObject.provider.name,
           status: (
             <span className={drugOrder.dateStopped && "red-text"}>
               {drugOrder.dateStopped && (
@@ -147,15 +172,26 @@ const Treatments = (props) => {
               )}
             </span>
           ),
-          actions: !drugOrder.dateStopped && (
-            <Link onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}>
-              {AddToDrugChart}
-            </Link>
-          ),
+          actions:
+            !drugOrder.dateStopped &&
+            (!showEditDrugChartLink ? (
+              <Link onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}>
+                {AddToDrugChart}
+              </Link>
+            ) : (
+              <Link
+                disabled={isEditDisabled}
+                onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}
+              >
+                {EditDrugChart}
+              </Link>
+            )),
           additionalData: {
-            instructions: drugOrder.instructions ? drugOrder.instructions : "",
-            additionalInstructions: drugOrder.additionalInstructions
-              ? drugOrder.additionalInstructions
+            instructions: drugOrderObject.instructions
+              ? drugOrderObject.instructions
+              : "",
+            additionalInstructions: drugOrderObject.additionalInstructions
+              ? drugOrderObject.additionalInstructions
               : "",
             recordedDate: formatDate(drugOrder.dateActivated, "DD/MM/YYYY"),
             recordedTime: formatDate(drugOrder.dateActivated, "HH:mm"),
@@ -176,10 +212,11 @@ const Treatments = (props) => {
     setTreatments(treatments);
     setAdditionalData(additionalMappedData);
   };
-  const getDrugName = (drugOrder) => {
+  const getDrugName = (drugOrderObject) => {
+    const drugOrder = drugOrderObject.drugOrder;
     if (
       drugOrder.drug &&
-      (drugOrder.instructions || drugOrder.additionalInstructions)
+      (drugOrderObject.instructions || drugOrderObject.additionalInstructions)
     ) {
       return (
         <div className="notes-icon-div">
@@ -202,8 +239,8 @@ const Treatments = (props) => {
 
   useEffect(() => {
     const getActiveDrugOrdersAndTreatmentConfig = async () => {
-      drugOrderList = await getPrescribedAndActiveDrugOrders(patientId);
-      if (drugOrderList.visitDrugOrders.length > 0) {
+      drugOrderList = await getAllDrugOrders(visitUuid);
+      if (drugOrderList.ipdDrugOrders.length > 0) {
         drugOrderList = updateDrugOrderList(drugOrderList);
         modifyTreatmentData(drugOrderList);
       }

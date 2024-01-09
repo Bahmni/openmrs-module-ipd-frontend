@@ -217,11 +217,12 @@ const DrugChartSlider = (props) => {
       : setStartTime(moment(time, "hh:mm A"));
   };
 
+  console.log("hostData", hostData);
   const createDrugChartPayload = () => {
     var payload = {
       providerUuid: hostData?.drugOrder?.provider?.uuid,
       patientUuid: hostData?.patientId,
-      orderUuid: hostData?.drugOrder?.uuid,
+      orderUuid: hostData?.drugOrder?.drugOrder?.uuid,
       slotStartTime: null,
       firstDaySlotsStartTime: null,
       dayWiseSlotsStartTime: null,
@@ -233,7 +234,7 @@ const DrugChartSlider = (props) => {
       const startTimeUTCEpoch = getUTCTimeEpoch(
         startTime,
         enable24HourTimers,
-        hostData?.drugOrder?.scheduledDate
+        hostData?.drugOrder?.drugOrder?.scheduledDate
       );
       payload.slotStartTime = startTimeUTCEpoch;
       payload.medicationFrequency =
@@ -242,7 +243,7 @@ const DrugChartSlider = (props) => {
     if (enableSchedule) {
       const nextScheduleDate = 24 * 60 * 60;
       const finalScheduleDate =
-        nextScheduleDate * hostData?.drugOrder?.duration;
+        nextScheduleDate * hostData?.drugOrder?.drugOrder?.duration;
 
       const firstDaySchedulesUTCTimeEpoch = firstDaySchedules.reduce(
         (result, schedule) => {
@@ -251,7 +252,7 @@ const DrugChartSlider = (props) => {
               getUTCTimeEpoch(
                 schedule,
                 enable24HourTimers,
-                hostData?.drugOrder?.scheduledDate
+                hostData?.drugOrder?.drugOrder?.scheduledDate
               )
             );
           }
@@ -264,7 +265,7 @@ const DrugChartSlider = (props) => {
         getUTCTimeEpoch(
           schedule,
           enable24HourTimers,
-          hostData?.drugOrder?.scheduledDate
+          hostData?.drugOrder?.drugOrder?.scheduledDate
         )
       );
 
@@ -272,7 +273,7 @@ const DrugChartSlider = (props) => {
         getUTCTimeEpoch(
           schedule,
           enable24HourTimers,
-          hostData?.drugOrder?.scheduledDate
+          hostData?.drugOrder?.drugOrder?.scheduledDate
         )
       );
 
