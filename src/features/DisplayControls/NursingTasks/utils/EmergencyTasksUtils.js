@@ -45,7 +45,6 @@ export const fetchMedicationConfig = async () => {
 };
 
 export const saveEmergencyMedication = async (emergencyMedication) => {
-  console.log("in save emergency medication api call ", emergencyMedication);
   try {
     return await axios.post(
       EMERGENCY_MEDICATIONS_BASE_URL,

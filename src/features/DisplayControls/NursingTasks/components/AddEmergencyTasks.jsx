@@ -24,7 +24,7 @@ import SearchDrug from "../../../SearchDrug/SearchDrug";
 import moment from "moment/moment";
 
 const AddEmergencyTasks = (props) => {
-  const { patientId, providerId, updateEmergencyTasksSlider } = props;
+  const { patientId, providerId, updateEmergencyTasksSlider, setShowSuccessNotification} = props;
   const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [dosageConfig, setDosageConfig] = useState({});
@@ -70,15 +70,13 @@ const AddEmergencyTasks = (props) => {
     const date = new Date(administrationDate);
     date.setHours(time[0]);
     date.setMinutes(time[1]);
-    // const dateTime = moment(administrationDate+" "+time); 
     const utcTimeEpoch = moment.utc(date).unix();
-    console.log("Date Time -------",utcTimeEpoch);
     const emergencyMedicationPayload = {
       patientUuid: patientId,
       drugUuid: selectedDrug?.uuid,
       dose:dosage,
-      doseUnitsUuid: doseUnits?.uuid, 
-      routeUuid: routes?.uuid,
+      doseUnits: doseUnits?.value, 
+      route: routes?.value,
       providers: [{ providerUuid: providerId, function: performerFunction }
         ,{
         providerUuid: requestedProvider?.uuid,function: requesterFunction
@@ -87,15 +85,12 @@ const AddEmergencyTasks = (props) => {
       status: "completed",
       administeredDateTime: utcTimeEpoch,
     };
-    console.log("emergencyMedicationPayload --- ", emergencyMedicationPayload)
     return emergencyMedicationPayload;
   };
 
   const handleSaveEmergencyMedication = async () => {
-    console.log("in handleSaveEmergencyMedication")
     const administeredTask = createEmergencyMedicationPayload();
     const response = await saveEmergencyMedication(administeredTask);
-    console.log("response -- ", response);
     response.status === 200 ? saveAdhocTasks() : null;
   };
 
@@ -304,6 +299,8 @@ const AddEmergencyTasks = (props) => {
 
 AddEmergencyTasks.propTypes = {
   patientId: PropTypes.string.isRequired,
+  providerId: PropTypes.string.isRequired,
   updateEmergencyTasksSlider: PropTypes.func.isRequired,
+  setShowSuccessNotification: PropTypes.func.isRequired
 };
 export default AddEmergencyTasks;
