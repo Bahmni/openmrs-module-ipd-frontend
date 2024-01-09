@@ -53,6 +53,9 @@ export const SortDrugChartData = (drugChartData) => {
 export const getDateFormatString = () =>
   drugChart.enable24HourTime ? "DD/MM/YYYY HH:mm" : "DD/MM/YYYY hh:mm A";
 
+export const getHourFormatString = () =>
+  drugChart.enable24HourTime ? "HH:mm" : "hh:mm";
+
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
   const slotDataByOrder = [];
@@ -81,7 +84,10 @@ export const TransformDrugChartData = (drugChartData) => {
           const { administeredDateTime, providers, notes } =
             medicationAdministration;
           const administeredDateTimeObject = new Date(administeredDateTime);
-          administeredTime = moment(administeredDateTimeObject).format("HH:mm");
+          const hourFormatString = getHourFormatString();
+          administeredTime = moment(administeredDateTimeObject).format(
+            hourFormatString
+          );
           adminInfo =
             providers[0].provider.display + " [" + administeredTime + "]";
           administeredStartHour = administeredDateTimeObject.getHours();
