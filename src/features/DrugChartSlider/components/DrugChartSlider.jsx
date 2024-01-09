@@ -17,6 +17,10 @@ import {
   updateStartTimeBasedOnFrequency,
   isInvalidTimeTextPresent,
   getUTCTimeEpoch,
+  epochTo24HourTimeFormat,
+  epochTo12HourTimeFormat,
+  setDrugOrderScheduleIn24HourFormat,
+  setDrugOrderScheduleIn12HourFormat,
 } from "../utils/DrugChartSliderUtils";
 import { DrugDetails } from "./DrugDetails";
 import { DrugInstructions } from "./DrugInstructions";
@@ -34,9 +38,7 @@ const DrugChartSlider = (props) => {
   );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
   const isEdit = Boolean(hostData?.drugOrder?.drugOrderSchedule);
-  console.log("isEdit", isEdit);
   const isAutoFill = Boolean(enableSchedule?.scheduleTiming) && !isEdit;
-
   const { setSliderContentModified } = useContext(SliderContext);
   const updateSliderContentModified = (value) => {
     setSliderContentModified((prev) => {
@@ -48,7 +50,6 @@ const DrugChartSlider = (props) => {
   };
   const [firstDaySlotsMissed, setFirstDaySlotsMissed] = useState(0);
   const [startTime, setStartTime] = useState("");
-
   const [
     showStartTimeBeyondNextDoseWarning,
     setShowStartTimeBeyondNextDoseWarning,
@@ -220,7 +221,6 @@ const DrugChartSlider = (props) => {
       : setStartTime(moment(time, "hh:mm A"));
   };
 
-  console.log("hostData", hostData);
   const createDrugChartPayload = () => {
     var payload = {
       providerUuid: hostData?.drugOrder?.provider?.uuid,
@@ -321,64 +321,6 @@ const DrugChartSlider = (props) => {
     }
   };
 
-  const epochTo24HourTime = (epochSeconds) => {
-    const date = new Date(epochSeconds * 1000);
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const formattedTime = `${hours}:${minutes}`;
-    return formattedTime;
-  };
-
-  const epochTo12HourTime = (epochSeconds) => {
-    const date = new Date(epochSeconds * 1000);
-    const hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const amOrPm = hours >= 12 ? "PM" : "AM";
-    const formattedHours = (hours % 12 || 12).toString().padStart(2, "0");
-    const formattedTime = `${formattedHours}:${minutes} ${amOrPm}`;
-    return formattedTime;
-  };
-
-  const setDrugOrderScheduleIn24HourFormat = (schedule) => {
-    const drugOrderSchduleIn24HourFormat = {};
-    Object.keys(schedule).forEach((key) => {
-      if (
-        key === "firstDaySlotsStartTime" ||
-        key === "dayWiseSlotsStartTime" ||
-        key === "remainingDaySlotsStartTime"
-      ) {
-        const scheduleArray = schedule[key];
-        if (scheduleArray) {
-          const formattedScheduleArray = scheduleArray.map((schedule) =>
-            epochTo24HourTime(schedule)
-          );
-          drugOrderSchduleIn24HourFormat[key] = formattedScheduleArray;
-        }
-      }
-    });
-    return drugOrderSchduleIn24HourFormat;
-  };
-
-  const setDrugOrderScheduleIn12HourFormat = (schedule) => {
-    const drugOrderSchduleIn12HourFormat = {};
-    Object.keys(schedule).forEach((key) => {
-      if (
-        key === "firstDaySlotsStartTime" ||
-        key === "dayWiseSlotsStartTime" ||
-        key === "remainingDaySlotsStartTime"
-      ) {
-        const scheduleArray = schedule[key];
-        if (scheduleArray) {
-          const formattedScheduleArray = scheduleArray.map((schedule) =>
-            epochTo12HourTime(schedule)
-          );
-          drugOrderSchduleIn12HourFormat[key] = formattedScheduleArray;
-        }
-      }
-    });
-    return drugOrderSchduleIn12HourFormat;
-  };
-
   useEffect(() => {
     if (isAutoFill) {
       const scheduleTimings = enable24HourTimers
@@ -435,11 +377,11 @@ const DrugChartSlider = (props) => {
 
       if (Object.keys(scheduleTimings).length === 0) {
         const startTimeValue = enable24HourTimers
-          ? epochTo24HourTime(drugOrderSchedule.slotStartTime)
-          : epochTo12HourTime(drugOrderSchedule.slotStartTime);
+          ? epochTo24HourTimeFormat(drugOrderSchedule.slotStartTime)
+          : epochTo12HourTimeFormat(drugOrderSchedule.slotStartTime);
         setStartTime(startTimeValue);
       }
-      console.log("scheduleTimings", scheduleTimings);
+
       if (scheduleTimings.firstDaySlotsStartTime) {
         setFirstDaySlotsMissed(1);
         scheduleTimings.firstDaySlotsStartTime.forEach((schedule) => {

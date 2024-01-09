@@ -65,5 +65,6 @@
   "NURSING_TASKS_SAVE_MESSAGE": "Medication task(s) updated successfully",
   "PATIENT_DASHBOARD": "Patient Dashboard",
   "DISCHARGE_SUMMARY": "Discharge Summary",
-  "EDIT_DRUG_CHART": "Edit Drug Chart"
+  "EDIT_DRUG_CHART": "Edit Drug Chart",
+  "DRUG_CHART_MODAL_EDIT_MESSAGE": "Medication task(s) updated successfully"
 }
