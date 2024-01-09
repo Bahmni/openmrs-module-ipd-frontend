@@ -47,7 +47,8 @@
       "timeInMinutesFromNowToShowPastTaskAsLate": 60,
       "timeInMinutesFromStartTimeToShowAdministeredTaskAsLate": 30,
       "shiftHours": 8,
-      "startTime": 6
+      "startTime": 6,
+      "enable24HourTime": true
     },
     "medicationTags": {
       "asNeeded": "Rx-PRN",

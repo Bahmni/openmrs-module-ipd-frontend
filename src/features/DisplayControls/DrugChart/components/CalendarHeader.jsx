@@ -1,19 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "../styles/CalendarHeader.scss";
+import data from "../../../../utils/config.json";
 
 export default function CalendarHeader(props) {
   const { currentShiftArray } = props;
-  const hours = currentShiftArray;
+  const enable24hour = data.config.drugChart.enable24HourTime;
 
   return (
     <div className="calendar-header">
       <div style={{ display: "flex" }}>
-        {hours.map((hour) => {
+        {currentShiftArray.map((hour) => {
+          const transformedHour = enable24hour ? hour : hour % 12 || 12;
+          const formattedHour = `${transformedHour.toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+          })}:00`;
+
           return (
             <div data-testid="hour" key={hour} className={"hour-header"}>
-              {hour.toLocaleString("en-US", { minimumIntegerDigits: 2 })}
-              :00
+              {formattedHour}
             </div>
           );
         })}
@@ -21,7 +26,6 @@ export default function CalendarHeader(props) {
     </div>
   );
 }
-
 CalendarHeader.propTypes = {
   currentShiftArray: PropTypes.array,
 };
