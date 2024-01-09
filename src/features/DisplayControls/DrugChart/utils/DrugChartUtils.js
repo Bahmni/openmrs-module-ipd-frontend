@@ -57,7 +57,7 @@ export const TransformDrugChartData = (drugChartData) => {
     slots.forEach((slot) => {
       let administeredStartHour, administeredStartMinutes, medicationNotes;
       const slotData = {};
-      const { startTime, status, order, medicationAdministration } = slot;
+      const { startTime, status, order, medicationAdministration, serviceType } = slot;
       let medicationStatus = "Pending";
       let adminInfo = "",
         administeredTime,
@@ -88,29 +88,43 @@ export const TransformDrugChartData = (drugChartData) => {
       const startDateTimeObj = new Date(startTime * 1000);
       startActualTime = moment(startDateTimeObj).format("HH:mm");
 
-      const drugOrder = {
-        uuid: order.uuid,
-        drugName: order.drug.display,
-        drugRoute: order.route.display,
-        administrationInfo: [],
-        dosingInstructions: order.dosingInstructions,
-        dosingTagInfo: {
-          asNeeded: order.asNeeded,
-          frequency: order.frequency.display,
-        },
-      };
+      let drugOrder;
+      if (order) {
+        drugOrder = {
+          uuid: order.uuid,
+          drugName: order.drug.display,
+          drugRoute: order.route.display,
+          administrationInfo: [],
+          dosingInstructions: order.dosingInstructions,
+          dosingTagInfo: {
+            asNeeded: order.asNeeded,
+            frequency: order.frequency.display,
+          },
+        };
 
-      if (order.duration) {
-        drugOrder.duration = order.duration + " " + order.durationUnits.display;
+        if (order.duration) {
+          drugOrder.duration = order.duration + " " + order.durationUnits.display;
+        }
+        if (order.doseUnits.display !== "ml") {
+          drugOrder.dosage = order.dose;
+          drugOrder.doseType = order.doseUnits.display;
+        } else {
+          drugOrder.dosage = order.dose + order.doseUnits.display;
+        }
+        if (order.duration) {
+          drugOrder.duration = order.duration + " " + order.durationUnits.display;
+        }
       }
-      if (order.doseUnits.display !== "ml") {
-        drugOrder.dosage = order.dose;
-        drugOrder.doseType = order.doseUnits.display;
-      } else {
-        drugOrder.dosage = order.dose + order.doseUnits.display;
-      }
-      if (order.duration) {
-        drugOrder.duration = order.duration + " " + order.durationUnits.display;
+      if (serviceType == "EmergencyMedicationRequest") {
+        drugOrder = {
+          uuid: medicationAdministration.uuid,
+          drugName: medicationAdministration.drug?.display,
+          drugRoute: medicationAdministration.route?.display,
+          administrationInfo: [],
+          dosingInstructions: medicationAdministration.dosingInstructions,
+          dosage: medicationAdministration.dose + medicationAdministration.doseUnits?.display,
+          dosingTagInfo: { emergency: true }
+        }
       }
 
       const setLateStatus = isLateTask(startTime);
