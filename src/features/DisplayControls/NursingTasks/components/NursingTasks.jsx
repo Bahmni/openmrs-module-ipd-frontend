@@ -281,7 +281,6 @@ export default function NursingTasks(props) {
             <Dropdown
               id="filter-task"
               className="nursing-task-dropdown"
-              size="lg"
               selectedItem={filterValue}
               items={items}
               itemToString={(item) => (item ? item.text : "")}
@@ -294,7 +293,7 @@ export default function NursingTasks(props) {
             <Button
               kind={"tertiary"}
               isExpressive
-              size="default"
+              size="small"
               renderIcon={Add16}
               onClick={() => {
                 if (!isSliderOpen.emergencyTasks) {

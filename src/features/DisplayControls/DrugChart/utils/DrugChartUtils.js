@@ -56,13 +56,15 @@ export const getDateFormatString = () =>
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
   const slotDataByOrder = [];
+  console.log("Drug chart data", drugChartData);
 
   drugChartData.map((schedule) => {
     const { slots } = schedule;
-
+    // const slotData = Array.from({ length: 24 }, () => []);
+    let slotData = {};
     slots.forEach((slot) => {
       let administeredStartHour, administeredStartMinutes, medicationNotes;
-      const slotData = {};
+      // const slotData = {};
       const { startTime, status, order, medicationAdministration } = slot;
       let medicationStatus = "Pending";
       let adminInfo = "",
@@ -123,20 +125,23 @@ export const TransformDrugChartData = (drugChartData) => {
       const startHour = startDateTimeObj.getHours();
       const startMinutes = startDateTimeObj.getMinutes();
       if (isCompleted) {
-        slotData[administeredStartHour] = {
+        slotData[administeredStartHour] = slotData[administeredStartHour] || [];
+        slotData[administeredStartHour].push({
           minutes: administeredStartMinutes,
           status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
           administrationInfo: adminInfo,
           notes: medicationNotes,
-        };
+        });
       } else {
-        slotData[startHour] = {
+        slotData[startHour] = slotData[startHour] || [];
+        slotData[startHour].push({
           minutes: startMinutes,
           status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
           administrationInfo: adminInfo,
           notes: medicationNotes,
-        };
+        });
       }
+      console.log("slotData", slotData);
       if (
         medicationStatus === "Administered" ||
         medicationStatus === "Administered-Late"
@@ -183,6 +188,8 @@ export const TransformDrugChartData = (drugChartData) => {
           ...slotData,
         };
       }
+      console.log("slotDataByOrder", slotDataByOrder);
+      // slotData = {};
     });
   });
   return [slotDataByOrder, drugOrderData];

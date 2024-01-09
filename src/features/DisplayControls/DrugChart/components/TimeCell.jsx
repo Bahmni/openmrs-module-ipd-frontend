@@ -7,21 +7,17 @@ import NoteIcon from "../../../../icons/note.svg";
 import { ifMedicationNotesPresent } from "../utils/DrugChartUtils";
 
 export default function TimeCell(props) {
-  const {
-    minutes,
-    status,
-    administrationInfo,
-    medicationNotes,
-    doHighlightCell,
-    highlightedCell,
-  } = props;
-  let left, right;
-
-  if (+minutes < 30) {
-    left = status;
-  } else {
-    right = status;
-  }
+  const { slotInfo = [], doHighlightCell, highlightedCell } = props;
+  const left = [],
+    right = [];
+  slotInfo.map((slot) => {
+    const { minutes } = slot;
+    if (+minutes < 30) {
+      left.push(slot);
+    } else {
+      right.push(slot);
+    }
+  });
 
   const icon = (
     <div className="note-icon-container">
@@ -37,12 +33,19 @@ export default function TimeCell(props) {
           doHighlightCell && highlightedCell === "left" ? "highligtedCell" : ""
         }
       >
-        {left && <SVGIcon iconType={left} info={administrationInfo} />}
-        {ifMedicationNotesPresent(medicationNotes, left) && (
-          <span data-testid="left-notes">
-            <TooltipCarbon icon={() => icon} content={medicationNotes} />
-          </span>
-        )}
+        {left.map((slot) => {
+          const { status, administrationInfo, notes, minutes } = slot;
+          return (
+            <div key={minutes}>
+              <SVGIcon iconType={status} info={administrationInfo} />
+              {ifMedicationNotesPresent(notes, status) && (
+                <span data-testid="left-notes">
+                  <TooltipCarbon icon={() => icon} content={notes} />
+                </span>
+              )}
+            </div>
+          );
+        })}
       </div>
       <div
         data-testid="right-icon"
@@ -50,22 +53,26 @@ export default function TimeCell(props) {
           doHighlightCell && highlightedCell === "right" ? "highligtedCell" : ""
         }
       >
-        {right && <SVGIcon iconType={right} info={administrationInfo} />}
-        {ifMedicationNotesPresent(medicationNotes, right) && (
-          <span data-testid="right-notes">
-            <TooltipCarbon icon={() => icon} content={medicationNotes} />
-          </span>
-        )}
+        {right.map((slot) => {
+          const { status, administrationInfo, notes, minutes } = slot;
+          return (
+            <div key={minutes}>
+              <SVGIcon iconType={status} info={administrationInfo} />
+              {ifMedicationNotesPresent(notes, status) && (
+                <span data-testid="right-notes">
+                  <TooltipCarbon icon={() => icon} content={notes} />
+                </span>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
 TimeCell.propTypes = {
-  minutes: PropTypes.string,
-  status: PropTypes.string,
-  administrationInfo: PropTypes.string,
+  slotInfo: PropTypes.array,
   doHighlightCell: PropTypes.bool,
   highlightedCell: PropTypes.string,
-  medicationNotes: PropTypes.string,
 };
