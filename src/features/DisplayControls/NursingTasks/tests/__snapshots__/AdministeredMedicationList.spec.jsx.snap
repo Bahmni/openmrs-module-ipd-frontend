@@ -33,6 +33,7 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
               </span>
               <span>
                  - 
+                Topical
               </span>
             </div>
           </span>
@@ -81,6 +82,7 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
               </span>
               <span>
                  - 
+                Intravenous
               </span>
             </div>
           </span>
