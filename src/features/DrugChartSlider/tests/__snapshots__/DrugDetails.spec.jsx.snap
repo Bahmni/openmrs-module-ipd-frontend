@@ -22,7 +22,7 @@ exports[`DrugDetails should match snapshot 1`] = `
           disabled=""
           id="drug-name"
           type="text"
-          value="drugName"
+          value=""
         />
       </div>
     </div>
@@ -319,7 +319,7 @@ exports[`DrugDetails should match snapshot 1`] = `
                 pattern="[0-9]*"
                 step="1"
                 type="number"
-                value="duration"
+                value="0"
               />
               <div
                 class="bx--number__controls"

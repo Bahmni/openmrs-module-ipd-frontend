@@ -13,10 +13,17 @@ import {
   isTimePassed,
   validateSchedules,
   saveMedication,
+  updateMedication,
   updateStartTimeBasedOnFrequency,
   isInvalidTimeTextPresent,
   getUTCTimeEpoch,
+  setDrugOrderScheduleIn24HourFormat,
+  setDrugOrderScheduleIn12HourFormat,
 } from "../utils/DrugChartSliderUtils";
+import {
+  epochTo24HourTimeFormat,
+  epochTo12HourTimeFormat,
+} from "../../../utils/DateTimeUtils";
 import { DrugDetails } from "./DrugDetails";
 import { DrugInstructions } from "./DrugInstructions";
 import { StartTimeSection } from "./StartTimeSection";
@@ -32,8 +39,8 @@ const DrugChartSlider = (props) => {
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
-  const isAutoFill = Boolean(enableSchedule?.scheduleTiming);
-
+  const isEdit = Boolean(hostData?.drugOrder?.drugOrderSchedule);
+  const isAutoFill = Boolean(enableSchedule?.scheduleTiming) && !isEdit;
   const { setSliderContentModified } = useContext(SliderContext);
   const updateSliderContentModified = (value) => {
     setSliderContentModified((prev) => {
@@ -45,7 +52,6 @@ const DrugChartSlider = (props) => {
   };
   const [firstDaySlotsMissed, setFirstDaySlotsMissed] = useState(0);
   const [startTime, setStartTime] = useState("");
-
   const [
     showStartTimeBeyondNextDoseWarning,
     setShowStartTimeBeyondNextDoseWarning,
@@ -218,10 +224,10 @@ const DrugChartSlider = (props) => {
   };
 
   const createDrugChartPayload = () => {
-    var payload = {
+    let payload = {
       providerUuid: hostData?.drugOrder?.provider?.uuid,
       patientUuid: hostData?.patientId,
-      orderUuid: hostData?.drugOrder?.uuid,
+      orderUuid: hostData?.drugOrder?.drugOrder?.uuid,
       slotStartTime: null,
       firstDaySlotsStartTime: null,
       dayWiseSlotsStartTime: null,
@@ -233,7 +239,7 @@ const DrugChartSlider = (props) => {
       const startTimeUTCEpoch = getUTCTimeEpoch(
         startTime,
         enable24HourTimers,
-        hostData?.drugOrder?.scheduledDate
+        hostData?.drugOrder?.drugOrder?.scheduledDate
       );
       payload.slotStartTime = startTimeUTCEpoch;
       payload.medicationFrequency =
@@ -242,7 +248,7 @@ const DrugChartSlider = (props) => {
     if (enableSchedule) {
       const nextScheduleDate = 24 * 60 * 60;
       const finalScheduleDate =
-        nextScheduleDate * hostData?.drugOrder?.duration;
+        nextScheduleDate * hostData?.drugOrder?.drugOrder?.duration;
 
       const firstDaySchedulesUTCTimeEpoch = firstDaySchedules.reduce(
         (result, schedule) => {
@@ -251,7 +257,7 @@ const DrugChartSlider = (props) => {
               getUTCTimeEpoch(
                 schedule,
                 enable24HourTimers,
-                hostData?.drugOrder?.scheduledDate
+                hostData?.drugOrder?.drugOrder?.scheduledDate
               )
             );
           }
@@ -264,7 +270,7 @@ const DrugChartSlider = (props) => {
         getUTCTimeEpoch(
           schedule,
           enable24HourTimers,
-          hostData?.drugOrder?.scheduledDate
+          hostData?.drugOrder?.drugOrder?.scheduledDate
         )
       );
 
@@ -272,7 +278,7 @@ const DrugChartSlider = (props) => {
         getUTCTimeEpoch(
           schedule,
           enable24HourTimers,
-          hostData?.drugOrder?.scheduledDate
+          hostData?.drugOrder?.drugOrder?.scheduledDate
         )
       );
 
@@ -364,11 +370,52 @@ const DrugChartSlider = (props) => {
     }
   }, [isAutoFill, enable24HourTimers, enableSchedule]);
 
+  useEffect(() => {
+    if (isEdit) {
+      const drugOrderSchedule = hostData?.drugOrder?.drugOrderSchedule;
+      const scheduleTimings = enable24HourTimers
+        ? setDrugOrderScheduleIn24HourFormat(drugOrderSchedule)
+        : setDrugOrderScheduleIn12HourFormat(drugOrderSchedule);
+
+      if (Object.keys(scheduleTimings).length === 0) {
+        const startTimeValue = enable24HourTimers
+          ? epochTo24HourTimeFormat(drugOrderSchedule.slotStartTime)
+          : epochTo12HourTimeFormat(drugOrderSchedule.slotStartTime);
+        setStartTime(startTimeValue);
+      }
+
+      if (scheduleTimings.firstDaySlotsStartTime) {
+        setFirstDaySlotsMissed(1);
+        scheduleTimings.firstDaySlotsStartTime.forEach((schedule) => {
+          let frequency = enableSchedule?.frequencyPerDay;
+          while (scheduleTimings.firstDaySlotsStartTime.length < frequency) {
+            setFirstDaySchedules((prevSchedules) => [
+              ...prevSchedules,
+              "hh:mm",
+            ]);
+            frequency--;
+          }
+          setFirstDaySchedules((prevSchedules) => [...prevSchedules, schedule]);
+        });
+      }
+
+      if (scheduleTimings.dayWiseSlotsStartTime) {
+        setSchedules(scheduleTimings.dayWiseSlotsStartTime);
+      }
+
+      if (scheduleTimings.remainingDaySlotsStartTime) {
+        setFinalDaySchedules(scheduleTimings.remainingDaySlotsStartTime);
+      }
+    }
+  }, [isEdit, enable24HourTimers, enableSchedule]);
+
   const handleSave = async () => {
     const performSave = await validateSave();
     if (performSave) {
       const medication = createDrugChartPayload();
-      const response = await saveMedication(medication);
+      const response = isEdit
+        ? await updateMedication(medication)
+        : await saveMedication(medication);
       response.status === 200 ? hostApi.onModalSave?.() : null;
     }
   };

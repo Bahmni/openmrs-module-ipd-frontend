@@ -351,6 +351,7 @@ export default function NursingTasks(props) {
                     refreshDisplayControl([
                       componentKeys.NURSING_TASKS,
                       componentKeys.DRUG_CHART,
+                      componentKeys.TREATMENTS,
                     ]);
                   },
                 }}

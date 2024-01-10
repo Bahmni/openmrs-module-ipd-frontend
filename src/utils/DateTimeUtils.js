@@ -8,3 +8,13 @@ export const formatDate = (value, format = defaultDateFormat) => {
 export const areDatesSame = (date1, date2) => {
   return formatDate(date1) === formatDate(date2);
 };
+
+export const epochTo24HourTimeFormat = (epochSeconds) => {
+  const formattedTime = moment.unix(epochSeconds).format("HH:mm");
+  return formattedTime;
+};
+
+export const epochTo12HourTimeFormat = (epochSeconds) => {
+  const formattedTime = moment.unix(epochSeconds).format("hh:mm A");
+  return formattedTime;
+};

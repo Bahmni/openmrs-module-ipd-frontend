@@ -17,6 +17,34 @@ export const mockScheduleDrugOrder = {
   route: "Oral",
 };
 
+export const mockScheduleDrugOrderForEdit = {
+  drugOrder: {
+    uuid: "e2b966e0-1d5f-11e0-b929-000c29ad1d07",
+    dateActivated: "2010-12-22T00:00:00.000+0530",
+    drug: {
+      uuid: "e2b83a8c-1d5f-11e0-b929-000c29ad1d07",
+      name: "Aspirin",
+    },
+    duration: 10,
+    durationUnit: "Days",
+    instructions: "",
+    additionalInstructions: "",
+    route: "Oral",
+  },
+  uniformDosingType: {
+    dose: 10,
+    doseUnits: "Tablet",
+    frequency: "Twice a day",
+  },
+  drugOrderSchedule: {
+    firstDaySlotsStartTime: [1704682800],
+    dayWiseSlotsStartTime: [1704769200, 1704796200],
+    remainingDaySlotsStartTime: [1705546800],
+    slotStartTime: null,
+    medicationAdministrationStarted: false,
+  },
+};
+
 export const mockStartTimeDrugOrder = {
   uuid: "e2b966e0-1d5f-11e0-b929-000c29ad1d07",
   dateActivated: "2010-12-22T00:00:00.000+0530",
