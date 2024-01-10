@@ -120,7 +120,6 @@ const Treatments = (props) => {
   };
 
   const modifyTreatmentData = (drugOrders) => {
-    console.log("ipdDrugOrders in modifyTreatmentData", drugOrders);
     const treatments = drugOrders.ipdDrugOrders
       .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
       .map((drugOrderObject) => {
