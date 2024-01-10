@@ -5,8 +5,12 @@ import data from "../../../../utils/config.json";
 
 const { config: { drugChart = {} } = {} } = data;
 
-export const fetchMedications = async (patientUuid, forDate) => {
-  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&forDate=${forDate}`;
+export const fetchMedications = async (
+  patientUuid,
+  startDateTime,
+  endDateTime
+) => {
+  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}`;
   try {
     const response = await axios.get(FETCH_MEDICATIONS_URL);
     return response;
@@ -38,10 +42,19 @@ const checkIfSlotIsAdministered = (status) => {
   return status === "COMPLETED";
 };
 
-export const getUTCEpochForDate = (viewDate) => {
-  const utcTimeEpoch = moment.utc(viewDate).unix();
-  return utcTimeEpoch;
+const sortByStartTime = (a, b) => a.startTime - b.startTime;
+export const SortDrugChartData = (drugChartData) => {
+  drugChartData.forEach((item) => {
+    item.slots.sort(sortByStartTime);
+  });
+  return drugChartData;
 };
+
+export const getDateFormatString = () =>
+  drugChart.enable24HourTime ? "DD/MM/YYYY HH:mm" : "DD/MM/YYYY hh:mm A";
+
+export const getHourFormatString = () =>
+  drugChart.enable24HourTime ? "HH:mm" : "hh:mm";
 
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
@@ -71,7 +84,10 @@ export const TransformDrugChartData = (drugChartData) => {
           const { administeredDateTime, providers, notes } =
             medicationAdministration;
           const administeredDateTimeObject = new Date(administeredDateTime);
-          administeredTime = moment(administeredDateTimeObject).format("HH:mm");
+          const hourFormatString = getHourFormatString();
+          administeredTime = moment(administeredDateTimeObject).format(
+            hourFormatString
+          );
           adminInfo =
             providers[0].provider.display + " [" + administeredTime + "]";
           administeredStartHour = administeredDateTimeObject.getHours();
@@ -195,9 +211,16 @@ export const ifMedicationNotesPresent = (medicationNotes, side) => {
 
 export const currentShiftHoursArray = () => {
   const shiftTimeInHours = drugChart.shiftHours;
+  let startTime = drugChart.startTime;
   const rangeArray = [];
-  for (let i = 0; i < 24; i += shiftTimeInHours) {
-    rangeArray.push(`${i}-${i + (shiftTimeInHours - 1)}`);
+
+  let i = 0;
+  while (i < 24 / shiftTimeInHours) {
+    rangeArray.push(
+      `${startTime}-${(startTime + (shiftTimeInHours - 1)) % 24}`
+    );
+    startTime = (startTime + shiftTimeInHours) % 24;
+    i++;
   }
 
   // finding the current hour range
@@ -220,4 +243,67 @@ export const currentShiftHoursArray = () => {
     currentShiftHoursArray.push(i);
   }
   return currentShiftHoursArray;
+};
+
+export const getDateTime = (date, hour) => {
+  let currentShiftStartTime = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+  return currentShiftStartTime.setHours(hour);
+};
+
+export const getNextShiftDetails = (
+  shiftTimeArray = [],
+  shiftTimeInHours = 12,
+  date
+) => {
+  const shiftLastHour = shiftTimeArray[shiftTimeArray.length - 1];
+  const currentDate = date;
+  let currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+  const startDateTime = currentShiftStartTime.setHours(shiftLastHour + 1);
+
+  // reset the currentShiftStartTime value
+  currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+  const endDateTime = currentShiftStartTime.setHours(
+    shiftLastHour + 1 + shiftTimeInHours
+  );
+  date = currentShiftStartTime;
+  return { startDateTime, endDateTime, nextDate: date };
+};
+
+export const getPreviousShiftDetails = (
+  shiftTimeArray = [],
+  shiftTimeInHours = 12,
+  date
+) => {
+  const shiftFirstHour = shiftTimeArray[0];
+  const currentDate = date;
+  let currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+  const endDateTime = currentShiftStartTime.setHours(shiftFirstHour);
+
+  // reset the currentShiftStartTime value
+  currentShiftStartTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+  const startDateTime = currentShiftStartTime.setHours(
+    shiftFirstHour - shiftTimeInHours
+  );
+  date = currentShiftStartTime;
+  return { startDateTime, endDateTime, nextDate: date };
 };
