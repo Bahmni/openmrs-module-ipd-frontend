@@ -40,7 +40,9 @@ const AdministeredMedicationList = ({ list }) => {
               <StructuredListCell className="administered-time-cell">
                 <ClockIcon className="clock-icon" />
                 <span className="time">
-                  {getAdministeredTime(new Date(list[key].actualTime))}
+                  {list[key].skipped
+                    ? list[key].startTime
+                    : getAdministeredTime(new Date(list[key].actualTime))}
                 </span>
               </StructuredListCell>
               <StructuredListCell>
