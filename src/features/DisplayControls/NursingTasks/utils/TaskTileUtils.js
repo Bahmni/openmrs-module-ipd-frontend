@@ -66,7 +66,7 @@ export const getMedicationDetails = (medication) => {
     <div>
       <span>{medication.dosage}</span>
       {medication.doseType && <span>&nbsp;-&nbsp;{medication.doseType}</span>}
-      <span>&nbsp;-&nbsp;{medication.drugRoute}</span>
+      <span>&nbsp;-&nbsp;{medication.route}</span>
     </div>
   );
 };
