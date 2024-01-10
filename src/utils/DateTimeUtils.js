@@ -11,7 +11,6 @@ export const areDatesSame = (date1, date2) => {
 
 export const epochTo24HourTimeFormat = (epochSeconds) => {
   const formattedTime = moment.unix(epochSeconds).format("HH:mm");
-  console.log("formattedTime -->", formattedTime);
   return formattedTime;
 };
 
