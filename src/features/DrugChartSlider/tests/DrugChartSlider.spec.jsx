@@ -361,7 +361,7 @@ describe("DrugChartSlider", () => {
     MockDate.reset();
   });
 
-  it.skip("should render with previous time on click of edit drug chart link", async () => {
+  it("should render with previous time on click of edit drug chart link", async () => {
     MockDate.set("2010-12-22T07:08:00.000");
     const { container, getByText, debug } = render(
       <SliderContext.Provider value={mockSliderContext}>
@@ -376,13 +376,11 @@ describe("DrugChartSlider", () => {
         />
       </SliderContext.Provider>
     );
-    debug();
+
     await waitFor(() => {
-    const startTimeInputs = document.querySelectorAll("#time-selector");
-      expect(startTimeInputs).toBeDefined();
-      console.log("chgtc",startTimeInputs);
-      expect(startTimeInputs[0].value).toBe("hh:mm");
+      expect(getByText("Schedule time (start date)")).toBeTruthy();
     });
+    expect(container).toMatchSnapshot();
     MockDate.reset();
   });
 });

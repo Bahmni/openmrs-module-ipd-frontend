@@ -1987,7 +1987,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                       pattern="[0-9]*"
                       step="1"
                       type="number"
-                      value="0"
+                      value="10"
                     />
                     <div
                       class="bx--number__controls"
@@ -2061,8 +2061,8 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               >
                 <label
                   class="bx--label bx--label--disabled"
-                  for="downshift-0-toggle-button"
-                  id="downshift-0-label"
+                  for="downshift-72-toggle-button"
+                  id="downshift-72-label"
                 >
                   <div
                     class="titleText"
@@ -2080,15 +2080,18 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     aria-disabled="true"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-0-label downshift-0-toggle-button"
+                    aria-labelledby="downshift-72-label downshift-72-toggle-button"
                     class="bx--list-box__field"
                     disabled=""
-                    id="downshift-0-toggle-button"
+                    id="downshift-72-toggle-button"
+                    title="Tablet"
                     type="button"
                   >
                     <span
                       class="bx--list-box__label"
-                    />
+                    >
+                      Tablet
+                    </span>
                     <div
                       class="bx--list-box__menu-icon"
                     >
@@ -2114,9 +2117,9 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </button>
                   <div
-                    aria-labelledby="downshift-0-label"
+                    aria-labelledby="downshift-72-label"
                     class="bx--list-box__menu"
-                    id="downshift-0-menu"
+                    id="downshift-72-menu"
                     role="listbox"
                     tabindex="-1"
                   />
@@ -2137,8 +2140,8 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               >
                 <label
                   class="bx--label bx--label--disabled"
-                  for="downshift-1-toggle-button"
-                  id="downshift-1-label"
+                  for="downshift-73-toggle-button"
+                  id="downshift-73-label"
                 >
                   <div
                     class="titleText"
@@ -2156,10 +2159,10 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     aria-disabled="true"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-1-label downshift-1-toggle-button"
+                    aria-labelledby="downshift-73-label downshift-73-toggle-button"
                     class="bx--list-box__field"
                     disabled=""
-                    id="downshift-1-toggle-button"
+                    id="downshift-73-toggle-button"
                     type="button"
                   >
                     <span
@@ -2190,9 +2193,9 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </button>
                   <div
-                    aria-labelledby="downshift-1-label"
+                    aria-labelledby="downshift-73-label"
                     class="bx--list-box__menu"
-                    id="downshift-1-menu"
+                    id="downshift-73-menu"
                     role="listbox"
                     tabindex="-1"
                   />
@@ -2311,8 +2314,8 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               >
                 <label
                   class="bx--label bx--label--disabled"
-                  for="downshift-2-toggle-button"
-                  id="downshift-2-label"
+                  for="downshift-74-toggle-button"
+                  id="downshift-74-label"
                 >
                   <div
                     class="titleText"
@@ -2330,10 +2333,10 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     aria-disabled="true"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-2-label downshift-2-toggle-button"
+                    aria-labelledby="downshift-74-label downshift-74-toggle-button"
                     class="bx--list-box__field"
                     disabled=""
-                    id="downshift-2-toggle-button"
+                    id="downshift-74-toggle-button"
                     type="button"
                   >
                     <span
@@ -2364,9 +2367,9 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </button>
                   <div
-                    aria-labelledby="downshift-2-label"
+                    aria-labelledby="downshift-74-label"
                     class="bx--list-box__menu"
-                    id="downshift-2-menu"
+                    id="downshift-74-menu"
                     role="listbox"
                     tabindex="-1"
                   />
@@ -2448,8 +2451,8 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
             >
               <label
                 class="bx--label bx--label--disabled"
-                for="downshift-3-toggle-button"
-                id="downshift-3-label"
+                for="downshift-75-toggle-button"
+                id="downshift-75-label"
               >
                 <div
                   class="titleText"
@@ -2467,15 +2470,18 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                   aria-disabled="true"
                   aria-expanded="false"
                   aria-haspopup="listbox"
-                  aria-labelledby="downshift-3-label downshift-3-toggle-button"
+                  aria-labelledby="downshift-75-label downshift-75-toggle-button"
                   class="bx--list-box__field"
                   disabled=""
-                  id="downshift-3-toggle-button"
+                  id="downshift-75-toggle-button"
+                  title="Twice a day"
                   type="button"
                 >
                   <span
                     class="bx--list-box__label"
-                  />
+                  >
+                    Twice a day
+                  </span>
                   <div
                     class="bx--list-box__menu-icon"
                   >
@@ -2501,12 +2507,273 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                   </div>
                 </button>
                 <div
-                  aria-labelledby="downshift-3-label"
+                  aria-labelledby="downshift-75-label"
                   class="bx--list-box__menu"
-                  id="downshift-3-menu"
+                  id="downshift-75-menu"
                   role="listbox"
                   tabindex="-1"
                 />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            class="schedule-section"
+          >
+            <div
+              class="titleText"
+            >
+              <span>
+                Schedule time (start date) 
+              </span>
+              <span
+                class="required"
+              >
+                *
+              </span>
+            </div>
+            <div
+              class="inline-field"
+              id="schedule"
+            >
+              <div
+                class="schedule-time"
+              >
+                <div
+                  class="bx--form-item"
+                >
+                  <label
+                    class="bx--label bx--label--disabled"
+                    for="time-selector"
+                  >
+                    <div
+                      class="titleText"
+                    >
+                      <span>
+                          
+                      </span>
+                    </div>
+                  </label>
+                  <div
+                    class="bx--time-picker"
+                  >
+                    <div
+                      class="bx--time-picker__input"
+                    >
+                      <input
+                        autocomplete="off"
+                        class="bx--time-picker__input-field bx--text-input"
+                        disabled=""
+                        id="time-selector"
+                        maxlength="5"
+                        pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
+                        placeholder="hh:mm"
+                        style="width: 70%; padding: 0px 0px 0px 1rem;"
+                        type="text"
+                        value="hh:mm"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="schedule-time"
+              >
+                <div
+                  class="bx--form-item"
+                >
+                  <label
+                    class="bx--label"
+                    for="time-selector"
+                  >
+                    <div
+                      class="titleText"
+                    >
+                      <span>
+                          
+                      </span>
+                    </div>
+                  </label>
+                  <div
+                    class="bx--time-picker"
+                  >
+                    <div
+                      class="bx--time-picker__input"
+                    >
+                      <input
+                        autocomplete="off"
+                        class="bx--time-picker__input-field bx--text-input"
+                        id="time-selector"
+                        maxlength="5"
+                        pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
+                        placeholder="hh:mm"
+                        style="width: 70%; padding: 0px 0px 0px 1rem;"
+                        type="text"
+                        value="03:00"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="schedule-section"
+          >
+            <div
+              class="titleText"
+            >
+              <span>
+                Schedule time (subsequent) 
+              </span>
+              <span
+                class="required"
+              >
+                *
+              </span>
+            </div>
+            <div
+              class="inline-field"
+              id="schedule"
+            >
+              <div
+                class="schedule-time"
+              >
+                <div
+                  class="bx--form-item"
+                >
+                  <label
+                    class="bx--label"
+                    for="time-selector"
+                  >
+                    <div
+                      class="titleText"
+                    >
+                      <span>
+                          
+                      </span>
+                    </div>
+                  </label>
+                  <div
+                    class="bx--time-picker"
+                  >
+                    <div
+                      class="bx--time-picker__input"
+                    >
+                      <input
+                        autocomplete="off"
+                        class="bx--time-picker__input-field bx--text-input"
+                        id="time-selector"
+                        maxlength="5"
+                        pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
+                        placeholder="hh:mm"
+                        style="width: 70%; padding: 0px 0px 0px 1rem;"
+                        type="text"
+                        value="03:00"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="schedule-time"
+              >
+                <div
+                  class="bx--form-item"
+                >
+                  <label
+                    class="bx--label"
+                    for="time-selector"
+                  >
+                    <div
+                      class="titleText"
+                    >
+                      <span>
+                          
+                      </span>
+                    </div>
+                  </label>
+                  <div
+                    class="bx--time-picker"
+                  >
+                    <div
+                      class="bx--time-picker__input"
+                    >
+                      <input
+                        autocomplete="off"
+                        class="bx--time-picker__input-field bx--text-input"
+                        id="time-selector"
+                        maxlength="5"
+                        pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
+                        placeholder="hh:mm"
+                        style="width: 70%; padding: 0px 0px 0px 1rem;"
+                        type="text"
+                        value="10:30"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="schedule-section"
+          >
+            <div
+              class="titleText"
+            >
+              <span>
+                Schedule time (remainder) 
+              </span>
+              <span
+                class="required"
+              >
+                *
+              </span>
+            </div>
+            <div
+              class="inline-field"
+              id="schedule"
+            >
+              <div
+                class="schedule-time"
+              >
+                <div
+                  class="bx--form-item"
+                >
+                  <label
+                    class="bx--label"
+                    for="time-selector"
+                  >
+                    <div
+                      class="titleText"
+                    >
+                      <span>
+                          
+                      </span>
+                    </div>
+                  </label>
+                  <div
+                    class="bx--time-picker"
+                  >
+                    <div
+                      class="bx--time-picker__input"
+                    >
+                      <input
+                        autocomplete="off"
+                        class="bx--time-picker__input-field bx--text-input"
+                        id="time-selector"
+                        maxlength="5"
+                        pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
+                        placeholder="hh:mm"
+                        style="width: 70%; padding: 0px 0px 0px 1rem;"
+                        type="text"
+                        value="03:00"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
