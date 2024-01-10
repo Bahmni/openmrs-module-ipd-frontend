@@ -1,10 +1,8 @@
 import React from "react";
 import {
-  PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL,
   CLINICAL_CONFIG_URL,
   ALL_DRUG_ORDERS_URL,
 } from "../../../../constants";
-import { getLocale } from "../../../i18n/utils";
 import axios from "axios";
 import { FormattedMessage } from "react-intl";
 import NotesIcon from "../../../../icons/notes.svg";

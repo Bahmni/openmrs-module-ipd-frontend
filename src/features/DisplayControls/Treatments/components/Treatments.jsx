@@ -53,7 +53,7 @@ const Treatments = (props) => {
       };
     });
   };
-  var drugOrderList = {};
+  let drugOrderList = {};
   const isAddToDrugChartDisabled =
     visitSummary.admissionDetails === null ? true : false;
   const sliderCloseActions = {
@@ -123,17 +123,14 @@ const Treatments = (props) => {
     const treatments = drugOrders.ipdDrugOrders
       .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
       .map((drugOrderObject) => {
-        var isEditDisabled;
-        var showEditDrugChartLink;
+        let isEditDisabled;
+        let showEditDrugChartLink;
         if (drugOrderObject.drugOrderSchedule != null) {
           showEditDrugChartLink = true;
-          if (
-            drugOrderObject.drugOrderSchedule.medicationAdministrationStarted
-          ) {
-            isEditDisabled = true;
-          } else {
-            isEditDisabled = false;
-          }
+          isEditDisabled = drugOrderObject.drugOrderSchedule
+            .medicationAdministrationStarted
+            ? true
+            : false;
         } else {
           showEditDrugChartLink = false;
         }

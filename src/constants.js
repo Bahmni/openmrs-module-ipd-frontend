@@ -25,8 +25,6 @@ export const ADMINISTERED_MEDICATIONS_BASE_URL =
 export const PATIENT_URL = RESTWS_V1 + "/patient";
 
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
-export const PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL =
-  BAHMNI_CORE + "/drugOrders/prescribedAndActive";
 export const ALL_DRUG_ORDERS_URL = (visitUuid) =>
   RESTWS_V1 + `/ipdVisit/${visitUuid}/medication?includes=emergencyMedications`;
 export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";

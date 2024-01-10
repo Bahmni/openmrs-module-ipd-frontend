@@ -4,6 +4,10 @@ import {
   EDIT_MEDICATIONS_BASE_URL,
 } from "../../../constants";
 import moment from "moment";
+import {
+  epochTo24HourTimeFormat,
+  epochTo12HourTimeFormat,
+} from "../../../utils/DateTimeUtils";
 
 export const invalidTimeText24Hour = "Please enter in 24-hr format";
 export const invalidTimeText12Hour = "Please enter in 12-hr format";
@@ -113,24 +117,6 @@ export const getUTCTimeEpoch = (time, enable24HourTimers, scheduledDate) => {
   );
   const utcTimeEpoch = moment.utc(localTime).unix();
   return utcTimeEpoch;
-};
-
-export const epochTo24HourTimeFormat = (epochSeconds) => {
-  const date = new Date(epochSeconds * 1000);
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const formattedTime = `${hours}:${minutes}`;
-  return formattedTime;
-};
-
-export const epochTo12HourTimeFormat = (epochSeconds) => {
-  const date = new Date(epochSeconds * 1000);
-  const hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const amOrPm = hours >= 12 ? "PM" : "AM";
-  const formattedHours = (hours % 12 || 12).toString().padStart(2, "0");
-  const formattedTime = `${formattedHours}:${minutes} ${amOrPm}`;
-  return formattedTime;
 };
 
 export const setDrugOrderScheduleIn24HourFormat = (schedule) => {

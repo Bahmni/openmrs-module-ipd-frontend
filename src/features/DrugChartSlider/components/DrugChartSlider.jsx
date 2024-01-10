@@ -17,11 +17,13 @@ import {
   updateStartTimeBasedOnFrequency,
   isInvalidTimeTextPresent,
   getUTCTimeEpoch,
-  epochTo24HourTimeFormat,
-  epochTo12HourTimeFormat,
   setDrugOrderScheduleIn24HourFormat,
   setDrugOrderScheduleIn12HourFormat,
 } from "../utils/DrugChartSliderUtils";
+import {
+  epochTo24HourTimeFormat,
+  epochTo12HourTimeFormat,
+} from "../../../utils/DateTimeUtils";
 import { DrugDetails } from "./DrugDetails";
 import { DrugInstructions } from "./DrugInstructions";
 import { StartTimeSection } from "./StartTimeSection";
@@ -222,7 +224,7 @@ const DrugChartSlider = (props) => {
   };
 
   const createDrugChartPayload = () => {
-    var payload = {
+    let payload = {
       providerUuid: hostData?.drugOrder?.provider?.uuid,
       patientUuid: hostData?.patientId,
       orderUuid: hostData?.drugOrder?.drugOrder?.uuid,
@@ -385,7 +387,7 @@ const DrugChartSlider = (props) => {
       if (scheduleTimings.firstDaySlotsStartTime) {
         setFirstDaySlotsMissed(1);
         scheduleTimings.firstDaySlotsStartTime.forEach((schedule) => {
-          var frequency = enableSchedule?.frequencyPerDay;
+          let frequency = enableSchedule?.frequencyPerDay;
           while (scheduleTimings.firstDaySlotsStartTime.length < frequency) {
             setFirstDaySchedules((prevSchedules) => [
               ...prevSchedules,
