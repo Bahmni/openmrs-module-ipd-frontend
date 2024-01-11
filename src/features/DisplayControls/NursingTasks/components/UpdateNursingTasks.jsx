@@ -20,7 +20,7 @@ import {
   isTimeWithinAdministeredWindow,
 } from "../utils/NursingTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
-import { performerFunction } from "../utils/constants";
+import { performerFunction } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 
 const UpdateNursingTasks = (props) => {

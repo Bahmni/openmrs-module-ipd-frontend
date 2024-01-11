@@ -60,3 +60,7 @@ export const componentKeys = {
   NURSING_TASKS: "NT",
   DRUG_CHART: "DC",
 };
+
+export const performerFunction = "Performer";
+export const requesterFunction = "Witness";
+export const verifierFunction = "Verifier";

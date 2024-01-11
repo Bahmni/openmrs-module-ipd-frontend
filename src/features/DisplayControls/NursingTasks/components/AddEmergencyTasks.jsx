@@ -19,7 +19,7 @@ import {
   TimePicker24Hour,
 } from "bahmni-carbon-ui";
 import _ from "lodash";
-import { performerFunction, requesterFunction } from "../utils/constants";
+import { performerFunction, requesterFunction } from "../../../../constants";
 import SearchDrug from "../../../SearchDrug/SearchDrug";
 import moment from "moment/moment";
 

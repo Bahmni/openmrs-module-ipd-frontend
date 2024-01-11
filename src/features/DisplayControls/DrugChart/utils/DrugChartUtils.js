@@ -1,6 +1,6 @@
 import axios from "axios";
 import moment from "moment";
-import { MEDICATIONS_BASE_URL } from "../../../../constants";
+import { MEDICATIONS_BASE_URL, performerFunction } from "../../../../constants";
 import data from "../../../../utils/config.json";
 
 const { config: { drugChart = {} } = {} } = data;
@@ -88,11 +88,13 @@ export const TransformDrugChartData = (drugChartData) => {
           administeredTime = moment(administeredDateTimeObject).format(
             hourFormatString
           );
+          const performer = providers.find(provider => provider.function === performerFunction).provider;
+          const performerName = performer.display.includes(" - ") ? performer.display.split(" - ")[1]: performer.display;
           adminInfo =
-            providers[0].provider.display + " [" + administeredTime + "]";
+          performerName + " [" + administeredTime + "]";
           administeredStartHour = administeredDateTimeObject.getHours();
           administeredStartMinutes = administeredDateTimeObject.getMinutes();
-          medicationNotes = notes && notes.length > 0 ? notes[0].text : "";
+          medicationNotes = notes && notes.length > 0 ? (notes?.find(notes => notes.author.uuid === performer.uuid).text) : "";
         } else {
           adminInfo = "";
         }
