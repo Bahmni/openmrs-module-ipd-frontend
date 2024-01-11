@@ -53,18 +53,44 @@ export const SortDrugChartData = (drugChartData) => {
 export const getDateFormatString = () =>
   drugChart.enable24HourTime ? "DD/MM/YYYY HH:mm" : "DD/MM/YYYY hh:mm A";
 
-export const TransformDrugChartData = (drugChartData) => {
+export const getTransformedDrugChartData = (drugChartData) => {
+  const sortedDrugChartData = SortDrugChartData(drugChartData);
+  const groupedSlots = groupSlotsByDrugName(sortedDrugChartData);
+  const transformedDrugChartData = TransformDrugChartData(groupedSlots);
+  return transformedDrugChartData;
+};
+
+export const groupSlotsByDrugName = (drugChartData) => {
+  const groupedSlots = {};
+
+  drugChartData.forEach((schedule) => {
+    const { slots } = schedule;
+
+    slots.forEach((slot) => {
+      const { order } = slot;
+      const drugName = order.drug.display;
+
+      if (!groupedSlots[drugName]) {
+        groupedSlots[drugName] = [];
+      }
+
+      groupedSlots[drugName].push(slot);
+    });
+  });
+
+  return groupedSlots;
+};
+
+export const TransformDrugChartData = (groupedSlots) => {
   const drugOrderData = [];
   const slotDataByOrder = [];
-  console.log("Drug chart data", drugChartData);
 
-  drugChartData.map((schedule) => {
-    const { slots } = schedule;
-    // const slotData = Array.from({ length: 24 }, () => []);
-    let slotData = {};
+  Object.values(groupedSlots).forEach((slots) => {
+    const slotData = {};
+
     slots.forEach((slot) => {
       let administeredStartHour, administeredStartMinutes, medicationNotes;
-      // const slotData = {};
+
       const { startTime, status, order, medicationAdministration } = slot;
       let medicationStatus = "Pending";
       let adminInfo = "",
@@ -141,7 +167,7 @@ export const TransformDrugChartData = (drugChartData) => {
           notes: medicationNotes,
         });
       }
-      console.log("slotData", slotData);
+
       if (
         medicationStatus === "Administered" ||
         medicationStatus === "Administered-Late"
@@ -188,8 +214,6 @@ export const TransformDrugChartData = (drugChartData) => {
           ...slotData,
         };
       }
-      console.log("slotDataByOrder", slotDataByOrder);
-      // slotData = {};
     });
   });
   return [slotDataByOrder, drugOrderData];
