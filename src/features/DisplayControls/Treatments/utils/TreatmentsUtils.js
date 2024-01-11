@@ -53,19 +53,6 @@ export const getAllDrugOrders = async (visitUuid) => {
   }
 };
 
-export const getAllDrugOrders = async (visitUuid) => {
-  try {
-    const response = await axios.get(ALL_DRUG_ORDERS_URL(visitUuid), {
-      withCredentials: true,
-    });
-    console.log("response", response);
-    if (response.status !== 200) throw new Error(response.statusText);
-    return response.data;
-  } catch (error) {
-    return error;
-  }
-};
-
 export const getConfigsForTreatments = async () => {
   try {
     const response = await axios.get(CLINICAL_CONFIG_URL, {
