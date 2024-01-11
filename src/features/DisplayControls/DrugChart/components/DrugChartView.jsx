@@ -10,6 +10,8 @@ import {
   currentShiftHoursArray,
   getNextShiftDetails,
   getPreviousShiftDetails,
+  SortDrugChartData,
+  getDateFormatString,
 } from "../utils/DrugChartUtils";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import data from "../../../../utils/config.json";
@@ -68,7 +70,8 @@ export default function DrugChartWrapper(props) {
     callFetchMedications(startDateTime, endDateTime);
   }, []);
 
-  const transformedDrugChartData = TransformDrugChartData(drugChartData);
+  const sortedDrugChartData = SortDrugChartData(drugChartData);
+  const transformedDrugChartData = TransformDrugChartData(sortedDrugChartData);
 
   const handlePrevious = () => {
     const firstHour = currentShiftArray[0];
@@ -131,7 +134,7 @@ export default function DrugChartWrapper(props) {
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
-
+  const dateFormatString = getDateFormatString();
   return (
     <div className="drugchart-parent-container">
       <div className="drugchart-shift-header">
@@ -171,8 +174,8 @@ export default function DrugChartWrapper(props) {
         <span>
           {`${formatDate(
             startEndDates.startDate,
-            "DD/MM/YYYY HH:mm"
-          )} - ${formatDate(startEndDates.endDate, "DD/MM/YYYY HH:mm")}`}
+            dateFormatString
+          )} - ${formatDate(startEndDates.endDate, dateFormatString)}`}
         </span>
       </div>
       {isLoading ? (

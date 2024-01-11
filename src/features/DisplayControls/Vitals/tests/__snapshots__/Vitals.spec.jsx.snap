@@ -310,7 +310,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
             >
               <tr>
                 <td>
-                  07/11/2023, 10:32 AM
+                  07/11/2023 10:32 AM
                 </td>
                 <td
                   class="history-tile"
@@ -340,7 +340,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
               </tr>
               <tr>
                 <td>
-                  11/12/2023, 02:02 PM
+                  11/12/2023 02:02 PM
                 </td>
                 <td
                   class="history-tile"
@@ -634,7 +634,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
             >
               <tr>
                 <td>
-                  07/11/2023, 10:32 AM
+                  07/11/2023 10:32 AM
                 </td>
                 <td
                   class="history-tile"
@@ -659,7 +659,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
               </tr>
               <tr>
                 <td>
-                  11/12/2023, 02:02 PM
+                  11/12/2023 02:02 PM
                 </td>
                 <td
                   class="history-tile"

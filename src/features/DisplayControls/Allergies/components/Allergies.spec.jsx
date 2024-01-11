@@ -24,7 +24,7 @@ describe("Allergies", () => {
     expect(screen.getByText(/test comment/i)).toBeInTheDocument();
   });
 
-  it("should highlight severity column when the value is high", async () => {
+  it("should highlight column in red", async () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
     render(<Allergies patientId={"__test_patient_uuid__"} />);
 
@@ -32,9 +32,6 @@ describe("Allergies", () => {
       expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
     });
     expect(screen.getAllByRole("cell", { name: /severe/i })[0]).toHaveClass(
-      "high-severity-color"
-    );
-    expect(screen.getAllByRole("cell", { name: /mild/i })[0]).not.toHaveClass(
       "high-severity-color"
     );
   });

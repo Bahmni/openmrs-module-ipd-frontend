@@ -18,13 +18,14 @@ export const ADDRESS_HEIRARCHY =
 export const homePageUrl = "/bahmni/home/#/dashboard";
 
 export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
-export const ADMINISTERED_MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/scheduledMedicationAdministrations";
+export const EDIT_MEDICATIONS_BASE_URL =
+  RESTWS_V1 + "/ipd/schedule/type/medication/edit";
+export const ADMINISTERED_MEDICATIONS_BASE_URL =
+  RESTWS_V1 + "/ipd/scheduledMedicationAdministrations";
 export const EMERGENCY_MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/adhocMedicationAdministrations";
 export const PATIENT_URL = RESTWS_V1 + "/patient";
 
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
-export const PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL =
-  BAHMNI_CORE + "/drugOrders/prescribedAndActive";
 export const ALL_DRUG_ORDERS_URL = (visitUuid) =>
   RESTWS_V1 + `/ipdVisit/${visitUuid}/medication?includes=emergencyMedications`;
 export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
@@ -46,8 +47,8 @@ export const medicationFrequency = {
   FIXED_SCHEDULE_FREQUENCY: "FIXED_SCHEDULE_FREQUENCY",
 };
 
-export const defaultDateFormat = "DD MMM YYYY";
-export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
+export const defaultDateFormat = "DD/MM/YYYY";
+export const defaultDateTimeFormat = "DD/MM/YYYY hh:mm A";
 export const DDMMYYY_DATE_FORMAT = "DD/MM/YYYY";
 export const dateFormat = "DD/MM/YYYY";
 

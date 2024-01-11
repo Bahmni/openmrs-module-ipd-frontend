@@ -2,7 +2,7 @@
   border: 2px solid #92c4c3;
   background: #edf8e6;
   width: 500px;
-  height: 90px;
+  height: 95px;
   position: relative;
   cursor: pointer;
   transition: opacity 0.3s ease;
@@ -23,6 +23,7 @@
 
 .relevant-task-tile {
   background-color: #e3fed1;
+  border: 2px solid #007d79;
 
   &:hover {
     background-color: #c5eea9;

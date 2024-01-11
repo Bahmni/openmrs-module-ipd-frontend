@@ -1,10 +1,12 @@
+import React from "react";
 import {
-  PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL,
   CLINICAL_CONFIG_URL,
   ALL_DRUG_ORDERS_URL,
 } from "../../../../constants";
-import { getLocale } from "../../../i18n/utils";
 import axios from "axios";
+import { FormattedMessage } from "react-intl";
+import NotesIcon from "../../../../icons/notes.svg";
+import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 
 export const treatmentHeaders = [
   {
@@ -39,28 +41,9 @@ export const treatmentHeaders = [
   },
 ];
 
-export const getPrescribedAndActiveDrugOrders = async (
-  patientUuid,
-  numberOfVisits,
-  getOtherActive,
-  visitUuids,
-  startDate,
-  endDate,
-  getEffectiveOrdersOnly
-) => {
+export const getAllDrugOrders = async (visitUuid) => {
   try {
-    const params = {
-      patientUuid: patientUuid,
-      numberOfVisits: numberOfVisits || 15,
-      getOtherActive: getOtherActive || true,
-      visitUuids: visitUuids || null,
-      startDate: startDate || null,
-      endDate: endDate || null,
-      getEffectiveOrdersOnly: getEffectiveOrdersOnly || false,
-      preferredLocale: getLocale(),
-    };
-    const response = await axios.get(PRESCRIBED_AND_ACTIVE_DRUG_ORDERS_URL, {
-      params: params,
+    const response = await axios.get(ALL_DRUG_ORDERS_URL(visitUuid), {
       withCredentials: true,
     });
     if (response.status !== 200) throw new Error(response.statusText);
@@ -122,4 +105,69 @@ export const updateDrugOrderList = (drugOrderList) => {
         : "";
   });
   return drugOrderList;
+};
+
+export const AddToDrugChart = (
+  <FormattedMessage
+    id={"ADD_TO_DRUG_CHART"}
+    defaultMessage={"Add to Drug Chart"}
+  />
+);
+
+export const EditDrugChart = (
+  <FormattedMessage id={"EDIT_DRUG_CHART"} defaultMessage={"Edit Drug Chart"} />
+);
+
+export const NoTreatmentsMessage = (
+  <FormattedMessage
+    id={"NO_TREATMENTS_MESSAGE"}
+    defaultMessage={"No IPD Medication is prescribed for this patient yet"}
+  />
+);
+
+export const isIPDDrugOrder = (drugOrderObject) => {
+  return drugOrderObject.drugOrder.careSetting === "INPATIENT";
+};
+
+export const setDosingInstructions = (drugOrder) => {
+  return (
+    <div className={drugOrder.dateStopped && "strike-through"}>
+      {drugOrder.dosingInstructions.dose +
+        " " +
+        drugOrder.dosingInstructions.doseUnits +
+        " - " +
+        drugOrder.dosingInstructions.route +
+        " - " +
+        drugOrder.dosingInstructions.frequency +
+        " - for " +
+        drugOrder.duration +
+        " " +
+        drugOrder.durationUnits}
+    </div>
+  );
+};
+
+export const getDrugName = (drugOrderObject) => {
+  const drugOrder = drugOrderObject.drugOrder;
+  if (
+    drugOrder.drug &&
+    (drugOrderObject.instructions || drugOrderObject.additionalInstructions)
+  ) {
+    return (
+      <div className="notes-icon-div">
+        <NotesIcon className="notes-icon" />
+        <span
+          className={`treatments-drug-name ${
+            drugOrder.dateStopped && "strike-through"
+          }`}
+        >
+          {drugOrder.drug.name}
+          <span>
+            <DisplayTags drugOrder={drugOrder.dosingInstructions} />
+          </span>
+        </span>
+      </div>
+    );
+  } else if (drugOrder.drug) return drugOrder.drug.name;
+  return drugOrder.freeTextAnswer;
 };
