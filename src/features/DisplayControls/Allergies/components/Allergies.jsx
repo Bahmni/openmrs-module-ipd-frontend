@@ -141,14 +141,7 @@ const Allergies = (props) => {
                 data-testid="table-body-row"
               >
                 {row.cells.map((cell) => (
-                  <TableCell
-                    key={cell.id}
-                    className={
-                      cell.id.includes("severity") && cell.value == "Severe"
-                        ? "high-severity-color"
-                        : ""
-                    }
-                  >
+                  <TableCell key={cell.id} className={"high-severity-color"}>
                     {cell.value}
                   </TableCell>
                 ))}

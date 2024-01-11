@@ -4,10 +4,16 @@ import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import {
-  getPrescribedAndActiveDrugOrders,
+  getAllDrugOrders,
   treatmentHeaders,
   getConfigsForTreatments,
   updateDrugOrderList,
+  AddToDrugChart,
+  EditDrugChart,
+  NoTreatmentsMessage,
+  isIPDDrugOrder,
+  setDosingInstructions,
+  getDrugName,
 } from "../utils/TreatmentsUtils";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
@@ -18,8 +24,6 @@ import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanel
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import TreatmentExpandableRow from "./TreatmentExpandableRow";
-import NotesIcon from "../../../../icons/notes.svg";
-import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import Notification from "../../../../components/Notification/Notification";
 
 const Treatments = (props) => {
@@ -29,6 +33,8 @@ const Treatments = (props) => {
     updateSliderOpen,
     sliderContentModified,
     setSliderContentModified,
+    visitUuid,
+    visitSummary,
   } = useContext(SliderContext);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
@@ -38,6 +44,7 @@ const Treatments = (props) => {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [drugChartNotes, setDrugChartNotes] = useState("");
   const [additionalData, setAdditionalData] = useState([]);
+  const [showEditMessage, setShowEditMessage] = useState(false);
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -46,7 +53,9 @@ const Treatments = (props) => {
       };
     });
   };
-  var drugOrderList = {};
+  let drugOrderList = {};
+  const isAddToDrugChartDisabled =
+    visitSummary.admissionDetails === null ? true : false;
   const sliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -71,27 +80,36 @@ const Treatments = (props) => {
     onModalSave: () => {
       setShowSuccessNotification(true);
       updateTreatmentsSlider(false);
-      refreshDisplayControl([componentKeys.NURSING_TASKS]);
-      refreshDisplayControl([componentKeys.DRUG_CHART]);
     },
   };
 
-  const NoTreatmentsMessage = (
-    <FormattedMessage
-      id={"NO_TREATMENTS_MESSAGE"}
-      defaultMessage={"No IPD Medication is prescribed for this patient yet"}
-    />
-  );
+  const handleEditAndAddToDrugChartClick = (
+    drugOrderId,
+    isEditDisabled,
+    showEditDrugChartLink
+  ) => {
+    if (isEditDisabled || isAddToDrugChartDisabled) {
+      updateSliderOpen((prev) => {
+        return {
+          ...prev,
+          treatments: false,
+        };
+      });
+      return;
+    }
 
-  const handleAddToDrugChartClick = (drugOrderId) => {
+    if (showEditDrugChartLink) {
+      setShowEditMessage(true);
+    }
+
     setSliderContentModified((prevState) => ({
       ...prevState,
       treatments: false,
     }));
     setSelectedDrugOrder((prevState) => ({
       ...prevState,
-      drugOrder: drugOrderList.visitDrugOrders.find(
-        (drugOrder) => drugOrder.uuid === drugOrderId
+      drugOrder: drugOrderList.ipdDrugOrders.find(
+        (drugOrderObject) => drugOrderObject.drugOrder.uuid === drugOrderId
       ),
     }));
     if (isSliderOpen.treatments) {
@@ -101,45 +119,28 @@ const Treatments = (props) => {
     setDrugChartNotes("");
   };
 
-  const AddToDrugChart = (
-    <FormattedMessage
-      id={"ADD_TO_DRUG_CHART"}
-      defaultMessage={"Add to Drug Chart"}
-    />
-  );
-
-  const isIPDDrugOrder = (drugOrder) => {
-    return drugOrder.careSetting === "INPATIENT";
-  };
-
-  const setDosingInstructions = (drugOrder) => {
-    return (
-      <div className={drugOrder.dateStopped && "strike-through"}>
-        {drugOrder.dosingInstructions.dose +
-          " " +
-          drugOrder.dosingInstructions.doseUnits +
-          " - " +
-          drugOrder.dosingInstructions.route +
-          " - " +
-          drugOrder.dosingInstructions.frequency +
-          " - for " +
-          drugOrder.duration +
-          " " +
-          drugOrder.durationUnits}
-      </div>
-    );
-  };
-
   const modifyTreatmentData = (drugOrders) => {
-    const treatments = drugOrders.visitDrugOrders
-      .filter((drugOrder) => isIPDDrugOrder(drugOrder))
-      .map((drugOrder) => {
+    const treatments = drugOrders.ipdDrugOrders
+      .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
+      .map((drugOrderObject) => {
+        let isEditDisabled;
+        let showEditDrugChartLink;
+        if (drugOrderObject.drugOrderSchedule != null) {
+          showEditDrugChartLink = true;
+          isEditDisabled = drugOrderObject.drugOrderSchedule
+            .medicationAdministrationStarted
+            ? true
+            : false;
+        } else {
+          showEditDrugChartLink = false;
+        }
+        const drugOrder = drugOrderObject.drugOrder;
         return {
           id: drugOrder.uuid,
           startDate: formatDate(drugOrder.effectiveStartDate, "DD/MM/YYYY"),
-          drugName: getDrugName(drugOrder),
+          drugName: getDrugName(drugOrderObject),
           dosageDetails: setDosingInstructions(drugOrder),
-          providerName: drugOrder.provider.name,
+          providerName: drugOrderObject.provider.name,
           status: (
             <span className={drugOrder.dateStopped && "red-text"}>
               {drugOrder.dateStopped && (
@@ -147,15 +148,41 @@ const Treatments = (props) => {
               )}
             </span>
           ),
-          actions: !drugOrder.dateStopped && (
-            <Link onClick={() => handleAddToDrugChartClick(drugOrder.uuid)}>
-              {AddToDrugChart}
-            </Link>
-          ),
+          actions:
+            !drugOrder.dateStopped &&
+            (!showEditDrugChartLink ? (
+              <Link
+                disabled={isAddToDrugChartDisabled}
+                onClick={() =>
+                  handleEditAndAddToDrugChartClick(
+                    drugOrder.uuid,
+                    isEditDisabled,
+                    showEditDrugChartLink
+                  )
+                }
+              >
+                {AddToDrugChart}
+              </Link>
+            ) : (
+              <Link
+                disabled={isEditDisabled || isAddToDrugChartDisabled}
+                onClick={() =>
+                  handleEditAndAddToDrugChartClick(
+                    drugOrder.uuid,
+                    isEditDisabled,
+                    showEditDrugChartLink
+                  )
+                }
+              >
+                {EditDrugChart}
+              </Link>
+            )),
           additionalData: {
-            instructions: drugOrder.instructions ? drugOrder.instructions : "",
-            additionalInstructions: drugOrder.additionalInstructions
-              ? drugOrder.additionalInstructions
+            instructions: drugOrderObject.instructions
+              ? drugOrderObject.instructions
+              : "",
+            additionalInstructions: drugOrderObject.additionalInstructions
+              ? drugOrderObject.additionalInstructions
               : "",
             recordedDate: formatDate(drugOrder.dateActivated, "DD/MM/YYYY"),
             recordedTime: formatDate(drugOrder.dateActivated, "HH:mm"),
@@ -176,34 +203,11 @@ const Treatments = (props) => {
     setTreatments(treatments);
     setAdditionalData(additionalMappedData);
   };
-  const getDrugName = (drugOrder) => {
-    if (
-      drugOrder.drug &&
-      (drugOrder.instructions || drugOrder.additionalInstructions)
-    ) {
-      return (
-        <div className="notes-icon-div">
-          <NotesIcon className="notes-icon" />
-          <span
-            className={`treatments-drug-name ${
-              drugOrder.dateStopped && "strike-through"
-            }`}
-          >
-            {drugOrder.drug.name}
-            <span>
-              <DisplayTags drugOrder={drugOrder.dosingInstructions} />
-            </span>
-          </span>
-        </div>
-      );
-    } else if (drugOrder.drug) return drugOrder.drug.name;
-    return drugOrder.freeTextAnswer;
-  };
 
   useEffect(() => {
     const getActiveDrugOrdersAndTreatmentConfig = async () => {
-      drugOrderList = await getPrescribedAndActiveDrugOrders(patientId);
-      if (drugOrderList.visitDrugOrders.length > 0) {
+      drugOrderList = await getAllDrugOrders(visitUuid);
+      if (drugOrderList.ipdDrugOrders.length > 0) {
         drugOrderList = updateDrugOrderList(drugOrderList);
         modifyTreatmentData(drugOrderList);
       }
@@ -262,9 +266,20 @@ const Treatments = (props) => {
         <Notification
           hostData={{
             notificationKind: "success",
-            messageId: "DRUG_CHART_MODAL_SAVE_MESSAGE",
+            messageId: showEditMessage
+              ? "DRUG_CHART_MODAL_EDIT_MESSAGE"
+              : "DRUG_CHART_MODAL_SAVE_MESSAGE",
           }}
-          hostApi={{ onClose: () => setShowSuccessNotification(false) }}
+          hostApi={{
+            onClose: () => {
+              setShowSuccessNotification(false);
+              refreshDisplayControl([
+                componentKeys.NURSING_TASKS,
+                componentKeys.DRUG_CHART,
+                componentKeys.TREATMENTS,
+              ]);
+            },
+          }}
         />
       )}
       {isLoading ? (

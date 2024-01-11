@@ -4,7 +4,6 @@ import "../styles/DiagnosisExpandableRow.scss";
 
 const DiagnosisExpandableRow = (props) => {
   const { data } = props;
-  console.log("data inside DiagnosisExpandableRow", data);
   return (
     <>
       <h6 className="notes-heading">Notes</h6>

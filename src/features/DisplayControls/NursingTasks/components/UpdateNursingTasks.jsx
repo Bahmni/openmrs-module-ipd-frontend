@@ -88,7 +88,7 @@ const UpdateNursingTasks = (props) => {
         orderUuid: skippedTasks[key].orderId,
         providers: [{ providerUuid: providerId, function: performerFunction }],
         notes: skippedTasks[key].notes
-          ? [{ authorUuid: providerId, text: administeredTasks[key]?.notes }]
+          ? [{ authorUuid: providerId, text: skippedTasks[key]?.notes }]
           : [],
         status: skippedTasks[key]?.status,
         slotUuid: key,
