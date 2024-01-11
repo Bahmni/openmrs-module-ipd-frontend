@@ -72,7 +72,7 @@ export const getConfigsForTreatments = async () => {
 };
 
 export const updateDrugOrderList = (drugOrderList) => {
-  drugOrderList.ipdDrugOrders.forEach((ipdDrugOrder) => {
+  drugOrderList.forEach((ipdDrugOrder) => {
     ipdDrugOrder.uniformDosingType = {
       dose: ipdDrugOrder.drugOrder.dosingInstructions.dose,
       doseUnits: ipdDrugOrder.drugOrder.dosingInstructions.doseUnits,

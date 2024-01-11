@@ -15,6 +15,7 @@ import {
   setDosingInstructions,
   getDrugName,
 } from "../utils/TreatmentsUtils";
+import { requesterFunction, verifierFunction } from "../../../../constants";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
 import { SliderContext } from "../../../../context/SliderContext";
@@ -25,6 +26,8 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import TreatmentExpandableRow from "./TreatmentExpandableRow";
 import Notification from "../../../../components/Notification/Notification";
+import NotesIcon from "../../../../icons/notes.svg";
+import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -108,7 +111,7 @@ const Treatments = (props) => {
     }));
     setSelectedDrugOrder((prevState) => ({
       ...prevState,
-      drugOrder: drugOrderList.ipdDrugOrders.find(
+      drugOrder: drugOrderList.find(
         (drugOrderObject) => drugOrderObject.drugOrder.uuid === drugOrderId
       ),
     }));
@@ -119,8 +122,9 @@ const Treatments = (props) => {
     setDrugChartNotes("");
   };
 
-  const modifyTreatmentData = (drugOrders) => {
-    const treatments = drugOrders.ipdDrugOrders
+
+  const modifyPrescribedTreatmentData = (drugOrders) => {
+    const treatments = drugOrders
       .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
       .map((drugOrderObject) => {
         let isEditDisabled;
@@ -186,6 +190,7 @@ const Treatments = (props) => {
               : "",
             recordedDate: formatDate(drugOrder.dateActivated, "DD/MM/YYYY"),
             recordedTime: formatDate(drugOrder.dateActivated, "HH:mm"),
+            startTimeForSort: drugOrder.effectiveStartDate
           },
         };
       });
@@ -204,12 +209,69 @@ const Treatments = (props) => {
     setAdditionalData(additionalMappedData);
   };
 
+  const modifyEmergencyTreatmentData = (emergencyMedications) => {
+    const emergencyTreatments = emergencyMedications
+      .map((medicationAdministration) => {
+        const dosingInstructions = { emergency: true };
+        const approver = medicationAdministration.providers.find(provider => provider.function === requesterFunction || provider.function === verifierFunction);
+        const approverNotes = medicationAdministration.notes.find(notes => notes.author.uuid === approver?.provider.uuid);
+        const approverName = approver?.provider.display.includes(" - ") ? approver?.provider.display.split(" - ")[1]: approver?.provider.display;
+        return {
+          id: medicationAdministration.uuid,
+          startDate: formatDate(medicationAdministration.administeredDateTime, "DD/MM/YYYY"),
+          drugName: <div className="notes-icon-div">
+              {approverNotes && <NotesIcon className="notes-icon" />}
+              <span className={`treatments-drug-name`} >
+                {medicationAdministration.drug.display}
+                <span>
+                    <DisplayTags drugOrder={dosingInstructions} />
+                </span>
+              </span>
+            </div>,
+          dosageDetails: <div>{medicationAdministration.dose + " " +
+              medicationAdministration.doseUnits?.display + " - " + medicationAdministration.route?.display}
+            </div>,
+          providerName: approverName,
+          status: (
+            <span>
+              {approver.function === requesterFunction && (
+                <FormattedMessage id="AWAITING" defaultMessage="Not acknowledged" />
+              )}
+              {approver.function === verifierFunction && (
+                <FormattedMessage id="CONFIRMED" defaultMessage="Acknowledged" />
+              )}
+            </span>
+          ),
+          actions: null,
+          additionalData: {
+            approverName: approver?.function === verifierFunction ? approverName : null,
+            approverNotes: approverNotes,
+            startTimeForSort: medicationAdministration.administeredDateTime
+          },
+        };
+      });
+    const additionalMappedData = emergencyTreatments.map((treatment) => {
+      return {
+        id: treatment.id,
+        approverNotes: treatment.additionalData.approverName ? treatment.additionalData.approverNotes?.text : null,
+        approverAdditionalData: treatment.additionalData.approverName
+        + " | " + formatDate(treatment.additionalData.approverNotes?.recordedTime, "DD/MM/YYYY")
+        + " | " + formatDate(treatment.additionalData.approverNotes?.recordedTime, "HH:mm")
+      };
+    });
+    setTreatments(prevtreatments => [...prevtreatments, ...emergencyTreatments]);
+    setAdditionalData(prevData => [...prevData, ...additionalMappedData]);
+  };
+
   useEffect(() => {
     const getActiveDrugOrdersAndTreatmentConfig = async () => {
-      drugOrderList = await getAllDrugOrders(visitUuid);
-      if (drugOrderList.ipdDrugOrders.length > 0) {
-        drugOrderList = updateDrugOrderList(drugOrderList);
-        modifyTreatmentData(drugOrderList);
+      const allMedicationsList = await getAllDrugOrders(visitUuid);
+      if (allMedicationsList.ipdDrugOrders.length > 0) {
+        drugOrderList = updateDrugOrderList(allMedicationsList.ipdDrugOrders);
+        modifyPrescribedTreatmentData(drugOrderList);
+      }
+      if (allMedicationsList.emergencyMedications && allMedicationsList.emergencyMedications.length > 0) {
+        modifyEmergencyTreatmentData(allMedicationsList.emergencyMedications);
       }
     };
 
@@ -288,7 +350,7 @@ const Treatments = (props) => {
         <div className="no-treatments">{NoTreatmentsMessage}</div>
       ) : (
         <ExpandableDataTable
-          rows={treatments}
+          rows={treatments.sort((a, b) => a.additionalData.startTimeForSort - b.additionalData.startTimeForSort)}
           headers={treatmentHeaders}
           additionalData={additionalData}
           component={(additionalData) => {

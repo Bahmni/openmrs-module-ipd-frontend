@@ -16,19 +16,26 @@ const ExpandableRowData = (props) => {
 
   const verticalTabsData = {};
 
-  if (expandTreatmentData.instructions !== "") {
+  if (expandTreatmentData.instructions && expandTreatmentData.instructions !== "") {
     verticalTabsData["Instructions"] = {
       data: expandTreatmentData.instructions,
       additionalData: [fetchAdditionalData(expandTreatmentData.instructions)],
     };
   }
 
-  if (expandTreatmentData.additionalInstructions !== "") {
+  if (expandTreatmentData.additionalInstructions && expandTreatmentData.additionalInstructions !== "") {
     verticalTabsData["Additional Instructions"] = {
       data: expandTreatmentData.additionalInstructions,
       additionalData: [
         fetchAdditionalData(expandTreatmentData.additionalInstructions),
       ],
+    };
+  }
+
+  if (expandTreatmentData.approverNotes && expandTreatmentData.approverNotes !== "") {
+    verticalTabsData["Acknowledgement Note"] = {
+      data: expandTreatmentData.approverNotes,
+      additionalData: [expandTreatmentData.approverAdditionalData]
     };
   }
 
