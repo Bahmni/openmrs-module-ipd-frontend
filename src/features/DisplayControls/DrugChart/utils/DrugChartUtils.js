@@ -51,7 +51,7 @@ export const SortDrugChartData = (drugChartData) => {
 };
 
 export const getDateFormatString = () =>
-  drugChart.enable24HourTime ? "DD/MM/YYYY HH:mm" : "DD/MM/YYYY hh:mm A";
+  drugChart.enable24HourTime ? "DD/MM/YYYY | HH:mm" : "DD/MM/YYYY | hh:mm A";
 
 export const getHourFormatString = () =>
   drugChart.enable24HourTime ? "HH:mm" : "hh:mm";
