@@ -30,6 +30,7 @@ const UpdateNursingTasks = (props) => {
     patientId,
     providerId,
     setShowSuccessNotification,
+    setSuccessMessage
   } = props;
   const [tasks, updateTasks] = useState({});
   const [errors, updateErrors] = useState({});
@@ -54,6 +55,7 @@ const UpdateNursingTasks = (props) => {
 
   const saveAdministeredTasks = () => {
     setShowSuccessNotification(true);
+    setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
   };
@@ -485,5 +487,6 @@ UpdateNursingTasks.propTypes = {
   patientId: PropTypes.string.isRequired,
   providerId: PropTypes.string.isRequired,
   setShowSuccessNotification: PropTypes.func.isRequired,
+  setSuccessMessage: PropTypes.func.isRequired
 };
 export default UpdateNursingTasks;

@@ -15,7 +15,7 @@ import {
   setDosingInstructions,
   getDrugName,
 } from "../utils/TreatmentsUtils";
-import { requesterFunction, verifierFunction } from "../../../../constants";
+import { requesterFunction, verifierFunction, defaultDateTimeFormat, defaultDateFormat } from "../../../../constants";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
 import { SliderContext } from "../../../../context/SliderContext";
@@ -188,8 +188,7 @@ const Treatments = (props) => {
             additionalInstructions: drugOrderObject.additionalInstructions
               ? drugOrderObject.additionalInstructions
               : "",
-            recordedDate: formatDate(drugOrder.dateActivated, "DD/MM/YYYY"),
-            recordedTime: formatDate(drugOrder.dateActivated, "HH:mm"),
+            recordedDateTime: formatDate(drugOrder.dateActivated, defaultDateTimeFormat),
             startTimeForSort: drugOrder.effectiveStartDate
           },
         };
@@ -200,8 +199,7 @@ const Treatments = (props) => {
         id: treatment.id,
         instructions: treatment.additionalData.instructions,
         additionalInstructions: treatment.additionalData.additionalInstructions,
-        recordedDate: treatment.additionalData.recordedDate,
-        recordedTime: treatment.additionalData.recordedTime,
+        recordedDateTime: treatment.additionalData.recordedDateTime,
         provider: treatment.providerName,
       };
     });
@@ -218,7 +216,7 @@ const Treatments = (props) => {
         const approverName = approver?.provider.display.includes(" - ") ? approver?.provider.display.split(" - ")[1]: approver?.provider.display;
         return {
           id: medicationAdministration.uuid,
-          startDate: formatDate(medicationAdministration.administeredDateTime, "DD/MM/YYYY"),
+          startDate: formatDate(medicationAdministration.administeredDateTime, defaultDateFormat),
           drugName: <div className="notes-icon-div">
               {approverNotes && <NotesIcon className="notes-icon" />}
               <span className={`treatments-drug-name`} >
@@ -255,8 +253,7 @@ const Treatments = (props) => {
         id: treatment.id,
         approverNotes: treatment.additionalData.approverName ? treatment.additionalData.approverNotes?.text : null,
         approverAdditionalData: treatment.additionalData.approverName
-        + " | " + formatDate(treatment.additionalData.approverNotes?.recordedTime, "DD/MM/YYYY")
-        + " | " + formatDate(treatment.additionalData.approverNotes?.recordedTime, "HH:mm")
+        + " | " + formatDate(treatment.additionalData.approverNotes?.recordedTime, defaultDateTimeFormat)
       };
     });
     setTreatments(prevtreatments => [...prevtreatments, ...emergencyTreatments]);

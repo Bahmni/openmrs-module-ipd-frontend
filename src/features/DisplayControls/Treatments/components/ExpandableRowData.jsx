@@ -8,9 +8,7 @@ const ExpandableRowData = (props) => {
     return additionalData
       ? expandTreatmentData.provider +
           " | " +
-          expandTreatmentData.recordedDate +
-          " | " +
-          expandTreatmentData.recordedTime
+          expandTreatmentData.recordedDateTime
       : null;
   };
 
