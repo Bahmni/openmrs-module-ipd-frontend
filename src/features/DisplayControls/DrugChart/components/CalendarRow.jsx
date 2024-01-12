@@ -15,9 +15,6 @@ export default function CalendarRow(props) {
         const isCurrentHour = hour === currentHour && sameDate;
         const highlightedCell = currentMinute < 30 ? "left" : "right";
         if (rowData[hour]) {
-          console.log(rowData[hour]);
-          // const { minutes, status, administrationInfo, notes } = rowData[hour];
-
           return (
             <TimeCell
               slotInfo={rowData[hour]}
