@@ -136,3 +136,84 @@ export const drugChartData = [
     ],
   },
 ];
+
+export const drugChartDataForGrouping = [
+  {
+    id: 1,
+    uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+    serviceType: "Medication Administration",
+    comment: "some comment",
+    startDate: 1690906304,
+    patient: {
+      uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+    },
+    slots: [
+      {
+        id: 1,
+        uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+        order: {
+          uuid: "9d7437a9-3f10-11e4-abcd-0800271c1b75",
+          drug: {
+            display: "Paracetamol 120 mg/5 mL Suspension (Liquid)",
+          },
+          route: {
+            uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+            display: "Oral",
+          },
+          dose: 25,
+          doseUnits: {
+            uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
+            display: "ml",
+          },
+          duration: 3,
+          durationUnits: {
+            uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+            display: "Day(s)",
+          },
+          dosingInstructions: '{"Before meals"}',
+          frequency: {
+            uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+            display: "Once a day",
+          },
+          asNeeded: false,
+        },
+        serviceType: "MedicationRequest",
+        status: "SCHEDULED",
+        startTime: 1690906550,
+      },
+      {
+        id: 2,
+        uuid: "738aa77d-03fc-438f-a87a-ae8a8867cyu721",
+        order: {
+          uuid: "9d7437a9-3f10-11e4-abcd-0800271c1b75",
+          drug: {
+            display: "Enalapril 120 mg",
+          },
+          route: {
+            uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+            display: "Oral",
+          },
+          dose: 25,
+          doseUnits: {
+            uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
+            display: "ml",
+          },
+          duration: 3,
+          durationUnits: {
+            uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+            display: "Day(s)",
+          },
+          dosingInstructions: '{"Before meals"}',
+          frequency: {
+            uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+            display: "Once a day",
+          },
+          asNeeded: false,
+        },
+        serviceType: "MedicationRequest",
+        status: "SCHEDULED",
+        startTime: 1690916550,
+      },
+    ],
+  },
+];
