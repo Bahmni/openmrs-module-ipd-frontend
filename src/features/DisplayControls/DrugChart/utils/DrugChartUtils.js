@@ -1,7 +1,11 @@
 import axios from "axios";
 import moment from "moment";
-import { MEDICATIONS_BASE_URL } from "../../../../constants";
+import {
+  ALL_DRUG_ORDERS_URL,
+  MEDICATIONS_BASE_URL,
+} from "../../../../constants";
 import data from "../../../../utils/config.json";
+import _ from "lodash";
 
 const { config: { drugChart = {} } = {} } = data;
 
@@ -12,11 +16,95 @@ export const fetchMedications = async (
 ) => {
   const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}`;
   try {
-    const response = await axios.get(FETCH_MEDICATIONS_URL);
-    return response;
+    return await axios.get(FETCH_MEDICATIONS_URL);
   } catch (error) {
     console.error(error);
   }
+};
+
+export const getAllDrugOrders = async (visitUuid) => {
+  try {
+    console.log("Visit Id", visitUuid);
+    const response = await axios.get(ALL_DRUG_ORDERS_URL(visitUuid), {
+      withCredentials: true,
+    });
+    if (response.status !== 200) throw new Error(response.statusText);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const transformDrugOrders = async (visitUuid) => {
+  const orders = await getAllDrugOrders(visitUuid);
+  const { ipdDrugOrders, emergencyMedications } = orders;
+  console.log("Orders", orders);
+  const medicationData = {};
+  ipdDrugOrders.forEach((order) => {
+    if (
+      order.drugOrder?.careSetting === "INPATIENT" &&
+      order.drugOrderSchedule
+    ) {
+      const { dosingInstructions, drug, duration, durationUnits } =
+        order.drugOrder;
+      let dosage = "",
+        doseUnits;
+      if (
+        dosingInstructions.doseUnits?.toLowerCase() === "ml" ||
+        dosingInstructions.doseUnits?.toLowerCase() === "mg"
+      ) {
+        dosage = dosingInstructions.dose + dosingInstructions.doseUnits;
+      } else {
+        dosage = dosingInstructions.dose;
+        doseUnits = dosingInstructions.doseUnits;
+      }
+      medicationData[order.drugOrder.uuid] = {
+        name: drug.name,
+        dosingInstructions: {
+          route: dosingInstructions.route,
+          dosage,
+          doseUnits,
+        },
+        duration: duration + " " + durationUnits,
+        slots: [],
+        dateStopped: order.drugOrder.dateStopped,
+        firstSlotStartTime:
+          order.drugOrderSchedule.slotStartTime ||
+          (order.drugOrderSchedule.firstDaySlotsStartTime &&
+            order.drugOrderSchedule.firstDaySlotsStartTime[0]) ||
+          order.drugOrderSchedule.dayWiseSlotsStartTime[0],
+        notes: order.notes && order.notes[0].text,
+      };
+    }
+  });
+  emergencyMedications.forEach((medication) => {
+    const { drug, notes, uuid, route } = medication;
+    let dosage = "",
+      doseUnits;
+    if (
+      medication.doseUnits?.toLowerCase() === "ml" ||
+      medication.doseUnits?.toLowerCase() === "mg"
+    ) {
+      dosage = medication.dose + medication.doseUnits;
+    } else {
+      dosage = medication.dose;
+      doseUnits = medication.doseUnits;
+    }
+    medicationData[uuid] = {
+      uuid: drug.uuid,
+      name: drug.display,
+      dosingInstructions: {
+        dosage,
+        doseUnits,
+        route,
+      },
+      notes: notes[0].text,
+    };
+  });
+
+  // medicationData.sort((a,b) => a.firstSlotStartTime - b.firstSlotStartTime);
+  console.log("Medication Data", medicationData, orders);
+  return medicationData;
 };
 
 const isLateTask = (startTime) => {
@@ -55,6 +143,65 @@ export const getDateFormatString = () =>
 
 export const getHourFormatString = () =>
   drugChart.enable24HourTime ? "HH:mm" : "hh:mm";
+
+export const getTransformedDrugChartData = (drugChartData, drugOrders) => {
+  console.log("Drug Chart Data", drugChartData, drugOrders);
+  const mappedOrders = mapDrugOrdersAndSlots(drugChartData, drugOrders);
+  console.log("Mapped Sorted Response", mappedOrders);
+  const sortedDrugChartData = SortDrugChartData(drugChartData);
+  const groupedSlots = groupSlotsByDrugName(sortedDrugChartData);
+  return TransformDrugChartData(groupedSlots);
+};
+
+export const resetDrugOrdersSlots = (drugOrders) => {
+  Object.keys(drugOrders).forEach((order) => {
+    drugOrders[order].slots = [];
+  });
+  return drugOrders;
+};
+
+export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
+  const orders = resetDrugOrdersSlots(drugOrders);
+  if (drugChartData && drugChartData.length > 0 && !_.isEmpty(orders)) {
+    let slots;
+    if (drugChartData[0]) {
+      slots = drugChartData[0].slots;
+    }
+    slots?.forEach((slot) => {
+      const { order } = slot;
+      orders[order.uuid].slots.push(slot);
+    });
+    const mappedOrders = Object.keys(orders).map((order) => {
+      return {
+        uuid: order,
+        ...orders[order],
+      };
+    });
+    mappedOrders.sort((a, b) => a.firstSlotStartTime - b.firstSlotStartTime);
+    return mappedOrders;
+  }
+};
+
+export const groupSlotsByDrugName = (drugChartData) => {
+  const groupedSlots = {};
+
+  drugChartData.forEach((schedule) => {
+    const { slots } = schedule;
+
+    slots.forEach((slot) => {
+      const { order } = slot;
+      const drugName = order.drug.display;
+
+      if (!groupedSlots[drugName]) {
+        groupedSlots[drugName] = [];
+      }
+
+      groupedSlots[drugName].push(slot);
+    });
+  });
+
+  return groupedSlots;
+};
 
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
@@ -194,20 +341,11 @@ export const TransformDrugChartData = (drugChartData) => {
   return [slotDataByOrder, drugOrderData];
 };
 
-export const ifMedicationNotesPresent = (medicationNotes, side) => {
-  let notesIcon;
-  if (!medicationNotes) {
-    notesIcon = false;
-  } else {
-    notesIcon = true;
-  }
-  return (
-    (side === "Administered-Late" ||
-      side === "Administered" ||
-      side === "Not-Administered") &&
-    notesIcon
-  );
-};
+export const ifMedicationNotesPresent = (medicationNotes, side) =>
+  (side === "Administered-Late" ||
+    side === "Administered" ||
+    side === "Not-Administered") &&
+  Boolean(medicationNotes);
 
 export const currentShiftHoursArray = () => {
   const shiftTimeInHours = drugChart.shiftHours;

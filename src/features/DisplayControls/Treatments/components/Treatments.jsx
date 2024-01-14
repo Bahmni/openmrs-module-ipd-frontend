@@ -54,8 +54,7 @@ const Treatments = (props) => {
     });
   };
   let drugOrderList = {};
-  const isAddToDrugChartDisabled =
-    visitSummary.admissionDetails === null ? true : false;
+  const isAddToDrugChartDisabled = visitSummary?.admissionDetails === null;
   const sliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -127,10 +126,8 @@ const Treatments = (props) => {
         let showEditDrugChartLink;
         if (drugOrderObject.drugOrderSchedule != null) {
           showEditDrugChartLink = true;
-          isEditDisabled = drugOrderObject.drugOrderSchedule
-            .medicationAdministrationStarted
-            ? true
-            : false;
+          isEditDisabled =
+            !!drugOrderObject.drugOrderSchedule.medicationAdministrationStarted;
         } else {
           showEditDrugChartLink = false;
         }
