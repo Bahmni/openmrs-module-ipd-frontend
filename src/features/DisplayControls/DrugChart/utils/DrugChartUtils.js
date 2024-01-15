@@ -131,6 +131,7 @@ const checkIfSlotIsAdministered = (status) => {
 };
 
 const sortByStartTime = (a, b) => a.startTime - b.startTime;
+
 export const SortDrugChartData = (drugChartData) => {
   drugChartData.forEach((item) => {
     item.slots.sort(sortByStartTime);
@@ -139,19 +140,19 @@ export const SortDrugChartData = (drugChartData) => {
 };
 
 export const getDateFormatString = () =>
-  drugChart.enable24HourTime ? "DD/MM/YYYY HH:mm" : "DD/MM/YYYY hh:mm A";
+  drugChart.enable24HourTime ? "DD/MM/YYYY | HH:mm" : "DD/MM/YYYY | hh:mm A";
 
 export const getHourFormatString = () =>
   drugChart.enable24HourTime ? "HH:mm" : "hh:mm";
 
-export const getTransformedDrugChartData = (drugChartData, drugOrders) => {
-  console.log("Drug Chart Data", drugChartData, drugOrders);
-  const mappedOrders = mapDrugOrdersAndSlots(drugChartData, drugOrders);
-  console.log("Mapped Sorted Response", mappedOrders);
-  const sortedDrugChartData = SortDrugChartData(drugChartData);
-  const groupedSlots = groupSlotsByDrugName(sortedDrugChartData);
-  return TransformDrugChartData(groupedSlots);
-};
+// export const getTransformedDrugChartData = (drugChartData, drugOrders) => {
+//   console.log("Drug Chart Data", drugChartData, drugOrders);
+//   const mappedOrders = mapDrugOrdersAndSlots(drugChartData, drugOrders);
+//   console.log("Mapped Sorted Response", mappedOrders);
+//   const sortedDrugChartData = SortDrugChartData(drugChartData);
+//   const groupedSlots = groupSlotsByDrugName(sortedDrugChartData);
+//   return TransformDrugChartData(groupedSlots);
+// };
 
 export const resetDrugOrdersSlots = (drugOrders) => {
   Object.keys(drugOrders).forEach((order) => {
@@ -182,6 +183,13 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
   }
 };
 
+export const getTransformedDrugChartData = (drugChartData) => {
+  const sortedDrugChartData = SortDrugChartData(drugChartData);
+  const groupedSlots = groupSlotsByDrugName(sortedDrugChartData);
+  const transformedDrugChartData = TransformDrugChartData(groupedSlots);
+  return transformedDrugChartData;
+};
+
 export const groupSlotsByDrugName = (drugChartData) => {
   const groupedSlots = {};
 
@@ -203,16 +211,16 @@ export const groupSlotsByDrugName = (drugChartData) => {
   return groupedSlots;
 };
 
-export const TransformDrugChartData = (drugChartData) => {
+export const TransformDrugChartData = (groupedSlots) => {
   const drugOrderData = [];
   const slotDataByOrder = [];
 
-  drugChartData.map((schedule) => {
-    const { slots } = schedule;
+  Object.values(groupedSlots).forEach((slots) => {
+    const slotData = {};
 
     slots.forEach((slot) => {
       let administeredStartHour, administeredStartMinutes, medicationNotes;
-      const slotData = {};
+
       const { startTime, status, order, medicationAdministration } = slot;
       let medicationStatus = "Pending";
       let adminInfo = "",
@@ -276,20 +284,23 @@ export const TransformDrugChartData = (drugChartData) => {
       const startHour = startDateTimeObj.getHours();
       const startMinutes = startDateTimeObj.getMinutes();
       if (isCompleted) {
-        slotData[administeredStartHour] = {
+        slotData[administeredStartHour] = slotData[administeredStartHour] || [];
+        slotData[administeredStartHour].push({
           minutes: administeredStartMinutes,
           status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
           administrationInfo: adminInfo,
           notes: medicationNotes,
-        };
+        });
       } else {
-        slotData[startHour] = {
+        slotData[startHour] = slotData[startHour] || [];
+        slotData[startHour].push({
           minutes: startMinutes,
           status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
           administrationInfo: adminInfo,
           notes: medicationNotes,
-        };
+        });
       }
+
       if (
         medicationStatus === "Administered" ||
         medicationStatus === "Administered-Late"
