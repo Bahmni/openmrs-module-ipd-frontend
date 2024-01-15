@@ -51,21 +51,49 @@ export const SortDrugChartData = (drugChartData) => {
 };
 
 export const getDateFormatString = () =>
-  drugChart.enable24HourTime ? "DD/MM/YYYY HH:mm" : "DD/MM/YYYY hh:mm A";
+  drugChart.enable24HourTime ? "DD/MM/YYYY | HH:mm" : "DD/MM/YYYY | hh:mm A";
 
 export const getHourFormatString = () =>
   drugChart.enable24HourTime ? "HH:mm" : "hh:mm";
 
-export const TransformDrugChartData = (drugChartData) => {
-  const drugOrderData = [];
-  const slotDataByOrder = [];
+export const getTransformedDrugChartData = (drugChartData) => {
+  const sortedDrugChartData = SortDrugChartData(drugChartData);
+  const groupedSlots = groupSlotsByDrugName(sortedDrugChartData);
+  const transformedDrugChartData = TransformDrugChartData(groupedSlots);
+  return transformedDrugChartData;
+};
 
-  drugChartData.map((schedule) => {
+export const groupSlotsByDrugName = (drugChartData) => {
+  const groupedSlots = {};
+
+  drugChartData.forEach((schedule) => {
     const { slots } = schedule;
 
     slots.forEach((slot) => {
+      const { order } = slot;
+      const drugName = order.drug.display;
+
+      if (!groupedSlots[drugName]) {
+        groupedSlots[drugName] = [];
+      }
+
+      groupedSlots[drugName].push(slot);
+    });
+  });
+
+  return groupedSlots;
+};
+
+export const TransformDrugChartData = (groupedSlots) => {
+  const drugOrderData = [];
+  const slotDataByOrder = [];
+
+  Object.values(groupedSlots).forEach((slots) => {
+    const slotData = {};
+
+    slots.forEach((slot) => {
       let administeredStartHour, administeredStartMinutes, medicationNotes;
-      const slotData = {};
+
       const { startTime, status, order, medicationAdministration } = slot;
       let medicationStatus = "Pending";
       let adminInfo = "",
@@ -129,20 +157,23 @@ export const TransformDrugChartData = (drugChartData) => {
       const startHour = startDateTimeObj.getHours();
       const startMinutes = startDateTimeObj.getMinutes();
       if (isCompleted) {
-        slotData[administeredStartHour] = {
+        slotData[administeredStartHour] = slotData[administeredStartHour] || [];
+        slotData[administeredStartHour].push({
           minutes: administeredStartMinutes,
           status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
           administrationInfo: adminInfo,
           notes: medicationNotes,
-        };
+        });
       } else {
-        slotData[startHour] = {
+        slotData[startHour] = slotData[startHour] || [];
+        slotData[startHour].push({
           minutes: startMinutes,
           status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
           administrationInfo: adminInfo,
           notes: medicationNotes,
-        };
+        });
       }
+
       if (
         medicationStatus === "Administered" ||
         medicationStatus === "Administered-Late"
