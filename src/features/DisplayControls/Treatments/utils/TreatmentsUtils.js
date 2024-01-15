@@ -105,6 +105,10 @@ export const EditDrugChart = (
   <FormattedMessage id={"EDIT_DRUG_CHART"} defaultMessage={"Edit Drug Chart"} />
 );
 
+export const StopDrugChart = (
+  <FormattedMessage id={"STOP_DRUG_CHART"} defaultMessage={"Stop Drug Chart"} />
+);
+
 export const NoTreatmentsMessage = (
   <FormattedMessage
     id={"NO_TREATMENTS_MESSAGE"}

@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { Link, DataTableSkeleton } from "carbon-components-react";
+import { Link, DataTableSkeleton, TextInput } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -10,6 +10,7 @@ import {
   updateDrugOrderList,
   AddToDrugChart,
   EditDrugChart,
+  StopDrugChart,
   NoTreatmentsMessage,
   isIPDDrugOrder,
   setDosingInstructions,
@@ -45,6 +46,7 @@ const Treatments = (props) => {
   const [drugChartNotes, setDrugChartNotes] = useState("");
   const [additionalData, setAdditionalData] = useState([]);
   const [showEditMessage, setShowEditMessage] = useState(false);
+  const [showStopDrugChartModal, setShowStopDrugChartModal] = useState(false);
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -63,6 +65,12 @@ const Treatments = (props) => {
     },
     onClose: () => {
       setShowWarningNotification(false);
+    },
+  };
+
+  const stopDrugModalCloseActions = {
+    onClose: () => {
+      setShowStopDrugChartModal(false);
     },
   };
 
@@ -85,10 +93,9 @@ const Treatments = (props) => {
 
   const handleEditAndAddToDrugChartClick = (
     drugOrderId,
-    isEditDisabled,
     showEditDrugChartLink
   ) => {
-    if (isEditDisabled || isAddToDrugChartDisabled) {
+    if (isAddToDrugChartDisabled) {
       updateSliderOpen((prev) => {
         return {
           ...prev,
@@ -97,7 +104,6 @@ const Treatments = (props) => {
       });
       return;
     }
-
     if (showEditDrugChartLink) {
       setShowEditMessage(true);
     }
@@ -119,18 +125,61 @@ const Treatments = (props) => {
     setDrugChartNotes("");
   };
 
+  const handleStopDrugChartClick = () => {
+    setShowStopDrugChartModal(true);
+  };
+
+  const handleStopDrugChartModalSubmit = () => {
+    //api call to stop drug chart
+  };
+
+  const getActions = (showEditDrugChartLink, showStopDrugChartLink) => {
+    if (!showEditDrugChartLink && !showStopDrugChartLink) {
+      return (
+        <Link
+          disabled={isAddToDrugChartDisabled}
+          onClick={() =>
+            handleEditAndAddToDrugChartClick(
+              drugOrder.uuid,
+              showEditDrugChartLink
+            )
+          }
+        >
+          {AddToDrugChart}
+        </Link>
+      );
+    } else if (!showStopDrugChartLink) {
+      return (
+        <Link
+          onClick={() =>
+            handleEditAndAddToDrugChartClick(
+              drugOrder.uuid,
+              showEditDrugChartLink
+            )
+          }
+        >
+          {EditDrugChart}
+        </Link>
+      );
+    } else {
+      return (
+        <Link onClick={() => handleStopDrugChartClick()}>{StopDrugChart}</Link>
+      );
+    }
+  };
+
   const modifyTreatmentData = (drugOrders) => {
     const treatments = drugOrders.ipdDrugOrders
       .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
       .map((drugOrderObject) => {
-        let isEditDisabled;
         let showEditDrugChartLink;
+        let showStopDrugChartLink;
         if (drugOrderObject.drugOrderSchedule != null) {
-          showEditDrugChartLink = true;
-          isEditDisabled = drugOrderObject.drugOrderSchedule
+          showStopDrugChartLink = drugOrderObject.drugOrderSchedule
             .medicationAdministrationStarted
             ? true
             : false;
+          showEditDrugChartLink = !showStopDrugChartLink;
         } else {
           showEditDrugChartLink = false;
         }
@@ -150,33 +199,7 @@ const Treatments = (props) => {
           ),
           actions:
             !drugOrder.dateStopped &&
-            (!showEditDrugChartLink ? (
-              <Link
-                disabled={isAddToDrugChartDisabled}
-                onClick={() =>
-                  handleEditAndAddToDrugChartClick(
-                    drugOrder.uuid,
-                    isEditDisabled,
-                    showEditDrugChartLink
-                  )
-                }
-              >
-                {AddToDrugChart}
-              </Link>
-            ) : (
-              <Link
-                disabled={isEditDisabled || isAddToDrugChartDisabled}
-                onClick={() =>
-                  handleEditAndAddToDrugChartClick(
-                    drugOrder.uuid,
-                    isEditDisabled,
-                    showEditDrugChartLink
-                  )
-                }
-              >
-                {EditDrugChart}
-              </Link>
-            )),
+            getActions(showEditDrugChartLink, showStopDrugChartLink),
           additionalData: {
             instructions: drugOrderObject.instructions
               ? drugOrderObject.instructions
@@ -233,6 +256,44 @@ const Treatments = (props) => {
 
   return (
     <>
+      {showStopDrugChartModal && (
+        <SideBarPanelClose
+          className="warning-notification"
+          open={true}
+          message={
+            <FormattedMessage id="STOP_DRUG" defaultMessage="Stop drug" />
+          }
+          label={""}
+          primaryButtonText={
+            <FormattedMessage id="STOP_DRUG" defaultMessage="Stop drug" />
+          }
+          secondaryButtonText={
+            <FormattedMessage
+              id="STOP_DRUG_CANCEL_TEXT"
+              defaultMessage="Cancel"
+            />
+          }
+          onSubmit={handleStopDrugChartModalSubmit}
+          onSecondarySubmit={stopDrugModalCloseActions.onClose}
+          onClose={stopDrugModalCloseActions.onClose}
+          children={
+            <>
+              <FormattedMessage
+                id="STOP_DRUG_CONFIRMATION_TEXT"
+                defaultMessage="Are you sure you want to stop this drug? You will not be able to reverse this decision"
+              />
+              <div className="stop=drug-reason-text">
+                <TextInput
+                  id="stop-drug-reason-text"
+                  type="text"
+                  labelText="Please mention a reason"
+                  required
+                />
+              </div>
+            </>
+          }
+        />
+      )}
       {isSliderOpen.treatments && (
         <DrugChartSlider
           title={AddToDrugChart}
