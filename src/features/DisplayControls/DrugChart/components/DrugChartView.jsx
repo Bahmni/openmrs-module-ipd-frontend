@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
+import { SliderContext } from "../../../../context/SliderContext";
 import { Button } from "carbon-components-react";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import DrugChart from "./DrugChart";
@@ -27,7 +28,8 @@ const NoMedicationTaskMessage = (
 );
 
 export default function DrugChartWrapper(props) {
-  const { patientId, visitId } = props;
+  const { patientId } = props;
+  const { visitUuid } = useContext(SliderContext);
   const [drugChartData, setDrugChartData] = useState([]);
   const [drugOrders, setDrugOrders] = useState({});
   const [isLoading, setLoading] = useState(true);
@@ -70,7 +72,7 @@ export default function DrugChartWrapper(props) {
     );
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
-    setDrugOrders(await transformDrugOrders(visitId));
+    setDrugOrders(await transformDrugOrders(visitUuid));
   }, []);
 
   const sortedDrugChartData = SortDrugChartData(drugChartData, drugOrders);
