@@ -276,10 +276,10 @@ export default function NursingTasks(props) {
                 />
                 <span>{`${formatDate(
                   startEndDates.startDate,
-                  "DD/MM/YYYY HH:mm"
+                  "DD/MM/YYYY | HH:mm"
                 )} - ${formatDate(
                   startEndDates.endDate,
-                  "DD/MM/YYYY HH:mm"
+                  "DD/MM/YYYY | HH:mm"
                 )}`}</span>
               </div>
               <div className="nursing-task-actions">

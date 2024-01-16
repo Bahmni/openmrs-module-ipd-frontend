@@ -5,13 +5,12 @@ import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import DrugChart from "./DrugChart";
 import {
   fetchMedications,
-  TransformDrugChartData,
   getDateTime,
   currentShiftHoursArray,
   getNextShiftDetails,
   getPreviousShiftDetails,
-  SortDrugChartData,
   getDateFormatString,
+  getTransformedDrugChartData,
 } from "../utils/DrugChartUtils";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import data from "../../../../utils/config.json";
@@ -70,8 +69,7 @@ export default function DrugChartWrapper(props) {
     callFetchMedications(startDateTime, endDateTime);
   }, []);
 
-  const sortedDrugChartData = SortDrugChartData(drugChartData);
-  const transformedDrugChartData = TransformDrugChartData(sortedDrugChartData);
+  const transformedDrugChartData = getTransformedDrugChartData(drugChartData);
 
   const handlePrevious = () => {
     const firstHour = currentShiftArray[0];
