@@ -88,13 +88,14 @@ export const TransformDrugChartData = (drugChartData) => {
           administeredTime = moment(administeredDateTimeObject).format(
             hourFormatString
           );
-          const performer = providers.find(provider => provider.function === performerFunction).provider;
-          const performerName = performer.display.includes(" - ") ? performer.display.split(" - ")[1]: performer.display;
+          let performer = providers.find(provider => provider.function === performerFunction);
+          performer = performer ? performer.provider : null;
+          const performerName = performer ? performer.display.includes(" - ") ? performer.display.split(" - ")[1]: performer.display : "";
           adminInfo =
           performerName + " [" + administeredTime + "]";
           administeredStartHour = administeredDateTimeObject.getHours();
           administeredStartMinutes = administeredDateTimeObject.getMinutes();
-          medicationNotes = notes && notes.length > 0 ? (notes?.find(notes => notes.author.uuid === performer.uuid).text) : "";
+          medicationNotes = notes && notes.length > 0 && performer ? (notes?.find(notes => notes.author.uuid === performer.uuid).text) : "";
         } else {
           adminInfo = "";
         }

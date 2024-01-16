@@ -223,7 +223,6 @@ const DrugChartSlider = (props) => {
       : setStartTime(moment(time, "hh:mm A"));
   };
 
-  console.log("hostData", hostData);
   const createDrugChartPayload = () => {
     let payload = {
       providerUuid: hostData?.drugOrder?.provider?.uuid,

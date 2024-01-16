@@ -23,7 +23,7 @@ import _ from "lodash";
 import { performerFunction, requesterFunction } from "../../../../constants";
 import SearchDrug from "../../../SearchDrug/SearchDrug";
 import moment from "moment/moment";
-import { formatDate } from "../../../../utils/DateTimeUtils";
+import { formatDate, dateTimeToEpochUTCTime } from "../../../../utils/DateTimeUtils";
 import AdministeredMedicationList from "./AdministeredMedicationList";
 
 const AddEmergencyTasks = (props) => {
@@ -147,7 +147,7 @@ const AddEmergencyTasks = (props) => {
     const date = new Date(administrationDate);
     date.setHours(time[0]);
     date.setMinutes(time[1]);
-    const utcTimeEpoch = moment.utc(date).unix();
+    const utcTimeEpoch = dateTimeToEpochUTCTime(date);
     const emergencyMedicationPayload = {
       patientUuid: patientId,
       drugUuid: selectedDrug?.uuid,

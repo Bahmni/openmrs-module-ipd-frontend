@@ -12,38 +12,25 @@ export const TransformDrugChartData = (drugChartData) => {
 
     slots.forEach((slot) => {
       const slotData = {};
-      const { startTime, status, order, medicationAdministration, serviceType } = slot;
+      const { startTime, status, order } = slot;
+      const drugOrder = {
+        uuid: order.uuid,
+        drugName: order.drug.display,
+        drugRoute: order.route.display,
+        administrationInfo: [],
+      };
 
-      let drugOrder;
-      if (order) {
-        drugOrder = {
-          uuid: order.uuid,
-          drugName: order.drug.display,
-          drugRoute: order.route.display,
-          administrationInfo: [],
-        };
-
-        if (order.duration) {
-          drugOrder.duration = order.duration + " " + order.durationUnits.display;
-        }
-        if (order.doseUnits.display !== "ml") {
-          drugOrder.dosage = order.dose;
-          drugOrder.doseType = order.doseUnits.display;
-        } else {
-          drugOrder.dosage = order.dose + order.doseUnits.display;
-        }
-        if (order.duration) {
-          drugOrder.duration = order.duration + " " + order.durationUnits.display;
-        }
+      if (order.duration) {
+        drugOrder.duration = order.duration + " " + order.durationUnits.display;
       }
-      if (serviceType == "EmergencyMedicationRequest") {
-        drugOrder = {
-          uuid: medicationAdministration.drug?.uuid,
-          drugName: medicationAdministration.drug?.display,
-          drugRoute: medicationAdministration.route?.display,
-          dosage: medicationAdministration.dose + medicationAdministration.doseUnits?.display,
-          dosingInstructions: { emergency: true }
-        }
+      if (order.doseUnits.display !== "ml") {
+        drugOrder.dosage = order.dose;
+        drugOrder.doseType = order.doseUnits.display;
+      } else {
+        drugOrder.dosage = order.dose + order.doseUnits.display;
+      }
+      if (order.duration) {
+        drugOrder.duration = order.duration + " " + order.durationUnits.display;
       }
 
       const startDateTimeObj = new Date(startTime * 1000);
