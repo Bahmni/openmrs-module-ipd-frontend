@@ -41,6 +41,18 @@ export const SEARCH_DRUG_URL =
   RESTWS_V1 +
   "/drug?q={queryString}&s=ordered&v=custom:(uuid,strength,name,dosageForm)";
 
+export const VISIT_SUMMARY_URL = BAHMNI_CORE+ "/visit/summary";
+export const CONFIG_BAHMNIENCOUNTER_URL = BAHMNI_CORE + "/config/bahmniencounter";
+export const PATIENT_MOVEMENT_URL = BAHMNI_CORE + "/bahmniencounter";
+export const DISCHARGE_PATIENT_MOVEMENT_URL = BAHMNI_CORE + "/discharge ";
+
+export const FSN_DISPOSITION_VALUE = "Disposition"
+export const BY_FSN_VALUE = "byFullySpecifiedName"
+export const FSN_ADT_NOTES_VALUE = "Adt Notes"
+export const BAHMNI_VALUE = "bahmni"
+export const CUSTOM_OUTPUT_VALUE = "custom:(uuid,name,answers:(uuid,name,mappings))"
+export const SEARCH_CONCEPT_URL  = RESTWS_V1 + "/concept";
+
 export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
   FIXED_SCHEDULE_FREQUENCY: "FIXED_SCHEDULE_FREQUENCY",

@@ -20,10 +20,11 @@ import { getPatientDashboardUrl } from "../../utils/CommonUtils";
 import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
 import RefreshDisplayControl from "../../context/RefreshDisplayControl";
 import { SliderContext } from "../../context/SliderContext";
+import { IPDContext } from "../../context/IPDContext";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
-  const { patient } = hostData;
+  const { patient, visitUuid ,location, provider } = hostData;
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
     nursingTasks: false,
@@ -101,6 +102,7 @@ export default function Dashboard(props) {
         visitSummary: hostData.visitSummary,
       }}
     >
+    <IPDContext.Provider value = {{patient, visit: visitUuid, location, provider}}>
       <main className="ipd-page">
         <Header
           className="border-bottom-0 header-bg-color"
@@ -186,6 +188,7 @@ export default function Dashboard(props) {
           </Accordion>
         </section>
       </main>
+    </IPDContext.Provider>
     </SliderContext.Provider>
   );
 }

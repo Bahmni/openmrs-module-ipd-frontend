@@ -15,6 +15,8 @@ import {
   Column,
   SkeletonText,
   Link,
+  OverflowMenu, 
+  OverflowMenuItem
 } from "carbon-components-react";
 import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { FormattedMessage } from "react-intl";
@@ -23,6 +25,7 @@ import "../styles/PatientHeader.scss";
 import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
 import { getPatientDashboardUrl } from "../../../../utils/CommonUtils";
 import PatientDetails from "./PatientDetails";
+import PatientMovementModal from "./PatientMovementModal";
 
 export const PatientHeader = (props) => {
   const { patientId, openDischargeSummary } = props;
@@ -31,6 +34,7 @@ export const PatientHeader = (props) => {
   const [isLoading, updateIsLoading] = useState(true);
   const [contacts, setMappedContacts] = useState([]);
   const [relationships, setMappedRelationships] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
   const showDetails = (
@@ -106,6 +110,9 @@ export const PatientHeader = (props) => {
   };
 
   const toggleDetailsView = () => togglePatientDetails(!showPatientDetails);
+  const updatePatientMovementModal = (isOpen) => {
+    setIsModalOpen(isOpen);
+  };
   useEffect(() => {
     const getPatientInfo = async () => {
       const patientProfile = await fetchPatientProfile(patientId);
@@ -133,7 +140,7 @@ export const PatientHeader = (props) => {
               <Row className="patient-image-and-details">
                 <div className={"patient-image"} />
                 <Column>
-                  <Row>
+                  <Row className="header-title-row">
                     <div className="patient-name-and-navigations">
                       <h1 className="patient-name">
                         {patientDetails?.fullName}
@@ -152,6 +159,9 @@ export const PatientHeader = (props) => {
                         {dischargeSummary}
                       </Link>
                     </div>
+                    <OverflowMenu data-testid="overflow-menu" flipped={true} aria-label="overflow-menu">
+                      <OverflowMenuItem title="item-patient-movement" itemText="Patient Movement" onClick={() => updatePatientMovementModal(!isModalOpen)}/>
+                    </OverflowMenu>
                   </Row>
                   <Row>
                     <div className="other-info">
@@ -204,6 +214,9 @@ export const PatientHeader = (props) => {
           </>
         )}
       </Tile>
+      <div>
+        {isModalOpen && <div> <PatientMovementModal updatePatientMovementModal={(isOpen) => updatePatientMovementModal(isOpen)}/> </div> }
+      </div>
     </>
   );
 };

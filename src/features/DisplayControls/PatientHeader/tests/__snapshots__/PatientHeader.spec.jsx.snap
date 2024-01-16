@@ -18,7 +18,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
           class="bx--col"
         >
           <div
-            class="bx--row"
+            class="header-title-row bx--row"
           >
             <div
               class="patient-name-and-navigations"
@@ -39,6 +39,46 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                 Discharge Summary
               </a>
             </div>
+            <button
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-label="Open and close list of options"
+              class="bx--overflow-menu bx--overflow-menu--md"
+              data-testid="overflow-menu"
+              type="button"
+            >
+              <svg
+                aria-label="Open and close list of options"
+                class="bx--overflow-menu__icon"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                role="img"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="16"
+                  cy="8"
+                  r="2"
+                />
+                <circle
+                  cx="16"
+                  cy="16"
+                  r="2"
+                />
+                <circle
+                  cx="16"
+                  cy="24"
+                  r="2"
+                />
+                <title>
+                  Open and close list of options
+                </title>
+              </svg>
+            </button>
           </div>
           <div
             class="bx--row"
@@ -238,5 +278,149 @@ exports[`PatientHeader should display all details of the patient 1`] = `
       </div>
     </div>
   </div>
+  <div />
+</div>
+`;
+
+exports[`PatientHeader should display patient movement item on click of overflow menu icon 1`] = `
+<div>
+  <div
+    class="bx--tile patient-header"
+  >
+    <div
+      class="bx--grid"
+    >
+      <div
+        class="patient-image-and-details bx--row"
+      >
+        <div
+          class="patient-image"
+        />
+        <div
+          class="bx--col"
+        >
+          <div
+            class="header-title-row bx--row"
+          >
+            <div
+              class="patient-name-and-navigations"
+            >
+              <h1
+                class="patient-name"
+              >
+                John Doe
+              </h1>
+              <a
+                class="bx--link"
+              >
+                Patient Dashboard
+              </a>
+              <a
+                class="bx--link"
+              >
+                Discharge Summary
+              </a>
+            </div>
+            <button
+              aria-expanded="true"
+              aria-haspopup="true"
+              aria-label="Open and close list of options"
+              class="bx--overflow-menu bx--overflow-menu--open bx--overflow-menu--md"
+              data-testid="overflow-menu"
+              type="button"
+            >
+              <svg
+                aria-label="Open and close list of options"
+                class="bx--overflow-menu__icon"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                role="img"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="16"
+                  cy="8"
+                  r="2"
+                />
+                <circle
+                  cx="16"
+                  cy="16"
+                  r="2"
+                />
+                <circle
+                  cx="16"
+                  cy="24"
+                  r="2"
+                />
+                <title>
+                  Open and close list of options
+                </title>
+              </svg>
+            </button>
+          </div>
+          <div
+            class="bx--row"
+          >
+            <div
+              class="other-info"
+            >
+              <div
+                class="patient-basic-info"
+              >
+                <h3
+                  class="patient-info"
+                >
+                  Male
+                </h3>
+                <h3
+                  class="patient-info"
+                >
+                  30
+                   
+                  Years
+                </h3>
+                <h3
+                  class="patient-info"
+                >
+                  01/01/1991
+                </h3>
+                <h3
+                  class="patient-info"
+                >
+                  12345
+                </h3>
+              </div>
+              <a
+                class="bx--link show-more bx--link--sm"
+                kind="tertiary"
+              >
+                Show Details
+                 
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="20"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div />
 </div>
 `;
