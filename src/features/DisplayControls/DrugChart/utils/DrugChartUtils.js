@@ -1,6 +1,6 @@
 import axios from "axios";
 import moment from "moment";
-import { MEDICATIONS_BASE_URL } from "../../../../constants";
+import { MEDICATIONS_BASE_URL, performerFunction } from "../../../../constants";
 import data from "../../../../utils/config.json";
 
 const { config: { drugChart = {} } = {} } = data;
@@ -93,8 +93,7 @@ export const TransformDrugChartData = (groupedSlots) => {
 
     slots.forEach((slot) => {
       let administeredStartHour, administeredStartMinutes, medicationNotes;
-
-      const { startTime, status, order, medicationAdministration } = slot;
+      const { startTime, status, order, medicationAdministration, serviceType } = slot;
       let medicationStatus = "Pending";
       let adminInfo = "",
         administeredTime,
@@ -116,11 +115,14 @@ export const TransformDrugChartData = (groupedSlots) => {
           administeredTime = moment(administeredDateTimeObject).format(
             hourFormatString
           );
+          let performer = providers.find(provider => provider.function === performerFunction);
+          performer = performer ? performer.provider : null;
+          const performerName = performer ? performer.display.includes(" - ") ? performer.display.split(" - ")[1]: performer.display : "";
           adminInfo =
-            providers[0].provider.display + " [" + administeredTime + "]";
+          performerName + " [" + administeredTime + "]";
           administeredStartHour = administeredDateTimeObject.getHours();
           administeredStartMinutes = administeredDateTimeObject.getMinutes();
-          medicationNotes = notes && notes.length > 0 ? notes[0].text : "";
+          medicationNotes = notes && notes.length > 0 && performer ? (notes?.find(notes => notes.author.uuid === performer.uuid).text) : "";
         } else {
           adminInfo = "";
         }
@@ -128,29 +130,43 @@ export const TransformDrugChartData = (groupedSlots) => {
       const startDateTimeObj = new Date(startTime * 1000);
       startActualTime = moment(startDateTimeObj).format("HH:mm");
 
-      const drugOrder = {
-        uuid: order.uuid,
-        drugName: order.drug.display,
-        drugRoute: order.route.display,
-        administrationInfo: [],
-        dosingInstructions: order.dosingInstructions,
-        dosingTagInfo: {
-          asNeeded: order.asNeeded,
-          frequency: order.frequency.display,
-        },
-      };
+      let drugOrder;
+      if (order) {
+        drugOrder = {
+          uuid: order.uuid,
+          drugName: order.drug.display,
+          drugRoute: order.route.display,
+          administrationInfo: [],
+          dosingInstructions: order.dosingInstructions,
+          dosingTagInfo: {
+            asNeeded: order.asNeeded,
+            frequency: order.frequency.display,
+          },
+        };
 
-      if (order.duration) {
-        drugOrder.duration = order.duration + " " + order.durationUnits.display;
+        if (order.duration) {
+          drugOrder.duration = order.duration + " " + order.durationUnits.display;
+        }
+        if (order.doseUnits.display !== "ml") {
+          drugOrder.dosage = order.dose;
+          drugOrder.doseType = order.doseUnits.display;
+        } else {
+          drugOrder.dosage = order.dose + order.doseUnits.display;
+        }
+        if (order.duration) {
+          drugOrder.duration = order.duration + " " + order.durationUnits.display;
+        }
       }
-      if (order.doseUnits.display !== "ml") {
-        drugOrder.dosage = order.dose;
-        drugOrder.doseType = order.doseUnits.display;
-      } else {
-        drugOrder.dosage = order.dose + order.doseUnits.display;
-      }
-      if (order.duration) {
-        drugOrder.duration = order.duration + " " + order.durationUnits.display;
+      if (serviceType == "EmergencyMedicationRequest") {
+        drugOrder = {
+          uuid: medicationAdministration.uuid,
+          drugName: medicationAdministration.drug?.display,
+          drugRoute: medicationAdministration.route?.display,
+          administrationInfo: [],
+          dosingInstructions: medicationAdministration.dosingInstructions,
+          dosage: medicationAdministration.dose + medicationAdministration.doseUnits?.display,
+          dosingTagInfo: { emergency: true }
+        }
       }
 
       const setLateStatus = isLateTask(startTime);

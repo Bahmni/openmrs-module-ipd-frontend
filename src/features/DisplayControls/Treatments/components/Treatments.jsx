@@ -14,7 +14,10 @@ import {
   isIPDDrugOrder,
   setDosingInstructions,
   getDrugName,
+  modifyEmergencyTreatmentData,
+  mapAdditionalDataForEmergencyTreatments,
 } from "../utils/TreatmentsUtils";
+import { defaultDateTimeFormat } from "../../../../constants";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
 import { SliderContext } from "../../../../context/SliderContext";
@@ -108,7 +111,7 @@ const Treatments = (props) => {
     }));
     setSelectedDrugOrder((prevState) => ({
       ...prevState,
-      drugOrder: drugOrderList.ipdDrugOrders.find(
+      drugOrder: drugOrderList.find(
         (drugOrderObject) => drugOrderObject.drugOrder.uuid === drugOrderId
       ),
     }));
@@ -119,8 +122,9 @@ const Treatments = (props) => {
     setDrugChartNotes("");
   };
 
-  const modifyTreatmentData = (drugOrders) => {
-    const treatments = drugOrders.ipdDrugOrders
+
+  const modifyPrescribedTreatmentData = (drugOrders) => {
+    const treatments = drugOrders
       .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
       .map((drugOrderObject) => {
         let isEditDisabled;
@@ -184,8 +188,8 @@ const Treatments = (props) => {
             additionalInstructions: drugOrderObject.additionalInstructions
               ? drugOrderObject.additionalInstructions
               : "",
-            recordedDate: formatDate(drugOrder.dateActivated, "DD/MM/YYYY"),
-            recordedTime: formatDate(drugOrder.dateActivated, "HH:mm"),
+            recordedDateTime: formatDate(drugOrder.dateActivated, defaultDateTimeFormat),
+            startTimeForSort: drugOrder.effectiveStartDate
           },
         };
       });
@@ -195,22 +199,29 @@ const Treatments = (props) => {
         id: treatment.id,
         instructions: treatment.additionalData.instructions,
         additionalInstructions: treatment.additionalData.additionalInstructions,
-        recordedDate: treatment.additionalData.recordedDate,
-        recordedTime: treatment.additionalData.recordedTime,
+        recordedDateTime: treatment.additionalData.recordedDateTime,
         provider: treatment.providerName,
       };
     });
-    setTreatments(treatments);
     setAdditionalData(additionalMappedData);
+    return treatments;
   };
 
   useEffect(() => {
     const getActiveDrugOrdersAndTreatmentConfig = async () => {
-      drugOrderList = await getAllDrugOrders(visitUuid);
-      if (drugOrderList.ipdDrugOrders.length > 0) {
-        drugOrderList = updateDrugOrderList(drugOrderList);
-        modifyTreatmentData(drugOrderList);
+      const allMedicationsList = await getAllDrugOrders(visitUuid);
+      let allTreatments = [];
+      if (allMedicationsList.ipdDrugOrders.length > 0) {
+        drugOrderList = updateDrugOrderList(allMedicationsList.ipdDrugOrders);
+        allTreatments = [...modifyPrescribedTreatmentData(drugOrderList)];
       }
+      if (allMedicationsList.emergencyMedications && allMedicationsList.emergencyMedications.length > 0) {
+        const emergencyTreatments = modifyEmergencyTreatmentData(allMedicationsList.emergencyMedications);
+        allTreatments = [...allTreatments, ...emergencyTreatments];
+        setAdditionalData(prevData => [...prevData, ...mapAdditionalDataForEmergencyTreatments(emergencyTreatments)]);
+      }
+      allTreatments.sort((a, b) => a.additionalData.startTimeForSort - b.additionalData.startTimeForSort);
+      setTreatments(allTreatments);
     };
 
     const getTreatmentConfigs = async () => {
