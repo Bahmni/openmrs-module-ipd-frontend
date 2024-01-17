@@ -8,8 +8,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
     <div
       class="vital-date-time"
     >
-      07/11/2023
-      , 10:32 AM  
+      11/12/2023 
       <a
         class="bx--link show-more"
         kind="tertiary"
@@ -892,8 +891,7 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
     <div
       class="vital-date-time"
     >
-      07/11/2023
-      , 10:32 AM  
+      11/12/2023 
       <a
         class="bx--link show-more"
         kind="tertiary"
