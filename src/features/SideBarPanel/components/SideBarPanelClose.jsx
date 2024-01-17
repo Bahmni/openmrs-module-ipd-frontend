@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, ModalBody } from "carbon-components-react";
+import { Modal } from "carbon-components-react";
 import PropTypes from "prop-types";
 
 export const SideBarPanelClose = ({
@@ -12,6 +12,7 @@ export const SideBarPanelClose = ({
   onSecondarySubmit,
   onClose,
   children,
+  primaryButtonDisabled,
 }) => {
   return (
     <Modal
@@ -26,6 +27,7 @@ export const SideBarPanelClose = ({
       modalLabel={label}
       primaryButtonText={primaryButtonText}
       secondaryButtonText={secondaryButtonText}
+      primaryButtonDisabled={primaryButtonDisabled}
       children={children}
     >
       {children}

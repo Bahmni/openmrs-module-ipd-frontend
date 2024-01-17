@@ -113,7 +113,7 @@ export const EditDrugChart = (
 );
 
 export const StopDrugChart = (
-  <FormattedMessage id={"STOP_DRUG_CHART"} defaultMessage={"Stop Drug Chart"} />
+  <FormattedMessage id={"STOP_DRUG"} defaultMessage={"Stop Drug"} />
 );
 
 export const NoTreatmentsMessage = (
@@ -125,6 +125,14 @@ export const NoTreatmentsMessage = (
 
 export const isIPDDrugOrder = (drugOrderObject) => {
   return drugOrderObject.drugOrder.careSetting === "INPATIENT";
+};
+
+export const isDrugOrderStoppedWithoutAdministration = (drugOrderObject) => {
+  return (
+    drugOrderObject.drugOrder.dateStopped !== null &&
+    (drugOrderObject.drugOrderSchedule === null ||
+      drugOrderObject.drugOrderSchedule?.medicationAdministration === false)
+  );
 };
 
 export const setDosingInstructions = (drugOrder) => {

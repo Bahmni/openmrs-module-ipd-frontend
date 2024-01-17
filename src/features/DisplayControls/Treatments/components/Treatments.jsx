@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { Link, DataTableSkeleton, TextInput } from "carbon-components-react";
+import { Link, DataTableSkeleton, TextArea } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -19,6 +19,7 @@ import {
   getEncounterType,
   modifyEmergencyTreatmentData,
   mapAdditionalDataForEmergencyTreatments,
+  isDrugOrderStoppedWithoutAdministration,
 } from "../utils/TreatmentsUtils";
 import { getCookies } from "../../../../utils/CommonUtils";
 import { defaultDateTimeFormat } from "../../../../constants";
@@ -56,7 +57,7 @@ const Treatments = (props) => {
   const [showEditMessage, setShowEditMessage] = useState(false);
   const [showStopDrugChartModal, setShowStopDrugChartModal] = useState(false);
   const [stopReason, setStopReason] = useState("");
-  const [stopReasonError, setStopReasonError] = useState(true);
+  const [isStopButtonDisabled, setStopButtonDisabled] = useState(true);
   const [stopDrugOrder, setStopDrugOrder] = useState({});
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
@@ -82,6 +83,8 @@ const Treatments = (props) => {
   const stopDrugModalCloseActions = {
     onClose: () => {
       setShowStopDrugChartModal(false);
+      setStopReason("");
+      setStopButtonDisabled(true);
     },
   };
 
@@ -226,6 +229,9 @@ const Treatments = (props) => {
   const modifyPrescribedTreatmentData = (drugOrders) => {
     const treatments = drugOrders
       .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
+      .filter((drugOrderObject) =>
+        !isDrugOrderStoppedWithoutAdministration(drugOrderObject)
+      )
       .map((drugOrderObject) => {
         let showEditDrugChartLink;
         let showStopDrugChartLink;
@@ -349,7 +355,8 @@ const Treatments = (props) => {
               defaultMessage="Cancel"
             />
           }
-          onSubmit={!stopReasonError && handleStopDrugChartModalSubmit}
+          primaryButtonDisabled={isStopButtonDisabled}
+          onSubmit={!isStopButtonDisabled && handleStopDrugChartModalSubmit}
           onSecondarySubmit={stopDrugModalCloseActions.onClose}
           onClose={stopDrugModalCloseActions.onClose}
           children={
@@ -358,15 +365,14 @@ const Treatments = (props) => {
                 id="STOP_DRUG_CONFIRMATION_TEXT"
                 defaultMessage="Are you sure you want to stop this drug? You will not be able to reverse this decision"
               />
-              <div className="stop=drug-reason-text">
-                <TextInput
-                  id="stop-drug-reason-text"
-                  type="text"
+              <div className="stop-drug-reason-text">
+                <TextArea
                   labelText="Please mention a reason"
-                  required
+                  rows={1}
+                  id="stop-drug-reason-text"
                   onChange={(event) => {
                     setStopReason(event.target.value);
-                    setStopReasonError(event.target.value.trim() === "");
+                    setStopButtonDisabled(event.target.value.trim() === "");
                   }}
                 />
               </div>
