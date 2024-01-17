@@ -59,6 +59,8 @@ const Treatments = (props) => {
   const [stopReason, setStopReason] = useState("");
   const [isStopButtonDisabled, setStopButtonDisabled] = useState(true);
   const [stopDrugOrder, setStopDrugOrder] = useState({});
+  const [showStopDrugSuccessNotification, setShowStopDrugSuccessNotification] =
+    useState(false);
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -178,11 +180,7 @@ const Treatments = (props) => {
 
   const saveStopDrugOrder = () => {
     setShowStopDrugChartModal(false);
-    refreshDisplayControl([
-      componentKeys.NURSING_TASKS,
-      componentKeys.DRUG_CHART,
-      componentKeys.TREATMENTS,
-    ]);
+    setShowStopDrugSuccessNotification(true);
   };
 
   const getActions = (
@@ -229,8 +227,9 @@ const Treatments = (props) => {
   const modifyPrescribedTreatmentData = (drugOrders) => {
     const treatments = drugOrders
       .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
-      .filter((drugOrderObject) =>
-        !isDrugOrderStoppedWithoutAdministration(drugOrderObject)
+      .filter(
+        (drugOrderObject) =>
+          !isDrugOrderStoppedWithoutAdministration(drugOrderObject)
       )
       .map((drugOrderObject) => {
         let showEditDrugChartLink;
@@ -378,6 +377,24 @@ const Treatments = (props) => {
               </div>
             </>
           }
+        />
+      )}
+      {showStopDrugSuccessNotification && (
+        <Notification
+          hostData={{
+            notificationKind: "success",
+            messageId: "STOP_DRUG_SUCCESS_NOTIFICATION",
+          }}
+          hostApi={{
+            onClose: () => {
+              setShowStopDrugSuccessNotification(false);
+              refreshDisplayControl([
+                componentKeys.NURSING_TASKS,
+                componentKeys.DRUG_CHART,
+                componentKeys.TREATMENTS,
+              ]);
+            },
+          }}
         />
       )}
       {isSliderOpen.treatments && (
