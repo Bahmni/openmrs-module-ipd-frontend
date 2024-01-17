@@ -15,7 +15,10 @@ import {
   isIPDDrugOrder,
   setDosingInstructions,
   getDrugName,
+  StopDrugOrders,
+  getEncounterType,
 } from "../utils/TreatmentsUtils";
+import { getCookies } from "../../../../utils/CommonUtils";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
 import { SliderContext } from "../../../../context/SliderContext";
@@ -26,6 +29,7 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import TreatmentExpandableRow from "./TreatmentExpandableRow";
 import Notification from "../../../../components/Notification/Notification";
+import moment from "moment";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -36,6 +40,7 @@ const Treatments = (props) => {
     setSliderContentModified,
     visitUuid,
     visitSummary,
+    provider,
   } = useContext(SliderContext);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
@@ -47,6 +52,9 @@ const Treatments = (props) => {
   const [additionalData, setAdditionalData] = useState([]);
   const [showEditMessage, setShowEditMessage] = useState(false);
   const [showStopDrugChartModal, setShowStopDrugChartModal] = useState(false);
+  const [stopReason, setStopReason] = useState("");
+  const [stopReasonError, setStopReasonError] = useState(true);
+  const [stopDrugOrder, setStopDrugOrder] = useState({});
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -125,15 +133,57 @@ const Treatments = (props) => {
     setDrugChartNotes("");
   };
 
-  const handleStopDrugChartClick = () => {
+  const handleStopDrugChartClick = (drugOrderId) => {
+    const stoppedDrugOrder = drugOrderList.ipdDrugOrders.find(
+      (drugOrderObject) => drugOrderObject.drugOrder.uuid === drugOrderId
+    );
+
+    setStopDrugOrder(() => {
+      return {
+        ...stoppedDrugOrder.drugOrder,
+        drugOrder: stoppedDrugOrder.drugOrder,
+        action: "DISCONTINUE",
+        dateActivated: null,
+        dateStopped: moment(),
+        previousOrderUuid: stoppedDrugOrder.drugOrder.uuid,
+      };
+    });
     setShowStopDrugChartModal(true);
   };
 
-  const handleStopDrugChartModalSubmit = () => {
-    //api call to stop drug chart
+  const handleStopDrugChartModalSubmit = async () => {
+    const cookies = getCookies();
+    const { uuid: locationUuid } = JSON.parse(cookies["bahmni.user.location"]);
+    const { uuid: encounterTypeUuid } = await getEncounterType("Consultation");
+
+    const StopDrugOrderPayload = {
+      drugOrders: [{ ...stopDrugOrder, orderReasonText: stopReason }],
+      patientUuid: patientId,
+      providers: [provider],
+      visitType: "IPD",
+      visitUuid: visitUuid,
+      encounterTypeUuid: encounterTypeUuid,
+      locationUuid,
+    };
+
+    const response = await StopDrugOrders(StopDrugOrderPayload);
+    response.status === 200 ? saveStopDrugOrder() : null;
   };
 
-  const getActions = (showEditDrugChartLink, showStopDrugChartLink) => {
+  const saveStopDrugOrder = () => {
+    setShowStopDrugChartModal(false);
+    refreshDisplayControl([
+      componentKeys.NURSING_TASKS,
+      componentKeys.DRUG_CHART,
+      componentKeys.TREATMENTS,
+    ]);
+  };
+
+  const getActions = (
+    showEditDrugChartLink,
+    showStopDrugChartLink,
+    drugOrder
+  ) => {
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
       return (
         <Link
@@ -163,7 +213,9 @@ const Treatments = (props) => {
       );
     } else {
       return (
-        <Link onClick={() => handleStopDrugChartClick()}>{StopDrugChart}</Link>
+        <Link onClick={() => handleStopDrugChartClick(drugOrder.uuid)}>
+          {StopDrugChart}
+        </Link>
       );
     }
   };
@@ -199,7 +251,7 @@ const Treatments = (props) => {
           ),
           actions:
             !drugOrder.dateStopped &&
-            getActions(showEditDrugChartLink, showStopDrugChartLink),
+            getActions(showEditDrugChartLink, showStopDrugChartLink, drugOrder),
           additionalData: {
             instructions: drugOrderObject.instructions
               ? drugOrderObject.instructions
@@ -273,7 +325,7 @@ const Treatments = (props) => {
               defaultMessage="Cancel"
             />
           }
-          onSubmit={handleStopDrugChartModalSubmit}
+          onSubmit={!stopReasonError && handleStopDrugChartModalSubmit}
           onSecondarySubmit={stopDrugModalCloseActions.onClose}
           onClose={stopDrugModalCloseActions.onClose}
           children={
@@ -288,6 +340,10 @@ const Treatments = (props) => {
                   type="text"
                   labelText="Please mention a reason"
                   required
+                  onChange={(event) => {
+                    setStopReason(event.target.value);
+                    setStopReasonError(event.target.value.trim() === "");
+                  }}
                 />
               </div>
             </>

@@ -2,6 +2,8 @@ import React from "react";
 import {
   CLINICAL_CONFIG_URL,
   ALL_DRUG_ORDERS_URL,
+  BAHMNI_ENCOUNTER_URL,
+  ENCOUNTER_TYPE_URL,
 } from "../../../../constants";
 import axios from "axios";
 import { FormattedMessage } from "react-intl";
@@ -161,4 +163,31 @@ export const getDrugName = (drugOrderObject) => {
     );
   } else if (drugOrder.drug) return drugOrder.drug.name;
   return drugOrder.freeTextAnswer;
+};
+
+export const StopDrugOrders = async (payload) => {
+  try {
+    return await axios.post(BAHMNI_ENCOUNTER_URL, payload, {
+      withCredentials: true,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const getEncounterType = async (encounterType) => {
+  try {
+    const response = await axios.get(
+      ENCOUNTER_TYPE_URL.replace("{encounterType}", encounterType)
+    );
+    console.log("encounterType", response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
