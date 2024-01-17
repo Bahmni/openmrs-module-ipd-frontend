@@ -75,7 +75,7 @@ export const groupSlotsByDrugName = (drugChartData) => {
       if (order) {
         drugName = order.drug.display;
       }
-      if (serviceType == "EmergencyMedicationRequest") {
+      if (serviceType === "EmergencyMedicationRequest") {
         drugName = medicationAdministration.drug.display;
       }
 
@@ -180,7 +180,7 @@ export const TransformDrugChartData = (groupedSlots) => {
             order.duration + " " + order.durationUnits.display;
         }
       }
-      if (serviceType == "EmergencyMedicationRequest") {
+      if (serviceType === "EmergencyMedicationRequest") {
         drugOrder = {
           uuid: medicationAdministration.uuid,
           drugName: medicationAdministration.drug?.display,
