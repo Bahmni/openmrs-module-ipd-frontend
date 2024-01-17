@@ -70,8 +70,14 @@ export const groupSlotsByDrugName = (drugChartData) => {
     const { slots } = schedule;
 
     slots.forEach((slot) => {
-      const { order } = slot;
-      const drugName = order.drug.display;
+      const { order, medicationAdministration, serviceType } = slot;
+      let drugName = "";
+      if (order) {
+        drugName = order.drug.display;
+      }
+      if (serviceType === "EmergencyMedicationRequest") {
+        drugName = medicationAdministration.drug.display;
+      }
 
       if (!groupedSlots[drugName]) {
         groupedSlots[drugName] = [];
@@ -93,7 +99,13 @@ export const TransformDrugChartData = (groupedSlots) => {
 
     slots.forEach((slot) => {
       let administeredStartHour, administeredStartMinutes, medicationNotes;
-      const { startTime, status, order, medicationAdministration, serviceType } = slot;
+      const {
+        startTime,
+        status,
+        order,
+        medicationAdministration,
+        serviceType,
+      } = slot;
       let medicationStatus = "Pending";
       let adminInfo = "",
         administeredTime,
@@ -115,14 +127,23 @@ export const TransformDrugChartData = (groupedSlots) => {
           administeredTime = moment(administeredDateTimeObject).format(
             hourFormatString
           );
-          let performer = providers.find(provider => provider.function === performerFunction);
+          let performer = providers.find(
+            (provider) => provider.function === performerFunction
+          );
           performer = performer ? performer.provider : null;
-          const performerName = performer ? performer.display.includes(" - ") ? performer.display.split(" - ")[1]: performer.display : "";
-          adminInfo =
-          performerName + " [" + administeredTime + "]";
+          const performerName = performer
+            ? performer.display.includes(" - ")
+              ? performer.display.split(" - ")[1]
+              : performer.display
+            : "";
+          adminInfo = performerName + " [" + administeredTime + "]";
           administeredStartHour = administeredDateTimeObject.getHours();
           administeredStartMinutes = administeredDateTimeObject.getMinutes();
-          medicationNotes = notes && notes.length > 0 && performer ? (notes?.find(notes => notes.author.uuid === performer.uuid).text) : "";
+          medicationNotes =
+            notes && notes.length > 0 && performer
+              ? notes?.find((notes) => notes.author.uuid === performer.uuid)
+                  .text
+              : "";
         } else {
           adminInfo = "";
         }
@@ -145,7 +166,8 @@ export const TransformDrugChartData = (groupedSlots) => {
         };
 
         if (order.duration) {
-          drugOrder.duration = order.duration + " " + order.durationUnits.display;
+          drugOrder.duration =
+            order.duration + " " + order.durationUnits.display;
         }
         if (order.doseUnits.display !== "ml") {
           drugOrder.dosage = order.dose;
@@ -154,19 +176,22 @@ export const TransformDrugChartData = (groupedSlots) => {
           drugOrder.dosage = order.dose + order.doseUnits.display;
         }
         if (order.duration) {
-          drugOrder.duration = order.duration + " " + order.durationUnits.display;
+          drugOrder.duration =
+            order.duration + " " + order.durationUnits.display;
         }
       }
-      if (serviceType == "EmergencyMedicationRequest") {
+      if (serviceType === "EmergencyMedicationRequest") {
         drugOrder = {
           uuid: medicationAdministration.uuid,
           drugName: medicationAdministration.drug?.display,
           drugRoute: medicationAdministration.route?.display,
           administrationInfo: [],
           dosingInstructions: medicationAdministration.dosingInstructions,
-          dosage: medicationAdministration.dose + medicationAdministration.doseUnits?.display,
-          dosingTagInfo: { emergency: true }
-        }
+          dosage:
+            medicationAdministration.dose +
+            medicationAdministration.doseUnits?.display,
+          dosingTagInfo: { emergency: true },
+        };
       }
 
       const setLateStatus = isLateTask(startTime);
