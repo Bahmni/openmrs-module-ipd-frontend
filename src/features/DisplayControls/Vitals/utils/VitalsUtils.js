@@ -52,7 +52,7 @@ export const getPatientVitals = async (patientUuid) => {
   const conceptParams = queryParams.join("&");
   try {
     const response = await axios.get(
-      `${PATIENT_VITALS_URL}?patientUuid=${patientUuid}&latestCount=1&groupBy=obstime&${conceptParams}`,
+      `${PATIENT_VITALS_URL}?patientUuid=${patientUuid}&latestCount=1&${conceptParams}`,
       {
         withCredentials: true,
       }
@@ -90,61 +90,65 @@ export const getPatientVitalsHistory = async (patientUuid) => {
   }
 };
 
-export const mapVitalsData = (VitalsList, setVitalsDate, setVitalsTime) => {
+export const mapVitalsData = (VitalsList,vitalsHistoryList ,setVitalsDate, setVitalsTime) => {
   let mappedVitals = {};
-  let latestDate = null;
+  let latestVisitDate = null;
+  let latestEntryDate = null;
   if (VitalsList.tabularData) {
     const VitalsValues = VitalsList.tabularData;
-    latestDate = getLatestDate(VitalsValues);
-    if (latestDate !== null) {
-      setDateAndTime(latestDate, setVitalsDate, setVitalsTime);
+    latestVisitDate = getLatestDate(VitalsValues);
+    latestEntryDate = getLatestDate(vitalsHistoryList.tabularData);
+
+
+    if (latestVisitDate !== null) {
+      setDateAndTime(latestEntryDate, setVitalsDate, setVitalsTime);
       mappedVitals = {
         Temp: {
-          value: VitalsValues[latestDate].Temperature?.value,
-          abnormal: VitalsValues[latestDate].Temperature?.abnormal,
+          value: VitalsValues[latestVisitDate].Temperature?.value,
+          abnormal: VitalsValues[latestVisitDate].Temperature?.abnormal,
         },
         HeartRate: {
-          value: parseInt(VitalsValues[latestDate].Pulse?.value, 10),
-          abnormal: VitalsValues[latestDate].Pulse?.abnormal,
+          value: parseInt(VitalsValues[latestVisitDate].Pulse?.value, 10),
+          abnormal: VitalsValues[latestVisitDate].Pulse?.abnormal,
         },
         SystolicPressure: {
           value: parseInt(
-            VitalsValues[latestDate]["Systolic Blood Pressure"]?.value,
+            VitalsValues[latestVisitDate]["Systolic Blood Pressure"]?.value,
             10
           ),
           abnormal:
-            VitalsValues[latestDate]["Systolic Blood Pressure"]?.abnormal,
+            VitalsValues[latestVisitDate]["Systolic Blood Pressure"]?.abnormal,
         },
         DiastolicPressure: {
           value: parseInt(
-            VitalsValues[latestDate]["Diastolic Blood Pressure"]?.value,
+            VitalsValues[latestVisitDate]["Diastolic Blood Pressure"]?.value,
             10
           ),
           abnormal:
-            VitalsValues[latestDate]["Diastolic Blood Pressure"]?.abnormal,
+            VitalsValues[latestVisitDate]["Diastolic Blood Pressure"]?.abnormal,
         },
         Height: {
-          value: parseInt(VitalsValues[latestDate].HEIGHT?.value, 10),
-          abnormal: VitalsValues[latestDate].HEIGHT?.abnormal,
+          value: parseInt(VitalsValues[latestVisitDate].HEIGHT?.value, 10),
+          abnormal: VitalsValues[latestVisitDate].HEIGHT?.abnormal,
         },
         Weight: {
-          value: parseInt(VitalsValues[latestDate].WEIGHT?.value, 10),
-          abnormal: VitalsValues[latestDate].WEIGHT?.abnormal,
+          value: parseInt(VitalsValues[latestVisitDate].WEIGHT?.value, 10),
+          abnormal: VitalsValues[latestVisitDate].WEIGHT?.abnormal,
         },
         RespiratoryRate: {
           value: parseInt(
-            VitalsValues[latestDate]["Respiratory Rate"]?.value,
+            VitalsValues[latestVisitDate]["Respiratory Rate"]?.value,
             10
           ),
-          abnormal: VitalsValues[latestDate]["Respiratory Rate"]?.abnormal,
+          abnormal: VitalsValues[latestVisitDate]["Respiratory Rate"]?.abnormal,
         },
         SpO2: {
-          value: parseInt(VitalsValues[latestDate].SpO2?.value, 10),
-          abnormal: VitalsValues[latestDate].SpO2?.abnormal,
+          value: parseInt(VitalsValues[latestVisitDate].SpO2?.value, 10),
+          abnormal: VitalsValues[latestVisitDate].SpO2?.abnormal,
         },
         BMI: {
-          value: VitalsValues[latestDate].BMI?.value,
-          abnormal: VitalsValues[latestDate].BMI?.abnormal,
+          value: VitalsValues[latestVisitDate].BMI?.value,
+          abnormal: VitalsValues[latestVisitDate].BMI?.abnormal,
         },
       };
     }
@@ -213,7 +217,8 @@ export const mapVitalsHistory = (vitalsHistoryList) => {
             : false,
       },
     };
-    vitalsHistory.push(pairedVital);
+    if( innerMappedVitals?.Pulse || innerMappedVitals?.SpO2 || innerMappedVitals?.Temperature || innerMappedVitals?.["Respiratory Rate"] || innerMappedVitals?.["Systolic Blood Pressure"] || innerMappedVitals?.["Diastolic Blood Pressure"])
+     { vitalsHistory.push(pairedVital); }
   }
   return vitalsHistory;
 };
@@ -259,7 +264,8 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
           : false,
       },
     };
-    biometricsHistory.push(pairedBiometrics);
+    if(innerMappedbiometrics?.BMI || innerMappedbiometrics?.HEIGHT || innerMappedbiometrics?.WEIGHT || innerMappedbiometrics?.MUAC)
+    {biometricsHistory.push(pairedBiometrics);}
   }
   return biometricsHistory;
 };

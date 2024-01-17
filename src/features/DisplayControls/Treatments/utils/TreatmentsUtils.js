@@ -4,11 +4,16 @@ import {
   ALL_DRUG_ORDERS_URL,
   BAHMNI_ENCOUNTER_URL,
   ENCOUNTER_TYPE_URL,
+  requesterFunction,
+  verifierFunction,
+  defaultDateTimeFormat,
+  defaultDateFormat,
 } from "../../../../constants";
 import axios from "axios";
 import { FormattedMessage } from "react-intl";
 import NotesIcon from "../../../../icons/notes.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 
 export const treatmentHeaders = [
   {
@@ -74,7 +79,7 @@ export const getConfigsForTreatments = async () => {
 };
 
 export const updateDrugOrderList = (drugOrderList) => {
-  drugOrderList.ipdDrugOrders.forEach((ipdDrugOrder) => {
+  drugOrderList.forEach((ipdDrugOrder) => {
     ipdDrugOrder.uniformDosingType = {
       dose: ipdDrugOrder.drugOrder.dosingInstructions.dose,
       doseUnits: ipdDrugOrder.drugOrder.dosingInstructions.doseUnits,
@@ -191,3 +196,58 @@ export const getEncounterType = async (encounterType) => {
     console.log(error);
   }
 };
+
+export const modifyEmergencyTreatmentData = (emergencyMedications) => {
+  const emergencyTreatments = emergencyMedications
+    .map((medicationAdministration) => {
+      const dosingInstructions = { emergency: true };
+      const approver = medicationAdministration.providers.find(provider => provider.function === requesterFunction || provider.function === verifierFunction);
+      const approverNotes = medicationAdministration.notes.find(notes => notes.author.uuid === approver?.provider.uuid);
+      const approverName = approver?.provider.display.includes(" - ") ? approver?.provider.display.split(" - ")[1]: approver?.provider.display;
+      return {
+        id: medicationAdministration.uuid,
+        startDate: formatDate(medicationAdministration.administeredDateTime, defaultDateFormat),
+        drugName: <div className="notes-icon-div">
+            {approverNotes && <NotesIcon className="notes-icon" />}
+            <span className={`treatments-drug-name`} >
+              {medicationAdministration.drug.display}
+              <span>
+                  <DisplayTags drugOrder={dosingInstructions} />
+              </span>
+            </span>
+          </div>,
+        dosageDetails: <div>{medicationAdministration.dose + " " +
+            medicationAdministration.doseUnits?.display + " - " + medicationAdministration.route?.display}
+          </div>,
+        providerName: approverName,
+        status: (
+          <span>
+            {approver.function === requesterFunction && (
+              <FormattedMessage id="AWAITING" defaultMessage="Not acknowledged" />
+            )}
+            {approver.function === verifierFunction && (
+              <FormattedMessage id="CONFIRMED" defaultMessage="Acknowledged" />
+            )}
+          </span>
+        ),
+        actions: null,
+        additionalData: {
+          approverName: approver?.function === verifierFunction ? approverName : null,
+          approverNotes: approverNotes,
+          startTimeForSort: medicationAdministration.administeredDateTime
+        },
+      };
+    });
+  return emergencyTreatments;
+};
+
+export const mapAdditionalDataForEmergencyTreatments = (emergencyTreatments) => {
+  return emergencyTreatments.map((treatment) => {
+    return {
+      id: treatment.id,
+      approverNotes: treatment.additionalData.approverName ? treatment.additionalData.approverNotes?.text : null,
+      approverAdditionalData: treatment.additionalData.approverName
+      + " | " + formatDate(treatment.additionalData.approverNotes?.recordedTime, defaultDateTimeFormat)
+    };
+  });
+}

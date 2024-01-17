@@ -18,3 +18,8 @@ export const epochTo12HourTimeFormat = (epochSeconds) => {
   const formattedTime = moment.unix(epochSeconds).format("hh:mm A");
   return formattedTime;
 };
+
+export const dateTimeToEpochUTCTime = (date) => {
+  const epochTime = moment.utc(date).unix();
+  return epochTime;
+};

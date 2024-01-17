@@ -25,6 +25,9 @@ const DisplayTags = (props) => {
   if (drugOrder?.frequency in medicationTags) {
     return <Tag type="blue">{medicationTags[drugOrder?.frequency]}</Tag>;
   }
+  if (drugOrder?.emergency && medicationTags["emergency"]) {
+    return <Tag type="blue">{medicationTags.emergency}</Tag>;
+  }
   return <Tag type="blue">{medicationTags.default}</Tag>;
 };
 

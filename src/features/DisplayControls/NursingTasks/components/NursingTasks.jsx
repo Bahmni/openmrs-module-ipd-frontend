@@ -37,6 +37,7 @@ export default function NursingTasks(props) {
   const [selectedMedicationTask, setSelectedMedicationTask] = useState([]);
   const [filterValue, setFilterValue] = useState(items[2]);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [date, updateDate] = useState(new Date());
   const [lastAction, updateLastActon] = useState("");
@@ -275,10 +276,10 @@ export default function NursingTasks(props) {
                 />
                 <span>{`${formatDate(
                   startEndDates.startDate,
-                  "DD/MM/YYYY HH:mm"
+                  "DD/MM/YYYY | HH:mm"
                 )} - ${formatDate(
                   startEndDates.endDate,
-                  "DD/MM/YYYY HH:mm"
+                  "DD/MM/YYYY | HH:mm"
                 )}`}</span>
               </div>
               <div className="nursing-task-actions">
@@ -321,12 +322,16 @@ export default function NursingTasks(props) {
                 patientId={patientId}
                 providerId={provider.uuid}
                 setShowSuccessNotification={setShowSuccessNotification}
+                setSuccessMessage={setSuccessMessage}
               />
             )}
             {isSliderOpen.emergencyTasks && (
               <AddEmergencyTasks
-                patientId={"uuid"}
+                patientId={patientId}
+                providerId={provider.uuid}
                 updateEmergencyTasksSlider={updateEmergencyTasksSlider}
+                setShowSuccessNotification={setShowSuccessNotification}
+                setSuccessMessage={setSuccessMessage}
               />
             )}
             {medicationNursingTasks && medicationNursingTasks.length === 0 ? (
@@ -343,7 +348,7 @@ export default function NursingTasks(props) {
               <Notification
                 hostData={{
                   notificationKind: "success",
-                  messageId: "NURSING_TASKS_SAVE_MESSAGE",
+                  messageId: successMessage,
                 }}
                 hostApi={{
                   onClose: () => {

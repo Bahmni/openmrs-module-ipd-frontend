@@ -76,7 +76,7 @@ describe("DrugChartWrapper", () => {
     fireEvent.click(previousButton);
     await waitFor(() => {
       expect(
-        screen.getByText("04/01/2024 18:00 - 05/01/2024 06:00")
+        screen.getByText("04/01/2024 | 18:00 - 05/01/2024 | 06:00")
       ).toBeTruthy();
     });
   });
@@ -91,7 +91,7 @@ describe("DrugChartWrapper", () => {
     fireEvent.click(nextButton);
     await waitFor(() => {
       expect(
-        screen.getByText("05/01/2024 18:00 - 06/01/2024 06:00")
+        screen.getByText("05/01/2024 | 18:00 - 06/01/2024 | 06:00")
       ).toBeTruthy();
     });
   });
@@ -106,7 +106,7 @@ describe("DrugChartWrapper", () => {
     fireEvent.click(currentShiftButton);
     await waitFor(() => {
       expect(
-        screen.getByText("05/01/2024 06:00 - 05/01/2024 18:00")
+        screen.getByText("05/01/2024 | 06:00 - 05/01/2024 | 18:00")
       ).toBeTruthy();
     });
   });

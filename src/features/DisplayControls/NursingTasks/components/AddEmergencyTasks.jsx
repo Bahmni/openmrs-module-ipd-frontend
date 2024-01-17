@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
+import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import PropTypes from "prop-types";
-import { Loading, Tab, Tabs, TextArea } from "carbon-components-react";
+import { Loading, Tab, Tabs, TextArea, Modal } from "carbon-components-react";
 import "../styles/EmergencyTasks.scss";
 import {
   fetchMedicationConfig,
   getDrugOrdersConfig,
   getProviders,
+  saveEmergencyMedication
 } from "../utils/EmergencyTasksUtils";
 import {
   NumberInputCarbon,
@@ -18,10 +20,14 @@ import {
   TimePicker24Hour,
 } from "bahmni-carbon-ui";
 import _ from "lodash";
+import { performerFunction, requesterFunction } from "../../../../constants";
 import SearchDrug from "../../../SearchDrug/SearchDrug";
+import moment from "moment/moment";
+import { formatDate, dateTimeToEpochUTCTime } from "../../../../utils/DateTimeUtils";
+import AdministeredMedicationList from "./AdministeredMedicationList";
 
 const AddEmergencyTasks = (props) => {
-  const { updateEmergencyTasksSlider } = props;
+  const { patientId, providerId, updateEmergencyTasksSlider, setShowSuccessNotification, setSuccessMessage} = props;
   const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [dosageConfig, setDosageConfig] = useState({});
@@ -31,12 +37,26 @@ const AddEmergencyTasks = (props) => {
 
   const [selectedDrug, setSelectedDrug] = useState({});
   const [doseUnits, setDoseUnits] = useState({});
-  const [administrationDate, setAdministrationDate] = useState();
-  const [administrationTime, setAdministrationTime] = useState("");
+  const [administrationDate, setAdministrationDate] = useState(new Date());
+  const [administrationTime, setAdministrationTime] = useState(formatDate(new Date(), "HH:mm"));
   const [requestedProvider, setRequestedProvider] = useState({});
   const [routes, setRoutes] = useState({});
   const [dosage, setDosage] = useState(undefined);
   const [notes, setNotes] = useState("");
+  const [emergencyTask, setEmergencyTask] = useState({});
+  const [popupMedicationData, setPopupMedicationData] = useState({});
+
+  const [showWarningNotification, setShowWarningNotification] = useState(false);
+  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const [atleastOneFieldFilled, setAtleastOneFieldFilled] = useState(false);
+  const [isTimeChanged, setIsTimeChanged] = useState(false);
+  const [isDateChanged, setIsDateChanged] = useState(false);
+  const invalidTimeText24Hour = (
+    <FormattedMessage
+      id={"INVALID_TIME"}
+      defaultMessage={"Please enter valid time"}
+    />
+  );
 
   const fetchDrugOrderConfig = async () => {
     setIsLoading(true);
@@ -73,6 +93,7 @@ const AddEmergencyTasks = (props) => {
             value: provider,
           };
         })
+        .sort((a, b) => a.label.localeCompare(b.label))
       );
     }
     setIsLoading(false);
@@ -98,6 +119,79 @@ const AddEmergencyTasks = (props) => {
     }
   };
 
+  const closeModal = () => {
+    setOpenConfirmationModal(false);
+  };
+
+  const handleClose = () => {
+    if (isSaveDisabled && !atleastOneFieldFilled) {
+      updateEmergencyTasksSlider(false);
+      setShowWarningNotification(false);
+    } else {
+      setShowWarningNotification(true);
+    }
+  };
+
+  const sliderCloseActions = {
+    onCancel: () => {
+      setShowWarningNotification(false);
+      updateEmergencyTasksSlider(false);
+    },
+    onClose: () => {
+      setShowWarningNotification(false);
+    },
+  };
+
+  const createEmergencyMedicationPayload = () => {
+    const time = administrationTime.split(":");
+    const date = new Date(administrationDate);
+    date.setHours(time[0]);
+    date.setMinutes(time[1]);
+    const utcTimeEpoch = dateTimeToEpochUTCTime(date);
+    const emergencyMedicationPayload = {
+      patientUuid: patientId,
+      drugUuid: selectedDrug?.uuid,
+      dose:dosage,
+      doseUnits: doseUnits?.value, 
+      route: routes?.value,
+      providers: [{ providerUuid: providerId, function: performerFunction }
+        ,{
+        providerUuid: requestedProvider?.uuid,function: requesterFunction
+        }],
+      notes: [{ authorUuid: providerId, text: notes }],
+      status: "completed",
+      administeredDateTime: utcTimeEpoch,
+    };
+    setPopupMedicationData({
+      [selectedDrug?.uuid] : { 
+        displayName: selectedDrug?.name,
+        doseType: doseUnits?.value,
+        dosage: dosage,
+        route: routes?.value,
+        actualTime: moment.utc(date),
+        status: "completed"
+      }
+    });
+    return emergencyMedicationPayload;
+  };
+
+  const handlePrimaryButtonClick = async () => {
+    const response = await saveEmergencyMedication(emergencyTask);
+    response.status === 200 ? saveAdhocTasks() : null;
+  };
+
+  const saveAdhocTasks = () => {
+    setShowSuccessNotification(true);
+    setSuccessMessage("EMERGENCY_TASK_SAVE_MESSAGE");
+    setOpenConfirmationModal(false);
+    updateEmergencyTasksSlider(false);
+  };
+
+  const handleSave = () => {
+    setEmergencyTask(createEmergencyMedicationPayload());
+    setOpenConfirmationModal(true);
+  };
+
   useEffect(() => {
     fetchDrugOrderConfig();
     fetchDrugFormDefaults();
@@ -119,6 +213,11 @@ const AddEmergencyTasks = (props) => {
       updateIsSaveDisabled(false);
     } else {
       updateIsSaveDisabled(true);
+      setAtleastOneFieldFilled(false);
+      if (dosage || isDateChanged || isTimeChanged || !_.isEmpty(doseUnits) || 
+          !_.isEmpty(routes) || !_.isEmpty(requestedProvider) || !_.isEmpty(notes)) {
+        setAtleastOneFieldFilled(true);
+      }
     }
   }, [
     selectedDrug,
@@ -130,7 +229,9 @@ const AddEmergencyTasks = (props) => {
     requestedProvider,
     notes,
   ]);
+
   return (
+    <>
     <SideBarPanel
       title={
         <FormattedMessage
@@ -138,9 +239,7 @@ const AddEmergencyTasks = (props) => {
           defaultMessage={"Add Nursing Task"}
         />
       }
-      closeSideBar={() => {
-        updateEmergencyTasksSlider(false);
-      }}
+      closeSideBar={handleClose}
     >
       <div className={"emergency-task-slider"}>
         <Tabs>
@@ -204,15 +303,22 @@ const AddEmergencyTasks = (props) => {
                   id={"Administration-Date"}
                   onChange={(e) => {
                     setAdministrationDate(new Date(e[0]));
+                    setIsDateChanged(true);
                   }}
                   title={"Administration Date"}
                   isRequired={true}
+                  value={administrationDate}
                 />
                 <TimePicker24Hour
-                  onChange={setAdministrationTime}
+                  defaultTime={administrationTime}
+                  onChange={(e) => {
+                    setAdministrationTime(e);
+                    setIsTimeChanged(true);
+                  }}
                   labelText="Administration Time"
                   width={"100%"}
                   isRequired={true}
+                  invalidText={invalidTimeText24Hour}
                 />
               </div>
               <Dropdown
@@ -221,7 +327,7 @@ const AddEmergencyTasks = (props) => {
                   setRequestedProvider(selectedItem?.value);
                 }}
                 placeholder={"Select Provider"}
-                titleText={"Approval Requested From"}
+                titleText={"Acknowledgement Requested From"}
                 isRequired={true}
                 options={providerOptions}
                 width={"100%"}
@@ -249,21 +355,73 @@ const AddEmergencyTasks = (props) => {
           ></Tab>
         </Tabs>
       </div>
+      <Modal
+          open={openConfirmationModal}
+          onRequestClose={closeModal}
+          onSecondarySubmit={closeModal}
+          preventCloseOnClickOutside={true}
+          modalHeading={
+            <FormattedMessage
+              id={"EMERGENCY_TASK_CONFIRMATION"}
+              defaultMessage={"Please confirm the emergency medication task"}
+            />
+          }
+          primaryButtonText={
+            <FormattedMessage
+              id={"DRUG_CHART_MODAL_SAVE"}
+              defaultMessage={"Save"}
+            />
+          }
+          secondaryButtonText={
+            <FormattedMessage
+              id={"DRUG_CHART_MODAL_CANCEL"}
+              defaultMessage={"Cancel"}
+            />
+          }
+          onRequestSubmit={handlePrimaryButtonClick}
+        >
+          <hr />
+          <AdministeredMedicationList
+            list={popupMedicationData}
+          />
+        </Modal>
       <SaveAndCloseButtons
-        onSave={() => {
-          updateEmergencyTasksSlider(false);
-        }}
-        onClose={() => {
-          updateEmergencyTasksSlider(false);
-        }}
+        onSave={handleSave}
+        onClose={handleClose}
         isSaveDisabled={isSaveDisabled}
       />
+
     </SideBarPanel>
+
+    {showWarningNotification && (
+      <SideBarPanelClose
+        className="warning-notification"
+        open={true}
+        message={
+          <FormattedMessage
+            id="TREATMENTS_WARNING_TEXT"
+            defaultMessage="You will lose the details entered. Do you want to continue?"
+          />
+        }
+        label={""}
+        primaryButtonText={<FormattedMessage id="NO" defaultMessage="No" />}
+        secondaryButtonText={
+          <FormattedMessage id="YES" defaultMessage="Yes" />
+        }
+        onSubmit={sliderCloseActions.onClose}
+        onSecondarySubmit={sliderCloseActions.onCancel}
+        onClose={sliderCloseActions.onClose}
+      />
+    )}
+    </>
   );
 };
 
 AddEmergencyTasks.propTypes = {
   patientId: PropTypes.string.isRequired,
+  providerId: PropTypes.string.isRequired,
   updateEmergencyTasksSlider: PropTypes.func.isRequired,
+  setShowSuccessNotification: PropTypes.func.isRequired,
+  setSuccessMessage: PropTypes.func.isRequired
 };
 export default AddEmergencyTasks;
