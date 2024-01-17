@@ -159,26 +159,11 @@ export const PatientHeader = (props) => {
                         {dischargeSummary}
                       </Link>
                     </div>
-                    <OverflowMenu data-testid="overflow-menu" flipped={true} aria-label="overflow-menu">
+                    <OverflowMenu data-testid="overflow-menu" flipped={true} aria-label="overflow-menu" className="patient-movement-overflow">
                       <OverflowMenuItem title="item-patient-movement" itemText="Patient Movement" onClick={() => updatePatientMovementModal(!isModalOpen)}/>
                     </OverflowMenu>
                   </Row>
                   <Row>
-                    <div className="other-info">
-                      <div className="patient-basic-info">
-                        <h3 className="patient-info">
-                          {patientDetails?.gender}
-                        </h3>
-                        <h3 className="patient-info">
-                          {patientDetails?.age} {years}
-                        </h3>
-                        <h3 className="patient-info">
-                          {patientDetails?.birthDate}
-                        </h3>
-                        <h3 className="patient-info">
-                          {patientDetails?.identifier}
-                        </h3>
-                      </div>
                       {showPatientDetails ? (
                         <Link
                           kind="tertiary"
@@ -198,6 +183,21 @@ export const PatientHeader = (props) => {
                           {showDetails} <ChevronDown20 />
                         </Link>
                       )}
+                    <div className="other-info">
+                      <div className="patient-basic-info">
+                        <h3 className="patient-info">
+                          {patientDetails?.gender}
+                        </h3>
+                        <h3 className="patient-info">
+                          {patientDetails?.age} {years}
+                        </h3>
+                        <h3 className="patient-info">
+                          {patientDetails?.birthDate}
+                        </h3>
+                        <h3 className="patient-info">
+                          {patientDetails?.identifier}
+                        </h3>
+                      </div>
                     </div>
                   </Row>
                 </Column>

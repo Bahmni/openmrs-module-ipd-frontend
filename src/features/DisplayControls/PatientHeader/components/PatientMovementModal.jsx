@@ -20,13 +20,13 @@ import {
 } from "../../../../constants";
 import {
   Modal,
-  Select,
-  SelectItem,
   TextArea,
   Dropdown,
   DropdownSkeleton,
 } from "carbon-components-react";
 import "../styles/PatientHeader.scss";
+import PropTypes from 'prop-types';
+import { drop } from "lodash";
 
 const PatientMovementModal = (props) => {
   const { updatePatientMovementModal } = props;
@@ -42,22 +42,18 @@ const PatientMovementModal = (props) => {
   const [saveEnable, setSaveEnable] = useState(false);
   const [vistEncounterTypes, setVisitEncounterTypes] = useState({});
   const fetchDropDownValues = async () => {
-    console.log('started');
     setIsLoading(true);
     const getDropDown = await searchConceptsByFSN(
       BY_FSN_VALUE,
       FSN_DISPOSITION_VALUE,
       CUSTOM_OUTPUT_VALUE
     );
-    console.log('first', getDropDown);
     if (getDropDown.status === 200) {
       const items  = getDropDown.data.results[0].answers;
       var getVisitSummary = await fetchVisitSummary(visit);
-      console.log('second', items);
       if (getVisitSummary.status === 200 && items.length > 0) {
         const visitSummaryData = getVisitSummary.data;
         setVisitSummary(visitSummaryData);
-        console.log('third', items);
         var dropDownList = items.map((item) => {
           if (item.name) {
             if (
@@ -93,7 +89,6 @@ const PatientMovementModal = (props) => {
         setIsLoading(false);
       }
     }
-    
   };
 
   useEffect(() => {
@@ -194,8 +189,6 @@ const PatientMovementModal = (props) => {
 
   const handleSelectOnChange = (e) => {
     var item = {};
-    console.log('eeeeeeeeee --->', e)
-    console.log("e.label ", e.label);
     setCurrentItem(e);
     setSaveEnable(false);
     if (e.label === "Admit Patient") {
@@ -228,11 +221,16 @@ const PatientMovementModal = (props) => {
   const handleNotesOnChange = (e) => {
     setAdtNotes(e.target.value);
   };
-  console.log("---> ADT --> ", adtNotes);
-  console.log("---> saveEnable --> ", saveEnable);
-  console.log("isLoading --> ", isLoading);
-  console.log("---> (dropDown); --> ", dropDown);
-  console.log("---> (currentItem); --> ", currentItem);
+
+  useEffect(() => {
+    if (currentItem != {}) {
+      setSaveEnable(false);
+    }
+    else {
+      setSaveEnable(true);
+    }
+  },[currentItem]);
+  
   return (
     <>
       {!isLoading && (
@@ -255,14 +253,16 @@ const PatientMovementModal = (props) => {
               id="patient-movement-dropdown"
               placeholder={"Choose the patient movement"}
               titleText={""}
-              // onChange={(e) => handleSelectOnChange(e)}
+              onChange={(e) => handleSelectOnChange(e.selectedItem)}
               isRequired={true}
               width={"100%"}
-              options={dropDown}
-              selectedValue={currentItem}
+              items={dropDown}
+              itemToString={(item) => (item ? item.label : "")}
+              selectedItem={currentItem}
             />
           )}
           &nbsp;&nbsp;
+          {!showAdtNotes && (<div style={{height:"50px"}}></div>)}
           {showAdtNotes && (
             <TextArea
               data-modal-primary-focus
@@ -281,3 +281,7 @@ const PatientMovementModal = (props) => {
 };
 
 export default PatientMovementModal;
+
+PatientMovementModal.propTypes = {
+  updatePatientMovementModal: PropTypes.func.isRequired
+}
