@@ -30,7 +30,7 @@ const UpdateNursingTasks = (props) => {
     patientId,
     providerId,
     setShowSuccessNotification,
-    setSuccessMessage
+    setSuccessMessage,
   } = props;
   const [tasks, updateTasks] = useState({});
   const [errors, updateErrors] = useState({});
@@ -235,13 +235,7 @@ const UpdateNursingTasks = (props) => {
     if (Object.keys(errors).length === 0) {
       setOpenConfirmationModal(true);
     }
-
     updateShowErrors(true);
-
-    setTimeout(() => {
-      updateShowErrors(false);
-    }, 3000);
-
     setAdministeredTasks({});
     setSkippedTasks({});
     Object.keys(tasks).forEach((key) => {
@@ -266,6 +260,7 @@ const UpdateNursingTasks = (props) => {
     } else {
       setShowWarningNotification(true);
     }
+    updateShowErrors(false);
   };
 
   const handleSkipDrug = (medicationTask, skipped) => {
@@ -487,6 +482,6 @@ UpdateNursingTasks.propTypes = {
   patientId: PropTypes.string.isRequired,
   providerId: PropTypes.string.isRequired,
   setShowSuccessNotification: PropTypes.func.isRequired,
-  setSuccessMessage: PropTypes.func.isRequired
+  setSuccessMessage: PropTypes.func.isRequired,
 };
 export default UpdateNursingTasks;
