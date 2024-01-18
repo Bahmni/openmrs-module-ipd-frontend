@@ -12,6 +12,7 @@ import {
   getPreviousShiftDetails,
   SortDrugChartData,
   getDateFormatString,
+  getTimeInSeconds,
 } from "../utils/DrugChartUtils";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import data from "../../../../utils/config.json";
@@ -35,7 +36,10 @@ export default function DrugChartWrapper(props) {
     startDate: new Date(),
     endDate: new Date(),
   });
-  const [nextShiftMaxHour, setNextShiftMaxHour] = useState(0);
+  const [nextShiftMaxHour] = useState(
+    getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
+      getTimeInSeconds(2)
+  );
   const [isDisabled, setIsDisabled] = useState({
     previous: false,
     next: false,
@@ -57,22 +61,21 @@ export default function DrugChartWrapper(props) {
         endDateTimeInSeconds
       );
       setDrugChartData(response.data);
-      if(response.data.length > 0) {
-      setIsDisabled({
-        previous: response.data[0].startDate > startDateTimeInSeconds,
-        next:
-          nextShiftMaxHour > 0 &&
-          (startDateTimeInSeconds >= nextShiftMaxHour ||
-            endDateTimeInSeconds >= nextShiftMaxHour),
-      });
-    }
+      if (response.data.length > 0) {
+        setIsDisabled({
+          previous: response.data[0].startDate > startDateTimeInSeconds,
+          next:
+            nextShiftMaxHour > 0 &&
+            (startDateTimeInSeconds >= nextShiftMaxHour ||
+              endDateTimeInSeconds >= nextShiftMaxHour),
+        });
+      }
     } catch (e) {
       return e;
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     const currentShift = currentShiftHoursArray();
     const startDateTime = getDateTime(new Date(), currentShift[0]);
@@ -80,7 +83,6 @@ export default function DrugChartWrapper(props) {
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
-    setNextShiftMaxHour(startDateTime / 1000 + 172800);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   }, []);

@@ -49,7 +49,7 @@ export default function NursingTasks(props) {
     startDate: new Date(),
     endDate: new Date(),
   });
-  const [nextShiftMaxHour, setNextShiftMaxHour] = useState(
+  const [nextShiftMaxHour] = useState(
     getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
       getTimeInSeconds(2)
   );

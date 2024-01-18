@@ -6,6 +6,7 @@ import MockDate from "mockdate";
 
 const mockFetchMedications = jest.fn();
 const MockTooltipCarbon = jest.fn();
+const mockGetTimeInSeconds = jest.fn();
 
 jest.mock("bahmni-carbon-ui", () => {
   return {
@@ -22,6 +23,7 @@ jest.mock("../utils/DrugChartUtils", () => {
     ...originalModule,
     fetchMedications: () => mockFetchMedications(),
     currentShiftHoursArray: () => [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+    getTimeInSeconds: () => mockGetTimeInSeconds(),
   };
 });
 
@@ -55,7 +57,7 @@ describe("DrugChartWrapper", () => {
   it("should render no medication message when drugChartData is empty", async () => {
     MockDate.set("2024-01-05");
     mockFetchMedications.mockResolvedValue({
-      data: [{slots: []}],
+      data: [{ slots: [] }],
     });
     render(<DrugChartView patientId="test-id" />);
     await waitFor(() => {
@@ -108,5 +110,32 @@ describe("DrugChartWrapper", () => {
         screen.getByText("05 Jan 2024 06:00 - 05 Jan 2024 18:00")
       ).toBeTruthy();
     });
+  });
+
+  it("should restrict previous shift navigation if it reaches administered time", async () => {
+    MockDate.set("2024-01-05");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    render(<DrugChartView patientId="test-id" />);
+    await waitFor(() => {
+      expect(screen.getByText(/Paracetamol/i)).toBeTruthy();
+    });
+    expect(screen.getByTestId("previousButton").disabled).toEqual(true);
+  });
+  it("should restrict next shift navigation if it reaches 2 days forth from the current shift", async () => {
+    MockDate.set("2024-01-05");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    mockGetTimeInSeconds.mockReturnValue(0);
+    render(<DrugChartView patientId="test-id" />);
+    await waitFor(() => {
+      expect(screen.getByText(/Paracetamol/i)).toBeTruthy();
+    });
+    await waitFor(() => {
+      expect(screen.getByText(/Paracetamol/i)).toBeTruthy();
+    });
+    expect(screen.getByTestId("nextButton").disabled).toEqual(true);
   });
 });
