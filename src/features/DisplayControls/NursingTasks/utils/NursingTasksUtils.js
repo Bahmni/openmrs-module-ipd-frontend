@@ -136,9 +136,7 @@ export const ExtractMedicationNursingTasksData = (
   });
 
   pendingExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
-  completedExtractedData.sort((a, b) =>
-    a.administeredTime.localeCompare(b.administeredTime)
-  );
+  completedExtractedData.sort((a, b) => a.administeredTimeInEpochSeconds - b.administeredTimeInEpochSeconds);
   stoppedExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
   extractedData.push(...pendingExtractedData);
 
