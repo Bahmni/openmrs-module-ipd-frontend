@@ -8,17 +8,23 @@ import {
   providersMockData,
   searchDrugMockData,
 } from "./AddEmergencyTasksMockData";
+import MockDate from "mockdate";
 
 const mockGetDrugOrdersConfig = jest.fn();
 const mockFetchMedicationConfig = jest.fn();
 const mockGetProviders = jest.fn();
 const mockSearchDrug = jest.fn();
+const mockUpdateEmergencyTasksSlider = jest.fn();
+const mockSetShowSuccessNotification = jest.fn();
+const mockSetSuccessMessage = jest.fn();
+const mockSaveEmergencyMedication = jest.fn();
 
 jest.mock("../utils/EmergencyTasksUtils", () => {
   return {
     getDrugOrdersConfig: () => mockGetDrugOrdersConfig(),
     fetchMedicationConfig: () => mockFetchMedicationConfig(),
     getProviders: () => mockGetProviders(),
+    saveEmergencyMedication: () => mockSaveEmergencyMedication()
   };
 });
 
@@ -57,6 +63,18 @@ describe("AddEmergencyTasks", () => {
     mockFetchMedicationConfig.mockResolvedValueOnce(MedicationConfigMockData);
     mockGetProviders.mockResolvedValueOnce(providersMockData);
     mockSearchDrug.mockReturnValue(searchDrugMockData);
+    mockSaveEmergencyMedication.mockResolvedValueOnce({
+      status: 200,
+      data: { message: "Medication task(s) updated successfully" },
+    });
+  });
+
+  beforeEach(() => {
+    MockDate.set('2024-01-01');
+  });
+
+  afterEach(() => {
+    MockDate.reset();
   });
 
   it("should render the component with loading state", () => {
@@ -135,7 +153,7 @@ describe("AddEmergencyTasks", () => {
       />
     );
 
-    const saveButton = screen.getByText("Save");
+    const saveButton = screen.getAllByText("Save")[1];
     expect(saveButton.disabled).toEqual(true);
 
     // Select Drug
@@ -182,5 +200,106 @@ describe("AddEmergencyTasks", () => {
     expect(notesInput.value).toEqual("Test Notes");
 
     expect(saveButton.disabled).toEqual(false);
+  });
+
+  it("should call save by confirming popup when emergency task is saved", async () => {
+    const { container, getByText } = render(
+      <AddEmergencyTasks
+        patientId={"__patient_uuid__"}
+        providerId={"__provider_uuid__"}
+        updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+        setShowSuccessNotification={mockSetShowSuccessNotification}
+        setSuccessMessage={mockSetSuccessMessage}
+      />
+    );
+
+    const saveButton = screen.getAllByText("Save")[1];
+    expect(saveButton.disabled).toEqual(true);
+
+    // Select Drug
+    await selectDrug(container, getByText);
+
+    // Set Dosage
+    const dosageIncrementor = container.querySelectorAll(".up-icon")[0];
+    fireEvent.click(dosageIncrementor);
+    const dosageInput = container.querySelector(
+      'input[type="number"][id="Dropdown"]'
+    );
+
+    // Set Administration Date
+    const datePickerInput = container.querySelector(".bx--date-picker__input");
+    fireEvent.change(datePickerInput, {
+      target: { value: "01-01-2024" },
+    });
+    fireEvent.blur(datePickerInput);
+    const dateInputField = container.querySelector(".bx--date-picker__input");
+
+    //Set Administration Time
+    const startTimeSelector = container.querySelector(
+      ".bx--time-picker__input-field"
+    );
+    fireEvent.change(startTimeSelector, { target: { value: "12:00" } });
+    fireEvent.blur(startTimeSelector);
+
+    // Set Provider
+    const providerSelector = container.querySelectorAll(".bx--text-input")[4];
+    fireEvent.change(providerSelector, { target: { value: "Dr." } });
+    await waitFor(() => {
+      expect(
+        container.querySelector(".bx--list-box__menu-item__option")
+      ).toBeTruthy();
+    });
+    fireEvent.click(getByText("Dr. Test"));
+
+    // Set Notes
+    const notesInput = container.querySelector("textarea");
+    fireEvent.change(notesInput, { target: { value: "Test Notes" } });
+
+    expect(saveButton.disabled).toEqual(false);
+    saveButton.click();
+
+    expect(screen.getByText("Please confirm the emergency medication task")).toBeTruthy();
+
+    const popupSave = screen.getAllByText("Save")[0];
+    popupSave.click();
+
+    await waitFor(() => {
+      expect(mockSetShowSuccessNotification).toHaveBeenCalledTimes(1);
+      expect(mockSetSuccessMessage).toHaveBeenCalledTimes(1);
+      expect(mockUpdateEmergencyTasksSlider).toHaveBeenCalledTimes(1);
+      expect(mockSaveEmergencyMedication).toHaveBeenCalledTimes(1);
+      
+    });
+  });
+
+  it("should render confirmation modal on click of cancel button when changes are made", async () => {
+    const { container, getByText } = render(
+      <AddEmergencyTasks
+        patientId={"__patient_uuid__"}
+        providerId={"__provider_uuid__"}
+        updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+        setShowSuccessNotification={mockSetShowSuccessNotification}
+        setSuccessMessage={mockSetSuccessMessage}
+      />
+    );
+
+    // Select Drug
+    await selectDrug(container, getByText);
+
+    // Set Dosage
+    const dosageIncrementor = container.querySelectorAll(".up-icon")[0];
+    fireEvent.click(dosageIncrementor);
+    const dosageInput = container.querySelector(
+      'input[type="number"][id="Dropdown"]'
+    );
+
+    const cancelButton = screen.getAllByText("Cancel")[1];
+    cancelButton.click();
+
+    expect(
+      screen.getByText(
+        "You will lose the details entered. Do you want to continue?"
+      )
+    ).toBeTruthy();
   });
 });

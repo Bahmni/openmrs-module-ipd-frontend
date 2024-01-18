@@ -62,6 +62,8 @@
   "STOPPED": "Stopped",
   "NURSING_TASKS_CONFIRMATION": "Please confirm your nursing tasks",
   "NURSING_TASKS_SAVE_MESSAGE": "Medication task(s) updated successfully",
+  "EMERGENCY_TASK_CONFIRMATION": "Please confirm the emergency medication task",
+  "EMERGENCY_TASK_SAVE_MESSAGE": "Emergency Medication task created successfully.",
   "PATIENT_DASHBOARD": "Patient Dashboard",
   "DISCHARGE_SUMMARY": "Discharge Summary",
   "EDIT_DRUG_CHART": "Edit Drug Chart",

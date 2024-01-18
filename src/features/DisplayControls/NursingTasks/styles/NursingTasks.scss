@@ -55,6 +55,12 @@
   .nursing-task-actions {
     display: flex;
     gap: 10px;
+    .bx--btn--expressive {
+      &:hover,
+      &:focus {
+        color: #fff;
+      }
+    }
   }
 
   .nursing-task-dropdown {

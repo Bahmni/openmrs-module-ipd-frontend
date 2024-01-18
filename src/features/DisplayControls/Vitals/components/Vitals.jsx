@@ -64,7 +64,7 @@ const Vitals = (props) => {
       const VitalsList = await getPatientVitals(patientId);
       const vitalsHistoryList = await getPatientVitalsHistory(patientId);
       handleVitalUnits(VitalsList.conceptDetails);
-      setVitals(mapVitalsData(VitalsList, setVitalsDate, setVitalsTime));
+      setVitals(mapVitalsData(VitalsList, vitalsHistoryList,setVitalsDate, setVitalsTime));
       setVitalsHistory(mapVitalsHistory(vitalsHistoryList));
       setBiometricsHistory(mapBiometricsHistory(vitalsHistoryList));
       updateIsLoading(false);
@@ -82,8 +82,7 @@ const Vitals = (props) => {
       ) : (
         <Tile className="vital-table">
           <div className="vital-date-time">
-            {vitalsDate ? vitalsDate : "-"}
-            {vitalsTime ? ", " + vitalsTime + "  " : "-"}
+            {vitalsDate ? vitalsDate + " ": "-"}
            {showMore ? (<Link
               kind="tertiary"
               className="show-more"
