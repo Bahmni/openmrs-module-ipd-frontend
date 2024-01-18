@@ -206,7 +206,9 @@ const AddEmergencyTasks = (props) => {
                     setAdministrationDate(new Date(e[0]));
                   }}
                   title={"Administration Date"}
+                  placeholder={"Select Administration Date"}
                   isRequired={true}
+                  dateFormat={"d M Y"}
                 />
                 <TimePicker24Hour
                   onChange={setAdministrationTime}

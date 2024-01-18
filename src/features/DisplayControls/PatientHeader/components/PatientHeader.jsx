@@ -16,13 +16,12 @@ import {
   SkeletonText,
   Link,
 } from "carbon-components-react";
-import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { FormattedMessage } from "react-intl";
-import { DDMMYYY_DATE_FORMAT } from "../../../../constants";
 import "../styles/PatientHeader.scss";
 import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
 import { getPatientDashboardUrl } from "../../../../utils/CommonUtils";
 import PatientDetails from "./PatientDetails";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 
 export const PatientHeader = (props) => {
   const { patientId, openDischargeSummary } = props;
@@ -77,10 +76,7 @@ export const PatientHeader = (props) => {
       familyName: patientInfo?.person?.preferredName.familyName,
       middleName: patientInfo?.person?.preferredName?.middleName,
       age: patientInfo?.person?.age,
-      birthDate: formatDateAsString(
-        new Date(patientInfo?.person?.birthdate),
-        DDMMYYY_DATE_FORMAT
-      ),
+      birthDate: formatDate(patientInfo?.person?.birthdate),
       attributes: patientInfo?.person?.attributes,
       gender: getGender(patientInfo?.person?.gender),
       identifier: patientInfo?.identifiers[0]?.identifier,

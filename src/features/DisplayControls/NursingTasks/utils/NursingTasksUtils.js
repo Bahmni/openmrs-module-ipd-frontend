@@ -189,3 +189,4 @@ export const isTimeWithinAdministeredWindow = (
 
   return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
 };
+export const getTimeInSeconds = (days) => days * 86400

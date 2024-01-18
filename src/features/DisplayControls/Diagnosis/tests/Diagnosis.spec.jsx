@@ -136,7 +136,7 @@ describe("Diagnosis", () => {
     });
     expect(screen.getByText("Arthropathy")).toBeTruthy();
     expect(screen.getByText("Inactive")).toBeTruthy();
-    expect(screen.getByText("26/10/2023")).toBeTruthy();
-    expect(screen.getByText("27/10/2023")).toBeTruthy();
+    expect(screen.getByText("26 Oct 2023")).toBeTruthy();
+    expect(screen.getByText("27 Oct 2023")).toBeTruthy();
   });
 });

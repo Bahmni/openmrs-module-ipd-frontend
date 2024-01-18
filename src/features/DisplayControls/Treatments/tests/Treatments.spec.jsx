@@ -132,7 +132,7 @@ describe("Treatments", () => {
       </SliderContext.Provider>
     );
     await waitFor(() => {
-      expect(getByText("20/01/1970")).toBeTruthy();
+      expect(getByText("20 Jan 1970")).toBeTruthy();
       expect(getByText("Drug 1")).toBeTruthy();
       expect(getByText("1 mg - Oral - Once a day - for 7 Day(s)")).toBeTruthy();
       expect(getByText("Dr. John Doe")).toBeTruthy();

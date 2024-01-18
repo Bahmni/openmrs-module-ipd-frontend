@@ -137,7 +137,7 @@ const Treatments = (props) => {
         const drugOrder = drugOrderObject.drugOrder;
         return {
           id: drugOrder.uuid,
-          startDate: formatDate(drugOrder.effectiveStartDate, "DD/MM/YYYY"),
+          startDate: formatDate(drugOrder.effectiveStartDate),
           drugName: getDrugName(drugOrderObject),
           dosageDetails: setDosingInstructions(drugOrder),
           providerName: drugOrderObject.provider.name,

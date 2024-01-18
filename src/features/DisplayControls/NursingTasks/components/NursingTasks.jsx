@@ -7,6 +7,7 @@ import { items } from "../utils/constants";
 import {
   fetchMedicationNursingTasks,
   ExtractMedicationNursingTasksData,
+  getTimeInSeconds,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
 import { formatDate } from "../../../../utils/DateTimeUtils";
@@ -22,6 +23,7 @@ import data from "../../../../utils/config.json";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import {
   currentShiftHoursArray,
+  getDateFormatString,
   getDateTime,
   getNextShiftDetails,
   getPreviousShiftDetails,
@@ -47,7 +49,16 @@ export default function NursingTasks(props) {
     startDate: new Date(),
     endDate: new Date(),
   });
+  const [nextShiftMaxHour, setNextShiftMaxHour] = useState(
+    getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
+      getTimeInSeconds(2)
+  );
+  const [isDisabled, setIsDisabled] = useState({
+    previous: false,
+    next: false,
+  });
   const { config: { drugChart = {} } = {} } = data;
+  const dateFormatString = getDateFormatString();
 
   useEffect(() => {
     const currentShift = currentShiftHoursArray();
@@ -59,7 +70,6 @@ export default function NursingTasks(props) {
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   }, []);
-
   const updateNursingTasksSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -182,6 +192,12 @@ export default function NursingTasks(props) {
       );
       setMedicationNursingTasks(extractedData);
       setIsLoading(false);
+      setIsDisabled({
+        previous: nursingTasks[0].startDate > startDateTimeInSeconds,
+        next:
+          startDateTimeInSeconds >= nextShiftMaxHour ||
+          endDateTimeInSeconds >= nextShiftMaxHour,
+      });
     }
   };
   useEffect(() => {
@@ -254,6 +270,7 @@ export default function NursingTasks(props) {
                   />
                 </Button>
                 <Button
+                  disabled={isDisabled.previous}
                   renderIcon={ChevronLeft16}
                   kind="tertiary"
                   isExpressive
@@ -264,6 +281,7 @@ export default function NursingTasks(props) {
                   data-testid="previous-shift"
                 />
                 <Button
+                  disabled={isDisabled.next}
                   renderIcon={ChevronRight16}
                   kind="tertiary"
                   isExpressive
@@ -273,13 +291,10 @@ export default function NursingTasks(props) {
                   className="margin-right-10"
                   data-testid="next-shift"
                 />
-                <span>{`${formatDate(
+                {`${formatDate(
                   startEndDates.startDate,
-                  "DD/MM/YYYY HH:mm"
-                )} - ${formatDate(
-                  startEndDates.endDate,
-                  "DD/MM/YYYY HH:mm"
-                )}`}</span>
+                  dateFormatString
+                )} - ${formatDate(startEndDates.endDate, dateFormatString)}`}
               </div>
               <div className="nursing-task-actions">
                 <Dropdown

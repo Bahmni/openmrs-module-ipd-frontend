@@ -40,7 +40,6 @@ describe("DrugChartWrapper", () => {
     });
     const { container } = render(<DrugChartView patientId="testid" />);
     await waitFor(() => {
-      screen.debug();
       expect(container).toMatchSnapshot();
     });
   });
@@ -56,7 +55,7 @@ describe("DrugChartWrapper", () => {
   it("should render no medication message when drugChartData is empty", async () => {
     MockDate.set("2024-01-05");
     mockFetchMedications.mockResolvedValue({
-      data: [],
+      data: [{slots: []}],
     });
     render(<DrugChartView patientId="test-id" />);
     await waitFor(() => {
@@ -76,7 +75,7 @@ describe("DrugChartWrapper", () => {
     fireEvent.click(previousButton);
     await waitFor(() => {
       expect(
-        screen.getByText("04/01/2024 18:00 - 05/01/2024 06:00")
+        screen.getByText("04 Jan 2024 18:00 - 05 Jan 2024 06:00")
       ).toBeTruthy();
     });
   });
@@ -91,7 +90,7 @@ describe("DrugChartWrapper", () => {
     fireEvent.click(nextButton);
     await waitFor(() => {
       expect(
-        screen.getByText("05/01/2024 18:00 - 06/01/2024 06:00")
+        screen.getByText("05 Jan 2024 18:00 - 06 Jan 2024 06:00")
       ).toBeTruthy();
     });
   });
@@ -106,7 +105,7 @@ describe("DrugChartWrapper", () => {
     fireEvent.click(currentShiftButton);
     await waitFor(() => {
       expect(
-        screen.getByText("05/01/2024 06:00 - 05/01/2024 18:00")
+        screen.getByText("05 Jan 2024 06:00 - 05 Jan 2024 18:00")
       ).toBeTruthy();
     });
   });

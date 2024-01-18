@@ -35,6 +35,11 @@ export default function DrugChartWrapper(props) {
     startDate: new Date(),
     endDate: new Date(),
   });
+  const [nextShiftMaxHour, setNextShiftMaxHour] = useState(0);
+  const [isDisabled, setIsDisabled] = useState({
+    previous: false,
+    next: false,
+  });
 
   const { config: { drugChart = {} } = {} } = data;
 
@@ -52,6 +57,15 @@ export default function DrugChartWrapper(props) {
         endDateTimeInSeconds
       );
       setDrugChartData(response.data);
+      if(response.data.length > 0) {
+      setIsDisabled({
+        previous: response.data[0].startDate > startDateTimeInSeconds,
+        next:
+          nextShiftMaxHour > 0 &&
+          (startDateTimeInSeconds >= nextShiftMaxHour ||
+            endDateTimeInSeconds >= nextShiftMaxHour),
+      });
+    }
     } catch (e) {
       return e;
     } finally {
@@ -66,6 +80,7 @@ export default function DrugChartWrapper(props) {
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
+    setNextShiftMaxHour(startDateTime / 1000 + 172800);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   }, []);
@@ -160,6 +175,7 @@ export default function DrugChartWrapper(props) {
           onClick={handlePrevious}
           className="margin-right-6"
           data-testid="previousButton"
+          disabled={isDisabled.previous}
         />
         <Button
           renderIcon={ChevronRight16}
@@ -170,6 +186,7 @@ export default function DrugChartWrapper(props) {
           onClick={handleNext}
           className="margin-right-10"
           data-testid="nextButton"
+          disabled={isDisabled.next}
         />
         <span>
           {`${formatDate(
@@ -180,7 +197,8 @@ export default function DrugChartWrapper(props) {
       </div>
       {isLoading ? (
         <div>Loading...</div>
-      ) : drugChartData && drugChartData.length === 0 ? (
+      ) : drugChartData &&
+        (drugChartData.length === 0 || drugChartData[0].slots.length === 0) ? (
         <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>
       ) : (
         <DrugChart

@@ -142,16 +142,6 @@ export default function Dashboard(props) {
               size={20}
               onClick={() => window.history.back()}
             />
-            <Link
-              onClick={() => {
-                window.location.href = getPatientDashboardUrl(patient?.uuid);
-              }}
-            >
-              <FormattedMessage
-                id={"VIEW_CLINICAL_DASHBOARD"}
-                defaultMessage={"View Clinical Dashboard"}
-              />
-            </Link>
           </div>
           <PatientHeader
             patientId={patient?.uuid}
