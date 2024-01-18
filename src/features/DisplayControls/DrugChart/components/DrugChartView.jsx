@@ -12,7 +12,7 @@ import {
   getPreviousShiftDetails,
   getDateFormatString,
   transformDrugOrders,
-  getTransformedDrugChartData,
+  mapDrugOrdersAndSlots,
 } from "../utils/DrugChartUtils";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import data from "../../../../utils/config.json";
@@ -30,6 +30,7 @@ export default function DrugChartWrapper(props) {
   const { patientId } = props;
   const { visitUuid } = useContext(SliderContext);
   const [drugChartData, setDrugChartData] = useState([]);
+  const [transformedData, setTransformedData] = useState([]);
   const [drugOrders, setDrugOrders] = useState({});
   const [isLoading, setLoading] = useState(true);
   const [date, updateDate] = useState(new Date());
@@ -61,6 +62,9 @@ export default function DrugChartWrapper(props) {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    setTransformedData(mapDrugOrdersAndSlots(drugChartData, drugOrders));
+  }, [drugChartData]);
 
   useEffect(async () => {
     const currentShift = currentShiftHoursArray();
@@ -73,8 +77,6 @@ export default function DrugChartWrapper(props) {
     callFetchMedications(startDateTime, endDateTime);
     setDrugOrders(await transformDrugOrders(visitUuid));
   }, []);
-
-  const transformedDrugChartData = getTransformedDrugChartData(drugChartData);
 
   const handlePrevious = () => {
     const firstHour = currentShiftArray[0];
@@ -187,7 +189,7 @@ export default function DrugChartWrapper(props) {
         <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>
       ) : (
         <DrugChart
-          drugChartData={transformedDrugChartData}
+          drugChartData={transformedData}
           currentShiftArray={currentShiftArray}
           selectedDate={date}
         />

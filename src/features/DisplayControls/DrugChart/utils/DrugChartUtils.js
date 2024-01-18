@@ -1,5 +1,4 @@
 import axios from "axios";
-import moment from "moment";
 import {
   ALL_DRUG_ORDERS_URL,
   MEDICATIONS_BASE_URL,
@@ -24,7 +23,6 @@ export const fetchMedications = async (
 
 export const getAllDrugOrders = async (visitUuid) => {
   try {
-    console.log("Visit Id", visitUuid);
     const response = await axios.get(ALL_DRUG_ORDERS_URL(visitUuid), {
       withCredentials: true,
     });
@@ -38,7 +36,6 @@ export const getAllDrugOrders = async (visitUuid) => {
 export const transformDrugOrders = async (visitUuid) => {
   const orders = await getAllDrugOrders(visitUuid);
   const { ipdDrugOrders, emergencyMedications } = orders;
-  console.log("Orders", orders);
   const medicationData = {};
   ipdDrugOrders.forEach((order) => {
     if (
@@ -64,6 +61,10 @@ export const transformDrugOrders = async (visitUuid) => {
           route: dosingInstructions.route,
           dosage,
           doseUnits,
+          asNeeded: dosingInstructions.asNeeded,
+          instructions: JSON.parse(
+            dosingInstructions.administrationInstructions
+          ),
         },
         duration: duration + " " + durationUnits,
         slots: [],
@@ -102,8 +103,6 @@ export const transformDrugOrders = async (visitUuid) => {
     };
   });
 
-  // medicationData.sort((a,b) => a.firstSlotStartTime - b.firstSlotStartTime);
-  console.log("Medication Data", medicationData, orders);
   return medicationData;
 };
 
@@ -125,11 +124,6 @@ const isAdministeredLateTask = (startTime, effectiveStartDate) => {
     effectiveStartDate - startTime * 1000 > lateTaskStatusWindowInMilliSeconds
   );
 };
-
-const checkIfSlotIsAdministered = (status) => {
-  return status === "COMPLETED";
-};
-
 const sortByStartTime = (a, b) => a.startTime - b.startTime;
 
 export const SortDrugChartData = (drugChartData) => {
@@ -144,15 +138,6 @@ export const getDateFormatString = () =>
 
 export const getHourFormatString = () =>
   drugChart.enable24HourTime ? "HH:mm" : "hh:mm";
-
-// export const getTransformedDrugChartData = (drugChartData, drugOrders) => {
-//   console.log("Drug Chart Data", drugChartData, drugOrders);
-//   const mappedOrders = mapDrugOrdersAndSlots(drugChartData, drugOrders);
-//   console.log("Mapped Sorted Response", mappedOrders);
-//   const sortedDrugChartData = SortDrugChartData(drugChartData);
-//   const groupedSlots = groupSlotsByDrugName(sortedDrugChartData);
-//   return TransformDrugChartData(groupedSlots);
-// };
 
 export const resetDrugOrdersSlots = (drugOrders) => {
   Object.keys(drugOrders).forEach((order) => {
@@ -169,189 +154,42 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
       slots = drugChartData[0].slots;
     }
     slots?.forEach((slot) => {
-      const { order } = slot;
-      orders[order.uuid].slots.push(slot);
+      const { startTime, status, order, medicationAdministration } = slot;
+      let administrationStatus = "Pending";
+      if (medicationAdministration) {
+        const { administeredDateTime } = medicationAdministration;
+        if (status === "COMPLETED") {
+          if (isAdministeredLateTask(startTime, administeredDateTime)) {
+            administrationStatus = "Administered-Late";
+          } else {
+            administrationStatus = "Administered";
+          }
+        }
+      } else {
+        if (isLateTask(startTime)) {
+          administrationStatus = "Late";
+        }
+      }
+      orders[order.uuid].slots.push({
+        ...slot,
+        administrationSummary: {
+          notes:
+            medicationAdministration?.notes &&
+            medicationAdministration?.notes[0]?.text,
+          status: administrationStatus,
+        },
+      });
     });
-    const mappedOrders = Object.keys(orders).map((order) => {
+    const mappedOrders = Object.keys(orders).map((orderUuid) => {
       return {
-        uuid: order,
-        ...orders[order],
+        uuid: orderUuid,
+        ...orders[orderUuid],
       };
     });
     mappedOrders.sort((a, b) => a.firstSlotStartTime - b.firstSlotStartTime);
     return mappedOrders;
   }
 };
-
-export const getTransformedDrugChartData = (drugChartData) => {
-  const sortedDrugChartData = SortDrugChartData(drugChartData);
-  const groupedSlots = groupSlotsByDrugName(sortedDrugChartData);
-  const transformedDrugChartData = TransformDrugChartData(groupedSlots);
-  return transformedDrugChartData;
-};
-
-export const groupSlotsByDrugName = (drugChartData) => {
-  const groupedSlots = {};
-
-  drugChartData.forEach((schedule) => {
-    const { slots } = schedule;
-
-    slots.forEach((slot) => {
-      const { order } = slot;
-      const drugName = order.drug.display;
-
-      if (!groupedSlots[drugName]) {
-        groupedSlots[drugName] = [];
-      }
-
-      groupedSlots[drugName].push(slot);
-    });
-  });
-
-  return groupedSlots;
-};
-
-export const TransformDrugChartData = (groupedSlots) => {
-  const drugOrderData = [];
-  const slotDataByOrder = [];
-
-  Object.values(groupedSlots).forEach((slots) => {
-    const slotData = {};
-
-    slots.forEach((slot) => {
-      let administeredStartHour, administeredStartMinutes, medicationNotes;
-
-      const { startTime, status, order, medicationAdministration } = slot;
-      let medicationStatus = "Pending";
-      let adminInfo = "",
-        administeredTime,
-        startActualTime;
-
-      const isCompleted = checkIfSlotIsAdministered(status);
-
-      if (isCompleted) {
-        const isLate = isAdministeredLateTask(
-          startTime,
-          medicationAdministration.administeredDateTime
-        );
-        medicationStatus = isLate ? "Administered-Late" : "Administered";
-        if (medicationAdministration) {
-          const { administeredDateTime, providers, notes } =
-            medicationAdministration;
-          const administeredDateTimeObject = new Date(administeredDateTime);
-          const hourFormatString = getHourFormatString();
-          administeredTime = moment(administeredDateTimeObject).format(
-            hourFormatString
-          );
-          adminInfo =
-            providers[0].provider.display + " [" + administeredTime + "]";
-          administeredStartHour = administeredDateTimeObject.getHours();
-          administeredStartMinutes = administeredDateTimeObject.getMinutes();
-          medicationNotes = notes && notes.length > 0 ? notes[0].text : "";
-        } else {
-          adminInfo = "";
-        }
-      }
-      const startDateTimeObj = new Date(startTime * 1000);
-      startActualTime = moment(startDateTimeObj).format("HH:mm");
-
-      const drugOrder = {
-        uuid: order.uuid,
-        drugName: order.drug.display,
-        drugRoute: order.route.display,
-        administrationInfo: [],
-        dosingInstructions: order.dosingInstructions,
-        dosingTagInfo: {
-          asNeeded: order.asNeeded,
-          frequency: order.frequency.display,
-        },
-      };
-
-      if (order.duration) {
-        drugOrder.duration = order.duration + " " + order.durationUnits.display;
-      }
-      if (order.doseUnits.display !== "ml") {
-        drugOrder.dosage = order.dose;
-        drugOrder.doseType = order.doseUnits.display;
-      } else {
-        drugOrder.dosage = order.dose + order.doseUnits.display;
-      }
-      if (order.duration) {
-        drugOrder.duration = order.duration + " " + order.durationUnits.display;
-      }
-
-      const setLateStatus = isLateTask(startTime);
-      const startHour = startDateTimeObj.getHours();
-      const startMinutes = startDateTimeObj.getMinutes();
-      if (isCompleted) {
-        slotData[administeredStartHour] = slotData[administeredStartHour] || [];
-        slotData[administeredStartHour].push({
-          minutes: administeredStartMinutes,
-          status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
-          administrationInfo: adminInfo,
-          notes: medicationNotes,
-        });
-      } else {
-        slotData[startHour] = slotData[startHour] || [];
-        slotData[startHour].push({
-          minutes: startMinutes,
-          status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
-          administrationInfo: adminInfo,
-          notes: medicationNotes,
-        });
-      }
-
-      if (
-        medicationStatus === "Administered" ||
-        medicationStatus === "Administered-Late"
-      ) {
-        const adminData = {
-          kind: medicationStatus,
-          time: startActualTime,
-          timeAdministered: administeredTime,
-        };
-        if (
-          drugOrderData.some(
-            (existingOrder) =>
-              existingOrder.drugName === drugOrder.drugName &&
-              existingOrder.uuid === drugOrder.uuid
-          )
-        ) {
-          const index = drugOrderData.findIndex(
-            (existingOrder) =>
-              existingOrder.drugName === drugOrder.drugName &&
-              existingOrder.uuid === drugOrder.uuid
-          );
-          drugOrderData[index].administrationInfo.push(adminData);
-        } else {
-          drugOrder.administrationInfo.push(adminData);
-        }
-      }
-      if (
-        !drugOrderData.some(
-          (existingOrder) =>
-            existingOrder.drugName === drugOrder.drugName &&
-            existingOrder.uuid === drugOrder.uuid
-        )
-      ) {
-        drugOrderData.push(drugOrder);
-        slotDataByOrder.push(slotData);
-      } else {
-        const index = drugOrderData.findIndex(
-          (existingOrder) =>
-            existingOrder.drugName === drugOrder.drugName &&
-            existingOrder.uuid === drugOrder.uuid
-        );
-        slotDataByOrder[index] = {
-          ...slotDataByOrder[index],
-          ...slotData,
-        };
-      }
-    });
-  });
-  return [slotDataByOrder, drugOrderData];
-};
-
 export const ifMedicationNotesPresent = (medicationNotes, side) =>
   (side === "Administered-Late" ||
     side === "Administered" ||
