@@ -339,7 +339,7 @@ describe("Treatments", () => {
     });
   });
 
-  it("should disable edit drug chart link after drug is administered", async () => {
+  it("should display stop drug link after one dose of drug is administered", async () => {
     const treatments = [
       {
         drugOrder: {
@@ -381,21 +381,19 @@ describe("Treatments", () => {
         ipdDrugOrders: treatments,
       });
     });
-    const { getByText } = render(
+    const { getByText, queryByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
         <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
       </SliderContext.Provider>
     );
 
     await waitFor(() => {
-      expect(getByText("Edit Drug Chart")).toBeTruthy();
-      expect(getByText("Edit Drug Chart").className).toContain(
-        "bx--link--disabled"
-      );
+      expect(getByText("Stop drug")).toBeTruthy();
+      expect(queryByText("Edit Drug Chart")).toBeFalsy();
     });
   });
 
-  it("should not open slider on click of disabled edit drug chart link", async () => {
+  it("should render a stop drug modal on click of stop drug link", async () => {
     const treatments = [
       {
         drugOrder: {
@@ -443,11 +441,16 @@ describe("Treatments", () => {
       </SliderContext.Provider>
     );
     await waitFor(() => {
-      expect(getByText("Edit Drug Chart")).toBeTruthy();
+      expect(getByText("Stop drug")).toBeTruthy();
     });
-    getByText("Edit Drug Chart").click();
+
+    getByText("Stop drug").click();
     await waitFor(() => {
-      expect(mockProviderValue.updateSliderOpen).toHaveBeenCalledTimes(1);
+      expect(
+        getByText(
+          "Are you sure you want to stop this drug? You will not be able to reverse this decision"
+        )
+      ).toBeTruthy();
     });
   });
 });

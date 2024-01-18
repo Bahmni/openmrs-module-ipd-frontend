@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { Link, DataTableSkeleton, TextArea } from "carbon-components-react";
+import { Title } from "bahmni-carbon-ui";
 import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -366,9 +367,12 @@ const Treatments = (props) => {
               />
               <div className="stop-drug-reason-text">
                 <TextArea
-                  labelText="Please mention a reason"
+                  labelText={
+                    <Title text={"Please mention a reason"} isRequired={true} />
+                  }
                   rows={1}
                   id="stop-drug-reason-text"
+                  required
                   onChange={(event) => {
                     setStopReason(event.target.value);
                     setStopButtonDisabled(event.target.value.trim() === "");

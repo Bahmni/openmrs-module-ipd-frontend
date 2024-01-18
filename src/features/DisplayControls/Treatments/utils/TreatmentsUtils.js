@@ -113,7 +113,7 @@ export const EditDrugChart = (
 );
 
 export const StopDrugChart = (
-  <FormattedMessage id={"STOP_DRUG"} defaultMessage={"Stop Drug"} />
+  <FormattedMessage id={"STOP_DRUG"} defaultMessage={"Stop drug"} />
 );
 
 export const NoTreatmentsMessage = (
