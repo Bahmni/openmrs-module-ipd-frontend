@@ -178,7 +178,7 @@ export const getDrugName = (drugOrderObject) => {
   return drugOrder.freeTextAnswer;
 };
 
-export const StopDrugOrders = async (payload) => {
+export const stopDrugOrders = async (payload) => {
   try {
     return await axios.post(BAHMNI_ENCOUNTER_URL, payload, {
       withCredentials: true,
@@ -189,7 +189,6 @@ export const StopDrugOrders = async (payload) => {
     });
   } catch (error) {
     console.log(error);
-    return error;
   }
 };
 
@@ -198,7 +197,6 @@ export const getEncounterType = async (encounterType) => {
     const response = await axios.get(
       ENCOUNTER_TYPE_URL.replace("{encounterType}", encounterType)
     );
-    console.log("encounterType", response.data);
     return response.data;
   } catch (error) {
     console.log(error);

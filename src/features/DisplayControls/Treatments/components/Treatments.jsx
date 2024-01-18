@@ -16,7 +16,7 @@ import {
   isIPDDrugOrder,
   setDosingInstructions,
   getDrugName,
-  StopDrugOrders,
+  stopDrugOrders,
   getEncounterType,
   modifyEmergencyTreatmentData,
   mapAdditionalDataForEmergencyTreatments,
@@ -175,7 +175,7 @@ const Treatments = (props) => {
       locationUuid,
     };
 
-    const response = await StopDrugOrders(StopDrugOrderPayload);
+    const response = await stopDrugOrders(StopDrugOrderPayload);
     response.status === 200 ? saveStopDrugOrder() : null;
   };
 
