@@ -7,10 +7,12 @@ import { items } from "../utils/constants";
 import {
   fetchMedicationNursingTasks,
   ExtractMedicationNursingTasksData,
-  getTimeInSeconds,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
-import { formatDate } from "../../../../utils/DateTimeUtils";
+import {
+  convertDaystoSeconds,
+  formatDate,
+} from "../../../../utils/DateTimeUtils";
 import { SliderContext } from "../../../../context/SliderContext";
 import UpdateNursingTasks from "./UpdateNursingTasks";
 import { Button, Dropdown } from "carbon-components-react";
@@ -43,6 +45,9 @@ export default function NursingTasks(props) {
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [date, updateDate] = useState(new Date());
   const [lastAction, updateLastActon] = useState("");
+  const allowedForthShfts =
+    getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
+    convertDaystoSeconds(2);
   const [currentShiftArray, updateShiftArray] = useState(
     currentShiftHoursArray()
   );
@@ -50,11 +55,8 @@ export default function NursingTasks(props) {
     startDate: new Date(),
     endDate: new Date(),
   });
-  const [nextShiftMaxHour] = useState(
-    getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
-      getTimeInSeconds(2)
-  );
-  const [isDisabled, setIsDisabled] = useState({
+  const [nextShiftMaxHour] = useState(allowedForthShfts);
+  const [isShiftsButtonsDisabled, setIsShiftsButtonsDisabled] = useState({
     previous: false,
     next: false,
   });
@@ -193,7 +195,7 @@ export default function NursingTasks(props) {
       );
       setMedicationNursingTasks(extractedData);
       setIsLoading(false);
-      setIsDisabled({
+      setIsShiftsButtonsDisabled({
         previous: nursingTasks[0].startDate > startDateTimeInSeconds,
         next:
           startDateTimeInSeconds >= nextShiftMaxHour ||
@@ -271,7 +273,7 @@ export default function NursingTasks(props) {
                   />
                 </Button>
                 <Button
-                  disabled={isDisabled.previous}
+                  disabled={isShiftsButtonsDisabled.previous}
                   renderIcon={ChevronLeft16}
                   kind="tertiary"
                   isExpressive
@@ -282,7 +284,7 @@ export default function NursingTasks(props) {
                   data-testid="previous-shift"
                 />
                 <Button
-                  disabled={isDisabled.next}
+                  disabled={isShiftsButtonsDisabled.next}
                   renderIcon={ChevronRight16}
                   kind="tertiary"
                   isExpressive

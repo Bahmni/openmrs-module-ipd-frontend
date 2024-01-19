@@ -2,9 +2,9 @@ import axios from "axios";
 import moment from "moment";
 import {
   MEDICATIONS_BASE_URL,
-  dateTimeFormat,
+  displayShiftTimingsFormat,
   defaultDateTimeFormat,
-  performerFunction
+  performerFunction,
 } from "../../../../constants";
 import data from "../../../../utils/config.json";
 
@@ -56,7 +56,9 @@ export const SortDrugChartData = (drugChartData) => {
 };
 
 export const getDateFormatString = () =>
-  drugChart.enable24HourTime ? dateTimeFormat : defaultDateTimeFormat;
+  drugChart.enable24HourTime
+    ? displayShiftTimingsFormat
+    : defaultDateTimeFormat;
 
 export const getHourFormatString = () =>
   drugChart.enable24HourTime ? "HH:mm" : "hh:mm";
@@ -118,10 +120,14 @@ export const TransformDrugChartData = (groupedSlots) => {
 
       const isCompleted = checkIfSlotIsAdministered(status);
 
-      if (!isCompleted && medicationAdministration && medicationAdministration.status === "Not Done") {
-          const { notes } = medicationAdministration;
-          medicationStatus = "Not-Administered";
-          medicationNotes = notes && notes.length > 0 ? notes[0].text : "";
+      if (
+        !isCompleted &&
+        medicationAdministration &&
+        medicationAdministration.status === "Not Done"
+      ) {
+        const { notes } = medicationAdministration;
+        medicationStatus = "Not-Administered";
+        medicationNotes = notes && notes.length > 0 ? notes[0].text : "";
       }
 
       if (isCompleted) {
@@ -390,5 +396,3 @@ export const getPreviousShiftDetails = (
   date = currentShiftStartTime;
   return { startDateTime, endDateTime, nextDate: date };
 };
-
-export const getTimeInSeconds = (days) => days * 86400

@@ -16,7 +16,13 @@ jest.mock("../utils/NursingTasksUtils", () => {
   return {
     ...originalModule,
     fetchMedicationNursingTasks: () => mockFetchMedicationNursingTasks(),
-    getTimeInSeconds: () => mockGetTimeInSeconds(),
+  };
+});
+jest.mock("../../../../utils/DateTimeUtils", () => {
+  const originalModule = jest.requireActual("../../../../utils/DateTimeUtils");
+  return {
+    ...originalModule,
+    convertDaystoSeconds: () => mockGetTimeInSeconds(),
   };
 });
 
@@ -45,9 +51,11 @@ describe("NursingTasks", () => {
   });
 
   it("should show no pending tasks message when nursing task reponse is empty", async () => {
-    mockFetchMedicationNursingTasks.mockResolvedValueOnce([{
-      slots: [],
-    }]);
+    mockFetchMedicationNursingTasks.mockResolvedValueOnce([
+      {
+        slots: [],
+      },
+    ]);
 
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
@@ -63,9 +71,11 @@ describe("NursingTasks", () => {
   });
 
   it("should show no completed tasks message when nursing task reponse is empty", async () => {
-    mockFetchMedicationNursingTasks.mockResolvedValueOnce([{
-      slots: [],
-    }]);
+    mockFetchMedicationNursingTasks.mockResolvedValueOnce([
+      {
+        slots: [],
+      },
+    ]);
     const { getByText, container } = render(
       <SliderContext.Provider value={mockProviderValue}>
         <NursingTasks patientId="patientid" />

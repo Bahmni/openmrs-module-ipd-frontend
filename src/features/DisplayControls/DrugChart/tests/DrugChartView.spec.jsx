@@ -26,6 +26,13 @@ jest.mock("../utils/DrugChartUtils", () => {
     getTimeInSeconds: () => mockGetTimeInSeconds(),
   };
 });
+jest.mock("../../../../utils/DateTimeUtils", () => {
+  const originalModule = jest.requireActual("../../../../utils/DateTimeUtils");
+  return {
+    ...originalModule,
+    convertDaystoSeconds: () => mockGetTimeInSeconds(),
+  };
+});
 
 afterEach(() => {
   MockDate.reset();

@@ -10,10 +10,12 @@ import {
   getNextShiftDetails,
   getPreviousShiftDetails,
   getDateFormatString,
-  getTimeInSeconds,
   getTransformedDrugChartData,
 } from "../utils/DrugChartUtils";
-import { formatDate } from "../../../../utils/DateTimeUtils";
+import {
+  convertDaystoSeconds,
+  formatDate,
+} from "../../../../utils/DateTimeUtils";
 import data from "../../../../utils/config.json";
 import { FormattedMessage } from "react-intl";
 import "../styles/DrugChartView.scss";
@@ -35,11 +37,11 @@ export default function DrugChartWrapper(props) {
     startDate: new Date(),
     endDate: new Date(),
   });
-  const [nextShiftMaxHour] = useState(
+  const allowedForthShfts =
     getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
-      getTimeInSeconds(2)
-  );
-  const [isDisabled, setIsDisabled] = useState({
+    convertDaystoSeconds(2);
+  const [nextShiftMaxHour] = useState(allowedForthShfts);
+  const [isShiftButtonsDisabled, setIsShiftButtonsDisabled] = useState({
     previous: false,
     next: false,
   });
@@ -61,12 +63,11 @@ export default function DrugChartWrapper(props) {
       );
       setDrugChartData(response.data);
       if (response.data.length > 0) {
-        setIsDisabled({
+        setIsShiftButtonsDisabled({
           previous: response.data[0].startDate > startDateTimeInSeconds,
           next:
-            nextShiftMaxHour > 0 &&
-            (startDateTimeInSeconds >= nextShiftMaxHour ||
-              endDateTimeInSeconds >= nextShiftMaxHour),
+            startDateTimeInSeconds >= nextShiftMaxHour ||
+            endDateTimeInSeconds >= nextShiftMaxHour,
         });
       }
     } catch (e) {
@@ -175,7 +176,7 @@ export default function DrugChartWrapper(props) {
           onClick={handlePrevious}
           className="margin-right-6"
           data-testid="previousButton"
-          disabled={isDisabled.previous}
+          disabled={isShiftButtonsDisabled.previous}
         />
         <Button
           renderIcon={ChevronRight16}
@@ -186,7 +187,7 @@ export default function DrugChartWrapper(props) {
           onClick={handleNext}
           className="margin-right-10"
           data-testid="nextButton"
-          disabled={isDisabled.next}
+          disabled={isShiftButtonsDisabled.next}
         />
         <span>
           {`${formatDate(
