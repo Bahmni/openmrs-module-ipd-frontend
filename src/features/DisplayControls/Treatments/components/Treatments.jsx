@@ -4,7 +4,6 @@ import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import {
-  getAllDrugOrders,
   treatmentHeaders,
   getConfigsForTreatments,
   updateDrugOrderList,
@@ -25,6 +24,7 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import TreatmentExpandableRow from "./TreatmentExpandableRow";
 import Notification from "../../../../components/Notification/Notification";
+import { AllMedicationsContext } from "../../../../context/AllMedications";
 
 const Treatments = (props) => {
   const { patientId } = props;
@@ -45,6 +45,7 @@ const Treatments = (props) => {
   const [drugChartNotes, setDrugChartNotes] = useState("");
   const [additionalData, setAdditionalData] = useState([]);
   const [showEditMessage, setShowEditMessage] = useState(false);
+  const allMedications = useContext(AllMedicationsContext);
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -202,31 +203,31 @@ const Treatments = (props) => {
   };
 
   useEffect(() => {
-    const getActiveDrugOrdersAndTreatmentConfig = async () => {
-      drugOrderList = await getAllDrugOrders(visitUuid);
+    allMedications.getAllDrugOrders(visitUuid);
+  }, []);
+
+  const getTreatmentConfigs = async () => {
+    const treatmentConfigs = await getConfigsForTreatments();
+    setSelectedDrugOrder({
+      patientId: patientId,
+      scheduleFrequencies: treatmentConfigs.scheduleFrequencies,
+      startTimeFrequencies: treatmentConfigs.startTimeFrequencies,
+      enable24HourTimers: treatmentConfigs.enable24HourTimers,
+      drugOrder: null,
+    });
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (allMedications.data) {
+      drugOrderList = { ...allMedications.data };
       if (drugOrderList.ipdDrugOrders.length > 0) {
         drugOrderList = updateDrugOrderList(drugOrderList);
         modifyTreatmentData(drugOrderList);
       }
-    };
-
-    const getTreatmentConfigs = async () => {
-      const treatmentConfigs = await getConfigsForTreatments();
-      setSelectedDrugOrder({
-        patientId: patientId,
-        scheduleFrequencies: treatmentConfigs.scheduleFrequencies,
-        startTimeFrequencies: treatmentConfigs.startTimeFrequencies,
-        enable24HourTimers: treatmentConfigs.enable24HourTimers,
-        drugOrder: null,
-      });
-    };
-
-    getActiveDrugOrdersAndTreatmentConfig().then(() => {
-      getTreatmentConfigs().then(() => {
-        setIsLoading(false);
-      });
-    });
-  }, []);
+      getTreatmentConfigs();
+    }
+  }, [allMedications.data]);
 
   return (
     <>

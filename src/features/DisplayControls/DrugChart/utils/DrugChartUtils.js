@@ -33,8 +33,7 @@ export const getAllDrugOrders = async (visitUuid) => {
   }
 };
 
-export const transformDrugOrders = async (visitUuid) => {
-  const orders = await getAllDrugOrders(visitUuid);
+export const transformDrugOrders = (orders) => {
   const { ipdDrugOrders, emergencyMedications } = orders;
   const medicationData = {};
   ipdDrugOrders.forEach((order) => {

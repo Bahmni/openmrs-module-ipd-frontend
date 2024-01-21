@@ -20,6 +20,7 @@ import { getPatientDashboardUrl } from "../../utils/CommonUtils";
 import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
 import RefreshDisplayControl from "../../context/RefreshDisplayControl";
 import { SliderContext } from "../../context/SliderContext";
+import { AllMedicationsContextProvider } from "../../context/AllMedications";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
@@ -158,31 +159,33 @@ export default function Dashboard(props) {
             openDischargeSummary={handleDischargeSummaryNavigation}
           />
           <Accordion className={"accordion"}>
-            {sections?.map((el) => {
-              const DisplayControl = componentMapping[el.componentKey];
-              return (
-                <section
-                  key={el.componentKey}
-                  ref={(ref) => (refs.current[el.componentKey] = ref)}
-                  style={{ marginBottom: "40px" }}
-                >
-                  <Suspense fallback={<p>Loading...</p>}>
-                    <AccordionItem open title={el.title}>
-                      <I18nProvider>
-                        <RefreshDisplayControl.Provider
-                          value={refreshDisplayControl}
-                        >
-                          <DisplayControl
-                            key={el.refreshKey}
-                            patientId={patient?.uuid}
-                          />
-                        </RefreshDisplayControl.Provider>
-                      </I18nProvider>
-                    </AccordionItem>
-                  </Suspense>
-                </section>
-              );
-            })}
+            <AllMedicationsContextProvider>
+              {sections?.map((el) => {
+                const DisplayControl = componentMapping[el.componentKey];
+                return (
+                  <section
+                    key={el.componentKey}
+                    ref={(ref) => (refs.current[el.componentKey] = ref)}
+                    style={{ marginBottom: "40px" }}
+                  >
+                    <Suspense fallback={<p>Loading...</p>}>
+                      <AccordionItem open title={el.title}>
+                        <I18nProvider>
+                          <RefreshDisplayControl.Provider
+                            value={refreshDisplayControl}
+                          >
+                            <DisplayControl
+                              key={el.refreshKey}
+                              patientId={patient?.uuid}
+                            />
+                          </RefreshDisplayControl.Provider>
+                        </I18nProvider>
+                      </AccordionItem>
+                    </Suspense>
+                  </section>
+                );
+              })}
+            </AllMedicationsContextProvider>
           </Accordion>
         </section>
       </main>

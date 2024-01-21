@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  CLINICAL_CONFIG_URL,
-  ALL_DRUG_ORDERS_URL,
-} from "../../../../constants";
+import { CLINICAL_CONFIG_URL } from "../../../../constants";
 import axios from "axios";
 import { FormattedMessage } from "react-intl";
 import NotesIcon from "../../../../icons/notes.svg";
@@ -40,18 +37,6 @@ export const treatmentHeaders = [
     isSortable: false,
   },
 ];
-
-export const getAllDrugOrders = async (visitUuid) => {
-  try {
-    const response = await axios.get(ALL_DRUG_ORDERS_URL(visitUuid), {
-      withCredentials: true,
-    });
-    if (response.status !== 200) throw new Error(response.statusText);
-    return response.data;
-  } catch (error) {
-    return error;
-  }
-};
 
 export const getConfigsForTreatments = async () => {
   try {

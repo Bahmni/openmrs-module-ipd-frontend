@@ -1,16 +1,17 @@
 import { render, waitFor } from "@testing-library/react";
 import React from "react";
 import Treatments from "../components/Treatments";
-import { getAllDrugOrders } from "../utils/TreatmentsUtils";
+// import { getAllDrugOrders } from "../utils/TreatmentsUtils";
 import { SliderContext } from "../../../../context/SliderContext";
+import { AllMedicationsContext } from "../../../../context/AllMedications";
 
-jest.mock("../utils/TreatmentsUtils", () => {
-  const originalModule = jest.requireActual("../utils/TreatmentsUtils");
-  return {
-    ...originalModule,
-    getAllDrugOrders: jest.fn(),
-  };
-});
+// jest.mock("../utils/TreatmentsUtils", () => {
+//   const originalModule = jest.requireActual("../utils/TreatmentsUtils");
+//   return {
+//     ...originalModule,
+//     getAllDrugOrders: jest.fn(),
+//   };
+// });
 
 const mockProviderValue = {
   isSliderOpen: {
@@ -22,21 +23,31 @@ const mockProviderValue = {
   visitUuid: "patient_visit_uuid",
 };
 
+const mockAllMedicationsProviderValue = {
+  data: {
+    emergencyMedications: [],
+    ipdDrugOrders: [],
+  },
+  getAllDrugOrders: jest.fn(),
+};
+
 describe("Treatments", () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
 
   it("should show no treatments message if no drug orders are present for that patient", async () => {
-    getAllDrugOrders.mockImplementation(() => {
-      return Promise.resolve({
-        emergencyMedications: [],
-        ipdDrugOrders: [],
-      });
-    });
+    // getAllDrugOrders.mockImplementation(() => {
+    //   return Promise.resolve({
+    //     emergencyMedications: [],
+    //     ipdDrugOrders: [],
+    //   });
+    // });
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        <AllMedicationsContext.Provider value={mockAllMedicationsProviderValue}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -73,15 +84,24 @@ describe("Treatments", () => {
         },
       },
     ];
-    getAllDrugOrders.mockImplementation(() => {
-      return Promise.resolve({
+    // getAllDrugOrders.mockImplementation(() => {
+    //   return Promise.resolve({
+    //     emergencyMedications: [],
+    //     ipdDrugOrders: treatments,
+    //   });
+    // });
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
         emergencyMedications: [],
         ipdDrugOrders: treatments,
-      });
-    });
+      },
+    };
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -120,15 +140,24 @@ describe("Treatments", () => {
         },
       },
     ];
-    getAllDrugOrders.mockImplementation(() => {
-      return Promise.resolve({
+    // getAllDrugOrders.mockImplementation(() => {
+    //   return Promise.resolve({
+    //     emergencyMedications: [],
+    //     ipdDrugOrders: treatments,
+    //   });
+    // });
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
         emergencyMedications: [],
         ipdDrugOrders: treatments,
-      });
-    });
+      },
+    };
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -169,15 +198,24 @@ describe("Treatments", () => {
         },
       },
     ];
-    getAllDrugOrders.mockImplementation(() => {
-      return Promise.resolve({
+    // getAllDrugOrders.mockImplementation(() => {
+    //   return Promise.resolve({
+    //     emergencyMedications: [],
+    //     ipdDrugOrders: treatments,
+    //   });
+    // });
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
         emergencyMedications: [],
         ipdDrugOrders: treatments,
-      });
-    });
+      },
+    };
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -218,15 +256,24 @@ describe("Treatments", () => {
         },
       },
     ];
-    getAllDrugOrders.mockImplementation(() => {
-      return Promise.resolve({
+    // getAllDrugOrders.mockImplementation(() => {
+    //   return Promise.resolve({
+    //     emergencyMedications: [],
+    //     ipdDrugOrders: treatments,
+    //   });
+    // });
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
         emergencyMedications: [],
         ipdDrugOrders: treatments,
-      });
-    });
+      },
+    };
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -268,15 +315,24 @@ describe("Treatments", () => {
         },
       },
     ];
-    getAllDrugOrders.mockImplementation(() => {
-      return Promise.resolve({
+    // getAllDrugOrders.mockImplementation(() => {
+    //   return Promise.resolve({
+    //     emergencyMedications: [],
+    //     ipdDrugOrders: treatments,
+    //   });
+    // });
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
         emergencyMedications: [],
         ipdDrugOrders: treatments,
-      });
-    });
+      },
+    };
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -321,15 +377,24 @@ describe("Treatments", () => {
         },
       },
     ];
-    getAllDrugOrders.mockImplementation(() => {
-      return Promise.resolve({
+    // getAllDrugOrders.mockImplementation(() => {
+    //   return Promise.resolve({
+    //     emergencyMedications: [],
+    //     ipdDrugOrders: treatments,
+    //   });
+    // });
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
         emergencyMedications: [],
         ipdDrugOrders: treatments,
-      });
-    });
+      },
+    };
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
       </SliderContext.Provider>
     );
     const editDrugChartLink = await waitFor(() => getByText("Edit Drug Chart"));
@@ -375,15 +440,24 @@ describe("Treatments", () => {
         },
       },
     ];
-    getAllDrugOrders.mockImplementation(() => {
-      return Promise.resolve({
+    // getAllDrugOrders.mockImplementation(() => {
+    //   return Promise.resolve({
+    //     emergencyMedications: [],
+    //     ipdDrugOrders: treatments,
+    //   });
+    // });
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
         emergencyMedications: [],
         ipdDrugOrders: treatments,
-      });
-    });
+      },
+    };
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
       </SliderContext.Provider>
     );
 
@@ -431,15 +505,24 @@ describe("Treatments", () => {
         },
       },
     ];
-    getAllDrugOrders.mockImplementation(() => {
-      return Promise.resolve({
+    // getAllDrugOrders.mockImplementation(() => {
+    //   return Promise.resolve({
+    //     emergencyMedications: [],
+    //     ipdDrugOrders: treatments,
+    //   });
+    // });
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
         emergencyMedications: [],
         ipdDrugOrders: treatments,
-      });
-    });
+      },
+    };
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {

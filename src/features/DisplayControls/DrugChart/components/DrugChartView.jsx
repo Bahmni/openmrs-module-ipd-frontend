@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
-import { SliderContext } from "../../../../context/SliderContext";
 import { Button } from "carbon-components-react";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import DrugChart from "./DrugChart";
@@ -17,6 +16,7 @@ import {
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import data from "../../../../utils/config.json";
 import { FormattedMessage } from "react-intl";
+import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";
 
 const NoMedicationTaskMessage = (
@@ -28,7 +28,6 @@ const NoMedicationTaskMessage = (
 
 export default function DrugChartWrapper(props) {
   const { patientId } = props;
-  const { visitUuid } = useContext(SliderContext);
   const [drugChartData, setDrugChartData] = useState([]);
   const [transformedData, setTransformedData] = useState([]);
   const [drugOrders, setDrugOrders] = useState({});
@@ -39,6 +38,7 @@ export default function DrugChartWrapper(props) {
     startDate: new Date(),
     endDate: new Date(),
   });
+  const allMedications = useContext(AllMedicationsContext);
 
   const { config: { drugChart = {} } = {} } = data;
 
@@ -66,6 +66,13 @@ export default function DrugChartWrapper(props) {
     setTransformedData(mapDrugOrdersAndSlots(drugChartData, drugOrders));
   }, [drugChartData]);
 
+  useEffect(() => {
+    const orders = allMedications.data;
+    if (orders) {
+      setDrugOrders(transformDrugOrders(orders));
+    }
+  }, [allMedications.data]);
+
   useEffect(async () => {
     const currentShift = currentShiftHoursArray();
     const startDateTime = getDateTime(new Date(), currentShift[0]);
@@ -75,7 +82,6 @@ export default function DrugChartWrapper(props) {
     );
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
-    setDrugOrders(await transformDrugOrders(visitUuid));
   }, []);
 
   const handlePrevious = () => {
