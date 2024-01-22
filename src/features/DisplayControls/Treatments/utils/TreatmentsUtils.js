@@ -129,10 +129,9 @@ export const isIPDDrugOrder = (drugOrderObject) => {
 
 export const isDrugOrderStoppedWithoutAdministration = (drugOrderObject) => {
   return (
-    drugOrderObject.drugOrder.dateStopped !== null &&
-    (drugOrderObject.drugOrderSchedule === null ||
-      drugOrderObject.drugOrderSchedule?.medicationAdministrationStarted ===
-        false)
+    drugOrderObject.drugOrder.dateStopped &&
+    (!drugOrderObject.drugOrderSchedule ||
+      !drugOrderObject.drugOrderSchedule?.medicationAdministrationStarted)
   );
 };
 
