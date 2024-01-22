@@ -1,8 +1,5 @@
 import axios from "axios";
-import {
-  ALL_DRUG_ORDERS_URL,
-  MEDICATIONS_BASE_URL,
-} from "../../../../constants";
+import { MEDICATIONS_BASE_URL, performerFunction } from "../../../../constants";
 import data from "../../../../utils/config.json";
 import _ from "lodash";
 
@@ -18,18 +15,6 @@ export const fetchMedications = async (
     return await axios.get(FETCH_MEDICATIONS_URL);
   } catch (error) {
     console.error(error);
-  }
-};
-
-export const getAllDrugOrders = async (visitUuid) => {
-  try {
-    const response = await axios.get(ALL_DRUG_ORDERS_URL(visitUuid), {
-      withCredentials: true,
-    });
-    if (response.status !== 200) throw new Error(response.statusText);
-    return response.data;
-  } catch (error) {
-    return error;
   }
 };
 
@@ -147,6 +132,7 @@ export const resetDrugOrdersSlots = (drugOrders) => {
 
 export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
   const orders = resetDrugOrdersSlots(drugOrders);
+
   if (drugChartData && drugChartData.length > 0 && !_.isEmpty(orders)) {
     let slots;
     if (drugChartData[0]) {
@@ -169,12 +155,32 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
           administrationStatus = "Late";
         }
       }
+      let performerName = "",
+        notes = "";
+      if (medicationAdministration) {
+        const { providers, notes: administeredNotes } =
+          medicationAdministration;
+        let performer = providers.find(
+          (provider) => provider.function === performerFunction
+        );
+        performer = performer ? performer.provider : null;
+        performerName = performer
+          ? performer.display.includes(" - ")
+            ? performer.display.split(" - ")[1]
+            : performer.display
+          : "";
+        notes =
+          administeredNotes && administeredNotes.length > 0 && performer
+            ? administeredNotes?.find(
+                (note) => note.author.uuid === performer.uuid
+              ).text
+            : "";
+      }
       orders[order.uuid].slots.push({
         ...slot,
         administrationSummary: {
-          notes:
-            medicationAdministration?.notes &&
-            medicationAdministration?.notes[0]?.text,
+          performerName,
+          notes,
           status: administrationStatus,
         },
       });
@@ -187,6 +193,8 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
     });
     mappedOrders.sort((a, b) => a.firstSlotStartTime - b.firstSlotStartTime);
     return mappedOrders;
+  } else {
+    return [];
   }
 };
 export const ifMedicationNotesPresent = (medicationNotes, side) =>

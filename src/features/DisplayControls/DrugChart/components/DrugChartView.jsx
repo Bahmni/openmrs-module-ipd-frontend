@@ -64,7 +64,7 @@ export default function DrugChartWrapper(props) {
   };
   useEffect(() => {
     setTransformedData(mapDrugOrdersAndSlots(drugChartData, drugOrders));
-  }, [drugChartData]);
+  }, [drugChartData, drugOrders]);
 
   useEffect(() => {
     const orders = allMedications.data;

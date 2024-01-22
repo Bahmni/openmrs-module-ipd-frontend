@@ -82,3 +82,29 @@ export const searchDrugMockData = {
   },
   status: 200,
 };
+
+export const CompleteMedicationConfigMockData = {
+  data: {
+    tabConfig: {
+      allMedicationTabConfig: {
+        inputOptionsConfig: { 
+          drugFormDefaults : {
+            Ayurvedic: {
+              doseUnits: "Teaspoon",
+              route: "Oral",
+            },
+            Capsule: {
+              doseUnits: "Capsule(s)",
+              route: "Oral",
+            },
+            Tablet: {
+              doseUnits: "Tablet(s)",
+              route: "Oral",
+            },
+          }
+        }
+      }
+    }
+  },
+  status: 200,
+};

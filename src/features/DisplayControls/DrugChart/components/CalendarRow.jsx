@@ -22,7 +22,7 @@ export default function CalendarRow(props) {
       );
       adminInfo = {
         notes: administrationSummary.notes,
-        administrationInfo: `${medicationAdministration.providers[0].provider.display} [${time}]`,
+        administrationInfo: `${administrationSummary.performerName} [${time}]`,
       };
     } else {
       time = moment(slot.startTime * 1000).format("HH:mm");
