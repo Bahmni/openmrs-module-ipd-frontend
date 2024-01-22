@@ -330,6 +330,7 @@ const AddEmergencyTasks = (props) => {
                     title={"Administration Date"}
                     isRequired={true}
                     value={administrationDate}
+                    dateFormat={"d M Y"}
                   />
                   <TimePicker24Hour
                     defaultTime={administrationTime}

@@ -67,7 +67,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
         </svg>
       </button>
       <span>
-        05/01/2024 | 06:00 - 05/01/2024 | 18:00
+        05 Jan 2024 06:00 - 05 Jan 2024 18:00
       </span>
     </div>
     <div>
@@ -144,7 +144,7 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
         </svg>
       </button>
       <span>
-        05/01/2024 | 06:00 - 05/01/2024 | 18:00
+        05 Jan 2024 06:00 - 05 Jan 2024 18:00
       </span>
     </div>
     <div>

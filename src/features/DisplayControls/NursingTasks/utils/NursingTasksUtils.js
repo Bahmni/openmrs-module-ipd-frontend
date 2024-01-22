@@ -7,7 +7,6 @@ import moment from "moment";
 import data from "../../../../utils/config.json";
 
 const { config: { nursingTasks = {} } = {} } = data;
-const { config: { drugChart = {} } = {} } = data;
 
 export const fetchMedicationNursingTasks = async (
   patientUuid,
@@ -38,14 +37,15 @@ export const ExtractMedicationNursingTasksData = (
     const { slots } = item;
 
     slots.forEach((slot) => {
-      const { startTime, uuid, order, medicationAdministration, serviceType } = slot;
+      const { startTime, uuid, order, medicationAdministration, serviceType } =
+        slot;
       const administeredDateTime =
         slot.status === "COMPLETED"
           ? medicationAdministration.administeredDateTime !== null
             ? medicationAdministration.administeredDateTime
             : ""
           : "";
-      let drugName, drugRoute, duration, dosage, doseType, dosingInstructions
+      let drugName, drugRoute, duration, dosage, doseType, dosingInstructions;
       if (order) {
         drugName = order.drug.display;
         drugRoute = order.route.display;
@@ -63,13 +63,15 @@ export const ExtractMedicationNursingTasksData = (
         }
         dosingInstructions = {
           asNeeded: order.asNeeded,
-          frequency: order.frequency.display
-        }
+          frequency: order.frequency.display,
+        };
       }
       if (serviceType == "EmergencyMedicationRequest") {
         drugName = medicationAdministration.drug?.display;
         drugRoute = medicationAdministration.route?.display;
-        dosage = medicationAdministration.dose + medicationAdministration.doseUnits?.display;
+        dosage =
+          medicationAdministration.dose +
+          medicationAdministration.doseUnits?.display;
         dosingInstructions = { emergency: true };
       }
       const startTimeInDate = new Date(startTime * 1000);
@@ -136,7 +138,10 @@ export const ExtractMedicationNursingTasksData = (
   });
 
   pendingExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
-  completedExtractedData.sort((a, b) => a.administeredTimeInEpochSeconds - b.administeredTimeInEpochSeconds);
+  completedExtractedData.sort(
+    (a, b) =>
+      a.administeredTimeInEpochSeconds - b.administeredTimeInEpochSeconds
+  );
   stoppedExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
   extractedData.push(...pendingExtractedData);
 
@@ -196,3 +201,4 @@ export const isTimeWithinAdministeredWindow = (
 
   return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
 };
+export const getTimeInSeconds = (days) => days * 86400;

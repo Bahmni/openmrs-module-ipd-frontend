@@ -33,7 +33,6 @@ const Diagnosis = (props) => {
               : "Active";
             let diagnosisDate = formatDate(
               diagnosis.diagnosisDateTime,
-              "DD/MM/YYYY"
             );
             let diagnosisTime = formatDate(
               diagnosis.diagnosisDateTime,

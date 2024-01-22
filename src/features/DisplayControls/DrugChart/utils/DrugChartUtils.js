@@ -1,6 +1,11 @@
 import axios from "axios";
 import moment from "moment";
-import { MEDICATIONS_BASE_URL, performerFunction } from "../../../../constants";
+import {
+  MEDICATIONS_BASE_URL,
+  displayShiftTimingsFormat,
+  defaultDateTimeFormat,
+  performerFunction,
+} from "../../../../constants";
 import data from "../../../../utils/config.json";
 
 const { config: { drugChart = {} } = {} } = data;
@@ -51,7 +56,9 @@ export const SortDrugChartData = (drugChartData) => {
 };
 
 export const getDateFormatString = () =>
-  drugChart.enable24HourTime ? "DD/MM/YYYY | HH:mm" : "DD/MM/YYYY | hh:mm A";
+  drugChart.enable24HourTime
+    ? displayShiftTimingsFormat
+    : defaultDateTimeFormat;
 
 export const getHourFormatString = () =>
   drugChart.enable24HourTime ? "HH:mm" : "hh:mm";
@@ -112,6 +119,16 @@ export const TransformDrugChartData = (groupedSlots) => {
         startActualTime;
 
       const isCompleted = checkIfSlotIsAdministered(status);
+
+      if (
+        !isCompleted &&
+        medicationAdministration &&
+        medicationAdministration.status === "Not Done"
+      ) {
+        const { notes } = medicationAdministration;
+        medicationStatus = "Not-Administered";
+        medicationNotes = notes && notes.length > 0 ? notes[0].text : "";
+      }
 
       if (isCompleted) {
         const isLate = isAdministeredLateTask(
