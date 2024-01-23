@@ -13,7 +13,10 @@ import {
   transformDrugOrders,
   mapDrugOrdersAndSlots,
 } from "../utils/DrugChartUtils";
-import { formatDate } from "../../../../utils/DateTimeUtils";
+import {
+  convertDaystoSeconds,
+  formatDate,
+} from "../../../../utils/DateTimeUtils";
 import data from "../../../../utils/config.json";
 import { FormattedMessage } from "react-intl";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
@@ -39,6 +42,14 @@ export default function DrugChartWrapper(props) {
     endDate: new Date(),
   });
   const allMedications = useContext(AllMedicationsContext);
+  const allowedForthShfts =
+    getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
+    convertDaystoSeconds(2);
+  const [nextShiftMaxHour] = useState(allowedForthShfts);
+  const [isShiftButtonsDisabled, setIsShiftButtonsDisabled] = useState({
+    previous: false,
+    next: false,
+  });
 
   const { config: { drugChart = {} } = {} } = data;
 
@@ -60,6 +71,14 @@ export default function DrugChartWrapper(props) {
       );
       console.log("before response data");
       setDrugChartData(response.data);
+      if (response.data.length > 0) {
+        setIsShiftButtonsDisabled({
+          previous: response.data[0].startDate > startDateTimeInSeconds,
+          next:
+            startDateTimeInSeconds >= nextShiftMaxHour ||
+            endDateTimeInSeconds >= nextShiftMaxHour,
+        });
+      }
     } catch (e) {
       return e;
     } finally {
@@ -203,6 +222,7 @@ export default function DrugChartWrapper(props) {
           onClick={handlePrevious}
           className="margin-right-6"
           data-testid="previousButton"
+          disabled={isShiftButtonsDisabled.previous}
         />
         <Button
           renderIcon={ChevronRight16}
@@ -213,6 +233,7 @@ export default function DrugChartWrapper(props) {
           onClick={handleNext}
           className="margin-right-10"
           data-testid="nextButton"
+          disabled={isShiftButtonsDisabled.next}
         />
         <span>
           {`${formatDate(
@@ -223,13 +244,14 @@ export default function DrugChartWrapper(props) {
       </div>
       {isLoading ? (
         <div>Loading...</div>
-      ) : drugChartData && drugChartData.length === 0 ? (
+      ) : drugChartData &&
+        (drugChartData.length === 0) ? (
         <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>
       ) : (
         <DrugChart
           drugChartData={transformedData}
           currentShiftArray={currentShiftArray}
-          selectedDate={date}
+          selectedDate={startEndDates.startDate}
         />
       )}
     </div>

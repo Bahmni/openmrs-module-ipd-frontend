@@ -64,7 +64,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                 <h3
                   class="patient-info"
                 >
-                  01/01/1991
+                  01 Jan 1991
                 </h3>
                 <h3
                   class="patient-info"

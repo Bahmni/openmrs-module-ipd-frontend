@@ -20,7 +20,7 @@ export default function DrugListCell(props) {
   const administrationInfo = [];
   slots.forEach((slot) => {
     if (
-      ["Administered", "Administered-Late"].includes(
+      ["Administered", "Administered-Late", "Not-Administered"].includes(
         slot.administrationSummary.status
       )
     ) {

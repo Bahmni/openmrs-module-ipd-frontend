@@ -23,3 +23,5 @@ export const dateTimeToEpochUTCTime = (date) => {
   const epochTime = moment.utc(date).unix();
   return epochTime;
 };
+
+export const convertDaystoSeconds = (days) => days * 86400;

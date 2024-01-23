@@ -19,6 +19,7 @@ export default function SVGIcon(props) {
       break;
     case "Not-Administered":
       icon = <NotAdministeredIcon />;
+      clickable = true;
       break;
     case "Late":
       icon = <LateIcon />;

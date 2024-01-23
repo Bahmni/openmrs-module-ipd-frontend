@@ -41,7 +41,6 @@ describe("AdministeredMedicationList", () => {
     render(
       <AdministeredMedicationList list={mockAdministeredMedicationsList} />
     );
-    screen.debug();
     mockGetStatus("completed");
     expect(mockGetStatus).toHaveBeenCalledTimes(1);
     expect(screen.getByText("Done")).toBeInTheDocument();
