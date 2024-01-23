@@ -10,7 +10,7 @@ export const fetchMedications = async (
   startDateTime,
   endDateTime
 ) => {
-  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}`;
+  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}&view=drugChart`;
   try {
     return await axios.get(FETCH_MEDICATIONS_URL);
   } catch (error) {
@@ -86,7 +86,7 @@ export const transformDrugOrders = (orders) => {
       notes: notes[0].text,
     };
   });
-
+console.log("medicationData -> ", medicationData);
   return medicationData;
 };
 
@@ -131,6 +131,9 @@ export const resetDrugOrdersSlots = (drugOrders) => {
 };
 
 export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
+  console.log("drugChartData -> ", drugChartData);
+  console.log("drugOrders -> ", drugOrders);
+  
   const orders = resetDrugOrdersSlots(drugOrders);
 
   if (drugChartData && drugChartData.length > 0 && !_.isEmpty(orders)) {
@@ -192,6 +195,7 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
       };
     });
     mappedOrders.sort((a, b) => a.firstSlotStartTime - b.firstSlotStartTime);
+    console.log("mappedOrders -> ", mappedOrders)
     return mappedOrders;
   } else {
     return [];
@@ -220,21 +224,41 @@ export const currentShiftHoursArray = () => {
   // finding the current hour range
   const currentDate = new Date();
   const currentHour = currentDate.getHours();
+  // const currentHour = 22;
   let currentRange = rangeArray[0];
   rangeArray.forEach((range) => {
-    const rangeLimits = range.split("-");
-    if (currentHour >= rangeLimits[0] && currentHour <= rangeLimits[1]) {
-      currentRange = range;
+    const [firstHour, lastHour] = range.split("-");
+    
+    if(+lastHour > +firstHour) {
+      if (currentHour >= +firstHour && currentHour <= +lastHour) {
+        currentRange = range;
+      }
+    } else {
+    if (currentHour < 12) {
+    	if(currentHour <= +lastHour && currentHour <= +firstHour) {
+      	currentRange = range;
+      } 
+    } else {
+        if(currentHour >= +firstHour && currentHour >= +lastHour) {
+          currentRange = range;
+        }
+      }
     }
   });
 
   const currentShiftHoursArray = [];
   const currentRangeArray = currentRange.split("-");
-  const lowestHour = parseInt(currentRangeArray[0]);
-  const highestHour = parseInt(currentRangeArray[1]);
+  let lowestHour = parseInt(currentRangeArray[0]);
+  //  const highestHour = parseInt(currentRangeArray[1]);
 
-  for (let i = lowestHour; i <= highestHour; i++) {
+  /*for (let i = lowestHour; i <= highestHour; i++) {
     currentShiftHoursArray.push(i);
+  }*/
+  let j = 0;
+  while (j< shiftTimeInHours) {
+    currentShiftHoursArray.push(lowestHour%24);
+    lowestHour++;
+    j++;
   }
   return currentShiftHoursArray;
 };

@@ -31,6 +31,8 @@ export default function DrugChart(props) {
       }
     };
   }, [leftPane, rightPane, registerPane, unregisterPane]);
+  console.log("inside DrugChart -> ", props);
+
   return (
     <div className="drug-chart-dashboard">
       <div className="drug-chart" style={{ height: drugChartHeight }}>

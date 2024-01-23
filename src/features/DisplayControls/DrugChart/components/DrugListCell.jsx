@@ -10,6 +10,7 @@ import data from "../../../../utils/config.json";
 import moment from "moment";
 
 export default function DrugListCell(props) {
+  console.log("inside DrugListCell -> ", props);
   const { dosingInstructions, duration, name, slots } = props.drugInfo;
   const { instructions, dosage, doseUnits, route } = dosingInstructions;
   const enable24hour = data.config.drugChart.enable24HourTime;
