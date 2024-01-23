@@ -24,7 +24,7 @@ import PatientDetails from "./PatientDetails";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 
 export const PatientHeader = (props) => {
-  const { patientId, openDischargeSummary } = props;
+  const { patientId, openVisitSummary } = props;
   const [showPatientDetails, togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
   const [isLoading, updateIsLoading] = useState(true);
@@ -56,10 +56,10 @@ export const PatientHeader = (props) => {
       defaultMessage="Patient Dashboard"
     />
   );
-  const dischargeSummary = (
+  const visitSummary = (
     <FormattedMessage
-      id="DISCHARGE_SUMMARY"
-      defaultMessage="Discharge Summary"
+      id="VISIT_SUMMARY"
+      defaultMessage="Visit Summaries"
     />
   );
 
@@ -144,8 +144,8 @@ export const PatientHeader = (props) => {
                       >
                         {patientDashboard}
                       </Link>
-                      <Link onClick={() => openDischargeSummary()}>
-                        {dischargeSummary}
+                      <Link onClick={() => openVisitSummary()}>
+                        {visitSummary}
                       </Link>
                     </div>
                   </Row>
@@ -206,5 +206,5 @@ export const PatientHeader = (props) => {
 
 PatientHeader.propTypes = {
   patientId: PropTypes.string.isRequired,
-  openDischargeSummary: PropTypes.func.isRequired,
+  openVisitSummary: PropTypes.func.isRequired,
 };
