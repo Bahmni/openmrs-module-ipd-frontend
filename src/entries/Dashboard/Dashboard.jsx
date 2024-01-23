@@ -76,8 +76,8 @@ export default function Dashboard(props) {
     return Object.values(isSliderOpen).includes(true);
   };
 
-  const handleDischargeSummaryNavigation = () => {
-    hostApi?.navigation?.dischargeSummary?.();
+  const handleVisitSummaryNavigation = () => {
+    hostApi?.navigation?.visitSummary?.();
   };
 
   const refreshDisplayControl = (componentKeyArray) => {
@@ -145,7 +145,7 @@ export default function Dashboard(props) {
           </div>
           <PatientHeader
             patientId={patient?.uuid}
-            openDischargeSummary={handleDischargeSummaryNavigation}
+            openVisitSummary={handleVisitSummaryNavigation}
           />
           <Accordion className={"accordion"}>
             {sections?.map((el) => {
