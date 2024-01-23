@@ -52,12 +52,27 @@ export default function NursingTasks(props) {
 
   useEffect(() => {
     const currentShift = currentShiftHoursArray();
-    const startDateTime = getDateTime(new Date(), currentShift[0]);
-    const endDateTime = getDateTime(
+    const firstHour = currentShift[0];
+    const lastHour = currentShift[currentShift.length - 1];
+    let startDateTime = getDateTime(new Date(), currentShift[0]);
+    let endDateTime = getDateTime(
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
+    /** if the shift is going on two different dates */
+    if (lastHour < firstHour) {
+      const d = new Date();
+      const currentHour = d.getHours();
+      if(currentHour > 12) {
+        d.setDate(d.getDate() + 1);
+        endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
+      } else {
+        d.setDate(d.getDate() - 1);
+        startDateTime = getDateTime(d, currentShift[0]);
+      }
+    }
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
+    updateDate(new Date(endDateTime));
     fetchNursingTasks(startDateTime, endDateTime);
   }, []);
 
@@ -82,7 +97,7 @@ export default function NursingTasks(props) {
   const handlePrevious = () => {
     const firstHour = currentShiftArray[0];
     const lastHour = currentShiftArray[currentShiftArray.length - 1];
-    if (lastHour < firstHour && lastAction === "N") {
+    if (lastHour < firstHour && (lastAction === "N" || lastAction === "")) {
       date.setDate(date.getDate() - 1);
     }
     const { startDateTime, endDateTime, nextDate } = getPreviousShiftDetails(
@@ -127,14 +142,26 @@ export default function NursingTasks(props) {
 
   const handleCurrent = () => {
     const currentShift = currentShiftHoursArray();
-    const nextDate = new Date();
-    const startDateTime = getDateTime(new Date(), currentShift[0]);
-    const endDateTime = getDateTime(
+    const firstHour = currentShift[0];
+    const lastHour = currentShift[currentShift.length - 1];
+    let startDateTime = getDateTime(new Date(), currentShift[0]);
+    let endDateTime = getDateTime(
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
+    if (lastHour < firstHour) {
+      const d = new Date();
+      const currentHour = d.getHours();
+      if(currentHour > 12) {
+        d.setDate(d.getDate() + 1);
+        endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
+      } else {
+        d.setDate(d.getDate() - 1);
+        startDateTime = getDateTime(d, currentShift[0]);
+      }
+    }
     updateShiftArray(currentShift);
-    updateDate(nextDate);
+    updateDate(new Date(endDateTime));
     updateLastActon("");
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });

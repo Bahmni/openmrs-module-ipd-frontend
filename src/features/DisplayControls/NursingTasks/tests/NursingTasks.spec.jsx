@@ -119,7 +119,7 @@ describe("NursingTasks", () => {
   });
 
   it("should show current date", async () => {
-    MockDate.set("2023-08-11");
+    MockDate.set("2023-08-11 07:00");
 
     mockFetchMedicationNursingTasks.mockResolvedValueOnce(
       mockNursingTasksResponse
