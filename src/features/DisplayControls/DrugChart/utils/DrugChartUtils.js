@@ -118,22 +118,10 @@ const isAdministeredLateTask = (startTime, effectiveStartDate) => {
     effectiveStartDate - startTime * 1000 > lateTaskStatusWindowInMilliSeconds
   );
 };
-const sortByStartTime = (a, b) => a.startTime - b.startTime;
-
-export const SortDrugChartData = (drugChartData) => {
-  drugChartData.forEach((item) => {
-    item.slots.sort(sortByStartTime);
-  });
-  return drugChartData;
-};
-
 export const getDateFormatString = () =>
   drugChart.enable24HourTime
     ? displayShiftTimingsFormat
     : defaultDateTimeFormat;
-
-export const getHourFormatString = () =>
-  drugChart.enable24HourTime ? "HH:mm" : "hh:mm";
 
 export const resetDrugOrdersSlots = (drugOrders) => {
   Object.keys(drugOrders).forEach((order) => {

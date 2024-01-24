@@ -290,6 +290,7 @@ const AddEmergencyTasks = (props) => {
                       value={dosage}
                       label={"Dose"}
                       isRequired={true}
+                      min={0}
                     />
                     <Dropdown
                       id={"Dosage Dropdown"}
