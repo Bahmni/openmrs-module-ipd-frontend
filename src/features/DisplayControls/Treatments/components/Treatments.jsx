@@ -235,7 +235,10 @@ const Treatments = (props) => {
       .map((drugOrderObject) => {
         let showEditDrugChartLink;
         let showStopDrugChartLink;
-        if (drugOrderObject.drugOrderSchedule != null) {
+        if (drugOrderObject.drugOrderSchedule != null && drugOrderObject.drugOrder.dosingInstructions.asNeeded) {
+          showEditDrugChartLink = false;
+          showStopDrugChartLink = true;
+        } else if (drugOrderObject.drugOrderSchedule != null) {
           showStopDrugChartLink = drugOrderObject.drugOrderSchedule
             .medicationAdministrationStarted
             ? true

@@ -23,6 +23,8 @@ import {
 import {
   epochTo24HourTimeFormat,
   epochTo12HourTimeFormat,
+  dateTimeToEpochUTCTime,
+  formatDate,
 } from "../../../utils/DateTimeUtils";
 import { DrugDetails } from "./DrugDetails";
 import { DrugInstructions } from "./DrugInstructions";
@@ -235,76 +237,89 @@ const DrugChartSlider = (props) => {
       comments: drugChartNotes,
       medicationFrequency: "",
     };
-    if (enableStartTime) {
-      const startTimeUTCEpoch = getUTCTimeEpoch(
-        startTime,
-        enable24HourTimers,
-        hostData?.drugOrder?.drugOrder?.scheduledDate
-      );
-      payload.slotStartTime = startTimeUTCEpoch;
-      payload.medicationFrequency =
-        medicationFrequency.START_TIME_DURATION_FREQUENCY;
+    if(hostData?.drugOrder?.drugOrder?.dosingInstructions?.asNeeded) {
+      const orderDate = formatDate(hostData?.drugOrder?.drugOrder?.scheduledDate, "DD:MM:YYYY");
+      const orderTime = formatDate(moment.now(),"hh:mm");
+      const orderDateTime = `${orderDate} ${orderTime}`;
+      const parsedDateTime = moment(orderDateTime, "DD:MM:YYYY HH:mm");
+      const orderDateTimeEpoch = dateTimeToEpochUTCTime(parsedDateTime);
+      payload.slotStartTime = orderDateTimeEpoch;
+      payload.medicationFrequency = medicationFrequency.START_TIME_DURATION_FREQUENCY;
+      return payload;
     }
-    if (enableSchedule) {
-      const nextScheduleDate = 24 * 60 * 60;
-      const finalScheduleDate =
-        nextScheduleDate * hostData?.drugOrder?.drugOrder?.duration;
-
-      const firstDaySchedulesUTCTimeEpoch = firstDaySchedules.reduce(
-        (result, schedule) => {
-          if (schedule !== "hh:mm") {
-            result.push(
-              getUTCTimeEpoch(
-                schedule,
-                enable24HourTimers,
-                hostData?.drugOrder?.drugOrder?.scheduledDate
-              )
-            );
-          }
-          return result;
-        },
-        []
-      );
-
-      const schedulesUTCTimeEpoch = schedules.map((schedule) =>
-        getUTCTimeEpoch(
-          schedule,
+    else {
+      if (enableStartTime) {
+        const startTimeUTCEpoch = getUTCTimeEpoch(
+          startTime,
           enable24HourTimers,
           hostData?.drugOrder?.drugOrder?.scheduledDate
+        );
+        payload.slotStartTime = startTimeUTCEpoch;
+        payload.medicationFrequency =
+          medicationFrequency.START_TIME_DURATION_FREQUENCY;
+      }
+      if (enableSchedule) {
+        const nextScheduleDate = 24 * 60 * 60;
+        const finalScheduleDate =
+          nextScheduleDate * hostData?.drugOrder?.drugOrder?.duration;
+  
+        const firstDaySchedulesUTCTimeEpoch = firstDaySchedules.reduce(
+          (result, schedule) => {
+            if (schedule !== "hh:mm") {
+              result.push(
+                getUTCTimeEpoch(
+                  schedule,
+                  enable24HourTimers,
+                  hostData?.drugOrder?.drugOrder?.scheduledDate
+                )
+              );
+            }
+            return result;
+          },
+          []
+        );
+  
+        const schedulesUTCTimeEpoch = schedules.map((schedule) =>
+          getUTCTimeEpoch(
+            schedule,
+            enable24HourTimers,
+            hostData?.drugOrder?.drugOrder?.scheduledDate
+          )
+        );
+  
+        const finalDaySchedulesUTCTimeEpoch = finalDaySchedules.map((schedule) =>
+          getUTCTimeEpoch(
+            schedule,
+            enable24HourTimers,
+            hostData?.drugOrder?.drugOrder?.scheduledDate
+          )
+        );
+  
+        payload.firstDaySlotsStartTime =
+          firstDaySlotsMissed > 0 ? firstDaySchedulesUTCTimeEpoch : [];
+        payload.dayWiseSlotsStartTime = firstDaySchedules.some(
+          (schedule) => schedule == "hh:mm"
         )
-      );
-
-      const finalDaySchedulesUTCTimeEpoch = finalDaySchedules.map((schedule) =>
-        getUTCTimeEpoch(
-          schedule,
-          enable24HourTimers,
-          hostData?.drugOrder?.drugOrder?.scheduledDate
-        )
-      );
-
-      payload.firstDaySlotsStartTime =
-        firstDaySlotsMissed > 0 ? firstDaySchedulesUTCTimeEpoch : [];
-      payload.dayWiseSlotsStartTime = firstDaySchedules.some(
-        (schedule) => schedule == "hh:mm"
-      )
-        ? schedulesUTCTimeEpoch.map((schedules) => schedules + nextScheduleDate)
-        : schedulesUTCTimeEpoch;
-      const remainingDaySlotsStartTime = finalDaySchedulesUTCTimeEpoch.map(
-        (schedules) => schedules + finalScheduleDate
-      );
-
-      const remainingDaySlotsTime = remainingDaySlotsStartTime.slice(
-        0,
-        firstDaySlotsMissed
-      );
-      payload.remainingDaySlotsStartTime = remainingDaySlotsTime;
-      payload.medicationFrequency =
-        medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
+          ? schedulesUTCTimeEpoch.map((schedules) => schedules + nextScheduleDate)
+          : schedulesUTCTimeEpoch;
+        const remainingDaySlotsStartTime = finalDaySchedulesUTCTimeEpoch.map(
+          (schedules) => schedules + finalScheduleDate
+        );
+  
+        const remainingDaySlotsTime = remainingDaySlotsStartTime.slice(
+          0,
+          firstDaySlotsMissed
+        );
+        payload.remainingDaySlotsStartTime = remainingDaySlotsTime;
+        payload.medicationFrequency =
+          medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
+      }
+      return payload;
     }
-    return payload;
   };
 
   const validateSave = async () => {
+    if(hostData?.drugOrder?.drugOrder?.dosingInstructions?.asNeeded) return true;
     if (isInvalidTimeTextPresent(enable24HourTimers)) return false;
     if (enableSchedule) {
       const validFirstDaySchedules = await isValidFirstDaySchedule();
@@ -443,38 +458,42 @@ const DrugChartSlider = (props) => {
       >
         <div style={{ padding: "20px", paddingBottom: "120px" }}>
           <DrugDetails hostData={hostData} />
-          <ScheduleSection
-            enableSchedule={enableSchedule}
-            firstDaySlotsMissed={firstDaySlotsMissed}
-            firstDaySchedules={firstDaySchedules}
-            schedules={schedules}
-            finalDaySchedules={finalDaySchedules}
-            handleFirstDaySchedule={handleFirstDaySchedule}
-            handleSubsequentDaySchedule={handleSubsequentDaySchedule}
-            handleFinalDaySchedule={handleFinalDaySchedule}
-            showFirstDayScheduleOrderWarning={showFirstDayScheduleOrderWarning}
-            showEmptyFirstDayScheduleWarning={showEmptyFirstDayScheduleWarning}
-            showFirstDaySchedulePassedWarning={
-              showFirstDaySchedulePassedWarning
-            }
-            showScheduleOrderWarning={showScheduleOrderWarning}
-            showEmptyScheduleWarning={showEmptyScheduleWarning}
-            showFinalDayScheduleOrderWarning={showFinalDayScheduleOrderWarning}
-            showEmptyFinalDayScheduleWarning={showEmptyFinalDayScheduleWarning}
-            showSchedulePassedWarning={showSchedulePassedWarning}
-            enable24HourTimers={enable24HourTimers}
-          />
-          {enableStartTime && (
-            <StartTimeSection
-              startTime={startTime}
-              handleStartTime={handleStartTime}
-              showEmptyStartTimeWarning={showEmptyStartTimeWarning}
-              showStartTimeBeyondNextDoseWarning={
-                showStartTimeBeyondNextDoseWarning
+          {!hostData?.drugOrder?.drugOrder?.dosingInstructions?.asNeeded && (
+            <>
+              <ScheduleSection
+              enableSchedule={enableSchedule}
+              firstDaySlotsMissed={firstDaySlotsMissed}
+              firstDaySchedules={firstDaySchedules}
+              schedules={schedules}
+              finalDaySchedules={finalDaySchedules}
+              handleFirstDaySchedule={handleFirstDaySchedule}
+              handleSubsequentDaySchedule={handleSubsequentDaySchedule}
+              handleFinalDaySchedule={handleFinalDaySchedule}
+              showFirstDayScheduleOrderWarning={showFirstDayScheduleOrderWarning}
+              showEmptyFirstDayScheduleWarning={showEmptyFirstDayScheduleWarning}
+              showFirstDaySchedulePassedWarning={
+                showFirstDaySchedulePassedWarning
               }
-              showStartTimePassedWarning={showStartTimePassedWarning}
+              showScheduleOrderWarning={showScheduleOrderWarning}
+              showEmptyScheduleWarning={showEmptyScheduleWarning}
+              showFinalDayScheduleOrderWarning={showFinalDayScheduleOrderWarning}
+              showEmptyFinalDayScheduleWarning={showEmptyFinalDayScheduleWarning}
+              showSchedulePassedWarning={showSchedulePassedWarning}
               enable24HourTimers={enable24HourTimers}
             />
+            {enableStartTime && (
+              <StartTimeSection
+                startTime={startTime}
+                handleStartTime={handleStartTime}
+                showEmptyStartTimeWarning={showEmptyStartTimeWarning}
+                showStartTimeBeyondNextDoseWarning={
+                  showStartTimeBeyondNextDoseWarning
+                }
+                showStartTimePassedWarning={showStartTimePassedWarning}
+                enable24HourTimers={enable24HourTimers}
+              />
+            )}
+          </>
           )}
           <DrugInstructions hostData={hostData} />
           <div className="notes-sections">
