@@ -151,7 +151,7 @@ describe("NursingTasks", () => {
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
     });
-    expect(getByText("11 Aug 2023 06:00 - 11 Aug 2023 18:00")).toBeTruthy();
+    expect(getByText("11 Aug 2023 | 06:00 - 11 Aug 2023 | 18:00")).toBeTruthy();
   });
   it("should show Correct Nursing Tasks when clicked on previous button", async () => {
     MockDate.set("2024-01-05");
@@ -251,7 +251,7 @@ describe("NursingTasks", () => {
     expect(getByTestId("previous-shift").disabled).toEqual(true);
   });
   it("should restrict next shift navigation if it reaches 2 days forth from the current shift", async () => {
-    MockDate.set("2024-01-03");
+    MockDate.set("2024-01-03 07:00");
     mockFetchMedicationNursingTasks
       .mockReturnValueOnce(mockShiftResponse)
       .mockReturnValueOnce(mockShiftResponse);

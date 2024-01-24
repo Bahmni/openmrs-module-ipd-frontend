@@ -22,7 +22,7 @@ describe("DrugChartUtils", () => {
       const patientUuid = "test-uuid";
       const startTime = "1704501000";
       const endTime = "1704529800";
-      const expectedUrl = `/openmrs/ws/rest/v1/ipd/schedule/type/medication?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}`;
+      const expectedUrl = `/openmrs/ws/rest/v1/ipd/schedule/type/medication?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}&view=drugChart`;
       await fetchMedications(patientUuid, startTime, endTime);
       expect(axios.get).toHaveBeenCalledWith(expectedUrl);
     });

@@ -25,7 +25,7 @@ export default function DrugListCell(props) {
     ) {
       administrationInfo.push({
         kind: slot.administrationSummary.status,
-        time: moment(slot.startTime * 1000).format("HH: mm"),
+        time: moment(slot.startTime * 1000).format("HH:mm"),
       });
     }
   });
