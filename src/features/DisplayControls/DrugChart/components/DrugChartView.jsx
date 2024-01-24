@@ -57,9 +57,6 @@ export default function DrugChartWrapper(props) {
     currentShiftHoursArray()
   );
 
-  console.log("drug orders -> ", drugOrders);
-  console.log("drugChartData -> ", drugChartData);
-
   const callFetchMedications = async (startDateTime, endDateTime) => {
     const startDateTimeInSeconds = startDateTime / 1000;
     const endDateTimeInSeconds = endDateTime / 1000 - 60;
@@ -69,7 +66,6 @@ export default function DrugChartWrapper(props) {
         startDateTimeInSeconds,
         endDateTimeInSeconds
       );
-      console.log("before response data");
       setDrugChartData(response.data);
       if (response.data.length > 0) {
         setIsShiftButtonsDisabled({
@@ -86,7 +82,6 @@ export default function DrugChartWrapper(props) {
     }
   };
   useEffect(() => {
-    console.log("in useEffect of drugChartData, drugOrders]");
     setTransformedData(mapDrugOrdersAndSlots(drugChartData, drugOrders));
   }, [drugChartData, drugOrders]);
 
@@ -97,7 +92,7 @@ export default function DrugChartWrapper(props) {
     }
   }, [allMedications.data]);
 
-  useEffect(async () => {
+  useEffect(() => {
     const currentShift = currentShiftHoursArray();
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
@@ -244,8 +239,7 @@ export default function DrugChartWrapper(props) {
       </div>
       {isLoading ? (
         <div>Loading...</div>
-      ) : drugChartData &&
-        (drugChartData.length === 0) ? (
+      ) : drugChartData && drugChartData.length === 0 ? (
         <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>
       ) : (
         <DrugChart

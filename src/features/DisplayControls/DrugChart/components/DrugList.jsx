@@ -4,7 +4,6 @@ import DrugListCell from "./DrugListCell.jsx";
 
 export default function DrugList(props) {
   const { drugDetails } = props;
-  console.log("inside DrugList -> ", props);
   
   return (
     <div>

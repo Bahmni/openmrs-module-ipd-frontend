@@ -51,6 +51,7 @@ export const transformDrugOrders = (orders) => {
           dosage,
           doseUnits,
           asNeeded: dosingInstructions.asNeeded,
+          frequency: dosingInstructions.frequency,
           instructions: JSON.parse(
             dosingInstructions.administrationInstructions
           ),
@@ -68,17 +69,20 @@ export const transformDrugOrders = (orders) => {
     }
   });
   emergencyMedications.forEach((medication) => {
-    const { drug, notes, uuid, route } = medication;
+    const { drug, notes, uuid, route, administeredDateTime } = medication;
+    const administeredDateTimeInSeconds = administeredDateTime
+      ? administeredDateTime / 1000
+      : null;
     let dosage = "",
       doseUnits;
     if (
-      medication.doseUnits?.toLowerCase() === "ml" ||
-      medication.doseUnits?.toLowerCase() === "mg"
+      medication.doseUnits?.display?.toLowerCase() === "ml" ||
+      medication.doseUnits?.display?.toLowerCase() === "mg"
     ) {
-      dosage = medication.dose + medication.doseUnits;
+      dosage = medication.dose + medication.doseUnits.display;
     } else {
       dosage = medication.dose;
-      doseUnits = medication.doseUnits;
+      doseUnits = medication.doseUnits.display;
     }
     medicationData[uuid] = {
       uuid: drug.uuid,
@@ -86,12 +90,13 @@ export const transformDrugOrders = (orders) => {
       dosingInstructions: {
         dosage,
         doseUnits,
-        route,
+        route: route.display,
+        emergency: true,
       },
+      firstSlotStartTime: administeredDateTimeInSeconds,
       notes: notes[0].text,
     };
   });
-  console.log("medicationData -> ", medicationData);
   return medicationData;
 };
 
@@ -138,9 +143,6 @@ export const resetDrugOrdersSlots = (drugOrders) => {
 };
 
 export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
-  console.log("drugChartData -> ", drugChartData);
-  console.log("drugOrders -> ", drugOrders);
-
   const orders = resetDrugOrdersSlots(drugOrders);
 
   if (drugChartData && drugChartData.length > 0 && !_.isEmpty(orders)) {
@@ -150,52 +152,55 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
     }
     slots?.forEach((slot) => {
       const { startTime, status, order, medicationAdministration } = slot;
-      let administrationStatus = "Pending";
-      if (medicationAdministration) {
-        const { administeredDateTime } = medicationAdministration;
-        if (status === "COMPLETED") {
-          if (isAdministeredLateTask(startTime, administeredDateTime)) {
-            administrationStatus = "Administered-Late";
-          } else {
-            administrationStatus = "Administered";
+      const uuid = order?.uuid || medicationAdministration?.uuid;
+      if (orders[uuid]) {
+        let administrationStatus = "Pending";
+        if (medicationAdministration) {
+          const { administeredDateTime } = medicationAdministration;
+          if (status === "COMPLETED") {
+            if (isAdministeredLateTask(startTime, administeredDateTime)) {
+              administrationStatus = "Administered-Late";
+            } else {
+              administrationStatus = "Administered";
+            }
+          } else if (status === "NOT_DONE") {
+            administrationStatus = "Not-Administered";
           }
-        } else if (status === "NOT_DONE") {
-          administrationStatus = "Not-Administered";
+        } else {
+          if (isLateTask(startTime)) {
+            administrationStatus = "Late";
+          }
         }
-      } else {
-        if (isLateTask(startTime)) {
-          administrationStatus = "Late";
-        }
-      }
-      let performerName = "",
-        notes = "";
-      if (medicationAdministration) {
-        const { providers, notes: administeredNotes } =
-          medicationAdministration;
-        let performer = providers.find(
-          (provider) => provider.function === performerFunction
-        );
-        performer = performer ? performer.provider : null;
-        performerName = performer
-          ? performer.display.includes(" - ")
-            ? performer.display.split(" - ")[1]
-            : performer.display
-          : "";
-        notes =
-          administeredNotes && administeredNotes.length > 0 && performer
-            ? administeredNotes?.find(
-                (note) => note.author.uuid === performer.uuid
-              ).text
+        let performerName = "",
+          notes = "";
+        if (medicationAdministration) {
+          const { providers, notes: administeredNotes } =
+            medicationAdministration;
+          let performer = providers.find(
+            (provider) => provider.function === performerFunction
+          );
+          performer = performer ? performer.provider : null;
+          performerName = performer
+            ? performer.display.includes(" - ")
+              ? performer.display.split(" - ")[1]
+              : performer.display
             : "";
+          notes =
+            administeredNotes && administeredNotes.length > 0 && performer
+              ? administeredNotes?.find(
+                  (note) => note.author.uuid === performer.uuid
+                ).text
+              : "";
+        }
+        orders[uuid].slots.push({
+          ...slot,
+          administrationSummary: {
+            performerName,
+            notes,
+            status: administrationStatus,
+          },
+        });
       }
-      orders[order.uuid].slots.push({
-        ...slot,
-        administrationSummary: {
-          performerName,
-          notes,
-          status: administrationStatus,
-        },
-      });
     });
     const mappedOrders = Object.keys(orders).map((orderUuid) => {
       return {
@@ -204,7 +209,6 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
       };
     });
     mappedOrders.sort((a, b) => a.firstSlotStartTime - b.firstSlotStartTime);
-    console.log("mappedOrders -> ", mappedOrders);
     return mappedOrders;
   } else {
     return [];

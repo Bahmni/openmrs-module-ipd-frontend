@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Tooltip } from "carbon-components-react";
 import AdministeredIcon from "../../../../icons/administered.svg";
 import AdministeredLateIcon from "../../../../icons/administered-late.svg";
 import LateIcon from "../../../../icons/late.svg";
 import NotAdministeredIcon from "../../../../icons/not-administered.svg";
 import PendingIcon from "../../../../icons/pending.svg";
-import { TooltipCarbon } from "bahmni-carbon-ui";
 import "../styles/SVGIcon.scss";
 
 export default function SVGIcon(props) {
@@ -35,7 +35,9 @@ export default function SVGIcon(props) {
   return (
     <div>
       {info && clickable ? (
-        <TooltipCarbon icon={() => icon} content={info} />
+        <Tooltip autoOrientation={true} renderIcon={() => icon}>
+          {info}
+        </Tooltip>
       ) : (
         icon
       )}

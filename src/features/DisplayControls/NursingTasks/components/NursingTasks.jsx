@@ -398,8 +398,8 @@ export default function NursingTasks(props) {
                   onClose: () => {
                     setShowSuccessNotification(false);
                     refreshDisplayControl([
-                      // componentKeys.TREATMENTS,
-                      // componentKeys.NURSING_TASKS,
+                      componentKeys.TREATMENTS,
+                      componentKeys.NURSING_TASKS,
                       componentKeys.DRUG_CHART,
                     ]);
                   },

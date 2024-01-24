@@ -10,7 +10,6 @@ import data from "../../../../utils/config.json";
 import moment from "moment";
 
 export default function DrugListCell(props) {
-  console.log("inside DrugListCell -> ", props);
   const { dosingInstructions, duration, name, slots } = props.drugInfo;
   const { instructions, dosage, doseUnits, route } = dosingInstructions;
   const enable24hour = data.config.drugChart.enable24HourTime;
@@ -70,7 +69,7 @@ export default function DrugListCell(props) {
           {dosage}
           {doseUnits && ` - ${doseUnits}`}
           {route && ` - ${route}`}
-          {` -  ${duration}`}
+          {duration && ` -  ${duration}`}
         </div>
         <div>
           {administrationInfo.length >= 1 && (
@@ -108,7 +107,7 @@ export default function DrugListCell(props) {
         </div>
       </div>
       <div className="medication-tags">
-        <DisplayTags drugOrder={{ asNeeded: dosingInstructions.asNeeded }} />
+        <DisplayTags drugOrder={dosingInstructions} />
         {/*{dateStopped && <Tag className={"red-tag"}><FormattedMessage id={"STOPPED"} defaultMessage={"Stopped"} /></Tag>}*/}
       </div>
     </div>

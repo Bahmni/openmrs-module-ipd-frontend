@@ -5,8 +5,6 @@ import { areDatesSame } from "../../../../utils/DateTimeUtils.js";
 import moment from "moment";
 
 export default function CalendarRow(props) {
-  console.log("inside CalendarRow -> ", props);
-
   const { rowData, currentShiftArray, selectedDate } = props;
   const { slots } = rowData;
   const transformedData = {};
