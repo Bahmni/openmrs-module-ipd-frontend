@@ -20,7 +20,7 @@ import {
   isTimeWithinAdministeredWindow,
 } from "../utils/NursingTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
-import { performerFunction } from "../utils/constants";
+import { performerFunction } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 
 const UpdateNursingTasks = (props) => {
@@ -30,6 +30,7 @@ const UpdateNursingTasks = (props) => {
     patientId,
     providerId,
     setShowSuccessNotification,
+    setSuccessMessage,
   } = props;
   const [tasks, updateTasks] = useState({});
   const [errors, updateErrors] = useState({});
@@ -54,6 +55,7 @@ const UpdateNursingTasks = (props) => {
 
   const saveAdministeredTasks = () => {
     setShowSuccessNotification(true);
+    setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
   };
@@ -233,13 +235,7 @@ const UpdateNursingTasks = (props) => {
     if (Object.keys(errors).length === 0) {
       setOpenConfirmationModal(true);
     }
-
     updateShowErrors(true);
-
-    setTimeout(() => {
-      updateShowErrors(false);
-    }, 3000);
-
     setAdministeredTasks({});
     setSkippedTasks({});
     Object.keys(tasks).forEach((key) => {
@@ -264,6 +260,7 @@ const UpdateNursingTasks = (props) => {
     } else {
       setShowWarningNotification(true);
     }
+    updateShowErrors(false);
   };
 
   const handleSkipDrug = (medicationTask, skipped) => {
@@ -485,5 +482,6 @@ UpdateNursingTasks.propTypes = {
   patientId: PropTypes.string.isRequired,
   providerId: PropTypes.string.isRequired,
   setShowSuccessNotification: PropTypes.func.isRequired,
+  setSuccessMessage: PropTypes.func.isRequired,
 };
 export default UpdateNursingTasks;

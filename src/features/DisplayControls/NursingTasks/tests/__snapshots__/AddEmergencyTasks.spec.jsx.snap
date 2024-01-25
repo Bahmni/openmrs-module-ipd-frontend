@@ -593,7 +593,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                       placeholder="hh:mm"
                       style="width: 100%; padding: 0px 0px 0px 1rem;"
                       type="text"
-                      value=""
+                      value="00:00"
                     />
                   </div>
                 </div>
@@ -615,7 +615,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                     class="titleText"
                   >
                     <span>
-                      Approval Requested From 
+                      Acknowledgement Requested From 
                     </span>
                     <span
                       class="required"
@@ -725,6 +725,100 @@ exports[`AddEmergencyTasks should render the component 1`] = `
           role="tabpanel"
           tabindex="0"
         />
+      </div>
+      <div
+        class="bx--modal bx--modal-tall"
+        role="presentation"
+      >
+        <span
+          class="bx--visually-hidden"
+          role="link"
+          tabindex="0"
+        >
+          Focus sentinel
+        </span>
+        <div
+          aria-label="[object Object]"
+          aria-modal="true"
+          class="bx--modal-container"
+          role="dialog"
+          tabindex="-1"
+        >
+          <div
+            class="bx--modal-header"
+          >
+            
+            <h3
+              class="bx--modal-header__heading"
+              id="bx--modal-header__heading--modal-2"
+            >
+              Please confirm the emergency medication task
+            </h3>
+            <button
+              aria-label="close"
+              class="bx--modal-close"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="bx--modal-close__icon"
+                fill="currentColor"
+                focusable="false"
+                height="20"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            aria-labelledby="bx--modal-header__heading--modal-2"
+            class="bx--modal-content"
+            id="bx--modal-body--modal-2"
+          >
+            <hr />
+            <div
+              aria-label="Structured list section"
+              class="bx--structured-list administered-list-body"
+              role="table"
+            >
+              <div
+                class="bx--structured-list-tbody"
+                role="rowgroup"
+              />
+            </div>
+          </div>
+          <div
+            class="bx--modal-footer bx--btn-set"
+          >
+            <button
+              class="bx--btn bx--btn--secondary"
+              tabindex="0"
+              type="button"
+            >
+              Cancel
+            </button>
+            <button
+              class="bx--btn bx--btn--primary"
+              tabindex="0"
+              type="button"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+        <span
+          class="bx--visually-hidden"
+          role="link"
+          tabindex="0"
+        >
+          Focus sentinel
+        </span>
       </div>
       <div
         class="footer"
@@ -1349,7 +1443,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                       placeholder="hh:mm"
                       style="width: 100%; padding: 0px 0px 0px 1rem;"
                       type="text"
-                      value=""
+                      value="00:00"
                     />
                   </div>
                 </div>
@@ -1371,7 +1465,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                     class="titleText"
                   >
                     <span>
-                      Approval Requested From 
+                      Acknowledgement Requested From 
                     </span>
                     <span
                       class="required"
@@ -1480,6 +1574,100 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
           role="tabpanel"
           tabindex="0"
         />
+      </div>
+      <div
+        class="bx--modal bx--modal-tall"
+        role="presentation"
+      >
+        <span
+          class="bx--visually-hidden"
+          role="link"
+          tabindex="0"
+        >
+          Focus sentinel
+        </span>
+        <div
+          aria-label="[object Object]"
+          aria-modal="true"
+          class="bx--modal-container"
+          role="dialog"
+          tabindex="-1"
+        >
+          <div
+            class="bx--modal-header"
+          >
+            
+            <h3
+              class="bx--modal-header__heading"
+              id="bx--modal-header__heading--modal-1"
+            >
+              Please confirm the emergency medication task
+            </h3>
+            <button
+              aria-label="close"
+              class="bx--modal-close"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="bx--modal-close__icon"
+                fill="currentColor"
+                focusable="false"
+                height="20"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            aria-labelledby="bx--modal-header__heading--modal-1"
+            class="bx--modal-content"
+            id="bx--modal-body--modal-1"
+          >
+            <hr />
+            <div
+              aria-label="Structured list section"
+              class="bx--structured-list administered-list-body"
+              role="table"
+            >
+              <div
+                class="bx--structured-list-tbody"
+                role="rowgroup"
+              />
+            </div>
+          </div>
+          <div
+            class="bx--modal-footer bx--btn-set"
+          >
+            <button
+              class="bx--btn bx--btn--secondary"
+              tabindex="0"
+              type="button"
+            >
+              Cancel
+            </button>
+            <button
+              class="bx--btn bx--btn--primary"
+              tabindex="0"
+              type="button"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+        <span
+          class="bx--visually-hidden"
+          role="link"
+          tabindex="0"
+        >
+          Focus sentinel
+        </span>
       </div>
       <div
         class="footer"

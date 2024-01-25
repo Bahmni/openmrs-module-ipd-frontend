@@ -77,8 +77,8 @@ export default function Dashboard(props) {
     return Object.values(isSliderOpen).includes(true);
   };
 
-  const handleDischargeSummaryNavigation = () => {
-    hostApi?.navigation?.dischargeSummary?.();
+  const handleVisitSummaryNavigation = () => {
+    hostApi?.navigation?.visitSummary?.();
   };
 
   const refreshDisplayControl = (componentKeyArray) => {
@@ -144,20 +144,10 @@ export default function Dashboard(props) {
               size={20}
               onClick={() => window.history.back()}
             />
-            <Link
-              onClick={() => {
-                window.location.href = getPatientDashboardUrl(patient?.uuid);
-              }}
-            >
-              <FormattedMessage
-                id={"VIEW_CLINICAL_DASHBOARD"}
-                defaultMessage={"View Clinical Dashboard"}
-              />
-            </Link>
           </div>
           <PatientHeader
             patientId={patient?.uuid}
-            openDischargeSummary={handleDischargeSummaryNavigation}
+            openVisitSummary={handleVisitSummaryNavigation}
           />
           <Accordion className={"accordion"}>
             {sections?.map((el) => {

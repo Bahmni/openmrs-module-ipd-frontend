@@ -5,15 +5,17 @@ import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import DrugChart from "./DrugChart";
 import {
   fetchMedications,
-  TransformDrugChartData,
   getDateTime,
   currentShiftHoursArray,
   getNextShiftDetails,
   getPreviousShiftDetails,
-  SortDrugChartData,
   getDateFormatString,
+  getTransformedDrugChartData,
 } from "../utils/DrugChartUtils";
-import { formatDate } from "../../../../utils/DateTimeUtils";
+import {
+  convertDaystoSeconds,
+  formatDate,
+} from "../../../../utils/DateTimeUtils";
 import data from "../../../../utils/config.json";
 import { FormattedMessage } from "react-intl";
 import "../styles/DrugChartView.scss";
@@ -35,6 +37,14 @@ export default function DrugChartWrapper(props) {
     startDate: new Date(),
     endDate: new Date(),
   });
+  const allowedForthShfts =
+    getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
+    convertDaystoSeconds(2);
+  const [nextShiftMaxHour] = useState(allowedForthShfts);
+  const [isShiftButtonsDisabled, setIsShiftButtonsDisabled] = useState({
+    previous: false,
+    next: false,
+  });
 
   const { config: { drugChart = {} } = {} } = data;
 
@@ -52,13 +62,20 @@ export default function DrugChartWrapper(props) {
         endDateTimeInSeconds
       );
       setDrugChartData(response.data);
+      if (response.data.length > 0) {
+        setIsShiftButtonsDisabled({
+          previous: response.data[0].startDate > startDateTimeInSeconds,
+          next:
+            startDateTimeInSeconds >= nextShiftMaxHour ||
+            endDateTimeInSeconds >= nextShiftMaxHour,
+        });
+      }
     } catch (e) {
       return e;
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     const currentShift = currentShiftHoursArray();
     const startDateTime = getDateTime(new Date(), currentShift[0]);
@@ -70,8 +87,7 @@ export default function DrugChartWrapper(props) {
     callFetchMedications(startDateTime, endDateTime);
   }, []);
 
-  const sortedDrugChartData = SortDrugChartData(drugChartData);
-  const transformedDrugChartData = TransformDrugChartData(sortedDrugChartData);
+  const transformedDrugChartData = getTransformedDrugChartData(drugChartData);
 
   const handlePrevious = () => {
     const firstHour = currentShiftArray[0];
@@ -160,6 +176,7 @@ export default function DrugChartWrapper(props) {
           onClick={handlePrevious}
           className="margin-right-6"
           data-testid="previousButton"
+          disabled={isShiftButtonsDisabled.previous}
         />
         <Button
           renderIcon={ChevronRight16}
@@ -170,6 +187,7 @@ export default function DrugChartWrapper(props) {
           onClick={handleNext}
           className="margin-right-10"
           data-testid="nextButton"
+          disabled={isShiftButtonsDisabled.next}
         />
         <span>
           {`${formatDate(
@@ -180,7 +198,8 @@ export default function DrugChartWrapper(props) {
       </div>
       {isLoading ? (
         <div>Loading...</div>
-      ) : drugChartData && drugChartData.length === 0 ? (
+      ) : drugChartData &&
+        (drugChartData.length === 0 || drugChartData[0].slots.length === 0) ? (
         <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>
       ) : (
         <DrugChart

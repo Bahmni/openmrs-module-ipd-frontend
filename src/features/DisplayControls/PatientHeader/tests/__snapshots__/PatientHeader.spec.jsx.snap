@@ -36,7 +36,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
               <a
                 class="bx--link"
               >
-                Discharge Summary
+                Visit Summaries
               </a>
             </div>
             <button
@@ -126,7 +126,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                 <h3
                   class="patient-info"
                 >
-                  01/01/1991
+                  01 Jan 1991
                 </h3>
                 <h3
                   class="patient-info"
@@ -318,7 +318,7 @@ exports[`PatientHeader should display patient movement item on click of overflow
               <a
                 class="bx--link"
               >
-                Discharge Summary
+                Visit Summaries
               </a>
             </div>
             <button
@@ -407,7 +407,7 @@ exports[`PatientHeader should display patient movement item on click of overflow
                 <h3
                   class="patient-info"
                 >
-                  01/01/1991
+                  01 Jan 1991
                 </h3>
                 <h3
                   class="patient-info"

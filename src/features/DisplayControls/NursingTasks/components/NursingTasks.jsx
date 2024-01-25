@@ -9,7 +9,10 @@ import {
   ExtractMedicationNursingTasksData,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
-import { formatDate } from "../../../../utils/DateTimeUtils";
+import {
+  convertDaystoSeconds,
+  formatDate,
+} from "../../../../utils/DateTimeUtils";
 import { SliderContext } from "../../../../context/SliderContext";
 import UpdateNursingTasks from "./UpdateNursingTasks";
 import { Button, Dropdown } from "carbon-components-react";
@@ -22,6 +25,7 @@ import data from "../../../../utils/config.json";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import {
   currentShiftHoursArray,
+  getDateFormatString,
   getDateTime,
   getNextShiftDetails,
   getPreviousShiftDetails,
@@ -37,9 +41,13 @@ export default function NursingTasks(props) {
   const [selectedMedicationTask, setSelectedMedicationTask] = useState([]);
   const [filterValue, setFilterValue] = useState(items[2]);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [date, updateDate] = useState(new Date());
   const [lastAction, updateLastActon] = useState("");
+  const allowedForthShfts =
+    getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
+    convertDaystoSeconds(2);
   const [currentShiftArray, updateShiftArray] = useState(
     currentShiftHoursArray()
   );
@@ -47,7 +55,13 @@ export default function NursingTasks(props) {
     startDate: new Date(),
     endDate: new Date(),
   });
+  const [nextShiftMaxHour] = useState(allowedForthShfts);
+  const [isShiftsButtonsDisabled, setIsShiftsButtonsDisabled] = useState({
+    previous: false,
+    next: false,
+  });
   const { config: { drugChart = {} } = {} } = data;
+  const dateFormatString = getDateFormatString();
 
   useEffect(() => {
     const currentShift = currentShiftHoursArray();
@@ -59,7 +73,6 @@ export default function NursingTasks(props) {
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   }, []);
-
   const updateNursingTasksSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -182,6 +195,12 @@ export default function NursingTasks(props) {
       );
       setMedicationNursingTasks(extractedData);
       setIsLoading(false);
+      setIsShiftsButtonsDisabled({
+        previous: nursingTasks[0].startDate > startDateTimeInSeconds,
+        next:
+          startDateTimeInSeconds >= nextShiftMaxHour ||
+          endDateTimeInSeconds >= nextShiftMaxHour,
+      });
     }
   };
   useEffect(() => {
@@ -254,6 +273,7 @@ export default function NursingTasks(props) {
                   />
                 </Button>
                 <Button
+                  disabled={isShiftsButtonsDisabled.previous}
                   renderIcon={ChevronLeft16}
                   kind="tertiary"
                   isExpressive
@@ -264,6 +284,7 @@ export default function NursingTasks(props) {
                   data-testid="previous-shift"
                 />
                 <Button
+                  disabled={isShiftsButtonsDisabled.next}
                   renderIcon={ChevronRight16}
                   kind="tertiary"
                   isExpressive
@@ -273,13 +294,10 @@ export default function NursingTasks(props) {
                   className="margin-right-10"
                   data-testid="next-shift"
                 />
-                <span>{`${formatDate(
+                {`${formatDate(
                   startEndDates.startDate,
-                  "DD/MM/YYYY HH:mm"
-                )} - ${formatDate(
-                  startEndDates.endDate,
-                  "DD/MM/YYYY HH:mm"
-                )}`}</span>
+                  dateFormatString
+                )} - ${formatDate(startEndDates.endDate, dateFormatString)}`}
               </div>
               <div className="nursing-task-actions">
                 <Dropdown
@@ -321,12 +339,16 @@ export default function NursingTasks(props) {
                 patientId={patientId}
                 providerId={provider.uuid}
                 setShowSuccessNotification={setShowSuccessNotification}
+                setSuccessMessage={setSuccessMessage}
               />
             )}
             {isSliderOpen.emergencyTasks && (
               <AddEmergencyTasks
-                patientId={"uuid"}
+                patientId={patientId}
+                providerId={provider.uuid}
                 updateEmergencyTasksSlider={updateEmergencyTasksSlider}
+                setShowSuccessNotification={setShowSuccessNotification}
+                setSuccessMessage={setSuccessMessage}
               />
             )}
             {medicationNursingTasks && medicationNursingTasks.length === 0 ? (
@@ -343,7 +365,7 @@ export default function NursingTasks(props) {
               <Notification
                 hostData={{
                   notificationKind: "success",
-                  messageId: "NURSING_TASKS_SAVE_MESSAGE",
+                  messageId: successMessage,
                 }}
                 hostApi={{
                   onClose: () => {

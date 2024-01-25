@@ -11,6 +11,8 @@ export const SideBarPanelClose = ({
   onSubmit,
   onSecondarySubmit,
   onClose,
+  children,
+  primaryButtonDisabled,
 }) => {
   return (
     <Modal
@@ -25,7 +27,11 @@ export const SideBarPanelClose = ({
       modalLabel={label}
       primaryButtonText={primaryButtonText}
       secondaryButtonText={secondaryButtonText}
-    />
+      primaryButtonDisabled={primaryButtonDisabled}
+      children={children}
+    >
+      {children}
+    </Modal>
   );
 };
 

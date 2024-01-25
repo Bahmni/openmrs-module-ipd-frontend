@@ -7,7 +7,6 @@ import moment from "moment";
 import data from "../../../../utils/config.json";
 
 const { config: { nursingTasks = {} } = {} } = data;
-const { config: { drugChart = {} } = {} } = data;
 
 export const fetchMedicationNursingTasks = async (
   patientUuid,
@@ -38,27 +37,42 @@ export const ExtractMedicationNursingTasksData = (
     const { slots } = item;
 
     slots.forEach((slot) => {
-      const { startTime, uuid, order, medicationAdministration } = slot;
+      const { startTime, uuid, order, medicationAdministration, serviceType } =
+        slot;
       const administeredDateTime =
         slot.status === "COMPLETED"
           ? medicationAdministration.administeredDateTime !== null
             ? medicationAdministration.administeredDateTime
             : ""
           : "";
-      const drugName = order.drug.display;
-      const drugRoute = order.route.display;
-      let duration, dosage, doseType;
-      if (order.duration) {
-        duration = order.duration + " " + order.durationUnits.display;
+      let drugName, drugRoute, duration, dosage, doseType, dosingInstructions;
+      if (order) {
+        drugName = order.drug.display;
+        drugRoute = order.route.display;
+        if (order.duration) {
+          duration = order.duration + " " + order.durationUnits.display;
+        }
+        if (
+          order.doseUnits.display !== "ml" &&
+          order.doseUnits.display !== "mg"
+        ) {
+          dosage = order.dose;
+          doseType = order.doseUnits.display;
+        } else {
+          dosage = order.dose + order.doseUnits.display;
+        }
+        dosingInstructions = {
+          asNeeded: order.asNeeded,
+          frequency: order.frequency.display,
+        };
       }
-      if (
-        order.doseUnits.display !== "ml" &&
-        order.doseUnits.display !== "mg"
-      ) {
-        dosage = order.dose;
-        doseType = order.doseUnits.display;
-      } else {
-        dosage = order.dose + order.doseUnits.display;
+      if (serviceType == "EmergencyMedicationRequest") {
+        drugName = medicationAdministration.drug?.display;
+        drugRoute = medicationAdministration.route?.display;
+        dosage =
+          medicationAdministration.dose +
+          medicationAdministration.doseUnits?.display;
+        dosingInstructions = { emergency: true };
       }
       const startTimeInDate = new Date(startTime * 1000);
       let administeredTimeInDate = "";
@@ -73,27 +87,24 @@ export const ExtractMedicationNursingTasksData = (
         doseType,
         uuid,
         startTimeInEpochSeconds: startTime,
-        dosingInstructions: {
-          asNeeded: order?.asNeeded,
-          frequency: order.frequency?.display,
-        },
+        dosingInstructions: dosingInstructions,
         startTime: startTimeInDate.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
           hourCycle: "h23",
         }),
-        orderId: order.uuid,
+        orderId: order?.uuid,
         isDisabled:
           !!administeredDateTime ||
-          order.dateStopped ||
+          order?.dateStopped ||
           slot.medicationAdministration?.status === "Not Done",
       };
 
-      if (order.dateStopped) {
+      if (order?.dateStopped) {
         if (filterValue.id === "stopped" || filterValue.id === "allTasks")
           stoppedExtractedData.push({
             ...slotInfo,
-            stopTime: order.dateStopped,
+            stopTime: order?.dateStopped,
           });
       } else if (
         (filterValue.id === "skipped" || filterValue.id === "allTasks") &&
@@ -127,8 +138,9 @@ export const ExtractMedicationNursingTasksData = (
   });
 
   pendingExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
-  completedExtractedData.sort((a, b) =>
-    a.administeredTime.localeCompare(b.administeredTime)
+  completedExtractedData.sort(
+    (a, b) =>
+      a.administeredTimeInEpochSeconds - b.administeredTimeInEpochSeconds
   );
   stoppedExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
   extractedData.push(...pendingExtractedData);
@@ -189,3 +201,4 @@ export const isTimeWithinAdministeredWindow = (
 
   return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
 };
+export const getTimeInSeconds = (days) => days * 86400;

@@ -37,7 +37,6 @@
   "NO_NURSING_TASKS_MESSAGE_COMPLETED": "No Completed Task is available for the patient",
   "NO_NURSING_TASKS_MESSAGE_PENDING": "No Pending Task is available for the patient",
   "NO_NURSING_TASKS_MESSAGE_STOPPED": "No Stopped Task is available for the patient",
-  "VIEW_CLINICAL_DASHBOARD": "View Clinical Dashboard",
   "INVALID_TIME": "Please enter valid time",
   "DONE": "Done",
   "AT": "at",
@@ -63,10 +62,16 @@
   "STOPPED": "Stopped",
   "NURSING_TASKS_CONFIRMATION": "Please confirm your nursing tasks",
   "NURSING_TASKS_SAVE_MESSAGE": "Medication task(s) updated successfully",
+  "EMERGENCY_TASK_CONFIRMATION": "Please confirm the emergency medication task",
+  "EMERGENCY_TASK_SAVE_MESSAGE": "Emergency Medication task created successfully.",
   "PATIENT_DASHBOARD": "Patient Dashboard",
-  "DISCHARGE_SUMMARY": "Discharge Summary",
+  "VISIT_SUMMARY": "Visit Summaries",
   "EDIT_DRUG_CHART": "Edit Drug Chart",
   "DRUG_CHART_MODAL_EDIT_MESSAGE": "Medication task(s) updated successfully",
   "NO_MEDICATION_DRUG_CHART_MESSAGE": "No Medication has been scheduled in this shift",
-  "CURRENT_SHIFT": "Current Shift"
+  "CURRENT_SHIFT": "Current Shift",
+  "STOP_DRUG": "Stop drug",
+  "STOP_DRUG_WARNING_TEXT": "Are you sure you want to stop this drug? You will not be able to reverse this decision",
+  "STOP_DRUG_CANCEL_TEXT": "Cancel",
+  "STOP_DRUG_SUCCESS_NOTIFICATION": "Medication stopped successfully"
 }

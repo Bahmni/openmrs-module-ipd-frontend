@@ -8,8 +8,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
     <div
       class="vital-date-time"
     >
-      07/11/2023
-      , 10:32 AM  
+      11 Dec 2023 
       <a
         class="bx--link show-more"
         kind="tertiary"
@@ -310,7 +309,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
             >
               <tr>
                 <td>
-                  07/11/2023 10:32 AM
+                  07 Nov 2023 10:32 am
                 </td>
                 <td
                   class="history-tile"
@@ -340,7 +339,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
               </tr>
               <tr>
                 <td>
-                  11/12/2023 02:02 PM
+                  11 Dec 2023 02:02 pm
                 </td>
                 <td
                   class="history-tile"
@@ -634,7 +633,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
             >
               <tr>
                 <td>
-                  07/11/2023 10:32 AM
+                  07 Nov 2023 10:32 am
                 </td>
                 <td
                   class="history-tile"
@@ -659,7 +658,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
               </tr>
               <tr>
                 <td>
-                  11/12/2023 02:02 PM
+                  11 Dec 2023 02:02 pm
                 </td>
                 <td
                   class="history-tile"
@@ -892,8 +891,7 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
     <div
       class="vital-date-time"
     >
-      07/11/2023
-      , 10:32 AM  
+      11 Dec 2023 
       <a
         class="bx--link show-more"
         kind="tertiary"
