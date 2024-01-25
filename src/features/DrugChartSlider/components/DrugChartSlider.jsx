@@ -10,19 +10,19 @@ import { medicationFrequency } from "../../../constants";
 import { SaveAndCloseButtons } from "../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import { SliderContext } from "../../../context/SliderContext";
 import {
-  getUTCTimeEpoch,
-  isInvalidTimeTextPresent,
   isTimePassed,
+  validateSchedules,
   saveMedication,
-  setDrugOrderScheduleIn12HourFormat,
-  setDrugOrderScheduleIn24HourFormat,
   updateMedication,
   updateStartTimeBasedOnFrequency,
-  validateSchedules,
+  isInvalidTimeTextPresent,
+  getUTCTimeEpoch,
+  setDrugOrderScheduleIn24HourFormat,
+  setDrugOrderScheduleIn12HourFormat,
 } from "../utils/DrugChartSliderUtils";
 import {
-  epochTo12HourTimeFormat,
   epochTo24HourTimeFormat,
+  epochTo12HourTimeFormat,
 } from "../../../utils/DateTimeUtils";
 import { DrugDetails } from "./DrugDetails";
 import { DrugInstructions } from "./DrugInstructions";
@@ -145,13 +145,15 @@ const DrugChartSlider = (props) => {
 
   const isValidSchedule = async () => {
     const { isValid, warningType } = await handleScheduleWarnings();
-    return !(!isValid && (warningType === "empty" || warningType === "passed"));
+    if (!isValid && (warningType === "empty" || warningType === "passed"))
+      return false;
+    return true;
   };
 
   const handleFirstDayScheduleWarnings = async () => {
     const { isValid, warningType } = await validateSchedules(
       firstDaySchedules.filter(
-        (firstDaySchedule) => firstDaySchedule !== "hh:mm"
+        (firstDaySchedule) => firstDaySchedule != "hh:mm"
       )
     );
     setShowEmptyFirstDayScheduleWarning(!isValid && warningType === "empty");
@@ -161,7 +163,9 @@ const DrugChartSlider = (props) => {
 
   const isValidFirstDaySchedule = async () => {
     const { isValid, warningType } = await handleFirstDayScheduleWarnings();
-    return !(!isValid && (warningType === "empty" || warningType === "passed"));
+    if (!isValid && (warningType === "empty" || warningType === "passed"))
+      return false;
+    return true;
   };
 
   const handleFinalDayScheduleWarnings = async () => {
@@ -173,7 +177,9 @@ const DrugChartSlider = (props) => {
 
   const isValidFinalDaySchedule = async () => {
     const { isValid, warningType } = await handleFinalDayScheduleWarnings();
-    return !(!isValid && (warningType === "empty" || warningType === "passed"));
+    if (!isValid && (warningType === "empty" || warningType === "passed"))
+      return false;
+    return true;
   };
 
   const isStartTimeExceedingFrequency = (time, frequency) => {
@@ -230,11 +236,12 @@ const DrugChartSlider = (props) => {
       medicationFrequency: "",
     };
     if (enableStartTime) {
-      payload.slotStartTime = getUTCTimeEpoch(
+      const startTimeUTCEpoch = getUTCTimeEpoch(
         startTime,
         enable24HourTimers,
         hostData?.drugOrder?.drugOrder?.scheduledDate
       );
+      payload.slotStartTime = startTimeUTCEpoch;
       payload.medicationFrequency =
         medicationFrequency.START_TIME_DURATION_FREQUENCY;
     }
@@ -278,7 +285,7 @@ const DrugChartSlider = (props) => {
       payload.firstDaySlotsStartTime =
         firstDaySlotsMissed > 0 ? firstDaySchedulesUTCTimeEpoch : [];
       payload.dayWiseSlotsStartTime = firstDaySchedules.some(
-        (schedule) => schedule === "hh:mm"
+        (schedule) => schedule == "hh:mm"
       )
         ? schedulesUTCTimeEpoch.map((schedules) => schedules + nextScheduleDate)
         : schedulesUTCTimeEpoch;
@@ -286,10 +293,11 @@ const DrugChartSlider = (props) => {
         (schedules) => schedules + finalScheduleDate
       );
 
-      payload.remainingDaySlotsStartTime = remainingDaySlotsStartTime.slice(
+      const remainingDaySlotsTime = remainingDaySlotsStartTime.slice(
         0,
         firstDaySlotsMissed
       );
+      payload.remainingDaySlotsStartTime = remainingDaySlotsTime;
       payload.medicationFrequency =
         medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
     }
@@ -302,11 +310,9 @@ const DrugChartSlider = (props) => {
       const validFirstDaySchedules = await isValidFirstDaySchedule();
       const validSchedules = await isValidSchedule();
       const validFinalDaySchedules = await isValidFinalDaySchedule();
-      return !(
-        !validFirstDaySchedules ||
-        !validSchedules ||
-        !validFinalDaySchedules
-      );
+      if (!validFirstDaySchedules || !validSchedules || !validFinalDaySchedules)
+        return false;
+      return true;
     }
     if (enableStartTime) {
       if (!startTime) {
