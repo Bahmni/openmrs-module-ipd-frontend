@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { Button } from "carbon-components-react";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
@@ -10,7 +10,8 @@ import {
   getNextShiftDetails,
   getPreviousShiftDetails,
   getDateFormatString,
-  getTransformedDrugChartData,
+  transformDrugOrders,
+  mapDrugOrdersAndSlots,
 } from "../utils/DrugChartUtils";
 import {
   convertDaystoSeconds,
@@ -18,6 +19,7 @@ import {
 } from "../../../../utils/DateTimeUtils";
 import data from "../../../../utils/config.json";
 import { FormattedMessage } from "react-intl";
+import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";
 
 const NoMedicationTaskMessage = (
@@ -30,6 +32,8 @@ const NoMedicationTaskMessage = (
 export default function DrugChartWrapper(props) {
   const { patientId } = props;
   const [drugChartData, setDrugChartData] = useState([]);
+  const [transformedData, setTransformedData] = useState([]);
+  const [drugOrders, setDrugOrders] = useState({});
   const [isLoading, setLoading] = useState(true);
   const [date, updateDate] = useState(new Date());
   const [lastAction, updateLastActon] = useState("");
@@ -37,6 +41,7 @@ export default function DrugChartWrapper(props) {
     startDate: new Date(),
     endDate: new Date(),
   });
+  const allMedications = useContext(AllMedicationsContext);
   const allowedForthShfts =
     getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
     convertDaystoSeconds(2);
@@ -77,22 +82,46 @@ export default function DrugChartWrapper(props) {
     }
   };
   useEffect(() => {
+    setTransformedData(mapDrugOrdersAndSlots(drugChartData, drugOrders));
+  }, [drugChartData, drugOrders]);
+
+  useEffect(() => {
+    const orders = allMedications.data;
+    if (orders) {
+      setDrugOrders(transformDrugOrders(orders));
+    }
+  }, [allMedications.data]);
+
+  useEffect(() => {
     const currentShift = currentShiftHoursArray();
-    const startDateTime = getDateTime(new Date(), currentShift[0]);
-    const endDateTime = getDateTime(
+    const firstHour = currentShift[0];
+    const lastHour = currentShift[currentShift.length - 1];
+    let startDateTime = getDateTime(new Date(), currentShift[0]);
+    let endDateTime = getDateTime(
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
+    /** if shift is going on two different dates */
+    if (lastHour < firstHour) {
+      const d = new Date();
+      const currentHour = d.getHours();
+      if (currentHour > 12) {
+        d.setDate(d.getDate() + 1);
+        endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
+      } else {
+        d.setDate(d.getDate() - 1);
+        startDateTime = getDateTime(d, currentShift[0]);
+      }
+    }
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
+    updateDate(new Date(endDateTime));
     callFetchMedications(startDateTime, endDateTime);
   }, []);
-
-  const transformedDrugChartData = getTransformedDrugChartData(drugChartData);
 
   const handlePrevious = () => {
     const firstHour = currentShiftArray[0];
     const lastHour = currentShiftArray[currentShiftArray.length - 1];
-    if (lastHour < firstHour && lastAction === "N") {
+    if (lastHour < firstHour && (lastAction === "N" || lastAction === "")) {
       date.setDate(date.getDate() - 1);
     }
     const { startDateTime, endDateTime, nextDate } = getPreviousShiftDetails(
@@ -137,14 +166,26 @@ export default function DrugChartWrapper(props) {
 
   const handleCurrent = () => {
     const currentShift = currentShiftHoursArray();
-    const nextDate = new Date();
-    const startDateTime = getDateTime(new Date(), currentShift[0]);
-    const endDateTime = getDateTime(
+    const firstHour = currentShift[0];
+    const lastHour = currentShift[currentShift.length - 1];
+    let startDateTime = getDateTime(new Date(), currentShift[0]);
+    let endDateTime = getDateTime(
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
+    if (lastHour < firstHour) {
+      const d = new Date();
+      const currentHour = d.getHours();
+      if (currentHour > 12) {
+        d.setDate(d.getDate() + 1);
+        endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
+      } else {
+        d.setDate(d.getDate() - 1);
+        startDateTime = getDateTime(d, currentShift[0]);
+      }
+    }
     updateShiftArray(currentShift);
-    updateDate(nextDate);
+    updateDate(new Date(endDateTime));
     updateLastActon("");
     setLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
@@ -198,14 +239,13 @@ export default function DrugChartWrapper(props) {
       </div>
       {isLoading ? (
         <div>Loading...</div>
-      ) : drugChartData &&
-        (drugChartData.length === 0 || drugChartData[0].slots.length === 0) ? (
+      ) : drugChartData && drugChartData.length === 0 ? (
         <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>
       ) : (
         <DrugChart
-          drugChartData={transformedDrugChartData}
+          drugChartData={transformedData}
           currentShiftArray={currentShiftArray}
-          selectedDate={date}
+          selectedDate={startEndDates.startDate}
         />
       )}
     </div>
@@ -213,4 +253,5 @@ export default function DrugChartWrapper(props) {
 }
 DrugChartWrapper.propTypes = {
   patientId: PropTypes.string.isRequired,
+  visitId: PropTypes.string.isRequired,
 };

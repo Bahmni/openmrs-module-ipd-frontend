@@ -2,9 +2,39 @@ import React from "react";
 import PropTypes from "prop-types";
 import TimeCell from "./TimeCell.jsx";
 import { areDatesSame } from "../../../../utils/DateTimeUtils.js";
+import moment from "moment";
 
 export default function CalendarRow(props) {
   const { rowData, currentShiftArray, selectedDate } = props;
+  const { slots } = rowData;
+  const transformedData = {};
+  slots.forEach((slot) => {
+    let time;
+    const { medicationAdministration, administrationSummary } = slot;
+    let adminInfo = {};
+    if (
+      ["Administered", "Administered-Late", "Not-Administered"].includes(
+        administrationSummary.status
+      )
+    ) {
+      time = moment(medicationAdministration.administeredDateTime).format(
+        "HH:mm"
+      );
+      adminInfo = {
+        notes: administrationSummary.notes,
+        administrationInfo: `${administrationSummary.performerName} [${time}]`,
+      };
+    } else {
+      time = moment(slot.startTime * 1000).format("HH:mm");
+    }
+    const [hours, minutes] = time.split(":");
+    transformedData[+hours] = transformedData[+hours] || [];
+    transformedData[+hours].push({
+      minutes,
+      status: administrationSummary.status,
+      ...adminInfo,
+    });
+  });
   return (
     <div style={{ display: "flex" }}>
       {currentShiftArray.map((hour) => {
@@ -14,10 +44,10 @@ export default function CalendarRow(props) {
         const sameDate = areDatesSame(date, selectedDate);
         const isCurrentHour = hour === currentHour && sameDate;
         const highlightedCell = currentMinute < 30 ? "left" : "right";
-        if (rowData[hour]) {
+        if (transformedData[hour]) {
           return (
             <TimeCell
-              slotInfo={rowData[hour]}
+              slotInfo={transformedData[hour]}
               key={hour}
               doHighlightCell={isCurrentHour}
               highlightedCell={highlightedCell}

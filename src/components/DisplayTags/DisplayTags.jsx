@@ -37,5 +37,6 @@ DisplayTags.propTypes = {
   drugOrder: PropTypes.exact({
     asNeeded: PropTypes.bool,
     frequency: PropTypes.string,
+    emergency: PropTypes.bool
   }).isRequired,
 };
