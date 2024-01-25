@@ -43,7 +43,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
               aria-expanded="false"
               aria-haspopup="true"
               aria-label="Open and close list of options"
-              class="bx--overflow-menu bx--overflow-menu--md"
+              class="patient-movement-overflow bx--overflow-menu bx--overflow-menu--md"
               data-testid="overflow-menu"
               type="button"
             >
@@ -83,6 +83,28 @@ exports[`PatientHeader should display all details of the patient 1`] = `
           <div
             class="bx--row"
           >
+            <a
+              class="bx--link show-more bx--link--sm"
+              kind="tertiary"
+            >
+              Hide Details
+               
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="20"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 10L26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
+                />
+              </svg>
+               
+            </a>
             <div
               class="other-info"
             >
@@ -112,28 +134,6 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                   12345
                 </h3>
               </div>
-              <a
-                class="bx--link show-more bx--link--sm"
-                kind="tertiary"
-              >
-                Hide Details
-                 
-                <svg
-                  aria-hidden="true"
-                  fill="currentColor"
-                  focusable="false"
-                  height="20"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 32 32"
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M16 10L26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
-                  />
-                </svg>
-                 
-              </a>
             </div>
           </div>
         </div>
@@ -325,7 +325,7 @@ exports[`PatientHeader should display patient movement item on click of overflow
               aria-expanded="true"
               aria-haspopup="true"
               aria-label="Open and close list of options"
-              class="bx--overflow-menu bx--overflow-menu--open bx--overflow-menu--md"
+              class="patient-movement-overflow bx--overflow-menu bx--overflow-menu--open bx--overflow-menu--md"
               data-testid="overflow-menu"
               type="button"
             >
@@ -365,6 +365,27 @@ exports[`PatientHeader should display patient movement item on click of overflow
           <div
             class="bx--row"
           >
+            <a
+              class="bx--link show-more bx--link--sm"
+              kind="tertiary"
+            >
+              Show Details
+               
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="20"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
+                />
+              </svg>
+            </a>
             <div
               class="other-info"
             >
@@ -394,27 +415,6 @@ exports[`PatientHeader should display patient movement item on click of overflow
                   12345
                 </h3>
               </div>
-              <a
-                class="bx--link show-more bx--link--sm"
-                kind="tertiary"
-              >
-                Show Details
-                 
-                <svg
-                  aria-hidden="true"
-                  fill="currentColor"
-                  focusable="false"
-                  height="20"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 32 32"
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
-                  />
-                </svg>
-              </a>
             </div>
           </div>
         </div>

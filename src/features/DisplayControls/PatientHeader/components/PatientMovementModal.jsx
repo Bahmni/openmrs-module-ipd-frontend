@@ -26,7 +26,6 @@ import {
 } from "carbon-components-react";
 import "../styles/PatientHeader.scss";
 import PropTypes from 'prop-types';
-import { drop } from "lodash";
 
 const PatientMovementModal = (props) => {
   const { updatePatientMovementModal } = props;
@@ -35,7 +34,6 @@ const PatientMovementModal = (props) => {
   const [dropDown, setDropDown] = useState([]);
   const [visitSummary, setVisitSummary] = useState({});
   const [selectedDropDownItem, setSelectedDropDownItem] = useState({});
-  const [currentItem, setCurrentItem] = useState({});
   const [adtNotes, setAdtNotes] = useState();
   const [adtNotesObj, setAdtNotesObj] = useState({});
   const [showAdtNotes, setShowAdtNotes] = useState(false);
@@ -182,38 +180,38 @@ const PatientMovementModal = (props) => {
           );
         }
       }
-    } else {
-      setSaveEnable(true);
     }
   };
 
   const handleSelectOnChange = (e) => {
     var item = {};
-    setCurrentItem(e);
-    setSaveEnable(false);
     if (e.label === "Admit Patient") {
       item = {
         name: "Admit Patient",
         encounterType: vistEncounterTypes.encounterTypes.ADMISSION,
       };
       setShowAdtNotes(true);
+      setSaveEnable(true);
     } else if (e.label === "Undo Discharge") {
       item = { name: "Undo Discharge", encounterType: null };
       setShowAdtNotes(false);
+      setSaveEnable(true);
     } else if (e.label === "Discharge Patient") {
       item = {
         name: "Discharge Patient",
         encounterType: vistEncounterTypes.encounterTypes.DISCHARGE,
       };
       setShowAdtNotes(true);
+      setSaveEnable(true);
     } else if (e.label === "Transfer Patient") {
       item = {
         name: "Transfer Patient",
         encounterType: vistEncounterTypes.encounterTypes.TRANSFER,
       };
       setShowAdtNotes(false);
-    } else {
       setSaveEnable(true);
+    } else {
+      setSaveEnable(false);
     }
     setSelectedDropDownItem(item);
   };
@@ -222,15 +220,6 @@ const PatientMovementModal = (props) => {
     setAdtNotes(e.target.value);
   };
 
-  useEffect(() => {
-    if (currentItem != {}) {
-      setSaveEnable(false);
-    }
-    else {
-      setSaveEnable(true);
-    }
-  },[currentItem]);
-  
   return (
     <>
       {!isLoading && (
@@ -243,7 +232,7 @@ const PatientMovementModal = (props) => {
           onRequestClose={() => updatePatientMovementModal(false)}
           onSecondarySubmit={() => updatePatientMovementModal(false)}
           onRequestSubmit={() => handleOnSave()}
-          primaryButtonDisabled={saveEnable}
+          primaryButtonDisabled={!saveEnable}
         >
           
           {dropDown == {} ? (
@@ -251,18 +240,16 @@ const PatientMovementModal = (props) => {
           ) : (
             <Dropdown
               id="patient-movement-dropdown"
-              placeholder={"Choose the patient movement"}
-              titleText={""}
+              label="Choose an option"
               onChange={(e) => handleSelectOnChange(e.selectedItem)}
               isRequired={true}
               width={"100%"}
               items={dropDown}
               itemToString={(item) => (item ? item.label : "")}
-              selectedItem={currentItem}
             />
           )}
           &nbsp;&nbsp;
-          {!showAdtNotes && (<div style={{height:"50px"}}></div>)}
+          {!showAdtNotes && (<div style={{height:"65px"}}></div>)}
           {showAdtNotes && (
             <TextArea
               data-modal-primary-focus

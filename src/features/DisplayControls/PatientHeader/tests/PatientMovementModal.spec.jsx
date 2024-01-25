@@ -8,22 +8,40 @@ import {
   visitSummaryToDischargeOrTransferMockData,
   visitSummaryToUndoDischargeMockData,
   vistAndEncounterTypesMockData,
+  patientResponseData,
 } from "./PatientMovementModalMockData";
 import { IPDContext } from "../../../../context/IPDContext";
+import { getADTDashboardUrl } from "../../../../utils/CommonUtils";
  
 const mockSearchConceptsByFSN = jest.fn();
 const mockFetchVisitSummary = jest.fn();
 const mockFetchVisitEncounterOrderTypes = jest.fn();
-const mockSearchConceptsByFSNForAdtNotes = jest.fn();
-// const mockUpdatePatientMovement = jest.fn();
-// const mockDischargePatient = jest.fn();
-// const mockUndoDischargePatient = jest.fn();
+const mockUpdatePatientMovement = jest.fn();
+const mockDischargePatient = jest.fn();
+const mockUndoDischargePatient = jest.fn();
 
-
-const patientMock = "patientMockUuid";
+const patientMock = {"uuid": "patientMockUuid"};
 const visitMock = "visitMockUuid";
 const locationMock = "locationMockUuid";
 const providerMock = "providerMockUuid";
+const patientPayload = {
+  "patientUuid": patientMock ,
+  "encounterTypeUuid": "encounterMockUuid",
+  "visitTypeUuid": visitMock,
+  "observations": [
+    {
+      "concept": {
+        "uuid": "uuid",
+        "name": "Adt Notes",
+        "dataType": "Text"
+      },
+      "label": "Adt Notes",
+      "value": "Admitted",
+      "autocompleteValue": "Admitted",
+      "conceptSetName": "Adt Notes"
+    }
+  ]
+};
 
 jest.mock("../../../../utils/CommonUtils", () => {
   const originalCommonModule = jest.requireActual("../../../../utils/CommonUtils");
@@ -31,10 +49,6 @@ jest.mock("../../../../utils/CommonUtils", () => {
     ...originalCommonModule,
     searchConceptsByFSN: () => mockSearchConceptsByFSN("byFullySpecified", "Disposition", "custom:(uuid,name)"),
     fetchVisitEncounterOrderTypes: () => mockFetchVisitEncounterOrderTypes(),
-    // searchConceptsByFSN: () => mockSearchConceptsByFSNForAdtNotes("byFullySpecified", "AdtNotes", "bahmni"),
-    // updatePatientMovement: () => mockUpdatePatientMovement(),
-    // dischargePatient: () => mockDischargePatient(),
-    // undoDischargePatient: () => mockUndoDischargePatient(),
   };
 });
 
@@ -43,9 +57,9 @@ jest.mock("../utils/PatientMovementModalUtils", () => {
   return {
     ...originalModule,
     fetchVisitSummary: () => mockFetchVisitSummary(visitMock),
-    // updatePatientMovement: () => mockUpdatePatientMovement(),
-    // dischargePatient: () => mockDischargePatient(),
-    // undoDischargePatient: () => mockUndoDischargePatient(),
+    updatePatientMovement: () => mockUpdatePatientMovement(patientPayload),
+    dischargePatient: () => mockDischargePatient(patientPayload),
+    undoDischargePatient: () => mockUndoDischargePatient(),
   };
 });
 
@@ -55,6 +69,9 @@ describe("PatientMovementModal", () => {
     mockSearchConceptsByFSN.mockResolvedValueOnce(byFullySpecifiedNameForDispoistionMockData).mockResolvedValueOnce(byFullySpecifiedNameForAdtNotesMockData);
     mockFetchVisitSummary.mockResolvedValue(visitSummaryToAdmitMockData);
     mockFetchVisitEncounterOrderTypes.mockResolvedValue(vistAndEncounterTypesMockData);
+    mockUpdatePatientMovement.mockResolvedValueOnce(patientResponseData);
+    mockDischargePatient.mockResolvedValueOnce(patientResponseData);
+    mockUndoDischargePatient.mockResolvedValueOnce(patientResponseData);
   });
 
   afterEach(() => {
@@ -64,8 +81,6 @@ describe("PatientMovementModal", () => {
   it("should display patient movement modal", async () => {
     render(<IPDContext.Provider value={{patient: patientMock, visit: visitMock, location: locationMock, provider: providerMock}}>
       <PatientMovementModal updatePatientMovementModal={()=> jest.fn()}/></IPDContext.Provider>);
-    // render(<PatientMovementModal updatePatientMovementModal={()=> jest.fn()}/>);
-
     await waitFor(() => expect(screen.getByText("Patient Movement")).toBeTruthy());
   });
 
@@ -74,9 +89,7 @@ describe("PatientMovementModal", () => {
       <PatientMovementModal updatePatientMovementModal={()=> jest.fn()}/></IPDContext.Provider>);
     
     await waitFor(() => {
-      expect(screen.getByText("Select")).toBeTruthy();
-      expect(screen.getByText("Choose the patient movement")).toBeTruthy();
-     
+      expect(screen.getByText("Choose an option")).toBeTruthy();
     });
   }); 
 
@@ -125,12 +138,19 @@ describe("PatientMovementModal", () => {
     await waitFor(() => {
       expect(screen.getByText("Patient Movement")).toBeTruthy();
     });
+    const chooseDropdown = screen.getByText("Choose an option")
+    fireEvent.click(chooseDropdown);
     expect(screen.getByText("Admit Patient")).toBeTruthy();
     
   });
 
   it('should save patient movement modal for admit patient', async () => {
-    const { container } = render(<IPDContext.Provider value={{patient: patientMock, visit: visitMock, location: locationMock, provider: providerMock}}>
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "/bahmni/adt/#/patient/patientMockUuid/visit/visitMockUuid/encounter/encounterUuid/bed"
+      },
+    });
+    render(<IPDContext.Provider value={{patient: patientMock, visit: visitMock, location: locationMock, provider: providerMock}}>
       <PatientMovementModal updatePatientMovementModal={()=> jest.fn()}/></IPDContext.Provider>);
        await waitFor(() => {
         expect(screen.getByText("Patient Movement")).toBeTruthy();
@@ -139,23 +159,26 @@ describe("PatientMovementModal", () => {
     const saveButton = screen.getByText("Save");
     expect(saveButton.disabled).toEqual(true);
 
-    
-    // screen.debug();
-    const chooseDropdown = screen.getByText("Choose the patient movement")
+    const chooseDropdown = screen.getByText("Choose an option")
     fireEvent.click(chooseDropdown);
     expect(screen.getByText("Admit Patient")).toBeTruthy();
     fireEvent.click(screen.getByText("Admit Patient"));
     expect(saveButton.disabled).toEqual(false);
     
-    // const addNotes = screen.getByRole('textbox');
-    // fireEvent.change(addNotes, { target: { value: "Adt Notes" } });
-    // expect(addNotes.value).toEqual("Adt Notes");
+    const addNotes = screen.getByPlaceholderText("Enter Adt Notes");
+    fireEvent.click(addNotes);
+    fireEvent.change(addNotes, { target: { value: "Admitted" } });
+    expect(addNotes.value).toEqual("Admitted");
     
-    // expect(saveButton.disabled).toEqual(false);
-    //fireEvent.click(saveButton);
-    // check whether that is updatePatient method is called
-  });
+    expect(saveButton.disabled).toEqual(false);
+    fireEvent.click(saveButton);
+    expect(mockUpdatePatientMovement).toHaveBeenCalledTimes(1);
 
+    const expectedUrl = getADTDashboardUrl("patientMockUuid", visitMock, "encounterUuid");
+    expect(window.location.href).toBe(expectedUrl);
+
+  });
+  
   it('should display patient movement modal with a discharge and transfer dropdown', async () => {
     mockFetchVisitSummary.mockResolvedValue(visitSummaryToDischargeOrTransferMockData);
     render(<IPDContext.Provider value={{patient: patientMock, visit: visitMock, location: locationMock, provider: providerMock}}>
@@ -164,17 +187,71 @@ describe("PatientMovementModal", () => {
     await waitFor(() => {
       expect(screen.getByText("Patient Movement")).toBeTruthy();
     });
+    const chooseDropdown = screen.getByText("Choose an option")
+    fireEvent.click(chooseDropdown);
     expect(screen.getByText("Discharge Patient")).toBeTruthy();
     expect(screen.getByText("Transfer Patient")).toBeTruthy();
   });
 
-  // it('should save patient movement modal for discharge patient', async () => {
-  
-  // });
+  it('should save patient movement modal for discharge patient', async () => {
+    mockFetchVisitSummary.mockResolvedValue(visitSummaryToDischargeOrTransferMockData);
+    const dischargeMethodCall = jest.fn();
+    render(<IPDContext.Provider value={{patient: patientMock, visit: visitMock, location: locationMock, provider: providerMock}}>
+      <PatientMovementModal updatePatientMovementModal={dischargeMethodCall}/></IPDContext.Provider>);
+       await waitFor(() => {
+        expect(screen.getByText("Patient Movement")).toBeTruthy();
+      });
+      
+    const saveButton = screen.getByText("Save");
+    expect(saveButton.disabled).toEqual(true);
 
-  // it('should save patient movement modal for transfer patient', async () => {
-  
-  // });
+    const chooseDropdown = screen.getByText("Choose an option")
+    fireEvent.click(chooseDropdown);
+    expect(screen.getByText("Discharge Patient")).toBeTruthy();
+    fireEvent.click(screen.getByText("Discharge Patient"));
+    expect(saveButton.disabled).toEqual(false);
+    
+    const addNotes = screen.getByPlaceholderText("Enter Adt Notes");
+    fireEvent.click(addNotes);
+    fireEvent.change(addNotes, { target: { value: "Discharged" } });
+    expect(addNotes.value).toEqual("Discharged");
+    
+    expect(saveButton.disabled).toEqual(false);
+    fireEvent.click(saveButton);
+    expect(mockDischargePatient).toHaveBeenCalledTimes(1);
+  });
+
+  it('should save patient movement modal for transfer patient', async () => {
+    mockFetchVisitSummary.mockResolvedValue(visitSummaryToDischargeOrTransferMockData);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "/bahmni/adt/#/patient/patientMockUuid/visit/visitMockUuid/encounter/encounterUuid/bed"
+      },
+    });
+    const transferMethodCall = jest.fn();
+    render(<IPDContext.Provider value={{patient: patientMock, visit: visitMock, location: locationMock, provider: providerMock}}>
+      <PatientMovementModal updatePatientMovementModal={transferMethodCall}/></IPDContext.Provider>);
+       await waitFor(() => {
+        expect(screen.getByText("Patient Movement")).toBeTruthy();
+      });
+      
+    const saveButton = screen.getByText("Save");
+    expect(saveButton.disabled).toEqual(true);
+
+    const chooseDropdown = screen.getByText("Choose an option")
+    fireEvent.click(chooseDropdown);
+    expect(screen.getByText("Transfer Patient")).toBeTruthy();
+    fireEvent.click(screen.getByText("Transfer Patient"));
+    expect(saveButton.disabled).toEqual(false);
+    
+    expect(screen.queryByText("Enter Adt Notes")).toBeNull();
+
+    expect(saveButton.disabled).toEqual(false);
+    fireEvent.click(saveButton);
+    expect(mockUpdatePatientMovement).toHaveBeenCalledTimes(1);
+    const expectedUrl = getADTDashboardUrl("patientMockUuid", visitMock, patientResponseData.data.encounterUuid);
+    expect(window.location.href).toBe(expectedUrl);
+  });
 
   it('should display patient movement modal with a undo discharge dropdown', async () => {
     mockFetchVisitSummary.mockResolvedValue(visitSummaryToUndoDischargeMockData);
@@ -184,54 +261,39 @@ describe("PatientMovementModal", () => {
     await waitFor(() => {
       expect(screen.getByText("Patient Movement")).toBeTruthy();
     });
+    const chooseDropdown = screen.getByText("Choose an option")
+    fireEvent.click(chooseDropdown);
     expect(screen.getByText("Undo Discharge")).toBeTruthy();
   });
 
-  // it('should save patient movement modal for undo discharge patient', async () => {
-  
-  // });
+  it('should save patient movement modal for undo discharge patient', async () => {
+    mockFetchVisitSummary.mockResolvedValue(visitSummaryToUndoDischargeMockData);
+    Object.defineProperty(window, "location", {
+      value: {
+        href: "/bahmni/adt/#/patient/patientMockUuid/visit/visitMockUuid/encounter/encounterUuid/bed"
+      },
+    });
+    render(<IPDContext.Provider value={{patient: patientMock, visit: visitMock, location: locationMock, provider: providerMock}}>
+      <PatientMovementModal updatePatientMovementModal={()=> jest.fn()}/></IPDContext.Provider>);
+       await waitFor(() => {
+        expect(screen.getByText("Patient Movement")).toBeTruthy();
+      });
+      
+    const saveButton = screen.getByText("Save");
+    expect(saveButton.disabled).toEqual(true);
 
-   
-
-  // it("should render without crashing", () => {
-  //   render(<PatientHeader patientId="123" />);
-  // });
-
-  // it("should call fetchPatientInfo on mount", () => {
-  //   render(<PatientHeader patientId="123" />);
-  //   expect(mockFetchPatientProfile).toHaveBeenCalledWith("123");
-  // });
-
-  // it("should display loading skeleton while fetching data", () => {
-  //   render(<PatientHeader patientId="123" />);
-  //   expect(screen.getByTestId("header-loading")).toBeTruthy();
-  // });
-
-  // it("should display patient details after data is fetched", async () => {
-  //   render(<PatientHeader patientId="123" />);
-  //   await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
-  //   expect(screen.getByText(/30 Years/i)).toBeTruthy();
-  //   expect(screen.getByText("01/01/1991")).toBeTruthy();
-  //   expect(screen.getByText(/12345/i)).toBeTruthy();
-  // });
-
-  // it("should display all details of the patient", async () => {
-  //   const { container } = render(<PatientHeader patientId="123" />);
-  //   await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
-  //   const showDetailsButton = screen.getByText("Show Details");
-  //   fireEvent.click(showDetailsButton);
-
-  //   await waitFor(() => {
-  //     expect(screen.getByText(/Country : Ethiopia/i)).toBeTruthy();
-  //     expect(container).toMatchSnapshot();
-  //   });
-  // });
-
-  // it("should display patient movement item on click of overflow menu icon", async () => {
-  //   const { container } = render(<PatientHeader patientId="123" />);
-  //   await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
-  //   screen.getByTestId("overflow-menu").click();
-  //   expect(screen.getByText("Patient Movement")).toBeTruthy();
-  //   expect(container).toMatchSnapshot();
-  // });
+    const chooseDropdown = screen.getByText("Choose an option")
+    fireEvent.click(chooseDropdown);
+    expect(screen.getByText("Undo Discharge")).toBeTruthy();
+    fireEvent.click(screen.getByText("Undo Discharge"));
+    expect(saveButton.disabled).toEqual(false);
+    
+    expect(screen.queryByText("Enter Adt Notes")).toBeNull();
+    
+    expect(saveButton.disabled).toEqual(false);
+    fireEvent.click(saveButton);
+    expect(mockUndoDischargePatient).toHaveBeenCalledTimes(1);
+    const expectedUrl = getADTDashboardUrl("patientMockUuid", visitMock, patientResponseData.data.encounterUuid);
+    expect(window.location.href).toBe(expectedUrl);
+  });
 });

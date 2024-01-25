@@ -1,4 +1,5 @@
 export const byFullySpecifiedNameForDispoistionMockData = {
+  status: 200,
   data: {
     results: [
       {
@@ -42,7 +43,7 @@ export const byFullySpecifiedNameForDispoistionMockData = {
 };
 
 export const byFullySpecifiedNameForAdtNotesMockData = {
-    status : 200,
+  status : 200,
   data: {
     results: [
       {
@@ -78,6 +79,7 @@ export const byFullySpecifiedNameForAdtNotesMockData = {
 };
 
 export const visitSummaryToAdmitMockData = {
+  status: 200,
   data: {
     uuid: "b6ae3ed8-903d-4c6e-a958-4e88ee61c845",
     startDateTime: 1704894659000,
@@ -89,6 +91,7 @@ export const visitSummaryToAdmitMockData = {
 };
 
 export const visitSummaryToDischargeOrTransferMockData = {
+  status: 200,
   data: {
     uuid: "b6ae3ed8-903d-4c6e-a958-4e88ee61c845",
     startDateTime: 1704894659000,
@@ -105,6 +108,7 @@ export const visitSummaryToDischargeOrTransferMockData = {
 };
 
 export const visitSummaryToUndoDischargeMockData = {
+  status: 200,
   data: {
     uuid: "b6ae3ed8-903d-4c6e-a958-4e88ee61c845",
     startDateTime: 1704894659000,
@@ -136,4 +140,25 @@ export const vistAndEncounterTypesMockData = {
       TRANSFER: "41ff1234-3f10-11e4-abcd-0800271c1b73",
     },
   },
+};
+
+export const patientResponseData ={
+  status: 200,
+  data: {
+    "encounterUuid": "c1c26908-3f10-11e4-adec-12345678901",
+    "observations": [
+        {
+          "encounterDateTime": 1706111613000,
+          "groupMembers": [],
+          "providers": [
+              {
+                  "uuid": "c1c26908-3f10-11e4-adec-08002713245",
+                  "name": "Super Man",
+              }
+          ],
+          "conceptNameToDisplay": "Adt Notes",
+          "valueAsString": "Admitted",
+        }
+    ],
+  }
 };
