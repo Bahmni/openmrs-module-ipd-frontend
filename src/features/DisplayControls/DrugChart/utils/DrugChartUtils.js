@@ -31,8 +31,13 @@ export const transformDrugOrders = (orders) => {
       order.drugOrder?.careSetting === "INPATIENT" &&
       order.drugOrderSchedule
     ) {
-      const { dosingInstructions, drug, duration, durationUnits } =
-        order.drugOrder;
+      const {
+        dosingInstructions,
+        drug,
+        duration,
+        durationUnits,
+        drugNonCoded,
+      } = order.drugOrder;
       let dosage = "",
         doseUnits;
       if (
@@ -45,7 +50,7 @@ export const transformDrugOrders = (orders) => {
         doseUnits = dosingInstructions.doseUnits;
       }
       medicationData[order.drugOrder.uuid] = {
-        name: drug.name,
+        name: drug?.name || drugNonCoded,
         dosingInstructions: {
           route: dosingInstructions.route,
           dosage,
@@ -82,7 +87,7 @@ export const transformDrugOrders = (orders) => {
       dosage = medication.dose + medication.doseUnits.display;
     } else {
       dosage = medication.dose;
-      doseUnits = medication.doseUnits.display;
+      doseUnits = medication.doseUnits?.display;
     }
     medicationData[uuid] = {
       uuid: drug.uuid,
