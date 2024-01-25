@@ -14,7 +14,7 @@ export default function DrugChart(props) {
     vertical: true,
   });
   const drugChartRowHeight = 66;
-  const drugChartHeight = (drugChartData[0].length + 2) * drugChartRowHeight;
+  const drugChartHeight = (drugChartData[0].length + 1) * drugChartRowHeight;
   useEffect(() => {
     if (leftPane.current) {
       registerPane(leftPane.current);

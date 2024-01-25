@@ -66,9 +66,60 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
           />
         </svg>
       </button>
-      <span>
-        05/01/2024 | 06:00 - 05/01/2024 | 18:00
-      </span>
+      <div
+        class="shift-timing"
+      >
+        <div
+          class="shift-timing-title"
+        >
+          Shift timing
+        </div>
+        <div
+          class="shift-time"
+        >
+          05/01/2024
+           | 
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+            />
+            <path
+              d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
+            />
+          </svg>
+           
+          06:00
+           to 
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+            />
+            <path
+              d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
+            />
+          </svg>
+           
+          17:59
+        </div>
+      </div>
     </div>
     <div>
       Loading...
@@ -143,9 +194,60 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
           />
         </svg>
       </button>
-      <span>
-        05/01/2024 | 06:00 - 05/01/2024 | 18:00
-      </span>
+      <div
+        class="shift-timing"
+      >
+        <div
+          class="shift-timing-title"
+        >
+          Shift timing
+        </div>
+        <div
+          class="shift-time"
+        >
+          05/01/2024
+           | 
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+            />
+            <path
+              d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
+            />
+          </svg>
+           
+          06:00
+           to 
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+            />
+            <path
+              d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
+            />
+          </svg>
+           
+          17:59
+        </div>
+      </div>
     </div>
     <div>
       Loading...

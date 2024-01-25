@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Button } from "carbon-components-react";
-import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
+import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
 import DrugChart from "./DrugChart";
 import {
   fetchMedications,
@@ -95,6 +95,41 @@ export default function DrugChartWrapper(props) {
     callFetchMedications(startDateTime, endDateTime);
   };
 
+  const shiftTiming = () => {
+    let shiftStartDateTime = formatDate(
+      startEndDates.startDate,
+      dateFormatString
+    );
+    let shiftEndDateTime = formatDate(
+      startEndDates.endDate - 60,
+      dateFormatString
+    );
+    const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
+    const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
+
+    if (shiftStartDate === shiftEndDate) {
+      return (
+        <div className="shift-timing">
+          <div className="shift-timing-title">Shift timing</div>
+          <div className="shift-time">
+            {shiftStartDate} | <Time16 /> {shiftStartTime} to <Time16 />{" "}
+            {shiftEndTime}
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="shift-timing">
+          <div className="shift-timing-title">Shift timing</div>
+          <div className="shift-time">
+            {shiftStartDate} | <Time16 /> {shiftStartTime} to {shiftEndDate} |{" "}
+            <Time16 /> {shiftEndTime}
+          </div>
+        </div>
+      );
+    }
+  };
+
   const handleNext = () => {
     const firstHour = currentShiftArray[0];
     const lastHour = currentShiftArray[currentShiftArray.length - 1];
@@ -169,12 +204,7 @@ export default function DrugChartWrapper(props) {
           className="margin-right-10"
           data-testid="nextButton"
         />
-        <span>
-          {`${formatDate(
-            startEndDates.startDate,
-            dateFormatString
-          )} - ${formatDate(startEndDates.endDate, dateFormatString)}`}
-        </span>
+        {shiftTiming()}
       </div>
       {isLoading ? (
         <div>Loading...</div>

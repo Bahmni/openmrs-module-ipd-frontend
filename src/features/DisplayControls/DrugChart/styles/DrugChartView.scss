@@ -37,4 +37,15 @@
     .bx--assistive-text {
     display: none;
   }
+  .shift-timing {
+    .shift-time {
+      display: flex;
+      svg {
+        margin: 0 3px;
+      }
+    }
+    .shift-title {
+      font-size: 12px;
+    }
+  }
 }

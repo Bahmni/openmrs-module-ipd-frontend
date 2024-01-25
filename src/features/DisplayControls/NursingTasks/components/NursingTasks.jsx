@@ -19,7 +19,7 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import { componentKeys } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import data from "../../../../utils/config.json";
-import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
+import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
 import {
   currentShiftHoursArray,
   getDateTime,
@@ -228,6 +228,41 @@ export default function NursingTasks(props) {
     }
   };
 
+  const shiftTiming = () => {
+    let shiftStartDateTime = formatDate(
+      startEndDates.startDate,
+      "DD/MM/YYYY | HH:mm"
+    );
+    let shiftEndDateTime = formatDate(
+      startEndDates.endDate - 60,
+      "DD/MM/YYYY | HH:mm"
+    );
+    const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
+    const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
+
+    if (shiftStartDate === shiftEndDate) {
+      return (
+        <div className="shift-timing">
+          <div className="shift-timing-title">Shift timing</div>
+          <div className="shift-time">
+            {shiftStartDate} | <Time16 /> {shiftStartTime} to <Time16 />{" "}
+            {shiftEndTime}
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="shift-timing">
+          <div className="shift-timing-title">Shift timing</div>
+          <div className="shift-time">
+            {shiftStartDate} | <Time16 /> {shiftStartTime} to {shiftEndDate} |{" "}
+            <Time16 /> {shiftEndTime}
+          </div>
+        </div>
+      );
+    }
+  };
+
   const showMedicationNursingTasks = () => {
     if (isLoading) {
       return <div style={{ paddingTop: "5px" }}>Loading...</div>;
@@ -274,13 +309,7 @@ export default function NursingTasks(props) {
                   className="margin-right-10"
                   data-testid="next-shift"
                 />
-                <span>{`${formatDate(
-                  startEndDates.startDate,
-                  "DD/MM/YYYY | HH:mm"
-                )} - ${formatDate(
-                  startEndDates.endDate,
-                  "DD/MM/YYYY | HH:mm"
-                )}`}</span>
+                {shiftTiming()}
               </div>
               <div className="nursing-task-actions">
                 <Dropdown
