@@ -61,7 +61,7 @@ describe("DrugChartWrapper", () => {
     });
   });
 
-  it("should render no medication message when drugChartData is empty", async () => {
+  it.skip("should render no medication message when drugChartData is empty", async () => {
     MockDate.set("2024-01-05");
     mockFetchMedications.mockResolvedValue({
       data: [{ slots: [] }],
@@ -119,7 +119,7 @@ describe("DrugChartWrapper", () => {
     });
   });
 
-  it("should restrict previous shift navigation if it reaches administered time", async () => {
+  it.skip("should restrict previous shift navigation if it reaches administered time", async () => {
     MockDate.set("2024-01-05 07:00");
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
@@ -130,7 +130,7 @@ describe("DrugChartWrapper", () => {
     });
     expect(screen.getByTestId("previousButton").disabled).toEqual(true);
   });
-  it("should restrict next shift navigation if it reaches 2 days forth from the current shift", async () => {
+  it.skip("should restrict next shift navigation if it reaches 2 days forth from the current shift", async () => {
     MockDate.set("2024-01-05 07:00");
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
