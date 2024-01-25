@@ -10,12 +10,12 @@ import data from "../../../../utils/config.json";
 import moment from "moment";
 
 export default function DrugListCell(props) {
-  const { dosingInstructions, duration, name, slots } = props.drugInfo;
+  const { dosingInstructions, duration, name, slots, notes } = props.drugInfo;
   const { instructions, dosage, doseUnits, route } = dosingInstructions;
   const enable24hour = data.config.drugChart.enable24HourTime;
 
   const showInstructionsIcon =
-    instructions?.instructions || instructions?.additionalInstructions;
+    instructions?.instructions || instructions?.additionalInstructions || notes;
   const administrationInfo = [];
   slots.forEach((slot) => {
     if (
@@ -44,6 +44,14 @@ export default function DrugListCell(props) {
           )}
           Additional Instructions:&nbsp;
           {dosingInstructions?.instructions?.additionalInstructions}
+        </>
+      )}
+      {notes && (
+        <>
+          <br />
+          <div className="tooltip-content-separater" />
+          Notes:&nbsp;
+          {notes}
         </>
       )}
     </div>

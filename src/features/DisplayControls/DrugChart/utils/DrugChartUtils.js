@@ -64,12 +64,12 @@ export const transformDrugOrders = (orders) => {
           (order.drugOrderSchedule.firstDaySlotsStartTime &&
             order.drugOrderSchedule.firstDaySlotsStartTime[0]) ||
           order.drugOrderSchedule.dayWiseSlotsStartTime[0],
-        notes: order.notes && order.notes[0].text,
+        notes: order.drugOrderSchedule?.notes,
       };
     }
   });
   emergencyMedications.forEach((medication) => {
-    const { drug, notes, uuid, route, administeredDateTime } = medication;
+    const { drug, uuid, route, administeredDateTime } = medication;
     const administeredDateTimeInSeconds = administeredDateTime
       ? administeredDateTime / 1000
       : null;
@@ -94,7 +94,6 @@ export const transformDrugOrders = (orders) => {
         emergency: true,
       },
       firstSlotStartTime: administeredDateTimeInSeconds,
-      notes: notes[0].text,
     };
   });
   return medicationData;
