@@ -110,7 +110,12 @@ export default function DrugChartWrapper(props) {
     if (shiftStartDate === shiftEndDate) {
       return (
         <div className="shift-timing">
-          <div className="shift-timing-title">Shift timing</div>
+          <div className="shift-timing-title">
+            <FormattedMessage
+              id={"SHIFT_TIMING"}
+              defaultMessage={"Shift timing"}
+            />
+          </div>
           <div className="shift-time">
             {shiftStartDate} | <Time16 /> {shiftStartTime} to <Time16 />{" "}
             {shiftEndTime}
@@ -120,7 +125,12 @@ export default function DrugChartWrapper(props) {
     } else {
       return (
         <div className="shift-timing">
-          <div className="shift-timing-title">Shift timing</div>
+          <div className="shift-timing-title">
+            <FormattedMessage
+              id={"SHIFT_TIMING"}
+              defaultMessage={"Shift timing"}
+            />
+          </div>
           <div className="shift-time">
             {shiftStartDate} | <Time16 /> {shiftStartTime} to {shiftEndDate} |{" "}
             <Time16 /> {shiftEndTime}
