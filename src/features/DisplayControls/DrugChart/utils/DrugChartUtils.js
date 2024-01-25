@@ -1,5 +1,4 @@
 import axios from "axios";
-import moment from "moment";
 import {
   MEDICATIONS_BASE_URL,
   displayShiftTimingsFormat,
@@ -7,6 +6,7 @@ import {
   performerFunction,
 } from "../../../../constants";
 import data from "../../../../utils/config.json";
+import _ from "lodash";
 
 const { config: { drugChart = {} } = {} } = data;
 
@@ -15,13 +15,93 @@ export const fetchMedications = async (
   startDateTime,
   endDateTime
 ) => {
-  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}`;
+  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}&view=drugChart`;
   try {
-    const response = await axios.get(FETCH_MEDICATIONS_URL);
-    return response;
+    return await axios.get(FETCH_MEDICATIONS_URL);
   } catch (error) {
     console.error(error);
   }
+};
+
+export const transformDrugOrders = (orders) => {
+  const { ipdDrugOrders, emergencyMedications } = orders;
+  const medicationData = {};
+  ipdDrugOrders.forEach((order) => {
+    if (
+      order.drugOrder?.careSetting === "INPATIENT" &&
+      order.drugOrderSchedule
+    ) {
+      const {
+        dosingInstructions,
+        drug,
+        duration,
+        durationUnits,
+        drugNonCoded,
+      } = order.drugOrder;
+      let dosage = "",
+        doseUnits;
+      if (
+        dosingInstructions.doseUnits?.toLowerCase() === "ml" ||
+        dosingInstructions.doseUnits?.toLowerCase() === "mg"
+      ) {
+        dosage = dosingInstructions.dose + dosingInstructions.doseUnits;
+      } else {
+        dosage = dosingInstructions.dose;
+        doseUnits = dosingInstructions.doseUnits;
+      }
+      medicationData[order.drugOrder.uuid] = {
+        name: drug?.name || drugNonCoded,
+        dosingInstructions: {
+          route: dosingInstructions.route,
+          dosage,
+          doseUnits,
+          asNeeded: dosingInstructions.asNeeded,
+          frequency: dosingInstructions.frequency,
+          instructions: JSON.parse(
+            dosingInstructions.administrationInstructions
+          ),
+        },
+        duration: duration + " " + durationUnits,
+        slots: [],
+        dateStopped: order.drugOrder.dateStopped,
+        firstSlotStartTime:
+          order.drugOrderSchedule.slotStartTime ||
+          (order.drugOrderSchedule.firstDaySlotsStartTime &&
+            order.drugOrderSchedule.firstDaySlotsStartTime[0]) ||
+          order.drugOrderSchedule.dayWiseSlotsStartTime[0],
+        notes: order.drugOrderSchedule?.notes,
+      };
+    }
+  });
+  emergencyMedications.forEach((medication) => {
+    const { drug, uuid, route, administeredDateTime } = medication;
+    const administeredDateTimeInSeconds = administeredDateTime
+      ? administeredDateTime / 1000
+      : null;
+    let dosage = "",
+      doseUnits;
+    if (
+      medication.doseUnits?.display?.toLowerCase() === "ml" ||
+      medication.doseUnits?.display?.toLowerCase() === "mg"
+    ) {
+      dosage = medication.dose + medication.doseUnits.display;
+    } else {
+      dosage = medication.dose;
+      doseUnits = medication.doseUnits?.display;
+    }
+    medicationData[uuid] = {
+      uuid: drug.uuid,
+      name: drug.display,
+      dosingInstructions: {
+        dosage,
+        doseUnits,
+        route: route.display,
+        emergency: true,
+      },
+      firstSlotStartTime: administeredDateTimeInSeconds,
+    };
+  });
+  return medicationData;
 };
 
 const isLateTask = (startTime) => {
@@ -42,261 +122,95 @@ const isAdministeredLateTask = (startTime, effectiveStartDate) => {
     effectiveStartDate - startTime * 1000 > lateTaskStatusWindowInMilliSeconds
   );
 };
-
-const checkIfSlotIsAdministered = (status) => {
-  return status === "COMPLETED";
-};
-
-const sortByStartTime = (a, b) => a.startTime - b.startTime;
-export const SortDrugChartData = (drugChartData) => {
-  drugChartData.forEach((item) => {
-    item.slots.sort(sortByStartTime);
-  });
-  return drugChartData;
-};
-
 export const getDateFormatString = () =>
   drugChart.enable24HourTime
     ? displayShiftTimingsFormat
     : defaultDateTimeFormat;
 
-export const getHourFormatString = () =>
-  drugChart.enable24HourTime ? "HH:mm" : "hh:mm";
-
-export const getTransformedDrugChartData = (drugChartData) => {
-  const sortedDrugChartData = SortDrugChartData(drugChartData);
-  const groupedSlots = groupSlotsByDrugName(sortedDrugChartData);
-  const transformedDrugChartData = TransformDrugChartData(groupedSlots);
-  return transformedDrugChartData;
-};
-
-export const groupSlotsByDrugName = (drugChartData) => {
-  const groupedSlots = {};
-
-  drugChartData.forEach((schedule) => {
-    const { slots } = schedule;
-
-    slots.forEach((slot) => {
-      const { order, medicationAdministration, serviceType } = slot;
-      let drugName = "";
-      if (order) {
-        drugName = order.drug.display;
-      }
-      if (serviceType === "EmergencyMedicationRequest") {
-        drugName = medicationAdministration.drug.display;
-      }
-
-      if (!groupedSlots[drugName]) {
-        groupedSlots[drugName] = [];
-      }
-
-      groupedSlots[drugName].push(slot);
-    });
+export const resetDrugOrdersSlots = (drugOrders) => {
+  Object.keys(drugOrders).forEach((order) => {
+    drugOrders[order].slots = [];
   });
-
-  return groupedSlots;
+  return drugOrders;
 };
 
-export const TransformDrugChartData = (groupedSlots) => {
-  const drugOrderData = [];
-  const slotDataByOrder = [];
+export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
+  const orders = resetDrugOrdersSlots(drugOrders);
 
-  Object.values(groupedSlots).forEach((slots) => {
-    const slotData = {};
-
-    slots.forEach((slot) => {
-      let administeredStartHour, administeredStartMinutes, medicationNotes;
-      const {
-        startTime,
-        status,
-        order,
-        medicationAdministration,
-        serviceType,
-      } = slot;
-      let medicationStatus = "Pending";
-      let adminInfo = "",
-        administeredTime,
-        startActualTime;
-
-      const isCompleted = checkIfSlotIsAdministered(status);
-
-      if (
-        !isCompleted &&
-        medicationAdministration &&
-        medicationAdministration.status === "Not Done"
-      ) {
-        const { notes } = medicationAdministration;
-        medicationStatus = "Not-Administered";
-        medicationNotes = notes && notes.length > 0 ? notes[0].text : "";
-      }
-
-      if (isCompleted) {
-        const isLate = isAdministeredLateTask(
-          startTime,
-          medicationAdministration.administeredDateTime
-        );
-        medicationStatus = isLate ? "Administered-Late" : "Administered";
+  if (drugChartData && drugChartData.length > 0 && !_.isEmpty(orders)) {
+    let slots;
+    if (drugChartData[0]) {
+      slots = drugChartData[0].slots;
+    }
+    slots?.forEach((slot) => {
+      const { startTime, status, order, medicationAdministration } = slot;
+      const uuid = order?.uuid || medicationAdministration?.uuid;
+      if (orders[uuid]) {
+        let administrationStatus = "Pending";
         if (medicationAdministration) {
-          const { administeredDateTime, providers, notes } =
+          const { administeredDateTime } = medicationAdministration;
+          if (status === "COMPLETED") {
+            if (isAdministeredLateTask(startTime, administeredDateTime)) {
+              administrationStatus = "Administered-Late";
+            } else {
+              administrationStatus = "Administered";
+            }
+          } else if (status === "NOT_DONE") {
+            administrationStatus = "Not-Administered";
+          }
+        } else {
+          if (isLateTask(startTime)) {
+            administrationStatus = "Late";
+          }
+        }
+        let performerName = "",
+          notes = "";
+        if (medicationAdministration) {
+          const { providers, notes: administeredNotes } =
             medicationAdministration;
-          const administeredDateTimeObject = new Date(administeredDateTime);
-          const hourFormatString = getHourFormatString();
-          administeredTime = moment(administeredDateTimeObject).format(
-            hourFormatString
-          );
           let performer = providers.find(
             (provider) => provider.function === performerFunction
           );
           performer = performer ? performer.provider : null;
-          const performerName = performer
+          performerName = performer
             ? performer.display.includes(" - ")
               ? performer.display.split(" - ")[1]
               : performer.display
             : "";
-          adminInfo = performerName + " [" + administeredTime + "]";
-          administeredStartHour = administeredDateTimeObject.getHours();
-          administeredStartMinutes = administeredDateTimeObject.getMinutes();
-          medicationNotes =
-            notes && notes.length > 0 && performer
-              ? notes?.find((notes) => notes.author.uuid === performer.uuid)
-                  .text
+          notes =
+            administeredNotes && administeredNotes.length > 0 && performer
+              ? administeredNotes?.find(
+                  (note) => note.author.uuid === performer.uuid
+                ).text
               : "";
-        } else {
-          adminInfo = "";
         }
-      }
-      const startDateTimeObj = new Date(startTime * 1000);
-      startActualTime = moment(startDateTimeObj).format("HH:mm");
-
-      let drugOrder;
-      if (order) {
-        drugOrder = {
-          uuid: order.uuid,
-          drugName: order.drug.display,
-          drugRoute: order.route.display,
-          administrationInfo: [],
-          dosingInstructions: order.dosingInstructions,
-          dosingTagInfo: {
-            asNeeded: order.asNeeded,
-            frequency: order.frequency.display,
+        orders[uuid].slots.push({
+          ...slot,
+          administrationSummary: {
+            performerName,
+            notes,
+            status: administrationStatus,
           },
-        };
-
-        if (order.duration) {
-          drugOrder.duration =
-            order.duration + " " + order.durationUnits.display;
-        }
-        if (order.doseUnits.display !== "ml") {
-          drugOrder.dosage = order.dose;
-          drugOrder.doseType = order.doseUnits.display;
-        } else {
-          drugOrder.dosage = order.dose + order.doseUnits.display;
-        }
-        if (order.duration) {
-          drugOrder.duration =
-            order.duration + " " + order.durationUnits.display;
-        }
-      }
-      if (serviceType === "EmergencyMedicationRequest") {
-        drugOrder = {
-          uuid: medicationAdministration.uuid,
-          drugName: medicationAdministration.drug?.display,
-          drugRoute: medicationAdministration.route?.display,
-          administrationInfo: [],
-          dosingInstructions: medicationAdministration.dosingInstructions,
-          dosage:
-            medicationAdministration.dose +
-            medicationAdministration.doseUnits?.display,
-          dosingTagInfo: { emergency: true },
-        };
-      }
-
-      const setLateStatus = isLateTask(startTime);
-      const startHour = startDateTimeObj.getHours();
-      const startMinutes = startDateTimeObj.getMinutes();
-      if (isCompleted) {
-        slotData[administeredStartHour] = slotData[administeredStartHour] || [];
-        slotData[administeredStartHour].push({
-          minutes: administeredStartMinutes,
-          status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
-          administrationInfo: adminInfo,
-          notes: medicationNotes,
         });
-      } else {
-        slotData[startHour] = slotData[startHour] || [];
-        slotData[startHour].push({
-          minutes: startMinutes,
-          status: !isCompleted && setLateStatus ? "Late" : medicationStatus,
-          administrationInfo: adminInfo,
-          notes: medicationNotes,
-        });
-      }
-
-      if (
-        medicationStatus === "Administered" ||
-        medicationStatus === "Administered-Late"
-      ) {
-        const adminData = {
-          kind: medicationStatus,
-          time: startActualTime,
-          timeAdministered: administeredTime,
-        };
-        if (
-          drugOrderData.some(
-            (existingOrder) =>
-              existingOrder.drugName === drugOrder.drugName &&
-              existingOrder.uuid === drugOrder.uuid
-          )
-        ) {
-          const index = drugOrderData.findIndex(
-            (existingOrder) =>
-              existingOrder.drugName === drugOrder.drugName &&
-              existingOrder.uuid === drugOrder.uuid
-          );
-          drugOrderData[index].administrationInfo.push(adminData);
-        } else {
-          drugOrder.administrationInfo.push(adminData);
-        }
-      }
-      if (
-        !drugOrderData.some(
-          (existingOrder) =>
-            existingOrder.drugName === drugOrder.drugName &&
-            existingOrder.uuid === drugOrder.uuid
-        )
-      ) {
-        drugOrderData.push(drugOrder);
-        slotDataByOrder.push(slotData);
-      } else {
-        const index = drugOrderData.findIndex(
-          (existingOrder) =>
-            existingOrder.drugName === drugOrder.drugName &&
-            existingOrder.uuid === drugOrder.uuid
-        );
-        slotDataByOrder[index] = {
-          ...slotDataByOrder[index],
-          ...slotData,
-        };
       }
     });
-  });
-  return [slotDataByOrder, drugOrderData];
-};
-
-export const ifMedicationNotesPresent = (medicationNotes, side) => {
-  let notesIcon;
-  if (!medicationNotes) {
-    notesIcon = false;
+    const mappedOrders = Object.keys(orders).map((orderUuid) => {
+      return {
+        uuid: orderUuid,
+        ...orders[orderUuid],
+      };
+    });
+    mappedOrders.sort((a, b) => a.firstSlotStartTime - b.firstSlotStartTime);
+    return mappedOrders;
   } else {
-    notesIcon = true;
+    return [];
   }
-  return (
-    (side === "Administered-Late" ||
-      side === "Administered" ||
-      side === "Not-Administered") &&
-    notesIcon
-  );
 };
+export const ifMedicationNotesPresent = (medicationNotes, side) =>
+  (side === "Administered-Late" ||
+    side === "Administered" ||
+    side === "Not-Administered") &&
+  Boolean(medicationNotes);
 
 export const currentShiftHoursArray = () => {
   const shiftTimeInHours = drugChart.shiftHours;
@@ -317,19 +231,37 @@ export const currentShiftHoursArray = () => {
   const currentHour = currentDate.getHours();
   let currentRange = rangeArray[0];
   rangeArray.forEach((range) => {
-    const rangeLimits = range.split("-");
-    if (currentHour >= rangeLimits[0] && currentHour <= rangeLimits[1]) {
-      currentRange = range;
+    let [firstHour, lastHour] = range.split("-");
+    firstHour = +firstHour;
+    lastHour = +lastHour;
+
+    /** if the shift is on same date */
+    if (lastHour > firstHour) {
+      if (currentHour >= firstHour && currentHour <= lastHour) {
+        currentRange = range;
+      }
+    } else {
+      /** else shift is on different dates */
+      if (currentHour < 12) {
+        if (currentHour <= lastHour && currentHour <= firstHour) {
+          currentRange = range;
+        }
+      } else {
+        if (currentHour >= firstHour && currentHour >= lastHour) {
+          currentRange = range;
+        }
+      }
     }
   });
 
   const currentShiftHoursArray = [];
   const currentRangeArray = currentRange.split("-");
-  const lowestHour = parseInt(currentRangeArray[0]);
-  const highestHour = parseInt(currentRangeArray[1]);
-
-  for (let i = lowestHour; i <= highestHour; i++) {
-    currentShiftHoursArray.push(i);
+  let lowestHour = parseInt(currentRangeArray[0]);
+  let j = 0;
+  while (j < shiftTimeInHours) {
+    currentShiftHoursArray.push(lowestHour % 24);
+    lowestHour++;
+    j++;
   }
   return currentShiftHoursArray;
 };

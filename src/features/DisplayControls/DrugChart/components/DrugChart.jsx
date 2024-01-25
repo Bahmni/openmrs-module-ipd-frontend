@@ -14,7 +14,7 @@ export default function DrugChart(props) {
     vertical: true,
   });
   const drugChartRowHeight = 66;
-  const drugChartHeight = (drugChartData[0].length + 2) * drugChartRowHeight;
+  const drugChartHeight = (drugChartData?.length + 2) * drugChartRowHeight;
   useEffect(() => {
     if (leftPane.current) {
       registerPane(leftPane.current);
@@ -31,6 +31,7 @@ export default function DrugChart(props) {
       }
     };
   }, [leftPane, rightPane, registerPane, unregisterPane]);
+
   return (
     <div className="drug-chart-dashboard">
       <div className="drug-chart" style={{ height: drugChartHeight }}>
@@ -40,7 +41,7 @@ export default function DrugChart(props) {
           ref={leftPane}
         >
           <div className="header" />
-          <DrugList drugDetails={drugChartData[1]} />
+          <DrugList drugDetails={drugChartData} />
         </div>
         <div
           className="drug-chart-content"
@@ -49,7 +50,7 @@ export default function DrugChart(props) {
         >
           <CalendarHeader currentShiftArray={currentShiftArray} />
           <Calendar
-            calendarData={drugChartData[0]}
+            calendarData={drugChartData}
             currentShiftArray={currentShiftArray}
             selectedDate={selectedDate}
           />

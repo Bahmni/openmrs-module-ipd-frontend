@@ -1,7 +1,6 @@
 import React from "react";
 import {
   CLINICAL_CONFIG_URL,
-  ALL_DRUG_ORDERS_URL,
   BAHMNI_ENCOUNTER_URL,
   ENCOUNTER_TYPE_URL,
   requesterFunction,
@@ -47,18 +46,6 @@ export const treatmentHeaders = [
     isSortable: false,
   },
 ];
-
-export const getAllDrugOrders = async (visitUuid) => {
-  try {
-    const response = await axios.get(ALL_DRUG_ORDERS_URL(visitUuid), {
-      withCredentials: true,
-    });
-    if (response.status !== 200) throw new Error(response.statusText);
-    return response.data;
-  } catch (error) {
-    return error;
-  }
-};
 
 export const getConfigsForTreatments = async () => {
   try {

@@ -65,7 +65,7 @@ export const ENCOUNTER_TYPE_URL = RESTWS_V1 + "/encountertype/{encounterType}";
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
 export const dateFormat = "DD/MM/YYYY";
-export const displayShiftTimingsFormat = "DD MMM YYYY HH:mm";
+export const displayShiftTimingsFormat = "DD MMM YYYY | HH:mm";
 
 export const componentKeys = {
   ALLERGIES: "AL",
