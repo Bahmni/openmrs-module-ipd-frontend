@@ -110,7 +110,8 @@ const Treatments = (props) => {
 
   const handleEditAndAddToDrugChartClick = (
     drugOrderId,
-    showEditDrugChartLink
+    showEditDrugChartLink,
+    drugOrdernotes
   ) => {
     if (isAddToDrugChartDisabled) {
       updateSliderOpen((prev) => {
@@ -123,6 +124,7 @@ const Treatments = (props) => {
     }
     if (showEditDrugChartLink) {
       setShowEditMessage(true);
+      setDrugChartNotes(drugOrdernotes);
     }
 
     setSliderContentModified((prevState) => ({
@@ -139,7 +141,7 @@ const Treatments = (props) => {
       return;
     }
     updateTreatmentsSlider(true);
-    setDrugChartNotes("");
+    if (!showEditDrugChartLink) setDrugChartNotes("");
   };
 
   const handleStopDrugChartClick = (drugOrderId) => {
@@ -187,7 +189,8 @@ const Treatments = (props) => {
   const getActions = (
     showEditDrugChartLink,
     showStopDrugChartLink,
-    drugOrder
+    drugOrder,
+    drugOrderSchedule
   ) => {
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
       return (
@@ -196,7 +199,8 @@ const Treatments = (props) => {
           onClick={() =>
             handleEditAndAddToDrugChartClick(
               drugOrder.uuid,
-              showEditDrugChartLink
+              showEditDrugChartLink,
+              drugOrderSchedule?.notes
             )
           }
         >
@@ -209,7 +213,8 @@ const Treatments = (props) => {
           onClick={() =>
             handleEditAndAddToDrugChartClick(
               drugOrder.uuid,
-              showEditDrugChartLink
+              showEditDrugChartLink,
+              drugOrderSchedule?.notes
             )
           }
         >
@@ -260,7 +265,12 @@ const Treatments = (props) => {
           ),
           actions:
             !drugOrder.dateStopped &&
-            getActions(showEditDrugChartLink, showStopDrugChartLink, drugOrder),
+            getActions(
+              showEditDrugChartLink,
+              showStopDrugChartLink,
+              drugOrder,
+              drugOrderObject.drugOrderSchedule
+            ),
           additionalData: {
             instructions: drugOrderObject.instructions
               ? drugOrderObject.instructions
