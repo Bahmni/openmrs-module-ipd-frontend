@@ -148,7 +148,7 @@ export const getDrugName = (drugOrderObject) => {
   ) {
     return (
       <div className="notes-icon-div">
-        <NotesIcon className="notes-icon" />
+        <NotesIcon className="notes-icon" data-testid="notes-icon" />
         <span
           className={`treatments-drug-name ${
             drugOrder.dateStopped && "strike-through"
@@ -161,7 +161,17 @@ export const getDrugName = (drugOrderObject) => {
         </span>
       </div>
     );
-  } else if (drugOrder.drug) return drugOrder.drug.name;
+  } else if (drugOrder.drug) {
+    return (
+      <span
+        className={`treatments-drug-name ${
+          drugOrder.dateStopped && "strike-through"
+        }`}
+      >
+        {drugOrder.drug.name}
+      </span>
+    );
+  }
   return drugOrder.freeTextAnswer;
 };
 
@@ -235,10 +245,12 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
         status: (
           <span>
             {approver.function === requesterFunction && (
-              <FormattedMessage
-                id="AWAITING"
-                defaultMessage="Not acknowledged"
-              />
+              <div className="red-text">
+                <FormattedMessage
+                  id="AWAITING"
+                  defaultMessage="Not acknowledged"
+                />
+              </div>
             )}
             {approver.function === verifierFunction && (
               <FormattedMessage id="CONFIRMED" defaultMessage="Acknowledged" />
