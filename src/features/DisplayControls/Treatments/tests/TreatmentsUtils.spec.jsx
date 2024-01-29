@@ -102,7 +102,7 @@ describe("TreatmentsUtils", () => {
     expect(queryByTestId("notes-icon")).toBeFalsy();
   });
 
-  it("should return drug name with strike-through when dateStopped is null and instructions are not assigned", () => {
+  it("should return drug name without strike-through when dateStopped is null and anyone of the instructions is present", () => {
     const drugOrderObject = {
       drugOrder: {
         drug: { name: "Paracetamol" },
