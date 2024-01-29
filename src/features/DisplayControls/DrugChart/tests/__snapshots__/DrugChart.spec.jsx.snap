@@ -17,102 +17,135 @@ exports[`DrugChart should match snapshot 1`] = `
           class="header"
         />
         <div>
+          <div
+            class="drug-order-details"
+          >
+            <div
+              class="order-details"
+            >
+              <div
+                class="drug-name-container"
+              >
+                <span
+                  class="bx--tooltip--definition bx--tooltip--a11y"
+                >
+                  <button
+                    aria-describedby="definition-tooltip-1"
+                    class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                    type="button"
+                  >
+                    <div
+                      class="drug-chart-drug-name"
+                    >
+                      Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
+                    </div>
+                  </button>
+                  <span
+                    class="bx--assistive-text"
+                    id="definition-tooltip-1"
+                    role="tooltip"
+                  >
+                    Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
+                  </span>
+                </span>
+                 
+                <div>
+                  TooltipCarbon
+                </div>
+              </div>
+              <div>
+                10mg - Topical -  5 Day(s)
+              </div>
+              <div />
+            </div>
+            <div
+              class="medication-tags"
+            >
+              <div
+                class="bx--tag bx--tag--sm bx--tag--blue"
+                id="tag-1"
+              >
+                <span
+                  title="Rx"
+                >
+                  Rx
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="drug-order-details"
+          >
+            <div
+              class="order-details"
+            >
+              <div
+                class="drug-name-container"
+              >
+                <span
+                  class="bx--tooltip--definition bx--tooltip--a11y"
+                >
+                  <button
+                    aria-describedby="definition-tooltip-2"
+                    class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                    type="button"
+                  >
+                    <div
+                      class="drug-chart-drug-name"
+                    >
+                      Combintation Chlorpheniramine, Paracetamol and Pseudophedrine 100 mL Syrup (Cough and Cold Syrup)
+                    </div>
+                  </button>
+                  <span
+                    class="bx--assistive-text"
+                    id="definition-tooltip-2"
+                    role="tooltip"
+                  >
+                    Combintation Chlorpheniramine, Paracetamol and Pseudophedrine 100 mL Syrup (Cough and Cold Syrup)
+                  </span>
+                </span>
+                 
+                <div>
+                  TooltipCarbon
+                </div>
+              </div>
+              <div>
+                10ml - Oral -  10 Day(s)
+              </div>
+              <div>
+                <div
+                  class="administration-details"
+                >
+                  <test-file-stub />
+                  <span
+                    style="color: rgb(255, 0, 0);"
+                  >
+                    02:30
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="medication-tags"
+            >
+              <div
+                class="bx--tag bx--tag--sm bx--tag--blue"
+                id="tag-2"
+              >
+                <span
+                  title="Rx"
+                >
+                  Rx
+                </span>
+              </div>
+            </div>
+          </div>
           <table
             style="overflow: hidden;"
           >
             <tbody>
-              <tr>
-                <td>
-                  <div
-                    class="drug-name-container"
-                  >
-                    <div
-                      class="drug-chart-drug-name"
-                    >
-                      Suxamethonium Chloride 100 mg/2 mL Ampoule (50 mg/mL )
-                    </div>
-                    <div>
-                      TooltipCarbon
-                    </div>
-                    <div
-                      class="drug-list-drug-name-cell"
-                    >
-                      <div
-                        class="bx--tag bx--tag--blue"
-                        id="tag-1"
-                      >
-                        <span
-                          title="Rx"
-                        >
-                          Rx
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="dosage"
-                  >
-                    <span>
-                      2
-                    </span>
-                    <span>
-                       - mg
-                    </span>
-                    <span>
-                       - Intravenous
-                    </span>
-                    <span>
-                       - 4 Day(s)
-                    </span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div
-                    class="drug-name-container"
-                  >
-                    <div
-                      class="drug-chart-drug-name"
-                    >
-                      Enalapril 5 mg Tablet
-                    </div>
-                    <div>
-                      TooltipCarbon
-                    </div>
-                    <div
-                      class="drug-list-drug-name-cell"
-                    >
-                      <div
-                        class="bx--tag bx--tag--blue"
-                        id="tag-2"
-                      >
-                        <span
-                          title="Rx"
-                        >
-                          Rx
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="dosage"
-                  >
-                    <span>
-                      1
-                    </span>
-                    <span>
-                       - Tablet(s)
-                    </span>
-                    <span>
-                       - Oral
-                    </span>
-                    <span>
-                       - 4 Day(s)
-                    </span>
-                  </div>
-                </td>
-              </tr>
+              <tr />
+              <tr />
             </tbody>
           </table>
         </div>
