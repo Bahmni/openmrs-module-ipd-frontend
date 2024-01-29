@@ -189,6 +189,9 @@ const Treatments = (props) => {
     showStopDrugChartLink,
     drugOrder
   ) => {
+    if(drugOrder.dosingInstructions.asNeeded) {
+      return <></>
+    }
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
       return (
         <Link
