@@ -25,7 +25,7 @@ import {
   DropdownSkeleton,
 } from "carbon-components-react";
 import "../styles/PatientHeader.scss";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 const PatientMovementModal = (props) => {
   const { updatePatientMovementModal } = props;
@@ -47,7 +47,7 @@ const PatientMovementModal = (props) => {
       CUSTOM_OUTPUT_VALUE
     );
     if (getDropDown.status === 200) {
-      const items  = getDropDown.data.results[0].answers;
+      const items = getDropDown.data.results[0].answers;
       var getVisitSummary = await fetchVisitSummary(visit);
       if (getVisitSummary.status === 200 && items.length > 0) {
         const visitSummaryData = getVisitSummary.data;
@@ -76,9 +76,9 @@ const PatientMovementModal = (props) => {
             }
           }
         });
-        dropDownList = dropDownList.filter(function( element ) {
+        dropDownList = dropDownList.filter(function (element) {
           return element !== undefined;
-       });
+        });
         setDropDown(dropDownList);
       }
       var getTypes = await fetchVisitEncounterOrderTypes();
@@ -234,7 +234,6 @@ const PatientMovementModal = (props) => {
           onRequestSubmit={() => handleOnSave()}
           primaryButtonDisabled={!saveEnable}
         >
-          
           {dropDown == {} ? (
             <DropdownSkeleton />
           ) : (
@@ -248,9 +247,9 @@ const PatientMovementModal = (props) => {
               itemToString={(item) => (item ? item.label : "")}
             />
           )}
-          &nbsp;&nbsp;
-          {!showAdtNotes && (<div style={{height:"65px"}}></div>)}
-          {showAdtNotes && (
+          <br />
+          <br />
+          {showAdtNotes ? (
             <TextArea
               data-modal-primary-focus
               id="ipd-adt-notes"
@@ -260,6 +259,12 @@ const PatientMovementModal = (props) => {
               }}
               onChange={(e) => handleNotesOnChange(e)}
             />
+          ) : (
+            <>
+              <br />
+              <br />
+              <br />
+            </>
           )}
         </Modal>
       )}
@@ -270,5 +275,5 @@ const PatientMovementModal = (props) => {
 export default PatientMovementModal;
 
 PatientMovementModal.propTypes = {
-  updatePatientMovementModal: PropTypes.func.isRequired
-}
+  updatePatientMovementModal: PropTypes.func.isRequired,
+};
