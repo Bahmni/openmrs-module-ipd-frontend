@@ -37,6 +37,13 @@ const ExpandableRowData = (props) => {
     };
   }
 
+  if (expandTreatmentData.stopReason) {
+    verticalTabsData["Stopping Notes"] = {
+      data: expandTreatmentData.stopReason,
+      additionalData: [expandTreatmentData.stopperAdditionalData]
+    };
+  }
+
   return <VerticalTabs tabData={verticalTabsData} />;
 };
 
