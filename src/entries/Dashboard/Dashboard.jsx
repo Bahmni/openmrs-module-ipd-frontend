@@ -103,8 +103,9 @@ export default function Dashboard(props) {
 
   return (
     <>
-      {!isConfigLoaded && <Loading withOverlay={true} />}
-      {isConfigLoaded && dashboardConfig?.config?.sections?.length === 0 ? (
+      {!isConfigLoaded ? (
+        <Loading withOverlay={true} />
+      ) : isConfigLoaded && dashboardConfig?.config?.sections?.length === 0 ? (
         <div style={{ paddingLeft: "10px" }}>{noConfigDataMessage}</div>
       ) : (
         <SliderContext.Provider
