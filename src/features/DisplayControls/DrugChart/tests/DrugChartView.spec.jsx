@@ -3,6 +3,8 @@ import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import DrugChartView from "../components/DrugChartView";
 import { drugChartData } from "./DrugChartViewMockData";
 import MockDate from "mockdate";
+import { IPDContext } from "../../../../context/IPDContext";
+import { mockConfig } from "../../../../utils/CommonUtils";
 
 const mockFetchMedications = jest.fn();
 const MockTooltipCarbon = jest.fn();
@@ -47,7 +49,11 @@ describe("DrugChartWrapper", () => {
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
-    const { container } = render(<DrugChartView patientId="testid" />);
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="testid" />
+      </IPDContext.Provider>
+    );
     await waitFor(() => {
       expect(container).toMatchSnapshot();
     });
@@ -55,7 +61,11 @@ describe("DrugChartWrapper", () => {
 
   it("should render loading state when isLoading is true", async () => {
     MockDate.set("2024-01-05");
-    const { container } = render(<DrugChartView patientId="test-id" />);
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
     await waitFor(() => {
       expect(container).toMatchSnapshot();
     });
@@ -66,7 +76,11 @@ describe("DrugChartWrapper", () => {
     mockFetchMedications.mockResolvedValue({
       data: [{ slots: [] }],
     });
-    render(<DrugChartView patientId="test-id" />);
+    render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
     await waitFor(() => {
       expect(
         screen.getByText("No Medication has been scheduled in this shift")
@@ -79,7 +93,11 @@ describe("DrugChartWrapper", () => {
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
-    render(<DrugChartView patientId="test-id" />);
+    render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
     const previousButton = screen.getByTestId("previousButton");
     fireEvent.click(previousButton);
     await waitFor(() => {
@@ -94,7 +112,11 @@ describe("DrugChartWrapper", () => {
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
-    render(<DrugChartView patientId="test-id" />);
+    render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
     const nextButton = screen.getByTestId("nextButton");
     fireEvent.click(nextButton);
     await waitFor(() => {
@@ -109,7 +131,11 @@ describe("DrugChartWrapper", () => {
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
-    render(<DrugChartView patientId="test-id" />);
+    render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
     const currentShiftButton = screen.getByTestId("currentShift");
     fireEvent.click(currentShiftButton);
     await waitFor(() => {
@@ -124,7 +150,11 @@ describe("DrugChartWrapper", () => {
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
-    render(<DrugChartView patientId="test-id" />);
+    render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
     await waitFor(() => {
       expect(screen.getByText(/Paracetamol/i)).toBeTruthy();
     });
@@ -136,7 +166,11 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     mockGetTimeInSeconds.mockReturnValue(0);
-    render(<DrugChartView patientId="test-id" />);
+    render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
     await waitFor(() => {
       expect(screen.getByText(/Paracetamol/i)).toBeTruthy();
     });

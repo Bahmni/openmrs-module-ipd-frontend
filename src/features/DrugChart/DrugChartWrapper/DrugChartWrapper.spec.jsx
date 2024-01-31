@@ -2,6 +2,8 @@ import React from "react";
 import { render } from "@testing-library/react";
 import DrugChartWrapper, { TransformDrugChartData } from "./DrugChartWrapper";
 import { drugChartData } from "./DrugChartWrapperMockData";
+import { mockConfig } from "../../../utils/CommonUtils";
+import { IPDContext } from "../../../context/IPDContext";
 
 const mockUseFetchMedications = jest.fn();
 
@@ -17,7 +19,9 @@ describe("DrugChartWrapper", () => {
       drugChartData,
     });
     const { container } = render(
-      <DrugChartWrapper patientId="testid" viewDate={mockDate} />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartWrapper patientId="testid" viewDate={mockDate} />
+      </IPDContext.Provider>
     );
     expect(container).toMatchSnapshot();
   });
@@ -28,7 +32,9 @@ describe("DrugChartWrapper", () => {
       drugChartData: [],
     });
     const { container } = render(
-      <DrugChartWrapper patientId="test-id" viewDate={mockDate} />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartWrapper patientId="test-id" viewDate={mockDate} />
+      </IPDContext.Provider>
     );
     expect(container).toMatchSnapshot();
   });

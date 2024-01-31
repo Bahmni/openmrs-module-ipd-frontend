@@ -155,7 +155,7 @@ export default function NursingTasks(props) {
   };
 
   const handleCurrent = () => {
-    const currentShift = currentShiftHoursArray(config);
+    const currentShift = currentShiftHoursArray(drugChart);
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
     let startDateTime = getDateTime(new Date(), currentShift[0]);

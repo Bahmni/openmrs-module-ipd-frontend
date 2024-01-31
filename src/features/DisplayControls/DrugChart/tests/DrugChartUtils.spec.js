@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import { mockResponse } from "./DrugChartUtilsMockData";
 import MockDate from "mockdate";
+import { mockConfig } from "../../../../utils/CommonUtils";
 jest.mock("axios");
 describe("DrugChartUtils", () => {
   beforeEach(() => {
@@ -48,7 +49,7 @@ describe("DrugChartUtils", () => {
   });
   it("test currentShiftHoursArray method", () => {
     MockDate.set("2023-12-19 16:00:00");
-    expect(currentShiftHoursArray()).toEqual([
+    expect(currentShiftHoursArray(mockConfig.config.drugChart)).toEqual([
       6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
     ]);
   });
