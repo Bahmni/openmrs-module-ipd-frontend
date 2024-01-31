@@ -144,7 +144,10 @@ export const getDrugName = (drugOrderObject) => {
   const drugOrder = drugOrderObject.drugOrder;
   if (
     drugOrder.drug &&
-    (drugOrderObject.instructions || drugOrderObject.additionalInstructions)
+    (drugOrderObject.instructions ||
+      drugOrderObject.additionalInstructions ||
+      drugOrder.orderReasonConcept ||
+      drugOrder.orderReasonText)
   ) {
     return (
       <div className="notes-icon-div">
@@ -276,4 +279,14 @@ export const mapAdditionalDataForEmergencyTreatments = (
         ),
     };
   });
+};
+
+export const getStopReason = (drugOrder) => {
+  const conceptName = drugOrder.orderReasonConcept
+    ? drugOrder.orderReasonConcept.name
+    : "";
+  const notes = drugOrder.orderReasonText || "";
+  const stopReason = conceptName + (conceptName && notes ? ": " : "") + notes;
+
+  return stopReason.trim() !== "" ? stopReason : null;
 };

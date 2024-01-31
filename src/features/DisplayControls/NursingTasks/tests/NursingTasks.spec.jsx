@@ -39,14 +39,14 @@ describe("NursingTasks", () => {
   });
 
   it("should show loading state", async () => {
-    const { getByText } = render(
+    const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
         <NursingTasks patientId="patientid" />
       </SliderContext.Provider>
     );
 
     await waitFor(() => {
-      expect(getByText("Loading...")).toBeTruthy();
+      expect(getByTestId("loading-icon")).toBeTruthy();
     });
   });
 

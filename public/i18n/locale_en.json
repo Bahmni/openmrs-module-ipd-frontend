@@ -5,7 +5,7 @@
   "DRUG_CHART_MODAL_CANCEL": "Cancel",
   "DRUG_CHART_MODAL_CLOSE": "Close",
   "DRUG_CHART_MODAL_CANCEL_MESSAGE": "No medication tasks have been scheduled.",
-  "DRUG_CHART_MODAL_SAVE_MESSAGE": "Medication tasks are scheduled successfully.",
+  "DRUG_CHART_MODAL_SAVE_MESSAGE": "Medication task(s) scheduled successfully.",
   "DRUG_CHART_MODAL_START_TIME_PASSED": "Start Time entered has already passed!",
   "DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING": "Schedule entered has already passed!",
   "DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING": "Times entered should be in ascending order",

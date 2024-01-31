@@ -85,6 +85,22 @@
       cursor: pointer;
     }
   }
+
+  .bx--loading {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+
+  .display-container {
+    min-height: 100px;
+  }
+  
+  .loading-parent{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 @media (max-width: 1024px) {
