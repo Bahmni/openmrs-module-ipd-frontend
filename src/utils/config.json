@@ -46,8 +46,6 @@
     "drugChart": {
       "timeInMinutesFromNowToShowPastTaskAsLate": 60,
       "timeInMinutesFromStartTimeToShowAdministeredTaskAsLate": 30,
-      "shiftHours": 12,
-      "startTime": 6,
       "enable24HourTime": true
     },
     "medicationTags": {
@@ -55,6 +53,10 @@
       "STAT (Immediately)": "Rx-STAT",
       "default": "Rx",
       "emergency": "EMERG"
+    },
+    "shiftDetails": {
+      "1": { "shiftStartTime": "08:00", "shiftEndTime": "19:00" },
+      "2": { "shiftStartTime": "19:00", "shiftEndTime": "08:00" }
     }
   }
 }

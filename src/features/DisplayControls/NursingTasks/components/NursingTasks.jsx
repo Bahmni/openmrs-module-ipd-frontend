@@ -43,14 +43,13 @@ export default function NursingTasks(props) {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const refreshDisplayControl = useContext(RefreshDisplayControl);
-  const [date, updateDate] = useState(new Date());
-  const [lastAction, updateLastActon] = useState("");
+  const {
+    config: { shiftDetails: shiftConfig = {} },
+  } = data;
+  const shiftDetails = currentShiftHoursArray(shiftConfig);
   const allowedForthShfts =
-    getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
+    getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0]) / 1000 +
     convertDaystoSeconds(2);
-  const [currentShiftArray, updateShiftArray] = useState(
-    currentShiftHoursArray()
-  );
   const [startEndDates, updatedStartEndDates] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -60,11 +59,12 @@ export default function NursingTasks(props) {
     previous: false,
     next: false,
   });
-  const { config: { drugChart = {} } = {} } = data;
+  const shiftRangeArray = shiftDetails.rangeArray;
+  const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
   const dateFormatString = getDateFormatString();
 
   useEffect(() => {
-    const currentShift = currentShiftHoursArray();
+    const currentShift = shiftDetails.currentShiftHoursArray;
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
     let startDateTime = getDateTime(new Date(), currentShift[0]);
@@ -85,7 +85,6 @@ export default function NursingTasks(props) {
       }
     }
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
-    updateDate(new Date(endDateTime));
     fetchNursingTasks(startDateTime, endDateTime);
   }, []);
   const updateNursingTasksSlider = (value) => {
@@ -107,53 +106,36 @@ export default function NursingTasks(props) {
   };
 
   const handlePrevious = () => {
-    const firstHour = currentShiftArray[0];
-    const lastHour = currentShiftArray[currentShiftArray.length - 1];
-    if (lastHour < firstHour && (lastAction === "N" || lastAction === "")) {
-      date.setDate(date.getDate() - 1);
-    }
-    const { startDateTime, endDateTime, nextDate } = getPreviousShiftDetails(
-      currentShiftArray,
-      drugChart.shiftHours,
-      date
-    );
-    const previousShiftArray = currentShiftArray.map((hour) => {
-      let updatedHour = hour - drugChart.shiftHours;
-      updatedHour = updatedHour < 0 ? 24 + updatedHour : updatedHour;
-      return updatedHour;
-    });
-    updateShiftArray(previousShiftArray);
-    updateDate(nextDate);
-    updateLastActon("P");
+    const { startDateTime, endDateTime, previousShiftIndex } =
+      getPreviousShiftDetails(
+        shiftRangeArray,
+        shiftIndex,
+        startEndDates.startDate,
+        startEndDates.endDate
+      );
+    updateShiftIndex(previousShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
 
   const handleNext = () => {
-    const firstHour = currentShiftArray[0];
-    const lastHour = currentShiftArray[currentShiftArray.length - 1];
-    if (lastHour < firstHour && lastAction === "P") {
-      date.setDate(date.getDate() + 1);
-    }
-    const { startDateTime, endDateTime, nextDate } = getNextShiftDetails(
-      currentShiftArray,
-      drugChart.shiftHours,
-      date
+    const { startDateTime, endDateTime, nextShiftIndex } = getNextShiftDetails(
+      shiftRangeArray,
+      shiftIndex,
+      startEndDates.startDate,
+      startEndDates.endDate
     );
-    const nextShiftArray = currentShiftArray.map(
-      (hour) => (hour + drugChart.shiftHours) % 24
-    );
-    updateShiftArray(nextShiftArray);
-    updateDate(nextDate);
-    updateLastActon("N");
+    updateShiftIndex(nextShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
 
   const handleCurrent = () => {
-    const currentShift = currentShiftHoursArray();
+    const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
+    const currentShift = shiftDetailsObj.currentShiftHoursArray;
+    const updatedShiftIndex = shiftDetailsObj.shiftIndex;
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
     let startDateTime = getDateTime(new Date(), currentShift[0]);
@@ -172,9 +154,7 @@ export default function NursingTasks(props) {
         startDateTime = getDateTime(d, currentShift[0]);
       }
     }
-    updateShiftArray(currentShift);
-    updateDate(new Date(endDateTime));
-    updateLastActon("");
+    updateShiftIndex(updatedShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);

@@ -15,11 +15,19 @@ describe("CalendarHeader", () => {
     MockDate.reset();
   });
   it("should render shiftHours hours", () => {
+    MockDate.set("2024-01-05 10:00");
     const currentShiftArray = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+    const shiftDetails = {
+      1: { shiftStartTime: "06:00", shiftEndTime: "18:00" },
+      2: { shiftStartTime: "18:00", shiftEndTime: "06:00" },
+    };
     const { getAllByTestId } = render(
       <CalendarHeader currentShiftArray={currentShiftArray} />
     );
     const hours = getAllByTestId("hour");
-    expect(hours.length).toBe(currentShiftHoursArray().length);
+    expect(hours.length).toBe(
+      currentShiftHoursArray(shiftDetails).currentShiftHoursArray.length
+    );
+    MockDate.reset();
   });
 });
