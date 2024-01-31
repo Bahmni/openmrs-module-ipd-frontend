@@ -8,7 +8,6 @@ import {
   SideNav,
   SideNavItems,
   SideNavLink,
-  Loading,
 } from "carbon-components-react";
 import { ArrowLeft } from "@carbon/icons-react/next";
 import { componentMapping } from "./componentMapping";
