@@ -1,11 +1,12 @@
 import { Tag } from "carbon-components-react";
-import React from "react";
-import data from "../../utils/config.json";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
+import { IPDContext } from "../../context/IPDContext";
 
 const DisplayTags = (props) => {
+  const { config } = useContext(IPDContext);
   const { drugOrder } = props;
-  const { config: { medicationTags = {} } = {} } = data;
+  const { config: { medicationTags = {} } = {} } = config;
 
   if (
     drugOrder?.asNeeded &&
@@ -37,6 +38,6 @@ DisplayTags.propTypes = {
   drugOrder: PropTypes.exact({
     asNeeded: PropTypes.bool,
     frequency: PropTypes.string,
-    emergency: PropTypes.bool
+    emergency: PropTypes.bool,
   }).isRequired,
 };

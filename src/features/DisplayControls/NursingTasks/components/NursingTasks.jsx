@@ -21,7 +21,7 @@ import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import { componentKeys } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
-import data from "../../../../utils/config.json";
+import { IPDContext } from "../../../../context/IPDContext";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import {
   currentShiftHoursArray,
@@ -33,6 +33,9 @@ import {
 
 export default function NursingTasks(props) {
   const { patientId } = props;
+  const { config } = useContext(IPDContext);
+  const { config: { drugChart = {} } = {} } = config;
+
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
   const [nursingTasks, setNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,10 +49,10 @@ export default function NursingTasks(props) {
   const [date, updateDate] = useState(new Date());
   const [lastAction, updateLastActon] = useState("");
   const allowedForthShfts =
-    getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
+    getDateTime(new Date(), currentShiftHoursArray(drugChart)[0]) / 1000 +
     convertDaystoSeconds(2);
   const [currentShiftArray, updateShiftArray] = useState(
-    currentShiftHoursArray()
+    currentShiftHoursArray(drugChart)
   );
   const [startEndDates, updatedStartEndDates] = useState({
     startDate: new Date(),
@@ -60,11 +63,10 @@ export default function NursingTasks(props) {
     previous: false,
     next: false,
   });
-  const { config: { drugChart = {} } = {} } = data;
-  const dateFormatString = getDateFormatString();
+  const dateFormatString = getDateFormatString(drugChart);
 
   useEffect(() => {
-    const currentShift = currentShiftHoursArray();
+    const currentShift = currentShiftHoursArray(drugChart);
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
     let startDateTime = getDateTime(new Date(), currentShift[0]);
@@ -76,7 +78,7 @@ export default function NursingTasks(props) {
     if (lastHour < firstHour) {
       const d = new Date();
       const currentHour = d.getHours();
-      if(currentHour > 12) {
+      if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
         endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
       } else {
@@ -153,7 +155,7 @@ export default function NursingTasks(props) {
   };
 
   const handleCurrent = () => {
-    const currentShift = currentShiftHoursArray();
+    const currentShift = currentShiftHoursArray(config);
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
     let startDateTime = getDateTime(new Date(), currentShift[0]);
@@ -164,7 +166,7 @@ export default function NursingTasks(props) {
     if (lastHour < firstHour) {
       const d = new Date();
       const currentHour = d.getHours();
-      if(currentHour > 12) {
+      if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
         endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
       } else {

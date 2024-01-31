@@ -73,5 +73,6 @@
   "STOP_DRUG": "Stop drug",
   "STOP_DRUG_WARNING_TEXT": "Are you sure you want to stop this drug? You will not be able to reverse this decision",
   "STOP_DRUG_CANCEL_TEXT": "Cancel",
-  "STOP_DRUG_SUCCESS_NOTIFICATION": "Medication stopped successfully"
+  "STOP_DRUG_SUCCESS_NOTIFICATION": "Medication stopped successfully",
+  "NO_CONFIG_MESSAGE": "Please specify IPD Dashboard configurations"
 }
