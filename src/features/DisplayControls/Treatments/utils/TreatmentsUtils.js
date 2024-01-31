@@ -234,13 +234,13 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
         providerName: approverName,
         status: (
           <span>
-            {approver.function === requesterFunction && (
+            {approver?.function === requesterFunction && (
               <FormattedMessage
                 id="AWAITING"
                 defaultMessage="Not acknowledged"
               />
             )}
-            {approver.function === verifierFunction && (
+            {approver?.function === verifierFunction && (
               <FormattedMessage id="CONFIRMED" defaultMessage="Acknowledged" />
             )}
           </span>
