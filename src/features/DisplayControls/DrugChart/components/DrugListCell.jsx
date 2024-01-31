@@ -10,7 +10,8 @@ import data from "../../../../utils/config.json";
 import moment from "moment";
 
 export default function DrugListCell(props) {
-  const { dosingInstructions, duration, name, slots, notes } = props.drugInfo;
+  const { dosingInstructions, duration, name, slots, notes, orderReasonText } =
+    props.drugInfo;
   const { instructions, dosage, doseUnits, route } = dosingInstructions;
   const enable24hour = data.config.drugChart.enable24HourTime;
 
@@ -44,6 +45,12 @@ export default function DrugListCell(props) {
           )}
           Additional Instructions:&nbsp;
           {dosingInstructions?.instructions?.additionalInstructions}
+        </>
+      )}
+      {orderReasonText && (
+        <>
+          <br /> <div className="tooltip-content-separater" />
+          Stopped Notes:&nbsp;{orderReasonText}
         </>
       )}
       {notes && (

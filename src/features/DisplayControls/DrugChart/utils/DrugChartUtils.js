@@ -37,6 +37,7 @@ export const transformDrugOrders = (orders) => {
         duration,
         durationUnits,
         drugNonCoded,
+        orderReasonText,
       } = order.drugOrder;
       let dosage = "",
         doseUnits;
@@ -64,6 +65,7 @@ export const transformDrugOrders = (orders) => {
         duration: duration + " " + durationUnits,
         slots: [],
         dateStopped: order.drugOrder.dateStopped,
+        orderReasonText: orderReasonText,
         firstSlotStartTime:
           order.drugOrderSchedule.slotStartTime ||
           (order.drugOrderSchedule.firstDaySlotsStartTime &&
@@ -159,7 +161,9 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
             administrationStatus = "Not-Administered";
           }
         } else {
-          if (isLateTask(startTime)) {
+          if (slot.status === "STOPPED") {
+            administrationStatus = "Stopped";
+          } else if (isLateTask(startTime)) {
             administrationStatus = "Late";
           }
         }
