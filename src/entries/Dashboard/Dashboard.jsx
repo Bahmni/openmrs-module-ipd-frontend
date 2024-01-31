@@ -164,15 +164,7 @@ export default function Dashboard(props) {
                       ref={(ref) => (refs.current[el.componentKey] = ref)}
                       style={{ marginBottom: "40px" }}
                     >
-                      <Suspense
-                        fallback={
-                          <div className="loading-parent" data-testid="loading-icon">
-                            <Loading
-                              withOverlay={false}
-                            />
-                          </div>
-                        }
-                      >
+                      <Suspense fallback={<p>Loading...</p>}>
                         <AccordionItem open title={el.title}>
                           <I18nProvider>
                             <RefreshDisplayControl.Provider

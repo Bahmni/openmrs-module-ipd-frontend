@@ -95,7 +95,7 @@ const Diagnosis = (props) => {
   }, []);
 
   return (
-    <div className="display-container">
+    <>
       {isLoading ? (
         <DataTableSkeleton data-testid="diagnosis-datatable-skeleton" />
       ) : diagnosis && diagnosis.length === 0 ? (
@@ -111,7 +111,7 @@ const Diagnosis = (props) => {
           useZebraStyles={true}
         />
       )}
-    </div>
+    </>
   );
 };
 

@@ -358,7 +358,7 @@ const Treatments = (props) => {
   }, [allMedications.data]);
 
   return (
-    <div className="display-container">
+    <>
       {showStopDrugChartModal && (
         <SideBarPanelClose
           className="warning-notification"
@@ -486,7 +486,7 @@ const Treatments = (props) => {
           useZebraStyles={true}
         />
       )}
-    </div>
+    </>
   );
 };
 

@@ -112,7 +112,7 @@ const Allergies = (props) => {
   return allergiesData?.entry === undefined ? (
     <div className="no-allergen-message"> {NoAllergenMessage} </div>
   ) : (
-    <div className="display-container">
+    <>
       <DataTable
         rows={rows}
         headers={headers}
@@ -152,7 +152,7 @@ const Allergies = (props) => {
           </Table>
         )}
       </DataTable>
-    </div>
+    </>
   );
 };
 
