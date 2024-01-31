@@ -170,11 +170,11 @@ describe("AddEmergencyTasks", () => {
     // Set Administration Date
     const datePickerInput = container.querySelector(".bx--date-picker__input");
     fireEvent.change(datePickerInput, {
-      target: { value: moment().format("DD MMM YYYY") },
+      target: { value: moment().format("DD/MM/YYYY") },
     });
     fireEvent.blur(datePickerInput);
     const dateInputField = container.querySelector(".bx--date-picker__input");
-    expect(dateInputField.value).toBe(moment().format("DD MMM YYYY"));
+    expect(dateInputField.value).toBe(moment().format("DD/MM/YYYY"));
 
     //Set Administration Time
     const startTimeSelector = container.querySelector(

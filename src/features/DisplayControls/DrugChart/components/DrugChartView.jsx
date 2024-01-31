@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
-import { Button } from "carbon-components-react";
+import { Button, Loading } from "carbon-components-react";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import DrugChart from "./DrugChart";
 import {
@@ -193,7 +193,7 @@ export default function DrugChartWrapper(props) {
   };
   const dateFormatString = getDateFormatString();
   return (
-    <div className="drugchart-parent-container">
+    <div className="drugchart-parent-container display-container">
       <div className="drugchart-shift-header">
         <Button
           kind="tertiary"
@@ -238,7 +238,9 @@ export default function DrugChartWrapper(props) {
         </span>
       </div>
       {isLoading ? (
-        <div>Loading...</div>
+        <div className="loading-parent" data-testid="loading-icon">
+          <Loading withOverlay={false} />
+        </div>
       ) : drugChartData && drugChartData.length === 0 ? (
         <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>
       ) : (

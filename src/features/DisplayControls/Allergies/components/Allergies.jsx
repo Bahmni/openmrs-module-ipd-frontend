@@ -112,45 +112,47 @@ const Allergies = (props) => {
   return allergiesData?.entry === undefined ? (
     <div className="no-allergen-message"> {NoAllergenMessage} </div>
   ) : (
-    <DataTable
-      rows={rows}
-      headers={headers}
-      useZebraStyles={true}
-      data-testid="datatable"
-    >
-      {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-        <Table {...getTableProps()} useZebraStyles>
-          <TableHead>
-            <TableRow>
-              {headers.map((header, index) => (
-                <TableHeader
-                  key={index + header.key}
-                  {...getHeaderProps({ header })}
-                  isSortable={header.key === "severity"}
-                >
-                  {header.header}
-                </TableHeader>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row, index) => (
-              <TableRow
-                key={index + row.id}
-                {...getRowProps({ row })}
-                data-testid="table-body-row"
-              >
-                {row.cells.map((cell) => (
-                  <TableCell key={cell.id} className={"high-severity-color"}>
-                    {cell.value}
-                  </TableCell>
+    <div className="display-container">
+      <DataTable
+        rows={rows}
+        headers={headers}
+        useZebraStyles={true}
+        data-testid="datatable"
+      >
+        {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
+          <Table {...getTableProps()} useZebraStyles>
+            <TableHead>
+              <TableRow>
+                {headers.map((header, index) => (
+                  <TableHeader
+                    key={index + header.key}
+                    {...getHeaderProps({ header })}
+                    isSortable={header.key === "severity"}
+                  >
+                    {header.header}
+                  </TableHeader>
                 ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
-    </DataTable>
+            </TableHead>
+            <TableBody>
+              {rows.map((row, index) => (
+                <TableRow
+                  key={index + row.id}
+                  {...getRowProps({ row })}
+                  data-testid="table-body-row"
+                >
+                  {row.cells.map((cell) => (
+                    <TableCell key={cell.id} className={"high-severity-color"}>
+                      {cell.value}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </DataTable>
+    </div>
   );
 };
 

@@ -39,7 +39,7 @@ export default function TaskTile(props) {
     <div
       className="drug-title"
       style={{
-        color: stopTime ? "#da1e28" : isRelevantTask ? "#393939" : "#525252",
+        color: stopTime ? "#FF0000" : isRelevantTask ? "#393939" : "#525252",
         fontWeight: isRelevantTask ? 500 : 400,
       }}
     >
