@@ -226,7 +226,9 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
         ),
         drugName: (
           <div className="notes-icon-div">
-            {approverNotes && <NotesIcon className="notes-icon" />}
+            {approverNotes && approver?.function === verifierFunction && (
+              <NotesIcon className="notes-icon" />
+            )}
             <span className={`treatments-drug-name`}>
               {medicationAdministration.drug.display}
               <span>
