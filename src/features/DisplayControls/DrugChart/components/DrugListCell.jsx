@@ -62,7 +62,7 @@ export default function DrugListCell(props) {
               <div className="tooltip-content-separater" />
             </>
           )}
-          Stopped Notes:&nbsp;{orderReasonText}
+          Stopping Notes:&nbsp;{orderReasonText}
         </>
       )}
       {notes && (
