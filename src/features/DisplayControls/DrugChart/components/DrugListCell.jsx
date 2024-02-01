@@ -16,7 +16,10 @@ export default function DrugListCell(props) {
   const enable24hour = data.config.drugChart.enable24HourTime;
 
   const showInstructionsIcon =
-    instructions?.instructions || instructions?.additionalInstructions || notes;
+    instructions?.instructions ||
+    instructions?.additionalInstructions ||
+    notes ||
+    orderReasonText;
   const administrationInfo = [];
   slots.forEach((slot) => {
     if (
