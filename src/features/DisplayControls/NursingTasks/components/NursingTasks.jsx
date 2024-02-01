@@ -34,19 +34,28 @@ import { IPDContext } from "../../../../context/IPDContext";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
-  const { config, isReadMode, visitSummary } = useContext(IPDContext);
-  const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
+  const { isReadMode, visitSummary,visit } = useContext(IPDContext);
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
   const [nursingTasks, setNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { isSliderOpen, updateSliderOpen, provider } =
     useContext(SliderContext);
   const [selectedMedicationTask, setSelectedMedicationTask] = useState([]);
-  const [filterValue, setFilterValue] = useState(isReadMode? items[1] : items[2]);
+  const [filterValue, setFilterValue] = useState(
+    isReadMode ? items[1] : items[2]
+  );
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const refreshDisplayControl = useContext(RefreshDisplayControl);
-  const shiftDetails = currentShiftHoursArray(isReadMode, visitSummary.stopDateTime, shiftConfig);
+  const {
+    config: { shiftDetails: shiftConfig = {} },
+  } = data;
+  console.log("visitSummary", visitSummary);
+  const shiftDetails = currentShiftHoursArray(
+    isReadMode,
+    visitSummary.stopDateTime,
+    shiftConfig
+  );
   const allowedForthShfts =
     getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0]) / 1000 +
     convertDaystoSeconds(2);
@@ -61,13 +70,16 @@ export default function NursingTasks(props) {
   });
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
-
+  const dateFormatString = getDateFormatString();
+  console.log("startEndDates", startEndDates, visitSummary.stopDateTime);
   useEffect(() => {
     const currentShift = shiftDetails.currentShiftHoursArray;
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
     let startDateTime = getDateTime(
-      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(), currentShift[0]);
+      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+      currentShift[0]
+    );
     let endDateTime = getDateTime(
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
       currentShift[currentShift.length - 1] + 1
@@ -75,7 +87,7 @@ export default function NursingTasks(props) {
     /** if the shift is going on two different dates */
     if (lastHour < firstHour) {
       const d = isReadMode ? new Date(visitSummary.stopDateTime) : new Date();
-      console.log('DDD', d);
+      console.log("DDD", d);
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
@@ -134,7 +146,11 @@ export default function NursingTasks(props) {
   };
 
   const handleCurrent = () => {
-    const shiftDetailsObj = currentShiftHoursArray(isReadMode, visitSummary.stopDateTime, shiftConfig);
+    const shiftDetailsObj = currentShiftHoursArray(
+      isReadMode,
+      visitSummary.stopDateTime,
+      shiftConfig
+    );
     const currentShift = shiftDetailsObj.currentShiftHoursArray;
     const updatedShiftIndex = shiftDetailsObj.shiftIndex;
     const firstHour = currentShift[0];
@@ -190,15 +206,17 @@ export default function NursingTasks(props) {
   //find the start date = enddate-hourshift(find with help of enddate)
 
   const fetchNursingTasks = async (startDate, endDate) => {
+    console.log("visitSummary.uuid", visitSummary.uuid);
     setIsLoading(true);
     const startDateTimeInSeconds = startDate / 1000;
     const endDateTimeInSeconds = endDate / 1000 - 60;
     const nursingTasks = await fetchMedicationNursingTasks(
       patientId,
       startDateTimeInSeconds,
-      endDateTimeInSeconds
+      endDateTimeInSeconds,
+      visit
     );
-    console.log('response nursingTasks data ', nursingTasks);
+    console.log("response nursingTasks data ", nursingTasks);
     setNursingTasks(nursingTasks);
     if (nursingTasks) {
       const extractedData = ExtractMedicationNursingTasksData(
@@ -207,7 +225,7 @@ export default function NursingTasks(props) {
       );
       setMedicationNursingTasks(extractedData);
       setIsLoading(false);
-      console.log('nursingTasks', nursingTasks);
+      console.log("nursingTasks", nursingTasks);
       setIsShiftsButtonsDisabled({
         previous: nursingTasks[0].startDate > startDateTimeInSeconds,
         next:

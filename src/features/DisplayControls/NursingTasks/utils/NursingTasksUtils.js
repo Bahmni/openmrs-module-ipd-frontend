@@ -8,9 +8,10 @@ import moment from "moment";
 export const fetchMedicationNursingTasks = async (
   patientUuid,
   startTime,
-  endTime
+  endTime,
+  visitUuid
 ) => {
-  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}`;
+  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}&visitUuid=${visitUuid}`;
   try {
     const response = await axios.get(FETCH_MEDICATIONS_URL);
     return response.data;

@@ -32,7 +32,7 @@ const NoMedicationTaskMessage = (
 
 export default function DrugChartWrapper(props) {
   const { patientId } = props;
-  const { config, isReadMode, visitSummary } = useContext(IPDContext);
+  const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
   const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
   const [drugChartData, setDrugChartData] = useState([]);
   const [transformedData, setTransformedData] = useState([]);
@@ -67,7 +67,8 @@ export default function DrugChartWrapper(props) {
       const response = await fetchMedications(
         patientId,
         startDateTimeInSeconds,
-        endDateTimeInSeconds
+        endDateTimeInSeconds,
+        visit
       );
       setDrugChartData(response.data);
       console.log('response drug chart data ', response);

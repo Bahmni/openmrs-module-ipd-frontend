@@ -6,9 +6,10 @@ import _ from "lodash";
 export const fetchMedications = async (
   patientUuid,
   startDateTime,
-  endDateTime
+  endDateTime,
+  visitUuid
 ) => {
-  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}&view=drugChart`;
+  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}&view=drugChart&visitUuid=${visitUuid}`;
   try {
     return await axios.get(FETCH_MEDICATIONS_URL);
   } catch (error) {
