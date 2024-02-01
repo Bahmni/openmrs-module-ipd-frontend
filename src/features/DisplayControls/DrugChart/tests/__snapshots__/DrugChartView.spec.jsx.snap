@@ -70,15 +70,16 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
         class="shift-timing"
       >
         <div
-          class="shift-timing-title"
-        >
-          Shift timing
-        </div>
-        <div
           class="shift-time"
         >
           05 Jan 2024
-           | 
+           
+          <span
+            class="mr-5"
+          >
+            |
+          </span>
+           
           <svg
             aria-hidden="true"
             fill="currentColor"
@@ -98,7 +99,13 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
           </svg>
            
           06:00
-           to 
+           
+          <span
+            class="to-text"
+          >
+            to
+          </span>
+           
           <svg
             aria-hidden="true"
             fill="currentColor"
@@ -226,15 +233,16 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
         class="shift-timing"
       >
         <div
-          class="shift-timing-title"
-        >
-          Shift timing
-        </div>
-        <div
           class="shift-time"
         >
           05 Jan 2024
-           | 
+           
+          <span
+            class="mr-5"
+          >
+            |
+          </span>
+           
           <svg
             aria-hidden="true"
             fill="currentColor"
@@ -254,7 +262,13 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
           </svg>
            
           06:00
-           to 
+           
+          <span
+            class="to-text"
+          >
+            to
+          </span>
+           
           <svg
             aria-hidden="true"
             fill="currentColor"

@@ -10,7 +10,6 @@ import {
   getUpdatedShiftArray,
   getNextShiftDetails,
   getPreviousShiftDetails,
-  getDateFormatString,
   transformDrugOrders,
   mapDrugOrdersAndSlots,
 } from "../utils/DrugChartUtils";
@@ -22,6 +21,7 @@ import { FormattedMessage } from "react-intl";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";
 import { IPDContext } from "../../../../context/IPDContext";
+import { displayShiftTimingsFormat } from "../../../../constants";
 
 const NoMedicationTaskMessage = (
   <FormattedMessage
@@ -139,51 +139,6 @@ export default function DrugChartWrapper(props) {
     callFetchMedications(startDateTime, endDateTime);
   };
 
-  const shiftTiming = () => {
-    let shiftStartDateTime = formatDate(
-      startEndDates.startDate,
-      dateFormatString
-    );
-    let shiftEndDateTime = formatDate(
-      startEndDates.endDate - 60,
-      dateFormatString
-    );
-    const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
-    const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
-
-    if (shiftStartDate === shiftEndDate) {
-      return (
-        <div className="shift-timing">
-          <div className="shift-timing-title">
-            <FormattedMessage
-              id={"SHIFT_TIMING"}
-              defaultMessage={"Shift timing"}
-            />
-          </div>
-          <div className="shift-time">
-            {shiftStartDate} | <Time16 /> {shiftStartTime} to <Time16 />{" "}
-            {shiftEndTime}
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className="shift-timing">
-          <div className="shift-timing-title">
-            <FormattedMessage
-              id={"SHIFT_TIMING"}
-              defaultMessage={"Shift timing"}
-            />
-          </div>
-          <div className="shift-time">
-            {shiftStartDate} | <Time16 /> {shiftStartTime} to {shiftEndDate} |{" "}
-            <Time16 /> {shiftEndTime}
-          </div>
-        </div>
-      );
-    }
-  };
-
   const handleNext = () => {
     const { startDateTime, endDateTime, nextShiftIndex } = getNextShiftDetails(
       shiftRangeArray,
@@ -228,7 +183,51 @@ export default function DrugChartWrapper(props) {
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
-  const dateFormatString = getDateFormatString(drugChart);
+
+  const shiftTiming = () => {
+    let shiftStartDateTime = formatDate(
+      startEndDates.startDate,
+      displayShiftTimingsFormat
+    );
+    let shiftEndDateTime = formatDate(
+      startEndDates.endDate - 60,
+      displayShiftTimingsFormat
+    );
+    const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
+    const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
+
+    const formattedShiftStartTime = drugChart.enable24HourTime
+      ? shiftStartTime
+      : formatDate(startEndDates.startDate, "hh:mm a");
+
+    const formattedShiftEndTime = drugChart.enable24HourTime
+      ? shiftEndTime
+      : formatDate(startEndDates.endDate - 60, "hh:mm a");
+
+    if (shiftStartDate === shiftEndDate) {
+      return (
+        <div className="shift-timing">
+          <div className="shift-time">
+            {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {formattedShiftStartTime} <span className="to-text">to</span>{" "}
+            <Time16 /> {formattedShiftEndTime}
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="shift-timing">
+          <div className="shift-time">
+            {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {formattedShiftStartTime} <span className="to-text">to</span>{" "}
+            {shiftEndDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {formattedShiftEndTime}
+          </div>
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="drugchart-parent-container display-container">
       <div className="drugchart-shift-header">
