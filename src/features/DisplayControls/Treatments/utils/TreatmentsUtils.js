@@ -13,6 +13,8 @@ import { FormattedMessage } from "react-intl";
 import NotesIcon from "../../../../icons/notes.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { formatDate } from "../../../../utils/DateTimeUtils";
+import { IPDContext } from "../../../../context/IPDContext";
+import { mockConfig } from "../../../../utils/CommonUtils";
 
 export const treatmentHeaders = [
   {
@@ -144,11 +146,14 @@ export const getDrugName = (drugOrderObject) => {
   const drugOrder = drugOrderObject.drugOrder;
   if (
     drugOrder.drug &&
-    (drugOrderObject.instructions || drugOrderObject.additionalInstructions)
+    (drugOrderObject.instructions ||
+      drugOrderObject.additionalInstructions ||
+      drugOrder.orderReasonConcept ||
+      drugOrder.orderReasonText)
   ) {
     return (
       <div className="notes-icon-div">
-        <NotesIcon className="notes-icon" />
+        <NotesIcon className="notes-icon" data-testid="notes-icon" />
         <span
           className={`treatments-drug-name ${
             drugOrder.dateStopped && "strike-through"
@@ -156,12 +161,24 @@ export const getDrugName = (drugOrderObject) => {
         >
           {drugOrder.drug.name}
           <span>
-            <DisplayTags drugOrder={drugOrder.dosingInstructions} />
+            <IPDContext.Provider value={{ config: mockConfig }}>
+              <DisplayTags drugOrder={drugOrder.dosingInstructions} />
+            </IPDContext.Provider>
           </span>
         </span>
       </div>
     );
-  } else if (drugOrder.drug) return drugOrder.drug.name;
+  } else if (drugOrder.drug) {
+    return (
+      <span
+        className={`treatments-drug-name ${
+          drugOrder.dateStopped && "strike-through"
+        }`}
+      >
+        {drugOrder.drug.name}
+      </span>
+    );
+  }
   return drugOrder.freeTextAnswer;
 };
 
@@ -213,11 +230,15 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
         ),
         drugName: (
           <div className="notes-icon-div">
-            {approverNotes && <NotesIcon className="notes-icon" />}
+            {approverNotes && approver?.function === verifierFunction && (
+              <NotesIcon className="notes-icon" />
+            )}
             <span className={`treatments-drug-name`}>
               {medicationAdministration.drug.display}
               <span>
-                <DisplayTags drugOrder={dosingInstructions} />
+                <IPDContext.Provider value={{ config: mockConfig }}>
+                  <DisplayTags drugOrder={dosingInstructions} />
+                </IPDContext.Provider>
               </span>
             </span>
           </div>
@@ -234,13 +255,15 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
         providerName: approverName,
         status: (
           <span>
-            {approver.function === requesterFunction && (
-              <FormattedMessage
-                id="AWAITING"
-                defaultMessage="Not acknowledged"
-              />
+            {approver?.function === requesterFunction && (
+              <div className="red-text">
+                <FormattedMessage
+                  id="AWAITING"
+                  defaultMessage="Not acknowledged"
+                />
+              </div>
             )}
-            {approver.function === verifierFunction && (
+            {approver?.function === verifierFunction && (
               <FormattedMessage id="CONFIRMED" defaultMessage="Acknowledged" />
             )}
           </span>
@@ -276,4 +299,14 @@ export const mapAdditionalDataForEmergencyTreatments = (
         ),
     };
   });
+};
+
+export const getStopReason = (drugOrder) => {
+  const conceptName = drugOrder.orderReasonConcept
+    ? drugOrder.orderReasonConcept.name
+    : "";
+  const notes = drugOrder.orderReasonText || "";
+  const stopReason = conceptName + (conceptName && notes ? ": " : "") + notes;
+
+  return stopReason.trim() !== "" ? stopReason : null;
 };

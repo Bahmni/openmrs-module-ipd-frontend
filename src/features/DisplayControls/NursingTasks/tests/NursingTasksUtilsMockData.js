@@ -679,6 +679,24 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
 export const mockExtractedMedicationNursingTasksDataForAllTasks = [
   [
     {
+      drugName: "Paracetamol 125 mg (Tablet)",
+      drugRoute: "Oral",
+      duration: "3 Day(s)",
+      dosage: "25mg",
+      doseType: undefined,
+      uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
+      startTimeInEpochSeconds: 1690917550,
+      startTime: "19:19",
+      dosingInstructions: {
+        asNeeded: false,
+        frequency: "Once a day",
+      },
+      orderId: "paracetamol-125mg-tablet-uuid",
+      isDisabled: false,
+    },
+  ],
+  [
+    {
       drugName: "Paracetamol 200 mg (Tablet)",
       drugRoute: "Oral",
       duration: "3 Day(s)",
@@ -710,24 +728,6 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
         frequency: "Once a day",
       },
       orderId: "paracetamol-500mg-tablet-uuid",
-      isDisabled: false,
-    },
-  ],
-  [
-    {
-      drugName: "Paracetamol 125 mg (Tablet)",
-      drugRoute: "Oral",
-      duration: "3 Day(s)",
-      dosage: "25mg",
-      doseType: undefined,
-      uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
-      startTimeInEpochSeconds: 1690917550,
-      startTime: "19:19",
-      dosingInstructions: {
-        asNeeded: false,
-        frequency: "Once a day",
-      },
-      orderId: "paracetamol-125mg-tablet-uuid",
       isDisabled: false,
     },
   ],

@@ -54,8 +54,8 @@ const UpdateNursingTasks = (props) => {
     setOpenConfirmationModal(false);
   };
 
-  const config = useContext(IPDContext);
-  const { config: { nursingTasks = {} } = {} } = config;
+  const { config } = useContext(IPDContext);
+  const { nursingTasks = {} } = config;
 
   const saveAdministeredTasks = () => {
     setShowSuccessNotification(true);

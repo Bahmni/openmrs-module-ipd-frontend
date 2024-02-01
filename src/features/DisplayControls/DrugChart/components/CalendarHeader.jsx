@@ -5,7 +5,7 @@ import { IPDContext } from "../../../../context/IPDContext";
 
 export default function CalendarHeader(props) {
   const { config } = useContext(IPDContext);
-  const { config: { drugChart = {} } = {} } = config;
+  const { drugChart = {} } = config;
   const { currentShiftArray } = props;
   const enable24hour = drugChart.enable24HourTime;
 

@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
-import { Button } from "carbon-components-react";
+import { Button, Loading } from "carbon-components-react";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import DrugChart from "./DrugChart";
 import {
   fetchMedications,
   getDateTime,
   currentShiftHoursArray,
+  getUpdatedShiftArray,
   getNextShiftDetails,
   getPreviousShiftDetails,
   getDateFormatString,
@@ -32,21 +33,19 @@ const NoMedicationTaskMessage = (
 export default function DrugChartWrapper(props) {
   const { patientId } = props;
   const { config } = useContext(IPDContext);
-  const { config: { drugChart = {} } = {} } = config;
-
+  const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
   const [drugChartData, setDrugChartData] = useState([]);
   const [transformedData, setTransformedData] = useState([]);
   const [drugOrders, setDrugOrders] = useState({});
   const [isLoading, setLoading] = useState(true);
-  const [date, updateDate] = useState(new Date());
-  const [lastAction, updateLastActon] = useState("");
   const [startEndDates, updatedStartEndDates] = useState({
     startDate: new Date(),
     endDate: new Date(),
   });
   const allMedications = useContext(AllMedicationsContext);
+  const shiftDetails = currentShiftHoursArray(shiftConfig);
   const allowedForthShfts =
-    getDateTime(new Date(), currentShiftHoursArray(drugChart)[0]) / 1000 +
+    getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0]) / 1000 +
     convertDaystoSeconds(2);
   const [nextShiftMaxHour] = useState(allowedForthShfts);
   const [isShiftButtonsDisabled, setIsShiftButtonsDisabled] = useState({
@@ -55,8 +54,11 @@ export default function DrugChartWrapper(props) {
   });
 
   const [currentShiftArray, updateShiftArray] = useState(
-    currentShiftHoursArray(drugChart)
+    shiftDetails.currentShiftHoursArray
   );
+
+  const shiftRangeArray = shiftDetails.rangeArray;
+  const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
 
   const callFetchMedications = async (startDateTime, endDateTime) => {
     const startDateTimeInSeconds = startDateTime / 1000;
@@ -96,7 +98,7 @@ export default function DrugChartWrapper(props) {
   }, [allMedications.data]);
 
   useEffect(() => {
-    const currentShift = currentShiftHoursArray(drugChart);
+    const currentShift = shiftDetails.currentShiftHoursArray;
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
     let startDateTime = getDateTime(new Date(), currentShift[0]);
@@ -117,58 +119,46 @@ export default function DrugChartWrapper(props) {
       }
     }
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
-    updateDate(new Date(endDateTime));
     callFetchMedications(startDateTime, endDateTime);
   }, []);
 
   const handlePrevious = () => {
-    const firstHour = currentShiftArray[0];
-    const lastHour = currentShiftArray[currentShiftArray.length - 1];
-    if (lastHour < firstHour && (lastAction === "N" || lastAction === "")) {
-      date.setDate(date.getDate() - 1);
-    }
-    const { startDateTime, endDateTime, nextDate } = getPreviousShiftDetails(
-      currentShiftArray,
-      drugChart.shiftHours,
-      date
-    );
-    const previousShiftArray = currentShiftArray.map((hour) => {
-      let updatedHour = hour - drugChart.shiftHours;
-      updatedHour = updatedHour < 0 ? 24 + updatedHour : updatedHour;
-      return updatedHour;
-    });
+    const { startDateTime, endDateTime, previousShiftIndex } =
+      getPreviousShiftDetails(
+        shiftRangeArray,
+        shiftIndex,
+        startEndDates.startDate,
+        startEndDates.endDate
+      );
+    const previousShiftRange = shiftRangeArray[previousShiftIndex];
+    const previousShiftArray = getUpdatedShiftArray(previousShiftRange);
     updateShiftArray(previousShiftArray);
-    updateDate(nextDate);
-    updateLastActon("P");
+    updateShiftIndex(previousShiftIndex);
     setLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
 
   const handleNext = () => {
-    const firstHour = currentShiftArray[0];
-    const lastHour = currentShiftArray[currentShiftArray.length - 1];
-    if (lastHour < firstHour && lastAction === "P") {
-      date.setDate(date.getDate() + 1);
-    }
-    const { startDateTime, endDateTime, nextDate } = getNextShiftDetails(
-      currentShiftArray,
-      drugChart.shiftHours,
-      date
+    const { startDateTime, endDateTime, nextShiftIndex } = getNextShiftDetails(
+      shiftRangeArray,
+      shiftIndex,
+      startEndDates.startDate,
+      startEndDates.endDate
     );
-    const nextShiftArray = currentShiftArray.map(
-      (hour) => (hour + drugChart.shiftHours) % 24
-    );
+    const nextShiftRange = shiftRangeArray[nextShiftIndex];
+    const nextShiftArray = getUpdatedShiftArray(nextShiftRange);
     updateShiftArray(nextShiftArray);
-    updateDate(nextDate);
-    updateLastActon("N");
+    updateShiftIndex(nextShiftIndex);
     setLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
 
   const handleCurrent = () => {
-    const currentShift = currentShiftHoursArray(drugChart);
+    const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
+    const currentShift = shiftDetailsObj.currentShiftHoursArray;
+    const updatedShiftIndex = shiftDetailsObj.shiftIndex;
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
     let startDateTime = getDateTime(new Date(), currentShift[0]);
@@ -188,15 +178,14 @@ export default function DrugChartWrapper(props) {
       }
     }
     updateShiftArray(currentShift);
-    updateDate(new Date(endDateTime));
-    updateLastActon("");
+    updateShiftIndex(updatedShiftIndex);
     setLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
   const dateFormatString = getDateFormatString(drugChart);
   return (
-    <div className="drugchart-parent-container">
+    <div className="drugchart-parent-container display-container">
       <div className="drugchart-shift-header">
         <Button
           kind="tertiary"
@@ -241,7 +230,9 @@ export default function DrugChartWrapper(props) {
         </span>
       </div>
       {isLoading ? (
-        <div>Loading...</div>
+        <div className="loading-parent" data-testid="loading-icon">
+          <Loading withOverlay={false} />
+        </div>
       ) : drugChartData && drugChartData.length === 0 ? (
         <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>
       ) : (

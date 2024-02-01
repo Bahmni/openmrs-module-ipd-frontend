@@ -58,9 +58,10 @@ export default function Dashboard(props) {
 
   const fetchConfig = async () => {
     const configData = await getDashboardConfig();
-    setDashboardConfig(configData.data);
+    const config = configData.data || {};
+    setDashboardConfig(config);
     setIsConfigLoaded(true);
-    const { config: { sections = [] } = {} } = configData.data;
+    const { sections = [] } = config;
     const updatedSections = sections
       .filter((sec) => componentMapping[sec.componentKey])
       .sort((a, b) => a.displayOrder - b.displayOrder);
@@ -105,7 +106,7 @@ export default function Dashboard(props) {
     <>
       {!isConfigLoaded ? (
         <Loading withOverlay={true} />
-      ) : isConfigLoaded && dashboardConfig?.config?.sections?.length === 0 ? (
+      ) : isConfigLoaded && dashboardConfig?.sections?.length === 0 ? (
         <div style={{ paddingLeft: "10px" }}>{noConfigDataMessage}</div>
       ) : (
         <SliderContext.Provider

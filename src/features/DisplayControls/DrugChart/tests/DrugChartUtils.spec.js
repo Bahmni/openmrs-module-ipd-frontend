@@ -8,7 +8,6 @@ import {
 import axios from "axios";
 import { mockResponse } from "./DrugChartUtilsMockData";
 import MockDate from "mockdate";
-import { mockConfig } from "../../../../utils/CommonUtils";
 jest.mock("axios");
 describe("DrugChartUtils", () => {
   beforeEach(() => {
@@ -48,42 +47,48 @@ describe("DrugChartUtils", () => {
     });
   });
   it("test currentShiftHoursArray method", () => {
+    const shiftDetails = {
+      1: { shiftStartTime: "06:00", shiftEndTime: "18:00" },
+      2: { shiftStartTime: "18:00", shiftEndTime: "06:00" },
+    };
     MockDate.set("2023-12-19 16:00:00");
-    expect(currentShiftHoursArray(mockConfig.config.drugChart)).toEqual([
-      6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-    ]);
+    expect(currentShiftHoursArray(shiftDetails).currentShiftHoursArray).toEqual(
+      [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+    );
   });
   it("test getNextShiftDetails method", () => {
-    /**  mocked current Date i.e new Date() to 5th Jan 2024 10:00 */
-    MockDate.set("2023-01-05 10:00:00");
-    const shiftTimeArray = [6, 7, 8, 9, 10, 11, 12, 13];
-    const shiftTimeInHours = 8;
-    /** date = 5th Jan 2024 14:00 */
-    const date = new Date(1704463200000);
+    const rangeArray = ["06:00-18:00", "18:00-06:00"];
+    const shiftIndex = 0;
+    /** startDate = 31st Jan 2024 06:00 */
+    const startDate = new Date(1706661000000);
+    /** endDate = 31st Jan 2024 18:00 */
+    const endDate = new Date(1706704200000);
     const { startDateTime, endDateTime } = getNextShiftDetails(
-      shiftTimeArray,
-      shiftTimeInHours,
-      date
+      rangeArray,
+      shiftIndex,
+      startDate,
+      endDate
     );
-    const nextExpectedStartDateTime = 1704463200000; // 5th Jan 2024 14:00
-    const nextExpectedEndDateTime = 1704492000000; // 5th Jan 2024 22:00
+    const nextExpectedStartDateTime = 1706704200000; // 31st Jan 2024 18:00
+    const nextExpectedEndDateTime = 1706747400000; // 1st Feb 2024 06:00
     expect(startDateTime).toEqual(nextExpectedStartDateTime);
     expect(endDateTime).toEqual(nextExpectedEndDateTime);
   });
   it("test getPreviousShiftDetails method", () => {
-    /**  mocked current Date i.e new Date() to 5th Jan 2024 16:00 */
-    MockDate.set("2023-01-05 16:00:00");
-    const shiftTimeArray = [14, 15, 16, 17, 18, 19, 20, 21];
-    const shiftTimeInHours = 8;
-    /** date = 5th Jan 2024 14:00 */
-    const date = new Date(1704463200000);
+    const rangeArray = ["06:00-18:00", "18:00-06:00"];
+    const shiftIndex = 1;
+    /** startDate = 31st Jan 2024 18:00 */
+    const startDate = new Date(1706704200000);
+    /** endDate = 1st Feb 2024 06:00 */
+    const endDate = new Date(1706747400000);
     const { startDateTime, endDateTime } = getPreviousShiftDetails(
-      shiftTimeArray,
-      shiftTimeInHours,
-      date
+      rangeArray,
+      shiftIndex,
+      startDate,
+      endDate
     );
-    const nextExpectedStartDateTime = 1704434400000; // 5th Jan 2024 06:00
-    const nextExpectedEndDateTime = 1704463200000; // 5th Jan 2024 14:00
+    const nextExpectedStartDateTime = 1706661000000; // 31st Jan 2024 06:00
+    const nextExpectedEndDateTime = 1706704200000; // 31st Jan 2024 18:00
     expect(startDateTime).toEqual(nextExpectedStartDateTime);
     expect(endDateTime).toEqual(nextExpectedEndDateTime);
   });

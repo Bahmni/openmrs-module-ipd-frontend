@@ -6,7 +6,7 @@ import { IPDContext } from "../../context/IPDContext";
 const DisplayTags = (props) => {
   const { config } = useContext(IPDContext);
   const { drugOrder } = props;
-  const { config: { medicationTags = {} } = {} } = config;
+  const { medicationTags = {} } = config;
 
   if (
     drugOrder?.asNeeded &&

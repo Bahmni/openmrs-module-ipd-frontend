@@ -24,7 +24,11 @@ jest.mock("../utils/DrugChartUtils", () => {
   return {
     ...originalModule,
     fetchMedications: () => mockFetchMedications(),
-    currentShiftHoursArray: () => [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+    currentShiftHoursArray: () => ({
+      currentShiftHoursArray: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      rangeArray: ["06:00-18:00", "18:00-06:00"],
+      shiftIndex: 0,
+    }),
     getTimeInSeconds: () => mockGetTimeInSeconds(),
   };
 });
@@ -42,10 +46,10 @@ afterEach(() => {
 
 describe("DrugChartWrapper", () => {
   // mocked current Date i.e new Date() to 5th Jan 2024
-  MockDate.set("2024-01-05");
+  MockDate.set("2024-01-05 10:00");
 
   it("matches snapshot", async () => {
-    MockDate.set("2024-01-05");
+    MockDate.set("2024-01-05 10:00");
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
@@ -60,7 +64,7 @@ describe("DrugChartWrapper", () => {
   });
 
   it("should render loading state when isLoading is true", async () => {
-    MockDate.set("2024-01-05");
+    MockDate.set("2024-01-05 10:00");
     const { container } = render(
       <IPDContext.Provider value={{ config: mockConfig }}>
         <DrugChartView patientId="test-id" />
@@ -72,7 +76,7 @@ describe("DrugChartWrapper", () => {
   });
 
   it.skip("should render no medication message when drugChartData is empty", async () => {
-    MockDate.set("2024-01-05");
+    MockDate.set("2024-01-05 10:00");
     mockFetchMedications.mockResolvedValue({
       data: [{ slots: [] }],
     });
@@ -89,7 +93,7 @@ describe("DrugChartWrapper", () => {
   });
 
   it("should show previous shift on previous button click", async () => {
-    MockDate.set("2024-01-05");
+    MockDate.set("2024-01-05 10:00");
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
@@ -108,7 +112,7 @@ describe("DrugChartWrapper", () => {
   });
 
   it("should show next shift on next button click", async () => {
-    MockDate.set("2024-01-05");
+    MockDate.set("2024-01-05 10:00");
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
@@ -127,7 +131,7 @@ describe("DrugChartWrapper", () => {
   });
 
   it("should show current shift on current button click", async () => {
-    MockDate.set("2024-01-05");
+    MockDate.set("2024-01-05 10:00");
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
