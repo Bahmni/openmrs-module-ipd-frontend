@@ -26,7 +26,7 @@ export default function DrugListCell(props) {
   const administrationInfo = [];
   slots.forEach((slot) => {
     if (
-      ["Administered", "Administered-Late", "Not-Administered"].includes(
+      ["Administered", "Administered-Late"].includes(
         slot.administrationSummary.status
       )
     ) {
@@ -78,7 +78,7 @@ export default function DrugListCell(props) {
   const getMedicationName = () => {
     return (
       <div className="drug-name-container">
-        <TooltipDefinition tooltipText={name} className={"name-tooltip"}>
+        <TooltipDefinition tooltipText={name}>
           <div className={"drug-chart-drug-name"}>{name}</div>
         </TooltipDefinition>
         &nbsp;

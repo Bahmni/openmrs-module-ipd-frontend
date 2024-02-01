@@ -42,6 +42,7 @@ const DrugChartSlider = (props) => {
   const isEdit = Boolean(hostData?.drugOrder?.drugOrderSchedule);
   const isAutoFill = Boolean(enableSchedule?.scheduleTiming) && !isEdit;
   const { setSliderContentModified } = useContext(SliderContext);
+  let sliderTitle = title;
   const updateSliderContentModified = (value) => {
     setSliderContentModified((prev) => {
       return {
@@ -442,15 +443,24 @@ const DrugChartSlider = (props) => {
     updateSliderContentModified(true);
     setDrugChartNotes(e.target.value);
   };
-
+  if (isEdit) {
+    sliderTitle = (
+      <FormattedMessage
+        id={"EDIT_DRUG_CHART_HEADER"}
+        defaultMessage={"Edit Drug Chart"}
+      />
+    );
+  } else {
+    sliderTitle = title || (
+      <FormattedMessage
+        id="DRUG_CHART_MODAL_HEADER"
+        defaultMessage={"Add to Drug Chart"}
+      />
+    );
+  }
   return (
     <I18nProvider>
-      <SideBarPanel
-        title={
-          title ? title : <FormattedMessage id="DRUG_CHART_MODAL_HEADER" />
-        }
-        closeSideBar={handleClose}
-      >
+      <SideBarPanel title={sliderTitle} closeSideBar={handleClose}>
         <div style={{ padding: "20px", paddingBottom: "120px" }}>
           <DrugDetails hostData={hostData} />
           <ScheduleSection

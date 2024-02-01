@@ -1,6 +1,7 @@
 {
   "IPD_HEADER": "Custom IPD Header translated",
   "DRUG_CHART_MODAL_HEADER": "Add to Drug Chart",
+  "EDIT_DRUG_CHART_HEADER": "Edit Drug Chart",
   "DRUG_CHART_MODAL_SAVE": "Save",
   "DRUG_CHART_MODAL_CANCEL": "Cancel",
   "DRUG_CHART_MODAL_CLOSE": "Close",
