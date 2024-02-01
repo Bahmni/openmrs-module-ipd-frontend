@@ -10,6 +10,15 @@
     margin: 10px 0 10px 0;
   }
 
+  .header-title-row{
+    justify-content: space-between;
+  
+    .patient-movement-overflow {
+      position: absolute;
+      right: 15px;
+    }
+  }
+
   .patient-details {
     width: 100%;
     padding: 0;
@@ -68,6 +77,13 @@
     display: flex;
   }
 
+  .show-more {
+    font-size: 0.875rem;
+    position: absolute;
+    right: 15px;
+    top: 90px;
+  }
+
   .other-info {
     display: flex;
     flex-direction: row;
@@ -89,4 +105,8 @@
 
 .bx--row.patient-image-and-details {
   align-items: center;
+}
+
+.patient-movement-ipd-dropdown {
+  width: 100%;
 }

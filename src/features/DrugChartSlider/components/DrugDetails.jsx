@@ -1,13 +1,16 @@
 import React from "react";
-import { TextInput } from "carbon-components-react";
+import {
+  DatePicker,
+  DatePickerInput,
+  TextInput,
+} from "carbon-components-react";
 import {
   NumberInputCarbon,
   DropdownCarbon,
   DatePickerCarbon,
 } from "bahmni-carbon-ui";
 import PropTypes from "prop-types";
-import moment from "moment";
-
+import { formatDate } from "../../../utils/DateTimeUtils";
 export const DrugDetails = ({ hostData }) => {
   return (
     <>
@@ -73,9 +76,8 @@ export const DrugDetails = ({ hostData }) => {
           onChange={() => {}}
           titleText={"Start Date"}
           title={"Start Date"}
-          value={moment(hostData?.drugOrder?.drugOrder?.scheduledDate).format(
-            "MM/DD/YYYY"
-          )}
+          dateFormat={"d M Y"}
+          value={formatDate(hostData?.drugOrder?.drugOrder?.scheduledDate)}
           isDisabled={true}
         />
       </div>

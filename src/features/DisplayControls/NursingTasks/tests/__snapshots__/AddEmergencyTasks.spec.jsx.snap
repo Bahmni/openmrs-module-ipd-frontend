@@ -162,7 +162,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                     class="titleText"
                   >
                     <span>
-                      Drug Name 
+                      Drug Name (Emergency / Ad hoc) 
                     </span>
                     <span
                       class="required"
@@ -264,6 +264,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                       >
                         <input
                           id="Dropdown"
+                          min="0"
                           pattern="[0-9]*"
                           step="1"
                           type="number"
@@ -593,7 +594,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                       placeholder="hh:mm"
                       style="width: 100%; padding: 0px 0px 0px 1rem;"
                       type="text"
-                      value="12:00"
+                      value="00:00"
                     />
                   </div>
                 </div>
@@ -1014,7 +1015,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                     class="titleText"
                   >
                     <span>
-                      Drug Name 
+                      Drug Name (Emergency / Ad hoc) 
                     </span>
                     <span
                       class="required"
@@ -1116,6 +1117,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                       >
                         <input
                           id="Dropdown"
+                          min="0"
                           pattern="[0-9]*"
                           step="1"
                           type="number"
@@ -1443,7 +1445,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                       placeholder="hh:mm"
                       style="width: 100%; padding: 0px 0px 0px 1rem;"
                       type="text"
-                      value="12:00"
+                      value="00:00"
                     />
                   </div>
                 </div>

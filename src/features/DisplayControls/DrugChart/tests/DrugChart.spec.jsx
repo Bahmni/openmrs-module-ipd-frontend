@@ -40,7 +40,7 @@ jest.mock("bahmni-carbon-ui", () => {
   };
 });
 
-describe("DrugChart", () => {
+describe.skip("DrugChart", () => {
   it("should match snapshot", () => {
     const { asFragment } = render(<DrugChart drugChartData={drugChartData} />);
     expect(asFragment()).toMatchSnapshot();

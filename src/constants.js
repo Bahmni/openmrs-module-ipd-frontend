@@ -22,7 +22,8 @@ export const EDIT_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/schedule/type/medication/edit";
 export const ADMINISTERED_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/scheduledMedicationAdministrations";
-export const EMERGENCY_MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/adhocMedicationAdministrations";
+export const EMERGENCY_MEDICATIONS_BASE_URL =
+  RESTWS_V1 + "/ipd/adhocMedicationAdministrations";
 export const PATIENT_URL = RESTWS_V1 + "/patient";
 
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
@@ -42,6 +43,18 @@ export const SEARCH_DRUG_URL =
   RESTWS_V1 +
   "/drug?q={queryString}&s=ordered&v=custom:(uuid,strength,name,dosageForm)";
 
+export const VISIT_SUMMARY_URL = BAHMNI_CORE+ "/visit/summary";
+export const CONFIG_BAHMNIENCOUNTER_URL = BAHMNI_CORE + "/config/bahmniencounter";
+export const PATIENT_MOVEMENT_URL = BAHMNI_CORE + "/bahmniencounter";
+export const DISCHARGE_PATIENT_MOVEMENT_URL = BAHMNI_CORE + "/discharge ";
+
+export const FSN_DISPOSITION_VALUE = "Disposition"
+export const BY_FSN_VALUE = "byFullySpecifiedName"
+export const FSN_ADT_NOTES_VALUE = "Adt Notes"
+export const BAHMNI_VALUE = "bahmni"
+export const CUSTOM_OUTPUT_VALUE = "custom:(uuid,name,answers:(uuid,name,mappings))"
+export const SEARCH_CONCEPT_URL  = RESTWS_V1 + "/concept";
+
 export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
   FIXED_SCHEDULE_FREQUENCY: "FIXED_SCHEDULE_FREQUENCY",
@@ -49,10 +62,10 @@ export const medicationFrequency = {
 export const BAHMNI_ENCOUNTER_URL = RESTWS_V1 + "/bahmnicore/bahmniencounter";
 export const ENCOUNTER_TYPE_URL = RESTWS_V1 + "/encountertype/{encounterType}";
 
-export const defaultDateFormat = "DD/MM/YYYY";
-export const defaultDateTimeFormat = "DD/MM/YYYY hh:mm A";
-export const DDMMYYY_DATE_FORMAT = "DD/MM/YYYY";
+export const defaultDateFormat = "DD MMM YYYY";
+export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
 export const dateFormat = "DD/MM/YYYY";
+export const displayShiftTimingsFormat = "DD MMM YYYY | HH:mm";
 
 export const componentKeys = {
   ALLERGIES: "AL",

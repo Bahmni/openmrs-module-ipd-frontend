@@ -9,12 +9,34 @@ import MockDate from "mockdate";
 import { SliderContext } from "../../../../context/SliderContext";
 
 const mockFetchMedicationNursingTasks = jest.fn();
+const mockGetTimeInSeconds = jest.fn();
 
 jest.mock("../utils/NursingTasksUtils", () => {
   const originalModule = jest.requireActual("../utils/NursingTasksUtils");
   return {
     ...originalModule,
     fetchMedicationNursingTasks: () => mockFetchMedicationNursingTasks(),
+  };
+});
+jest.mock("../../../../utils/DateTimeUtils", () => {
+  const originalModule = jest.requireActual("../../../../utils/DateTimeUtils");
+  return {
+    ...originalModule,
+    convertDaystoSeconds: () => mockGetTimeInSeconds(),
+  };
+});
+
+jest.mock("../../DrugChart/utils/DrugChartUtils", () => {
+  const originalModule = jest.requireActual(
+    "../../DrugChart/utils/DrugChartUtils"
+  );
+  return {
+    ...originalModule,
+    currentShiftHoursArray: () => ({
+      currentShiftHoursArray: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      rangeArray: ["06:00-18:00", "18:00-06:00"],
+      shiftIndex: 0,
+    }),
   };
 });
 
@@ -28,23 +50,26 @@ const mockProviderValue = {
 describe("NursingTasks", () => {
   afterEach(() => {
     jest.resetAllMocks();
-    MockDate.reset();
   });
 
   it("should show loading state", async () => {
-    const { getByText } = render(
+    const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
         <NursingTasks patientId="patientid" />
       </SliderContext.Provider>
     );
 
     await waitFor(() => {
-      expect(getByText("Loading...")).toBeTruthy();
+      expect(getByTestId("loading-icon")).toBeTruthy();
     });
   });
 
   it("should show no pending tasks message when nursing task reponse is empty", async () => {
-    mockFetchMedicationNursingTasks.mockResolvedValueOnce([]);
+    mockFetchMedicationNursingTasks.mockResolvedValueOnce([
+      {
+        slots: [],
+      },
+    ]);
 
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
@@ -60,7 +85,11 @@ describe("NursingTasks", () => {
   });
 
   it("should show no completed tasks message when nursing task reponse is empty", async () => {
-    mockFetchMedicationNursingTasks.mockResolvedValueOnce([]);
+    mockFetchMedicationNursingTasks.mockResolvedValueOnce([
+      {
+        slots: [],
+      },
+    ]);
     const { getByText, container } = render(
       <SliderContext.Provider value={mockProviderValue}>
         <NursingTasks patientId="patientid" />
@@ -80,7 +109,11 @@ describe("NursingTasks", () => {
   });
 
   it("should show no nursing tasks message when nursing task reponse is empty for all tasks", async () => {
-    mockFetchMedicationNursingTasks.mockResolvedValueOnce([]);
+    mockFetchMedicationNursingTasks.mockResolvedValueOnce([
+      {
+        slots: [],
+      },
+    ]);
     const { getByText, container } = render(
       <SliderContext.Provider value={mockProviderValue}>
         <NursingTasks patientId="patientid" />
@@ -119,7 +152,7 @@ describe("NursingTasks", () => {
   });
 
   it("should show current date", async () => {
-    MockDate.set("2023-08-11");
+    MockDate.set("2023-08-11 07:00");
 
     mockFetchMedicationNursingTasks.mockResolvedValueOnce(
       mockNursingTasksResponse
@@ -132,7 +165,7 @@ describe("NursingTasks", () => {
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
     });
-    expect(getByText("11/08/2023 | 06:00 to 17:59")).toBeTruthy();
+    expect(getByText("11 Aug 2023 | 06:00 to 17:59")).toBeTruthy();
   });
   it("should show Correct Nursing Tasks when clicked on previous button", async () => {
     MockDate.set("2024-01-05");
@@ -163,6 +196,7 @@ describe("NursingTasks", () => {
     mockFetchMedicationNursingTasks
       .mockReturnValueOnce(mockNursingTasksResponse)
       .mockReturnValue(mockShiftResponse);
+    mockGetTimeInSeconds.mockReturnValue(259200);
     const { getAllByText, getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
         <NursingTasks patientId="patientid" />
@@ -216,5 +250,34 @@ describe("NursingTasks", () => {
     expect(
       getAllByText("Paracetamol 120 mg/5 mL Suspension (Liquid)")
     ).toBeTruthy();
+  });
+  it("should restrict previous shift navigation if it reaches administered time", async () => {
+    MockDate.set("2024-01-05");
+    mockFetchMedicationNursingTasks.mockReturnValueOnce(mockShiftResponse);
+    const { getByTestId } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <NursingTasks patientId="patientid" />
+      </SliderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
+    });
+    expect(getByTestId("previous-shift").disabled).toEqual(true);
+  });
+  it("should restrict next shift navigation if it reaches 2 days forth from the current shift", async () => {
+    MockDate.set("2024-01-03 07:00");
+    mockFetchMedicationNursingTasks
+      .mockReturnValueOnce(mockShiftResponse)
+      .mockReturnValueOnce(mockShiftResponse);
+    mockGetTimeInSeconds.mockReturnValue(0);
+    const { getByTestId } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <NursingTasks patientId="patientid" />
+      </SliderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
+    });
+    expect(getByTestId("next-shift").disabled).toEqual(true);
   });
 });

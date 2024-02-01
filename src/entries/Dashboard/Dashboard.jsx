@@ -8,7 +8,6 @@ import {
   SideNav,
   SideNavItems,
   SideNavLink,
-  Link,
 } from "carbon-components-react";
 import { ArrowLeft } from "@carbon/icons-react/next";
 import { componentMapping } from "./componentMapping";
@@ -20,10 +19,12 @@ import { getPatientDashboardUrl } from "../../utils/CommonUtils";
 import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
 import RefreshDisplayControl from "../../context/RefreshDisplayControl";
 import { SliderContext } from "../../context/SliderContext";
+import { IPDContext } from "../../context/IPDContext";
+import { AllMedicationsContextProvider } from "../../context/AllMedications";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
-  const { patient } = hostData;
+  const { patient, visitUuid, location, provider } = hostData;
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
     nursingTasks: false,
@@ -76,8 +77,8 @@ export default function Dashboard(props) {
     return Object.values(isSliderOpen).includes(true);
   };
 
-  const handleDischargeSummaryNavigation = () => {
-    hostApi?.navigation?.dischargeSummary?.();
+  const handleVisitSummaryNavigation = () => {
+    hostApi?.navigation?.visitSummary?.();
   };
 
   const refreshDisplayControl = (componentKeyArray) => {
@@ -101,91 +102,89 @@ export default function Dashboard(props) {
         visitSummary: hostData.visitSummary,
       }}
     >
-      <main className="ipd-page">
-        <Header
-          className="border-bottom-0 header-bg-color"
-          aria-label="IBM Platform Name"
-        >
-          <HeaderMenuButton
-            aria-label="Open menu"
-            className="header-nav-toggle-btn"
-            onClick={onClickSideNavExpand}
-            isActive={isSideNavExpanded}
-          />
-          <SideNav
-            aria-label="Side navigation"
-            className="navbar-border"
-            isPersistent={true}
-            expanded={isSideNavExpanded}
+      <IPDContext.Provider
+        value={{ patient, visit: visitUuid, location, provider }}
+      >
+        <main className="ipd-page">
+          <Header
+            className="border-bottom-0 header-bg-color"
+            aria-label="IBM Platform Name"
           >
-            <SideNavItems>
-              {sections?.map((el) => {
-                return (
-                  <SideNavLink
-                    className="cursor-pointer"
-                    isActive={el.componentKey === selectedTab}
-                    key={el.componentKey}
-                    onClick={() => scrollToSection(el.componentKey)}
-                  >
-                    {el.title}
-                  </SideNavLink>
-                );
-              })}
-            </SideNavItems>
-          </SideNav>
-        </Header>
-
-        <section className={checkSliderStatus() ? "main-with-slider" : "main"}>
-          <div className={"navigation-buttons"}>
-            <ArrowLeft
-              data-testid={"Back button"}
-              size={20}
-              onClick={() => window.history.back()}
+            <HeaderMenuButton
+              aria-label="Open menu"
+              className="header-nav-toggle-btn"
+              onClick={onClickSideNavExpand}
+              isActive={isSideNavExpanded}
             />
-            <Link
-              onClick={() => {
-                window.location.href = getPatientDashboardUrl(patient?.uuid);
-              }}
+            <SideNav
+              aria-label="Side navigation"
+              className="navbar-border"
+              isPersistent={true}
+              expanded={isSideNavExpanded}
             >
-              <FormattedMessage
-                id={"VIEW_CLINICAL_DASHBOARD"}
-                defaultMessage={"View Clinical Dashboard"}
+              <SideNavItems>
+                {sections?.map((el) => {
+                  return (
+                    <SideNavLink
+                      className="cursor-pointer"
+                      isActive={el.componentKey === selectedTab}
+                      key={el.componentKey}
+                      onClick={() => scrollToSection(el.componentKey)}
+                    >
+                      {el.title}
+                    </SideNavLink>
+                  );
+                })}
+              </SideNavItems>
+            </SideNav>
+          </Header>
+
+          <section
+            className={checkSliderStatus() ? "main-with-slider" : "main"}
+          >
+            <div className={"navigation-buttons"}>
+              <ArrowLeft
+                data-testid={"Back button"}
+                size={20}
+                onClick={() => window.history.back()}
               />
-            </Link>
-          </div>
-          <PatientHeader
-            patientId={patient?.uuid}
-            openDischargeSummary={handleDischargeSummaryNavigation}
-          />
-          <Accordion className={"accordion"}>
-            {sections?.map((el) => {
-              const DisplayControl = componentMapping[el.componentKey];
-              return (
-                <section
-                  key={el.componentKey}
-                  ref={(ref) => (refs.current[el.componentKey] = ref)}
-                  style={{ marginBottom: "40px" }}
-                >
-                  <Suspense fallback={<p>Loading...</p>}>
-                    <AccordionItem open title={el.title}>
-                      <I18nProvider>
-                        <RefreshDisplayControl.Provider
-                          value={refreshDisplayControl}
-                        >
-                          <DisplayControl
-                            key={el.refreshKey}
-                            patientId={patient?.uuid}
-                          />
-                        </RefreshDisplayControl.Provider>
-                      </I18nProvider>
-                    </AccordionItem>
-                  </Suspense>
-                </section>
-              );
-            })}
-          </Accordion>
-        </section>
-      </main>
+            </div>
+            <PatientHeader
+              patientId={patient?.uuid}
+              openVisitSummary={handleVisitSummaryNavigation}
+            />
+            <Accordion className={"accordion"}>
+              <AllMedicationsContextProvider>
+                {sections?.map((el) => {
+                  const DisplayControl = componentMapping[el.componentKey];
+                  return (
+                    <section
+                      key={el.componentKey}
+                      ref={(ref) => (refs.current[el.componentKey] = ref)}
+                      style={{ marginBottom: "40px" }}
+                    >
+                      <Suspense fallback={<p>Loading...</p>}>
+                        <AccordionItem open title={el.title}>
+                          <I18nProvider>
+                            <RefreshDisplayControl.Provider
+                              value={refreshDisplayControl}
+                            >
+                              <DisplayControl
+                                key={el.refreshKey}
+                                patientId={patient?.uuid}
+                              />
+                            </RefreshDisplayControl.Provider>
+                          </I18nProvider>
+                        </AccordionItem>
+                      </Suspense>
+                    </section>
+                  );
+                })}
+              </AllMedicationsContextProvider>
+            </Accordion>
+          </section>
+        </main>
+      </IPDContext.Provider>
     </SliderContext.Provider>
   );
 }

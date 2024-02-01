@@ -9,10 +9,13 @@ import {
   ExtractMedicationNursingTasksData,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
-import { formatDate } from "../../../../utils/DateTimeUtils";
+import {
+  convertDaystoSeconds,
+  formatDate,
+} from "../../../../utils/DateTimeUtils";
 import { SliderContext } from "../../../../context/SliderContext";
 import UpdateNursingTasks from "./UpdateNursingTasks";
-import { Button, Dropdown } from "carbon-components-react";
+import { Button, Dropdown, Loading } from "carbon-components-react";
 import AddEmergencyTasks from "./AddEmergencyTasks";
 import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
@@ -22,6 +25,7 @@ import data from "../../../../utils/config.json";
 import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
 import {
   currentShiftHoursArray,
+  getDateFormatString,
   getDateTime,
   getNextShiftDetails,
   getPreviousShiftDetails,
@@ -39,28 +43,50 @@ export default function NursingTasks(props) {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const refreshDisplayControl = useContext(RefreshDisplayControl);
-  const [date, updateDate] = useState(new Date());
-  const [lastAction, updateLastActon] = useState("");
-  const [currentShiftArray, updateShiftArray] = useState(
-    currentShiftHoursArray()
-  );
+  const {
+    config: { shiftDetails: shiftConfig = {} },
+  } = data;
+  const shiftDetails = currentShiftHoursArray(shiftConfig);
+  const allowedForthShfts =
+    getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0]) / 1000 +
+    convertDaystoSeconds(2);
   const [startEndDates, updatedStartEndDates] = useState({
     startDate: new Date(),
     endDate: new Date(),
   });
-  const { config: { drugChart = {} } = {} } = data;
+  const [nextShiftMaxHour] = useState(allowedForthShfts);
+  const [isShiftsButtonsDisabled, setIsShiftsButtonsDisabled] = useState({
+    previous: false,
+    next: false,
+  });
+  const shiftRangeArray = shiftDetails.rangeArray;
+  const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
+  const dateFormatString = getDateFormatString();
 
   useEffect(() => {
-    const currentShift = currentShiftHoursArray();
-    const startDateTime = getDateTime(new Date(), currentShift[0]);
-    const endDateTime = getDateTime(
+    const currentShift = shiftDetails.currentShiftHoursArray;
+    const firstHour = currentShift[0];
+    const lastHour = currentShift[currentShift.length - 1];
+    let startDateTime = getDateTime(new Date(), currentShift[0]);
+    let endDateTime = getDateTime(
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
+    /** if the shift is going on two different dates */
+    if (lastHour < firstHour) {
+      const d = new Date();
+      const currentHour = d.getHours();
+      if (currentHour > 12) {
+        d.setDate(d.getDate() + 1);
+        endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
+      } else {
+        d.setDate(d.getDate() - 1);
+        startDateTime = getDateTime(d, currentShift[0]);
+      }
+    }
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   }, []);
-
   const updateNursingTasksSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -80,62 +106,55 @@ export default function NursingTasks(props) {
   };
 
   const handlePrevious = () => {
-    const firstHour = currentShiftArray[0];
-    const lastHour = currentShiftArray[currentShiftArray.length - 1];
-    if (lastHour < firstHour && lastAction === "N") {
-      date.setDate(date.getDate() - 1);
-    }
-    const { startDateTime, endDateTime, nextDate } = getPreviousShiftDetails(
-      currentShiftArray,
-      drugChart.shiftHours,
-      date
-    );
-    const previousShiftArray = currentShiftArray.map((hour) => {
-      let updatedHour = hour - drugChart.shiftHours;
-      updatedHour = updatedHour < 0 ? 24 + updatedHour : updatedHour;
-      return updatedHour;
-    });
-    updateShiftArray(previousShiftArray);
-    updateDate(nextDate);
-    updateLastActon("P");
+    const { startDateTime, endDateTime, previousShiftIndex } =
+      getPreviousShiftDetails(
+        shiftRangeArray,
+        shiftIndex,
+        startEndDates.startDate,
+        startEndDates.endDate
+      );
+    updateShiftIndex(previousShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
 
   const handleNext = () => {
-    const firstHour = currentShiftArray[0];
-    const lastHour = currentShiftArray[currentShiftArray.length - 1];
-    if (lastHour < firstHour && lastAction === "P") {
-      date.setDate(date.getDate() + 1);
-    }
-    const { startDateTime, endDateTime, nextDate } = getNextShiftDetails(
-      currentShiftArray,
-      drugChart.shiftHours,
-      date
+    const { startDateTime, endDateTime, nextShiftIndex } = getNextShiftDetails(
+      shiftRangeArray,
+      shiftIndex,
+      startEndDates.startDate,
+      startEndDates.endDate
     );
-    const nextShiftArray = currentShiftArray.map(
-      (hour) => (hour + drugChart.shiftHours) % 24
-    );
-    updateShiftArray(nextShiftArray);
-    updateDate(nextDate);
-    updateLastActon("N");
+    updateShiftIndex(nextShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
 
   const handleCurrent = () => {
-    const currentShift = currentShiftHoursArray();
-    const nextDate = new Date();
-    const startDateTime = getDateTime(new Date(), currentShift[0]);
-    const endDateTime = getDateTime(
+    const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
+    const currentShift = shiftDetailsObj.currentShiftHoursArray;
+    const updatedShiftIndex = shiftDetailsObj.shiftIndex;
+    const firstHour = currentShift[0];
+    const lastHour = currentShift[currentShift.length - 1];
+    let startDateTime = getDateTime(new Date(), currentShift[0]);
+    let endDateTime = getDateTime(
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
-    updateShiftArray(currentShift);
-    updateDate(nextDate);
-    updateLastActon("");
+    if (lastHour < firstHour) {
+      const d = new Date();
+      const currentHour = d.getHours();
+      if (currentHour > 12) {
+        d.setDate(d.getDate() + 1);
+        endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
+      } else {
+        d.setDate(d.getDate() - 1);
+        startDateTime = getDateTime(d, currentShift[0]);
+      }
+    }
+    updateShiftIndex(updatedShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
@@ -183,6 +202,12 @@ export default function NursingTasks(props) {
       );
       setMedicationNursingTasks(extractedData);
       setIsLoading(false);
+      setIsShiftsButtonsDisabled({
+        previous: nursingTasks[0].startDate > startDateTimeInSeconds,
+        next:
+          startDateTimeInSeconds >= nextShiftMaxHour ||
+          endDateTimeInSeconds >= nextShiftMaxHour,
+      });
     }
   };
   useEffect(() => {
@@ -231,11 +256,11 @@ export default function NursingTasks(props) {
   const shiftTiming = () => {
     let shiftStartDateTime = formatDate(
       startEndDates.startDate,
-      "DD/MM/YYYY | HH:mm"
+      dateFormatString
     );
     let shiftEndDateTime = formatDate(
       startEndDates.endDate - 60,
-      "DD/MM/YYYY | HH:mm"
+      dateFormatString
     );
     const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
     const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
@@ -273,15 +298,10 @@ export default function NursingTasks(props) {
     }
   };
 
-  const showMedicationNursingTasks = () => {
-    if (isLoading) {
-      return <div style={{ paddingTop: "5px" }}>Loading...</div>;
-    }
-
-    return (
-      <div className="nursing-tasks-content-container">
-        {isLoading ? (
-          <div style={{ paddingTop: "5px" }}>Loading...</div>
+  return (
+    <div className="nursing-tasks-content-container display-container">
+      {isLoading ? (
+          <div style={{ paddingTop: "5px" }} data-testid="loading-icon">Loading...</div>
         ) : (
           <>
             <div className={"nursing-task-navigation"}>
@@ -300,6 +320,7 @@ export default function NursingTasks(props) {
                   />
                 </Button>
                 <Button
+                  disabled={isShiftsButtonsDisabled.previous}
                   renderIcon={ChevronLeft16}
                   kind="tertiary"
                   isExpressive
@@ -310,6 +331,7 @@ export default function NursingTasks(props) {
                   data-testid="previous-shift"
                 />
                 <Button
+                  disabled={isShiftsButtonsDisabled.next}
                   renderIcon={ChevronRight16}
                   kind="tertiary"
                   isExpressive
@@ -364,6 +386,7 @@ export default function NursingTasks(props) {
                 setSuccessMessage={setSuccessMessage}
               />
             )}
+            
             {isSliderOpen.emergencyTasks && (
               <AddEmergencyTasks
                 patientId={patientId}
@@ -373,16 +396,20 @@ export default function NursingTasks(props) {
                 setSuccessMessage={setSuccessMessage}
               />
             )}
-            {medicationNursingTasks && medicationNursingTasks.length === 0 ? (
+            
+            {isLoading ? (
+              <div className="loading-parent" data-testid="loading-icon">
+                <Loading withOverlay={false} />
+              </div>
+            ) : medicationNursingTasks && medicationNursingTasks.length === 0 ? (
               <div className="no-nursing-tasks">{getNoTaskMessage()}</div>
             ) : (
               <div>
-                <div className="nursing-task-tiles-container">
-                  {showTaskTiles()}
-                </div>
+                <div className="nursing-task-tiles-container">{showTaskTiles()}</div>
                 <AdministrationLegend />
               </div>
             )}
+
             {showSuccessNotification && (
               <Notification
                 hostData={{
@@ -393,9 +420,9 @@ export default function NursingTasks(props) {
                   onClose: () => {
                     setShowSuccessNotification(false);
                     refreshDisplayControl([
+                      componentKeys.TREATMENTS,
                       componentKeys.NURSING_TASKS,
                       componentKeys.DRUG_CHART,
-                      componentKeys.TREATMENTS,
                     ]);
                   },
                 }}
@@ -405,9 +432,7 @@ export default function NursingTasks(props) {
         )}
       </div>
     );
-  };
-  return <div>{showMedicationNursingTasks()}</div>;
-}
+};
 
 NursingTasks.propTypes = {
   patientId: PropTypes.string.isRequired,

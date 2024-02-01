@@ -4,7 +4,7 @@ export const drugChartData = [
     uuid: "821bcf56-8beb-48e3-82ac-4a3be4947cb3",
     serviceType: "MedicationRequest",
     comments: null,
-    startDate: 1704443600,
+    startDate: 1704434402,
     endDate: null,
     slots: [
       {

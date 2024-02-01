@@ -290,6 +290,7 @@ const AddEmergencyTasks = (props) => {
                       value={dosage}
                       label={"Dose"}
                       isRequired={true}
+                      min={0}
                     />
                     <Dropdown
                       id={"Dosage Dropdown"}
@@ -330,6 +331,7 @@ const AddEmergencyTasks = (props) => {
                     title={"Administration Date"}
                     isRequired={true}
                     value={administrationDate}
+                    dateFormat={"d M Y"}
                   />
                   <TimePicker24Hour
                     defaultTime={administrationTime}

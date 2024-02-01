@@ -55,7 +55,7 @@
   }
 
   .abnormal-tiles {
-    color: #da1e28;
+    color: #ff0000;
   }
 
   .vitals-history-pagination,
@@ -72,13 +72,13 @@
     font-weight: 600;
     font-size: 15px;
   }
-  .history-abnormal-tile{
-    color: #da1e28;
+  .history-abnormal-tile {
+    color: #ff0000;
   }
-  .history-tile{
+  .history-tile {
     color: #525252;
   }
-  .history-data-table{
-      pointer-events: none;
+  .history-data-table {
+    pointer-events: none;
   }
 }

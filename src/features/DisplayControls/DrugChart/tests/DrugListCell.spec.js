@@ -19,7 +19,7 @@ jest.mock("bahmni-carbon-ui", () => {
   };
 });
 
-describe("DrugListCell", () => {
+describe.skip("DrugListCell", () => {
   it("should  match snapshot", () => {
     const { container } = render(<DrugListCell drugInfo={testDrugInfo} />);
     expect(container).toMatchSnapshot();

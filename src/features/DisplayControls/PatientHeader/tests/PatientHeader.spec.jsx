@@ -50,7 +50,7 @@ describe("PatientHeader", () => {
     render(<PatientHeader patientId="123" />);
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
     expect(screen.getByText(/30 Years/i)).toBeTruthy();
-    expect(screen.getByText("01/01/1991")).toBeTruthy();
+    expect(screen.getByText("01 Jan 1991")).toBeTruthy();
     expect(screen.getByText(/12345/i)).toBeTruthy();
   });
 
@@ -64,5 +64,13 @@ describe("PatientHeader", () => {
       expect(screen.getByText(/Country : Ethiopia/i)).toBeTruthy();
       expect(container).toMatchSnapshot();
     });
+  });
+
+  it("should display patient movement item on click of overflow menu icon", async () => {
+    const { container } = render(<PatientHeader patientId="123" />);
+    await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
+    screen.getByTestId("overflow-menu").click();
+    expect(screen.getByText("Patient Movement")).toBeTruthy();
+    expect(container).toMatchSnapshot();
   });
 });

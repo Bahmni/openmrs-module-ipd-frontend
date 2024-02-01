@@ -70,7 +70,7 @@ describe("AddEmergencyTasks", () => {
   });
 
   beforeEach(() => {
-    MockDate.set(new Date('2024-01-01T12:00:00.000Z'));
+    MockDate.set('2024-01-01');
   });
 
   afterEach(() => {
@@ -170,11 +170,11 @@ describe("AddEmergencyTasks", () => {
     // Set Administration Date
     const datePickerInput = container.querySelector(".bx--date-picker__input");
     fireEvent.change(datePickerInput, {
-      target: { value: moment().format("MM/DD/YYYY") },
+      target: { value: moment().format("DD MMM YYYY") },
     });
     fireEvent.blur(datePickerInput);
     const dateInputField = container.querySelector(".bx--date-picker__input");
-    expect(dateInputField.value).toBe(moment().format("MM/DD/YYYY"));
+    expect(dateInputField.value).toBe(moment().format("DD MMM YYYY"));
 
     //Set Administration Time
     const startTimeSelector = container.querySelector(

@@ -15,22 +15,25 @@ import {
   Column,
   SkeletonText,
   Link,
+  OverflowMenu, 
+  OverflowMenuItem
 } from "carbon-components-react";
-import { formatDateAsString } from "../../../../utils/DateFormatter";
 import { FormattedMessage } from "react-intl";
-import { DDMMYYY_DATE_FORMAT } from "../../../../constants";
 import "../styles/PatientHeader.scss";
 import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
 import { getPatientDashboardUrl } from "../../../../utils/CommonUtils";
 import PatientDetails from "./PatientDetails";
+import PatientMovementModal from "./PatientMovementModal";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 
 export const PatientHeader = (props) => {
-  const { patientId, openDischargeSummary } = props;
+  const { patientId, openVisitSummary } = props;
   const [showPatientDetails, togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
   const [isLoading, updateIsLoading] = useState(true);
   const [contacts, setMappedContacts] = useState([]);
   const [relationships, setMappedRelationships] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
   const showDetails = (
@@ -57,10 +60,10 @@ export const PatientHeader = (props) => {
       defaultMessage="Patient Dashboard"
     />
   );
-  const dischargeSummary = (
+  const visitSummary = (
     <FormattedMessage
-      id="DISCHARGE_SUMMARY"
-      defaultMessage="Discharge Summary"
+      id="VISIT_SUMMARY"
+      defaultMessage="Visit Summaries"
     />
   );
 
@@ -77,10 +80,7 @@ export const PatientHeader = (props) => {
       familyName: patientInfo?.person?.preferredName.familyName,
       middleName: patientInfo?.person?.preferredName?.middleName,
       age: patientInfo?.person?.age,
-      birthDate: formatDateAsString(
-        new Date(patientInfo?.person?.birthdate),
-        DDMMYYY_DATE_FORMAT
-      ),
+      birthDate: formatDate(patientInfo?.person?.birthdate),
       attributes: patientInfo?.person?.attributes,
       gender: getGender(patientInfo?.person?.gender),
       identifier: patientInfo?.identifiers[0]?.identifier,
@@ -106,6 +106,9 @@ export const PatientHeader = (props) => {
   };
 
   const toggleDetailsView = () => togglePatientDetails(!showPatientDetails);
+  const updatePatientMovementModal = (isOpen) => {
+    setIsModalOpen(isOpen);
+  };
   useEffect(() => {
     const getPatientInfo = async () => {
       const patientProfile = await fetchPatientProfile(patientId);
@@ -133,7 +136,7 @@ export const PatientHeader = (props) => {
               <Row className="patient-image-and-details">
                 <div className={"patient-image"} />
                 <Column>
-                  <Row>
+                  <Row className="header-title-row">
                     <div className="patient-name-and-navigations">
                       <h1 className="patient-name">
                         {patientDetails?.fullName}
@@ -148,27 +151,15 @@ export const PatientHeader = (props) => {
                       >
                         {patientDashboard}
                       </Link>
-                      <Link onClick={() => openDischargeSummary()}>
-                        {dischargeSummary}
+                      <Link onClick={() => openVisitSummary()}>
+                        {visitSummary}
                       </Link>
                     </div>
+                    <OverflowMenu data-testid="overflow-menu" flipped={true} aria-label="overflow-menu" className="patient-movement-overflow">
+                      <OverflowMenuItem title="item-patient-movement" itemText="Patient Movement" onClick={() => updatePatientMovementModal(!isModalOpen)}/>
+                    </OverflowMenu>
                   </Row>
                   <Row>
-                    <div className="other-info">
-                      <div className="patient-basic-info">
-                        <h3 className="patient-info">
-                          {patientDetails?.gender}
-                        </h3>
-                        <h3 className="patient-info">
-                          {patientDetails?.age} {years}
-                        </h3>
-                        <h3 className="patient-info">
-                          {patientDetails?.birthDate}
-                        </h3>
-                        <h3 className="patient-info">
-                          {patientDetails?.identifier}
-                        </h3>
-                      </div>
                       {showPatientDetails ? (
                         <Link
                           kind="tertiary"
@@ -188,6 +179,21 @@ export const PatientHeader = (props) => {
                           {showDetails} <ChevronDown20 />
                         </Link>
                       )}
+                    <div className="other-info">
+                      <div className="patient-basic-info">
+                        <h3 className="patient-info">
+                          {patientDetails?.gender}
+                        </h3>
+                        <h3 className="patient-info">
+                          {patientDetails?.age} {years}
+                        </h3>
+                        <h3 className="patient-info">
+                          {patientDetails?.birthDate}
+                        </h3>
+                        <h3 className="patient-info">
+                          {patientDetails?.identifier}
+                        </h3>
+                      </div>
                     </div>
                   </Row>
                 </Column>
@@ -204,11 +210,14 @@ export const PatientHeader = (props) => {
           </>
         )}
       </Tile>
+      <div>
+        {isModalOpen && <div> <PatientMovementModal updatePatientMovementModal={(isOpen) => updatePatientMovementModal(isOpen)}/> </div> }
+      </div>
     </>
   );
 };
 
 PatientHeader.propTypes = {
   patientId: PropTypes.string.isRequired,
-  openDischargeSummary: PropTypes.func.isRequired,
+  openVisitSummary: PropTypes.func.isRequired,
 };

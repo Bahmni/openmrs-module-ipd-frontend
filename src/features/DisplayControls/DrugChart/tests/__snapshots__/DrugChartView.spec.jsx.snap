@@ -3,7 +3,7 @@
 exports[`DrugChartWrapper matches snapshot 1`] = `
 <div>
   <div
-    class="drugchart-parent-container"
+    class="drugchart-parent-container display-container"
   >
     <div
       class="drugchart-shift-header"
@@ -77,7 +77,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
         <div
           class="shift-time"
         >
-          05/01/2024
+          05 Jan 2024
            | 
           <svg
             aria-hidden="true"
@@ -121,8 +121,36 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
         </div>
       </div>
     </div>
-    <div>
-      Loading...
+    <div
+      class="loading-parent"
+      data-testid="loading-icon"
+    >
+      <div
+        aria-atomic="true"
+        aria-live="assertive"
+        class="bx--loading"
+      >
+        <label
+          class="bx--visually-hidden"
+          id="loading-id-1"
+        >
+          Active loading indicator
+        </label>
+        <svg
+          class="bx--loading__svg"
+          viewBox="0 0 100 100"
+        >
+          <title>
+            Active loading indicator
+          </title>
+          <circle
+            class="bx--loading__stroke"
+            cx="50%"
+            cy="50%"
+            r="44"
+          />
+        </svg>
+      </div>
     </div>
   </div>
 </div>
@@ -131,7 +159,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
 exports[`DrugChartWrapper should render loading state when isLoading is true 1`] = `
 <div>
   <div
-    class="drugchart-parent-container"
+    class="drugchart-parent-container display-container"
   >
     <div
       class="drugchart-shift-header"
@@ -205,7 +233,7 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
         <div
           class="shift-time"
         >
-          05/01/2024
+          05 Jan 2024
            | 
           <svg
             aria-hidden="true"
@@ -249,8 +277,36 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
         </div>
       </div>
     </div>
-    <div>
-      Loading...
+    <div
+      class="loading-parent"
+      data-testid="loading-icon"
+    >
+      <div
+        aria-atomic="true"
+        aria-live="assertive"
+        class="bx--loading"
+      >
+        <label
+          class="bx--visually-hidden"
+          id="loading-id-5"
+        >
+          Active loading indicator
+        </label>
+        <svg
+          class="bx--loading__svg"
+          viewBox="0 0 100 100"
+        >
+          <title>
+            Active loading indicator
+          </title>
+          <circle
+            class="bx--loading__stroke"
+            cx="50%"
+            cy="50%"
+            r="44"
+          />
+        </svg>
+      </div>
     </div>
   </div>
 </div>
