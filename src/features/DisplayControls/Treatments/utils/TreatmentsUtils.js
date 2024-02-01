@@ -13,7 +13,6 @@ import { FormattedMessage } from "react-intl";
 import NotesIcon from "../../../../icons/notes.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { formatDate } from "../../../../utils/DateTimeUtils";
-import { IPDContext } from "../../../../context/IPDContext";
 
 export const treatmentHeaders = [
   {
@@ -160,7 +159,7 @@ export const getDrugName = (drugOrderObject) => {
         >
           {drugOrder.drug.name}
           <span>
-              <DisplayTags drugOrder={drugOrder.dosingInstructions} />
+            <DisplayTags drugOrder={drugOrder.dosingInstructions} />
           </span>
         </span>
       </div>
@@ -227,13 +226,13 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
         ),
         drugName: (
           <div className="notes-icon-div">
-            {approverNotes && approver?.function === verifierFunction && (
-              <NotesIcon className="notes-icon" />
-            )}
             <span className={`treatments-drug-name`}>
               {medicationAdministration.drug.display}
+              {approverNotes && approver?.function === verifierFunction && (
+                <NotesIcon className="notes-icon" />
+              )}
               <span>
-                  <DisplayTags drugOrder={dosingInstructions} />
+                <DisplayTags drugOrder={dosingInstructions} />
               </span>
             </span>
           </div>
