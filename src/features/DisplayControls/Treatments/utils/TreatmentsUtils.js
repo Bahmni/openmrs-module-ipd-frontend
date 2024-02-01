@@ -151,16 +151,16 @@ export const getDrugName = (drugOrderObject) => {
   ) {
     return (
       <div className="notes-icon-div">
-        <NotesIcon className="notes-icon" data-testid="notes-icon" />
         <span
           className={`treatments-drug-name ${
             drugOrder.dateStopped && "strike-through"
           }`}
         >
           {drugOrder.drug.name}
-          <span>
-            <DisplayTags drugOrder={drugOrder.dosingInstructions} />
-          </span>
+          <NotesIcon className="notes-icon" data-testid="notes-icon" />
+        </span>
+        <span>
+          <DisplayTags drugOrder={drugOrder.dosingInstructions} />
         </span>
       </div>
     );
@@ -231,9 +231,9 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
               {approverNotes && approver?.function === verifierFunction && (
                 <NotesIcon className="notes-icon" />
               )}
-              <span>
-                <DisplayTags drugOrder={dosingInstructions} />
-              </span>
+            </span>
+            <span>
+              <DisplayTags drugOrder={dosingInstructions} />
             </span>
           </div>
         ),
