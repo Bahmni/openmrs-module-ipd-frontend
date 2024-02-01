@@ -52,7 +52,13 @@ export default function DrugListCell(props) {
       )}
       {orderReasonText && (
         <>
-          <br /> <div className="tooltip-content-separater" />
+          {(dosingInstructions?.instructions?.instructions ||
+            dosingInstructions?.instructions?.additionalInstructions) && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
           Stopped Notes:&nbsp;{orderReasonText}
         </>
       )}
