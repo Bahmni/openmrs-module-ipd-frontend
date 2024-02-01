@@ -37,4 +37,23 @@
     .bx--assistive-text {
     display: none;
   }
+  .shift-timing {
+    .shift-time {
+      display: flex;
+      font-weight: 600;
+      svg {
+        margin-right: 2px;
+      }
+      .to-text {
+        margin: 0 6px;
+        font-weight: 400;
+      }
+      .mr-5 {
+        margin: 0 5px;
+      }
+    }
+    .shift-title {
+      font-size: 12px;
+    }
+  }
 }

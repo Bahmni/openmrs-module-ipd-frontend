@@ -179,7 +179,9 @@ describe("NursingTasks", () => {
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
     });
-    expect(getByText("11 Aug 2023 | 06:00 - 11 Aug 2023 | 18:00")).toBeTruthy();
+    expect(getByText(/11 Aug 2023/)).toBeTruthy();
+    expect(getByText(/06:00/)).toBeTruthy();
+    expect(getByText(/17:59/)).toBeTruthy();
   });
   it("should show Correct Nursing Tasks when clicked on previous button", async () => {
     MockDate.set("2024-01-05");

@@ -22,14 +22,14 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import { componentKeys } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
-import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
+import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
 import {
   currentShiftHoursArray,
-  getDateFormatString,
   getDateTime,
   getNextShiftDetails,
   getPreviousShiftDetails,
 } from "../../DrugChart/utils/DrugChartUtils";
+import { displayShiftTimingsFormat } from "../../../../constants";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
@@ -60,7 +60,6 @@ export default function NursingTasks(props) {
   });
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
-  const dateFormatString = getDateFormatString(drugChart);
 
   useEffect(() => {
     const currentShift = shiftDetails.currentShiftHoursArray;
@@ -252,6 +251,50 @@ export default function NursingTasks(props) {
     }
   };
 
+  const shiftTiming = () => {
+    let shiftStartDateTime = formatDate(
+      startEndDates.startDate,
+      displayShiftTimingsFormat
+    );
+    let shiftEndDateTime = formatDate(
+      startEndDates.endDate - 60,
+      displayShiftTimingsFormat
+    );
+    const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
+    const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
+
+    const formattedShiftStartTime = drugChart.enable24HourTime
+      ? shiftStartTime
+      : formatDate(startEndDates.startDate, "hh:mm a");
+
+    const formattedShiftEndTime = drugChart.enable24HourTime
+      ? shiftEndTime
+      : formatDate(startEndDates.endDate - 60, "hh:mm a");
+
+    if (shiftStartDate === shiftEndDate) {
+      return (
+        <div className="shift-timing">
+          <div className="shift-time">
+            {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {formattedShiftStartTime} <span className="to-text">to</span>{" "}
+            <Time16 /> {formattedShiftEndTime}
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="shift-timing">
+          <div className="shift-time">
+            {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {formattedShiftStartTime} <span className="to-text">to</span>{" "}
+            {shiftEndDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {formattedShiftEndTime}
+          </div>
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="nursing-tasks-content-container display-container">
       <div className={"nursing-task-navigation"}>
@@ -291,10 +334,7 @@ export default function NursingTasks(props) {
             className="margin-right-10"
             data-testid="next-shift"
           />
-          {`${formatDate(
-            startEndDates.startDate,
-            dateFormatString
-          )} - ${formatDate(startEndDates.endDate, dateFormatString)}`}
+          {shiftTiming()}
         </div>
         <div className="nursing-task-actions">
           <Dropdown

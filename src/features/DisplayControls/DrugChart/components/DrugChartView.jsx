@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { Button, Loading } from "carbon-components-react";
-import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
+import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
 import DrugChart from "./DrugChart";
 import {
   fetchMedications,
@@ -10,7 +10,6 @@ import {
   getUpdatedShiftArray,
   getNextShiftDetails,
   getPreviousShiftDetails,
-  getDateFormatString,
   transformDrugOrders,
   mapDrugOrdersAndSlots,
 } from "../utils/DrugChartUtils";
@@ -22,6 +21,7 @@ import { FormattedMessage } from "react-intl";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";
 import { IPDContext } from "../../../../context/IPDContext";
+import { displayShiftTimingsFormat } from "../../../../constants";
 
 const NoMedicationTaskMessage = (
   <FormattedMessage
@@ -183,7 +183,51 @@ export default function DrugChartWrapper(props) {
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
-  const dateFormatString = getDateFormatString(drugChart);
+
+  const shiftTiming = () => {
+    let shiftStartDateTime = formatDate(
+      startEndDates.startDate,
+      displayShiftTimingsFormat
+    );
+    let shiftEndDateTime = formatDate(
+      startEndDates.endDate - 60,
+      displayShiftTimingsFormat
+    );
+    const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
+    const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
+
+    const formattedShiftStartTime = drugChart.enable24HourTime
+      ? shiftStartTime
+      : formatDate(startEndDates.startDate, "hh:mm a");
+
+    const formattedShiftEndTime = drugChart.enable24HourTime
+      ? shiftEndTime
+      : formatDate(startEndDates.endDate - 60, "hh:mm a");
+
+    if (shiftStartDate === shiftEndDate) {
+      return (
+        <div className="shift-timing">
+          <div className="shift-time">
+            {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {formattedShiftStartTime} <span className="to-text">to</span>{" "}
+            <Time16 /> {formattedShiftEndTime}
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="shift-timing">
+          <div className="shift-time">
+            {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {formattedShiftStartTime} <span className="to-text">to</span>{" "}
+            {shiftEndDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {formattedShiftEndTime}
+          </div>
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="drugchart-parent-container display-container">
       <div className="drugchart-shift-header">
@@ -222,12 +266,7 @@ export default function DrugChartWrapper(props) {
           data-testid="nextButton"
           disabled={isShiftButtonsDisabled.next}
         />
-        <span>
-          {`${formatDate(
-            startEndDates.startDate,
-            dateFormatString
-          )} - ${formatDate(startEndDates.endDate, dateFormatString)}`}
-        </span>
+        {shiftTiming()}
       </div>
       {isLoading ? (
         <div className="loading-parent" data-testid="loading-icon">
