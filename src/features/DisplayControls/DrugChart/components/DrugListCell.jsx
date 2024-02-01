@@ -10,7 +10,8 @@ import moment from "moment";
 import { IPDContext } from "../../../../context/IPDContext";
 
 export default function DrugListCell(props) {
-  const { dosingInstructions, duration, name, slots, notes } = props.drugInfo;
+  const { dosingInstructions, duration, name, slots, notes, orderReasonText } =
+    props.drugInfo;
   const { instructions, dosage, doseUnits, route } = dosingInstructions;
   const { config } = useContext(IPDContext);
   const { drugChart = {} } = config;
@@ -18,7 +19,10 @@ export default function DrugListCell(props) {
   const enable24hour = drugChart.enable24HourTime;
 
   const showInstructionsIcon =
-    instructions?.instructions || instructions?.additionalInstructions || notes;
+    instructions?.instructions ||
+    instructions?.additionalInstructions ||
+    notes ||
+    orderReasonText;
   const administrationInfo = [];
   slots.forEach((slot) => {
     if (
@@ -47,6 +51,18 @@ export default function DrugListCell(props) {
           )}
           Additional Instructions:&nbsp;
           {dosingInstructions?.instructions?.additionalInstructions}
+        </>
+      )}
+      {orderReasonText && (
+        <>
+          {(dosingInstructions?.instructions?.instructions ||
+            dosingInstructions?.instructions?.additionalInstructions) && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
+          Stopped Notes:&nbsp;{orderReasonText}
         </>
       )}
       {notes && (
