@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import DrugChartView from "../components/DrugChartView";
 import { drugChartData } from "./DrugChartViewMockData";
+import { IPDContext } from "../../../../context/IPDContext";
 import MockDate from "mockdate";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
@@ -54,7 +55,7 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     const { container } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="testid" />
       </IPDContext.Provider>
     );
@@ -66,7 +67,7 @@ describe("DrugChartWrapper", () => {
   it("should render loading state when isLoading is true", async () => {
     MockDate.set("2024-01-05 10:00");
     const { container } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="test-id" />
       </IPDContext.Provider>
     );
@@ -81,7 +82,7 @@ describe("DrugChartWrapper", () => {
       data: [{ slots: [] }],
     });
     render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="test-id" />
       </IPDContext.Provider>
     );
@@ -98,7 +99,7 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="test-id" />
       </IPDContext.Provider>
     );
@@ -118,7 +119,7 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="test-id" />
       </IPDContext.Provider>
     );
@@ -138,7 +139,7 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="test-id" />
       </IPDContext.Provider>
     );

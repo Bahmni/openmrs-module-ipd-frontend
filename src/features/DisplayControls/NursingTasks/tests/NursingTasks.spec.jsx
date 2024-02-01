@@ -1,6 +1,8 @@
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { fireEvent, render, waitFor, screen } from "@testing-library/react";
 import NursingTasks from "../components/NursingTasks";
+import { IPDContext } from "../../../../context/IPDContext";
+
 import {
   mockNursingTasksResponse,
   mockShiftResponse,
@@ -57,7 +59,7 @@ describe("NursingTasks", () => {
   it("should show loading state", async () => {
     const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
@@ -77,7 +79,7 @@ describe("NursingTasks", () => {
 
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
@@ -98,7 +100,7 @@ describe("NursingTasks", () => {
     ]);
     const { getByText, container } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
@@ -124,7 +126,7 @@ describe("NursingTasks", () => {
     ]);
     const { getByText, container } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
@@ -149,7 +151,7 @@ describe("NursingTasks", () => {
     );
     const { getAllByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
@@ -171,7 +173,7 @@ describe("NursingTasks", () => {
     );
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
@@ -190,7 +192,7 @@ describe("NursingTasks", () => {
       .mockReturnValue(mockShiftResponse);
     const { getAllByText, getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
@@ -217,7 +219,7 @@ describe("NursingTasks", () => {
     mockGetTimeInSeconds.mockReturnValue(259200);
     const { getAllByText, getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
@@ -244,7 +246,7 @@ describe("NursingTasks", () => {
       .mockReturnValue(mockNursingTasksResponse);
     const { getAllByText, getByTestId, queryByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
@@ -280,7 +282,7 @@ describe("NursingTasks", () => {
     mockFetchMedicationNursingTasks.mockReturnValueOnce(mockShiftResponse);
     const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
@@ -298,7 +300,7 @@ describe("NursingTasks", () => {
     mockGetTimeInSeconds.mockReturnValue(0);
     const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
@@ -308,4 +310,23 @@ describe("NursingTasks", () => {
     });
     expect(getByTestId("next-shift").disabled).toEqual(true);
   });
+  // it.only("should show Current Shift and Add Task button as disabled", async () => {
+  //   MockDate.set("2024-01-05");
+  //   mockFetchMedicationNursingTasks
+  //     .mockReturnValueOnce(mockNursingTasksResponse)
+  //     .mockReturnValueOnce(mockShiftResponse)
+  //     .mockReturnValue(mockNursingTasksResponse);
+  //   const { getByText } = render(
+  //     <IPDContext.Provider value={{isReadMode: false}}>
+  //       <SliderContext.Provider value={mockProviderValue}>
+  //         <NursingTasks patientId="patientid" />
+  //       </SliderContext.Provider>
+  //     </IPDContext.Provider>
+  //   );
+  //   await waitFor(() => {
+  //     expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
+  //   });
+  //   screen.debug();
+  //   expect(getByText("Current Shift")).toEqual(true);
+  // });
 });

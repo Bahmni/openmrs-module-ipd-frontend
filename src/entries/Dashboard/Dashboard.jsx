@@ -24,7 +24,7 @@ import { FormattedMessage } from "react-intl";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
-  const { patient, visitUuid, location, provider } = hostData;
+  const { patient, visitUuid ,location, provider, isReadMode=false, visitSummary } = hostData;
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
     nursingTasks: false,
@@ -127,6 +127,8 @@ export default function Dashboard(props) {
               location,
               provider,
               config: dashboardConfig,
+              isReadMode, 
+              visitSummary
             }}
           >
             <main className="ipd-page">

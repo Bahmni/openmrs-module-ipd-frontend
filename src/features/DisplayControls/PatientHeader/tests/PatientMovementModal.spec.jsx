@@ -98,7 +98,7 @@ describe("PatientMovementModal", () => {
       <PatientMovementModal updatePatientMovementModal={()=> jest.fn()}/></IPDContext.Provider>);
     
     await waitFor(() => {
-      expect(screen.getByPlaceholderText("Enter Adt Notes")).toBeTruthy();
+      expect(screen.getByPlaceholderText("Enter ADT Notes")).toBeTruthy();
     });
   }); 
 
@@ -165,7 +165,7 @@ describe("PatientMovementModal", () => {
     fireEvent.click(screen.getByText("Admit Patient"));
     expect(saveButton.disabled).toEqual(false);
     
-    const addNotes = screen.getByPlaceholderText("Enter Adt Notes");
+    const addNotes = screen.getByPlaceholderText("Enter ADT Notes");
     fireEvent.click(addNotes);
     fireEvent.change(addNotes, { target: { value: "Admitted" } });
     expect(addNotes.value).toEqual("Admitted");
@@ -211,7 +211,7 @@ describe("PatientMovementModal", () => {
     fireEvent.click(screen.getByText("Discharge Patient"));
     expect(saveButton.disabled).toEqual(false);
     
-    const addNotes = screen.getByPlaceholderText("Enter Adt Notes");
+    const addNotes = screen.getByPlaceholderText("Enter ADT Notes");
     fireEvent.click(addNotes);
     fireEvent.change(addNotes, { target: { value: "Discharged" } });
     expect(addNotes.value).toEqual("Discharged");
@@ -244,7 +244,7 @@ describe("PatientMovementModal", () => {
     fireEvent.click(screen.getByText("Transfer Patient"));
     expect(saveButton.disabled).toEqual(false);
     
-    expect(screen.queryByText("Enter Adt Notes")).toBeNull();
+    expect(screen.queryByText("Enter ADT Notes")).toBeNull();
 
     expect(saveButton.disabled).toEqual(false);
     fireEvent.click(saveButton);
@@ -288,7 +288,7 @@ describe("PatientMovementModal", () => {
     fireEvent.click(screen.getByText("Undo Discharge"));
     expect(saveButton.disabled).toEqual(false);
     
-    expect(screen.queryByText("Enter Adt Notes")).toBeNull();
+    expect(screen.queryByText("Enter ADT Notes")).toBeNull();
     
     expect(saveButton.disabled).toEqual(false);
     fireEvent.click(saveButton);

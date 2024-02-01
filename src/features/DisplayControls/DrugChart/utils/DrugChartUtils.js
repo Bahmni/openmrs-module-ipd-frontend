@@ -245,14 +245,16 @@ export const getUpdatedShiftArray = (shiftRange = "") => {
   return updatedShiftHoursArray;
 };
 
-export const currentShiftHoursArray = (shiftDetails = {}) => {
+export const currentShiftHoursArray = (isReadMode, endDate, shiftDetails = {}) => {
   const rangeArray = [];
   Object.values(shiftDetails).forEach((shift) => {
     rangeArray.push(`${shift.shiftStartTime}-${shift.shiftEndTime}`);
   });
 
   // finding the current hour range
-  const currentDate = new Date();
+  console.log('Inside the Utils', endDate, new  Date(endDate));
+  const currentDate = isReadMode ? new Date(endDate) : new Date();
+  console.log('Utils currentDate', currentDate);
   const currentHour = currentDate.getHours();
   let currentRange = rangeArray[0];
   let shiftIndex = 0;

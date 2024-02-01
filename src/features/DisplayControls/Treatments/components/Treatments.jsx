@@ -27,6 +27,7 @@ import { defaultDateTimeFormat } from "../../../../constants";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
 import { SliderContext } from "../../../../context/SliderContext";
+import { IPDContext } from "../../../../context/IPDContext";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { componentKeys } from "../../../../constants";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
@@ -58,6 +59,7 @@ const Treatments = (props) => {
   const [additionalData, setAdditionalData] = useState([]);
   const [showEditMessage, setShowEditMessage] = useState(false);
   const allMedications = useContext(AllMedicationsContext);
+  const { isReadMode } = useContext(IPDContext);
   const [showStopDrugChartModal, setShowStopDrugChartModal] = useState(false);
   const [stopReason, setStopReason] = useState("");
   const [isStopButtonDisabled, setStopButtonDisabled] = useState(true);
@@ -73,7 +75,7 @@ const Treatments = (props) => {
     });
   };
   let drugOrderList = {};
-  const isAddToDrugChartDisabled = visitSummary?.admissionDetails === null;
+  const isAddToDrugChartDisabled = isReadMode || (visitSummary?.admissionDetails === null);
   const sliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -215,6 +217,7 @@ const Treatments = (props) => {
     } else if (!showStopDrugChartLink) {
       return (
         <Link
+          disabled={isReadMode}
           onClick={() =>
             handleEditAndAddToDrugChartClick(
               drugOrder.uuid,
@@ -228,7 +231,7 @@ const Treatments = (props) => {
       );
     } else {
       return (
-        <Link onClick={() => handleStopDrugChartClick(drugOrder.uuid)}>
+        <Link disabled={isReadMode} onClick={() => handleStopDrugChartClick(drugOrder.uuid)}>
           {StopDrugChart}
         </Link>
       );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import {
   getGender,
@@ -25,9 +25,11 @@ import { getPatientDashboardUrl } from "../../../../utils/CommonUtils";
 import PatientDetails from "./PatientDetails";
 import PatientMovementModal from "./PatientMovementModal";
 import { formatDate } from "../../../../utils/DateTimeUtils";
+import { IPDContext } from "../../../../context/IPDContext";
 
 export const PatientHeader = (props) => {
   const { patientId, openVisitSummary } = props;
+  const { isReadMode } = useContext(IPDContext);
   const [showPatientDetails, togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
   const [isLoading, updateIsLoading] = useState(true);
@@ -156,7 +158,7 @@ export const PatientHeader = (props) => {
                       </Link>
                     </div>
                     <OverflowMenu data-testid="overflow-menu" flipped={true} aria-label="overflow-menu" className="patient-movement-overflow">
-                      <OverflowMenuItem title="item-patient-movement" itemText="Patient Movement" onClick={() => updatePatientMovementModal(!isModalOpen)}/>
+                      <OverflowMenuItem data-testid="overflow-menu-item1" title="item-patient-movement" itemText="Patient Movement" onClick={() => updatePatientMovementModal(!isModalOpen)} disabled={isReadMode}/>
                     </OverflowMenu>
                   </Row>
                   <Row>

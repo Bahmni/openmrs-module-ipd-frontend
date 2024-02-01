@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { fireEvent, getByRole, render, waitFor } from "@testing-library/react";
 import React from "react";
 import Treatments from "../components/Treatments";
 import { getEncounterType, stopDrugOrders } from "../utils/TreatmentsUtils";
@@ -85,7 +85,7 @@ describe("Treatments", () => {
 
   it("should show no treatments message if no drug orders are present for that patient", async () => {
     const { getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider
             value={mockAllMedicationsProviderValue}
@@ -137,7 +137,7 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -189,7 +189,7 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -243,7 +243,7 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -297,7 +297,7 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -352,7 +352,7 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -410,13 +410,15 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <AllMedicationsContext.Provider value={updatedAllMedications}>
-            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-          </AllMedicationsContext.Provider>
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{isReadMode: false}}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <IPDContext.Provider value={{ config: mockConfig }}>
+            <AllMedicationsContext.Provider value={updatedAllMedications}>
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </AllMedicationsContext.Provider>
+          </IPDContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
     const editDrugChartLink = await waitFor(() => getByText("Edit Drug Chart"));
     await waitFor(() => {
@@ -435,7 +437,7 @@ describe("Treatments", () => {
       },
     };
     const { getByText, queryByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -461,7 +463,7 @@ describe("Treatments", () => {
     };
 
     const { getByText, getAllByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -494,7 +496,7 @@ describe("Treatments", () => {
     };
 
     const { getAllByText, container } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -540,7 +542,7 @@ describe("Treatments", () => {
     });
 
     const { getAllByText, container } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -608,7 +610,7 @@ describe("Treatments", () => {
     };
 
     const { queryByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -634,7 +636,7 @@ describe("Treatments", () => {
     };
 
     const { getAllByText, queryByText, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -653,5 +655,115 @@ describe("Treatments", () => {
         )
       ).toBeFalsy();
     });
+  });
+
+  it("should render an AddToDrugChart link disabled for IPD treatments read mode", async () => {
+    const treatments = [
+      {
+        drugOrder: {
+          uuid: "1",
+          effectiveStartDate: 1704785404,
+          dateStopped: null,
+          dateActivated: 1704785404,
+          scheduledDate: 1704785404,
+          drug: {
+            name: "Drug 1",
+          },
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            route: "Oral",
+            frequency: "Once a day",
+            administrationInstructions:
+              '{"instructions":"As directed","additionalInstructions":"all good"}',
+          },
+          duration: 7,
+          durationUnits: "Day(s)",
+          careSetting: "INPATIENT",
+        },
+        provider: {
+          name: "Dr. John Doe",
+        },
+      },
+    ];
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
+        emergencyMedications: [],
+        ipdDrugOrders: treatments,
+      },
+    };
+    const { getByRole } = render(
+      <IPDContext.Provider value={{isReadMode: true}}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
+    );
+    await waitFor(() => {
+      const link = getByRole('link', {disabled: true});
+      expect(link).toBeTruthy();
+    });
+  });
+});
+
+it("should render an Edit Drug Chart link disabled for IPD treatments read mode", async () => {
+  const treatments = [
+    {
+      drugOrder: {
+        uuid: "1",
+        effectiveStartDate: 1704785404,
+        dateStopped: null,
+        dateActivated: 1704785404,
+        scheduledDate: 1704785404,
+        drug: {
+          name: "Drug 1",
+        },
+        dosingInstructions: {
+          dose: 1,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Once a day",
+          administrationInstructions:
+            '{"instructions":"As directed","additionalInstructions":"all good"}',
+        },
+        duration: 7,
+        durationUnits: "Day(s)",
+        careSetting: "INPATIENT",
+      },
+      drugOrderSchedule: {
+        firstDaySlotsStartTime: [1704798900],
+        dayWiseSlotsStartTime: [1704853800, 1704885000],
+        remainingDaySlotsStartTime: [1704940200],
+        slotStartTime: null,
+        medicationAdministrationStarted: false,
+      },
+      provider: {
+        name: "Dr. John Doe",
+      },
+    },
+  ];
+  const updatedAllMedications = {
+    ...mockAllMedicationsProviderValue,
+    data: {
+      emergencyMedications: [],
+      ipdDrugOrders: treatments,
+    },
+  };
+  const { getByText } = render(
+    <IPDContext.Provider value={{isReadMode: true}}>
+      <SliderContext.Provider value={mockProviderValue}>
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    </IPDContext.Provider>
+  );
+  const editDrugChartLink = await waitFor(() => getByText("Edit Drug Chart"));
+  await waitFor(() => {
+    expect(editDrugChartLink).toBeTruthy();
+    expect(editDrugChartLink.className).toContain("bx--link--disabled");
   });
 });

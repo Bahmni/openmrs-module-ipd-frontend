@@ -32,25 +32,25 @@ const NoMedicationTaskMessage = (
 
 export default function DrugChartWrapper(props) {
   const { patientId } = props;
-  const { config } = useContext(IPDContext);
+  const { config, isReadMode, visitSummary } = useContext(IPDContext);
   const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
   const [drugChartData, setDrugChartData] = useState([]);
   const [transformedData, setTransformedData] = useState([]);
   const [drugOrders, setDrugOrders] = useState({});
   const [isLoading, setLoading] = useState(true);
   const [startEndDates, updatedStartEndDates] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+    endDate: isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
   });
   const allMedications = useContext(AllMedicationsContext);
-  const shiftDetails = currentShiftHoursArray(shiftConfig);
+  const shiftDetails = currentShiftHoursArray(isReadMode, visitSummary.stopDateTime, shiftConfig);
   const allowedForthShfts =
     getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0]) / 1000 +
     convertDaystoSeconds(2);
   const [nextShiftMaxHour] = useState(allowedForthShfts);
   const [isShiftButtonsDisabled, setIsShiftButtonsDisabled] = useState({
     previous: false,
-    next: false,
+    next: isReadMode ? true : false,
   });
 
   const [currentShiftArray, updateShiftArray] = useState(
@@ -70,6 +70,7 @@ export default function DrugChartWrapper(props) {
         endDateTimeInSeconds
       );
       setDrugChartData(response.data);
+      console.log('response drug chart data ', response);
       if (response.data.length > 0) {
         setIsShiftButtonsDisabled({
           previous: response.data[0].startDate > startDateTimeInSeconds,
@@ -101,14 +102,15 @@ export default function DrugChartWrapper(props) {
     const currentShift = shiftDetails.currentShiftHoursArray;
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
-    let startDateTime = getDateTime(new Date(), currentShift[0]);
+    let startDateTime = getDateTime(
+      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(), currentShift[0]);
     let endDateTime = getDateTime(
-      new Date(),
+      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
       currentShift[currentShift.length - 1] + 1
     );
     /** if shift is going on two different dates */
     if (lastHour < firstHour) {
-      const d = new Date();
+      const d = isReadMode ? new Date(visitSummary.stopDateTime) : new Date();
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
@@ -156,7 +158,7 @@ export default function DrugChartWrapper(props) {
   };
 
   const handleCurrent = () => {
-    const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
+    const shiftDetailsObj = currentShiftHoursArray(isReadMode, visitSummary.stopDateTime,shiftConfig);
     const currentShift = shiftDetailsObj.currentShiftHoursArray;
     const updatedShiftIndex = shiftDetailsObj.shiftIndex;
     const firstHour = currentShift[0];
@@ -238,6 +240,7 @@ export default function DrugChartWrapper(props) {
           onClick={handleCurrent}
           className="margin-right-10"
           data-testid="currentShift"
+          disabled={isReadMode}
         >
           <FormattedMessage
             id={"CURRENT_SHIFT"}
