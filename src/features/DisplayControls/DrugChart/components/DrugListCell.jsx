@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import Clock from "../../../../icons/clock.svg";
 import "../styles/DrugListCell.scss";
@@ -6,16 +6,23 @@ import { TooltipDefinition } from "carbon-components-react";
 import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
-import data from "../../../../utils/config.json";
 import moment from "moment";
+import { IPDContext } from "../../../../context/IPDContext";
 
 export default function DrugListCell(props) {
-  const { dosingInstructions, duration, name, slots, notes } = props.drugInfo;
+  const { dosingInstructions, duration, name, slots, notes, orderReasonText } =
+    props.drugInfo;
   const { instructions, dosage, doseUnits, route } = dosingInstructions;
-  const enable24hour = data.config.drugChart.enable24HourTime;
+  const { config } = useContext(IPDContext);
+  const { drugChart = {} } = config;
+
+  const enable24hour = drugChart.enable24HourTime;
 
   const showInstructionsIcon =
-    instructions?.instructions || instructions?.additionalInstructions || notes;
+    instructions?.instructions ||
+    instructions?.additionalInstructions ||
+    notes ||
+    orderReasonText;
   const administrationInfo = [];
   slots.forEach((slot) => {
     if (
@@ -44,6 +51,18 @@ export default function DrugListCell(props) {
           )}
           Additional Instructions:&nbsp;
           {dosingInstructions?.instructions?.additionalInstructions}
+        </>
+      )}
+      {orderReasonText && (
+        <>
+          {(dosingInstructions?.instructions?.instructions ||
+            dosingInstructions?.instructions?.additionalInstructions) && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
+          Stopped Notes:&nbsp;{orderReasonText}
         </>
       )}
       {notes && (

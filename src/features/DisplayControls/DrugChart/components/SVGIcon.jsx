@@ -6,6 +6,7 @@ import AdministeredLateIcon from "../../../../icons/administered-late.svg";
 import LateIcon from "../../../../icons/late.svg";
 import NotAdministeredIcon from "../../../../icons/not-administered.svg";
 import PendingIcon from "../../../../icons/pending.svg";
+import StoppedIcon from "../../../../icons/stopped.svg";
 import "../styles/SVGIcon.scss";
 
 export default function SVGIcon(props) {
@@ -27,6 +28,9 @@ export default function SVGIcon(props) {
     case "Administered-Late":
       icon = <AdministeredLateIcon />;
       clickable = true;
+      break;
+    case "Stopped":
+      icon = <StoppedIcon />;
       break;
     default:
       icon = <PendingIcon />;

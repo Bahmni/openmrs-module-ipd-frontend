@@ -23,6 +23,7 @@ import { componentKeys } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import data from "../../../../utils/config.json";
 import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
+import { IPDContext } from "../../../../context/IPDContext";
 import {
   currentShiftHoursArray,
   getDateFormatString,
@@ -33,6 +34,8 @@ import {
 
 export default function NursingTasks(props) {
   const { patientId } = props;
+  const { config } = useContext(IPDContext);
+  const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
   const [nursingTasks, setNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,9 +46,6 @@ export default function NursingTasks(props) {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const refreshDisplayControl = useContext(RefreshDisplayControl);
-  const {
-    config: { shiftDetails: shiftConfig = {} },
-  } = data;
   const shiftDetails = currentShiftHoursArray(shiftConfig);
   const allowedForthShfts =
     getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0]) / 1000 +
@@ -61,7 +61,7 @@ export default function NursingTasks(props) {
   });
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
-  const dateFormatString = getDateFormatString();
+  const dateFormatString = getDateFormatString(drugChart);
 
   useEffect(() => {
     const currentShift = shiftDetails.currentShiftHoursArray;

@@ -4,6 +4,8 @@ import Treatments from "../components/Treatments";
 import { getEncounterType, stopDrugOrders } from "../utils/TreatmentsUtils";
 import { SliderContext } from "../../../../context/SliderContext";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
+import { IPDContext } from "../../../../context/IPDContext";
+import { mockConfig } from "../../../../utils/CommonUtils";
 
 jest.mock("../utils/TreatmentsUtils", () => {
   const originalModule = jest.requireActual("../utils/TreatmentsUtils");
@@ -83,11 +85,15 @@ describe("Treatments", () => {
 
   it("should show no treatments message if no drug orders are present for that patient", async () => {
     const { getByText } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={mockAllMedicationsProviderValue}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider
+            value={mockAllMedicationsProviderValue}
+          >
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
     await waitFor(() => {
       expect(
@@ -131,11 +137,13 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
     await waitFor(() => {
       expect(
@@ -181,11 +189,13 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
     await waitFor(() => {
       expect(getByText("20 Jan 1970")).toBeTruthy();
@@ -233,11 +243,13 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
     await waitFor(() => {
       expect(getByText("Add to Drug Chart")).toBeTruthy();
@@ -285,11 +297,13 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
     await waitFor(() => {
       expect(getByText("Add to Drug Chart")).toBeTruthy();
@@ -338,11 +352,13 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
     await waitFor(() => {
       expect(getByText(/drug 1/i)).toBeTruthy();
@@ -395,9 +411,11 @@ describe("Treatments", () => {
     };
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
     const editDrugChartLink = await waitFor(() => getByText("Edit Drug Chart"));
@@ -417,11 +435,13 @@ describe("Treatments", () => {
       },
     };
     const { getByText, queryByText } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
 
     await waitFor(() => {
@@ -441,11 +461,13 @@ describe("Treatments", () => {
     };
 
     const { getByText, getAllByText } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
 
     await waitFor(() => {
@@ -472,11 +494,13 @@ describe("Treatments", () => {
     };
 
     const { getAllByText, container } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
 
     await waitFor(() => {
@@ -516,11 +540,13 @@ describe("Treatments", () => {
     });
 
     const { getAllByText, container } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
 
     await waitFor(() => {
@@ -582,11 +608,13 @@ describe("Treatments", () => {
     };
 
     const { queryByText } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
 
     await waitFor(() => {
@@ -606,11 +634,13 @@ describe("Treatments", () => {
     };
 
     const { getAllByText, queryByText, getByText } = render(
-      <SliderContext.Provider value={mockProviderValue}>
-        <AllMedicationsContext.Provider value={updatedAllMedications}>
-          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-        </AllMedicationsContext.Provider>
-      </SliderContext.Provider>
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
     );
 
     await waitFor(() => {

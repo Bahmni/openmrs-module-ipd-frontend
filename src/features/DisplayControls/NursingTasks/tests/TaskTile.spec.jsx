@@ -1,13 +1,14 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import MockDate from "mockdate";
-
 import TaskTile from "../components/TaskTile";
 import {
   mockCompletedTaskTileData,
   mockPendingTaskTileData,
   mockTaskTileDataForGroupedTask,
 } from "./NursingTasksUtilsMockData";
+import { mockConfig } from "../../../../utils/CommonUtils";
+import { IPDContext } from "../../../../context/IPDContext";
 
 describe("TaskTile", () => {
   beforeEach(() => {
@@ -19,14 +20,18 @@ describe("TaskTile", () => {
   });
   it("should match the snapshot for non grouped task", () => {
     const { asFragment } = render(
-      <TaskTile medicationNursingTask={mockCompletedTaskTileData} />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <TaskTile medicationNursingTask={mockCompletedTaskTileData} />
+      </IPDContext.Provider>
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("should match the snapshot for grouped task", async () => {
     const { asFragment, getByText } = render(
-      <TaskTile medicationNursingTask={mockTaskTileDataForGroupedTask} />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <TaskTile medicationNursingTask={mockTaskTileDataForGroupedTask} />
+      </IPDContext.Provider>
     );
 
     await waitFor(() => {
@@ -37,7 +42,9 @@ describe("TaskTile", () => {
 
   it("should disable tile when task is completed", () => {
     const { container, getByTestId } = render(
-      <TaskTile medicationNursingTask={mockCompletedTaskTileData} />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <TaskTile medicationNursingTask={mockCompletedTaskTileData} />
+      </IPDContext.Provider>
     );
 
     const completedTile = container.querySelector(".disabled-tile");
@@ -49,7 +56,9 @@ describe("TaskTile", () => {
 
   it("should render pending icon when task is not administered", () => {
     const { getByTestId } = render(
-      <TaskTile medicationNursingTask={mockPendingTaskTileData} />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <TaskTile medicationNursingTask={mockPendingTaskTileData} />
+      </IPDContext.Provider>
     );
 
     const pendingIcon = getByTestId("Pending");

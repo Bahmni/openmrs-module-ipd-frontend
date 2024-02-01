@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import PropTypes from "prop-types";
 import "../styles/UpdateNursingTasks.scss";
@@ -22,6 +22,7 @@ import {
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import { performerFunction } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
+import { IPDContext } from "../../../../context/IPDContext";
 
 const UpdateNursingTasks = (props) => {
   const {
@@ -52,6 +53,9 @@ const UpdateNursingTasks = (props) => {
   const closeModal = () => {
     setOpenConfirmationModal(false);
   };
+
+  const { config } = useContext(IPDContext);
+  const { nursingTasks = {} } = config;
 
   const saveAdministeredTasks = () => {
     setShowSuccessNotification(true);
@@ -155,7 +159,9 @@ const UpdateNursingTasks = (props) => {
   };
 
   const handleTimeChange = (time, id) => {
-    if (!isTimeWithinAdministeredWindow(time, tasks[id].startTime)) {
+    if (
+      !isTimeWithinAdministeredWindow(time, tasks[id].startTime, nursingTasks)
+    ) {
       updateTasks({
         ...tasks,
         [id]: {
@@ -183,7 +189,10 @@ const UpdateNursingTasks = (props) => {
 
   const handleToggle = (checked, id) => {
     const time = moment().format("HH:mm");
-    if (checked && !isTimeWithinAdministeredWindow(time, tasks[id].startTime)) {
+    if (
+      checked &&
+      !isTimeWithinAdministeredWindow(time, tasks[id].startTime, nursingTasks)
+    ) {
       updateTasks({
         ...tasks,
         [id]: {
