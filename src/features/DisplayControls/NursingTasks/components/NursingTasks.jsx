@@ -30,11 +30,10 @@ import {
   getPreviousShiftDetails,
 } from "../../DrugChart/utils/DrugChartUtils";
 import { displayShiftTimingsFormat } from "../../../../constants";
-import { IPDContext } from "../../../../context/IPDContext";
 
 export default function NursingTasks(props) {
   const { patientId } = props;
-  const { isReadMode, visitSummary,visit } = useContext(IPDContext);
+  const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
   const [nursingTasks, setNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -47,9 +46,7 @@ export default function NursingTasks(props) {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const refreshDisplayControl = useContext(RefreshDisplayControl);
-  const {
-    config: { shiftDetails: shiftConfig = {} },
-  } = data;
+  const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
   console.log("visitSummary", visitSummary);
   const shiftDetails = currentShiftHoursArray(
     isReadMode,
@@ -63,14 +60,13 @@ export default function NursingTasks(props) {
     startDate: isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
     endDate: isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
   });
-  const [nextShiftMaxHour] = useState(allowedForthShfts);
+  const [nextShiftMaxHour] = useState(isReadMode? visitSummary.stopDateTime/1000 : allowedForthShfts);
   const [isShiftsButtonsDisabled, setIsShiftsButtonsDisabled] = useState({
     previous: false,
     next: isReadMode ? true : false,
   });
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
-  const dateFormatString = getDateFormatString();
   console.log("startEndDates", startEndDates, visitSummary.stopDateTime);
   useEffect(() => {
     const currentShift = shiftDetails.currentShiftHoursArray;
