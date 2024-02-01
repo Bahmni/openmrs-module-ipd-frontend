@@ -80,7 +80,7 @@ export default function Dashboard(props) {
   const scrollToSection = (key) => {
     updateSelectedTab(key);
     window.scrollTo({
-      top: refs.current[key].offsetTop,
+      top: refs.current[key].offsetTop - 60,
       behavior: "smooth",
     });
   };

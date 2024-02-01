@@ -38,7 +38,7 @@ const ExpandableRowData = (props) => {
   }
 
   if (expandTreatmentData.stopReason) {
-    verticalTabsData["Stopping Notes"] = {
+    verticalTabsData["Stopped Notes"] = {
       data: expandTreatmentData.stopReason,
       additionalData: [expandTreatmentData.stopperAdditionalData]
     };

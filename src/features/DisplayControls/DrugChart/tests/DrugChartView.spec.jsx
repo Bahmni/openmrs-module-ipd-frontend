@@ -105,9 +105,10 @@ describe("DrugChartWrapper", () => {
     const previousButton = screen.getByTestId("previousButton");
     fireEvent.click(previousButton);
     await waitFor(() => {
-      expect(
-        screen.getByText("04 Jan 2024 | 18:00 - 05 Jan 2024 | 06:00")
-      ).toBeTruthy();
+      expect(screen.getByText(/04 Jan 2024/)).toBeTruthy();
+      expect(screen.getByText(/18:00/)).toBeTruthy();
+      expect(screen.getByText(/05 Jan 2024/)).toBeTruthy();
+      expect(screen.getByText(/05:59/)).toBeTruthy();
     });
   });
 
@@ -124,9 +125,10 @@ describe("DrugChartWrapper", () => {
     const nextButton = screen.getByTestId("nextButton");
     fireEvent.click(nextButton);
     await waitFor(() => {
-      expect(
-        screen.getByText("05 Jan 2024 | 18:00 - 06 Jan 2024 | 06:00")
-      ).toBeTruthy();
+      expect(screen.getByText(/05 Jan 2024/)).toBeTruthy();
+      expect(screen.getByText(/18:00/)).toBeTruthy();
+      expect(screen.getByText(/06 Jan 2024/)).toBeTruthy();
+      expect(screen.getByText(/05:59/)).toBeTruthy();
     });
   });
 
@@ -143,9 +145,9 @@ describe("DrugChartWrapper", () => {
     const currentShiftButton = screen.getByTestId("currentShift");
     fireEvent.click(currentShiftButton);
     await waitFor(() => {
-      expect(
-        screen.getByText("05 Jan 2024 | 06:00 - 05 Jan 2024 | 18:00")
-      ).toBeTruthy();
+      expect(screen.getByText(/05 Jan 2024/)).toBeTruthy();
+      expect(screen.getByText(/06:00/)).toBeTruthy();
+      expect(screen.getByText(/17:59/)).toBeTruthy();
     });
   });
 

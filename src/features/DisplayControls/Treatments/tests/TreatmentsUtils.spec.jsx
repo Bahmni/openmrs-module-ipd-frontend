@@ -1,3 +1,4 @@
+import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import axios from "axios";
 import {
@@ -5,6 +6,9 @@ import {
   getEncounterType,
   getDrugName,
 } from "../utils/TreatmentsUtils";
+import { IPDContext } from "../../../../context/IPDContext";
+import { mockConfig } from "../../../../utils/CommonUtils";
+
 jest.mock("axios");
 
 const stoppedDrugOrder = [
@@ -112,7 +116,11 @@ describe("TreatmentsUtils", () => {
       additionalInstructions: null,
     };
 
-    const { queryByText, queryByTestId } = render(getDrugName(drugOrderObject));
+    const { queryByText, queryByTestId } = render(
+      <IPDContext.Provider value={{config: mockConfig}}>
+        {getDrugName(drugOrderObject)}
+      </IPDContext.Provider>
+    );
 
     expect(queryByText("Paracetamol")).toBeTruthy();
     expect(

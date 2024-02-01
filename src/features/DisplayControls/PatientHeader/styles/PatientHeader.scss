@@ -1,19 +1,21 @@
 .patient-header {
   margin: 10px 0 10px 0;
   padding: 0;
-
+  position: sticky;
+  top: 48px;
+  z-index: 1000;
   .patient-name {
     color: #393939;
     font-size: 20px;
     margin: 10px 0 10px 0;
   }
 
-  .header-title-row{
+  .header-title-row {
     justify-content: space-between;
-  
+
     .patient-movement-overflow {
       position: absolute;
-      right: 15px;
+      right: 1px;
     }
   }
 
@@ -78,8 +80,8 @@
   .show-more {
     font-size: 0.875rem;
     position: absolute;
-    right: 15px;
-    top: 90px;
+    right: 1px;
+    top: 45px;
   }
 
   .other-info {
