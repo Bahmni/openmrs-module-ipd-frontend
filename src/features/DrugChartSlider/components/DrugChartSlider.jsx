@@ -31,11 +31,11 @@ import { ScheduleSection } from "./ScheduleSection";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
-  const enableSchedule = hostData?.scheduleFrequencies.find(
+  const enableSchedule = hostData?.scheduleFrequencies?.find(
     (frequency) =>
       frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
   );
-  const enableStartTime = hostData?.startTimeFrequencies.includes(
+  const enableStartTime = hostData?.startTimeFrequencies?.includes(
     hostData?.drugOrder?.uniformDosingType?.frequency
   );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
@@ -266,7 +266,7 @@ const DrugChartSlider = (props) => {
         []
       );
 
-      const schedulesUTCTimeEpoch = schedules.map((schedule) =>
+      const schedulesUTCTimeEpoch = schedules?.map((schedule) =>
         getUTCTimeEpoch(
           schedule,
           enable24HourTimers,
@@ -274,7 +274,7 @@ const DrugChartSlider = (props) => {
         )
       );
 
-      const finalDaySchedulesUTCTimeEpoch = finalDaySchedules.map((schedule) =>
+      const finalDaySchedulesUTCTimeEpoch = finalDaySchedules?.map((schedule) =>
         getUTCTimeEpoch(
           schedule,
           enable24HourTimers,
@@ -287,13 +287,15 @@ const DrugChartSlider = (props) => {
       payload.dayWiseSlotsStartTime = firstDaySchedules.some(
         (schedule) => schedule == "hh:mm"
       )
-        ? schedulesUTCTimeEpoch.map((schedules) => schedules + nextScheduleDate)
+        ? schedulesUTCTimeEpoch?.map(
+            (schedules) => schedules + nextScheduleDate
+          )
         : schedulesUTCTimeEpoch;
-      const remainingDaySlotsStartTime = finalDaySchedulesUTCTimeEpoch.map(
+      const remainingDaySlotsStartTime = finalDaySchedulesUTCTimeEpoch?.map(
         (schedules) => schedules + finalScheduleDate
       );
 
-      const remainingDaySlotsTime = remainingDaySlotsStartTime.slice(
+      const remainingDaySlotsTime = remainingDaySlotsStartTime?.slice(
         0,
         firstDaySlotsMissed
       );
@@ -339,9 +341,6 @@ const DrugChartSlider = (props) => {
         }
       });
       setSchedules(scheduleTimings || []);
-      finalScheduleCount > 0 &&
-        finalScheduleCount !== enableSchedule?.frequencyPerDay &&
-        setFinalDaySchedules(scheduleTimings.slice(firstDaySlotsMissed) || []);
       if (
         finalScheduleCount > 0 &&
         finalScheduleCount === enableSchedule?.frequencyPerDay
@@ -358,8 +357,6 @@ const DrugChartSlider = (props) => {
         const updatedFirstDaySchedules = getUpdatedFirstDaySchedules();
         setFirstDaySlotsMissed(finalScheduleCount - 1);
         setFirstDaySchedules(updatedFirstDaySchedules);
-
-        setFinalDaySchedules(scheduleTimings.slice(firstDaySlotsMissed) || []);
       }
     } else {
       const defaultSchedules = Array.from(
@@ -369,6 +366,22 @@ const DrugChartSlider = (props) => {
       setSchedules(defaultSchedules);
     }
   }, [isAutoFill, enable24HourTimers, enableSchedule]);
+
+  useEffect(() => {
+    const scheduleTimings = enable24HourTimers
+      ? enableSchedule?.scheduleTiming
+      : enableSchedule?.scheduleTiming?.map((time) => moment(time, "hh:mm A"));
+    if (scheduleTimings && firstDaySlotsMissed > 0 && isAutoFill) {
+      setFinalDaySchedules(scheduleTimings.slice(0, firstDaySlotsMissed) || []);
+      const quantity =
+        hostData?.drugOrder?.drugOrder?.dosingInstructions?.quantity;
+      const dose = hostData?.drugOrder?.drugOrder?.dosingInstructions?.dose;
+      const totalNoOfSlots = Math.ceil(quantity / dose);
+      if (totalNoOfSlots === enableSchedule?.frequencyPerDay) {
+        setSchedules([]);
+      }
+    }
+  }, [firstDaySlotsMissed, isAutoFill, enable24HourTimers, enableSchedule]);
 
   useEffect(() => {
     if (isEdit) {
@@ -383,11 +396,12 @@ const DrugChartSlider = (props) => {
           : epochTo12HourTimeFormat(drugOrderSchedule.slotStartTime);
         setStartTime(startTimeValue);
       }
-
       if (scheduleTimings.firstDaySlotsStartTime) {
-        setFirstDaySlotsMissed(1);
+        let frequency = enableSchedule?.frequencyPerDay;
+        setFirstDaySlotsMissed(
+          frequency - scheduleTimings.firstDaySlotsStartTime.length
+        );
         scheduleTimings.firstDaySlotsStartTime.forEach((schedule) => {
-          let frequency = enableSchedule?.frequencyPerDay;
           while (scheduleTimings.firstDaySlotsStartTime.length < frequency) {
             setFirstDaySchedules((prevSchedules) => [
               ...prevSchedules,
@@ -399,13 +413,9 @@ const DrugChartSlider = (props) => {
         });
       }
 
-      if (scheduleTimings.dayWiseSlotsStartTime) {
-        setSchedules(scheduleTimings.dayWiseSlotsStartTime);
-      }
+      setSchedules(scheduleTimings.dayWiseSlotsStartTime || []);
 
-      if (scheduleTimings.remainingDaySlotsStartTime) {
-        setFinalDaySchedules(scheduleTimings.remainingDaySlotsStartTime);
-      }
+      setFinalDaySchedules(scheduleTimings.remainingDaySlotsStartTime);
     }
   }, [isEdit, enable24HourTimers, enableSchedule]);
 

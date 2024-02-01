@@ -20,6 +20,7 @@ import {
   modifyEmergencyTreatmentData,
   mapAdditionalDataForEmergencyTreatments,
   isDrugOrderStoppedWithoutAdministration,
+  getStopReason,
 } from "../utils/TreatmentsUtils";
 import { getCookies } from "../../../../utils/CommonUtils";
 import { defaultDateTimeFormat } from "../../../../constants";
@@ -192,8 +193,8 @@ const Treatments = (props) => {
     drugOrder,
     drugOrderSchedule
   ) => {
-    if(drugOrder.dosingInstructions.asNeeded) {
-      return <></>
+    if (drugOrder.dosingInstructions.asNeeded) {
+      return <></>;
     }
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
       return (
@@ -286,6 +287,11 @@ const Treatments = (props) => {
               defaultDateTimeFormat
             ),
             startTimeForSort: drugOrder.effectiveStartDate,
+            stopReason: getStopReason(drugOrder),
+            stopperAdditionalData:
+              drugOrderObject.provider.name +
+              " | " +
+              formatDate(drugOrder.dateStopped, defaultDateTimeFormat),
           },
         };
       });
@@ -297,6 +303,8 @@ const Treatments = (props) => {
         additionalInstructions: treatment.additionalData.additionalInstructions,
         recordedDateTime: treatment.additionalData.recordedDateTime,
         provider: treatment.providerName,
+        stopReason: treatment.additionalData.stopReason,
+        stopperAdditionalData: treatment.additionalData.stopperAdditionalData,
       };
     });
     setAdditionalData(additionalMappedData);

@@ -162,7 +162,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                     class="titleText"
                   >
                     <span>
-                      Drug Name 
+                      Drug Name (Emergency / Ad hoc) 
                     </span>
                     <span
                       class="required"
@@ -1015,7 +1015,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                     class="titleText"
                   >
                     <span>
-                      Drug Name 
+                      Drug Name (Emergency / Ad hoc) 
                     </span>
                     <span
                       class="required"

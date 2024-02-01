@@ -36,15 +36,18 @@ const areSchedulesInOrder = (allSchedule) => {
 };
 
 export const validateSchedules = async (schedules) => {
-  if (schedules.some((schedule) => schedule === "")) {
-    return { isValid: false, warningType: "empty" };
-  }
+  if (schedules?.length > 0) {
+    if (schedules.some((schedule) => schedule === "")) {
+      return { isValid: false, warningType: "empty" };
+    }
 
-  if (areSchedulesInOrder(schedules)) {
-    return { isValid: true, warningType: "" };
-  } else {
-    return { isValid: false, warningType: "passed" };
+    if (areSchedulesInOrder(schedules)) {
+      return { isValid: true, warningType: "" };
+    } else {
+      return { isValid: false, warningType: "passed" };
+    }
   }
+  return { isValid: true, warningType: "" };
 };
 
 export const updateStartTimeBasedOnFrequency = (frequency, time) => {

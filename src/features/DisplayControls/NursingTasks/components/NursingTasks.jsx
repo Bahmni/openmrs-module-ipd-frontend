@@ -15,7 +15,7 @@ import {
 } from "../../../../utils/DateTimeUtils";
 import { SliderContext } from "../../../../context/SliderContext";
 import UpdateNursingTasks from "./UpdateNursingTasks";
-import { Button, Dropdown } from "carbon-components-react";
+import { Button, Dropdown, Loading } from "carbon-components-react";
 import AddEmergencyTasks from "./AddEmergencyTasks";
 import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
@@ -43,14 +43,13 @@ export default function NursingTasks(props) {
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const refreshDisplayControl = useContext(RefreshDisplayControl);
-  const [date, updateDate] = useState(new Date());
-  const [lastAction, updateLastActon] = useState("");
+  const {
+    config: { shiftDetails: shiftConfig = {} },
+  } = data;
+  const shiftDetails = currentShiftHoursArray(shiftConfig);
   const allowedForthShfts =
-    getDateTime(new Date(), currentShiftHoursArray()[0]) / 1000 +
+    getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0]) / 1000 +
     convertDaystoSeconds(2);
-  const [currentShiftArray, updateShiftArray] = useState(
-    currentShiftHoursArray()
-  );
   const [startEndDates, updatedStartEndDates] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -60,11 +59,12 @@ export default function NursingTasks(props) {
     previous: false,
     next: false,
   });
-  const { config: { drugChart = {} } = {} } = data;
+  const shiftRangeArray = shiftDetails.rangeArray;
+  const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
   const dateFormatString = getDateFormatString();
 
   useEffect(() => {
-    const currentShift = currentShiftHoursArray();
+    const currentShift = shiftDetails.currentShiftHoursArray;
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
     let startDateTime = getDateTime(new Date(), currentShift[0]);
@@ -76,7 +76,7 @@ export default function NursingTasks(props) {
     if (lastHour < firstHour) {
       const d = new Date();
       const currentHour = d.getHours();
-      if(currentHour > 12) {
+      if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
         endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
       } else {
@@ -85,7 +85,6 @@ export default function NursingTasks(props) {
       }
     }
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
-    updateDate(new Date(endDateTime));
     fetchNursingTasks(startDateTime, endDateTime);
   }, []);
   const updateNursingTasksSlider = (value) => {
@@ -107,53 +106,36 @@ export default function NursingTasks(props) {
   };
 
   const handlePrevious = () => {
-    const firstHour = currentShiftArray[0];
-    const lastHour = currentShiftArray[currentShiftArray.length - 1];
-    if (lastHour < firstHour && (lastAction === "N" || lastAction === "")) {
-      date.setDate(date.getDate() - 1);
-    }
-    const { startDateTime, endDateTime, nextDate } = getPreviousShiftDetails(
-      currentShiftArray,
-      drugChart.shiftHours,
-      date
-    );
-    const previousShiftArray = currentShiftArray.map((hour) => {
-      let updatedHour = hour - drugChart.shiftHours;
-      updatedHour = updatedHour < 0 ? 24 + updatedHour : updatedHour;
-      return updatedHour;
-    });
-    updateShiftArray(previousShiftArray);
-    updateDate(nextDate);
-    updateLastActon("P");
+    const { startDateTime, endDateTime, previousShiftIndex } =
+      getPreviousShiftDetails(
+        shiftRangeArray,
+        shiftIndex,
+        startEndDates.startDate,
+        startEndDates.endDate
+      );
+    updateShiftIndex(previousShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
 
   const handleNext = () => {
-    const firstHour = currentShiftArray[0];
-    const lastHour = currentShiftArray[currentShiftArray.length - 1];
-    if (lastHour < firstHour && lastAction === "P") {
-      date.setDate(date.getDate() + 1);
-    }
-    const { startDateTime, endDateTime, nextDate } = getNextShiftDetails(
-      currentShiftArray,
-      drugChart.shiftHours,
-      date
+    const { startDateTime, endDateTime, nextShiftIndex } = getNextShiftDetails(
+      shiftRangeArray,
+      shiftIndex,
+      startEndDates.startDate,
+      startEndDates.endDate
     );
-    const nextShiftArray = currentShiftArray.map(
-      (hour) => (hour + drugChart.shiftHours) % 24
-    );
-    updateShiftArray(nextShiftArray);
-    updateDate(nextDate);
-    updateLastActon("N");
+    updateShiftIndex(nextShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
 
   const handleCurrent = () => {
-    const currentShift = currentShiftHoursArray();
+    const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
+    const currentShift = shiftDetailsObj.currentShiftHoursArray;
+    const updatedShiftIndex = shiftDetailsObj.shiftIndex;
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
     let startDateTime = getDateTime(new Date(), currentShift[0]);
@@ -164,7 +146,7 @@ export default function NursingTasks(props) {
     if (lastHour < firstHour) {
       const d = new Date();
       const currentHour = d.getHours();
-      if(currentHour > 12) {
+      if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
         endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
       } else {
@@ -172,9 +154,7 @@ export default function NursingTasks(props) {
         startDateTime = getDateTime(d, currentShift[0]);
       }
     }
-    updateShiftArray(currentShift);
-    updateDate(new Date(endDateTime));
-    updateLastActon("");
+    updateShiftIndex(updatedShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
@@ -273,145 +253,131 @@ export default function NursingTasks(props) {
     }
   };
 
-  const showMedicationNursingTasks = () => {
-    if (isLoading) {
-      return <div style={{ paddingTop: "5px" }}>Loading...</div>;
-    }
-
-    return (
-      <div className="nursing-tasks-content-container">
-        {isLoading ? (
-          <div style={{ paddingTop: "5px" }}>Loading...</div>
-        ) : (
-          <>
-            <div className={"nursing-task-navigation"}>
-              <div className="nursingTask-shift-header">
-                <Button
-                  kind="tertiary"
-                  isExpressive
-                  size="small"
-                  onClick={handleCurrent}
-                  className="margin-right-10"
-                  data-testid="current-shift"
-                >
-                  <FormattedMessage
-                    id={"CURRENT_SHIFT"}
-                    defaultMessage={"Current Shift"}
-                  />
-                </Button>
-                <Button
-                  disabled={isShiftsButtonsDisabled.previous}
-                  renderIcon={ChevronLeft16}
-                  kind="tertiary"
-                  isExpressive
-                  hasIconOnly
-                  size="sm"
-                  onClick={handlePrevious}
-                  className="margin-right-6"
-                  data-testid="previous-shift"
-                />
-                <Button
-                  disabled={isShiftsButtonsDisabled.next}
-                  renderIcon={ChevronRight16}
-                  kind="tertiary"
-                  isExpressive
-                  hasIconOnly
-                  size="sm"
-                  onClick={handleNext}
-                  className="margin-right-10"
-                  data-testid="next-shift"
-                />
-                {`${formatDate(
-                  startEndDates.startDate,
-                  dateFormatString
-                )} - ${formatDate(startEndDates.endDate, dateFormatString)}`}
-              </div>
-              <div className="nursing-task-actions">
-                <Dropdown
-                  id="filter-task"
-                  className="nursing-task-dropdown"
-                  size="lg"
-                  selectedItem={filterValue}
-                  items={items}
-                  itemToString={(item) => (item ? item.text : "")}
-                  onChange={(event) => {
-                    event.selectedItem
-                      ? setFilterValue(event.selectedItem)
-                      : setFilterValue(items[2]);
-                  }}
-                />
-                <Button
-                  kind={"tertiary"}
-                  isExpressive
-                  size="default"
-                  renderIcon={Add16}
-                  onClick={() => {
-                    if (!isSliderOpen.emergencyTasks) {
-                      updateEmergencyTasksSlider(true);
-                    }
-                  }}
-                >
-                  <FormattedMessage
-                    id={"ADD_TASK"}
-                    defaultMessage={"Add Task"}
-                  />
-                </Button>
-              </div>
-            </div>
-
-            {isSliderOpen.nursingTasks && (
-              <UpdateNursingTasks
-                medicationTasks={selectedMedicationTask}
-                updateNursingTasksSlider={updateNursingTasksSlider}
-                patientId={patientId}
-                providerId={provider.uuid}
-                setShowSuccessNotification={setShowSuccessNotification}
-                setSuccessMessage={setSuccessMessage}
-              />
-            )}
-            {isSliderOpen.emergencyTasks && (
-              <AddEmergencyTasks
-                patientId={patientId}
-                providerId={provider.uuid}
-                updateEmergencyTasksSlider={updateEmergencyTasksSlider}
-                setShowSuccessNotification={setShowSuccessNotification}
-                setSuccessMessage={setSuccessMessage}
-              />
-            )}
-            {medicationNursingTasks && medicationNursingTasks.length === 0 ? (
-              <div className="no-nursing-tasks">{getNoTaskMessage()}</div>
-            ) : (
-              <div>
-                <div className="nursing-task-tiles-container">
-                  {showTaskTiles()}
-                </div>
-                <AdministrationLegend />
-              </div>
-            )}
-            {showSuccessNotification && (
-              <Notification
-                hostData={{
-                  notificationKind: "success",
-                  messageId: successMessage,
-                }}
-                hostApi={{
-                  onClose: () => {
-                    setShowSuccessNotification(false);
-                    refreshDisplayControl([
-                      componentKeys.TREATMENTS,
-                      componentKeys.NURSING_TASKS,
-                      componentKeys.DRUG_CHART,
-                    ]);
-                  },
-                }}
-              />
-            )}
-          </>
-        )}
+  return (
+    <div className="nursing-tasks-content-container display-container">
+      <div className={"nursing-task-navigation"}>
+        <div className="nursingTask-shift-header">
+          <Button
+            kind="tertiary"
+            isExpressive
+            size="small"
+            onClick={handleCurrent}
+            className="margin-right-10"
+            data-testid="current-shift"
+          >
+            <FormattedMessage
+              id={"CURRENT_SHIFT"}
+              defaultMessage={"Current Shift"}
+            />
+          </Button>
+          <Button
+            disabled={isShiftsButtonsDisabled.previous}
+            renderIcon={ChevronLeft16}
+            kind="tertiary"
+            isExpressive
+            hasIconOnly
+            size="sm"
+            onClick={handlePrevious}
+            className="margin-right-6"
+            data-testid="previous-shift"
+          />
+          <Button
+            disabled={isShiftsButtonsDisabled.next}
+            renderIcon={ChevronRight16}
+            kind="tertiary"
+            isExpressive
+            hasIconOnly
+            size="sm"
+            onClick={handleNext}
+            className="margin-right-10"
+            data-testid="next-shift"
+          />
+          {`${formatDate(
+            startEndDates.startDate,
+            dateFormatString
+          )} - ${formatDate(startEndDates.endDate, dateFormatString)}`}
+        </div>
+        <div className="nursing-task-actions">
+          <Dropdown
+            id="filter-task"
+            className="nursing-task-dropdown"
+            size="lg"
+            selectedItem={filterValue}
+            items={items}
+            itemToString={(item) => (item ? item.text : "")}
+            onChange={(event) => {
+              event.selectedItem
+                ? setFilterValue(event.selectedItem)
+                : setFilterValue(items[2]);
+            }}
+          />
+          <Button
+            kind={"tertiary"}
+            isExpressive
+            size="default"
+            renderIcon={Add16}
+            onClick={() => {
+              if (!isSliderOpen.emergencyTasks) {
+                updateEmergencyTasksSlider(true);
+              }
+            }}
+          >
+            <FormattedMessage id={"ADD_TASK"} defaultMessage={"Add Task"} />
+          </Button>
+        </div>
       </div>
-    );
-  };
-  return <div>{showMedicationNursingTasks()}</div>;
+
+      {isSliderOpen.nursingTasks && (
+        <UpdateNursingTasks
+          medicationTasks={selectedMedicationTask}
+          updateNursingTasksSlider={updateNursingTasksSlider}
+          patientId={patientId}
+          providerId={provider.uuid}
+          setShowSuccessNotification={setShowSuccessNotification}
+          setSuccessMessage={setSuccessMessage}
+        />
+      )}
+      {isSliderOpen.emergencyTasks && (
+        <AddEmergencyTasks
+          patientId={patientId}
+          providerId={provider.uuid}
+          updateEmergencyTasksSlider={updateEmergencyTasksSlider}
+          setShowSuccessNotification={setShowSuccessNotification}
+          setSuccessMessage={setSuccessMessage}
+        />
+      )}
+      {isLoading ? (
+        <div className="loading-parent" data-testid="loading-icon">
+          <Loading withOverlay={false} />
+        </div>
+      ) : medicationNursingTasks && medicationNursingTasks.length === 0 ? (
+        <div className="no-nursing-tasks">{getNoTaskMessage()}</div>
+      ) : (
+        <div>
+          <div className="nursing-task-tiles-container">{showTaskTiles()}</div>
+          <AdministrationLegend />
+        </div>
+      )}
+      {showSuccessNotification && (
+        <Notification
+          hostData={{
+            notificationKind: "success",
+            messageId: successMessage,
+          }}
+          hostApi={{
+            onClose: () => {
+              setShowSuccessNotification(false);
+              refreshDisplayControl([
+                componentKeys.TREATMENTS,
+                componentKeys.NURSING_TASKS,
+                componentKeys.DRUG_CHART,
+              ]);
+            },
+          }}
+        />
+      )}
+    </div>
+  );
 }
 
 NursingTasks.propTypes = {

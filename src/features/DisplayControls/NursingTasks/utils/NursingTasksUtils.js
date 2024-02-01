@@ -136,13 +136,16 @@ export const ExtractMedicationNursingTasksData = (
       }
     });
   });
-
-  pendingExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
+  pendingExtractedData.sort(
+    (a, b) => a.startTimeInEpochSeconds - b.startTimeInEpochSeconds
+  );
   completedExtractedData.sort(
     (a, b) =>
       a.administeredTimeInEpochSeconds - b.administeredTimeInEpochSeconds
   );
-  stoppedExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
+  stoppedExtractedData.sort(
+    (a, b) => a.startTimeInEpochSeconds - b.startTimeInEpochSeconds
+  );
   extractedData.push(...pendingExtractedData);
 
   const groupedData = [];

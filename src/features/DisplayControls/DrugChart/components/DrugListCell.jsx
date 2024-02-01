@@ -92,7 +92,7 @@ export default function DrugListCell(props) {
                 }
                 if (adminInfo.kind === "Administered-Late") {
                   return (
-                    <span style={{ color: "#da1e28" }} key={index}>
+                    <span style={{ color: "#FF0000" }} key={index}>
                       {adminInfoTime}
                       {index !== administrationInfo.length - 1 && (
                         <span style={{ color: "#525252" }}>,</span>

@@ -26,6 +26,20 @@ jest.mock("../../../../utils/DateTimeUtils", () => {
   };
 });
 
+jest.mock("../../DrugChart/utils/DrugChartUtils", () => {
+  const originalModule = jest.requireActual(
+    "../../DrugChart/utils/DrugChartUtils"
+  );
+  return {
+    ...originalModule,
+    currentShiftHoursArray: () => ({
+      currentShiftHoursArray: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      rangeArray: ["06:00-18:00", "18:00-06:00"],
+      shiftIndex: 0,
+    }),
+  };
+});
+
 const mockProviderValue = {
   isSliderOpen: {
     treatments: false,
@@ -39,14 +53,14 @@ describe("NursingTasks", () => {
   });
 
   it("should show loading state", async () => {
-    const { getByText } = render(
+    const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
         <NursingTasks patientId="patientid" />
       </SliderContext.Provider>
     );
 
     await waitFor(() => {
-      expect(getByText("Loading...")).toBeTruthy();
+      expect(getByTestId("loading-icon")).toBeTruthy();
     });
   });
 

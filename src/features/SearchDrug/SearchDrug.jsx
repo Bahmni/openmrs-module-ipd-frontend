@@ -46,7 +46,9 @@ const SearchDrug = (props) => {
           onChange(e.selectedItem);
         }}
         size={"xl"}
-        titleText={<Title text={"Drug Name"} isRequired={true} />}
+        titleText={
+          <Title text={"Drug Name (Emergency / Ad hoc)"} isRequired={true} />
+        }
         onInputChange={onChangeHandler}
       />
     </div>

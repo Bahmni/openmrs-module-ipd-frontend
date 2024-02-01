@@ -144,7 +144,10 @@ export const getDrugName = (drugOrderObject) => {
   const drugOrder = drugOrderObject.drugOrder;
   if (
     drugOrder.drug &&
-    (drugOrderObject.instructions || drugOrderObject.additionalInstructions)
+    (drugOrderObject.instructions ||
+      drugOrderObject.additionalInstructions ||
+      drugOrder.orderReasonConcept ||
+      drugOrder.orderReasonText)
   ) {
     return (
       <div className="notes-icon-div">
@@ -244,7 +247,7 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
         providerName: approverName,
         status: (
           <span>
-            {approver.function === requesterFunction && (
+            {approver?.function === requesterFunction && (
               <div className="red-text">
                 <FormattedMessage
                   id="AWAITING"
@@ -252,7 +255,7 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
                 />
               </div>
             )}
-            {approver.function === verifierFunction && (
+            {approver?.function === verifierFunction && (
               <FormattedMessage id="CONFIRMED" defaultMessage="Acknowledged" />
             )}
           </span>
@@ -288,4 +291,14 @@ export const mapAdditionalDataForEmergencyTreatments = (
         ),
     };
   });
+};
+
+export const getStopReason = (drugOrder) => {
+  const conceptName = drugOrder.orderReasonConcept
+    ? drugOrder.orderReasonConcept.name
+    : "";
+  const notes = drugOrder.orderReasonText || "";
+  const stopReason = conceptName + (conceptName && notes ? ": " : "") + notes;
+
+  return stopReason.trim() !== "" ? stopReason : null;
 };
