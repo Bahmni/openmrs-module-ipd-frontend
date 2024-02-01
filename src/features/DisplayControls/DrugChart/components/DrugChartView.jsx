@@ -18,10 +18,10 @@ import {
   convertDaystoSeconds,
   formatDate,
 } from "../../../../utils/DateTimeUtils";
-import data from "../../../../utils/config.json";
 import { FormattedMessage } from "react-intl";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";
+import { IPDContext } from "../../../../context/IPDContext";
 
 const NoMedicationTaskMessage = (
   <FormattedMessage
@@ -32,6 +32,8 @@ const NoMedicationTaskMessage = (
 
 export default function DrugChartWrapper(props) {
   const { patientId } = props;
+  const { config } = useContext(IPDContext);
+  const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
   const [drugChartData, setDrugChartData] = useState([]);
   const [transformedData, setTransformedData] = useState([]);
   const [drugOrders, setDrugOrders] = useState({});
@@ -41,9 +43,6 @@ export default function DrugChartWrapper(props) {
     endDate: new Date(),
   });
   const allMedications = useContext(AllMedicationsContext);
-  const {
-    config: { shiftDetails: shiftConfig = {} },
-  } = data;
   const shiftDetails = currentShiftHoursArray(shiftConfig);
   const allowedForthShfts =
     getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0]) / 1000 +
@@ -86,7 +85,9 @@ export default function DrugChartWrapper(props) {
     }
   };
   useEffect(() => {
-    setTransformedData(mapDrugOrdersAndSlots(drugChartData, drugOrders));
+    setTransformedData(
+      mapDrugOrdersAndSlots(drugChartData, drugOrders, drugChart)
+    );
   }, [drugChartData, drugOrders]);
 
   useEffect(() => {
@@ -182,7 +183,7 @@ export default function DrugChartWrapper(props) {
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   };
-  const dateFormatString = getDateFormatString();
+  const dateFormatString = getDateFormatString(drugChart);
   return (
     <div className="drugchart-parent-container display-container">
       <div className="drugchart-shift-header">

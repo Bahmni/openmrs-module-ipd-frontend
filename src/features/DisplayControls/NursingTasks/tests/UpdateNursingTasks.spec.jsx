@@ -2,30 +2,36 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import UpdateNursingTasks from "../components/UpdateNursingTasks";
 import { mockMedicationTasks } from "./NursingTasksUtilsMockData";
+import { IPDContext } from "../../../../context/IPDContext";
+import { mockConfig } from "../../../../utils/CommonUtils";
 
 describe("UpdateNursingTasksSlider", function () {
   it("should render UpdateNursingTasksSlider", function () {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={mockMedicationTasks}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     expect(container).toMatchSnapshot();
   });
 
   it("should enable save Button when atleast one task is selected", function () {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={mockMedicationTasks}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     const saveButton = screen.getAllByText("Save")[1];
     expect(saveButton.disabled).toEqual(true);
@@ -36,13 +42,15 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should show notes and time when toggle switch is On", function () {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={mockMedicationTasks}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -57,13 +65,15 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should show warning for empty notes when time is updated", function () {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={mockMedicationTasks}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -78,13 +88,15 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should render confirmation modal on click of save button", function () {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={mockMedicationTasks}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -105,13 +117,15 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should close the slider on click of cancel button when no changes are made", function () {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={mockMedicationTasks}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     const cancelButton = screen.getAllByText("Cancel")[1];
     fireEvent.click(cancelButton);
@@ -120,13 +134,15 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should render confirmation modal on click of cancel button when changes are made", function () {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={mockMedicationTasks}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -150,13 +166,15 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should show notes error when time is greater than administered time window", function () {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={mockMedicationTasks}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
 
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
@@ -178,26 +196,30 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should show OverflowMenu for a task", () => {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={mockMedicationTasks}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     expect(container.querySelectorAll(".bx--overflow-menu")).toBeTruthy();
   });
 
   it("should show Skip Drug option on click of Overflow menu button", () => {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={mockMedicationTasks}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     const overflowMenuButton =
       container.querySelectorAll(".bx--overflow-menu")[0];
@@ -207,13 +229,15 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should hide the Administer Done toggle button on click of Skip Drug button", () => {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={[mockMedicationTasks[0]]}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={[mockMedicationTasks[0]]}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     const overflowMenuButton =
       container.querySelectorAll(".bx--overflow-menu")[0];
@@ -225,13 +249,15 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should show notes as mandatory when Skip Drug button is clicked", () => {
     const { container } = render(
-      <UpdateNursingTasks
-        medicationTasks={[mockMedicationTasks[0]]}
-        updateNursingTasksSlider={jest.fn}
-        patientId="test_patient_uuid"
-        providerId="test_provider_uuid"
-        setShowSuccessNotification={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={[mockMedicationTasks[0]]}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     const overflowMenuButton =
       container.querySelectorAll(".bx--overflow-menu")[0];

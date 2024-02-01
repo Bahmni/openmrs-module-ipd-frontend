@@ -1,9 +1,9 @@
-import data from "../../../../utils/config.json";
 import React from "react";
 
-const { config: { nursingTasks = {} } = {} } = data;
-
-export const getRelevantTaskStatus = (startTimeInEpochSeconds) => {
+export const getRelevantTaskStatus = (
+  startTimeInEpochSeconds,
+  nursingTasks
+) => {
   const currentTimeInSeconds = Math.floor(new Date().getTime() / 1000);
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
@@ -15,7 +15,7 @@ export const getRelevantTaskStatus = (startTimeInEpochSeconds) => {
   );
 };
 
-const isLateTask = (startTimeInEpochSeconds) => {
+const isLateTask = (startTimeInEpochSeconds, nursingTasks) => {
   const currentTime = Math.floor(new Date().getTime() / 1000);
   const lateTaskStatusWindowInSeconds =
     nursingTasks.timeInMinutesFromNowToShowPastTaskAsLate * 60;
@@ -23,7 +23,7 @@ const isLateTask = (startTimeInEpochSeconds) => {
   return startTimeInEpochSeconds < currentTime - lateTaskStatusWindowInSeconds;
 };
 
-export const iconType = (task) => {
+export const iconType = (task, nursingTasks) => {
   const {
     stopTime,
     administeredTimeInEpochSeconds,
@@ -42,7 +42,7 @@ export const iconType = (task) => {
     return isLate ? "Administered-Late" : "Administered";
   }
 
-  return isLateTask(startTimeInEpochSeconds) ? "Late" : "Pending";
+  return isLateTask(startTimeInEpochSeconds, nursingTasks) ? "Late" : "Pending";
 };
 
 export const getTime = (administeredTimeInEpochmilliSeconds, startTime) => {

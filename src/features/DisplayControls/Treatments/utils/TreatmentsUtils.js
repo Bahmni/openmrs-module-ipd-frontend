@@ -13,6 +13,8 @@ import { FormattedMessage } from "react-intl";
 import NotesIcon from "../../../../icons/notes.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { formatDate } from "../../../../utils/DateTimeUtils";
+import { IPDContext } from "../../../../context/IPDContext";
+import { mockConfig } from "../../../../utils/CommonUtils";
 
 export const treatmentHeaders = [
   {
@@ -159,7 +161,9 @@ export const getDrugName = (drugOrderObject) => {
         >
           {drugOrder.drug.name}
           <span>
-            <DisplayTags drugOrder={drugOrder.dosingInstructions} />
+            <IPDContext.Provider value={{ config: mockConfig }}>
+              <DisplayTags drugOrder={drugOrder.dosingInstructions} />
+            </IPDContext.Provider>
           </span>
         </span>
       </div>
@@ -232,7 +236,9 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
             <span className={`treatments-drug-name`}>
               {medicationAdministration.drug.display}
               <span>
-                <DisplayTags drugOrder={dosingInstructions} />
+                <IPDContext.Provider value={{ config: mockConfig }}>
+                  <DisplayTags drugOrder={dosingInstructions} />
+                </IPDContext.Provider>
               </span>
             </span>
           </div>

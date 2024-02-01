@@ -13,7 +13,6 @@ import { I18nProvider } from "../../features/i18n/I18nProvider";
 const CareViewDashboard = (props) => {
   const { hostData, hostApi } = props;
   console.log("hostData", hostData);
-  console.log("hostApi", hostApi);
   return (
     <I18nProvider>
       <main className="care-view-page">

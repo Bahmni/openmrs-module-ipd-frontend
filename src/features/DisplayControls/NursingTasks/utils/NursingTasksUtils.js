@@ -4,9 +4,6 @@ import {
   ADMINISTERED_MEDICATIONS_BASE_URL,
 } from "../../../../constants";
 import moment from "moment";
-import data from "../../../../utils/config.json";
-
-const { config: { nursingTasks = {} } = {} } = data;
 
 export const fetchMedicationNursingTasks = async (
   patientUuid,
@@ -195,7 +192,8 @@ const timeToEpoch = (time) => {
 
 export const isTimeWithinAdministeredWindow = (
   taskTime,
-  scheduledStartTime
+  scheduledStartTime,
+  nursingTasks
 ) => {
   const enteredTimeInEpochSeconds = timeToEpoch(taskTime);
   const timeWithinWindowInEpochSeconds =

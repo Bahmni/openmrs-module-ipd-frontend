@@ -6,10 +6,7 @@ import {
   defaultDateTimeFormat,
   performerFunction,
 } from "../../../../constants";
-import data from "../../../../utils/config.json";
 import _ from "lodash";
-
-const { config: { drugChart = {} } = {} } = data;
 
 export const fetchMedications = async (
   patientUuid,
@@ -107,7 +104,7 @@ export const transformDrugOrders = (orders) => {
   return medicationData;
 };
 
-const isLateTask = (startTime) => {
+const isLateTask = (startTime, drugChart) => {
   const currentTime = Math.floor(new Date().getTime() / 1000);
   const lateTaskStatusWindowInSeconds =
     drugChart.timeInMinutesFromNowToShowPastTaskAsLate * 60;
@@ -115,7 +112,7 @@ const isLateTask = (startTime) => {
   return startTime < currentTime - lateTaskStatusWindowInSeconds;
 };
 
-const isAdministeredLateTask = (startTime, effectiveStartDate) => {
+const isAdministeredLateTask = (startTime, effectiveStartDate, drugChart) => {
   const lateTaskStatusWindowInMilliSeconds =
     drugChart.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate *
     60 *
@@ -125,7 +122,7 @@ const isAdministeredLateTask = (startTime, effectiveStartDate) => {
     effectiveStartDate - startTime * 1000 > lateTaskStatusWindowInMilliSeconds
   );
 };
-export const getDateFormatString = () =>
+export const getDateFormatString = (drugChart) =>
   drugChart.enable24HourTime
     ? displayShiftTimingsFormat
     : defaultDateTimeFormat;
@@ -137,7 +134,7 @@ export const resetDrugOrdersSlots = (drugOrders) => {
   return drugOrders;
 };
 
-export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
+export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
   const orders = resetDrugOrdersSlots(drugOrders);
 
   if (drugChartData && drugChartData.length > 0 && !_.isEmpty(orders)) {
@@ -153,7 +150,9 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
         if (medicationAdministration) {
           const { administeredDateTime } = medicationAdministration;
           if (status === "COMPLETED") {
-            if (isAdministeredLateTask(startTime, administeredDateTime)) {
+            if (
+              isAdministeredLateTask(startTime, administeredDateTime, drugChart)
+            ) {
               administrationStatus = "Administered-Late";
             } else {
               administrationStatus = "Administered";
@@ -164,7 +163,7 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders) => {
         } else {
           if (slot.status === "STOPPED") {
             administrationStatus = "Stopped";
-          } else if (isLateTask(startTime)) {
+          } else if (isLateTask(startTime, drugChart)) {
             administrationStatus = "Late";
           }
         }
