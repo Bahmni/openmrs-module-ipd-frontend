@@ -32,7 +32,7 @@ describe("CalendarHeader", () => {
     );
     const hours = getAllByTestId("hour");
     expect(hours.length).toBe(
-      currentShiftHoursArray(shiftDetails).currentShiftHoursArray.length
+      currentShiftHoursArray(new Date(), shiftDetails).currentShiftHoursArray.length
     );
     MockDate.reset();
   });

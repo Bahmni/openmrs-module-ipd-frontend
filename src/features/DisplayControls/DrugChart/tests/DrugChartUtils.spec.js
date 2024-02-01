@@ -22,8 +22,9 @@ describe("DrugChartUtils", () => {
       const patientUuid = "test-uuid";
       const startTime = "1704501000";
       const endTime = "1704529800";
-      const expectedUrl = `/openmrs/ws/rest/v1/ipd/schedule/type/medication?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}&view=drugChart`;
-      await fetchMedications(patientUuid, startTime, endTime);
+      const visitUuid = "test-uuid";
+      const expectedUrl = `/openmrs/ws/rest/v1/ipd/schedule/type/medication?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}&view=drugChart&visitUuid=${visitUuid}`;
+      await fetchMedications(patientUuid, startTime, endTime, visitUuid);
       expect(axios.get).toHaveBeenCalledWith(expectedUrl);
     });
     it("should return response data", async () => {
@@ -52,7 +53,7 @@ describe("DrugChartUtils", () => {
       2: { shiftStartTime: "18:00", shiftEndTime: "06:00" },
     };
     MockDate.set("2023-12-19 16:00:00");
-    expect(currentShiftHoursArray(shiftDetails).currentShiftHoursArray).toEqual(
+    expect(currentShiftHoursArray(new Date(), shiftDetails).currentShiftHoursArray).toEqual(
       [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
     );
   });

@@ -4,7 +4,6 @@ import DrugChartView from "../components/DrugChartView";
 import { drugChartData } from "./DrugChartViewMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import MockDate from "mockdate";
-import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
 
 const mockFetchMedications = jest.fn();

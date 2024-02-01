@@ -49,8 +49,7 @@ export default function NursingTasks(props) {
   const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
   console.log("visitSummary", visitSummary);
   const shiftDetails = currentShiftHoursArray(
-    isReadMode,
-    visitSummary.stopDateTime,
+    isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
     shiftConfig
   );
   const allowedForthShfts =
@@ -67,7 +66,6 @@ export default function NursingTasks(props) {
   });
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
-  console.log("startEndDates", startEndDates, visitSummary.stopDateTime);
   useEffect(() => {
     const currentShift = shiftDetails.currentShiftHoursArray;
     const firstHour = currentShift[0];
@@ -83,7 +81,6 @@ export default function NursingTasks(props) {
     /** if the shift is going on two different dates */
     if (lastHour < firstHour) {
       const d = isReadMode ? new Date(visitSummary.stopDateTime) : new Date();
-      console.log("DDD", d);
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
@@ -143,8 +140,7 @@ export default function NursingTasks(props) {
 
   const handleCurrent = () => {
     const shiftDetailsObj = currentShiftHoursArray(
-      isReadMode,
-      visitSummary.stopDateTime,
+      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(), 
       shiftConfig
     );
     const currentShift = shiftDetailsObj.currentShiftHoursArray;
@@ -202,7 +198,6 @@ export default function NursingTasks(props) {
   //find the start date = enddate-hourshift(find with help of enddate)
 
   const fetchNursingTasks = async (startDate, endDate) => {
-    console.log("visitSummary.uuid", visitSummary.uuid);
     setIsLoading(true);
     const startDateTimeInSeconds = startDate / 1000;
     const endDateTimeInSeconds = endDate / 1000 - 60;
@@ -221,7 +216,6 @@ export default function NursingTasks(props) {
       );
       setMedicationNursingTasks(extractedData);
       setIsLoading(false);
-      console.log("nursingTasks", nursingTasks);
       setIsShiftsButtonsDisabled({
         previous: nursingTasks[0].startDate > startDateTimeInSeconds,
         next:

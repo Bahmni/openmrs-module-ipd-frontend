@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, waitFor, screen } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import NursingTasks from "../components/NursingTasks";
 import { IPDContext } from "../../../../context/IPDContext";
 
@@ -9,7 +9,6 @@ import {
 } from "./NursingTasksUtilsMockData";
 import MockDate from "mockdate";
 import { SliderContext } from "../../../../context/SliderContext";
-import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
 
 const mockFetchMedicationNursingTasks = jest.fn();
@@ -310,23 +309,4 @@ describe("NursingTasks", () => {
     });
     expect(getByTestId("next-shift").disabled).toEqual(true);
   });
-  // it.only("should show Current Shift and Add Task button as disabled", async () => {
-  //   MockDate.set("2024-01-05");
-  //   mockFetchMedicationNursingTasks
-  //     .mockReturnValueOnce(mockNursingTasksResponse)
-  //     .mockReturnValueOnce(mockShiftResponse)
-  //     .mockReturnValue(mockNursingTasksResponse);
-  //   const { getByText } = render(
-  //     <IPDContext.Provider value={{isReadMode: false}}>
-  //       <SliderContext.Provider value={mockProviderValue}>
-  //         <NursingTasks patientId="patientid" />
-  //       </SliderContext.Provider>
-  //     </IPDContext.Provider>
-  //   );
-  //   await waitFor(() => {
-  //     expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
-  //   });
-  //   screen.debug();
-  //   expect(getByText("Current Shift")).toEqual(true);
-  // });
 });
