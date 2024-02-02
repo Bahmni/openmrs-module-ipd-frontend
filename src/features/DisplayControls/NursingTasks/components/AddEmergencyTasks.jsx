@@ -191,8 +191,12 @@ const AddEmergencyTasks = (props) => {
   };
 
   const handlePrimaryButtonClick = async () => {
+    updateIsSaveDisabled(true);
     const response = await saveEmergencyMedication(emergencyTask);
-    response.status === 200 ? saveAdhocTasks() : null;
+    if (response.status === 200) {
+      updateIsSaveDisabled(false);
+      saveAdhocTasks();
+    }
   };
 
   const saveAdhocTasks = () => {
@@ -403,6 +407,7 @@ const AddEmergencyTasks = (props) => {
             />
           }
           onRequestSubmit={handlePrimaryButtonClick}
+          primaryButtonDisabled={isSaveDisabled}
         >
           <hr />
           <AdministeredMedicationList list={popupMedicationData} />

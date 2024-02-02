@@ -273,7 +273,7 @@ export const mockNursingTasksResponseForStopped = [
         id: 16,
         uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
         serviceType: "MedicationRequest",
-        status: "COMPLETED",
+        status: "STOPPED",
         startTime: 1702650600,
         order: {
           uuid: "paracetamol-120mg-tablet-uuid",
@@ -322,7 +322,7 @@ export const mockNursingTasksResponseForStopped = [
         id: 16,
         uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
         serviceType: "MedicationRequest",
-        status: "COMPLETED",
+        status: "STOPPED",
         startTime: 1702650600,
         order: {
           uuid: "paracetamol-125mg-tablet-uuid",

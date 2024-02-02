@@ -805,7 +805,8 @@ exports[`AddEmergencyTasks should render the component 1`] = `
               Cancel
             </button>
             <button
-              class="bx--btn bx--btn--primary"
+              class="bx--btn bx--btn--primary bx--btn--disabled"
+              disabled=""
               tabindex="0"
               type="button"
             >
@@ -1655,7 +1656,8 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
               Cancel
             </button>
             <button
-              class="bx--btn bx--btn--primary"
+              class="bx--btn bx--btn--primary bx--btn--disabled"
+              disabled=""
               tabindex="0"
               type="button"
             >

@@ -93,19 +93,21 @@ export const ExtractMedicationNursingTasksData = (
         orderId: order?.uuid,
         isDisabled:
           !!administeredDateTime ||
-          order?.dateStopped ||
-          slot.medicationAdministration?.status === "Not Done",
+          slot.status === "STOPPED" ||
+          slot.status === "NOT_DONE",
       };
 
-      if (order?.dateStopped) {
-        if (filterValue.id === "stopped" || filterValue.id === "allTasks")
-          stoppedExtractedData.push({
-            ...slotInfo,
-            stopTime: order?.dateStopped,
-          });
+      if (
+        (filterValue.id === "stopped" || filterValue.id === "allTasks") &&
+        slot.status === "STOPPED"
+      ) {
+        stoppedExtractedData.push({
+          ...slotInfo,
+          stopTime: order?.dateStopped,
+        });
       } else if (
         (filterValue.id === "skipped" || filterValue.id === "allTasks") &&
-        slot.medicationAdministration?.status === "Not Done"
+        slot.status === "NOT_DONE"
       ) {
         skippedExtractedData.push({ ...slotInfo, status: "Not Done" });
       } else if (
