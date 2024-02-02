@@ -13,7 +13,7 @@ export default function CalendarRow(props) {
     const { medicationAdministration, administrationSummary } = slot;
     let adminInfo = {};
     if (
-      ["Administered", "Administered-Late", "Not-Administered"].includes(
+      ["Administered", "Administered-Late"].includes(
         administrationSummary.status
       )
     ) {
@@ -23,6 +23,12 @@ export default function CalendarRow(props) {
       adminInfo = {
         notes: administrationSummary.notes,
         administrationInfo: `${administrationSummary.performerName} [${time}]`,
+      };
+    } else if (administrationSummary.status === "Not-Administered") {
+      time = moment(slot.startTime * 1000).format("HH:mm");
+      adminInfo = {
+        notes: administrationSummary.notes,
+        administrationInfo: administrationSummary.performerName,
       };
     } else {
       time = moment(slot.startTime * 1000).format("HH:mm");
