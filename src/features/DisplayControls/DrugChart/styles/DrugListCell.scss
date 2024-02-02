@@ -23,6 +23,19 @@
     display: flex;
     align-items: center;
     gap: 5px;
+    .administration-details-tooltip {
+      width: 100%;
+    }
+    .administration-time-info {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      .clock-icon {
+        position: relative;
+        top: 4px;
+        margin-right: 5px;
+      }
+    }
   }
 
   .medication-tags {

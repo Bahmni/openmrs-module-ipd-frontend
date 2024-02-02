@@ -88,6 +88,19 @@ export default function DrugListCell(props) {
       </div>
     );
   };
+  const getToolTipTextForAdministeredTime = () => {
+    let administeredTimes = [];
+    administrationInfo.map((adminInfo) => {
+      let adminInfoTime = adminInfo.time;
+      if (adminInfoTime && !enable24hour) {
+        const [hours, minutes] = adminInfoTime.split(":");
+        const hours12 = hours % 12 || 12;
+        adminInfoTime = `${hours12}:${minutes}`;
+      }
+      administeredTimes.push(adminInfoTime);
+    });
+    return administeredTimes.join(", ");
+  };
   return (
     <div className="drug-order-details">
       <div className="order-details">
@@ -101,34 +114,41 @@ export default function DrugListCell(props) {
         <div>
           {administrationInfo.length >= 1 && (
             <div className={"administration-details"}>
-              <Clock />
-              {administrationInfo.map((adminInfo, index) => {
-                let adminInfoTime = adminInfo.time;
-                if (adminInfoTime && !enable24hour) {
-                  const [hours, minutes] = adminInfoTime.split(":");
-                  const hours12 = hours % 12 || 12;
-                  adminInfoTime = `${hours12}:${minutes}`;
-                }
-                if (adminInfo.kind === "Administered-Late") {
-                  return (
-                    <span style={{ color: "#FF0000" }} key={index}>
-                      {adminInfoTime}
-                      {index !== administrationInfo.length - 1 && (
-                        <span style={{ color: "#525252" }}>,</span>
-                      )}
-                    </span>
-                  );
-                } else {
-                  return (
-                    <span style={{ color: "#525252" }} key={index}>
-                      {adminInfoTime}
-                      {index !== administrationInfo.length - 1 && (
-                        <span>,</span>
-                      )}
-                    </span>
-                  );
-                }
-              })}
+              <TooltipDefinition
+                tooltipText={getToolTipTextForAdministeredTime()}
+                className={"administration-details-tooltip"}
+              >
+                <div className={"administration-time-info"}>
+                  <Clock className={"clock-icon"} />
+                  {administrationInfo.map((adminInfo, index) => {
+                    let adminInfoTime = adminInfo.time;
+                    if (adminInfoTime && !enable24hour) {
+                      const [hours, minutes] = adminInfoTime.split(":");
+                      const hours12 = hours % 12 || 12;
+                      adminInfoTime = `${hours12}:${minutes}`;
+                    }
+                    if (adminInfo.kind === "Administered-Late") {
+                      return (
+                        <span style={{ color: "#FF0000" }} key={index}>
+                          {adminInfoTime}
+                          {index !== administrationInfo.length - 1 && (
+                            <span style={{ color: "#525252" }}>, </span>
+                          )}
+                        </span>
+                      );
+                    } else {
+                      return (
+                        <span style={{ color: "#525252" }} key={index}>
+                          {adminInfoTime}
+                          {index !== administrationInfo.length - 1 && (
+                            <span>, </span>
+                          )}
+                        </span>
+                      );
+                    }
+                  })}
+                </div>
+              </TooltipDefinition>
             </div>
           )}
         </div>
