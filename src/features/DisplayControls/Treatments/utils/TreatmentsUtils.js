@@ -156,7 +156,7 @@ export const getDrugName = (drugOrderObject) => {
             drugOrder.dateStopped && "strike-through"
           }`}
         >
-          {drugOrder.drug.name}
+          <span>{drugOrder.drug.name}</span>
           <NotesIcon className="notes-icon" data-testid="notes-icon" />
         </span>
         <span>

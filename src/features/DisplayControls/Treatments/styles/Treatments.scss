@@ -8,9 +8,6 @@
 
 .treatments-drug-name {
   width: 100%;
-  display: flex;
-  justify-content: normal;
-  align-items: center;
 }
 
 .notes-icon-div {
@@ -20,6 +17,10 @@
   align-items: center;
   .bx--tag {
     width: 100%;
+  }
+  .notes-icon {
+    position: relative;
+    top: 2px;
   }
 }
 

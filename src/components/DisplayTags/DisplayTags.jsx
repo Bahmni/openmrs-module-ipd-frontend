@@ -15,21 +15,41 @@ const DisplayTags = (props) => {
   ) {
     return (
       <>
-        <Tag type="blue">{medicationTags.asNeeded}</Tag>
-        <Tag type="blue">{medicationTags[drugOrder?.frequency]}</Tag>
+        <Tag type="blue" size={"sm"}>
+          {medicationTags.asNeeded}
+        </Tag>
+        <Tag type="blue" size={"sm"}>
+          {medicationTags[drugOrder?.frequency]}
+        </Tag>
       </>
     );
   }
   if (drugOrder?.asNeeded && medicationTags["asNeeded"]) {
-    return <Tag type="blue">{medicationTags.asNeeded}</Tag>;
+    return (
+      <Tag type="blue" size={"sm"}>
+        {medicationTags.asNeeded}
+      </Tag>
+    );
   }
   if (drugOrder?.frequency in medicationTags) {
-    return <Tag type="blue">{medicationTags[drugOrder?.frequency]}</Tag>;
+    return (
+      <Tag type="blue" size={"sm"}>
+        {medicationTags[drugOrder?.frequency]}
+      </Tag>
+    );
   }
   if (drugOrder?.emergency && medicationTags["emergency"]) {
-    return <Tag type="blue">{medicationTags.emergency}</Tag>;
+    return (
+      <Tag type="blue" size={"sm"}>
+        {medicationTags.emergency}
+      </Tag>
+    );
   }
-  return <Tag type="blue">{medicationTags.default}</Tag>;
+  return (
+    <Tag type="blue" size={"sm"}>
+      {medicationTags.default}
+    </Tag>
+  );
 };
 
 export default DisplayTags;
