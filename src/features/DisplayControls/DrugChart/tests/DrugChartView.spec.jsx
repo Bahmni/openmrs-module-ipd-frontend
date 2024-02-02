@@ -1,9 +1,14 @@
 import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import DrugChartView from "../components/DrugChartView";
-import { drugChartData } from "./DrugChartViewMockData";
+import {
+  drugChartData,
+  mockDrugOrders,
+  mockEmptyDrugOrders,
+} from "./DrugChartViewMockData";
 import MockDate from "mockdate";
 import { IPDContext } from "../../../../context/IPDContext";
+import { AllMedicationsContext } from "../../../../context/AllMedications";
 import { mockConfig } from "../../../../utils/CommonUtils";
 
 const mockFetchMedications = jest.fn();
@@ -43,7 +48,17 @@ jest.mock("../../../../utils/DateTimeUtils", () => {
 afterEach(() => {
   MockDate.reset();
 });
-
+const renderDrugChartView = (mockOrders) => {
+  return render(
+    <AllMedicationsContext.Provider
+      value={{ data: mockOrders, getAllDrugOrders: jest.fn() }}
+    >
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="testid" visitId={"visit-id"} />
+      </IPDContext.Provider>
+    </AllMedicationsContext.Provider>
+  );
+};
 describe("DrugChartWrapper", () => {
   // mocked current Date i.e new Date() to 5th Jan 2024
   MockDate.set("2024-01-05 10:00");
@@ -53,38 +68,27 @@ describe("DrugChartWrapper", () => {
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
-    const { container } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <DrugChartView patientId="testid" />
-      </IPDContext.Provider>
-    );
+    const { container } = renderDrugChartView(mockDrugOrders);
     await waitFor(() => {
+      expect(screen.getAllByText(/Paracetamol/i)).toBeTruthy();
       expect(container).toMatchSnapshot();
     });
   });
 
   it("should render loading state when isLoading is true", async () => {
     MockDate.set("2024-01-05 10:00");
-    const { container } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <DrugChartView patientId="test-id" />
-      </IPDContext.Provider>
-    );
+    const { container } = renderDrugChartView(mockEmptyDrugOrders);
     await waitFor(() => {
       expect(container).toMatchSnapshot();
     });
   });
 
-  it.skip("should render no medication message when drugChartData is empty", async () => {
+  it("should render no medication message when drugChartData is empty", async () => {
     MockDate.set("2024-01-05 10:00");
     mockFetchMedications.mockResolvedValue({
-      data: [{ slots: [] }],
+      data: [],
     });
-    render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <DrugChartView patientId="test-id" />
-      </IPDContext.Provider>
-    );
+    renderDrugChartView(mockEmptyDrugOrders);
     await waitFor(() => {
       expect(
         screen.getByText("No Medication has been scheduled in this shift")
@@ -97,11 +101,7 @@ describe("DrugChartWrapper", () => {
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
-    render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <DrugChartView patientId="test-id" />
-      </IPDContext.Provider>
-    );
+    renderDrugChartView(mockDrugOrders);
     const previousButton = screen.getByTestId("previousButton");
     fireEvent.click(previousButton);
     await waitFor(() => {
@@ -117,11 +117,7 @@ describe("DrugChartWrapper", () => {
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
-    render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <DrugChartView patientId="test-id" />
-      </IPDContext.Provider>
-    );
+    renderDrugChartView(mockDrugOrders);
     const nextButton = screen.getByTestId("nextButton");
     fireEvent.click(nextButton);
     await waitFor(() => {
@@ -137,11 +133,7 @@ describe("DrugChartWrapper", () => {
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
-    render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <DrugChartView patientId="test-id" />
-      </IPDContext.Provider>
-    );
+    renderDrugChartView(mockDrugOrders);
     const currentShiftButton = screen.getByTestId("currentShift");
     fireEvent.click(currentShiftButton);
     await waitFor(() => {
@@ -151,37 +143,26 @@ describe("DrugChartWrapper", () => {
     });
   });
 
-  it.skip("should restrict previous shift navigation if it reaches administered time", async () => {
+  it("should restrict previous shift navigation if it reaches administered time", async () => {
     MockDate.set("2024-01-05 07:00");
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
-    render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <DrugChartView patientId="test-id" />
-      </IPDContext.Provider>
-    );
+    renderDrugChartView(mockDrugOrders);
     await waitFor(() => {
-      expect(screen.getByText(/Paracetamol/i)).toBeTruthy();
+      expect(screen.getAllByText(/Paracetamol/i)).toBeTruthy();
     });
     expect(screen.getByTestId("previousButton").disabled).toEqual(true);
   });
-  it.skip("should restrict next shift navigation if it reaches 2 days forth from the current shift", async () => {
+  it("should restrict next shift navigation if it reaches 2 days forth from the current shift", async () => {
     MockDate.set("2024-01-05 07:00");
     mockFetchMedications.mockResolvedValue({
       data: drugChartData,
     });
     mockGetTimeInSeconds.mockReturnValue(0);
-    render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <DrugChartView patientId="test-id" />
-      </IPDContext.Provider>
-    );
+    renderDrugChartView(mockDrugOrders);
     await waitFor(() => {
-      expect(screen.getByText(/Paracetamol/i)).toBeTruthy();
-    });
-    await waitFor(() => {
-      expect(screen.getByText(/Paracetamol/i)).toBeTruthy();
+      expect(screen.getAllByText(/Paracetamol/i)).toBeTruthy();
     });
     expect(screen.getByTestId("nextButton").disabled).toEqual(true);
   });
