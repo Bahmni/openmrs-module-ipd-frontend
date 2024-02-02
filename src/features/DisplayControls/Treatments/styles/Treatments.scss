@@ -16,12 +16,15 @@
   justify-content: left;
   align-items: center;
   .bx--tag {
-    width: 100%;
+    min-width: max-content;
   }
   .notes-icon {
     position: relative;
     top: 2px;
     left: 2px;
+  }
+  .display-tags {
+    display: flex;
   }
 }
 
