@@ -78,7 +78,7 @@ export default function DrugListCell(props) {
   const getMedicationName = () => {
     return (
       <div className="drug-name-container">
-        <TooltipDefinition tooltipText={name}>
+        <TooltipDefinition tooltipText={name} className={"name-tooltip"}>
           <div className={"drug-chart-drug-name"}>{name}</div>
         </TooltipDefinition>
         &nbsp;
