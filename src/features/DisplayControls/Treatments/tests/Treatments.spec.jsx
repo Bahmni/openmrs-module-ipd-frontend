@@ -694,7 +694,7 @@ describe("Treatments", () => {
       },
     };
     const { getByRole } = render(
-      <IPDContext.Provider value={{isReadMode: true}}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: true}}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -753,7 +753,7 @@ it("should render an Edit Drug Chart link disabled for IPD treatments read mode"
     },
   };
   const { getByText } = render(
-    <IPDContext.Provider value={{isReadMode: true}}>
+    <IPDContext.Provider value={{ config: mockConfig, isReadMode: true }}>
       <SliderContext.Provider value={mockProviderValue}>
         <AllMedicationsContext.Provider value={updatedAllMedications}>
           <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />

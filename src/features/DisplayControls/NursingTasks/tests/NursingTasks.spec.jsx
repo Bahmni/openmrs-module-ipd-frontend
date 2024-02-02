@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { fireEvent, render, waitFor} from "@testing-library/react";
 import NursingTasks from "../components/NursingTasks";
 import { IPDContext } from "../../../../context/IPDContext";
 
@@ -334,5 +334,26 @@ describe("NursingTasks", () => {
 
     expect(currentShiftButton.className).toContain("bx--btn--disabled");
     expect(AddTaskButton.className).toContain("bx--btn--disabled");
+  });
+  it("should show next button disabled for ipd inactive visit", async () => {
+    MockDate.set("2024-01-05");
+    mockFetchMedicationNursingTasks
+      .mockReturnValueOnce(mockNursingTasksResponse)
+      .mockReturnValueOnce(mockShiftResponse)
+      .mockReturnValue(mockNursingTasksResponse);
+    const { getByTestId } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            isReadMode: true,
+            visitSummary: { stopDateTime: new Date() },
+          }}
+        >
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    );
+    expect(getByTestId("next-shift").disabled).toEqual(true);
   });
 });
