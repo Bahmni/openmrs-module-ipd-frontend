@@ -4,7 +4,6 @@
   border-left: var(--day-border);
   display: flex;
   height: var(--time-cell-height);
-  align-items: center;
   align-items: stretch;
   .note-icon-container {
     margin: 0;
@@ -19,16 +18,15 @@
   }
 
   > div {
-    box-sizing: content-box;
     width: var(--half-hour-width);
     flex-direction: row;
     gap: 8px;
     display: flex;
-    align-items: center;
+    align-items: start;
+    box-sizing: border-box;
     justify-content: center;
-
+    padding: 25px 0;
     text-align: center;
-
     &:last-child {
       border-left: 1px dashed #c6c6c6;
     }

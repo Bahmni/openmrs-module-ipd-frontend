@@ -1,6 +1,14 @@
-import { waitFor } from "@testing-library/react";
+import React from "react";
+import { render, waitFor } from "@testing-library/react";
 import axios from "axios";
-import { stopDrugOrders, getEncounterType } from "../utils/TreatmentsUtils";
+import {
+  stopDrugOrders,
+  getEncounterType,
+  getDrugName,
+} from "../utils/TreatmentsUtils";
+import { IPDContext } from "../../../../context/IPDContext";
+import { mockConfig } from "../../../../utils/CommonUtils";
+
 jest.mock("axios");
 
 const stoppedDrugOrder = [
@@ -77,5 +85,47 @@ describe("TreatmentsUtils", () => {
         uuid: "81852aee-3f10-11e4-adec-0800271c1b75",
       });
     });
+  });
+
+  it("should return drug name with strike-through when dateStopped is present and instructions are not assigned", () => {
+    const drugOrderObject = {
+      drugOrder: {
+        drug: { name: "Paracetamol" },
+        dateStopped: "2023-01-01",
+      },
+      instructions: null,
+      additionalInstructions: null,
+    };
+
+    const { queryByTestId, queryByText } = render(getDrugName(drugOrderObject));
+
+    expect(queryByText("Paracetamol")).toBeTruthy();
+    expect(
+      queryByText("Paracetamol").classList.contains("strike-through")
+    ).toBeTruthy();
+    expect(queryByTestId("notes-icon")).toBeFalsy();
+  });
+
+  it("should return drug name without strike-through when dateStopped is null and anyone of the instructions is present", () => {
+    const drugOrderObject = {
+      drugOrder: {
+        drug: { name: "Paracetamol" },
+        dateStopped: null,
+      },
+      instructions: "Sample Instruction",
+      additionalInstructions: null,
+    };
+
+    const { queryByText, queryByTestId } = render(
+      <IPDContext.Provider value={{config: mockConfig}}>
+        {getDrugName(drugOrderObject)}
+      </IPDContext.Provider>
+    );
+
+    expect(queryByText("Paracetamol")).toBeTruthy();
+    expect(
+      queryByText("Paracetamol").classList.contains("strike-through")
+    ).toBeFalsy();
+    expect(queryByTestId("notes-icon")).toBeTruthy();
   });
 });

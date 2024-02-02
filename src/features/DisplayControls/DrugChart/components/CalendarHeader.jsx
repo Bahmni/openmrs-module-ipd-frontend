@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import "../styles/CalendarHeader.scss";
-import data from "../../../../utils/config.json";
+import { IPDContext } from "../../../../context/IPDContext";
 
 export default function CalendarHeader(props) {
+  const { config } = useContext(IPDContext);
+  const { drugChart = {} } = config;
   const { currentShiftArray } = props;
-  const enable24hour = data.config.drugChart.enable24HourTime;
+  const enable24hour = drugChart.enable24HourTime;
 
   return (
     <div className="calendar-header">

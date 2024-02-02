@@ -16,7 +16,7 @@ exports[`Search Drug Should allow drug search 1`] = `
           class="titleText"
         >
           <span>
-            Drug Name 
+            Drug Name (Emergency / Ad hoc) 
           </span>
           <span
             class="required"

@@ -1,7 +1,6 @@
 import React from "react";
 import {
   CLINICAL_CONFIG_URL,
-  ALL_DRUG_ORDERS_URL,
   BAHMNI_ENCOUNTER_URL,
   ENCOUNTER_TYPE_URL,
   requesterFunction,
@@ -47,18 +46,6 @@ export const treatmentHeaders = [
     isSortable: false,
   },
 ];
-
-export const getAllDrugOrders = async (visitUuid) => {
-  try {
-    const response = await axios.get(ALL_DRUG_ORDERS_URL(visitUuid), {
-      withCredentials: true,
-    });
-    if (response.status !== 200) throw new Error(response.statusText);
-    return response.data;
-  } catch (error) {
-    return error;
-  }
-};
 
 export const getConfigsForTreatments = async () => {
   try {
@@ -157,24 +144,37 @@ export const getDrugName = (drugOrderObject) => {
   const drugOrder = drugOrderObject.drugOrder;
   if (
     drugOrder.drug &&
-    (drugOrderObject.instructions || drugOrderObject.additionalInstructions)
+    (drugOrderObject.instructions ||
+      drugOrderObject.additionalInstructions ||
+      drugOrder.orderReasonConcept ||
+      drugOrder.orderReasonText)
   ) {
     return (
       <div className="notes-icon-div">
-        <NotesIcon className="notes-icon" />
         <span
           className={`treatments-drug-name ${
             drugOrder.dateStopped && "strike-through"
           }`}
         >
-          {drugOrder.drug.name}
-          <span>
-            <DisplayTags drugOrder={drugOrder.dosingInstructions} />
-          </span>
+          <span>{drugOrder.drug.name}</span>
+          <NotesIcon className="notes-icon" data-testid="notes-icon" />
+        </span>
+        <span>
+          <DisplayTags drugOrder={drugOrder.dosingInstructions} />
         </span>
       </div>
     );
-  } else if (drugOrder.drug) return drugOrder.drug.name;
+  } else if (drugOrder.drug) {
+    return (
+      <span
+        className={`treatments-drug-name ${
+          drugOrder.dateStopped && "strike-through"
+        }`}
+      >
+        {drugOrder.drug.name}
+      </span>
+    );
+  }
   return drugOrder.freeTextAnswer;
 };
 
@@ -226,12 +226,14 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
         ),
         drugName: (
           <div className="notes-icon-div">
-            {approverNotes && <NotesIcon className="notes-icon" />}
             <span className={`treatments-drug-name`}>
               {medicationAdministration.drug.display}
-              <span>
-                <DisplayTags drugOrder={dosingInstructions} />
-              </span>
+              {approverNotes && approver?.function === verifierFunction && (
+                <NotesIcon className="notes-icon" />
+              )}
+            </span>
+            <span>
+              <DisplayTags drugOrder={dosingInstructions} />
             </span>
           </div>
         ),
@@ -247,13 +249,15 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
         providerName: approverName,
         status: (
           <span>
-            {approver.function === requesterFunction && (
-              <FormattedMessage
-                id="AWAITING"
-                defaultMessage="Not acknowledged"
-              />
+            {approver?.function === requesterFunction && (
+              <div className="red-text">
+                <FormattedMessage
+                  id="AWAITING"
+                  defaultMessage="Not acknowledged"
+                />
+              </div>
             )}
-            {approver.function === verifierFunction && (
+            {approver?.function === verifierFunction && (
               <FormattedMessage id="CONFIRMED" defaultMessage="Acknowledged" />
             )}
           </span>
@@ -289,4 +293,14 @@ export const mapAdditionalDataForEmergencyTreatments = (
         ),
     };
   });
+};
+
+export const getStopReason = (drugOrder) => {
+  const conceptName = drugOrder.orderReasonConcept
+    ? drugOrder.orderReasonConcept.name
+    : "";
+  const notes = drugOrder.orderReasonText || "";
+  const stopReason = conceptName + (conceptName && notes ? ": " : "") + notes;
+
+  return stopReason.trim() !== "" ? stopReason : null;
 };

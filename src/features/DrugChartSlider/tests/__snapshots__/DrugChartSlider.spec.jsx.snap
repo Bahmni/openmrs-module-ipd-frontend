@@ -1885,7 +1885,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
       class="side-bar-header"
     >
       <div>
-        Add to Drug Chart
+        Edit Drug Chart
       </div>
       <div
         class="close-icon"

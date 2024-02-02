@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
@@ -10,10 +10,15 @@ import {
 import { TooltipDefinition } from "carbon-components-react";
 import "../styles/TaskTile.scss";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
+import { IPDContext } from "../../../../context/IPDContext";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
+
+  const { config } = useContext(IPDContext);
+  const { nursingTasks = {} } = config;
+
   let isGroupedTask, taskCount;
   if (medicationNursingTask.length > 1) {
     isGroupedTask = true;
@@ -33,20 +38,23 @@ export default function TaskTile(props) {
     administeredTimeInEpochSeconds,
   } = newMedicationNursingTask;
 
-  const isRelevantTask = getRelevantTaskStatus(startTimeInEpochSeconds);
+  const isRelevantTask = getRelevantTaskStatus(
+    startTimeInEpochSeconds,
+    nursingTasks
+  );
 
   const drugNameText = (
     <div
       className="drug-title"
       style={{
-        color: stopTime ? "#da1e28" : isRelevantTask ? "#393939" : "#525252",
+        color: stopTime ? "#FF0000" : isRelevantTask ? "#393939" : "#525252",
         fontWeight: isRelevantTask ? 500 : 400,
       }}
     >
       {drugName}
     </div>
   );
-  const statusIcon = iconType(newMedicationNursingTask);
+  const statusIcon = iconType(newMedicationNursingTask, nursingTasks);
   return (
     <div className="tile-parent-container">
       <div
@@ -83,7 +91,7 @@ export default function TaskTile(props) {
             {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
             <span>&nbsp;-&nbsp;{drugRoute}</span>
           </div>
-          {!dosingInstructions.asNeeded && (
+          {!dosingInstructions?.asNeeded && (
             <div className="tile-content-subtext">
               <Clock />
               <div>

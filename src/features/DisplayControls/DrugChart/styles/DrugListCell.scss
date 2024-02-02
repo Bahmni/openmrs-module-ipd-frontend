@@ -1,27 +1,55 @@
 .drug-chart-drug-name {
-  max-width: 85%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 500;
+  font-size: 14px;
   color: #393939;
   font-style: normal;
-  display: contents;
 }
+
+.drug-order-details {
+  display: flex;
+  padding: 6px 10px;
+
+  .order-details {
+    display: flex;
+    flex-direction: column;
+    max-width: calc(100% - 5rem);
+    gap: 2px;
+  }
+
+  .administration-details {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .medication-tags {
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
 .drug-name-container {
-  display: block;
+  display: flex;
+  align-items: center;
 }
+
 .dosage {
   font-size: 12px;
   font-weight: 400;
   color: #393939;
+
   > * {
     display: inline-block;
   }
 }
+
 .note-icon-container {
   margin-left: 5px;
 }
+
 .tooltip-content-separater {
   height: 1px;
   background-color: #bbb8b8;
@@ -30,6 +58,9 @@
   margin-bottom: 10px;
 }
 
-.drug-list-drug-name-cell {
-  float: inline-end;
+.red-tag {
+  color: #fff;
+  background-color: #ff0000;
+  min-width: 64px;
+  margin: 4px 0;
 }

@@ -1,11 +1,12 @@
 {
   "IPD_HEADER": "Custom IPD Header translated",
   "DRUG_CHART_MODAL_HEADER": "Add to Drug Chart",
+  "EDIT_DRUG_CHART_HEADER": "Edit Drug Chart",
   "DRUG_CHART_MODAL_SAVE": "Save",
   "DRUG_CHART_MODAL_CANCEL": "Cancel",
   "DRUG_CHART_MODAL_CLOSE": "Close",
   "DRUG_CHART_MODAL_CANCEL_MESSAGE": "No medication tasks have been scheduled.",
-  "DRUG_CHART_MODAL_SAVE_MESSAGE": "Medication tasks are scheduled successfully.",
+  "DRUG_CHART_MODAL_SAVE_MESSAGE": "Medication task(s) scheduled successfully.",
   "DRUG_CHART_MODAL_START_TIME_PASSED": "Start Time entered has already passed!",
   "DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING": "Schedule entered has already passed!",
   "DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING": "Times entered should be in ascending order",
@@ -73,5 +74,6 @@
   "STOP_DRUG": "Stop drug",
   "STOP_DRUG_WARNING_TEXT": "Are you sure you want to stop this drug? You will not be able to reverse this decision",
   "STOP_DRUG_CANCEL_TEXT": "Cancel",
-  "STOP_DRUG_SUCCESS_NOTIFICATION": "Medication stopped successfully"
+  "STOP_DRUG_SUCCESS_NOTIFICATION": "Medication stopped successfully",
+  "NO_CONFIG_MESSAGE": "Please specify IPD Dashboard configurations"
 }

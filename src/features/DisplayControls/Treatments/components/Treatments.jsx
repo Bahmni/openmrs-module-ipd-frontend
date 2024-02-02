@@ -5,7 +5,6 @@ import { FormattedMessage } from "react-intl";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import {
-  getAllDrugOrders,
   treatmentHeaders,
   getConfigsForTreatments,
   updateDrugOrderList,
@@ -21,6 +20,7 @@ import {
   modifyEmergencyTreatmentData,
   mapAdditionalDataForEmergencyTreatments,
   isDrugOrderStoppedWithoutAdministration,
+  getStopReason,
 } from "../utils/TreatmentsUtils";
 import { getCookies } from "../../../../utils/CommonUtils";
 import { defaultDateTimeFormat } from "../../../../constants";
@@ -34,6 +34,7 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import TreatmentExpandableRow from "./TreatmentExpandableRow";
 import Notification from "../../../../components/Notification/Notification";
+import { AllMedicationsContext } from "../../../../context/AllMedications";
 import moment from "moment";
 
 const Treatments = (props) => {
@@ -56,6 +57,7 @@ const Treatments = (props) => {
   const [drugChartNotes, setDrugChartNotes] = useState("");
   const [additionalData, setAdditionalData] = useState([]);
   const [showEditMessage, setShowEditMessage] = useState(false);
+  const allMedications = useContext(AllMedicationsContext);
   const [showStopDrugChartModal, setShowStopDrugChartModal] = useState(false);
   const [stopReason, setStopReason] = useState("");
   const [isStopButtonDisabled, setStopButtonDisabled] = useState(true);
@@ -71,8 +73,7 @@ const Treatments = (props) => {
     });
   };
   let drugOrderList = {};
-  const isAddToDrugChartDisabled =
-    visitSummary.admissionDetails === null ? true : false;
+  const isAddToDrugChartDisabled = visitSummary?.admissionDetails === null;
   const sliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -110,7 +111,8 @@ const Treatments = (props) => {
 
   const handleEditAndAddToDrugChartClick = (
     drugOrderId,
-    showEditDrugChartLink
+    showEditDrugChartLink,
+    drugOrdernotes
   ) => {
     if (isAddToDrugChartDisabled) {
       updateSliderOpen((prev) => {
@@ -123,6 +125,7 @@ const Treatments = (props) => {
     }
     if (showEditDrugChartLink) {
       setShowEditMessage(true);
+      setDrugChartNotes(drugOrdernotes);
     }
 
     setSliderContentModified((prevState) => ({
@@ -139,7 +142,7 @@ const Treatments = (props) => {
       return;
     }
     updateTreatmentsSlider(true);
-    setDrugChartNotes("");
+    if (!showEditDrugChartLink) setDrugChartNotes("");
   };
 
   const handleStopDrugChartClick = (drugOrderId) => {
@@ -187,8 +190,12 @@ const Treatments = (props) => {
   const getActions = (
     showEditDrugChartLink,
     showStopDrugChartLink,
-    drugOrder
+    drugOrder,
+    drugOrderSchedule
   ) => {
+    if (drugOrder.dosingInstructions.asNeeded) {
+      return <></>;
+    }
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
       return (
         <Link
@@ -196,7 +203,8 @@ const Treatments = (props) => {
           onClick={() =>
             handleEditAndAddToDrugChartClick(
               drugOrder.uuid,
-              showEditDrugChartLink
+              showEditDrugChartLink,
+              drugOrderSchedule?.notes
             )
           }
         >
@@ -209,7 +217,8 @@ const Treatments = (props) => {
           onClick={() =>
             handleEditAndAddToDrugChartClick(
               drugOrder.uuid,
-              showEditDrugChartLink
+              showEditDrugChartLink,
+              drugOrderSchedule?.notes
             )
           }
         >
@@ -263,7 +272,12 @@ const Treatments = (props) => {
           ),
           actions:
             !drugOrder.dateStopped &&
-            getActions(showEditDrugChartLink, showStopDrugChartLink, drugOrder),
+            getActions(
+              showEditDrugChartLink,
+              showStopDrugChartLink,
+              drugOrder,
+              drugOrderObject.drugOrderSchedule
+            ),
           additionalData: {
             instructions: drugOrderObject.instructions
               ? drugOrderObject.instructions
@@ -276,6 +290,11 @@ const Treatments = (props) => {
               defaultDateTimeFormat
             ),
             startTimeForSort: drugOrder.effectiveStartDate,
+            stopReason: getStopReason(drugOrder),
+            stopperAdditionalData:
+              drugOrderObject.provider.name +
+              " | " +
+              formatDate(drugOrder.dateStopped, defaultDateTimeFormat),
           },
         };
       });
@@ -287,6 +306,8 @@ const Treatments = (props) => {
         additionalInstructions: treatment.additionalData.additionalInstructions,
         recordedDateTime: treatment.additionalData.recordedDateTime,
         provider: treatment.providerName,
+        stopReason: treatment.additionalData.stopReason,
+        stopperAdditionalData: treatment.additionalData.stopperAdditionalData,
       };
     });
     setAdditionalData(additionalMappedData);
@@ -294,9 +315,25 @@ const Treatments = (props) => {
   };
 
   useEffect(() => {
-    const getActiveDrugOrdersAndTreatmentConfig = async () => {
-      const allMedicationsList = await getAllDrugOrders(visitUuid);
+    allMedications.getAllDrugOrders(visitUuid);
+  }, []);
+
+  const getTreatmentConfigs = async () => {
+    const treatmentConfigs = await getConfigsForTreatments();
+    setSelectedDrugOrder({
+      patientId: patientId,
+      scheduleFrequencies: treatmentConfigs.scheduleFrequencies,
+      startTimeFrequencies: treatmentConfigs.startTimeFrequencies,
+      enable24HourTimers: treatmentConfigs.enable24HourTimers,
+      drugOrder: null,
+    });
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (allMedications.data) {
       let allTreatments = [];
+      const allMedicationsList = { ...allMedications.data };
       if (allMedicationsList.ipdDrugOrders.length > 0) {
         drugOrderList = updateDrugOrderList(allMedicationsList.ipdDrugOrders);
         allTreatments = [...modifyPrescribedTreatmentData(drugOrderList)];
@@ -319,25 +356,9 @@ const Treatments = (props) => {
           a.additionalData.startTimeForSort - b.additionalData.startTimeForSort
       );
       setTreatments(allTreatments);
-    };
-
-    const getTreatmentConfigs = async () => {
-      const treatmentConfigs = await getConfigsForTreatments();
-      setSelectedDrugOrder({
-        patientId: patientId,
-        scheduleFrequencies: treatmentConfigs.scheduleFrequencies,
-        startTimeFrequencies: treatmentConfigs.startTimeFrequencies,
-        enable24HourTimers: treatmentConfigs.enable24HourTimers,
-        drugOrder: null,
-      });
-    };
-
-    getActiveDrugOrdersAndTreatmentConfig().then(() => {
-      getTreatmentConfigs().then(() => {
-        setIsLoading(false);
-      });
-    });
-  }, []);
+      getTreatmentConfigs();
+    }
+  }, [allMedications.data]);
 
   return (
     <>

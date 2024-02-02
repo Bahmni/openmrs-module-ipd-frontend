@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Tooltip } from "carbon-components-react";
 import "../styles/TimeCell.scss";
 import SVGIcon from "./SVGIcon.jsx";
-import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
 import { ifMedicationNotesPresent } from "../utils/DrugChartUtils";
 
@@ -40,7 +40,9 @@ export default function TimeCell(props) {
               <SVGIcon iconType={status} info={administrationInfo} />
               {ifMedicationNotesPresent(notes, status) && (
                 <span data-testid="left-notes">
-                  <TooltipCarbon icon={() => icon} content={notes} />
+                  <Tooltip autoOrientation={true} renderIcon={() => icon}>
+                    {notes}
+                  </Tooltip>
                 </span>
               )}
             </div>
@@ -60,7 +62,9 @@ export default function TimeCell(props) {
               <SVGIcon iconType={status} info={administrationInfo} />
               {ifMedicationNotesPresent(notes, status) && (
                 <span data-testid="right-notes">
-                  <TooltipCarbon icon={() => icon} content={notes} />
+                  <Tooltip autoOrientation={true} renderIcon={() => icon}>
+                    {notes}
+                  </Tooltip>
                 </span>
               )}
             </div>

@@ -7,6 +7,8 @@ import {
 } from "./NursingTasksUtilsMockData";
 import MockDate from "mockdate";
 import { SliderContext } from "../../../../context/SliderContext";
+import { IPDContext } from "../../../../context/IPDContext";
+import { mockConfig } from "../../../../utils/CommonUtils";
 
 const mockFetchMedicationNursingTasks = jest.fn();
 const mockGetTimeInSeconds = jest.fn();
@@ -26,6 +28,20 @@ jest.mock("../../../../utils/DateTimeUtils", () => {
   };
 });
 
+jest.mock("../../DrugChart/utils/DrugChartUtils", () => {
+  const originalModule = jest.requireActual(
+    "../../DrugChart/utils/DrugChartUtils"
+  );
+  return {
+    ...originalModule,
+    currentShiftHoursArray: () => ({
+      currentShiftHoursArray: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      rangeArray: ["06:00-18:00", "18:00-06:00"],
+      shiftIndex: 0,
+    }),
+  };
+});
+
 const mockProviderValue = {
   isSliderOpen: {
     treatments: false,
@@ -39,14 +55,16 @@ describe("NursingTasks", () => {
   });
 
   it("should show loading state", async () => {
-    const { getByText } = render(
+    const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <NursingTasks patientId="patientid" />
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
 
     await waitFor(() => {
-      expect(getByText("Loading...")).toBeTruthy();
+      expect(getByTestId("loading-icon")).toBeTruthy();
     });
   });
 
@@ -59,7 +77,9 @@ describe("NursingTasks", () => {
 
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <NursingTasks patientId="patientid" />
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -78,7 +98,9 @@ describe("NursingTasks", () => {
     ]);
     const { getByText, container } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <NursingTasks patientId="patientid" />
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
 
@@ -102,7 +124,9 @@ describe("NursingTasks", () => {
     ]);
     const { getByText, container } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <NursingTasks patientId="patientid" />
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
 
@@ -125,7 +149,9 @@ describe("NursingTasks", () => {
     );
     const { getAllByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <NursingTasks patientId="patientid" />
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -138,20 +164,24 @@ describe("NursingTasks", () => {
   });
 
   it("should show current date", async () => {
-    MockDate.set("2023-08-11");
+    MockDate.set("2023-08-11 07:00");
 
     mockFetchMedicationNursingTasks.mockResolvedValueOnce(
       mockNursingTasksResponse
     );
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <NursingTasks patientId="patientid" />
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
     });
-    expect(getByText("11 Aug 2023 06:00 - 11 Aug 2023 18:00")).toBeTruthy();
+    expect(getByText(/11 Aug 2023/)).toBeTruthy();
+    expect(getByText(/06:00/)).toBeTruthy();
+    expect(getByText(/17:59/)).toBeTruthy();
   });
   it("should show Correct Nursing Tasks when clicked on previous button", async () => {
     MockDate.set("2024-01-05");
@@ -160,7 +190,9 @@ describe("NursingTasks", () => {
       .mockReturnValue(mockShiftResponse);
     const { getAllByText, getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <NursingTasks patientId="patientid" />
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -185,7 +217,9 @@ describe("NursingTasks", () => {
     mockGetTimeInSeconds.mockReturnValue(259200);
     const { getAllByText, getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <NursingTasks patientId="patientid" />
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -210,7 +244,9 @@ describe("NursingTasks", () => {
       .mockReturnValue(mockNursingTasksResponse);
     const { getAllByText, getByTestId, queryByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <NursingTasks patientId="patientid" />
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -219,6 +255,7 @@ describe("NursingTasks", () => {
     expect(
       getAllByText("Paracetamol 120 mg/5 mL Suspension (Liquid)")
     ).toBeTruthy();
+
     getByTestId("next-shift").click();
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(2);
@@ -226,6 +263,7 @@ describe("NursingTasks", () => {
     expect(
       getAllByText("Amoxicillin 250 mg/5 mL Powder for Oral Suspension")
     ).toBeTruthy();
+
     getByTestId("current-shift").click();
     await waitFor(() => {
       expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(3);
@@ -242,7 +280,9 @@ describe("NursingTasks", () => {
     mockFetchMedicationNursingTasks.mockReturnValueOnce(mockShiftResponse);
     const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <NursingTasks patientId="patientid" />
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -251,14 +291,16 @@ describe("NursingTasks", () => {
     expect(getByTestId("previous-shift").disabled).toEqual(true);
   });
   it("should restrict next shift navigation if it reaches 2 days forth from the current shift", async () => {
-    MockDate.set("2024-01-03");
+    MockDate.set("2024-01-03 07:00");
     mockFetchMedicationNursingTasks
       .mockReturnValueOnce(mockShiftResponse)
       .mockReturnValueOnce(mockShiftResponse);
     mockGetTimeInSeconds.mockReturnValue(0);
     const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <NursingTasks patientId="patientid" />
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
       </SliderContext.Provider>
     );
     await waitFor(() => {

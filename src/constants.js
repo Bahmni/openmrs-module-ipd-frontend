@@ -33,6 +33,8 @@ export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
 export const CLINICAL_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/clinical/app.json";
+export const DASHBORAD_CONFIG_URL =
+  hostUrl + "/bahmni_config/openmrs/apps/ipdDashboard/app.json";
 export const PATIENT_PROFILE = RESTWS_V1 + "/patientprofile";
 export const MEDICATION_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/clinical/medication.json";
@@ -42,6 +44,20 @@ export const GET_ALL_PROVIDERS_URL =
 export const SEARCH_DRUG_URL =
   RESTWS_V1 +
   "/drug?q={queryString}&s=ordered&v=custom:(uuid,strength,name,dosageForm)";
+
+export const VISIT_SUMMARY_URL = BAHMNI_CORE + "/visit/summary";
+export const CONFIG_BAHMNIENCOUNTER_URL =
+  BAHMNI_CORE + "/config/bahmniencounter";
+export const PATIENT_MOVEMENT_URL = BAHMNI_CORE + "/bahmniencounter";
+export const DISCHARGE_PATIENT_MOVEMENT_URL = BAHMNI_CORE + "/discharge ";
+
+export const FSN_DISPOSITION_VALUE = "Disposition";
+export const BY_FSN_VALUE = "byFullySpecifiedName";
+export const FSN_ADT_NOTES_VALUE = "Adt Notes";
+export const BAHMNI_VALUE = "bahmni";
+export const CUSTOM_OUTPUT_VALUE =
+  "custom:(uuid,name,answers:(uuid,name,mappings))";
+export const SEARCH_CONCEPT_URL = RESTWS_V1 + "/concept";
 
 export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
@@ -53,7 +69,7 @@ export const ENCOUNTER_TYPE_URL = RESTWS_V1 + "/encountertype/{encounterType}";
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
 export const dateFormat = "DD/MM/YYYY";
-export const displayShiftTimingsFormat = "DD MMM YYYY HH:mm";
+export const displayShiftTimingsFormat = "DD MMM YYYY | HH:mm";
 
 export const componentKeys = {
   ALLERGIES: "AL",

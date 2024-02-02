@@ -4,9 +4,6 @@ import {
   ADMINISTERED_MEDICATIONS_BASE_URL,
 } from "../../../../constants";
 import moment from "moment";
-import data from "../../../../utils/config.json";
-
-const { config: { nursingTasks = {} } = {} } = data;
 
 export const fetchMedicationNursingTasks = async (
   patientUuid,
@@ -136,13 +133,16 @@ export const ExtractMedicationNursingTasksData = (
       }
     });
   });
-
-  pendingExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
+  pendingExtractedData.sort(
+    (a, b) => a.startTimeInEpochSeconds - b.startTimeInEpochSeconds
+  );
   completedExtractedData.sort(
     (a, b) =>
       a.administeredTimeInEpochSeconds - b.administeredTimeInEpochSeconds
   );
-  stoppedExtractedData.sort((a, b) => a.startTime.localeCompare(b.startTime));
+  stoppedExtractedData.sort(
+    (a, b) => a.startTimeInEpochSeconds - b.startTimeInEpochSeconds
+  );
   extractedData.push(...pendingExtractedData);
 
   const groupedData = [];
@@ -192,7 +192,8 @@ const timeToEpoch = (time) => {
 
 export const isTimeWithinAdministeredWindow = (
   taskTime,
-  scheduledStartTime
+  scheduledStartTime,
+  nursingTasks
 ) => {
   const enteredTimeInEpochSeconds = timeToEpoch(taskTime);
   const timeWithinWindowInEpochSeconds =

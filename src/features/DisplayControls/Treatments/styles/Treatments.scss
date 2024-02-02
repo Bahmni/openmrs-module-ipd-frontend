@@ -6,34 +6,33 @@
   z-index: 10000;
 }
 
-.treatments-drug-name-slider-open {
-  padding-left: 10px;
-  width: 100%;
-  display: block;
-}
-
 .treatments-drug-name {
-  padding-left: 10px;
   width: 100%;
-  display: block;
-  position: relative;
-  top: -5px;
 }
 
 .notes-icon-div {
+  width: 100%;
   display: flex;
-  align-items: flex-start;
-  margin-top: 5px;
+  justify-content: left;
+  align-items: center;
+  .bx--tag {
+    width: 100%;
+  }
+  .notes-icon {
+    position: relative;
+    top: 2px;
+    left: 2px;
+  }
 }
 
 .strike-through {
-  text-decoration: line-through #da1e28;
+  text-decoration: line-through #ff0000;
 }
 
 .red-text {
-  color: #da1e28;
+  color: #ff0000;
 }
 
-.stop-drug-reason-text{
+.stop-drug-reason-text {
   padding-top: 16px;
 }

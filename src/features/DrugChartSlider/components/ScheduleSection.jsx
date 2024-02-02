@@ -86,53 +86,55 @@ export const ScheduleSection = ({
               </p>
             )}
           </div>
-          <div className="schedule-section">
-            <Title text="Schedule time (subsequent)" isRequired={true} />
-            <div className="inline-field" id="schedule">
-              {Array.from(
-                { length: enableSchedule?.frequencyPerDay },
-                (_, index) =>
-                  enable24HourTimers ? (
-                    <div className="schedule-time" key={index}>
-                      <TimePicker24Hour
-                        key={index}
-                        id={`schedule-${index}`}
-                        defaultTime={schedules[index]}
-                        onChange={(time) => {
-                          handleSubsequentDaySchedule(time, index);
-                        }}
-                        labelText=" "
-                        width="70%"
-                        invalidText={invalidTimeText24Hour}
-                      />
-                    </div>
-                  ) : (
-                    <div className="schedule-time" key={index}>
-                      <TimePicker
-                        key={index}
-                        labelText=" "
-                        defaultTime={schedules[index]}
-                        onChange={(time) => {
-                          handleSubsequentDaySchedule(time, index);
-                        }}
-                        id={`schedule-${index}`}
-                        invalidText={invalidTimeText12Hour}
-                      />
-                    </div>
-                  )
+          {schedules.length != 0 && (
+            <div className="schedule-section">
+              <Title text="Schedule time (subsequent)" isRequired={true} />
+              <div className="inline-field" id="schedule">
+                {Array.from(
+                  { length: enableSchedule?.frequencyPerDay },
+                  (_, index) =>
+                    enable24HourTimers ? (
+                      <div className="schedule-time" key={index}>
+                        <TimePicker24Hour
+                          key={index}
+                          id={`schedule-${index}`}
+                          defaultTime={schedules[index]}
+                          onChange={(time) => {
+                            handleSubsequentDaySchedule(time, index);
+                          }}
+                          labelText=" "
+                          width="70%"
+                          invalidText={invalidTimeText24Hour}
+                        />
+                      </div>
+                    ) : (
+                      <div className="schedule-time" key={index}>
+                        <TimePicker
+                          key={index}
+                          labelText=" "
+                          defaultTime={schedules[index]}
+                          onChange={(time) => {
+                            handleSubsequentDaySchedule(time, index);
+                          }}
+                          id={`schedule-${index}`}
+                          invalidText={invalidTimeText12Hour}
+                        />
+                      </div>
+                    )
+                )}
+              </div>
+              {showScheduleOrderWarning && (
+                <p className="time-error">
+                  <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
+                </p>
+              )}
+              {showEmptyScheduleWarning && (
+                <p className="time-error">
+                  <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
+                </p>
               )}
             </div>
-            {showScheduleOrderWarning && (
-              <p className="time-error">
-                <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING"></FormattedMessage>
-              </p>
-            )}
-            {showEmptyScheduleWarning && (
-              <p className="time-error">
-                <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
-              </p>
-            )}
-          </div>
+          )}
           <div className="schedule-section">
             <Title text="Schedule time (remainder)" isRequired={true} />
             <div className="inline-field" id="schedule">
