@@ -340,7 +340,7 @@ export default function NursingTasks(props) {
           <Dropdown
             id="filter-task"
             className="nursing-task-dropdown"
-            size="lg"
+            size="sm"
             selectedItem={filterValue}
             items={items}
             itemToString={(item) => (item ? item.text : "")}
