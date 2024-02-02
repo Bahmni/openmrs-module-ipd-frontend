@@ -90,7 +90,7 @@ export const transformDrugOrders = (orders) => {
       dosingInstructions: {
         dosage,
         doseUnits,
-        route: route.display,
+        route: route?.display,
         emergency: true,
       },
       firstSlotStartTime: administeredDateTimeInSeconds,

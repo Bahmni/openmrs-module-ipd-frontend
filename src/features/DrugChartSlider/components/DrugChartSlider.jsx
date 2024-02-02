@@ -97,6 +97,7 @@ const DrugChartSlider = (props) => {
     showEmptyFinalDayScheduleWarning,
     setShowEmptyFinalDayScheduleWarning,
   ] = useState(false);
+  const [isSaveDisabled, updateIsSaveDisabled] = useState(false);
 
   const handleFirstDaySchedule = (newSchedule, index) => {
     updateSliderContentModified(true);
@@ -438,11 +439,15 @@ const DrugChartSlider = (props) => {
   const handleSave = async () => {
     const performSave = await validateSave();
     if (performSave) {
+      updateIsSaveDisabled(true);
       const medication = createDrugChartPayload();
       const response = isEdit
         ? await updateMedication(medication)
         : await saveMedication(medication);
-      response.status === 200 ? hostApi.onModalSave?.() : null;
+      if (response.status === 200) {
+        updateIsSaveDisabled(false);
+        hostApi.onModalSave?.();
+      }
     }
   };
 
@@ -531,6 +536,7 @@ const DrugChartSlider = (props) => {
         <SaveAndCloseButtons
           onSave={() => handleSave()}
           onClose={() => handleCancel()}
+          isSaveDisabled={isSaveDisabled}
         />
       </SideBarPanel>
     </I18nProvider>
