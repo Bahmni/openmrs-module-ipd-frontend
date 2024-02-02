@@ -28,7 +28,7 @@ export default function CalendarRow(props) {
       time = moment(slot.startTime * 1000).format("HH:mm");
       adminInfo = {
         notes: administrationSummary.notes,
-        administrationInfo: `${administrationSummary.performerName}`,
+        administrationInfo: administrationSummary.performerName,
       };
     } else {
       time = moment(slot.startTime * 1000).format("HH:mm");

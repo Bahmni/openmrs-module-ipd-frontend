@@ -1,11 +1,6 @@
 import axios from "axios";
 import moment from "moment";
-import {
-  MEDICATIONS_BASE_URL,
-  displayShiftTimingsFormat,
-  defaultDateTimeFormat,
-  performerFunction,
-} from "../../../../constants";
+import { MEDICATIONS_BASE_URL, performerFunction } from "../../../../constants";
 import _ from "lodash";
 
 export const fetchMedications = async (
@@ -122,10 +117,6 @@ const isAdministeredLateTask = (startTime, effectiveStartDate, drugChart) => {
     effectiveStartDate - startTime * 1000 > lateTaskStatusWindowInMilliSeconds
   );
 };
-export const getDateFormatString = (drugChart) =>
-  drugChart.enable24HourTime
-    ? displayShiftTimingsFormat
-    : defaultDateTimeFormat;
 
 export const resetDrugOrdersSlots = (drugOrders) => {
   Object.keys(drugOrders).forEach((order) => {
