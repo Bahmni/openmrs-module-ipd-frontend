@@ -185,4 +185,24 @@ describe("DrugChartWrapper", () => {
     });
     expect(screen.getByTestId("nextButton").disabled).toEqual(true);
   });
+
+  it("should show current shift as disabled for read mode", async () => {
+    MockDate.set("2024-01-05 10:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    render(
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: true,
+          visitSummary: { stopDateTime: new Date() },
+        }}
+      >
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
+    const currentShiftButton = screen.getByTestId("currentShift");
+    expect(currentShiftButton.className).toContain("bx--btn--disabled");
+  });
 });

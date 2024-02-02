@@ -309,4 +309,30 @@ describe("NursingTasks", () => {
     });
     expect(getByTestId("next-shift").disabled).toEqual(true);
   });
+  it("should show Current Shift and Add Task button as disabled", async () => {
+    MockDate.set("2024-01-05");
+    mockFetchMedicationNursingTasks
+      .mockReturnValueOnce(mockNursingTasksResponse)
+      .mockReturnValueOnce(mockShiftResponse)
+      .mockReturnValue(mockNursingTasksResponse);
+    const { getByTestId, getByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            isReadMode: true,
+            visitSummary: { stopDateTime: new Date() },
+          }}
+        >
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    );
+
+    const currentShiftButton = getByTestId("current-shift");
+    const AddTaskButton = getByText("Add Task");
+
+    expect(currentShiftButton.className).toContain("bx--btn--disabled");
+    expect(AddTaskButton.className).toContain("bx--btn--disabled");
+  });
 });
