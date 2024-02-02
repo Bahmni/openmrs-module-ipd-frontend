@@ -159,9 +159,9 @@ export const getDrugName = (drugOrderObject) => {
           <span>{drugOrder.drug.name}</span>
           <NotesIcon className="notes-icon" data-testid="notes-icon" />
         </span>
-        <span>
+        <div className={"display-tags"}>
           <DisplayTags drugOrder={drugOrder.dosingInstructions} />
-        </span>
+        </div>
       </div>
     );
   } else if (drugOrder.drug) {
