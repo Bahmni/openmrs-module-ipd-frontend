@@ -1,4 +1,4 @@
-import { fireEvent, getByRole, render, waitFor } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import Treatments from "../components/Treatments";
 import { getEncounterType, stopDrugOrders } from "../utils/TreatmentsUtils";
@@ -410,15 +410,13 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <IPDContext.Provider value={{isReadMode: false}}>
-        <SliderContext.Provider value={mockProviderValue}>
-          <IPDContext.Provider value={{ config: mockConfig }}>
-            <AllMedicationsContext.Provider value={updatedAllMedications}>
-              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
-            </AllMedicationsContext.Provider>
-          </IPDContext.Provider>
-        </SliderContext.Provider>
-      </IPDContext.Provider>
+      <SliderContext.Provider value={mockProviderValue}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </IPDContext.Provider>
+      </SliderContext.Provider>
     );
     const editDrugChartLink = await waitFor(() => getByText("Edit Drug Chart"));
     await waitFor(() => {
@@ -694,7 +692,7 @@ describe("Treatments", () => {
       },
     };
     const { getByRole } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: true}}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: true }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -703,7 +701,7 @@ describe("Treatments", () => {
       </IPDContext.Provider>
     );
     await waitFor(() => {
-      const link = getByRole('link', {disabled: true});
+      const link = getByRole("link", { disabled: true });
       expect(link).toBeTruthy();
     });
   });
