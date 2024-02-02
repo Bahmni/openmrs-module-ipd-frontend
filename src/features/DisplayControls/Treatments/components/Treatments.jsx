@@ -157,6 +157,7 @@ const Treatments = (props) => {
         action: "DISCONTINUE",
         dateActivated: null,
         dateStopped: moment(),
+        scheduledDate: moment(),
         previousOrderUuid: stoppedDrugOrder.drugOrder.uuid,
       };
     });
