@@ -19,7 +19,10 @@ import { Button, Dropdown, Loading } from "carbon-components-react";
 import AddEmergencyTasks from "./AddEmergencyTasks";
 import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
-import { asNeededPlaceholderConceptName, componentKeys } from "../../../../constants";
+import {
+  asNeededPlaceholderConceptName,
+  componentKeys,
+} from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
 import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
@@ -78,14 +81,20 @@ export default function NursingTasks(props) {
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTimeChange = getDateTime(d, currentShift[currentShift.length - 1] + 1);
+        endDateTimeChange = getDateTime(
+          d,
+          currentShift[currentShift.length - 1] + 1
+        );
       } else {
         d.setDate(d.getDate() - 1);
         startDateTimeChange = getDateTime(d, currentShift[0]);
       }
     }
 
-    updatedStartEndDates({ startDate: startDateTimeChange, endDate: endDateTimeChange });
+    updatedStartEndDates({
+      startDate: startDateTimeChange,
+      endDate: endDateTimeChange,
+    });
     fetchNursingTasks(startDateTimeChange, endDateTimeChange);
   }, []);
   const updateNursingTasksSlider = (value) => {
@@ -128,7 +137,7 @@ export default function NursingTasks(props) {
       shiftIndex,
       startEndDates.startDate,
       startEndDates.endDate
-      );
+    );
     startDateTimeChange = startDateTime;
     endDateTimeChange = endDateTime;
     updateShiftIndex(nextShiftIndex);
@@ -153,7 +162,10 @@ export default function NursingTasks(props) {
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTimeChange = getDateTime(d, currentShift[currentShift.length - 1] + 1);
+        endDateTimeChange = getDateTime(
+          d,
+          currentShift[currentShift.length - 1] + 1
+        );
       } else {
         d.setDate(d.getDate() - 1);
         startDateTimeChange = getDateTime(d, currentShift[0]);
@@ -161,7 +173,10 @@ export default function NursingTasks(props) {
     }
     updateShiftIndex(updatedShiftIndex);
     setIsLoading(true);
-    updatedStartEndDates({ startDate: startDateTimeChange, endDate: endDateTimeChange });
+    updatedStartEndDates({
+      startDate: startDateTimeChange,
+      endDate: endDateTimeChange,
+    });
     fetchNursingTasks(startDateTimeChange, endDateTimeChange);
   };
 
@@ -193,9 +208,30 @@ export default function NursingTasks(props) {
   const isCurrentShift = () => {
     const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
     const currentShift = shiftDetailsObj.currentShiftHoursArray;
-    const startDateTimeCurrent = getDateTime(new Date(), currentShift[0]);
-    const endDateTimeCurrent = getDateTime(new Date(),currentShift[currentShift.length - 1] + 1);
-    return startDateTimeCurrent == startDateTimeChange && endDateTimeCurrent == endDateTimeChange ? true : false;
+    let startDateTimeCurrent = getDateTime(new Date(), currentShift[0]);
+    let endDateTimeCurrent = getDateTime(
+      new Date(),
+      currentShift[currentShift.length - 1] + 1
+    );
+
+    if (startDateTimeCurrent > endDateTimeCurrent) {
+      const d = new Date();
+      const currentHour = d.getHours();
+      if (currentHour > 12) {
+        d.setDate(d.getDate() + 1);
+        endDateTimeCurrent = getDateTime(
+          d,
+          currentShift[currentShift.length - 1] + 1
+        );
+      } else {
+        d.setDate(d.getDate() - 1);
+        startDateTimeCurrent = getDateTime(d, currentShift[0]);
+      }
+    }
+    return (
+      startDateTimeCurrent == startDateTimeChange &&
+      endDateTimeCurrent == endDateTimeChange
+    );
   };
 
   const fetchNursingTasks = async (startDate, endDate) => {
@@ -213,15 +249,16 @@ export default function NursingTasks(props) {
         nursingTasks,
         filterValue
       );
-      if(!isCurrentShift()) {
-        const filteredData = extractedData[0].filter((data)=> {
-          if(data.serviceType != asNeededPlaceholderConceptName) {
-            return data;
-          }
-        });
+      if (!isCurrentShift()) {
+        const filteredData = extractedData
+          .map((extract) =>
+            extract.filter(
+              (data) => data.serviceType != asNeededPlaceholderConceptName
+            )
+          )
+          .filter((innerArray) => innerArray.length > 0);
         setMedicationNursingTasks(filteredData);
-      }
-      else {
+      } else {
         setMedicationNursingTasks(extractedData);
       }
       setIsLoading(false);

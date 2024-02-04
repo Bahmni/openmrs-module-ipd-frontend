@@ -234,72 +234,77 @@ const Treatments = (props) => {
   };
 
   const modifyPrescribedTreatmentData = async (drugOrders) => {
-    const prescribedTreatments = await Promise.all(drugOrders
-      .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
-      .filter(
-        (drugOrderObject) =>
-          !isDrugOrderStoppedWithoutAdministration(drugOrderObject)
-      )
-      .map(async (drugOrderObject) => {
-        let showEditDrugChartLink;
-        let showStopDrugChartLink;
-        if (drugOrderObject.drugOrder.dosingInstructions.asNeeded) {
-          const placeholderSlot = await getSlotsForAnOrderAndServiceType(patientId, drugOrderObject.drugOrder.uuid, serviceType.AS_NEEDED_PLACEHOLDER);
-          if (placeholderSlot.length > 0) {
+    const prescribedTreatments = await Promise.all(
+      drugOrders
+        .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
+        .filter(
+          (drugOrderObject) =>
+            !isDrugOrderStoppedWithoutAdministration(drugOrderObject)
+        )
+        .map(async (drugOrderObject) => {
+          let showEditDrugChartLink;
+          let showStopDrugChartLink;
+          if (drugOrderObject.drugOrder.dosingInstructions.asNeeded) {
+            const placeholderSlot = await getSlotsForAnOrderAndServiceType(
+              patientId,
+              drugOrderObject.drugOrder.uuid,
+              serviceType.AS_NEEDED_PLACEHOLDER
+            );
+            if (placeholderSlot.length > 0) {
+              showEditDrugChartLink = false;
+              showStopDrugChartLink = true;
+            }
+          } else if (drugOrderObject.drugOrderSchedule != null) {
+            showStopDrugChartLink = drugOrderObject.drugOrderSchedule
+              .medicationAdministrationStarted
+              ? true
+              : false;
+            showEditDrugChartLink = !showStopDrugChartLink;
+          } else {
             showEditDrugChartLink = false;
-            showStopDrugChartLink = true;
           }
-        } else if (drugOrderObject.drugOrderSchedule != null) {
-          showStopDrugChartLink = drugOrderObject.drugOrderSchedule
-            .medicationAdministrationStarted
-            ? true
-            : false;
-          showEditDrugChartLink = !showStopDrugChartLink;
-        } else {
-          showEditDrugChartLink = false;
-        }
-        const drugOrder = drugOrderObject.drugOrder;
-        return {
-          id: drugOrder.uuid,
-          startDate: formatDate(drugOrder.effectiveStartDate),
-          drugName: getDrugName(drugOrderObject),
-          dosageDetails: setDosingInstructions(drugOrder),
-          providerName: drugOrderObject.provider.name,
-          status: (
-            <span className={drugOrder.dateStopped && "red-text"}>
-              {drugOrder.dateStopped && (
-                <FormattedMessage id="STOPPED" defaultMessage="Stopped" />
-              )}
-            </span>
-          ),
-          actions:
-            !drugOrder.dateStopped &&
-            getActions(
-              showEditDrugChartLink,
-              showStopDrugChartLink,
-              drugOrder,
-              drugOrderObject.drugOrderSchedule
+          const drugOrder = drugOrderObject.drugOrder;
+          return {
+            id: drugOrder.uuid,
+            startDate: formatDate(drugOrder.effectiveStartDate),
+            drugName: getDrugName(drugOrderObject),
+            dosageDetails: setDosingInstructions(drugOrder),
+            providerName: drugOrderObject.provider.name,
+            status: (
+              <span className={drugOrder.dateStopped && "red-text"}>
+                {drugOrder.dateStopped && (
+                  <FormattedMessage id="STOPPED" defaultMessage="Stopped" />
+                )}
+              </span>
             ),
-          additionalData: {
-            instructions: drugOrderObject.instructions
-              ? drugOrderObject.instructions
-              : "",
-            additionalInstructions: drugOrderObject.additionalInstructions
-              ? drugOrderObject.additionalInstructions
-              : "",
-            recordedDateTime: formatDate(
-              drugOrder.dateActivated,
-              defaultDateTimeFormat
-            ),
-            startTimeForSort: drugOrder.effectiveStartDate,
-            stopReason: getStopReason(drugOrder),
-            stopperAdditionalData:
-              drugOrderObject.provider.name +
-              " | " +
-              formatDate(drugOrder.dateStopped, defaultDateTimeFormat),
-          },
-        };
-      })
+            actions:
+              !drugOrder.dateStopped &&
+              getActions(
+                showEditDrugChartLink,
+                showStopDrugChartLink,
+                drugOrder,
+                drugOrderObject.drugOrderSchedule
+              ),
+            additionalData: {
+              instructions: drugOrderObject.instructions
+                ? drugOrderObject.instructions
+                : "",
+              additionalInstructions: drugOrderObject.additionalInstructions
+                ? drugOrderObject.additionalInstructions
+                : "",
+              recordedDateTime: formatDate(
+                drugOrder.dateActivated,
+                defaultDateTimeFormat
+              ),
+              startTimeForSort: drugOrder.effectiveStartDate,
+              stopReason: getStopReason(drugOrder),
+              stopperAdditionalData:
+                drugOrderObject.provider.name +
+                " | " +
+                formatDate(drugOrder.dateStopped, defaultDateTimeFormat),
+            },
+          };
+        })
     );
 
     const additionalMappedData = prescribedTreatments.map((treatment) => {
@@ -341,7 +346,8 @@ const Treatments = (props) => {
         const allMedicationsList = { ...allMedications.data };
         if (allMedicationsList.ipdDrugOrders.length > 0) {
           drugOrderList = updateDrugOrderList(allMedicationsList.ipdDrugOrders);
-          const allPrescribedTreatmentData = await modifyPrescribedTreatmentData(drugOrderList);
+          const allPrescribedTreatmentData =
+            await modifyPrescribedTreatmentData(drugOrderList);
           allTreatments = [...allPrescribedTreatmentData];
         }
         if (
@@ -359,7 +365,8 @@ const Treatments = (props) => {
         }
         allTreatments.sort(
           (a, b) =>
-            a.additionalData.startTimeForSort - b.additionalData.startTimeForSort
+            a.additionalData.startTimeForSort -
+            b.additionalData.startTimeForSort
         );
         setTreatments(allTreatments);
         getTreatmentConfigs();
@@ -367,7 +374,6 @@ const Treatments = (props) => {
     };
 
     setMedicationsData();
-
   }, [allMedications.data]);
 
   return (
