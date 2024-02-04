@@ -561,6 +561,7 @@ export const mockExtractedMedicationNursingTasksData = [
       dosingInstructions: { asNeeded: false, frequency: "Once a day" },
       isDisabled: false,
       orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750884",
+      serviceType: "MedicationRequest"
     },
     {
       drugName: "Paracetamol 120 mg (Tablet)",
@@ -574,6 +575,7 @@ export const mockExtractedMedicationNursingTasksData = [
       dosingInstructions: { asNeeded: false, frequency: "Once a day" },
       isDisabled: false,
       orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750885",
+      serviceType: "MedicationRequest"
     },
   ],
   [
@@ -589,6 +591,7 @@ export const mockExtractedMedicationNursingTasksData = [
       dosingInstructions: { asNeeded: false, frequency: "Once a day" },
       orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750885",
       isDisabled: false,
+      serviceType: "MedicationRequest"
     },
   ],
 ];
@@ -612,6 +615,7 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       },
       isDisabled: true,
       orderId: "paracetamol-125mg-tablet-uuid",
+      serviceType: "MedicationRequest"
     },
   ],
   [
@@ -632,6 +636,7 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       },
       isDisabled: true,
       orderId: "paracetamol-120mg-tablet-uuid",
+      serviceType: "MedicationRequest"
     },
   ],
 ];
@@ -653,6 +658,7 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
       },
       orderId: "paracetamol-120mg-tablet-uuid",
       isDisabled: true,
+      serviceType: "MedicationRequest"
     },
   ],
   [
@@ -671,6 +677,7 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
         frequency: "Once a day",
       },
       orderId: "paracetamol-125mg-tablet-uuid",
+      serviceType: "MedicationRequest",
       isDisabled: true,
     },
   ],
@@ -692,6 +699,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
         frequency: "Once a day",
       },
       orderId: "paracetamol-125mg-tablet-uuid",
+      serviceType: "MedicationRequest",
       isDisabled: false,
     },
   ],
@@ -710,6 +718,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
         frequency: "Once a day",
       },
       orderId: "paracetamol-200mg-tablet-uuid",
+      serviceType: "MedicationRequest",
       isDisabled: false,
     },
   ],
@@ -728,6 +737,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
         frequency: "Once a day",
       },
       orderId: "paracetamol-500mg-tablet-uuid",
+      serviceType: "MedicationRequest",
       isDisabled: false,
     },
   ],
@@ -748,6 +758,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
         frequency: "Once a day",
       },
       orderId: "paracetamol-125mg-tablet-uuid",
+      serviceType: "MedicationRequest",
       isDisabled: true,
     },
   ],
@@ -769,6 +780,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       },
       isDisabled: true,
       orderId: "paracetamol-120mg-tablet-uuid",
+      serviceType: "MedicationRequest"
     },
   ],
 ];

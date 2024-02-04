@@ -6,7 +6,7 @@ import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../i18n/I18nProvider";
 import SideBarPanel from "../../SideBarPanel/components/SideBarPanel";
 import "../styles/DrugChartSlider.scss";
-import { medicationFrequency } from "../../../constants";
+import { medicationFrequency, serviceType } from "../../../constants";
 import { SaveAndCloseButtons } from "../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import { SliderContext } from "../../../context/SliderContext";
 import {
@@ -232,24 +232,19 @@ const DrugChartSlider = (props) => {
       providerUuid: hostData?.drugOrder?.provider?.uuid,
       patientUuid: hostData?.patientId,
       orderUuid: hostData?.drugOrder?.drugOrder?.uuid,
-      slotStartTime: null,
-      firstDaySlotsStartTime: null,
-      dayWiseSlotsStartTime: null,
-      remainingDaySlotsStartTime: null,
       comments: drugChartNotes,
-      medicationFrequency: "",
     };
     if(hostData?.drugOrder?.drugOrder?.dosingInstructions?.asNeeded) {
-      const orderDate = formatDate(hostData?.drugOrder?.drugOrder?.scheduledDate, "DD:MM:YYYY");
-      const orderTime = formatDate(moment.now(),"hh:mm");
-      const orderDateTime = `${orderDate} ${orderTime}`;
-      const parsedDateTime = moment(orderDateTime, "DD:MM:YYYY HH:mm");
-      const orderDateTimeEpoch = dateTimeToEpochUTCTime(parsedDateTime);
-      payload.slotStartTime = orderDateTimeEpoch;
-      payload.medicationFrequency = medicationFrequency.START_TIME_DURATION_FREQUENCY;
-      return payload;
+      payload.serviceType = serviceType.AS_NEEDED_PLACEHOLDER;
     }
     else {
+      payload.slotStartTime = null;
+      payload.firstDaySlotsStartTime = null;
+      payload.dayWiseSlotsStartTime = null;
+      payload.remainingDaySlotsStartTime = null;
+      payload.medicationFrequency = "";
+      payload.serviceType = serviceType.MEDICATION_REQUEST;
+
       if (enableStartTime) {
         const startTimeUTCEpoch = getUTCTimeEpoch(
           startTime,
@@ -318,8 +313,8 @@ const DrugChartSlider = (props) => {
       payload.medicationFrequency =
         medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
       }
-      return payload;
     }
+    return payload;
   };
 
   const validateSave = async () => {

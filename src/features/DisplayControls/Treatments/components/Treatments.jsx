@@ -21,9 +21,10 @@ import {
   mapAdditionalDataForEmergencyTreatments,
   isDrugOrderStoppedWithoutAdministration,
   getStopReason,
+  getSlotsForAnOrderAndServiceType,
 } from "../utils/TreatmentsUtils";
 import { getCookies } from "../../../../utils/CommonUtils";
-import { defaultDateTimeFormat } from "../../../../constants";
+import { defaultDateTimeFormat, serviceType } from "../../../../constants";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
 import { SliderContext } from "../../../../context/SliderContext";
@@ -194,9 +195,6 @@ const Treatments = (props) => {
     drugOrder,
     drugOrderSchedule
   ) => {
-    if (drugOrder.dosingInstructions.asNeeded) {
-      return <></>;
-    }
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
       return (
         <Link
@@ -235,19 +233,22 @@ const Treatments = (props) => {
     }
   };
 
-  const modifyPrescribedTreatmentData = (drugOrders) => {
-    const treatments = drugOrders
+  const modifyPrescribedTreatmentData = async (drugOrders) => {
+    const prescribedTreatments = await Promise.all(drugOrders
       .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
       .filter(
         (drugOrderObject) =>
           !isDrugOrderStoppedWithoutAdministration(drugOrderObject)
       )
-      .map((drugOrderObject) => {
+      .map(async (drugOrderObject) => {
         let showEditDrugChartLink;
         let showStopDrugChartLink;
-        if (drugOrderObject.drugOrderSchedule != null && drugOrderObject.drugOrder.dosingInstructions.asNeeded) {
-          showEditDrugChartLink = false;
-          showStopDrugChartLink = true;
+        if (drugOrderObject.drugOrder.dosingInstructions.asNeeded) {
+          const placeholderSlot = await getSlotsForAnOrderAndServiceType(patientId, drugOrderObject.drugOrder.uuid, serviceType.AS_NEEDED_PLACEHOLDER);
+          if (placeholderSlot.length > 0) {
+            showEditDrugChartLink = false;
+            showStopDrugChartLink = true;
+          }
         } else if (drugOrderObject.drugOrderSchedule != null) {
           showStopDrugChartLink = drugOrderObject.drugOrderSchedule
             .medicationAdministrationStarted
@@ -298,9 +299,10 @@ const Treatments = (props) => {
               formatDate(drugOrder.dateStopped, defaultDateTimeFormat),
           },
         };
-      });
+      })
+    );
 
-    const additionalMappedData = treatments.map((treatment) => {
+    const additionalMappedData = prescribedTreatments.map((treatment) => {
       return {
         id: treatment.id,
         instructions: treatment.additionalData.instructions,
@@ -311,8 +313,9 @@ const Treatments = (props) => {
         stopperAdditionalData: treatment.additionalData.stopperAdditionalData,
       };
     });
+    console.log("Bye ", additionalMappedData);
     setAdditionalData(additionalMappedData);
-    return treatments;
+    return prescribedTreatments;
   };
 
   useEffect(() => {
@@ -332,33 +335,39 @@ const Treatments = (props) => {
   };
 
   useEffect(() => {
-    if (allMedications.data) {
-      let allTreatments = [];
-      const allMedicationsList = { ...allMedications.data };
-      if (allMedicationsList.ipdDrugOrders.length > 0) {
-        drugOrderList = updateDrugOrderList(allMedicationsList.ipdDrugOrders);
-        allTreatments = [...modifyPrescribedTreatmentData(drugOrderList)];
-      }
-      if (
-        allMedicationsList.emergencyMedications &&
-        allMedicationsList.emergencyMedications.length > 0
-      ) {
-        const emergencyTreatments = modifyEmergencyTreatmentData(
-          allMedicationsList.emergencyMedications
+    const setMedicationsData = async () => {
+      if (allMedications.data) {
+        let allTreatments = [];
+        const allMedicationsList = { ...allMedications.data };
+        if (allMedicationsList.ipdDrugOrders.length > 0) {
+          drugOrderList = updateDrugOrderList(allMedicationsList.ipdDrugOrders);
+          const allPrescribedTreatmentData = await modifyPrescribedTreatmentData(drugOrderList);
+          allTreatments = [...allPrescribedTreatmentData];
+        }
+        if (
+          allMedicationsList.emergencyMedications &&
+          allMedicationsList.emergencyMedications.length > 0
+        ) {
+          const emergencyTreatments = modifyEmergencyTreatmentData(
+            allMedicationsList.emergencyMedications
+          );
+          allTreatments = [...allTreatments, ...emergencyTreatments];
+          setAdditionalData((prevData) => [
+            ...prevData,
+            ...mapAdditionalDataForEmergencyTreatments(emergencyTreatments),
+          ]);
+        }
+        allTreatments.sort(
+          (a, b) =>
+            a.additionalData.startTimeForSort - b.additionalData.startTimeForSort
         );
-        allTreatments = [...allTreatments, ...emergencyTreatments];
-        setAdditionalData((prevData) => [
-          ...prevData,
-          ...mapAdditionalDataForEmergencyTreatments(emergencyTreatments),
-        ]);
+        setTreatments(allTreatments);
+        getTreatmentConfigs();
       }
-      allTreatments.sort(
-        (a, b) =>
-          a.additionalData.startTimeForSort - b.additionalData.startTimeForSort
-      );
-      setTreatments(allTreatments);
-      getTreatmentConfigs();
-    }
+    };
+
+    setMedicationsData();
+
   }, [allMedications.data]);
 
   return (
@@ -384,6 +393,7 @@ const Treatments = (props) => {
           onSubmit={!isStopButtonDisabled && handleStopDrugChartModalSubmit}
           onSecondarySubmit={stopDrugModalCloseActions.onClose}
           onClose={stopDrugModalCloseActions.onClose}
+          // eslint-disable-next-line react/no-children-prop
           children={
             <>
               <FormattedMessage

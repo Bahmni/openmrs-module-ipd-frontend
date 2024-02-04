@@ -19,7 +19,7 @@ import { Button, Dropdown, Loading } from "carbon-components-react";
 import AddEmergencyTasks from "./AddEmergencyTasks";
 import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
-import { componentKeys } from "../../../../constants";
+import { asNeededPlaceholderConceptName, componentKeys } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
 import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
@@ -60,30 +60,33 @@ export default function NursingTasks(props) {
   });
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
+  let startDateTimeChange, endDateTimeChange;
 
   useEffect(() => {
     const currentShift = shiftDetails.currentShiftHoursArray;
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
-    let startDateTime = getDateTime(new Date(), currentShift[0]);
-    let endDateTime = getDateTime(
+    startDateTimeChange = getDateTime(new Date(), currentShift[0]);
+    endDateTimeChange = getDateTime(
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
+
     /** if the shift is going on two different dates */
     if (lastHour < firstHour) {
       const d = new Date();
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
+        endDateTimeChange = getDateTime(d, currentShift[currentShift.length - 1] + 1);
       } else {
         d.setDate(d.getDate() - 1);
-        startDateTime = getDateTime(d, currentShift[0]);
+        startDateTimeChange = getDateTime(d, currentShift[0]);
       }
     }
-    updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
-    fetchNursingTasks(startDateTime, endDateTime);
+
+    updatedStartEndDates({ startDate: startDateTimeChange, endDate: endDateTimeChange });
+    fetchNursingTasks(startDateTimeChange, endDateTimeChange);
   }, []);
   const updateNursingTasksSlider = (value) => {
     updateSliderOpen((prev) => {
@@ -111,19 +114,23 @@ export default function NursingTasks(props) {
         startEndDates.startDate,
         startEndDates.endDate
       );
+    startDateTimeChange = startDateTime;
+    endDateTimeChange = endDateTime;
     updateShiftIndex(previousShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
-
+  
   const handleNext = () => {
     const { startDateTime, endDateTime, nextShiftIndex } = getNextShiftDetails(
       shiftRangeArray,
       shiftIndex,
       startEndDates.startDate,
       startEndDates.endDate
-    );
+      );
+    startDateTimeChange = startDateTime;
+    endDateTimeChange = endDateTime;
     updateShiftIndex(nextShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
@@ -136,8 +143,8 @@ export default function NursingTasks(props) {
     const updatedShiftIndex = shiftDetailsObj.shiftIndex;
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
-    let startDateTime = getDateTime(new Date(), currentShift[0]);
-    let endDateTime = getDateTime(
+    startDateTimeChange = getDateTime(new Date(), currentShift[0]);
+    endDateTimeChange = getDateTime(
       new Date(),
       currentShift[currentShift.length - 1] + 1
     );
@@ -146,16 +153,16 @@ export default function NursingTasks(props) {
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
+        endDateTimeChange = getDateTime(d, currentShift[currentShift.length - 1] + 1);
       } else {
         d.setDate(d.getDate() - 1);
-        startDateTime = getDateTime(d, currentShift[0]);
+        startDateTimeChange = getDateTime(d, currentShift[0]);
       }
     }
     updateShiftIndex(updatedShiftIndex);
     setIsLoading(true);
-    updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
-    fetchNursingTasks(startDateTime, endDateTime);
+    updatedStartEndDates({ startDate: startDateTimeChange, endDate: endDateTimeChange });
+    fetchNursingTasks(startDateTimeChange, endDateTimeChange);
   };
 
   const NoNursingTasksMessage = (
@@ -183,6 +190,14 @@ export default function NursingTasks(props) {
     />
   );
 
+  const isCurrentShift = () => {
+    const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
+    const currentShift = shiftDetailsObj.currentShiftHoursArray;
+    const startDateTimeCurrent = getDateTime(new Date(), currentShift[0]);
+    const endDateTimeCurrent = getDateTime(new Date(),currentShift[currentShift.length - 1] + 1);
+    return startDateTimeCurrent == startDateTimeChange && endDateTimeCurrent == endDateTimeChange ? true : false;
+  };
+
   const fetchNursingTasks = async (startDate, endDate) => {
     setIsLoading(true);
     const startDateTimeInSeconds = startDate / 1000;
@@ -198,7 +213,17 @@ export default function NursingTasks(props) {
         nursingTasks,
         filterValue
       );
-      setMedicationNursingTasks(extractedData);
+      if(!isCurrentShift()) {
+        const filteredData = extractedData[0].filter((data)=> {
+          if(data.serviceType != asNeededPlaceholderConceptName) {
+            return data;
+          }
+        });
+        setMedicationNursingTasks(filteredData);
+      }
+      else {
+        setMedicationNursingTasks(extractedData);
+      }
       setIsLoading(false);
       setIsShiftsButtonsDisabled({
         previous: nursingTasks[0].startDate > startDateTimeInSeconds,

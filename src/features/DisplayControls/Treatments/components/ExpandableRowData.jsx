@@ -1,5 +1,6 @@
 import React from "react";
 import VerticalTabs from "../../../../components/VerticalTabs/VerticalTabs";
+import PropTypes from 'prop-types';
 
 const ExpandableRowData = (props) => {
   const { expandTreatmentData } = props;
@@ -46,5 +47,9 @@ const ExpandableRowData = (props) => {
 
   return <VerticalTabs tabData={verticalTabsData} />;
 };
+
+ExpandableRowData.propTypes = {
+  expandTreatmentData: PropTypes.object
+}
 
 export default ExpandableRowData;

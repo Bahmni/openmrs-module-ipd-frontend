@@ -95,6 +95,7 @@ export const ExtractMedicationNursingTasksData = (
           !!administeredDateTime ||
           slot.status === "STOPPED" ||
           slot.status === "NOT_DONE",
+        serviceType
       };
 
       if (
