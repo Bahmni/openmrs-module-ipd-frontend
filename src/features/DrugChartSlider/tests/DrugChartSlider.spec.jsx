@@ -9,6 +9,7 @@ import {
   mockDrugOrderFrequencies,
   mockScheduleFrequenciesWithTimings,
   mockScheduleDrugOrderForEdit,
+  mockScheduleDrugOrderAsNeeded,
 } from "../utils/DrugChartSliderTestUtils";
 import "@testing-library/jest-dom";
 import mockAdapter from "axios-mock-adapter";
@@ -361,9 +362,33 @@ describe("DrugChartSlider", () => {
     MockDate.reset();
   });
 
+  it("Should render Drug Chart Slider for As Needed medications with not time fields", async () => {
+    MockDate.set("2010-12-22T07:08:00.000");
+    const { getByText, queryByText } = render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            enable24HourTimers: true,
+            scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockScheduleDrugOrderAsNeeded,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(getByText("Add to Drug Chart")).toBeInTheDocument();
+    });
+    expect(queryByText("Schedule(s)")).toBeNull();
+    expect(queryByText("Start Time")).toBeNull();
+    MockDate.reset();
+  });
+
   it("should render with previous time on click of edit drug chart link", async () => {
     MockDate.set("2010-12-22T07:08:00.000");
-    const { container, getByText, debug } = render(
+    const { container, getByText } = render(
       <SliderContext.Provider value={mockSliderContext}>
         <DrugChartSlider
           hostData={{
