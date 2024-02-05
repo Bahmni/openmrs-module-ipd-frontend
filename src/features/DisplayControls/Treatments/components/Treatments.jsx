@@ -9,6 +9,7 @@ import {
   getConfigsForTreatments,
   updateDrugOrderList,
   AddToDrugChart,
+  AddToTasks,
   EditDrugChart,
   StopDrugChart,
   NoTreatmentsMessage,
@@ -207,7 +208,9 @@ const Treatments = (props) => {
             )
           }
         >
-          {AddToDrugChart}
+          {!drugOrder.dosingInstructions?.asNeeded
+            ? AddToDrugChart
+            : AddToTasks}
         </Link>
       );
     } else if (!showStopDrugChartLink) {
@@ -318,7 +321,6 @@ const Treatments = (props) => {
         stopperAdditionalData: treatment.additionalData.stopperAdditionalData,
       };
     });
-    console.log("Bye ", additionalMappedData);
     setAdditionalData(additionalMappedData);
     return prescribedTreatments;
   };
@@ -444,7 +446,11 @@ const Treatments = (props) => {
       )}
       {isSliderOpen.treatments && (
         <DrugChartSlider
-          title={AddToDrugChart}
+          title={
+            !selectedDrugOrder.drugOrder.drugOrder.dosingInstructions?.asNeeded
+              ? AddToDrugChart
+              : AddToTasks
+          }
           hostData={selectedDrugOrder}
           hostApi={DrugChartSliderActions}
           setDrugChartNotes={setDrugChartNotes}
@@ -477,7 +483,10 @@ const Treatments = (props) => {
             notificationKind: "success",
             messageId: showEditMessage
               ? "DRUG_CHART_MODAL_EDIT_MESSAGE"
-              : "DRUG_CHART_MODAL_SAVE_MESSAGE",
+              : !selectedDrugOrder.drugOrder.drugOrder.dosingInstructions
+                  ?.asNeeded
+              ? "DRUG_CHART_MODAL_SAVE_MESSAGE"
+              : "DRUG_CHART_MODAL_SAVE_MESSAGE_PRN",
           }}
           hostApi={{
             onClose: () => {

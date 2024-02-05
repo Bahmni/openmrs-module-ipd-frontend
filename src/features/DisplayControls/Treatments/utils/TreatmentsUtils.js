@@ -66,10 +66,14 @@ export const getConfigsForTreatments = async () => {
   }
 };
 
-export const getSlotsForAnOrderAndServiceType = async (patientUuid, orderUuids, serviceType) => {
+export const getSlotsForAnOrderAndServiceType = async (
+  patientUuid,
+  orderUuids,
+  serviceType
+) => {
   try {
     const response = await axios.get(MEDICATIONS_BASE_URL, {
-      params: {patientUuid, orderUuids, serviceType},
+      params: { patientUuid, orderUuids, serviceType },
       withCredentials: true,
     });
 
@@ -78,7 +82,7 @@ export const getSlotsForAnOrderAndServiceType = async (patientUuid, orderUuids, 
   } catch (error) {
     return error;
   }
-}
+};
 
 export const updateDrugOrderList = (drugOrderList) => {
   drugOrderList.forEach((ipdDrugOrder) => {
@@ -108,6 +112,10 @@ export const AddToDrugChart = (
     id={"ADD_TO_DRUG_CHART"}
     defaultMessage={"Add to Drug Chart"}
   />
+);
+
+export const AddToTasks = (
+  <FormattedMessage id={"ADD_TO_TASKS"} defaultMessage={"Add to Tasks"} />
 );
 
 export const EditDrugChart = (
