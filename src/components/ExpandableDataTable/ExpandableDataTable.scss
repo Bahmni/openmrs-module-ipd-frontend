@@ -2,6 +2,17 @@
   fill: #161616;
 }
 
-td.bx--table-expand{
-  padding: 0 !important;    
+td.bx--table-expand {
+  padding: 0 !important;
+}
+
+table.bx--data-table {
+  tbody tr:hover {
+    background: transparent;
+  }
+  tr.bx--expandable-row.expandable-row-content {
+    td {
+      background-color: transparent !important;
+    }
+  }
 }
