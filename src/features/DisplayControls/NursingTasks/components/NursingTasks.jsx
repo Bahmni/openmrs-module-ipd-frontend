@@ -59,7 +59,9 @@ export default function NursingTasks(props) {
     startDate: isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
     endDate: isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
   });
-  const [nextShiftMaxHour] = useState(isReadMode? visitSummary.stopDateTime/1000 : allowedForthShfts);
+  const [nextShiftMaxHour] = useState(
+    isReadMode ? visitSummary.stopDateTime / 1000 : allowedForthShfts
+  );
   const [isShiftsButtonsDisabled, setIsShiftsButtonsDisabled] = useState({
     previous: false,
     next: isReadMode ? true : false,
@@ -140,7 +142,7 @@ export default function NursingTasks(props) {
 
   const handleCurrent = () => {
     const shiftDetailsObj = currentShiftHoursArray(
-      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(), 
+      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
       shiftConfig
     );
     const currentShift = shiftDetailsObj.currentShiftHoursArray;
@@ -217,7 +219,9 @@ export default function NursingTasks(props) {
       setMedicationNursingTasks(extractedData);
       setIsLoading(false);
       setIsShiftsButtonsDisabled({
-        previous: nursingTasks[0].startDate > startDateTimeInSeconds,
+        previous:
+          (isReadMode && nursingTasks.length === 0) ||
+          nursingTasks[0].startDate > startDateTimeInSeconds,
         next:
           startDateTimeInSeconds >= nextShiftMaxHour ||
           endDateTimeInSeconds >= nextShiftMaxHour,
