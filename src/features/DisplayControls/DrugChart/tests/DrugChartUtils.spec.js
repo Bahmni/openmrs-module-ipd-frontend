@@ -53,9 +53,9 @@ describe("DrugChartUtils", () => {
       2: { shiftStartTime: "18:00", shiftEndTime: "06:00" },
     };
     MockDate.set("2023-12-19 16:00:00");
-    expect(currentShiftHoursArray(new Date(), shiftDetails).currentShiftHoursArray).toEqual(
-      [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
-    );
+    expect(
+      currentShiftHoursArray(new Date(), shiftDetails).currentShiftHoursArray
+    ).toEqual([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
   });
   it("test getNextShiftDetails method", () => {
     const rangeArray = ["06:00-18:00", "18:00-06:00"];

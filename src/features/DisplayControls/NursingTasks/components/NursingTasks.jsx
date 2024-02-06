@@ -47,7 +47,6 @@ export default function NursingTasks(props) {
   const [successMessage, setSuccessMessage] = useState("");
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
-  console.log("visitSummary", visitSummary);
   const shiftDetails = currentShiftHoursArray(
     isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
     shiftConfig
@@ -209,7 +208,6 @@ export default function NursingTasks(props) {
       endDateTimeInSeconds,
       visit
     );
-    console.log("response nursingTasks data ", nursingTasks);
     setNursingTasks(nursingTasks);
     if (nursingTasks) {
       const extractedData = ExtractMedicationNursingTasksData(

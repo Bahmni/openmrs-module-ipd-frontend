@@ -254,7 +254,6 @@ export const currentShiftHoursArray = (date, shiftDetails = {}) => {
 
   // finding the current hour range
   const currentDate = date;
-  console.log('Utils currentDate', currentDate);
   const currentHour = currentDate.getHours();
   let currentRange = rangeArray[0];
   let shiftIndex = 0;

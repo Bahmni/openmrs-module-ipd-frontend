@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import NursingTasks from "../components/NursingTasks";
 import { IPDContext } from "../../../../context/IPDContext";
 

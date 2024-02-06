@@ -75,7 +75,8 @@ const Treatments = (props) => {
     });
   };
   let drugOrderList = {};
-  const isAddToDrugChartDisabled = isReadMode || (visitSummary?.admissionDetails === null);
+  const isAddToDrugChartDisabled =
+    isReadMode || visitSummary?.admissionDetails === null;
   const sliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -231,7 +232,10 @@ const Treatments = (props) => {
       );
     } else {
       return (
-        <Link disabled={isReadMode} onClick={() => handleStopDrugChartClick(drugOrder.uuid)}>
+        <Link
+          disabled={isReadMode}
+          onClick={() => handleStopDrugChartClick(drugOrder.uuid)}
+        >
           {StopDrugChart}
         </Link>
       );
