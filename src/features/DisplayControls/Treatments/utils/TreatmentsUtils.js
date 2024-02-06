@@ -162,7 +162,7 @@ export const getDrugName = (drugOrderObject) => {
         )}
       </span>
       <div className="display-tags">
-        <DisplayTags drugOrder={drugOrder?.dosingInstructions} />
+        <DisplayTags drugOrder={drugOrder.dosingInstructions} />
       </div>
     </div>
   );
