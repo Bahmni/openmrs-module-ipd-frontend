@@ -76,7 +76,6 @@ export default function DrugChartWrapper(props) {
         visit
       );
       setDrugChartData(response.data);
-      console.log("response drug chart data ", response);
       setIsShiftButtonsDisabled({
         previous:
           (isReadMode && response.data.length === 0) ||
