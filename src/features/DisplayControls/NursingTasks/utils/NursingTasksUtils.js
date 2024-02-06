@@ -46,7 +46,7 @@ export const ExtractMedicationNursingTasksData = (
       let drugName, drugRoute, duration, dosage, doseType, dosingInstructions;
       if (order) {
         drugName = order.drug.display;
-        drugRoute = order.route.display;
+        drugRoute = order.route?.display;
         if (order.duration) {
           duration = order.duration + " " + order.durationUnits.display;
         }
