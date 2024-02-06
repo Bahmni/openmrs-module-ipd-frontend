@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import React, { Children } from "react";
+import React from "react";
 import { PatientHeader } from "../components/PatientHeader";
 import {
   contactConfigMockData,
