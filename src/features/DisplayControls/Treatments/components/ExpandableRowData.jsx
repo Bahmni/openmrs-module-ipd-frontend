@@ -1,5 +1,6 @@
 import React from "react";
 import VerticalTabs from "../../../../components/VerticalTabs/VerticalTabs";
+import PropTypes from "prop-types";
 
 const ExpandableRowData = (props) => {
   const { expandTreatmentData } = props;
@@ -33,18 +34,22 @@ const ExpandableRowData = (props) => {
   if (expandTreatmentData.approverNotes) {
     verticalTabsData["Acknowledgement Note"] = {
       data: expandTreatmentData.approverNotes,
-      additionalData: [expandTreatmentData.approverAdditionalData]
+      additionalData: [expandTreatmentData.approverAdditionalData],
     };
   }
 
   if (expandTreatmentData.stopReason) {
     verticalTabsData["Stopped Notes"] = {
       data: expandTreatmentData.stopReason,
-      additionalData: [expandTreatmentData.stopperAdditionalData]
+      additionalData: [expandTreatmentData.stopperAdditionalData],
     };
   }
 
   return <VerticalTabs tabData={verticalTabsData} />;
+};
+
+ExpandableRowData.propTypes = {
+  expandTreatmentData: PropTypes.object,
 };
 
 export default ExpandableRowData;

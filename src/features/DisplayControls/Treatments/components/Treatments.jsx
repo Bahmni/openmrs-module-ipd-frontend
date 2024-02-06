@@ -9,6 +9,7 @@ import {
   getConfigsForTreatments,
   updateDrugOrderList,
   AddToDrugChart,
+  AddToTasks,
   EditDrugChart,
   StopDrugChart,
   NoTreatmentsMessage,
@@ -21,9 +22,10 @@ import {
   mapAdditionalDataForEmergencyTreatments,
   isDrugOrderStoppedWithoutAdministration,
   getStopReason,
+  getSlotsForAnOrderAndServiceType,
 } from "../utils/TreatmentsUtils";
 import { getCookies } from "../../../../utils/CommonUtils";
-import { defaultDateTimeFormat } from "../../../../constants";
+import { defaultDateTimeFormat, serviceType } from "../../../../constants";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
 import { SliderContext } from "../../../../context/SliderContext";
@@ -194,9 +196,6 @@ const Treatments = (props) => {
     drugOrder,
     drugOrderSchedule
   ) => {
-    if (drugOrder.dosingInstructions.asNeeded) {
-      return <></>;
-    }
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
       return {
         link: (
@@ -210,10 +209,12 @@ const Treatments = (props) => {
               )
             }
           >
-            {AddToDrugChart}
+            {!drugOrder.dosingInstructions?.asNeeded
+              ? AddToDrugChart
+              : AddToTasks}
           </Link>
         ),
-        isScheduled: false,
+        isScheduled: !drugOrder.dosingInstructions?.asNeeded ? false : true,
       };
     } else if (!showStopDrugChartLink) {
       return {
@@ -244,73 +245,85 @@ const Treatments = (props) => {
     }
   };
 
-  const modifyPrescribedTreatmentData = (drugOrders) => {
-    const treatments = drugOrders
-      .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
-      .filter(
-        (drugOrderObject) =>
-          !isDrugOrderStoppedWithoutAdministration(drugOrderObject)
-      )
-      .map((drugOrderObject) => {
-        let showEditDrugChartLink;
-        let showStopDrugChartLink;
-        if (drugOrderObject.drugOrderSchedule != null) {
-          showStopDrugChartLink = drugOrderObject.drugOrderSchedule
-            .medicationAdministrationStarted
-            ? true
-            : false;
-          showEditDrugChartLink = !showStopDrugChartLink;
-        } else {
-          showEditDrugChartLink = false;
-        }
-        
-        const drugOrder = drugOrderObject.drugOrder;
-        const actionsObjectValue =
-          !drugOrder.dateStopped &&
-          getActions(
-            showEditDrugChartLink,
-            showStopDrugChartLink,
-            drugOrder,
-            drugOrderObject.drugOrderSchedule
-          );
+  const modifyPrescribedTreatmentData = async (drugOrders) => {
+    const prescribedTreatments = await Promise.all(
+      drugOrders
+        .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
+        .filter(
+          (drugOrderObject) =>
+            !isDrugOrderStoppedWithoutAdministration(drugOrderObject)
+        )
+        .map(async (drugOrderObject) => {
+          let showEditDrugChartLink;
+          let showStopDrugChartLink;
+          if (drugOrderObject.drugOrder.dosingInstructions.asNeeded) {
+            const placeholderSlot = await getSlotsForAnOrderAndServiceType(
+              patientId,
+              drugOrderObject.drugOrder.uuid,
+              serviceType.AS_NEEDED_PLACEHOLDER
+            );
+            if (placeholderSlot.length > 0) {
+              showEditDrugChartLink = false;
+              showStopDrugChartLink = true;
+            }
+          } else if (drugOrderObject.drugOrderSchedule != null) {
+            showStopDrugChartLink = drugOrderObject.drugOrderSchedule
+              .medicationAdministrationStarted
+              ? true
+              : false;
+            showEditDrugChartLink = !showStopDrugChartLink;
+          } else {
+            showEditDrugChartLink = false;
+          }
 
-        return {
-          id: drugOrder.uuid,
-          startDate: formatDate(drugOrder.effectiveStartDate),
-          drugName: getDrugName(drugOrderObject),
-          dosageDetails: setDosingInstructions(drugOrder),
-          providerName: drugOrderObject.provider.name,
-          status: (
-            <span className={drugOrder.dateStopped && "red-text"}>
-              {drugOrder.dateStopped && (
-                <FormattedMessage id="STOPPED" defaultMessage="Stopped" />
-              )}
-            </span>
-          ),
-          actions: actionsObjectValue.link,
-          additionalData: {
-            instructions: drugOrderObject.instructions
-              ? drugOrderObject.instructions
-              : "",
-            additionalInstructions: drugOrderObject.additionalInstructions
-              ? drugOrderObject.additionalInstructions
-              : "",
-            recordedDateTime: formatDate(
-              drugOrder.dateActivated,
-              defaultDateTimeFormat
+          const drugOrder = drugOrderObject.drugOrder;
+          const actionsObjectValue =
+            !drugOrder.dateStopped &&
+            getActions(
+              showEditDrugChartLink,
+              showStopDrugChartLink,
+              drugOrder,
+              drugOrderObject.drugOrderSchedule
+            );
+
+          return {
+            id: drugOrder.uuid,
+            startDate: formatDate(drugOrder.effectiveStartDate),
+            drugName: getDrugName(drugOrderObject),
+            dosageDetails: setDosingInstructions(drugOrder),
+            providerName: drugOrderObject.provider.name,
+            status: (
+              <span className={drugOrder.dateStopped && "red-text"}>
+                {drugOrder.dateStopped && (
+                  <FormattedMessage id="STOPPED" defaultMessage="Stopped" />
+                )}
+              </span>
             ),
-            startTimeForSort: drugOrder.effectiveStartDate,
-            stopReason: getStopReason(drugOrder),
-            stopperAdditionalData:
-              drugOrderObject.provider.name +
-              " | " +
-              formatDate(drugOrder.dateStopped, defaultDateTimeFormat),
-            isScheduled: actionsObjectValue?.isScheduled,
-          },
-        };
-      });
+            actions: actionsObjectValue.link,
+            additionalData: {
+              instructions: drugOrderObject.instructions
+                ? drugOrderObject.instructions
+                : "",
+              additionalInstructions: drugOrderObject.additionalInstructions
+                ? drugOrderObject.additionalInstructions
+                : "",
+              recordedDateTime: formatDate(
+                drugOrder.dateActivated,
+                defaultDateTimeFormat
+              ),
+              startTimeForSort: drugOrder.effectiveStartDate,
+              stopReason: getStopReason(drugOrder),
+              stopperAdditionalData:
+                drugOrderObject.provider.name +
+                " | " +
+                formatDate(drugOrder.dateStopped, defaultDateTimeFormat),
+              isScheduled: actionsObjectValue?.isScheduled,
+            },
+          };
+        })
+    );
 
-    const additionalMappedData = treatments.map((treatment) => {
+    const additionalMappedData = prescribedTreatments.map((treatment) => {
       return {
         id: treatment.id,
         instructions: treatment.additionalData.instructions,
@@ -323,7 +336,7 @@ const Treatments = (props) => {
       };
     });
     setAdditionalData(additionalMappedData);
-    return treatments;
+    return prescribedTreatments;
   };
 
   useEffect(() => {
@@ -343,33 +356,40 @@ const Treatments = (props) => {
   };
 
   useEffect(() => {
-    if (allMedications.data) {
-      let allTreatments = [];
-      const allMedicationsList = { ...allMedications.data };
-      if (allMedicationsList.ipdDrugOrders.length > 0) {
-        drugOrderList = updateDrugOrderList(allMedicationsList.ipdDrugOrders);
-        allTreatments = [...modifyPrescribedTreatmentData(drugOrderList)];
-      }
-      if (
-        allMedicationsList.emergencyMedications &&
-        allMedicationsList.emergencyMedications.length > 0
-      ) {
-        const emergencyTreatments = modifyEmergencyTreatmentData(
-          allMedicationsList.emergencyMedications
+    const setMedicationsData = async () => {
+      if (allMedications.data) {
+        let allTreatments = [];
+        const allMedicationsList = { ...allMedications.data };
+        if (allMedicationsList.ipdDrugOrders.length > 0) {
+          drugOrderList = updateDrugOrderList(allMedicationsList.ipdDrugOrders);
+          const allPrescribedTreatmentData =
+            await modifyPrescribedTreatmentData(drugOrderList);
+          allTreatments = [...allPrescribedTreatmentData];
+        }
+        if (
+          allMedicationsList.emergencyMedications &&
+          allMedicationsList.emergencyMedications.length > 0
+        ) {
+          const emergencyTreatments = modifyEmergencyTreatmentData(
+            allMedicationsList.emergencyMedications
+          );
+          allTreatments = [...allTreatments, ...emergencyTreatments];
+          setAdditionalData((prevData) => [
+            ...prevData,
+            ...mapAdditionalDataForEmergencyTreatments(emergencyTreatments),
+          ]);
+        }
+        allTreatments.sort(
+          (a, b) =>
+            a.additionalData.startTimeForSort -
+            b.additionalData.startTimeForSort
         );
-        allTreatments = [...allTreatments, ...emergencyTreatments];
-        setAdditionalData((prevData) => [
-          ...prevData,
-          ...mapAdditionalDataForEmergencyTreatments(emergencyTreatments),
-        ]);
+        setTreatments(allTreatments);
+        getTreatmentConfigs();
       }
-      allTreatments.sort(
-        (a, b) =>
-          a.additionalData.startTimeForSort - b.additionalData.startTimeForSort
-      );
-      setTreatments(allTreatments);
-      getTreatmentConfigs();
-    }
+    };
+
+    setMedicationsData();
   }, [allMedications.data]);
 
   return (
@@ -395,6 +415,7 @@ const Treatments = (props) => {
           onSubmit={!isStopButtonDisabled && handleStopDrugChartModalSubmit}
           onSecondarySubmit={stopDrugModalCloseActions.onClose}
           onClose={stopDrugModalCloseActions.onClose}
+          // eslint-disable-next-line react/no-children-prop
           children={
             <>
               <FormattedMessage
@@ -439,7 +460,11 @@ const Treatments = (props) => {
       )}
       {isSliderOpen.treatments && (
         <DrugChartSlider
-          title={AddToDrugChart}
+          title={
+            !selectedDrugOrder.drugOrder.drugOrder.dosingInstructions?.asNeeded
+              ? AddToDrugChart
+              : AddToTasks
+          }
           hostData={selectedDrugOrder}
           hostApi={DrugChartSliderActions}
           setDrugChartNotes={setDrugChartNotes}
@@ -472,7 +497,10 @@ const Treatments = (props) => {
             notificationKind: "success",
             messageId: showEditMessage
               ? "DRUG_CHART_MODAL_EDIT_MESSAGE"
-              : "DRUG_CHART_MODAL_SAVE_MESSAGE",
+              : !selectedDrugOrder.drugOrder.drugOrder.dosingInstructions
+                  ?.asNeeded
+              ? "DRUG_CHART_MODAL_SAVE_MESSAGE"
+              : "DRUG_CHART_MODAL_SAVE_MESSAGE_PRN",
           }}
           hostApi={{
             onClose: () => {

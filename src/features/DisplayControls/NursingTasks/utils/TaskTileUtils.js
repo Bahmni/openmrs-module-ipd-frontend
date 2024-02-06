@@ -1,4 +1,5 @@
 import React from "react";
+import { asNeededPlaceholderConceptName } from "../../../../constants";
 
 export const getRelevantTaskStatus = (
   startTimeInEpochSeconds,
@@ -28,8 +29,11 @@ export const iconType = (task, nursingTasks) => {
     stopTime,
     administeredTimeInEpochSeconds,
     startTimeInEpochSeconds,
+    serviceType,
     status,
   } = task;
+  if (serviceType === asNeededPlaceholderConceptName)
+    return administeredTimeInEpochSeconds ? "Administered" : "Pending";
   if (stopTime) return "Stopped";
   if (status === "Not Done") return "Not-Administered";
   if (administeredTimeInEpochSeconds) {
