@@ -13,8 +13,8 @@
 }
 
 .disabled-tile {
-  border: 2px solid #92c4c3;
-  background-color: #edf8e6;
+  border: 2px solid #92c4c3 !important;
+  background-color: #edf8e6 !important;
   cursor: not-allowed;
   &:hover {
     background-color: #edf8e6 !important;
