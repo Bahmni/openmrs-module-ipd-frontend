@@ -2061,8 +2061,8 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               >
                 <label
                   class="bx--label bx--label--disabled"
-                  for="downshift-72-toggle-button"
-                  id="downshift-72-label"
+                  for="downshift-76-toggle-button"
+                  id="downshift-76-label"
                 >
                   <div
                     class="titleText"
@@ -2080,10 +2080,10 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     aria-disabled="true"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-72-label downshift-72-toggle-button"
+                    aria-labelledby="downshift-76-label downshift-76-toggle-button"
                     class="bx--list-box__field"
                     disabled=""
-                    id="downshift-72-toggle-button"
+                    id="downshift-76-toggle-button"
                     title="Tablet"
                     type="button"
                   >
@@ -2117,9 +2117,9 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </button>
                   <div
-                    aria-labelledby="downshift-72-label"
+                    aria-labelledby="downshift-76-label"
                     class="bx--list-box__menu"
-                    id="downshift-72-menu"
+                    id="downshift-76-menu"
                     role="listbox"
                     tabindex="-1"
                   />
@@ -2140,8 +2140,8 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               >
                 <label
                   class="bx--label bx--label--disabled"
-                  for="downshift-73-toggle-button"
-                  id="downshift-73-label"
+                  for="downshift-77-toggle-button"
+                  id="downshift-77-label"
                 >
                   <div
                     class="titleText"
@@ -2159,10 +2159,10 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     aria-disabled="true"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-73-label downshift-73-toggle-button"
+                    aria-labelledby="downshift-77-label downshift-77-toggle-button"
                     class="bx--list-box__field"
                     disabled=""
-                    id="downshift-73-toggle-button"
+                    id="downshift-77-toggle-button"
                     type="button"
                   >
                     <span
@@ -2193,9 +2193,9 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </button>
                   <div
-                    aria-labelledby="downshift-73-label"
+                    aria-labelledby="downshift-77-label"
                     class="bx--list-box__menu"
-                    id="downshift-73-menu"
+                    id="downshift-77-menu"
                     role="listbox"
                     tabindex="-1"
                   />
@@ -2314,8 +2314,8 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               >
                 <label
                   class="bx--label bx--label--disabled"
-                  for="downshift-74-toggle-button"
-                  id="downshift-74-label"
+                  for="downshift-78-toggle-button"
+                  id="downshift-78-label"
                 >
                   <div
                     class="titleText"
@@ -2333,10 +2333,10 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     aria-disabled="true"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-74-label downshift-74-toggle-button"
+                    aria-labelledby="downshift-78-label downshift-78-toggle-button"
                     class="bx--list-box__field"
                     disabled=""
-                    id="downshift-74-toggle-button"
+                    id="downshift-78-toggle-button"
                     type="button"
                   >
                     <span
@@ -2367,9 +2367,9 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </button>
                   <div
-                    aria-labelledby="downshift-74-label"
+                    aria-labelledby="downshift-78-label"
                     class="bx--list-box__menu"
-                    id="downshift-74-menu"
+                    id="downshift-78-menu"
                     role="listbox"
                     tabindex="-1"
                   />
@@ -2451,8 +2451,8 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
             >
               <label
                 class="bx--label bx--label--disabled"
-                for="downshift-75-toggle-button"
-                id="downshift-75-label"
+                for="downshift-79-toggle-button"
+                id="downshift-79-label"
               >
                 <div
                   class="titleText"
@@ -2470,10 +2470,10 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                   aria-disabled="true"
                   aria-expanded="false"
                   aria-haspopup="listbox"
-                  aria-labelledby="downshift-75-label downshift-75-toggle-button"
+                  aria-labelledby="downshift-79-label downshift-79-toggle-button"
                   class="bx--list-box__field"
                   disabled=""
-                  id="downshift-75-toggle-button"
+                  id="downshift-79-toggle-button"
                   title="Twice a day"
                   type="button"
                 >
@@ -2507,9 +2507,9 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                   </div>
                 </button>
                 <div
-                  aria-labelledby="downshift-75-label"
+                  aria-labelledby="downshift-79-label"
                   class="bx--list-box__menu"
-                  id="downshift-75-menu"
+                  id="downshift-79-menu"
                   role="listbox"
                   tabindex="-1"
                 />
