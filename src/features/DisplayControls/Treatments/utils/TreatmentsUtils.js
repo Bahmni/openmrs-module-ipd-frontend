@@ -142,40 +142,32 @@ export const setDosingInstructions = (drugOrder) => {
 
 export const getDrugName = (drugOrderObject) => {
   const drugOrder = drugOrderObject.drugOrder;
-  if (
+  const isNotesIconDiv =
     drugOrder.drug &&
     (drugOrderObject.instructions ||
       drugOrderObject.additionalInstructions ||
       drugOrder.orderReasonConcept ||
-      drugOrder.orderReasonText)
-  ) {
-    return (
-      <div className="notes-icon-div">
-        <span
-          className={`treatments-drug-name ${
-            drugOrder.dateStopped && "strike-through"
-          }`}
-        >
-          <span>{drugOrder.drug.name}</span>
-          <NotesIcon className="notes-icon" data-testid="notes-icon" />
-        </span>
-        <div className={"display-tags"}>
-          <DisplayTags drugOrder={drugOrder.dosingInstructions} />
-        </div>
-      </div>
-    );
-  } else if (drugOrder.drug) {
-    return (
+      drugOrder.orderReasonText);
+
+  const drugNameValue = (
+    <div className={isNotesIconDiv ? "notes-icon-div" : "no-notes-icon-div"}>
       <span
         className={`treatments-drug-name ${
           drugOrder.dateStopped && "strike-through"
         }`}
       >
-        {drugOrder.drug.name}
+        <span>{drugOrder.drug.name}</span>
+        {isNotesIconDiv && (
+          <NotesIcon className="notes-icon" data-testid="notes-icon" />
+        )}
       </span>
-    );
-  }
-  return drugOrder.freeTextAnswer;
+      <div className="display-tags">
+        <DisplayTags drugOrder={drugOrder.dosingInstructions} />
+      </div>
+    </div>
+  );
+
+  return drugOrder.drug ? drugNameValue : drugOrder.freeTextAnswer;
 };
 
 export const stopDrugOrders = async (payload) => {
