@@ -228,9 +228,11 @@ const Treatments = (props) => {
       );
     } else {
       return (
-        <Link onClick={() => handleStopDrugChartClick(drugOrder.uuid)}>
-          {StopDrugChart}
-        </Link>
+        drugOrderSchedule?.pendingSlotsAvailable && (
+          <Link onClick={() => handleStopDrugChartClick(drugOrder.uuid)}>
+            {StopDrugChart}
+          </Link>
+        )
       );
     }
   };
