@@ -63,12 +63,13 @@ const ExpandableDataTable = (props) => {
                         data-testid="expandable-row"
                       >
                         {row.cells.map((cell) => (
-                          <TableCell key={cell.id}>
-                            {cell.value}
-                          </TableCell>
+                          <TableCell key={cell.id}>{cell.value}</TableCell>
                         ))}
                       </TableExpandRow>
-                      <TableExpandedRow colSpan={headers.length + 1}>
+                      <TableExpandedRow
+                        colSpan={headers.length + 1}
+                        className="expandable-row-content"
+                      >
                         {renderExpandableRowComponent(row, additionalData)}
                       </TableExpandedRow>
                     </React.Fragment>

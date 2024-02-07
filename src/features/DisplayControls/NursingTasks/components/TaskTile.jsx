@@ -91,12 +91,14 @@ export default function TaskTile(props) {
             {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
             <span>&nbsp;-&nbsp;{drugRoute}</span>
           </div>
-          <div className="tile-content-subtext">
-            <Clock />
-            <div>
-              &nbsp;{getTime(administeredTimeInEpochSeconds, startTime)}
+          {!dosingInstructions?.asNeeded && (
+            <div className="tile-content-subtext">
+              <Clock />
+              <div>
+                &nbsp;{getTime(administeredTimeInEpochSeconds, startTime)}
+              </div>
             </div>
-          </div>
+          )}
           {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
         </div>
       </div>

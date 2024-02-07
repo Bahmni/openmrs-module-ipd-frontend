@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   MEDICATIONS_BASE_URL,
   ADMINISTERED_MEDICATIONS_BASE_URL,
+  asNeededPlaceholderConceptName,
 } from "../../../../constants";
 import moment from "moment";
 
@@ -46,7 +47,7 @@ export const ExtractMedicationNursingTasksData = (
       let drugName, drugRoute, duration, dosage, doseType, dosingInstructions;
       if (order) {
         drugName = order.drug.display;
-        drugRoute = order.route.display;
+        drugRoute = order.route?.display;
         if (order.duration) {
           duration = order.duration + " " + order.durationUnits.display;
         }
@@ -96,6 +97,7 @@ export const ExtractMedicationNursingTasksData = (
           !!administeredDateTime ||
           slot.status === "STOPPED" ||
           slot.status === "NOT_DONE",
+        serviceType,
       };
 
       if (
@@ -153,14 +155,18 @@ export const ExtractMedicationNursingTasksData = (
   let currentGroup = [];
 
   extractedData.forEach((item) => {
-    if (item.startTime !== currentStartTime && !item.stopTime) {
-      if (currentGroup.length > 0) {
-        groupedData.push(currentGroup);
-      }
-      currentGroup = [item];
-      currentStartTime = item.startTime;
+    if (item.serviceType == asNeededPlaceholderConceptName) {
+      groupedData.push([item]);
     } else {
-      currentGroup.push(item);
+      if (item.startTime !== currentStartTime && !item.stopTime) {
+        if (currentGroup.length > 0) {
+          groupedData.push(currentGroup);
+        }
+        currentGroup = [item];
+        currentStartTime = item.startTime;
+      } else {
+        currentGroup.push(item);
+      }
     }
   });
 
