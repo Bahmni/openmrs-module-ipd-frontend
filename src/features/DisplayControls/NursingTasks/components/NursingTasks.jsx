@@ -261,7 +261,8 @@ export default function NursingTasks(props) {
     if (nursingTasks) {
       const extractedData = ExtractMedicationNursingTasksData(
         nursingTasks,
-        filterValue
+        filterValue,
+        isReadMode
       );
       if (!isCurrentShift()) {
         const filteredData = extractedData
@@ -288,7 +289,7 @@ export default function NursingTasks(props) {
   };
   useEffect(() => {
     setMedicationNursingTasks(
-      ExtractMedicationNursingTasksData(nursingTasks, filterValue)
+      ExtractMedicationNursingTasksData(nursingTasks, filterValue, isReadMode)
     );
   }, [filterValue]);
 
@@ -309,7 +310,7 @@ export default function NursingTasks(props) {
               }
             }}
           >
-            <TaskTile medicationNursingTask={medicationNursingTask} />
+            <TaskTile medicationNursingTask={medicationNursingTask} is />
           </div>
         </div>
       );

@@ -25,7 +25,8 @@ export const GetUTCEpochForDate = (viewDate) => moment.utc(viewDate).unix();
 
 export const ExtractMedicationNursingTasksData = (
   medicationNursingTasksData,
-  filterValue
+  filterValue,
+  isReadMode
 ) => {
   const extractedData = [],
     pendingExtractedData = [],
@@ -93,10 +94,11 @@ export const ExtractMedicationNursingTasksData = (
           hourCycle: "h23",
         }),
         orderId: order?.uuid,
-        isDisabled:
-          !!administeredDateTime ||
-          slot.status === "STOPPED" ||
-          slot.status === "NOT_DONE",
+        isDisabled: isReadMode
+          ? true
+          : !!administeredDateTime ||
+            slot.status === "STOPPED" ||
+            slot.status === "NOT_DONE",
         serviceType,
       };
 
