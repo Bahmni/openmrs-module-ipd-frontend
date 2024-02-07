@@ -8,6 +8,7 @@ import {
 } from "../utils/TreatmentsUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
+import "@testing-library/jest-dom/extend-expect";
 
 jest.mock("axios");
 
@@ -97,12 +98,16 @@ describe("TreatmentsUtils", () => {
       additionalInstructions: null,
     };
 
-    const { queryByTestId, queryByText } = render(getDrugName(drugOrderObject));
+    const { queryByTestId, queryByText, getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        {getDrugName(drugOrderObject)}
+      </IPDContext.Provider>
+    );
 
     expect(queryByText("Paracetamol")).toBeTruthy();
-    expect(
-      queryByText("Paracetamol").classList.contains("strike-through")
-    ).toBeTruthy();
+    const strikeThroughElement =
+      getByText("Paracetamol").closest(".strike-through");
+    expect(strikeThroughElement).toBeInTheDocument();
     expect(queryByTestId("notes-icon")).toBeFalsy();
   });
 
@@ -117,7 +122,7 @@ describe("TreatmentsUtils", () => {
     };
 
     const { queryByText, queryByTestId } = render(
-      <IPDContext.Provider value={{config: mockConfig}}>
+      <IPDContext.Provider value={{ config: mockConfig }}>
         {getDrugName(drugOrderObject)}
       </IPDContext.Provider>
     );

@@ -16,3 +16,14 @@ table.bx--data-table {
     }
   }
 }
+
+.expandable-datatable {
+  .green-row {
+    .green-cell {
+      background-color: #f2ffea !important;
+    }
+    td.bx--table-expand {
+      background-color: #f2ffea !important;
+    }
+  }
+}
