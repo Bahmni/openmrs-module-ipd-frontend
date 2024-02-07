@@ -239,8 +239,11 @@ const Treatments = (props) => {
       };
     } else {
       return {
-        link: (
-          <Link disabled={isReadMode} onClick={() => handleStopDrugChartClick(drugOrder.uuid)}>
+        link: drugOrderSchedule?.pendingSlotsAvailable && (
+          <Link
+            disabled={isReadMode}
+            onClick={() => handleStopDrugChartClick(drugOrder.uuid)}
+          >
             {StopDrugChart}
           </Link>
         ),
