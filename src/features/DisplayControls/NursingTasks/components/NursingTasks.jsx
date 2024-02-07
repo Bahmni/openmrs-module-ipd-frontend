@@ -78,7 +78,8 @@ export default function NursingTasks(props) {
     const lastHour = currentShift[currentShift.length - 1];
     startDateTimeChange = getDateTime(
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      currentShift[0]);
+      currentShift[0]
+    );
     endDateTimeChange = getDateTime(
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
       currentShift[currentShift.length - 1] + 1
@@ -218,7 +219,7 @@ export default function NursingTasks(props) {
   );
 
   const isCurrentShift = () => {
-    const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
+    const shiftDetailsObj = currentShiftHoursArray(new Date(), shiftConfig);
     const currentShift = shiftDetailsObj.currentShiftHoursArray;
     let startDateTimeCurrent = getDateTime(new Date(), currentShift[0]);
     let endDateTimeCurrent = getDateTime(
