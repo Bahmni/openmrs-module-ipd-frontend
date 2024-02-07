@@ -253,7 +253,7 @@ const PatientMovementModal = (props) => {
             <TextArea
               data-modal-primary-focus
               id="ipd-adt-notes"
-              placeholder={"Enter " + adtNotesObj.name.display}
+              placeholder={"Enter ADT Notes"}
               style={{
                 marginBottom: "1rem",
               }}
