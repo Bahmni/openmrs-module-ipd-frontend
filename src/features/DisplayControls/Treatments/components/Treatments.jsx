@@ -197,42 +197,51 @@ const Treatments = (props) => {
     drugOrderSchedule
   ) => {
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
-      return (
-        <Link
-          disabled={isAddToDrugChartDisabled}
-          onClick={() =>
-            handleEditAndAddToDrugChartClick(
-              drugOrder.uuid,
-              showEditDrugChartLink,
-              drugOrderSchedule?.notes
-            )
-          }
-        >
-          {!drugOrder.dosingInstructions?.asNeeded
-            ? AddToDrugChart
-            : AddToTasks}
-        </Link>
-      );
+      return {
+        link: (
+          <Link
+            disabled={isAddToDrugChartDisabled}
+            onClick={() =>
+              handleEditAndAddToDrugChartClick(
+                drugOrder.uuid,
+                showEditDrugChartLink,
+                drugOrderSchedule?.notes
+              )
+            }
+          >
+            {!drugOrder.dosingInstructions?.asNeeded
+              ? AddToDrugChart
+              : AddToTasks}
+          </Link>
+        ),
+        isScheduled: !drugOrder.dosingInstructions?.asNeeded ? false : true,
+      };
     } else if (!showStopDrugChartLink) {
-      return (
-        <Link
-          onClick={() =>
-            handleEditAndAddToDrugChartClick(
-              drugOrder.uuid,
-              showEditDrugChartLink,
-              drugOrderSchedule?.notes
-            )
-          }
-        >
-          {EditDrugChart}
-        </Link>
-      );
+      return {
+        link: (
+          <Link
+            onClick={() =>
+              handleEditAndAddToDrugChartClick(
+                drugOrder.uuid,
+                showEditDrugChartLink,
+                drugOrderSchedule?.notes
+              )
+            }
+          >
+            {EditDrugChart}
+          </Link>
+        ),
+        isScheduled: true,
+      };
     } else {
-      return (
-        <Link onClick={() => handleStopDrugChartClick(drugOrder.uuid)}>
-          {StopDrugChart}
-        </Link>
-      );
+      return {
+        link: (
+          <Link onClick={() => handleStopDrugChartClick(drugOrder.uuid)}>
+            {StopDrugChart}
+          </Link>
+        ),
+        isScheduled: true,
+      };
     }
   };
 
@@ -266,7 +275,17 @@ const Treatments = (props) => {
           } else {
             showEditDrugChartLink = false;
           }
+
           const drugOrder = drugOrderObject.drugOrder;
+          const actionsObjectValue =
+            !drugOrder.dateStopped &&
+            getActions(
+              showEditDrugChartLink,
+              showStopDrugChartLink,
+              drugOrder,
+              drugOrderObject.drugOrderSchedule
+            );
+
           return {
             id: drugOrder.uuid,
             startDate: formatDate(drugOrder.effectiveStartDate),
@@ -280,14 +299,7 @@ const Treatments = (props) => {
                 )}
               </span>
             ),
-            actions:
-              !drugOrder.dateStopped &&
-              getActions(
-                showEditDrugChartLink,
-                showStopDrugChartLink,
-                drugOrder,
-                drugOrderObject.drugOrderSchedule
-              ),
+            actions: actionsObjectValue.link,
             additionalData: {
               instructions: drugOrderObject.instructions
                 ? drugOrderObject.instructions
@@ -305,6 +317,7 @@ const Treatments = (props) => {
                 drugOrderObject.provider.name +
                 " | " +
                 formatDate(drugOrder.dateStopped, defaultDateTimeFormat),
+              isScheduled: actionsObjectValue?.isScheduled,
             },
           };
         })
@@ -319,6 +332,7 @@ const Treatments = (props) => {
         provider: treatment.providerName,
         stopReason: treatment.additionalData.stopReason,
         stopperAdditionalData: treatment.additionalData.stopperAdditionalData,
+        isNotScheduled: !(treatment.additionalData.isScheduled ?? true),
       };
     });
     setAdditionalData(additionalMappedData);

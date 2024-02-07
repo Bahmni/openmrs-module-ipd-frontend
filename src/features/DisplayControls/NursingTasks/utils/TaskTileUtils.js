@@ -32,7 +32,8 @@ export const iconType = (task, nursingTasks) => {
     serviceType,
     status,
   } = task;
-  if(serviceType === asNeededPlaceholderConceptName) return administeredTimeInEpochSeconds ? "Administered" : "Pending";
+  if (serviceType === asNeededPlaceholderConceptName)
+    return administeredTimeInEpochSeconds ? "Administered" : "Pending";
   if (stopTime) return "Stopped";
   if (status === "Not Done") return "Not-Administered";
   if (administeredTimeInEpochSeconds) {

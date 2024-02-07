@@ -130,7 +130,7 @@ export default function NursingTasks(props) {
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
-  
+
   const handleNext = () => {
     const { startDateTime, endDateTime, nextShiftIndex } = getNextShiftDetails(
       shiftRangeArray,

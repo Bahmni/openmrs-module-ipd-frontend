@@ -561,7 +561,7 @@ export const mockExtractedMedicationNursingTasksData = [
       dosingInstructions: { asNeeded: false, frequency: "Once a day" },
       isDisabled: false,
       orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750884",
-      serviceType: "MedicationRequest"
+      serviceType: "MedicationRequest",
     },
     {
       drugName: "Paracetamol 120 mg (Tablet)",
@@ -575,7 +575,7 @@ export const mockExtractedMedicationNursingTasksData = [
       dosingInstructions: { asNeeded: false, frequency: "Once a day" },
       isDisabled: false,
       orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750885",
-      serviceType: "MedicationRequest"
+      serviceType: "MedicationRequest",
     },
   ],
   [
@@ -591,7 +591,7 @@ export const mockExtractedMedicationNursingTasksData = [
       dosingInstructions: { asNeeded: false, frequency: "Once a day" },
       orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750885",
       isDisabled: false,
-      serviceType: "MedicationRequest"
+      serviceType: "MedicationRequest",
     },
   ],
 ];
@@ -615,7 +615,7 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       },
       isDisabled: true,
       orderId: "paracetamol-125mg-tablet-uuid",
-      serviceType: "MedicationRequest"
+      serviceType: "MedicationRequest",
     },
   ],
   [
@@ -636,7 +636,7 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       },
       isDisabled: true,
       orderId: "paracetamol-120mg-tablet-uuid",
-      serviceType: "MedicationRequest"
+      serviceType: "MedicationRequest",
     },
   ],
 ];
@@ -658,7 +658,7 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
       },
       orderId: "paracetamol-120mg-tablet-uuid",
       isDisabled: true,
-      serviceType: "MedicationRequest"
+      serviceType: "MedicationRequest",
     },
   ],
   [
@@ -780,7 +780,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       },
       isDisabled: true,
       orderId: "paracetamol-120mg-tablet-uuid",
-      serviceType: "MedicationRequest"
+      serviceType: "MedicationRequest",
     },
   ],
 ];
