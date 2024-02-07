@@ -4,7 +4,16 @@ import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAnd
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import PropTypes from "prop-types";
-import { Loading, Tab, Tabs, TextArea, Modal } from "carbon-components-react";
+import {
+  Loading,
+  Tab,
+  Tabs,
+  TextArea,
+  Modal,
+  DatePicker,
+  DatePickerInput,
+  TimePicker,
+} from "carbon-components-react";
 import "../styles/EmergencyTasks.scss";
 import {
   fetchMedicationConfig,
@@ -62,6 +71,7 @@ const AddEmergencyTasks = (props) => {
   const [atleastOneFieldFilled, setAtleastOneFieldFilled] = useState(false);
   const [isTimeChanged, setIsTimeChanged] = useState(false);
   const [isDateChanged, setIsDateChanged] = useState(false);
+  const [isInvalidData, setIsInvalidData] = useState(false);
   const invalidTimeText24Hour = (
     <FormattedMessage
       id={"INVALID_TIME"}
@@ -221,6 +231,7 @@ const AddEmergencyTasks = (props) => {
     if (
       dosage &&
       administrationDate &&
+      administrationTime <= formatDate(new Date(), "HH:mm") &&
       !(
         _.isEmpty(doseUnits) ||
         _.isEmpty(routes) ||
@@ -326,7 +337,7 @@ const AddEmergencyTasks = (props) => {
                   className={"administration-info"}
                   style={{ display: "flex", gap: "10px" }}
                 >
-                  <DatePickerCarbon
+                  {/* <DatePickerCarbon
                     id={"Administration-Date"}
                     onChange={(e) => {
                       setAdministrationDate(new Date(e[0]));
@@ -336,18 +347,59 @@ const AddEmergencyTasks = (props) => {
                     isRequired={true}
                     value={administrationDate}
                     dateFormat={"d M Y"}
-                  />
+                  /> */}
+                  <DatePicker
+                    datePickerType={"single"}
+                    onChange={(e) => {
+                      setAdministrationDate(new Date(e[0]));
+                      setIsDateChanged(true);
+                    }}
+                    disabled={false}
+                    value={administrationDate}
+                    dateFormat={"d M Y"}
+                    maxDate={new Date()}
+                  >
+                    <DatePickerInput
+                      id={"Administration-Date"}
+                      placeholder={"mm/dd/yyyy"}
+                      labelText={"Administration Date"}
+                      size={"md"}
+                      style={{ width: "250px" }}
+                      autoComplete={"off"}
+                      disabled={false}
+                      required={true}
+                    />
+                  </DatePicker>
                   <TimePicker24Hour
                     defaultTime={administrationTime}
                     onChange={(e) => {
+                      console.log("first", e > formatDate(new Date(), "HH:mm"));
                       setAdministrationTime(e);
                       setIsTimeChanged(true);
                     }}
                     labelText="Administration Time"
                     width={"100%"}
                     isRequired={true}
-                    invalidText={invalidTimeText24Hour}
+                    invalid={
+                      administrationTime > formatDate(new Date(), "HH:mm")
+                    }
+                    invalidText={
+                      administrationTime > formatDate(new Date(), "HH:mm")
+                        ? "Future time is not allowed"
+                        : invalidTimeText24Hour
+                    }
                   />
+                  {/* <TimePicker
+                    id={"time-selector"}
+                    labelText={"Administration Time"}
+                    onBlur={handleChange}
+                    value={administrationTime === "Invalid date" ? "" : administrationTime}
+                    style={{ width: "72px", padding: "0 0 0 1rem" }}
+                    autoComplete={"off"}
+                    disabled={false}
+                    invalid={administrationTime > formatDate(new Date(), "HH:mm")}
+                    invalidText={invalidTimeText24Hour} */}
+                  {/* ></TimePicker> */}
                 </div>
                 <Dropdown
                   id={"Provider-info"}
