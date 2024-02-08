@@ -15,9 +15,10 @@ import moment from "moment";
 export const fetchMedicationNursingTasks = async (
   patientUuid,
   startTime,
-  endTime
+  endTime,
+  visitUuid
 ) => {
-  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}`;
+  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}&visitUuid=${visitUuid}`;
   try {
     const response = await axios.get(FETCH_MEDICATIONS_URL);
     return response.data;
@@ -30,7 +31,8 @@ export const GetUTCEpochForDate = (viewDate) => moment.utc(viewDate).unix();
 
 export const ExtractMedicationNursingTasksData = (
   medicationNursingTasksData,
-  filterValue
+  filterValue,
+  isReadMode
 ) => {
   const extractedData = [],
     pendingExtractedData = [],
@@ -98,10 +100,11 @@ export const ExtractMedicationNursingTasksData = (
           hourCycle: "h23",
         }),
         orderId: order?.uuid,
-        isDisabled:
-          !!administeredDateTime ||
-          slot.status === "STOPPED" ||
-          slot.status === "NOT_DONE",
+        isDisabled: isReadMode
+          ? true
+          : !!administeredDateTime ||
+            slot.status === "STOPPED" ||
+            slot.status === "NOT_DONE",
         serviceType,
       };
 
@@ -223,7 +226,7 @@ export const isCurrentShift = (
   startDateTimeChange,
   endDateTimeChange
 ) => {
-  const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
+  const shiftDetailsObj = currentShiftHoursArray(new Date(), shiftConfig);
   const currentShift = shiftDetailsObj.currentShiftHoursArray;
   let startDateTimeCurrent = getDateTime(new Date(), currentShift[0]);
   let endDateTimeCurrent = getDateTime(

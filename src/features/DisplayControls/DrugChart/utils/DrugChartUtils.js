@@ -6,9 +6,10 @@ import _ from "lodash";
 export const fetchMedications = async (
   patientUuid,
   startDateTime,
-  endDateTime
+  endDateTime,
+  visitUuid
 ) => {
-  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}&view=drugChart`;
+  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}&view=drugChart&visitUuid=${visitUuid}`;
   try {
     return await axios.get(FETCH_MEDICATIONS_URL);
   } catch (error) {
@@ -245,14 +246,14 @@ export const getUpdatedShiftArray = (shiftRange = "") => {
   return updatedShiftHoursArray;
 };
 
-export const currentShiftHoursArray = (shiftDetails = {}) => {
+export const currentShiftHoursArray = (date, shiftDetails = {}) => {
   const rangeArray = [];
   Object.values(shiftDetails).forEach((shift) => {
     rangeArray.push(`${shift.shiftStartTime}-${shift.shiftEndTime}`);
   });
 
   // finding the current hour range
-  const currentDate = new Date();
+  const currentDate = date;
   const currentHour = currentDate.getHours();
   let currentRange = rangeArray[0];
   let shiftIndex = 0;

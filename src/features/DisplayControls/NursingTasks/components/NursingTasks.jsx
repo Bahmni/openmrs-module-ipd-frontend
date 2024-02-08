@@ -38,31 +38,38 @@ import { displayShiftTimingsFormat } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
 export default function NursingTasks(props) {
   const { patientId } = props;
-  const { config } = useContext(IPDContext);
-  const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
+  const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
   const [nursingTasks, setNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { isSliderOpen, updateSliderOpen, provider } =
     useContext(SliderContext);
   const [selectedMedicationTask, setSelectedMedicationTask] = useState([]);
-  const [filterValue, setFilterValue] = useState(items[2]);
+  const [filterValue, setFilterValue] = useState(
+    isReadMode ? items[1] : items[2]
+  );
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [notCurrentShift, setNotCurrentShift] = useState(false);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
-  const shiftDetails = currentShiftHoursArray(shiftConfig);
+  const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
+  const shiftDetails = currentShiftHoursArray(
+    isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+    shiftConfig
+  );
   const allowedForthShfts =
     getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0]) / 1000 +
     convertDaystoSeconds(2);
   const [startEndDates, updatedStartEndDates] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+    endDate: isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
   });
-  const [nextShiftMaxHour] = useState(allowedForthShfts);
+  const [nextShiftMaxHour] = useState(
+    isReadMode ? visitSummary.stopDateTime / 1000 : allowedForthShfts
+  );
   const [isShiftsButtonsDisabled, setIsShiftsButtonsDisabled] = useState({
     previous: false,
-    next: false,
+    next: isReadMode ? true : false,
   });
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
@@ -72,15 +79,18 @@ export default function NursingTasks(props) {
     const currentShift = shiftDetails.currentShiftHoursArray;
     const firstHour = currentShift[0];
     const lastHour = currentShift[currentShift.length - 1];
-    startDateTimeChange = getDateTime(new Date(), currentShift[0]);
+    startDateTimeChange = getDateTime(
+      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+      currentShift[0]
+    );
     endDateTimeChange = getDateTime(
-      new Date(),
+      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
       currentShift[currentShift.length - 1] + 1
     );
 
     /** if the shift is going on two different dates */
     if (lastHour < firstHour) {
-      const d = new Date();
+      const d = isReadMode ? new Date(visitSummary.stopDateTime) : new Date();
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
@@ -156,7 +166,10 @@ export default function NursingTasks(props) {
   };
 
   const handleCurrent = () => {
-    const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
+    const shiftDetailsObj = currentShiftHoursArray(
+      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+      shiftConfig
+    );
     const currentShift = shiftDetailsObj.currentShiftHoursArray;
     const updatedShiftIndex = shiftDetailsObj.shiftIndex;
     const firstHour = currentShift[0];
@@ -214,7 +227,7 @@ export default function NursingTasks(props) {
       defaultMessage={"No Stopped Task is available for the patient"}
     />
   );
-
+  
   const fetchNursingTasks = async (startDate, endDate) => {
     setIsLoading(true);
     const startDateTimeInSeconds = startDate / 1000;
@@ -222,13 +235,15 @@ export default function NursingTasks(props) {
     const nursingTasks = await fetchMedicationNursingTasks(
       patientId,
       startDateTimeInSeconds,
-      endDateTimeInSeconds
+      endDateTimeInSeconds,
+      visit
     );
     setNursingTasks(nursingTasks);
     if (nursingTasks) {
       const extractedData = ExtractMedicationNursingTasksData(
         nursingTasks,
-        filterValue
+        filterValue,
+        isReadMode
       );
       if (
         !isCurrentShift(shiftConfig, startDateTimeChange, endDateTimeChange)
@@ -246,7 +261,9 @@ export default function NursingTasks(props) {
       }
       setIsLoading(false);
       setIsShiftsButtonsDisabled({
-        previous: nursingTasks[0].startDate > startDateTimeInSeconds,
+        previous:
+          (isReadMode && nursingTasks.length === 0) ||
+          nursingTasks[0].startDate > startDateTimeInSeconds,
         next:
           startDateTimeInSeconds >= nextShiftMaxHour ||
           endDateTimeInSeconds >= nextShiftMaxHour,
@@ -255,7 +272,7 @@ export default function NursingTasks(props) {
   };
   useEffect(() => {
     setMedicationNursingTasks(
-      ExtractMedicationNursingTasksData(nursingTasks, filterValue)
+      ExtractMedicationNursingTasksData(nursingTasks, filterValue, isReadMode)
     );
   }, [filterValue]);
 
@@ -276,7 +293,7 @@ export default function NursingTasks(props) {
               }
             }}
           >
-            <TaskTile medicationNursingTask={medicationNursingTask} />
+            <TaskTile medicationNursingTask={medicationNursingTask} is />
           </div>
         </div>
       );
@@ -367,6 +384,7 @@ export default function NursingTasks(props) {
             onClick={handleCurrent}
             className="margin-right-10"
             data-testid="current-shift"
+            disabled={isReadMode}
           >
             <FormattedMessage
               id={"CURRENT_SHIFT"}
@@ -421,6 +439,7 @@ export default function NursingTasks(props) {
                 updateEmergencyTasksSlider(true);
               }
             }}
+            disabled={isReadMode}
           >
             <FormattedMessage id={"ADD_TASK"} defaultMessage={"Add Task"} />
           </Button>
@@ -434,6 +453,7 @@ export default function NursingTasks(props) {
           providerId={provider.uuid}
           setShowSuccessNotification={setShowSuccessNotification}
           setSuccessMessage={setSuccessMessage}
+          disabled={isReadMode}
         />
       )}
       {isSliderOpen.emergencyTasks && (
@@ -443,6 +463,7 @@ export default function NursingTasks(props) {
           updateEmergencyTasksSlider={updateEmergencyTasksSlider}
           setShowSuccessNotification={setShowSuccessNotification}
           setSuccessMessage={setSuccessMessage}
+          disabled={isReadMode}
         />
       )}
       {isLoading ? (

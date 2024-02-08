@@ -29,6 +29,7 @@ import { defaultDateTimeFormat, serviceType } from "../../../../constants";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
 import { SliderContext } from "../../../../context/SliderContext";
+import { IPDContext } from "../../../../context/IPDContext";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { componentKeys } from "../../../../constants";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
@@ -60,6 +61,7 @@ const Treatments = (props) => {
   const [additionalData, setAdditionalData] = useState([]);
   const [showEditMessage, setShowEditMessage] = useState(false);
   const allMedications = useContext(AllMedicationsContext);
+  const { isReadMode } = useContext(IPDContext);
   const [showStopDrugChartModal, setShowStopDrugChartModal] = useState(false);
   const [stopReason, setStopReason] = useState("");
   const [isStopButtonDisabled, setStopButtonDisabled] = useState(true);
@@ -75,7 +77,8 @@ const Treatments = (props) => {
     });
   };
   let drugOrderList = {};
-  const isAddToDrugChartDisabled = visitSummary?.admissionDetails === null;
+  const isAddToDrugChartDisabled =
+    isReadMode || visitSummary?.admissionDetails === null;
   const sliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -197,42 +200,55 @@ const Treatments = (props) => {
     drugOrderSchedule
   ) => {
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
-      return (
-        <Link
-          disabled={isAddToDrugChartDisabled}
-          onClick={() =>
-            handleEditAndAddToDrugChartClick(
-              drugOrder.uuid,
-              showEditDrugChartLink,
-              drugOrderSchedule?.notes
-            )
-          }
-        >
-          {!drugOrder.dosingInstructions?.asNeeded
-            ? AddToDrugChart
-            : AddToTasks}
-        </Link>
-      );
+      return {
+        link: (
+          <Link
+            disabled={isAddToDrugChartDisabled}
+            onClick={() =>
+              handleEditAndAddToDrugChartClick(
+                drugOrder.uuid,
+                showEditDrugChartLink,
+                drugOrderSchedule?.notes
+              )
+            }
+          >
+            {!drugOrder.dosingInstructions?.asNeeded
+              ? AddToDrugChart
+              : AddToTasks}
+          </Link>
+        ),
+        isScheduled: !drugOrder.dosingInstructions?.asNeeded ? false : true,
+      };
     } else if (!showStopDrugChartLink) {
-      return (
-        <Link
-          onClick={() =>
-            handleEditAndAddToDrugChartClick(
-              drugOrder.uuid,
-              showEditDrugChartLink,
-              drugOrderSchedule?.notes
-            )
-          }
-        >
-          {EditDrugChart}
-        </Link>
-      );
+      return {
+        link: (
+          <Link
+            disabled={isReadMode}
+            onClick={() =>
+              handleEditAndAddToDrugChartClick(
+                drugOrder.uuid,
+                showEditDrugChartLink,
+                drugOrderSchedule?.notes
+              )
+            }
+          >
+            {EditDrugChart}
+          </Link>
+        ),
+        isScheduled: true,
+      };
     } else {
-      return (
-        <Link onClick={() => handleStopDrugChartClick(drugOrder.uuid)}>
-          {StopDrugChart}
-        </Link>
-      );
+      return {
+        link: drugOrderSchedule?.pendingSlotsAvailable && (
+          <Link
+            disabled={isReadMode}
+            onClick={() => handleStopDrugChartClick(drugOrder.uuid)}
+          >
+            {StopDrugChart}
+          </Link>
+        ),
+        isScheduled: true,
+      };
     }
   };
 
@@ -266,7 +282,17 @@ const Treatments = (props) => {
           } else {
             showEditDrugChartLink = false;
           }
+
           const drugOrder = drugOrderObject.drugOrder;
+          const actionsObjectValue =
+            !drugOrder.dateStopped &&
+            getActions(
+              showEditDrugChartLink,
+              showStopDrugChartLink,
+              drugOrder,
+              drugOrderObject.drugOrderSchedule
+            );
+
           return {
             id: drugOrder.uuid,
             startDate: formatDate(drugOrder.effectiveStartDate),
@@ -280,14 +306,7 @@ const Treatments = (props) => {
                 )}
               </span>
             ),
-            actions:
-              !drugOrder.dateStopped &&
-              getActions(
-                showEditDrugChartLink,
-                showStopDrugChartLink,
-                drugOrder,
-                drugOrderObject.drugOrderSchedule
-              ),
+            actions: actionsObjectValue.link,
             additionalData: {
               instructions: drugOrderObject.instructions
                 ? drugOrderObject.instructions
@@ -305,6 +324,7 @@ const Treatments = (props) => {
                 drugOrderObject.provider.name +
                 " | " +
                 formatDate(drugOrder.dateStopped, defaultDateTimeFormat),
+              isScheduled: actionsObjectValue?.isScheduled,
             },
           };
         })
@@ -319,6 +339,7 @@ const Treatments = (props) => {
         provider: treatment.providerName,
         stopReason: treatment.additionalData.stopReason,
         stopperAdditionalData: treatment.additionalData.stopperAdditionalData,
+        isNotScheduled: !(treatment.additionalData.isScheduled ?? true),
       };
     });
     setAdditionalData(additionalMappedData);
