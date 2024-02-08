@@ -308,4 +308,40 @@ describe("NursingTasks", () => {
     });
     expect(getByTestId("next-shift").disabled).toEqual(true);
   });
+  it("should display not in current shift message when next shift button is clicked", async () => {
+    MockDate.set("2024-01-05");
+    mockFetchMedicationNursingTasks
+      .mockReturnValueOnce(mockNursingTasksResponse)
+      .mockReturnValue(mockShiftResponse);
+    mockGetTimeInSeconds.mockReturnValue(259200);
+    const { getByText, getByTestId } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    );
+    getByTestId("next-shift").click();
+    await waitFor(() => {
+      expect(getByText("You are not viewing the current shift")).toBeTruthy();
+    });
+  });
+  it("should display not in current shift message when previous shift button is clicked", async () => {
+    MockDate.set("2024-01-05");
+    mockFetchMedicationNursingTasks
+      .mockReturnValueOnce(mockNursingTasksResponse)
+      .mockReturnValue(mockShiftResponse);
+    mockGetTimeInSeconds.mockReturnValue(259200);
+    const { getByText, getByTestId } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    );
+    getByTestId("previous-shift").click();
+    await waitFor(() => {
+      expect(getByText("You are not viewing the current shift")).toBeTruthy();
+    });
+  });
 });
