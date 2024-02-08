@@ -323,7 +323,7 @@ describe("NursingTasks", () => {
     );
     getByTestId("next-shift").click();
     await waitFor(() => {
-      expect(getByText("You are not viewing the current shift")).toBeTruthy();
+      expect(getByText("You're not viewing the current shift")).toBeTruthy();
     });
   });
   it("should display not in current shift message when previous shift button is clicked", async () => {
@@ -341,7 +341,7 @@ describe("NursingTasks", () => {
     );
     getByTestId("previous-shift").click();
     await waitFor(() => {
-      expect(getByText("You are not viewing the current shift")).toBeTruthy();
+      expect(getByText("You're not viewing the current shift")).toBeTruthy();
     });
   });
 });

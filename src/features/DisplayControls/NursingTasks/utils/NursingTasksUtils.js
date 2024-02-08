@@ -254,6 +254,6 @@ export const isCurrentShift = (
 export const NotCurrentShiftMessage = (
   <FormattedMessage
     id={"NOT_CURRENT_SHIFT_MESSAGE"}
-    defaultMessage={"You are not viewing the current shift"}
+    defaultMessage={"You're not viewing the current shift"}
   />
 );
