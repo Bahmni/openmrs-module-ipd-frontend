@@ -1,9 +1,15 @@
 import axios from "axios";
+import React from "react";
 import {
   MEDICATIONS_BASE_URL,
   ADMINISTERED_MEDICATIONS_BASE_URL,
   asNeededPlaceholderConceptName,
 } from "../../../../constants";
+import {
+  currentShiftHoursArray,
+  getDateTime,
+} from "../../DrugChart/utils/DrugChartUtils";
+import { FormattedMessage } from "react-intl";
 import moment from "moment";
 
 export const fetchMedicationNursingTasks = async (
@@ -211,3 +217,43 @@ export const isTimeWithinAdministeredWindow = (
   return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
 };
 export const getTimeInSeconds = (days) => days * 86400;
+
+export const isCurrentShift = (
+  shiftConfig,
+  startDateTimeChange,
+  endDateTimeChange
+) => {
+  const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
+  const currentShift = shiftDetailsObj.currentShiftHoursArray;
+  let startDateTimeCurrent = getDateTime(new Date(), currentShift[0]);
+  let endDateTimeCurrent = getDateTime(
+    new Date(),
+    currentShift[currentShift.length - 1] + 1
+  );
+
+  if (startDateTimeCurrent > endDateTimeCurrent) {
+    const d = new Date();
+    const currentHour = d.getHours();
+    if (currentHour > 12) {
+      d.setDate(d.getDate() + 1);
+      endDateTimeCurrent = getDateTime(
+        d,
+        currentShift[currentShift.length - 1] + 1
+      );
+    } else {
+      d.setDate(d.getDate() - 1);
+      startDateTimeCurrent = getDateTime(d, currentShift[0]);
+    }
+  }
+  return (
+    startDateTimeCurrent == startDateTimeChange &&
+    endDateTimeCurrent == endDateTimeChange
+  );
+};
+
+export const NotCurrentShiftMessage = (
+  <FormattedMessage
+    id={"NOT_CURRENT_SHIFT_MESSAGE"}
+    defaultMessage={"You are not viewing the current shift"}
+  />
+);

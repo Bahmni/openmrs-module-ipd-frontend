@@ -7,6 +7,8 @@ import { items } from "../utils/constants";
 import {
   fetchMedicationNursingTasks,
   ExtractMedicationNursingTasksData,
+  isCurrentShift,
+  NotCurrentShiftMessage,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
 import {
@@ -33,7 +35,7 @@ import {
   getPreviousShiftDetails,
 } from "../../DrugChart/utils/DrugChartUtils";
 import { displayShiftTimingsFormat } from "../../../../constants";
-
+import WarningIcon from "../../../../icons/warning.svg";
 export default function NursingTasks(props) {
   const { patientId } = props;
   const { config } = useContext(IPDContext);
@@ -47,6 +49,7 @@ export default function NursingTasks(props) {
   const [filterValue, setFilterValue] = useState(items[2]);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [notCurrentShift, setNotCurrentShift] = useState(false);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const shiftDetails = currentShiftHoursArray(shiftConfig);
   const allowedForthShfts =
@@ -125,12 +128,15 @@ export default function NursingTasks(props) {
       );
     startDateTimeChange = startDateTime;
     endDateTimeChange = endDateTime;
+    isCurrentShift(shiftConfig, startDateTimeChange, endDateTimeChange)
+      ? setNotCurrentShift(false)
+      : setNotCurrentShift(true);
     updateShiftIndex(previousShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     fetchNursingTasks(startDateTime, endDateTime);
   };
-  
+
   const handleNext = () => {
     const { startDateTime, endDateTime, nextShiftIndex } = getNextShiftDetails(
       shiftRangeArray,
@@ -140,6 +146,9 @@ export default function NursingTasks(props) {
     );
     startDateTimeChange = startDateTime;
     endDateTimeChange = endDateTime;
+    isCurrentShift(shiftConfig, startDateTimeChange, endDateTimeChange)
+      ? setNotCurrentShift(false)
+      : setNotCurrentShift(true);
     updateShiftIndex(nextShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
@@ -171,6 +180,7 @@ export default function NursingTasks(props) {
         startDateTimeChange = getDateTime(d, currentShift[0]);
       }
     }
+    setNotCurrentShift(false);
     updateShiftIndex(updatedShiftIndex);
     setIsLoading(true);
     updatedStartEndDates({
@@ -205,35 +215,6 @@ export default function NursingTasks(props) {
     />
   );
 
-  const isCurrentShift = () => {
-    const shiftDetailsObj = currentShiftHoursArray(shiftConfig);
-    const currentShift = shiftDetailsObj.currentShiftHoursArray;
-    let startDateTimeCurrent = getDateTime(new Date(), currentShift[0]);
-    let endDateTimeCurrent = getDateTime(
-      new Date(),
-      currentShift[currentShift.length - 1] + 1
-    );
-
-    if (startDateTimeCurrent > endDateTimeCurrent) {
-      const d = new Date();
-      const currentHour = d.getHours();
-      if (currentHour > 12) {
-        d.setDate(d.getDate() + 1);
-        endDateTimeCurrent = getDateTime(
-          d,
-          currentShift[currentShift.length - 1] + 1
-        );
-      } else {
-        d.setDate(d.getDate() - 1);
-        startDateTimeCurrent = getDateTime(d, currentShift[0]);
-      }
-    }
-    return (
-      startDateTimeCurrent == startDateTimeChange &&
-      endDateTimeCurrent == endDateTimeChange
-    );
-  };
-
   const fetchNursingTasks = async (startDate, endDate) => {
     setIsLoading(true);
     const startDateTimeInSeconds = startDate / 1000;
@@ -249,7 +230,9 @@ export default function NursingTasks(props) {
         nursingTasks,
         filterValue
       );
-      if (!isCurrentShift()) {
+      if (
+        !isCurrentShift(shiftConfig, startDateTimeChange, endDateTimeChange)
+      ) {
         const filteredData = extractedData
           .map((extract) =>
             extract.filter(
@@ -336,6 +319,14 @@ export default function NursingTasks(props) {
     if (shiftStartDate === shiftEndDate) {
       return (
         <div className="shift-timing">
+          {notCurrentShift && (
+            <div className="not-current-shift-message-div">
+              <WarningIcon />
+              <span className="not-current-shift-message">
+                {NotCurrentShiftMessage}
+              </span>
+            </div>
+          )}
           <div className="shift-time">
             {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
             {formattedShiftStartTime} <span className="to-text">to</span>{" "}
@@ -346,6 +337,14 @@ export default function NursingTasks(props) {
     } else {
       return (
         <div className="shift-timing">
+          {notCurrentShift && (
+            <div className="not-current-shift-message-div">
+              <WarningIcon />
+              <span className="not-current-shift-message">
+                {NotCurrentShiftMessage}
+              </span>
+            </div>
+          )}
           <div className="shift-time">
             {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
             {formattedShiftStartTime} <span className="to-text">to</span>{" "}
@@ -427,7 +426,6 @@ export default function NursingTasks(props) {
           </Button>
         </div>
       </div>
-
       {isSliderOpen.nursingTasks && (
         <UpdateNursingTasks
           medicationTasks={selectedMedicationTask}
