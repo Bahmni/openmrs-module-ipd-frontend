@@ -21,10 +21,7 @@ export const transformDrugOrders = (orders) => {
   const { ipdDrugOrders, emergencyMedications } = orders;
   const medicationData = {};
   ipdDrugOrders.forEach((order) => {
-    if (
-      order.drugOrder?.careSetting === "INPATIENT" &&
-      order.drugOrderSchedule
-    ) {
+    if (order.drugOrder?.careSetting === "INPATIENT") {
       const {
         dosingInstructions,
         drug,
@@ -60,11 +57,12 @@ export const transformDrugOrders = (orders) => {
         slots: [],
         dateStopped: order.drugOrder.dateStopped,
         orderReasonText: orderReasonText,
-        firstSlotStartTime:
-          order.drugOrderSchedule.slotStartTime ||
-          (order.drugOrderSchedule.firstDaySlotsStartTime &&
-            order.drugOrderSchedule.firstDaySlotsStartTime[0]) ||
-          order.drugOrderSchedule.dayWiseSlotsStartTime[0],
+        firstSlotStartTime: order.drugOrderSchedule
+          ? order.drugOrderSchedule.slotStartTime ||
+            (order.drugOrderSchedule.firstDaySlotsStartTime &&
+              order.drugOrderSchedule.firstDaySlotsStartTime[0]) ||
+            order.drugOrderSchedule.dayWiseSlotsStartTime[0]
+          : order.drugOrder.scheduledDate,
         notes: order.drugOrderSchedule?.notes,
       };
     }

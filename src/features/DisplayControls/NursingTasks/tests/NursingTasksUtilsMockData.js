@@ -832,6 +832,9 @@ export const mockMedicationTasks = [
       "Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension",
     drugRoute: "Topical",
     duration: "4 Day(s)",
+    dosingInstructions: {
+      asNeeded: false,
+    },
     dosage: "30mg",
     uuid: "d9ae1992-63ac-4e05-8dfb-13f021102ec6",
     startTimeInEpochSeconds: 1700620200,
@@ -841,6 +844,24 @@ export const mockMedicationTasks = [
     drugName: "Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)",
     drugRoute: "Intravenous",
     duration: "6 Day(s)",
+    dosingInstructions: {
+      asNeeded: false,
+    },
+    dosage: "25mg",
+    uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
+    startTimeInEpochSeconds: 1700620200,
+    startTime: "08:00",
+  },
+];
+
+export const mockPRNMedicationTasks = [
+  {
+    drugName: "Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)",
+    drugRoute: "Intravenous",
+    duration: "6 Day(s)",
+    dosingInstructions: {
+      asNeeded: true,
+    },
     dosage: "25mg",
     uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
     startTimeInEpochSeconds: 1700620200,
