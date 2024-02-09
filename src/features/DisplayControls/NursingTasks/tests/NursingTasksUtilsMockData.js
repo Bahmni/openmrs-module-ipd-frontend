@@ -900,6 +900,41 @@ export const mockPendingTaskTileData = [
   },
 ];
 
+export const mockCompletedPRNTaskTileData = [
+  {
+    drugName: "Paracetamol 125 mg Tablet",
+    drugRoute: "Oral",
+    duration: "5 Day(s)",
+    dosage: 1,
+    doseType: "Tablet(s)",
+    uuid: "72af0cfa-be74-42a8-b650-45f6978314dd",
+    startTimeInEpochSeconds: 1703601000,
+    startTime: "16:38",
+    administeredTimeInEpochSeconds: 1787901000,
+    orderId: "703ce1a1-8839-44ab-a349-8a6ca758f6b8",
+    isDisabled: false,
+    dosingInstructions: {
+      asNeeded: true,
+    },
+  },
+];
+
+export const mockPendingPRNTaskTileData = [
+  {
+    drugName: "Paracetamol 125 mg Tablet",
+    drugRoute: "Oral",
+    duration: "5 Day(s)",
+    dosage: 1,
+    doseType: "Tablet(s)",
+    uuid: "72af0cfa-be74-42a8-b650-45f6978314dd",
+    orderId: "703ce1a1-8839-44ab-a349-8a6ca758f6b8",
+    isDisabled: false,
+    dosingInstructions: {
+      asNeeded: true,
+    },
+  },
+];
+
 export const mockShiftResponse = [
   {
     id: 14,
