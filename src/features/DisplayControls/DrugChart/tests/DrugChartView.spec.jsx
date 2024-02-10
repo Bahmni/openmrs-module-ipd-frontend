@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import DrugChartView from "../components/DrugChartView";
-import { drugChartData } from "./DrugChartViewMockData";
+import { drugChartData, drugChartDataForPRN } from "./DrugChartViewMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import MockDate from "mockdate";
 import { mockConfig } from "../../../../utils/CommonUtils";
@@ -206,4 +206,20 @@ describe("DrugChartWrapper", () => {
     expect(currentShiftButton.className).toContain("bx--btn--disabled");
     expect(screen.getByTestId("nextButton").disabled).toEqual(true);
   });
+
+  // it.only("should show PRN administered medication", async () => {
+  //   MockDate.set("2024-01-05 07:00");
+  //   mockFetchMedications.mockResolvedValue({
+  //     data: drugChartDataForPRN,
+  //   });
+  //   render(
+  //     <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+  //       <DrugChartView patientId="test-id" />
+  //     </IPDContext.Provider>
+  //   );
+  //   screen.debug();
+  //   await waitFor(() => {
+  //     expect(screen.getByText(/Zinc Oxide/i)).toBeTruthy();
+  //   });
+  // });
 });
