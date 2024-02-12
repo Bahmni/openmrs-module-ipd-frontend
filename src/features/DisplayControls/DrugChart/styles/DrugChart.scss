@@ -20,14 +20,16 @@
   overflow-y: auto;
   height: 100%;
   min-width: 225px;
-  box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.25);
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.25);
   z-index: 20;
   .header {
+    display: flex;
+    align-items: end;
     height: 63px;
     background-color: #ededed;
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2;
   }
   table {
     table-layout: fixed;
@@ -51,6 +53,19 @@
   scrollbar-width: none; /* Firefox */
 }
 
+.arrow-button {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 1;
+  min-height: 30px;
+  max-width: none;
+  width: 100%;
+  .bx--btn__icon {
+    width: 100%;
+  }
+}
+
 .drug-chart-left-panel::-webkit-scrollbar {
   display: none;
 }
@@ -59,4 +74,15 @@
   overflow: auto;
   height: 100%;
   margin-left: 6px;
+}
+
+.arrow-button-wrapper {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+  width: 100%;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 4px 2px rgba(0, 0, 0, 0.25);
+  .bx--btn__icon {
+    width: 100%;
+  }
 }
