@@ -288,7 +288,7 @@ describe("UpdateNursingTasksSlider", function () {
     expect(scheduledFor).toBeNull();
     const overflowMenuButton =
       container.querySelectorAll(".bx--overflow-menu")[0];
-    expect(overflowMenuButton).toBeUndefined();
+    expect(overflowMenuButton).not.toBeTruthy();
   });
 
   it("should show PRN confirm message while saving PRN task", () => {
