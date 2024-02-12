@@ -272,22 +272,24 @@ describe("UpdateNursingTasksSlider", function () {
     expect(screen.getByText("Please enter notes")).toBeTruthy();
   });
 
-  // it.only("should not show overflow menu for scheduled for text for PRN Nursing Task", () => {
-  //   render(
-  //     <IPDContext.Provider value={{ config: mockConfig }}>
-  //       <UpdateNursingTasks
-  //         medicationTasks={mockPRNMedicationTasks}
-  //         updateNursingTasksSlider={jest.fn}
-  //         patientId="test_patient_uuid"
-  //         providerId="test_provider_uuid"
-  //         setShowSuccessNotification={jest.fn}
-  //       />
-  //     </IPDContext.Provider>
-  //   );
-  //   screen.debug();
-  //   // expect(screen.findAllByRole(".bx--overflow-menu")).toBeEmptyDOMElement();
-  //   // expect(getByText('Scheduled for')).not.toBeInTheDocument();
-  // });
+  it("should not show overflow menu for scheduled for text for PRN Nursing Task", async () => {
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockPRNMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
+    );
+    const scheduledFor = screen.queryByText("Scheduled for");
+    expect(scheduledFor).toBeNull();
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    expect(overflowMenuButton).toBeUndefined();
+  });
 
   it("should show PRN confirm message while saving PRN task", () => {
     const { container } = render(

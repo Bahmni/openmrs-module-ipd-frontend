@@ -1,10 +1,15 @@
 import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import DrugChartView from "../components/DrugChartView";
-import { drugChartData, drugChartDataForPRN } from "./DrugChartViewMockData";
+import {
+  drugChartData,
+  drugChartDataForPRN,
+  allMedicationData,
+} from "./DrugChartViewMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import MockDate from "mockdate";
 import { mockConfig } from "../../../../utils/CommonUtils";
+import { AllMedicationsContext } from "../../../../context/AllMedications";
 
 const mockFetchMedications = jest.fn();
 const MockTooltipCarbon = jest.fn();
@@ -207,19 +212,20 @@ describe("DrugChartWrapper", () => {
     expect(screen.getByTestId("nextButton").disabled).toEqual(true);
   });
 
-  // it.only("should show PRN administered medication", async () => {
-  //   MockDate.set("2024-01-05 07:00");
-  //   mockFetchMedications.mockResolvedValue({
-  //     data: drugChartDataForPRN,
-  //   });
-  //   render(
-  //     <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
-  //       <DrugChartView patientId="test-id" />
-  //     </IPDContext.Provider>
-  //   );
-  //   screen.debug();
-  //   await waitFor(() => {
-  //     expect(screen.getByText(/Zinc Oxide/i)).toBeTruthy();
-  //   });
-  // });
+  it("should show PRN administered medication", async () => {
+    MockDate.set("2024-02-08 07:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartDataForPRN,
+    });
+    render(
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+        <AllMedicationsContext.Provider value={allMedicationData}>
+          <DrugChartView patientId="test-id" />
+        </AllMedicationsContext.Provider>
+      </IPDContext.Provider>
+    );
+    await waitFor(() => {
+      expect(screen.queryAllByText(/Zinc Oxide 20 mg Tablet/i)).toHaveLength(2);
+    });
+  });
 });
