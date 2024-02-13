@@ -158,7 +158,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                     </svg>
                   </h3>
                   <h3
-                    style="padding: 0px; min-width: fit-content; color: rgb(82, 82, 82); font-size: 14px;"
+                    class="bed-information"
                   >
                      General Ward -ICU ICU1
                   </h3>
@@ -469,7 +469,7 @@ exports[`PatientHeader should display patient movement item on click of overflow
                     </svg>
                   </h3>
                   <h3
-                    style="padding: 0px; min-width: fit-content; color: rgb(82, 82, 82); font-size: 14px;"
+                    class="bed-information"
                   >
                      General Ward -ICU ICU1
                   </h3>
@@ -642,7 +642,7 @@ exports[`PatientHeader should display patient movement overflow menu item as dis
                     </svg>
                   </h3>
                   <h3
-                    style="padding: 0px; min-width: fit-content; color: rgb(82, 82, 82); font-size: 14px;"
+                    class="bed-information"
                   >
                      General Ward -ICU ICU1
                   </h3>
