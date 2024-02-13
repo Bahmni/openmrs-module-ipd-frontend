@@ -27,7 +27,7 @@ exports[`DrugChart should match snapshot 1`] = `
                 class="drug-name-container"
               >
                 <span
-                  class="bx--tooltip--definition bx--tooltip--a11y"
+                  class="bx--tooltip--definition bx--tooltip--a11y name-tooltip"
                 >
                   <button
                     aria-describedby="definition-tooltip-1"
@@ -83,7 +83,7 @@ exports[`DrugChart should match snapshot 1`] = `
                 class="drug-name-container"
               >
                 <span
-                  class="bx--tooltip--definition bx--tooltip--a11y"
+                  class="bx--tooltip--definition bx--tooltip--a11y name-tooltip"
                 >
                   <button
                     aria-describedby="definition-tooltip-2"
@@ -116,11 +116,34 @@ exports[`DrugChart should match snapshot 1`] = `
                 <div
                   class="administration-details"
                 >
-                  <test-file-stub />
                   <span
-                    style="color: rgb(255, 0, 0);"
+                    class="bx--tooltip--definition bx--tooltip--a11y administration-details-tooltip"
                   >
-                    02:30
+                    <button
+                      aria-describedby="definition-tooltip-3"
+                      class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                      type="button"
+                    >
+                      <div
+                        class="administration-time-info"
+                      >
+                        <test-file-stub
+                          classname="clock-icon"
+                        />
+                        <span
+                          style="color: rgb(255, 0, 0);"
+                        >
+                          02:30
+                        </span>
+                      </div>
+                    </button>
+                    <span
+                      class="bx--assistive-text"
+                      id="definition-tooltip-3"
+                      role="tooltip"
+                    >
+                      02:30
+                    </span>
                   </span>
                 </div>
               </div>

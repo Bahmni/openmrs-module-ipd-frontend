@@ -159,7 +159,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                         class="drug-name-container"
                       >
                         <span
-                          class="bx--tooltip--definition bx--tooltip--a11y"
+                          class="bx--tooltip--definition bx--tooltip--a11y name-tooltip"
                         >
                           <button
                             aria-describedby="definition-tooltip-1"
