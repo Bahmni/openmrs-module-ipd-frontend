@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import useScrollSync from "react-scroll-sync-hook";
 import Calendar from "./Calendar";
@@ -8,17 +8,22 @@ import DrugList from "./DrugList";
 import DrugChartLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { Button } from "carbon-components-react";
 import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
+import { throttle } from "lodash";
+import { easeInOutQuad } from "../utils/DrugChartUtils";
+
 export default function DrugChart(props) {
   const { drugChartData, currentShiftArray, selectedDate } = props;
   const leftPane = useRef(null);
   const rightPane = useRef(null);
   const [isPrevDisabled, setIsPrevDisabled] = useState(true);
-  const [isNextDisabled, setIsNextDisabled] = useState(false);
+  const [isNextDisabled, setIsNextDisabled] = useState(true);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const { registerPane, unregisterPane } = useScrollSync({
     vertical: true,
   });
   const drugChartRowHeight = 66;
   const drugChartHeight = (drugChartData?.length + 1) * drugChartRowHeight;
+
   useEffect(() => {
     if (leftPane.current) {
       registerPane(leftPane.current);
@@ -36,37 +41,64 @@ export default function DrugChart(props) {
     };
   }, [leftPane, rightPane, registerPane, unregisterPane]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const leftPaneElement = leftPane.current;
-      const scrollTop = leftPaneElement.scrollTop;
-      const maxScrollTop =
-        leftPaneElement.scrollHeight - leftPaneElement.clientHeight;
+  const handleScroll = useCallback(() => {
+    const leftPaneElement = leftPane.current;
+    const scrollTop = Math.ceil(leftPaneElement.scrollTop);
+    const maxScrollTop =
+      leftPaneElement.scrollHeight - leftPaneElement.clientHeight;
 
-      setIsPrevDisabled(scrollTop <= 0);
-      setIsNextDisabled(scrollTop >= maxScrollTop);
-    };
-
-    leftPane.current.addEventListener("scroll", handleScroll);
-    return () => {
-      leftPane.current.removeEventListener("scroll", handleScroll);
-    };
+    setScrollPosition(scrollTop);
+    setIsPrevDisabled(scrollTop <= 0);
+    setIsNextDisabled(scrollTop >= Math.ceil(maxScrollTop));
   }, []);
 
-  const handleScroll = (direction) => {
-    const scrollAmount = 100;
-    const newScrollTop =
-      leftPane.current.scrollTop +
-      (direction === "Prev" ? -scrollAmount : scrollAmount);
-    leftPane.current.scrollTop = newScrollTop;
-    rightPane.current.scrollTop = newScrollTop;
+  const throttledScrollHandler = useCallback(throttle(handleScroll, 100), []);
 
-    const scrollTop = newScrollTop;
-    const maxScrollTop =
-      leftPane.current.scrollHeight - leftPane.current.clientHeight;
-    setIsPrevDisabled(scrollTop <= 0);
-    setIsNextDisabled(scrollTop >= maxScrollTop);
-  };
+  useEffect(() => {
+    leftPane.current.addEventListener("scroll", throttledScrollHandler);
+    return () => {
+      leftPane.current.removeEventListener("scroll", throttledScrollHandler);
+    };
+  }, [throttledScrollHandler]);
+
+  useEffect(() => {
+    if (drugChartData) {
+      const isListLong = drugChartData.length <= 10;
+      setIsNextDisabled(isListLong);
+    }
+  }, [drugChartData]);
+
+  const handleSmoothScroll = useCallback(
+    (direction) => {
+      const scrollAmount = 66;
+      const startScrollTop = scrollPosition;
+      const endScrollTop =
+        startScrollTop + (direction === "Up" ? -scrollAmount : scrollAmount);
+
+      smoothScroll(startScrollTop, endScrollTop);
+    },
+    [scrollPosition]
+  );
+
+  const smoothScroll = useCallback((startScrollTop, endScrollTop) => {
+    const startTime = Date.now();
+    const duration = 500;
+
+    const scroll = () => {
+      const elapsedTime = Date.now() - startTime;
+      const easing = easeInOutQuad(elapsedTime / duration);
+      const newScrollTop =
+        startScrollTop + (endScrollTop - startScrollTop) * easing;
+      leftPane.current.scrollTop = newScrollTop;
+      rightPane.current.scrollTop = newScrollTop;
+
+      if (elapsedTime < duration) {
+        requestAnimationFrame(scroll);
+      }
+    };
+
+    requestAnimationFrame(scroll);
+  }, []);
 
   return (
     <div className="drug-chart-dashboard">
@@ -79,8 +111,9 @@ export default function DrugChart(props) {
           <div className="header">
             <Button
               className="arrow-button"
+              data-testid="up-arrow"
               renderIcon={ChevronUp20}
-              onClick={() => handleScroll("Prev")}
+              onClick={() => handleSmoothScroll("Up")}
               disabled={isPrevDisabled}
             />
           </div>
@@ -102,8 +135,9 @@ export default function DrugChart(props) {
       <div className="arrow-button-wrapper">
         <Button
           className="arrow-button"
+          data-testid="down-arrow"
           renderIcon={ChevronDown20}
-          onClick={() => handleScroll("Next")}
+          onClick={() => handleSmoothScroll("Down")}
           disabled={isNextDisabled}
         />
       </div>
