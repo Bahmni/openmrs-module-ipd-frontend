@@ -43,6 +43,7 @@ export default function Dashboard(props) {
     emergencyTasks: false,
   });
   const [sections, setSections] = useState([]);
+  const [showMenuButton, setShowMenuButton] = useState(false);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
   const refs = useRef([]);
@@ -57,10 +58,12 @@ export default function Dashboard(props) {
     />
   );
   window.addEventListener("resize", () => {
-    updateWindowWidth(window.outerWidth);
+    updateWindowWidth(window.innerWidth);
   });
   useEffect(() => {
-    updateSideNav(window.outerWidth > 1024);
+    console.log(showMenuButton, "-----------", isSideNavExpanded);
+    updateSideNav(window.innerWidth > 1439);
+    setShowMenuButton(window.innerWidth <= 1439);
   }, [windowWidth]);
 
   const fetchConfig = async () => {
@@ -77,11 +80,20 @@ export default function Dashboard(props) {
   };
 
   useEffect(() => {
+    if (window.outerWidth > 1439) {
+      setShowMenuButton(false);
+      updateSideNav(true);
+    } else {
+      setShowMenuButton(true);
+      updateSideNav(false);
+    }
     fetchConfig();
   }, []);
 
   const onClickSideNavExpand = () => {
-    updateSideNav((oldState) => !oldState);
+    console.log(isSideNavExpanded);
+    updateSideNav(!isSideNavExpanded);
+    setShowMenuButton(!showMenuButton);
   };
 
   const scrollToSection = (key) => {
@@ -147,12 +159,13 @@ export default function Dashboard(props) {
                   aria-label="Open menu"
                   className="header-nav-toggle-btn"
                   onClick={onClickSideNavExpand}
-                  isActive={isSideNavExpanded}
+                  isActive={showMenuButton}
                 />
                 <SideNav
                   aria-label="Side navigation"
                   className="navbar-border"
-                  isPersistent={true}
+                  // isPersistent={true}
+                  isCollapsible={isSideNavExpanded}
                   expanded={isSideNavExpanded}
                 >
                   <SideNavItems>
