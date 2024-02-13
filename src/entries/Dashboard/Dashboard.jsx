@@ -43,11 +43,9 @@ export default function Dashboard(props) {
     emergencyTasks: false,
   });
   const [sections, setSections] = useState([]);
-  const [showMenuButton, setShowMenuButton] = useState(false);
   const [isSideNavExpanded, updateSideNav] = useState(true);
   const [selectedTab, updateSelectedTab] = useState(null);
   const refs = useRef([]);
-  const [windowWidth, updateWindowWidth] = useState(window.outerWidth);
   const [dashboardConfig, setDashboardConfig] = useState({});
   const [isConfigLoaded, setIsConfigLoaded] = useState(false);
 
@@ -57,14 +55,6 @@ export default function Dashboard(props) {
       defaultMessage={"Please specify IPD Dashboard configurations"}
     />
   );
-  window.addEventListener("resize", () => {
-    updateWindowWidth(window.innerWidth);
-  });
-  useEffect(() => {
-    console.log(showMenuButton, "-----------", isSideNavExpanded);
-    updateSideNav(window.innerWidth > 1439);
-    setShowMenuButton(window.innerWidth <= 1439);
-  }, [windowWidth]);
 
   const fetchConfig = async () => {
     const configData = await getDashboardConfig();
@@ -80,20 +70,11 @@ export default function Dashboard(props) {
   };
 
   useEffect(() => {
-    if (window.outerWidth > 1439) {
-      setShowMenuButton(false);
-      updateSideNav(true);
-    } else {
-      setShowMenuButton(true);
-      updateSideNav(false);
-    }
     fetchConfig();
   }, []);
 
   const onClickSideNavExpand = () => {
-    console.log(isSideNavExpanded);
     updateSideNav(!isSideNavExpanded);
-    setShowMenuButton(!showMenuButton);
   };
 
   const scrollToSection = (key) => {
@@ -159,13 +140,12 @@ export default function Dashboard(props) {
                   aria-label="Open menu"
                   className="header-nav-toggle-btn"
                   onClick={onClickSideNavExpand}
-                  isActive={showMenuButton}
+                  isActive={isSideNavExpanded}
                 />
                 <SideNav
                   aria-label="Side navigation"
                   className="navbar-border"
-                  // isPersistent={true}
-                  isCollapsible={isSideNavExpanded}
+                  isPersistent={true}
                   expanded={isSideNavExpanded}
                 >
                   <SideNavItems>
