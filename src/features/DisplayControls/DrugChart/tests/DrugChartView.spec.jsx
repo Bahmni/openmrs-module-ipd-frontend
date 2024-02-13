@@ -6,9 +6,9 @@ import {
   mockDrugOrders,
   mockEmptyDrugOrders,
 } from "./DrugChartViewMockData";
-import MockDate from "mockdate";
 import { IPDContext } from "../../../../context/IPDContext";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
+import MockDate from "mockdate";
 import { mockConfig } from "../../../../utils/CommonUtils";
 
 const mockFetchMedications = jest.fn();
@@ -164,6 +164,27 @@ describe("DrugChartWrapper", () => {
     await waitFor(() => {
       expect(screen.getAllByText(/Paracetamol/i)).toBeTruthy();
     });
+    expect(screen.getByTestId("nextButton").disabled).toEqual(true);
+  });
+
+  it("should show current shift and next-shift button as disabled for read mode", async () => {
+    MockDate.set("2024-01-05 10:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    render(
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: true,
+          visitSummary: { stopDateTime: new Date() },
+        }}
+      >
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
+    const currentShiftButton = screen.getByTestId("currentShift");
+    expect(currentShiftButton.className).toContain("bx--btn--disabled");
     expect(screen.getByTestId("nextButton").disabled).toEqual(true);
   });
 });

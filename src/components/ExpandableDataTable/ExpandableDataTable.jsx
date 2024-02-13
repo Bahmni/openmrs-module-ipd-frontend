@@ -36,7 +36,11 @@ const ExpandableDataTable = (props) => {
         getTableProps,
         getExpandHeaderProps,
       }) => (
-        <Table {...getTableProps()} data-testid="expandable-datatable">
+        <Table
+          {...getTableProps()}
+          data-testid="expandable-datatable"
+          className="expandable-datatable"
+        >
           <TableHead>
             <TableRow>
               <TableExpandHeader
@@ -61,14 +65,21 @@ const ExpandableDataTable = (props) => {
                       <TableExpandRow
                         {...getRowProps({ row })}
                         data-testid="expandable-row"
+                        className={data?.isNotScheduled && "green-row"}
                       >
                         {row.cells.map((cell) => (
-                          <TableCell key={cell.id}>
+                          <TableCell
+                            key={cell.id}
+                            className={data?.isNotScheduled && "green-cell"}
+                          >
                             {cell.value}
                           </TableCell>
                         ))}
                       </TableExpandRow>
-                      <TableExpandedRow colSpan={headers.length + 1}>
+                      <TableExpandedRow
+                        colSpan={headers.length + 1}
+                        className="expandable-row-content"
+                      >
                         {renderExpandableRowComponent(row, additionalData)}
                       </TableExpandedRow>
                     </React.Fragment>

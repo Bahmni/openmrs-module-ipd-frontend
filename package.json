@@ -71,7 +71,8 @@
     "lint": "eslint src/**/*.{js,jsx}",
     "dev:sandbox": "webpack serve --mode development --open --config-name=sandbox",
     "dev:integrated": "yarn build --watch",
-    "build": "webpack --mode production --config-name=federation"
+    "build": "webpack --mode production --config-name=federation",
+    "build:dev": "webpack --mode development --config-name=federation"
   },
   "exports": {
     ".": {

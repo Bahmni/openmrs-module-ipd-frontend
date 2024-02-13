@@ -63,6 +63,12 @@ export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
   FIXED_SCHEDULE_FREQUENCY: "FIXED_SCHEDULE_FREQUENCY",
 };
+
+export const serviceType = {
+  AS_NEEDED_PLACEHOLDER: "AS_NEEDED_PLACEHOLDER",
+  AS_NEEDED_MEDICATION_REQUEST: "AS_NEEDED_MEDICATION_REQUEST",
+  MEDICATION_REQUEST: "MEDICATION_REQUEST",
+};
 export const BAHMNI_ENCOUNTER_URL = RESTWS_V1 + "/bahmnicore/bahmniencounter";
 export const ENCOUNTER_TYPE_URL = RESTWS_V1 + "/encountertype/{encounterType}";
 
@@ -83,3 +89,4 @@ export const componentKeys = {
 export const performerFunction = "Performer";
 export const requesterFunction = "Witness";
 export const verifierFunction = "Verifier";
+export const asNeededPlaceholderConceptName = "AsNeededPlaceholder";

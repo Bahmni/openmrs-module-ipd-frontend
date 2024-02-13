@@ -30,8 +30,14 @@ describe("NursingTasksUtils", () => {
       const patientUuid = "test-uuid";
       const startTime = "1690906550";
       const endTime = "1690906550";
-      const expectedUrl = `/openmrs/ws/rest/v1/ipd/schedule/type/medication?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}`;
-      await fetchMedicationNursingTasks(patientUuid, startTime, endTime);
+      const visitUuid = "test-uuid";
+      const expectedUrl = `/openmrs/ws/rest/v1/ipd/schedule/type/medication?patientUuid=${patientUuid}&startTime=${startTime}&endTime=${endTime}&visitUuid=${visitUuid}`;
+      await fetchMedicationNursingTasks(
+        patientUuid,
+        startTime,
+        endTime,
+        visitUuid
+      );
       expect(axios.get).toHaveBeenCalledWith(expectedUrl);
     });
 

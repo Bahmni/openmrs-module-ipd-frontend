@@ -98,6 +98,7 @@ const UpdateNursingTasks = (props) => {
           : [],
         status: skippedTasks[key]?.status,
         slotUuid: key,
+        administeredDateTime: skippedTasks[key].scheduledTime,
       });
     });
     return administeredTasksPayload;
@@ -278,6 +279,7 @@ const UpdateNursingTasks = (props) => {
       [medicationTask.uuid]: {
         ...tasks[medicationTask.uuid],
         skipped: skipped,
+        scheduledTime: medicationTask.startTimeInEpochSeconds,
       },
     });
     if (skipped && !tasks[medicationTask.uuid].notes) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import {
   getGender,
@@ -15,8 +15,8 @@ import {
   Column,
   SkeletonText,
   Link,
-  OverflowMenu, 
-  OverflowMenuItem
+  OverflowMenu,
+  OverflowMenuItem,
 } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
 import "../styles/PatientHeader.scss";
@@ -25,9 +25,11 @@ import { getPatientDashboardUrl } from "../../../../utils/CommonUtils";
 import PatientDetails from "./PatientDetails";
 import PatientMovementModal from "./PatientMovementModal";
 import { formatDate } from "../../../../utils/DateTimeUtils";
+import { IPDContext } from "../../../../context/IPDContext";
 
 export const PatientHeader = (props) => {
   const { patientId, openVisitSummary } = props;
+  const { isReadMode } = useContext(IPDContext);
   const [showPatientDetails, togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
   const [isLoading, updateIsLoading] = useState(true);
@@ -61,10 +63,7 @@ export const PatientHeader = (props) => {
     />
   );
   const visitSummary = (
-    <FormattedMessage
-      id="VISIT_SUMMARY"
-      defaultMessage="Visit Summaries"
-    />
+    <FormattedMessage id="VISIT_SUMMARY" defaultMessage="Visit Summaries" />
   );
 
   const getContactDetailsConfigs = async () => {
@@ -155,30 +154,41 @@ export const PatientHeader = (props) => {
                         {visitSummary}
                       </Link>
                     </div>
-                    <OverflowMenu data-testid="overflow-menu" flipped={true} aria-label="overflow-menu" className="patient-movement-overflow">
-                      <OverflowMenuItem title="item-patient-movement" itemText="Patient Movement" onClick={() => updatePatientMovementModal(!isModalOpen)}/>
+                    <OverflowMenu
+                      data-testid="overflow-menu"
+                      flipped={true}
+                      aria-label="overflow-menu"
+                      className="patient-movement-overflow"
+                    >
+                      <OverflowMenuItem
+                        data-testid="overflow-menu-item1"
+                        title="item-patient-movement"
+                        itemText="Patient Movement"
+                        onClick={() => updatePatientMovementModal(!isModalOpen)}
+                        disabled={isReadMode}
+                      />
                     </OverflowMenu>
                   </Row>
                   <Row>
-                      {showPatientDetails ? (
-                        <Link
-                          kind="tertiary"
-                          className="show-more"
-                          size="sm"
-                          onClick={toggleDetailsView}
-                        >
-                          {hideDetails} <ChevronUp20 />{" "}
-                        </Link>
-                      ) : (
-                        <Link
-                          kind="tertiary"
-                          className="show-more"
-                          size="sm"
-                          onClick={toggleDetailsView}
-                        >
-                          {showDetails} <ChevronDown20 />
-                        </Link>
-                      )}
+                    {showPatientDetails ? (
+                      <Link
+                        kind="tertiary"
+                        className="show-more"
+                        size="sm"
+                        onClick={toggleDetailsView}
+                      >
+                        {hideDetails} <ChevronUp20 />{" "}
+                      </Link>
+                    ) : (
+                      <Link
+                        kind="tertiary"
+                        className="show-more"
+                        size="sm"
+                        onClick={toggleDetailsView}
+                      >
+                        {showDetails} <ChevronDown20 />
+                      </Link>
+                    )}
                     <div className="other-info">
                       <div className="patient-basic-info">
                         <h3 className="patient-info">
@@ -211,7 +221,15 @@ export const PatientHeader = (props) => {
         )}
       </Tile>
       <div>
-        {isModalOpen && <div> <PatientMovementModal updatePatientMovementModal={(isOpen) => updatePatientMovementModal(isOpen)}/> </div> }
+        {isModalOpen && (
+          <div>
+            <PatientMovementModal
+              updatePatientMovementModal={(isOpen) =>
+                updatePatientMovementModal(isOpen)
+              }
+            />
+          </div>
+        )}
       </div>
     </>
   );
