@@ -4,6 +4,7 @@ import UpdateNursingTasks from "../components/UpdateNursingTasks";
 import { mockMedicationTasks } from "./NursingTasksUtilsMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
+import MockDate from "mockdate";
 
 describe("UpdateNursingTasksSlider", function () {
   it("should render UpdateNursingTasksSlider", function () {
@@ -267,5 +268,21 @@ describe("UpdateNursingTasksSlider", function () {
     const saveButton = screen.getAllByText("Save")[1];
     fireEvent.click(saveButton);
     expect(screen.getByText("Please enter notes")).toBeTruthy();
+  });
+
+  it("should disable Done toggle if the task is not relevant", () => {
+    MockDate.set("2023-11-21 6:00");
+     render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={[mockMedicationTasks[0]]}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
+    );
+    expect(screen.getByTestId("done-toggle").disabled).toBe(true);
   });
 });

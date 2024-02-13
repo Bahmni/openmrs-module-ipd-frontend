@@ -652,7 +652,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
               class="titleText"
             >
               <span>
-                Schedule(s) 
+                Schedule(s) (24 hrs format) 
               </span>
               <span
                 class="required"
@@ -1510,7 +1510,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
               class="titleText"
             >
               <span>
-                Schedule time (start date) 
+                Schedule time (start date, 24 hrs format) 
               </span>
               <span
                 class="required"
@@ -1610,7 +1610,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
               class="titleText"
             >
               <span>
-                Schedule time (subsequent) 
+                Schedule time (subsequent, 24 hrs format) 
               </span>
               <span
                 class="required"
@@ -1709,7 +1709,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
               class="titleText"
             >
               <span>
-                Schedule time (remainder) 
+                Schedule time (remainder, 24 hrs format) 
               </span>
               <span
                 class="required"
@@ -2525,7 +2525,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               class="titleText"
             >
               <span>
-                Schedule time (start date) 
+                Schedule time (start date, 24 hrs format) 
               </span>
               <span
                 class="required"
@@ -2625,7 +2625,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               class="titleText"
             >
               <span>
-                Schedule time (subsequent) 
+                Schedule time (subsequent, 24 hrs format) 
               </span>
               <span
                 class="required"
@@ -2724,7 +2724,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               class="titleText"
             >
               <span>
-                Schedule time (remainder) 
+                Schedule time (remainder, 24 hrs format) 
               </span>
               <span
                 class="required"

@@ -5,11 +5,13 @@ import {
   contactConfigMockData,
   addressMappingMockData,
   patientProfileMockData,
+  bedInformation,
 } from "./PatientHeaderMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 const mockFetchPatientProfile = jest.fn();
 const mockContactDetailsConfig = jest.fn();
 const mockFetchAddressMapping = jest.fn();
+const mockBedInformation = jest.fn();
 
 jest.mock("../utils/PatientHeaderUtils", () => {
   const originalModule = jest.requireActual("../utils/PatientHeaderUtils");
@@ -18,6 +20,7 @@ jest.mock("../utils/PatientHeaderUtils", () => {
     fetchPatientProfile: () => mockFetchPatientProfile("123"),
     getConfigsForPatientContactDetails: () => mockContactDetailsConfig(),
     fetchAddressMapping: () => mockFetchAddressMapping(),
+    getBedInformation: () => mockBedInformation("123", "123"),
   };
 });
 
@@ -26,6 +29,7 @@ describe("PatientHeader", () => {
     mockContactDetailsConfig.mockResolvedValue(contactConfigMockData);
     mockFetchPatientProfile.mockResolvedValue(patientProfileMockData);
     mockFetchAddressMapping.mockResolvedValue(addressMappingMockData);
+    mockBedInformation.mockResolvedValue(bedInformation);
   });
 
   afterEach(() => {
@@ -34,7 +38,9 @@ describe("PatientHeader", () => {
 
   it("should render without crashing", () => {
     render(
-      <IPDContext.Provider value={{ isReadMode: false }}>
+      <IPDContext.Provider
+        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+      >
         <PatientHeader patientId="123" />
       </IPDContext.Provider>
     );
@@ -42,7 +48,9 @@ describe("PatientHeader", () => {
 
   it("should call fetchPatientInfo on mount", () => {
     render(
-      <IPDContext.Provider value={{ isReadMode: false }}>
+      <IPDContext.Provider
+        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+      >
         <PatientHeader patientId="123" />
       </IPDContext.Provider>
     );
@@ -51,7 +59,9 @@ describe("PatientHeader", () => {
 
   it("should display loading skeleton while fetching data", () => {
     render(
-      <IPDContext.Provider value={{ isReadMode: false }}>
+      <IPDContext.Provider
+        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+      >
         <PatientHeader patientId="123" />
       </IPDContext.Provider>
     );
@@ -60,7 +70,9 @@ describe("PatientHeader", () => {
 
   it("should display patient details after data is fetched", async () => {
     render(
-      <IPDContext.Provider value={{ isReadMode: false }}>
+      <IPDContext.Provider
+        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+      >
         <PatientHeader patientId="123" />
       </IPDContext.Provider>
     );
@@ -72,7 +84,9 @@ describe("PatientHeader", () => {
 
   it("should display all details of the patient", async () => {
     const { container } = render(
-      <IPDContext.Provider value={{ isReadMode: false }}>
+      <IPDContext.Provider
+        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+      >
         <PatientHeader patientId="123" />
       </IPDContext.Provider>
     );
@@ -88,7 +102,9 @@ describe("PatientHeader", () => {
 
   it("should display patient movement item on click of overflow menu icon", async () => {
     const { container } = render(
-      <IPDContext.Provider value={{ isReadMode: false }}>
+      <IPDContext.Provider
+        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+      >
         <PatientHeader patientId="123" />
       </IPDContext.Provider>
     );
@@ -100,7 +116,9 @@ describe("PatientHeader", () => {
 
   it("should display patient movement overflow menu item as disabled", async () => {
     const { container } = render(
-      <IPDContext.Provider value={{ isReadMode: true }}>
+      <IPDContext.Provider
+        value={{ isReadMode: true, visitSummary: { uuid: "123" } }}
+      >
         <PatientHeader patientId="123" />
       </IPDContext.Provider>
     );
@@ -109,5 +127,17 @@ describe("PatientHeader", () => {
     const patientMovementButton = screen.getByTestId("overflow-menu-item1");
     expect(patientMovementButton.disabled).toEqual(true);
     expect(container).toMatchSnapshot();
+  });
+
+  it("should display bed and ward information in patient header", async () => {
+    render(
+      <IPDContext.Provider
+        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+      >
+        <PatientHeader patientId="123" />
+      </IPDContext.Provider>
+    );
+    await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
+    expect(screen.getByText("General Ward -ICU ICU1")).toBeTruthy();
   });
 });

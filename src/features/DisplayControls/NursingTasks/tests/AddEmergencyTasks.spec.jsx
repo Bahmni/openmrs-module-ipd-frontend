@@ -9,6 +9,8 @@ import {
   searchDrugMockData,
 } from "./AddEmergencyTasksMockData";
 import MockDate from "mockdate";
+import { IPDContext } from "../../../../context/IPDContext";
+import { mockConfig } from "../../../../utils/CommonUtils";
 
 const mockGetDrugOrdersConfig = jest.fn();
 const mockFetchMedicationConfig = jest.fn();
@@ -24,7 +26,7 @@ jest.mock("../utils/EmergencyTasksUtils", () => {
     getDrugOrdersConfig: () => mockGetDrugOrdersConfig(),
     fetchMedicationConfig: () => mockFetchMedicationConfig(),
     getProviders: () => mockGetProviders(),
-    saveEmergencyMedication: () => mockSaveEmergencyMedication()
+    saveEmergencyMedication: () => mockSaveEmergencyMedication(),
   };
 });
 
@@ -70,7 +72,7 @@ describe("AddEmergencyTasks", () => {
   });
 
   beforeEach(() => {
-    MockDate.set('2024-01-01');
+    MockDate.set("2024-01-01");
   });
 
   afterEach(() => {
@@ -79,10 +81,12 @@ describe("AddEmergencyTasks", () => {
 
   it("should render the component with loading state", () => {
     const { getByText, container } = render(
-      <AddEmergencyTasks
-        patientId={"__patient_uuid__"}
-        updateEmergencyTasksSlider={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <AddEmergencyTasks
+          patientId={"__patient_uuid__"}
+          updateEmergencyTasksSlider={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     expect(getByText("Loading...")).toBeTruthy();
     expect(container).toMatchSnapshot();
@@ -90,10 +94,12 @@ describe("AddEmergencyTasks", () => {
 
   it("should render the component", async () => {
     const { queryByText, getByText, container } = render(
-      <AddEmergencyTasks
-        patientId={"__patient_uuid__"}
-        updateEmergencyTasksSlider={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <AddEmergencyTasks
+          patientId={"__patient_uuid__"}
+          updateEmergencyTasksSlider={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     expect(getByText("Add Nursing Task")).toBeTruthy();
     await waitFor(() => {
@@ -107,20 +113,24 @@ describe("AddEmergencyTasks", () => {
 
   it("should allow Drug search", async () => {
     const { container, getByText } = render(
-      <AddEmergencyTasks
-        patientId={"__patient_uuid__"}
-        updateEmergencyTasksSlider={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <AddEmergencyTasks
+          patientId={"__patient_uuid__"}
+          updateEmergencyTasksSlider={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     await selectDrug(container, getByText);
   });
 
   it("should set the dose units based on dosage form", async () => {
     const { container, getByText } = render(
-      <AddEmergencyTasks
-        patientId={"__patient_uuid__"}
-        updateEmergencyTasksSlider={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <AddEmergencyTasks
+          patientId={"__patient_uuid__"}
+          updateEmergencyTasksSlider={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     await selectDrug(container, getByText);
     await waitFor(() => {
@@ -132,10 +142,12 @@ describe("AddEmergencyTasks", () => {
 
   it("should set the route based on dosage form", async () => {
     const { container, getByText } = render(
-      <AddEmergencyTasks
-        patientId={"__patient_uuid__"}
-        updateEmergencyTasksSlider={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <AddEmergencyTasks
+          patientId={"__patient_uuid__"}
+          updateEmergencyTasksSlider={jest.fn}
+        />
+      </IPDContext.Provider>
     );
     await selectDrug(container, getByText);
     await waitFor(() => {
@@ -146,11 +158,14 @@ describe("AddEmergencyTasks", () => {
   });
 
   it("should enable save when all fields are added", async () => {
+    MockDate.set("2024-01-05 12:00");
     const { container, getByText } = render(
-      <AddEmergencyTasks
-        patientId={"__patient_uuid__"}
-        updateEmergencyTasksSlider={jest.fn}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <AddEmergencyTasks
+          patientId={"__patient_uuid__"}
+          updateEmergencyTasksSlider={jest.fn}
+        />
+      </IPDContext.Provider>
     );
 
     const saveButton = screen.getAllByText("Save")[1];
@@ -203,14 +218,17 @@ describe("AddEmergencyTasks", () => {
   });
 
   it("should call save by confirming popup when emergency task is saved", async () => {
+    MockDate.set("2024-01-05 12:00");
     const { container, getByText } = render(
-      <AddEmergencyTasks
-        patientId={"__patient_uuid__"}
-        providerId={"__provider_uuid__"}
-        updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
-        setShowSuccessNotification={mockSetShowSuccessNotification}
-        setSuccessMessage={mockSetSuccessMessage}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <AddEmergencyTasks
+          patientId={"__patient_uuid__"}
+          providerId={"__provider_uuid__"}
+          updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+          setShowSuccessNotification={mockSetShowSuccessNotification}
+          setSuccessMessage={mockSetSuccessMessage}
+        />
+      </IPDContext.Provider>
     );
 
     const saveButton = screen.getAllByText("Save")[1];
@@ -258,7 +276,9 @@ describe("AddEmergencyTasks", () => {
     expect(saveButton.disabled).toEqual(false);
     saveButton.click();
 
-    expect(screen.getByText("Please confirm the emergency medication task")).toBeTruthy();
+    expect(
+      screen.getByText("Please confirm the emergency medication task")
+    ).toBeTruthy();
 
     const popupSave = screen.getAllByText("Save")[0];
     popupSave.click();
@@ -268,19 +288,20 @@ describe("AddEmergencyTasks", () => {
       expect(mockSetSuccessMessage).toHaveBeenCalledTimes(1);
       expect(mockUpdateEmergencyTasksSlider).toHaveBeenCalledTimes(1);
       expect(mockSaveEmergencyMedication).toHaveBeenCalledTimes(1);
-      
     });
   });
 
   it("should render confirmation modal on click of cancel button when changes are made", async () => {
     const { container, getByText } = render(
-      <AddEmergencyTasks
-        patientId={"__patient_uuid__"}
-        providerId={"__provider_uuid__"}
-        updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
-        setShowSuccessNotification={mockSetShowSuccessNotification}
-        setSuccessMessage={mockSetSuccessMessage}
-      />
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <AddEmergencyTasks
+          patientId={"__patient_uuid__"}
+          providerId={"__provider_uuid__"}
+          updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+          setShowSuccessNotification={mockSetShowSuccessNotification}
+          setSuccessMessage={mockSetSuccessMessage}
+        />
+      </IPDContext.Provider>
     );
 
     // Select Drug

@@ -1,19 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import PropTypes from "prop-types";
-import {
-  Loading,
-  Tab,
-  Tabs,
-  TextArea,
-  Modal,
-  DatePicker,
-  DatePickerInput,
-  TimePicker,
-} from "carbon-components-react";
+import { Loading, Tab, Tabs, TextArea, Modal } from "carbon-components-react";
 import "../styles/EmergencyTasks.scss";
 import {
   fetchMedicationConfig,
@@ -29,7 +20,12 @@ import {
   TimePicker24Hour,
 } from "bahmni-carbon-ui";
 import _ from "lodash";
-import { performerFunction, requesterFunction } from "../../../../constants";
+import {
+  performerFunction,
+  requesterFunction,
+  timeText12,
+  timeText24,
+} from "../../../../constants";
 import SearchDrug from "../../../SearchDrug/SearchDrug";
 import moment from "moment/moment";
 import {
@@ -37,6 +33,7 @@ import {
   dateTimeToEpochUTCTime,
 } from "../../../../utils/DateTimeUtils";
 import AdministeredMedicationList from "./AdministeredMedicationList";
+import { IPDContext } from "../../../../context/IPDContext";
 
 const AddEmergencyTasks = (props) => {
   const {
@@ -52,6 +49,9 @@ const AddEmergencyTasks = (props) => {
   const [unitOptions, setUnitOptions] = useState([]);
   const [routeOptions, setRouteOptions] = useState([]);
   const [providerOptions, setProviderOptions] = useState([]);
+  const { config = {} } = useContext(IPDContext);
+  const { drugChart = {} } = config;
+  const enable24hour = drugChart.enable24HourTime;
 
   const [selectedDrug, setSelectedDrug] = useState({});
   const [doseUnits, setDoseUnits] = useState({});
@@ -71,14 +71,20 @@ const AddEmergencyTasks = (props) => {
   const [atleastOneFieldFilled, setAtleastOneFieldFilled] = useState(false);
   const [isTimeChanged, setIsTimeChanged] = useState(false);
   const [isDateChanged, setIsDateChanged] = useState(false);
-  const [isInvalidData, setIsInvalidData] = useState(false);
+  const [isInvalidTime, setIsInvalidTime] = useState(false);
+  const [invalidText, setInvalidText] = useState(false);
   const invalidTimeText24Hour = (
     <FormattedMessage
       id={"INVALID_TIME"}
       defaultMessage={"Please enter valid time"}
     />
   );
-
+  const invalidFutureTimeText = (
+    <FormattedMessage
+      id={"FUTURE_TIME"}
+      defaultMessage={"Future time is not allowed"}
+    />
+  );
   const fetchDrugOrderConfig = async () => {
     setIsLoading(true);
     const drugOrderConfigResponse = await getDrugOrdersConfig();
@@ -231,7 +237,7 @@ const AddEmergencyTasks = (props) => {
     if (
       dosage &&
       administrationDate &&
-      administrationTime <= formatDate(new Date(), "HH:mm") &&
+      !isInvalidTime &&
       !(
         _.isEmpty(doseUnits) ||
         _.isEmpty(routes) ||
@@ -265,7 +271,31 @@ const AddEmergencyTasks = (props) => {
     administrationTime,
     requestedProvider,
     notes,
+    isInvalidTime,
   ]);
+
+  useEffect(() => {
+    customValidation(administrationTime);
+  }, [administrationDate]);
+
+  const customValidation = (time) => {
+    if (time) {
+      if (
+        formatDate(administrationDate) === formatDate(new Date()) &&
+        time > formatDate(new Date(), "HH:mm")
+      ) {
+        setIsInvalidTime(true);
+        setInvalidText(invalidFutureTimeText);
+      } else {
+        setIsInvalidTime(false);
+      }
+    }
+  };
+
+  const actionForInvalidTime = (invalid) => {
+    setIsInvalidTime(invalid);
+    setInvalidText(invalidTimeText24Hour);
+  };
 
   return (
     <>
@@ -337,7 +367,7 @@ const AddEmergencyTasks = (props) => {
                   className={"administration-info"}
                   style={{ display: "flex", gap: "10px" }}
                 >
-                  {/* <DatePickerCarbon
+                  <DatePickerCarbon
                     id={"Administration-Date"}
                     onChange={(e) => {
                       setAdministrationDate(new Date(e[0]));
@@ -347,59 +377,26 @@ const AddEmergencyTasks = (props) => {
                     isRequired={true}
                     value={administrationDate}
                     dateFormat={"d M Y"}
-                  /> */}
-                  <DatePicker
-                    datePickerType={"single"}
-                    onChange={(e) => {
-                      setAdministrationDate(new Date(e[0]));
-                      setIsDateChanged(true);
-                    }}
-                    disabled={false}
-                    value={administrationDate}
-                    dateFormat={"d M Y"}
                     maxDate={new Date()}
-                  >
-                    <DatePickerInput
-                      id={"Administration-Date"}
-                      placeholder={"mm/dd/yyyy"}
-                      labelText={"Administration Date"}
-                      size={"md"}
-                      style={{ width: "250px" }}
-                      autoComplete={"off"}
-                      disabled={false}
-                      required={true}
-                    />
-                  </DatePicker>
+                  />
                   <TimePicker24Hour
                     defaultTime={administrationTime}
                     onChange={(e) => {
-                      console.log("first", e > formatDate(new Date(), "HH:mm"));
-                      setAdministrationTime(e);
+                      e != "" && setAdministrationTime(e);
                       setIsTimeChanged(true);
                     }}
-                    labelText="Administration Time"
+                    labelText={
+                      enable24hour
+                        ? `Administration Time (${timeText24})`
+                        : `Administration Time (${timeText12})`
+                    }
                     width={"100%"}
                     isRequired={true}
-                    invalid={
-                      administrationTime > formatDate(new Date(), "HH:mm")
-                    }
-                    invalidText={
-                      administrationTime > formatDate(new Date(), "HH:mm")
-                        ? "Future time is not allowed"
-                        : invalidTimeText24Hour
-                    }
+                    customValidation={customValidation}
+                    actionForInvalidTime={actionForInvalidTime}
+                    invalid={isInvalidTime}
+                    invalidText={invalidText}
                   />
-                  {/* <TimePicker
-                    id={"time-selector"}
-                    labelText={"Administration Time"}
-                    onBlur={handleChange}
-                    value={administrationTime === "Invalid date" ? "" : administrationTime}
-                    style={{ width: "72px", padding: "0 0 0 1rem" }}
-                    autoComplete={"off"}
-                    disabled={false}
-                    invalid={administrationTime > formatDate(new Date(), "HH:mm")}
-                    invalidText={invalidTimeText24Hour} */}
-                  {/* ></TimePicker> */}
                 </div>
                 <Dropdown
                   id={"Provider-info"}
