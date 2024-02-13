@@ -59,8 +59,7 @@ const UpdateNursingTasks = (props) => {
   };
 
   const { config } = useContext(IPDContext);
-  const { nursingTasks = {} } = config;
-  const { drugChart = {} } = config;
+  const { nursingTasks = {}, drugChart = {} } = config;
   const enable24hour = drugChart.enable24HourTime;
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
