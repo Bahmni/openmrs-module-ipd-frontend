@@ -1,6 +1,10 @@
 import axios from "axios";
 import moment from "moment";
-import { MEDICATIONS_BASE_URL, performerFunction } from "../../../../constants";
+import {
+  MEDICATIONS_BASE_URL,
+  performerFunction,
+  asNeededPlaceholderConceptName,
+} from "../../../../constants";
 import _ from "lodash";
 
 export const fetchMedications = async (
@@ -135,9 +139,15 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
       slots = drugChartData[0].slots;
     }
     slots?.forEach((slot) => {
-      const { startTime, status, order, medicationAdministration } = slot;
+      const {
+        startTime,
+        status,
+        order,
+        medicationAdministration,
+        serviceType,
+      } = slot;
       const uuid = order?.uuid || medicationAdministration?.uuid;
-      if (orders[uuid]) {
+      if (orders[uuid] && serviceType != asNeededPlaceholderConceptName) {
         let administrationStatus = "Pending";
         if (medicationAdministration) {
           const { administeredDateTime } = medicationAdministration;
