@@ -1,5 +1,11 @@
 import React from "react";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  getByTestId,
+} from "@testing-library/react";
 import DrugChartView from "../components/DrugChartView";
 import {
   drugChartData,
@@ -210,6 +216,37 @@ describe("DrugChartWrapper", () => {
     const currentShiftButton = screen.getByTestId("currentShift");
     expect(currentShiftButton.className).toContain("bx--btn--disabled");
     expect(screen.getByTestId("nextButton").disabled).toEqual(true);
+  });
+  
+  it("should display not in current shift message when next shift button is clicked", async () => {
+    MockDate.set("2024-01-05 10:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    const { getByTestId, getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
+    getByTestId("nextButton").click();
+    await waitFor(() => {
+      expect(getByText("You're not viewing the current shift")).toBeTruthy();
+    });
+  });
+  it("should display not in current shift message when previous shift button is clicked", async () => {
+    MockDate.set("2024-01-05 10:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    const { getByTestId, getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
+    getByTestId("previousButton").click();
+    await waitFor(() => {
+      expect(getByText("You're not viewing the current shift")).toBeTruthy();
+    });
   });
 
   it("should show PRN administered medication", async () => {
