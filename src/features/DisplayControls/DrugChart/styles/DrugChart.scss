@@ -1,6 +1,21 @@
 .drug-chart-dashboard {
   font-family: "IBM Plex Sans", sans-serif;
+  .arrow-button-wrapper {
+    display: grid;
+    grid-template-columns: 3fr 7fr;
+    .arrow-button {
+      z-index: 1;
+      min-height: 30px;
+      max-width: none;
+      width: 100%;
+      .bx--btn__icon {
+        width: 100%;
+        padding-left: 16px;
+      }
+    }
+  }
 }
+
 .drug-chart {
   --time-cell-height: 66px;
   --half-hour-width: 50px;
@@ -12,6 +27,16 @@
   width: 100%;
   border: 1px solid #ccc;
   margin: 0 auto;
+  .arrow-button {
+    z-index: 1;
+    min-height: 30px;
+    max-width: none;
+    width: 100%;
+    .bx--btn__icon {
+      width: 100%;
+      padding-left: 16px;
+    }
+  }
 }
 
 .drug-chart-left-panel {
@@ -51,27 +76,6 @@
   }
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
-}
-
-.arrow-button {
-  z-index: 1;
-  min-height: 30px;
-  max-width: none;
-  width: 100%;
-  .bx--btn__icon {
-    width: 100%;
-    padding-left: 16px;
-  }
-}
-
-.arrow-button-wrapper {
-  display: grid;
-  grid-template-columns: 3fr 7fr;
-  width: 100%;
-  .bx--btn__icon {
-    width: 100%;
-    padding-left: 16px;
-  }
 }
 
 .drug-chart-left-panel::-webkit-scrollbar {
