@@ -6,6 +6,8 @@ import {
   mockCompletedTaskTileData,
   mockPendingTaskTileData,
   mockTaskTileDataForGroupedTask,
+  mockCompletedPRNTaskTileData,
+  mockPendingPRNTaskTileData,
 } from "./NursingTasksUtilsMockData";
 import { mockConfig } from "../../../../utils/CommonUtils";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -64,5 +66,28 @@ describe("TaskTile", () => {
     const pendingIcon = getByTestId("Pending");
 
     expect(pendingIcon).toBeTruthy();
+  });
+
+  it("should render placeholder Rx- PRN task with pending icon", () => {
+    const { getByTestId, getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <TaskTile medicationNursingTask={mockPendingPRNTaskTileData} />
+      </IPDContext.Provider>
+    );
+    const pendingIcon = getByTestId("Pending");
+    expect(pendingIcon).toBeTruthy();
+    expect(getByText("Rx-PRN")).toBeTruthy();
+  });
+
+  it("should render administered PRN task with time and Rx-PRN tag", () => {
+    const { getByTestId, getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <TaskTile medicationNursingTask={mockCompletedPRNTaskTileData} />
+      </IPDContext.Provider>
+    );
+    const administeredIcon = getByTestId("Administered");
+    expect(administeredIcon).toBeTruthy();
+    expect(getByText("Rx-PRN")).toBeTruthy();
+    expect(getByText("16:38 - 16:38 (actual)")).toBeTruthy();
   });
 });

@@ -71,6 +71,7 @@ let stopDrugOrder = {
     dayWiseSlotsStartTime: [1704853800, 1704885000],
     remainingDaySlotsStartTime: [1704940200],
     slotStartTime: null,
+    pendingSlotsAvailable: true,
     medicationAdministrationStarted: true,
   },
   provider: {
