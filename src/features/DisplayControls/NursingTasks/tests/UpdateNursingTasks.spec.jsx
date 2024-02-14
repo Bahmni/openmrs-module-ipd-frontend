@@ -1,7 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import UpdateNursingTasks from "../components/UpdateNursingTasks";
-import { mockMedicationTasks } from "./NursingTasksUtilsMockData";
+import {
+  mockMedicationTasks,
+  mockPRNMedicationTasks,
+} from "./NursingTasksUtilsMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
 
@@ -267,5 +270,53 @@ describe("UpdateNursingTasksSlider", function () {
     const saveButton = screen.getAllByText("Save")[1];
     fireEvent.click(saveButton);
     expect(screen.getByText("Please enter notes")).toBeTruthy();
+  });
+
+  it("should not show overflow menu for scheduled for text for PRN Nursing Task", async () => {
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockPRNMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
+    );
+    const scheduledFor = screen.queryByText("Scheduled for");
+    expect(scheduledFor).toBeNull();
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    expect(overflowMenuButton).not.toBeTruthy();
+  });
+
+  it("should show PRN confirm message while saving PRN task", () => {
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockPRNMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
+    );
+    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    fireEvent.click(toggleButton);
+
+    const timePicker = screen.getAllByRole("textbox")[0];
+    fireEvent.change(timePicker, { target: { value: "12:00" } });
+    fireEvent.blur(timePicker);
+
+    const notes = screen.getAllByRole("textbox")[1];
+    fireEvent.change(notes, { target: { value: "test notes" } });
+    fireEvent.blur(notes);
+
+    const saveButton = screen.getAllByText("Save")[1];
+    fireEvent.click(saveButton);
+
+    expect(screen.getByText("Please confirm your PRN task")).toBeTruthy();
   });
 });

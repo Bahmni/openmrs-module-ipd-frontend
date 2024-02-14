@@ -19,6 +19,7 @@ import {
   saveAdministeredMedication,
   isTimeWithinAdministeredWindow,
 } from "../utils/NursingTasksUtils";
+import { saveEmergencyMedication } from "../utils/EmergencyTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import { performerFunction } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
@@ -37,6 +38,7 @@ const UpdateNursingTasks = (props) => {
   const [errors, updateErrors] = useState({});
   const [showErrors, updateShowErrors] = useState(false);
   const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
+  const [isPRNMedication, updateIsPRNMedication] = useState(false);
   const [isAnyMedicationSkipped, setIsAnyMedicationSkipped] = useState(false);
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
   const [isAnyMedicationAdministered, setIsAnyMedicationAdministered] =
@@ -62,11 +64,14 @@ const UpdateNursingTasks = (props) => {
     setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
+    updateIsPRNMedication(false);
   };
 
   const handlePrimaryButtonClick = async () => {
     const administeredTasks = createAdministeredTasksPayload();
-    const response = await saveAdministeredMedication(administeredTasks);
+    const response = isPRNMedication
+      ? await saveEmergencyMedication(administeredTasks[0])
+      : await saveAdministeredMedication(administeredTasks);
     response.status === 200 ? saveAdministeredTasks() : null;
   };
 
@@ -120,6 +125,7 @@ const UpdateNursingTasks = (props) => {
   };
   useEffect(() => {
     medicationTasks.map((medicationTask) => {
+      updateIsPRNMedication(medicationTask?.dosingInstructions.asNeeded);
       updateTasks((prev) => {
         return {
           ...prev,
@@ -309,14 +315,16 @@ const UpdateNursingTasks = (props) => {
         closeSideBar={handleClose}
       >
         <div className={"update-nursing-tasks"}>
-          <div className={"task-heading"}>
-            <FormattedMessage
-              id={"SCHEDULED_FOR_KEY"}
-              defaultMessage={"Scheduled for"}
-            />
-            <Clock />
-            {medicationTasks[0].startTime}
-          </div>
+          {!isPRNMedication && (
+            <div className={"task-heading"}>
+              <FormattedMessage
+                id={"SCHEDULED_FOR_KEY"}
+                defaultMessage={"Scheduled for"}
+              />
+              <Clock />
+              {medicationTasks[0].startTime}
+            </div>
+          )}
           {medicationTasks.map((medicationTask, index) => {
             return (
               <div key={index} className={"nursing-task-section"}>
@@ -398,27 +406,29 @@ const UpdateNursingTasks = (props) => {
                     </div>
                   </div>
                 )}
-                <OverflowMenu
-                  flipped={true}
-                  disabled={tasks[medicationTask.uuid]?.isSelected}
-                  className={"overflowMenu"}
-                >
-                  {tasks[medicationTask.uuid]?.skipped ? (
-                    <OverflowMenuItem
-                      itemText={"Un-Skip Drug"}
-                      onClick={() => {
-                        handleSkipDrug(medicationTask, false);
-                      }}
-                    />
-                  ) : (
-                    <OverflowMenuItem
-                      itemText={"Skip Drug"}
-                      onClick={() => {
-                        handleSkipDrug(medicationTask, true);
-                      }}
-                    />
-                  )}
-                </OverflowMenu>
+                {!tasks[medicationTask.uuid]?.dosingInstructions.asNeeded && (
+                  <OverflowMenu
+                    flipped={true}
+                    disabled={tasks[medicationTask.uuid]?.isSelected}
+                    className={"overflowMenu"}
+                  >
+                    {tasks[medicationTask.uuid]?.skipped ? (
+                      <OverflowMenuItem
+                        itemText={"Un-Skip Drug"}
+                        onClick={() => {
+                          handleSkipDrug(medicationTask, false);
+                        }}
+                      />
+                    ) : (
+                      <OverflowMenuItem
+                        itemText={"Skip Drug"}
+                        onClick={() => {
+                          handleSkipDrug(medicationTask, true);
+                        }}
+                      />
+                    )}
+                  </OverflowMenu>
+                )}
               </div>
             );
           })}
@@ -432,10 +442,21 @@ const UpdateNursingTasks = (props) => {
           onSecondarySubmit={closeModal}
           preventCloseOnClickOutside={true}
           modalHeading={
-            <FormattedMessage
-              id={"NURSING_TASKS_CONFIRMATION"}
-              defaultMessage={"Please confirm your nursing tasks"}
-            />
+            isPRNMedication ? (
+              <>
+                <FormattedMessage
+                  id={"PRN_TASKS_CONFIRMATION"}
+                  defaultMessage={"Please confirm your PRN task"}
+                />
+              </>
+            ) : (
+              <>
+                <FormattedMessage
+                  id={"NURSING_TASKS_CONFIRMATION"}
+                  defaultMessage={"Please confirm your nursing tasks"}
+                />
+              </>
+            )
           }
           primaryButtonText={
             <FormattedMessage

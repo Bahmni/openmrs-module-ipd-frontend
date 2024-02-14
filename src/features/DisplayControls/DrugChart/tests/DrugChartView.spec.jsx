@@ -7,10 +7,15 @@ import {
   getByTestId,
 } from "@testing-library/react";
 import DrugChartView from "../components/DrugChartView";
-import { drugChartData } from "./DrugChartViewMockData";
+import {
+  drugChartData,
+  drugChartDataForPRN,
+  allMedicationData,
+} from "./DrugChartViewMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import MockDate from "mockdate";
 import { mockConfig } from "../../../../utils/CommonUtils";
+import { AllMedicationsContext } from "../../../../context/AllMedications";
 
 const mockFetchMedications = jest.fn();
 const MockTooltipCarbon = jest.fn();
@@ -212,6 +217,7 @@ describe("DrugChartWrapper", () => {
     expect(currentShiftButton.className).toContain("bx--btn--disabled");
     expect(screen.getByTestId("nextButton").disabled).toEqual(true);
   });
+  
   it("should display not in current shift message when next shift button is clicked", async () => {
     MockDate.set("2024-01-05 10:00");
     mockFetchMedications.mockResolvedValue({
@@ -240,6 +246,23 @@ describe("DrugChartWrapper", () => {
     getByTestId("previousButton").click();
     await waitFor(() => {
       expect(getByText("You're not viewing the current shift")).toBeTruthy();
+    });
+  });
+
+  it("should show PRN administered medication", async () => {
+    MockDate.set("2024-02-08 07:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartDataForPRN,
+    });
+    render(
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+        <AllMedicationsContext.Provider value={allMedicationData}>
+          <DrugChartView patientId="test-id" />
+        </AllMedicationsContext.Provider>
+      </IPDContext.Provider>
+    );
+    await waitFor(() => {
+      expect(screen.queryAllByText(/Zinc Oxide 20 mg Tablet/i)).toHaveLength(2);
     });
   });
 });
