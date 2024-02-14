@@ -12,15 +12,13 @@ import {
   getPreviousShiftDetails,
   transformDrugOrders,
   mapDrugOrdersAndSlots,
+  isCurrentShift,
+  NotCurrentShiftMessage,
 } from "../utils/DrugChartUtils";
 import {
   convertDaystoSeconds,
   formatDate,
 } from "../../../../utils/DateTimeUtils";
-import {
-  isCurrentShift,
-  NotCurrentShiftMessage,
-} from "../../NursingTasks/utils/NursingTasksUtils";
 import { FormattedMessage } from "react-intl";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";

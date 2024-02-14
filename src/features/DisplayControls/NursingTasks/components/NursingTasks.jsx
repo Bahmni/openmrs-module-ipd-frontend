@@ -7,8 +7,6 @@ import { items } from "../utils/constants";
 import {
   fetchMedicationNursingTasks,
   ExtractMedicationNursingTasksData,
-  isCurrentShift,
-  NotCurrentShiftMessage,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
 import {
@@ -33,6 +31,8 @@ import {
   getDateTime,
   getNextShiftDetails,
   getPreviousShiftDetails,
+  isCurrentShift,
+  NotCurrentShiftMessage,
 } from "../../DrugChart/utils/DrugChartUtils";
 import { displayShiftTimingsFormat } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
