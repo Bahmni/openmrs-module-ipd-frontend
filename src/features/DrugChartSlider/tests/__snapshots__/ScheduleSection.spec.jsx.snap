@@ -10,7 +10,7 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots  
         class="titleText"
       >
         <span>
-          Schedule(s) 
+          Schedule(s) (24 hrs format) 
         </span>
         <span
           class="required"
@@ -155,7 +155,7 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
         class="titleText"
       >
         <span>
-          Schedule time (start date) 
+          Schedule time (start date, 24 hrs format) 
         </span>
         <span
           class="required"
@@ -293,7 +293,7 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
         class="titleText"
       >
         <span>
-          Schedule time (subsequent) 
+          Schedule time (subsequent, 24 hrs format) 
         </span>
         <span
           class="required"
@@ -431,7 +431,7 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
         class="titleText"
       >
         <span>
-          Schedule time (remainder) 
+          Schedule time (remainder, 24 hrs format) 
         </span>
         <span
           class="required"

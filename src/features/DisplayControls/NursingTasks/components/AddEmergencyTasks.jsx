@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
@@ -20,7 +20,12 @@ import {
   TimePicker24Hour,
 } from "bahmni-carbon-ui";
 import _ from "lodash";
-import { performerFunction, requesterFunction } from "../../../../constants";
+import {
+  performerFunction,
+  requesterFunction,
+  timeText12,
+  timeText24,
+} from "../../../../constants";
 import SearchDrug from "../../../SearchDrug/SearchDrug";
 import moment from "moment/moment";
 import {
@@ -28,6 +33,7 @@ import {
   dateTimeToEpochUTCTime,
 } from "../../../../utils/DateTimeUtils";
 import AdministeredMedicationList from "./AdministeredMedicationList";
+import { IPDContext } from "../../../../context/IPDContext";
 
 const AddEmergencyTasks = (props) => {
   const {
@@ -43,6 +49,9 @@ const AddEmergencyTasks = (props) => {
   const [unitOptions, setUnitOptions] = useState([]);
   const [routeOptions, setRouteOptions] = useState([]);
   const [providerOptions, setProviderOptions] = useState([]);
+  const { config = {} } = useContext(IPDContext);
+  const { drugChart = {} } = config;
+  const enable24hour = drugChart.enable24HourTime;
 
   const [selectedDrug, setSelectedDrug] = useState({});
   const [doseUnits, setDoseUnits] = useState({});
@@ -62,13 +71,20 @@ const AddEmergencyTasks = (props) => {
   const [atleastOneFieldFilled, setAtleastOneFieldFilled] = useState(false);
   const [isTimeChanged, setIsTimeChanged] = useState(false);
   const [isDateChanged, setIsDateChanged] = useState(false);
+  const [isInvalidTime, setIsInvalidTime] = useState(false);
+  const [invalidText, setInvalidText] = useState(false);
   const invalidTimeText24Hour = (
     <FormattedMessage
       id={"INVALID_TIME"}
       defaultMessage={"Please enter valid time"}
     />
   );
-
+  const invalidFutureTimeText = (
+    <FormattedMessage
+      id={"FUTURE_TIME"}
+      defaultMessage={"Future time is not allowed"}
+    />
+  );
   const fetchDrugOrderConfig = async () => {
     setIsLoading(true);
     const drugOrderConfigResponse = await getDrugOrdersConfig();
@@ -221,6 +237,7 @@ const AddEmergencyTasks = (props) => {
     if (
       dosage &&
       administrationDate &&
+      !isInvalidTime &&
       !(
         _.isEmpty(doseUnits) ||
         _.isEmpty(routes) ||
@@ -254,7 +271,31 @@ const AddEmergencyTasks = (props) => {
     administrationTime,
     requestedProvider,
     notes,
+    isInvalidTime,
   ]);
+
+  useEffect(() => {
+    customValidation(administrationTime);
+  }, [administrationDate]);
+
+  const customValidation = (time) => {
+    if (time) {
+      if (
+        formatDate(administrationDate) === formatDate(new Date()) &&
+        time > formatDate(new Date(), "HH:mm")
+      ) {
+        setIsInvalidTime(true);
+        setInvalidText(invalidFutureTimeText);
+      } else {
+        setIsInvalidTime(false);
+      }
+    }
+  };
+
+  const actionForInvalidTime = (invalid) => {
+    setIsInvalidTime(invalid);
+    setInvalidText(invalidTimeText24Hour);
+  };
 
   return (
     <>
@@ -336,17 +377,25 @@ const AddEmergencyTasks = (props) => {
                     isRequired={true}
                     value={administrationDate}
                     dateFormat={"d M Y"}
+                    maxDate={new Date()}
                   />
                   <TimePicker24Hour
                     defaultTime={administrationTime}
                     onChange={(e) => {
-                      setAdministrationTime(e);
+                      e != "" && setAdministrationTime(e);
                       setIsTimeChanged(true);
                     }}
-                    labelText="Administration Time"
+                    labelText={
+                      enable24hour
+                        ? `Administration Time (${timeText24})`
+                        : `Administration Time (${timeText12})`
+                    }
                     width={"100%"}
                     isRequired={true}
-                    invalidText={invalidTimeText24Hour}
+                    customValidation={customValidation}
+                    actionForInvalidTime={actionForInvalidTime}
+                    invalid={isInvalidTime}
+                    invalidText={invalidText}
                   />
                 </div>
                 <Dropdown

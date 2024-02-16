@@ -21,7 +21,11 @@ import {
 } from "../utils/NursingTasksUtils";
 import { saveEmergencyMedication } from "../utils/EmergencyTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
-import { performerFunction } from "../../../../constants";
+import {
+  performerFunction,
+  timeText12,
+  timeText24,
+} from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
 
@@ -57,8 +61,10 @@ const UpdateNursingTasks = (props) => {
   };
 
   const { config } = useContext(IPDContext);
-  const { nursingTasks = {} } = config;
-
+  const { nursingTasks = {}, drugChart = {} } = config;
+  const enable24hour = drugChart.enable24HourTime;
+  const relevantTaskStatusWindowInSeconds =
+    nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
   const saveAdministeredTasks = () => {
     setShowSuccessNotification(true);
     setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
@@ -140,6 +146,9 @@ const UpdateNursingTasks = (props) => {
             actualTime: null,
             providerId: medicationTask.providerId,
             orderId: medicationTask.orderId,
+            isRelevantTask:
+              medicationTask.startTimeInEpochSeconds <=
+              new Date().getTime() / 1000 + relevantTaskStatusWindowInSeconds,
           },
         };
       });
@@ -330,11 +339,13 @@ const UpdateNursingTasks = (props) => {
               <div key={index} className={"nursing-task-section"}>
                 {!tasks[medicationTask.uuid]?.skipped && (
                   <Toggle
+                    data-testId="done-toggle"
                     id={medicationTask.uuid}
                     size={"sm"}
                     labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
                     labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
                     onToggle={handleToggle}
+                    disabled={!tasks[medicationTask.uuid]?.isRelevantTask}
                   />
                 )}
                 <div className={"medication-name"}>
@@ -365,9 +376,14 @@ const UpdateNursingTasks = (props) => {
                         onChange={(time) => {
                           handleTimeChange(time, medicationTask.uuid);
                         }}
-                        labelText="Task Time"
+                        labelText={
+                          enable24hour
+                            ? `Task Time (${timeText24})`
+                            : `Task Time (${timeText12})`
+                        }
                         invalidText={invalidTimeText24Hour}
                         light={true}
+                        width={"150px"}
                       />
                     )}
                     <div
