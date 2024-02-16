@@ -21,6 +21,7 @@ import { SliderContext } from "../../context/SliderContext";
 import { IPDContext } from "../../context/IPDContext";
 import { AllMedicationsContextProvider } from "../../context/AllMedications";
 import { FormattedMessage } from "react-intl";
+import { FALSE } from "sass";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
@@ -36,7 +37,7 @@ export default function Dashboard(props) {
     emergencyTasks: false,
   });
   const [sections, setSections] = useState([]);
-  const [isSideNavExpanded, updateSideNav] = useState(true);
+  const [isSideNavExpanded, updateSideNav] = useState(false);
   const [selectedTab, updateSelectedTab] = useState(null);
   const refs = useRef([]);
   const [dashboardConfig, setDashboardConfig] = useState({});
@@ -136,7 +137,7 @@ export default function Dashboard(props) {
                 <SideNav
                   aria-label="Side navigation"
                   className="navbar-border"
-                  isPersistent={true}
+                  // isPersistent={true}
                   expanded={isSideNavExpanded}
                 >
                   <SideNavItems>
