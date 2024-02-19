@@ -21,7 +21,6 @@ import { SliderContext } from "../../context/SliderContext";
 import { IPDContext } from "../../context/IPDContext";
 import { AllMedicationsContextProvider } from "../../context/AllMedications";
 import { FormattedMessage } from "react-intl";
-import { FALSE } from "sass";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
@@ -49,6 +48,7 @@ export default function Dashboard(props) {
   const refs = useRef([]);
   const [dashboardConfig, setDashboardConfig] = useState({});
   const [isConfigLoaded, setIsConfigLoaded] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const noConfigDataMessage = (
     <FormattedMessage
@@ -72,6 +72,12 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     fetchConfig();
+    document.addEventListener("click", handleClickOutside);
+    window.addEventListener("resize", updateWindowWidth);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+      window.removeEventListener("resize", updateWindowWidth);
+    };
   }, []);
 
   const onClickSideNavExpand = () => {
@@ -101,6 +107,17 @@ export default function Dashboard(props) {
         : el;
     });
     setSections(updatedSections);
+  };
+
+  const handleClickOutside = (event) => {
+    const navBar = document.getElementById("Side-Nav");
+    if (navBar && !navBar.contains(event.target)) {
+      updateSideNav(false);
+    }
+  };
+
+  const updateWindowWidth = () => {
+    setWindowWidth(window.innerWidth);
   };
 
   return (
@@ -140,14 +157,20 @@ export default function Dashboard(props) {
                 <HeaderMenuButton
                   aria-label="Open menu"
                   className="header-nav-toggle-btn"
+                  style={
+                    windowWidth < 1056 && checkSliderStatus()
+                      ? { display: "none" }
+                      : {}
+                  }
                   onClick={onClickSideNavExpand}
                   isActive={isSideNavExpanded}
                 />
                 <SideNav
+                  id="Side-Nav"
                   aria-label="Side navigation"
                   className="navbar-border"
-                  // isPersistent={true}
                   expanded={isSideNavExpanded}
+                  addMouseListeners={true}
                 >
                   <SideNavItems>
                     {sections?.map((el) => {
