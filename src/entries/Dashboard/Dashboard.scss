@@ -52,11 +52,6 @@
 
   .header-nav-toggle-btn {
     border: none;
-    // @media screen and (min-width: 1440px) {
-    //   .bx--header__menu-toggle_hidden {
-    //     display: none !important;
-    //   }
-    // }
   }
 
   .header-nav-toggle-btn:hover {
@@ -108,7 +103,7 @@
   }
 }
 
-@media screen and (max-width: 1054px) {
+@media screen and (max-width: 1055px) {
   .ipd-page {
     .main {
       margin-left: 0;
