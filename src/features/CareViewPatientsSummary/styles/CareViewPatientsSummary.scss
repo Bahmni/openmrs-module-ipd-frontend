@@ -1,0 +1,26 @@
+.patient-row-container {
+  overflow-x: scroll;
+  .patient-details-container {
+    padding: 8px;
+    min-width: 420px;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    border-right: 1px solid #ededed;
+    box-shadow: 0 1px 4px 2px rgba(0, 0, 0, 0.25);
+  }
+}
+
+.care-view-patient-table {
+  display: block;
+  max-height: 500px;
+  overflow: scroll;
+  tbody {
+    tr {
+      border-bottom: 0;
+      &:nth-child(even) {
+        background-color: #f4f4f4;
+      }
+    }
+  }
+}

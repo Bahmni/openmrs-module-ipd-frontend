@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Header, Link } from "carbon-components-react";
+import { Header, Link, Loading } from "carbon-components-react";
 import { Home20, ListBulleted24 } from "@carbon/icons-react";
 import { ArrowLeft } from "@carbon/icons-react/next";
 import "./CareViewDashboard.scss";
 import { CareViewSummary } from "../../features/CareViewSummary/components/CareViewSummary";
 import { CareViewPatients } from "../../features/CareViewPatients/components/CareViewPatients";
-import { goToHome } from "./CareViewDashboardUtils";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
+import { homePageUrl } from "../../constants";
+import { CareViewContext } from "../../context/CareViewContext";
 
 const CareViewDashboard = (props) => {
-  const { hostData, hostApi } = props;
-  console.log("hostData", hostData);
+  const { hostApi } = props;
+  const [selectedWard, setSelectedWard] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [wardSummary, setWardSummary] = useState({});
   return (
     <I18nProvider>
       <main className="care-view-page">
@@ -20,31 +23,41 @@ const CareViewDashboard = (props) => {
           className="border-bottom-0 header-bg-color"
           aria-label="IBM Platform Name"
         >
-          <Link onClick={() => goToHome()}>
+          <Link href={homePageUrl}>
             <Home20 className="home" aria-label="home-button" />
           </Link>
         </Header>
 
         <section className="main">
-          <div className="care-view-navigations">
-            <ArrowLeft
-              data-testid={"Back button"}
-              size={20}
-              onClick={() => hostApi?.onHome()}
-            />
-            <Link
-              className="ward-view-nav-link"
-              onClick={() => hostApi?.onHome()}
-            >
-              <ListBulleted24 data-testid={"List button"} size={20} />
-              <FormattedMessage
-                id={"WARD_LIST_VIEW_TEXT"}
-                defaultMessage="Ward List View"
+          {isLoading && <Loading />}
+          <CareViewContext.Provider
+            value={{
+              wardSummary,
+              setWardSummary,
+              selectedWard,
+              setSelectedWard,
+            }}
+          >
+            <div className="care-view-navigations">
+              <ArrowLeft
+                data-testid={"Back button"}
+                size={20}
+                onClick={() => hostApi?.onHome()}
               />
-            </Link>
-          </div>
-          <CareViewSummary />
-          <CareViewPatients />
+              <Link
+                className="ward-view-nav-link"
+                onClick={() => hostApi?.onHome()}
+              >
+                <ListBulleted24 data-testid={"List button"} size={20} />
+                <FormattedMessage
+                  id={"WARD_LIST_VIEW_TEXT"}
+                  defaultMessage="Ward List View"
+                />
+              </Link>
+            </div>
+            <CareViewSummary callbacks={{ setIsLoading }} />
+            <CareViewPatients callbacks={{ setIsLoading }} />
+          </CareViewContext.Provider>
         </section>
       </main>
     </I18nProvider>
