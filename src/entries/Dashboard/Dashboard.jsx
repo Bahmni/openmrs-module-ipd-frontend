@@ -21,6 +21,7 @@ import { SliderContext } from "../../context/SliderContext";
 import { IPDContext } from "../../context/IPDContext";
 import { AllMedicationsContextProvider } from "../../context/AllMedications";
 import { FormattedMessage } from "react-intl";
+import { RESOLUTION_VALUE } from "../../constants";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
@@ -158,7 +159,7 @@ export default function Dashboard(props) {
                   aria-label="Open menu"
                   className="header-nav-toggle-btn"
                   style={
-                    windowWidth < 1056 && checkSliderStatus()
+                    windowWidth < RESOLUTION_VALUE && checkSliderStatus()
                       ? { display: "none" }
                       : {}
                   }
@@ -170,7 +171,6 @@ export default function Dashboard(props) {
                   aria-label="Side navigation"
                   className="navbar-border"
                   expanded={isSideNavExpanded}
-                  addMouseListeners={true}
                 >
                   <SideNavItems>
                     {sections?.map((el) => {
