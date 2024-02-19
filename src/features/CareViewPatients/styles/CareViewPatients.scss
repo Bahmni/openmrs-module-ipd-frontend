@@ -17,4 +17,15 @@
     flex-flow: row;
     justify-content: end;
   }
+
+  .patient-pagination {
+    max-width: max-content;
+    margin-left: auto;
+
+    .bx--btn.bx--btn--icon-only.bx--tooltip__trigger.bx--tooltip--hidden
+      .bx--assistive-text {
+      color: white;
+      padding: 0.5rem 1rem;
+    }
+  }
 }

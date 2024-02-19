@@ -2,8 +2,9 @@
   display: flex;
   flex-flow: row;
   justify-content: center;
-  align-items: baseline;
+  gap: 15px;
   padding: 20px;
+  border-bottom: 1px solid #007d79;
 
   .bx--dropdown__wrapper.bx--list-box__wrapper {
     padding: 0 20px;
@@ -12,10 +13,16 @@
   .summary-tiles {
     display: flex;
     flex-flow: row wrap;
-
+    gap: 15px;
+    margin-top: 15px;
     .summary-tile {
-      margin: 10px;
-      font-weight: 600;
+      .heading-text {
+        font-weight: 600;
+      }
+      .value-text {
+        color: #004144;
+        font-size: 28px;
+      }
     }
   }
 }
