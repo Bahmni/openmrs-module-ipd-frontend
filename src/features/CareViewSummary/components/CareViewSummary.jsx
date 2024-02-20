@@ -14,6 +14,7 @@ export const CareViewSummary = (props) => {
   const { selectedWard, setSelectedWard, wardSummary, setWardSummary } =
     useContext(CareViewContext);
   const getWardList = async () => {
+    callbacks.setIsLoading(true);
     const wardList = await getWardDetails();
     const wardOptions = [];
     wardList?.forEach((ward) => {
@@ -37,7 +38,6 @@ export const CareViewSummary = (props) => {
     callbacks.setIsLoading(false);
   };
   useEffect(() => {
-    callbacks.setIsLoading(true);
     getWardList();
   }, []);
   useEffect(() => {
