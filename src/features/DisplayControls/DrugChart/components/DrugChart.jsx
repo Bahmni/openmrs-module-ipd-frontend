@@ -21,8 +21,9 @@ export default function DrugChart(props) {
   const { registerPane, unregisterPane } = useScrollSync({
     vertical: true,
   });
-  const drugChartRowHeight = 66;
-  const drugChartHeight = (drugChartData?.length + 1) * drugChartRowHeight;
+  const drugChartRowHeight = 70;
+  /* 65px header */
+  const drugChartHeight = drugChartData?.length * drugChartRowHeight + 65;
 
   useEffect(() => {
     if (leftPane.current) {
@@ -70,7 +71,7 @@ export default function DrugChart(props) {
 
   const handleSmoothScroll = useCallback(
     (direction) => {
-      const scrollAmount = 66;
+      const scrollAmount = drugChartRowHeight;
       const startScrollTop = scrollPosition;
       const endScrollTop =
         startScrollTop + (direction === "Up" ? -scrollAmount : scrollAmount);
