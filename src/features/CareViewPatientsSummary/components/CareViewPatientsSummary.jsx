@@ -8,7 +8,7 @@ import { FormattedMessage } from "react-intl";
 export const CareViewPatientsSummary = (props) => {
   const { patientsSummary } = props;
   return (
-    <table className={"care-view-patient-table"} border={0}>
+    <table className={"care-view-patient-table"}>
       <tbody>
         {patientsSummary.map((patientSummary, idx) => {
           const { patientDetails, bedDetails } = patientSummary;
