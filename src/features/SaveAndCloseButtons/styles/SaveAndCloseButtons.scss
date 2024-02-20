@@ -1,9 +1,10 @@
-@media (max-width: 640px) {
+@media (max-width: 1055px) {
   .footer {
     width: 100%;
   }
   .save-button-slider,
   .cancel-button-slider {
+    max-width: 50%;
     width: 50%;
   }
 }

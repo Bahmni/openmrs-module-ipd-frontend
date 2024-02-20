@@ -79,6 +79,7 @@ export const dateFormat = "DD/MM/YYYY";
 export const displayShiftTimingsFormat = "DD MMM YYYY | HH:mm";
 export const timeText24 = "24 hrs format";
 export const timeText12 = "12 hrs format";
+export const RESOLUTION_VALUE = 1055;
 
 export const componentKeys = {
   ALLERGIES: "AL",
