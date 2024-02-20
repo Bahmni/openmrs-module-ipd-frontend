@@ -73,11 +73,11 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     fetchConfig();
+    document.addEventListener("resize", updateWindowWidth);
     document.addEventListener("click", handleClickOutside);
-    window.addEventListener("resize", updateWindowWidth);
     return () => {
       document.removeEventListener("click", handleClickOutside);
-      window.removeEventListener("resize", updateWindowWidth);
+      document.removeEventListener("resize", updateWindowWidth);
     };
   }, []);
 
