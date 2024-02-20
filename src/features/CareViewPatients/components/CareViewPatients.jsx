@@ -9,24 +9,40 @@ import { CareViewPatientsSummary } from "../../CareViewPatientsSummary/component
 export const CareViewPatients = (props) => {
   const { callbacks } = props;
   const { selectedWard, wardSummary } = useContext(CareViewContext);
-  const [offset, setOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [patientList, setPatientList] = useState([]);
+
   const getPatientsList = async () => {
-    const response = await fetchPatientsList(selectedWard.value, offset, 100);
-    if (response.status === 200 && response.data?.totalPatients) {
-      const { admittedPatients } = response.data;
-      setPatientList(admittedPatients || []);
+    callbacks.setIsLoading(true);
+    const response = await fetchPatientsList(
+      selectedWard.value,
+      (currentPage - 1) * limit,
+      limit
+    );
+    if (response.status === 200) {
+      setPatientList(response.data || []);
     }
     callbacks.setIsLoading(false);
   };
+
   useEffect(() => {
-    callbacks.setIsLoading(true);
-    if (selectedWard.value) {
-      getPatientsList(0);
+    if (currentPage > 1) {
+      setCurrentPage(1);
     }
-  }, [selectedWard, offset, limit]);
-  console.log(offset, patientList, wardSummary);
+  }, [selectedWard]);
+
+  useEffect(() => {
+    if (selectedWard.value) {
+      getPatientsList();
+    }
+  }, [selectedWard, currentPage, limit]);
+
+  const handlePaginationChange = (e) => {
+    setCurrentPage(e.page);
+    setLimit(e.pageSize);
+  };
+
   return (
     <div className="care-view-patients-container">
       <div className="care-view-patients">
@@ -42,11 +58,9 @@ export const CareViewPatients = (props) => {
         <CareViewPatientsSummary patientsSummary={patientList} />
         <div className={"patient-pagination"}>
           <Pagination
-            onChange={(e) => {
-              console.log("On Change", e);
-              setOffset((e.page - 1) * e.pageSize);
-              setLimit(e.pageSize);
-            }}
+            page={currentPage}
+            pageSize={limit}
+            onChange={handlePaginationChange}
             pageSizes={[10, 20, 30, 40, 50]}
             totalItems={wardSummary?.totalPatients || 0}
             itemsPerPageText={"Patients per page"}

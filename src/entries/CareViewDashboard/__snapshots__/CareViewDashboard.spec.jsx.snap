@@ -11,6 +11,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
     >
       <a
         class="bx--link"
+        href="/bahmni/home/#/dashboard"
       >
         <svg
           aria-label="home-button"
@@ -33,6 +34,36 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
     <section
       class="main"
     >
+      <div
+        class="bx--loading-overlay"
+      >
+        <div
+          aria-atomic="true"
+          aria-live="assertive"
+          class="bx--loading"
+        >
+          <label
+            class="bx--visually-hidden"
+            id="loading-id-1"
+          >
+            Active loading indicator
+          </label>
+          <svg
+            class="bx--loading__svg"
+            viewBox="0 0 100 100"
+          >
+            <title>
+              Active loading indicator
+            </title>
+            <circle
+              class="bx--loading__stroke"
+              cx="50%"
+              cy="50%"
+              r="44"
+            />
+          </svg>
+        </div>
+      </div>
       <div
         class="care-view-navigations"
       >
@@ -87,59 +118,79 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
         class="care-view-summary"
       >
         <div
-          class="bx--dropdown__wrapper bx--list-box__wrapper"
+          data-testid="select"
         >
-          
           <div
-            class="bx--dropdown bx--list-box"
-            id="default"
+            class="bx--list-box__wrapper"
           >
-            <button
-              aria-disabled="false"
-              aria-expanded="false"
-              aria-haspopup="listbox"
-              aria-labelledby="downshift-0-label downshift-0-toggle-button"
-              class="bx--list-box__field"
-              id="downshift-0-toggle-button"
-              title="General Ward (A)"
-              type="button"
+            <label
+              class="bx--label"
+              dir="auto"
+              for="default"
+              id="downshift-0-label"
             >
-              <span
-                class="bx--list-box__label"
-              >
-                General Ward (A)
-              </span>
               <div
-                class="bx--list-box__menu-icon"
+                class="titleText"
               >
-                <svg
-                  aria-label="Open menu"
-                  fill="currentColor"
-                  focusable="false"
-                  height="16"
-                  name="chevron--down"
-                  preserveAspectRatio="xMidYMid meet"
-                  role="img"
-                  viewBox="0 0 16 16"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                  />
-                  <title>
-                    Open menu
-                  </title>
-                </svg>
+                <span>
+                   
+                </span>
               </div>
-            </button>
+            </label>
             <div
-              aria-labelledby="downshift-0-label"
-              class="bx--list-box__menu"
-              id="downshift-0-menu"
-              role="listbox"
-              tabindex="-1"
-            />
+              class="bx--combo-box bx--list-box"
+            >
+              <div
+                class="bx--list-box__field"
+              >
+                <input
+                  aria-autocomplete="list"
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  autocomplete="off"
+                  class="bx--text-input bx--text-input--empty"
+                  id="default"
+                  role="combobox"
+                  style="width: 250px;"
+                  tabindex="0"
+                  title=""
+                  type="text"
+                  value=""
+                />
+                
+                <button
+                  aria-haspopup="true"
+                  aria-label="Open"
+                  class="bx--list-box__menu-icon"
+                  data-toggle="true"
+                  role="button"
+                  tabindex="-1"
+                  title="Open"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                aria-label="Choose an item"
+                class="bx--list-box__menu"
+                id="downshift-0-menu"
+                role="listbox"
+              />
+            </div>
           </div>
         </div>
         <div
@@ -148,27 +199,82 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           <div
             class="bx--tile summary-tile"
           >
-            Total patients
+            <span
+              class="heading-text"
+            >
+              Total patients
+            </span>
+            <br />
+            <br />
+            <span
+              class="value-text"
+            >
+              0
+            </span>
           </div>
           <div
             class="bx--tile summary-tile"
           >
-            My patients
+            <span
+              class="heading-text"
+            >
+              My patients
+            </span>
+            <br />
+            <br />
+            <span
+              class="value-text"
+            >
+              0
+            </span>
           </div>
           <div
             class="bx--tile summary-tile"
           >
-            New patients
+            <span
+              class="heading-text"
+            >
+              New patients
+            </span>
+            <br />
+            <br />
+            <span
+              class="value-text"
+            >
+              0
+            </span>
           </div>
           <div
             class="bx--tile summary-tile"
           >
-            Scheduled for OT
+            <span
+              class="heading-text"
+            >
+              Scheduled for OT
+            </span>
+            <br />
+            <br />
+            <span
+              class="value-text"
+            >
+              0
+            </span>
           </div>
           <div
             class="bx--tile summary-tile"
           >
-            To be discharged
+            <span
+              class="heading-text"
+            >
+              To be discharged
+            </span>
+            <br />
+            <br />
+            <span
+              class="value-text"
+            >
+              0
+            </span>
           </div>
         </div>
       </div>
@@ -193,9 +299,9 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   aria-disabled="false"
                   aria-expanded="false"
                   aria-haspopup="listbox"
-                  aria-labelledby="downshift-1-label downshift-1-toggle-button"
+                  aria-labelledby="downshift-0-label downshift-0-toggle-button"
                   class="bx--list-box__field"
-                  id="downshift-1-toggle-button"
+                  id="downshift-0-toggle-button"
                   title="All tasks"
                   type="button"
                 >
@@ -229,95 +335,229 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   </div>
                 </button>
                 <div
-                  aria-labelledby="downshift-1-label"
+                  aria-labelledby="downshift-0-label"
                   class="bx--list-box__menu"
-                  id="downshift-1-menu"
+                  id="downshift-0-menu"
                   role="listbox"
                   tabindex="-1"
                 />
               </div>
             </div>
           </div>
-          <ul
-            class="bx--accordion patient-section bx--accordion--end bx--accordion--md"
+          <table
+            class="care-view-patient-table"
           >
-            <li
-              class="bx--accordion__item"
+            <tbody />
+          </table>
+          <div
+            class="patient-pagination"
+          >
+            <div
+              class="bx--pagination"
             >
-              <button
-                aria-controls="accordion-item-1"
-                aria-expanded="false"
-                class="bx--accordion__heading"
-                type="button"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="bx--accordion__arrow"
-                  fill="currentColor"
-                  focusable="false"
-                  height="16"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 16 16"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
-                  />
-                </svg>
-                <div
-                  class="bx--accordion__title"
-                  dir="auto"
-                >
-                  Patient 1
-                </div>
-              </button>
               <div
-                class="bx--accordion__content"
-                id="accordion-item-1"
+                class="bx--pagination__left"
               >
-                Patient 1
-              </div>
-            </li>
-            <li
-              class="bx--accordion__item"
-            >
-              <button
-                aria-controls="accordion-item-2"
-                aria-expanded="false"
-                class="bx--accordion__heading"
-                type="button"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="bx--accordion__arrow"
-                  fill="currentColor"
-                  focusable="false"
-                  height="16"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 16 16"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
+                <label
+                  class="bx--pagination__text"
+                  for="bx-pagination-select-1"
+                  id="bx-pagination-select-1-count-label"
                 >
-                  <path
-                    d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
-                  />
-                </svg>
+                  Patients per page
+                </label>
                 <div
-                  class="bx--accordion__title"
-                  dir="auto"
+                  class="bx--form-item"
                 >
-                  Patient 2
+                  <div
+                    class="bx--select bx--select--inline bx--select__item-count"
+                  >
+                    <div
+                      class="bx--select-input--inline__wrapper"
+                    >
+                      <div
+                        class="bx--select-input__wrapper"
+                      >
+                        <select
+                          class="bx--select-input"
+                          id="bx-pagination-select-1"
+                        >
+                          <option
+                            class="bx--select-option"
+                            value="10"
+                          >
+                            10
+                          </option>
+                          <option
+                            class="bx--select-option"
+                            value="20"
+                          >
+                            20
+                          </option>
+                          <option
+                            class="bx--select-option"
+                            value="30"
+                          >
+                            30
+                          </option>
+                          <option
+                            class="bx--select-option"
+                            value="40"
+                          >
+                            40
+                          </option>
+                          <option
+                            class="bx--select-option"
+                            value="50"
+                          >
+                            50
+                          </option>
+                        </select>
+                        <svg
+                          aria-hidden="true"
+                          class="bx--select__arrow"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </button>
-              <div
-                class="bx--accordion__content"
-                id="accordion-item-2"
-              >
-                Patient 2
+                <span
+                  class="bx--pagination__text bx--pagination__items-count"
+                >
+                  0–0 of 0 items
+                </span>
               </div>
-            </li>
-          </ul>
+              <div
+                class="bx--pagination__right"
+              >
+                <div
+                  class="bx--form-item"
+                >
+                  <div
+                    class="bx--select bx--select--inline bx--select__page-number"
+                  >
+                    <label
+                      class="bx--label bx--visually-hidden"
+                      for="bx-pagination-select-1-right"
+                    >
+                      Page number, of 1 pages
+                    </label>
+                    <div
+                      class="bx--select-input--inline__wrapper"
+                    >
+                      <div
+                        class="bx--select-input__wrapper"
+                      >
+                        <select
+                          class="bx--select-input"
+                          id="bx-pagination-select-1-right"
+                        >
+                          <option
+                            class="bx--select-option"
+                            value="1"
+                          >
+                            1
+                          </option>
+                        </select>
+                        <svg
+                          aria-hidden="true"
+                          class="bx--select__arrow"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  class="bx--pagination__text"
+                >
+                  of 1 page
+                </span>
+                <div
+                  class="bx--pagination__control-buttons"
+                >
+                  <button
+                    class="bx--pagination__button bx--pagination__button--backward bx--pagination__button--no-index bx--btn bx--btn--ghost bx--btn--disabled bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+                    disabled=""
+                    tabindex="0"
+                    type="button"
+                  >
+                    <div
+                      class="bx--assistive-text"
+                    >
+                      Previous page
+                    </div>
+                    <svg
+                      aria-hidden="true"
+                      aria-label="Previous page"
+                      class="bx--btn__icon"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M20 24L10 16 20 8z"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    class="bx--pagination__button bx--pagination__button--forward bx--pagination__button--no-index bx--btn bx--btn--ghost bx--btn--disabled bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-end"
+                    disabled=""
+                    tabindex="0"
+                    type="button"
+                  >
+                    <div
+                      class="bx--assistive-text"
+                    >
+                      Next page
+                    </div>
+                    <svg
+                      aria-hidden="true"
+                      aria-label="Next page"
+                      class="bx--btn__icon"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 8L22 16 12 24z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
