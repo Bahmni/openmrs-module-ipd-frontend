@@ -8,6 +8,25 @@ export const contactConfigMockData = {
   ],
 };
 
+export const bedInformation = [
+  {
+    bedId: 72,
+    bedNumber: "ICU1",
+    bedType: null,
+    physicalLocation: {
+      uuid: "39184160-b772-49ff-aec5-5a1014578808",
+      display: "General Ward -ICU",
+      name: "General Ward -ICU",
+      description: "General Ward -ICU",
+      parentLocation: {
+        uuid: "baf7bd38-d225-11e4-9c67-080027b662ec",
+        display: "General Ward",
+        name: "General Ward",
+      },
+    },
+  },
+];
+
 export const patientProfileMockData = {
   patient: {
     person: {

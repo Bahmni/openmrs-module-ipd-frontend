@@ -6,6 +6,7 @@ import {
 } from "../utils/DrugChartSliderUtils";
 import { FormattedMessage } from "react-intl";
 import { TimePicker, TimePicker24Hour, Title } from "bahmni-carbon-ui";
+import { timeText12, timeText24 } from "../../../constants";
 
 export const ScheduleSection = ({
   enableSchedule,
@@ -31,7 +32,14 @@ export const ScheduleSection = ({
       {enableSchedule && firstDaySlotsMissed > 0 && (
         <div>
           <div className="schedule-section">
-            <Title text="Schedule time (start date)" isRequired={true} />
+            <Title
+              text={
+                enable24HourTimers
+                  ? `Schedule time (start date, ${timeText24})`
+                  : `Schedule time (start date, ${timeText12})`
+              }
+              isRequired={true}
+            />
             <div className="inline-field" id="schedule">
               {Array.from(
                 { length: enableSchedule?.frequencyPerDay },
@@ -88,7 +96,14 @@ export const ScheduleSection = ({
           </div>
           {schedules.length != 0 && (
             <div className="schedule-section">
-              <Title text="Schedule time (subsequent)" isRequired={true} />
+              <Title
+                text={
+                  enable24HourTimers
+                    ? `Schedule time (subsequent, ${timeText24})`
+                    : `Schedule time (subsequent, ${timeText12})`
+                }
+                isRequired={true}
+              />
               <div className="inline-field" id="schedule">
                 {Array.from(
                   { length: enableSchedule?.frequencyPerDay },
@@ -136,7 +151,14 @@ export const ScheduleSection = ({
             </div>
           )}
           <div className="schedule-section">
-            <Title text="Schedule time (remainder)" isRequired={true} />
+            <Title
+              text={
+                enable24HourTimers
+                  ? `Schedule time (remainder, ${timeText24})`
+                  : `Schedule time (remainder, ${timeText12})`
+              }
+              isRequired={true}
+            />
             <div className="inline-field" id="schedule">
               {Array.from(
                 {
@@ -203,7 +225,14 @@ export const ScheduleSection = ({
       {enableSchedule && firstDaySlotsMissed == 0 && (
         <div>
           <div className="schedule-section">
-            <Title text="Schedule(s)" isRequired={true} />
+            <Title
+              text={
+                enable24HourTimers
+                  ? `Schedule(s) (${timeText24})`
+                  : `Schedule(s) (${timeText12})`
+              }
+              isRequired={true}
+            />
             <div className="inline-field" id="schedule">
               {Array.from(
                 { length: enableSchedule?.frequencyPerDay },

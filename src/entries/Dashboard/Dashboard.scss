@@ -103,7 +103,7 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media screen and (max-width: 1055px) {
   .ipd-page {
     .main {
       margin-left: 0;
@@ -112,11 +112,5 @@
       margin-left: 0;
       margin-right: 540px;
     }
-  }
-}
-
-@media (max-width: 640px) {
-  .header-nav-toggle-btn {
-    display: none;
   }
 }

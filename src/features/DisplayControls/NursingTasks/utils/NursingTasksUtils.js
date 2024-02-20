@@ -1,4 +1,5 @@
 import axios from "axios";
+import React from "react";
 import {
   MEDICATIONS_BASE_URL,
   ADMINISTERED_MEDICATIONS_BASE_URL,

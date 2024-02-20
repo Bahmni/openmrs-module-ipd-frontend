@@ -50,6 +50,7 @@ export const CONFIG_BAHMNIENCOUNTER_URL =
   BAHMNI_CORE + "/config/bahmniencounter";
 export const PATIENT_MOVEMENT_URL = BAHMNI_CORE + "/bahmniencounter";
 export const DISCHARGE_PATIENT_MOVEMENT_URL = BAHMNI_CORE + "/discharge ";
+export const BED_INFORMATION_URL = RESTWS_V1 + "/beds";
 
 export const FSN_DISPOSITION_VALUE = "Disposition";
 export const BY_FSN_VALUE = "byFullySpecifiedName";
@@ -76,6 +77,9 @@ export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
 export const dateFormat = "DD/MM/YYYY";
 export const displayShiftTimingsFormat = "DD MMM YYYY | HH:mm";
+export const timeText24 = "24 hrs format";
+export const timeText12 = "12 hrs format";
+export const RESOLUTION_VALUE = 1055;
 
 export const componentKeys = {
   ALLERGIES: "AL",

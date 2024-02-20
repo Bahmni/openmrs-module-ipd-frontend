@@ -12,6 +12,8 @@ import {
   getPreviousShiftDetails,
   transformDrugOrders,
   mapDrugOrdersAndSlots,
+  isCurrentShift,
+  NotCurrentShiftMessage,
 } from "../utils/DrugChartUtils";
 import {
   convertDaystoSeconds,
@@ -22,6 +24,7 @@ import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";
 import { IPDContext } from "../../../../context/IPDContext";
 import { displayShiftTimingsFormat } from "../../../../constants";
+import WarningIcon from "../../../../icons/warning.svg";
 
 const NoMedicationTaskMessage = (
   <FormattedMessage
@@ -64,6 +67,7 @@ export default function DrugChartWrapper(props) {
 
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
+  const [notCurrentShift, setNotCurrentShift] = useState(false);
 
   const callFetchMedications = async (startDateTime, endDateTime) => {
     const startDateTimeInSeconds = startDateTime / 1000;
@@ -141,6 +145,9 @@ export default function DrugChartWrapper(props) {
       );
     const previousShiftRange = shiftRangeArray[previousShiftIndex];
     const previousShiftArray = getUpdatedShiftArray(previousShiftRange);
+    isCurrentShift(shiftConfig, startDateTime, endDateTime)
+      ? setNotCurrentShift(false)
+      : setNotCurrentShift(true);
     updateShiftArray(previousShiftArray);
     updateShiftIndex(previousShiftIndex);
     setLoading(true);
@@ -157,6 +164,9 @@ export default function DrugChartWrapper(props) {
     );
     const nextShiftRange = shiftRangeArray[nextShiftIndex];
     const nextShiftArray = getUpdatedShiftArray(nextShiftRange);
+    isCurrentShift(shiftConfig, startDateTime, endDateTime)
+      ? setNotCurrentShift(false)
+      : setNotCurrentShift(true);
     updateShiftArray(nextShiftArray);
     updateShiftIndex(nextShiftIndex);
     setLoading(true);
@@ -189,6 +199,7 @@ export default function DrugChartWrapper(props) {
         startDateTime = getDateTime(d, currentShift[0]);
       }
     }
+    setNotCurrentShift(false);
     updateShiftArray(currentShift);
     updateShiftIndex(updatedShiftIndex);
     setLoading(true);
@@ -219,6 +230,14 @@ export default function DrugChartWrapper(props) {
     if (shiftStartDate === shiftEndDate) {
       return (
         <div className="shift-timing">
+          {notCurrentShift && (
+            <div className="not-current-shift-message-div">
+              <WarningIcon />
+              <span className="not-current-shift-message">
+                {NotCurrentShiftMessage}
+              </span>
+            </div>
+          )}
           <div className="shift-time">
             {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
             {formattedShiftStartTime} <span className="to-text">to</span>{" "}
@@ -229,6 +248,14 @@ export default function DrugChartWrapper(props) {
     } else {
       return (
         <div className="shift-timing">
+          {notCurrentShift && (
+            <div className="not-current-shift-message-div">
+              <WarningIcon />
+              <span className="not-current-shift-message">
+                {NotCurrentShiftMessage}
+              </span>
+            </div>
+          )}
           <div className="shift-time">
             {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
             {formattedShiftStartTime} <span className="to-text">to</span>{" "}

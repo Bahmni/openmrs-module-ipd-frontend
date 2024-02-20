@@ -16,7 +16,7 @@ exports[`StartTimeSection should match snapshot 1`] = `
           class="titleText"
         >
           <span>
-            Start Time 
+            Start Time (12 hrs format) 
           </span>
           <span
             class="required"

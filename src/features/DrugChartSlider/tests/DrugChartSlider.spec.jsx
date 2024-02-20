@@ -163,6 +163,7 @@ describe("DrugChartSlider", () => {
       <SliderContext.Provider value={mockSliderContext}>
         <DrugChartSlider
           hostData={{
+            enable24HourTimers: true,
             scheduleFrequencies: mockScheduleFrequencies,
             startTimeFrequencies: mockStartTimeFrequencies,
             drugOrder: mockScheduleDrugOrder,
@@ -172,7 +173,7 @@ describe("DrugChartSlider", () => {
       </SliderContext.Provider>
     );
     await waitFor(() => {
-      const inputElement = screen.getByText("Schedule(s)");
+      const inputElement = screen.getByText("Schedule(s) (24 hrs format)");
       expect(inputElement).toBeTruthy();
     });
   });
@@ -182,6 +183,7 @@ describe("DrugChartSlider", () => {
       <SliderContext.Provider value={mockSliderContext}>
         <DrugChartSlider
           hostData={{
+            enable24HourTimers: true,
             scheduleFrequencies: mockScheduleFrequencies,
             startTimeFrequencies: mockStartTimeFrequencies,
             drugOrder: mockStartTimeDrugOrder,
@@ -191,7 +193,7 @@ describe("DrugChartSlider", () => {
       </SliderContext.Provider>
     );
     await waitFor(() => {
-      const inputElement = screen.getByText("Start Time");
+      const inputElement = screen.getByText("Start Time (24 hrs format)");
       expect(inputElement).toBeTruthy();
     });
   });
@@ -332,7 +334,7 @@ describe("DrugChartSlider", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Schedule time (start date)")
+        screen.getByText("Schedule time (start date, 24 hrs format)")
       ).toBeInTheDocument();
       expect(container).toMatchSnapshot();
     });
@@ -356,7 +358,7 @@ describe("DrugChartSlider", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Schedule(s)")).toBeInTheDocument();
+      expect(screen.getByText("Schedule(s) (24 hrs format)")).toBeInTheDocument();
       expect(container).toMatchSnapshot();
     });
     MockDate.reset();
@@ -403,7 +405,7 @@ describe("DrugChartSlider", () => {
     );
 
     await waitFor(() => {
-      expect(getByText("Schedule time (start date)")).toBeTruthy();
+      expect(getByText("Schedule time (start date, 24 hrs format)")).toBeTruthy();
     });
     expect(container).toMatchSnapshot();
     MockDate.reset();

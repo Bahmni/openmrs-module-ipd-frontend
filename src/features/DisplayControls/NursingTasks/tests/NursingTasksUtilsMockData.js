@@ -832,6 +832,9 @@ export const mockMedicationTasks = [
       "Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension",
     drugRoute: "Topical",
     duration: "4 Day(s)",
+    dosingInstructions: {
+      asNeeded: false,
+    },
     dosage: "30mg",
     uuid: "d9ae1992-63ac-4e05-8dfb-13f021102ec6",
     startTimeInEpochSeconds: 1700620200,
@@ -841,6 +844,24 @@ export const mockMedicationTasks = [
     drugName: "Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)",
     drugRoute: "Intravenous",
     duration: "6 Day(s)",
+    dosingInstructions: {
+      asNeeded: false,
+    },
+    dosage: "25mg",
+    uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
+    startTimeInEpochSeconds: 1700620200,
+    startTime: "08:00",
+  },
+];
+
+export const mockPRNMedicationTasks = [
+  {
+    drugName: "Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)",
+    drugRoute: "Intravenous",
+    duration: "6 Day(s)",
+    dosingInstructions: {
+      asNeeded: true,
+    },
     dosage: "25mg",
     uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
     startTimeInEpochSeconds: 1700620200,
@@ -876,6 +897,41 @@ export const mockPendingTaskTileData = [
     startTime: "20:00",
     orderId: "703ce1a1-8839-44ab-a349-8a6ca758f6b8",
     isDisabled: false,
+  },
+];
+
+export const mockCompletedPRNTaskTileData = [
+  {
+    drugName: "Paracetamol 125 mg Tablet",
+    drugRoute: "Oral",
+    duration: "5 Day(s)",
+    dosage: 1,
+    doseType: "Tablet(s)",
+    uuid: "72af0cfa-be74-42a8-b650-45f6978314dd",
+    startTimeInEpochSeconds: 1703601000,
+    startTime: "16:38",
+    administeredTimeInEpochSeconds: 1787901000,
+    orderId: "703ce1a1-8839-44ab-a349-8a6ca758f6b8",
+    isDisabled: false,
+    dosingInstructions: {
+      asNeeded: true,
+    },
+  },
+];
+
+export const mockPendingPRNTaskTileData = [
+  {
+    drugName: "Paracetamol 125 mg Tablet",
+    drugRoute: "Oral",
+    duration: "5 Day(s)",
+    dosage: 1,
+    doseType: "Tablet(s)",
+    uuid: "72af0cfa-be74-42a8-b650-45f6978314dd",
+    orderId: "703ce1a1-8839-44ab-a349-8a6ca758f6b8",
+    isDisabled: false,
+    dosingInstructions: {
+      asNeeded: true,
+    },
   },
 ];
 
