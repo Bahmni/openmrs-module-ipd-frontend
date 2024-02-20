@@ -8,36 +8,40 @@ import { FormattedMessage } from "react-intl";
 export const CareViewPatientsSummary = (props) => {
   const { patientsSummary } = props;
   return (
-    <table className={"care-view-patient-table"}>
+    <table className={"care-view-patient-table"} border={0}>
       <tbody>
         {patientsSummary.map((patientSummary, idx) => {
-          console.log(patientSummary, idx);
           const { patientDetails, bedDetails } = patientSummary;
           const { person } = patientDetails;
           return (
             <tr key={idx} className={"patient-row-container"}>
               <td className={"patient-details-container"}>
-                <div>
-                  <HospitalBed16 />
-                  &nbsp;
-                  <span>{bedDetails.bedNumber}</span>&nbsp;
-                  <Link href={"#"}>
-                    <span>{patientDetails.display.split(" ")[0]}</span>
-                  </Link>
-                </div>
-                <br />
-                <div>
-                  <FormattedMessage id={"PATIENT"} defaultMessage={"Patient"} />
-                  : <span>{person.display}</span>&nbsp;(
-                  <span>{person.gender}</span>)&nbsp;.<span>{person.age}</span>
-                  <FormattedMessage
-                    id={"AGE_YEARS_LABEL"}
-                    defaultMessage={"yrs"}
-                  />
+                <div className={"care-view-patient-details"}>
+                  <div>
+                    <HospitalBed16 />
+                    &nbsp;
+                    <span>{bedDetails.bedNumber}</span>&nbsp;
+                    <Link href={"#"} inline={true}>
+                      <span>{patientDetails.display.split(" ")[0]}</span>
+                    </Link>
+                  </div>
+                  <div>
+                    <FormattedMessage
+                      id={"PATIENT"}
+                      defaultMessage={"Patient"}
+                    />
+                    : <span>{person.display}</span>&nbsp;(
+                    <span>{person.gender}</span>)&nbsp;.
+                    <span>{person.age}</span>
+                    <FormattedMessage
+                      id={"AGE_YEARS_LABEL"}
+                      defaultMessage={"yrs"}
+                    />
+                  </div>
                 </div>
               </td>
-              <td style={{ minWidth: "250px" }}></td>
-              <td style={{ minWidth: "80px" }}></td>
+              <td style={{ minWidth: "650px" }}></td>
+              <td style={{ minWidth: "650px" }}></td>
             </tr>
           );
         })}

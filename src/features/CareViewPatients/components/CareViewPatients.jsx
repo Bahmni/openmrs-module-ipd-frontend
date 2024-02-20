@@ -14,16 +14,23 @@ export const CareViewPatients = (props) => {
   const [patientList, setPatientList] = useState([]);
 
   const getPatientsList = async () => {
-    callbacks.setIsLoading(true);
-    const response = await fetchPatientsList(
-      selectedWard.value,
-      (currentPage - 1) * limit,
-      limit
-    );
-    if (response.status === 200) {
-      setPatientList(response.data || []);
+    try {
+      callbacks.setIsLoading(true);
+      const response = await fetchPatientsList(
+        selectedWard.value,
+        (currentPage - 1) * limit,
+        limit
+      );
+      if (response.status === 200) {
+        setPatientList(response.data || []);
+      } else {
+        throw new Error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      callbacks.setIsLoading(false);
     }
-    callbacks.setIsLoading(false);
   };
 
   useEffect(() => {

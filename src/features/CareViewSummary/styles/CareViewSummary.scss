@@ -18,10 +18,16 @@
     .summary-tile {
       .heading-text {
         font-weight: 600;
+        line-height: 18px;
+        letter-spacing: 0.01em;
+        text-align: left;
       }
       .value-text {
         color: #004144;
         font-size: 28px;
+        line-height: 36px;
+        letter-spacing: 0.01em;
+        text-align: left;
       }
     }
   }
