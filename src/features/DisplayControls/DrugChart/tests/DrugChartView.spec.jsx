@@ -1,10 +1,21 @@
 import React from "react";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  getByTestId,
+} from "@testing-library/react";
 import DrugChartView from "../components/DrugChartView";
-import { drugChartData } from "./DrugChartViewMockData";
-import MockDate from "mockdate";
+import {
+  drugChartData,
+  drugChartDataForPRN,
+  allMedicationData,
+} from "./DrugChartViewMockData";
 import { IPDContext } from "../../../../context/IPDContext";
+import MockDate from "mockdate";
 import { mockConfig } from "../../../../utils/CommonUtils";
+import { AllMedicationsContext } from "../../../../context/AllMedications";
 
 const mockFetchMedications = jest.fn();
 const MockTooltipCarbon = jest.fn();
@@ -54,7 +65,7 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     const { container } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="testid" />
       </IPDContext.Provider>
     );
@@ -66,7 +77,7 @@ describe("DrugChartWrapper", () => {
   it("should render loading state when isLoading is true", async () => {
     MockDate.set("2024-01-05 10:00");
     const { container } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="test-id" />
       </IPDContext.Provider>
     );
@@ -81,7 +92,7 @@ describe("DrugChartWrapper", () => {
       data: [{ slots: [] }],
     });
     render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="test-id" />
       </IPDContext.Provider>
     );
@@ -98,7 +109,7 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="test-id" />
       </IPDContext.Provider>
     );
@@ -118,7 +129,7 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="test-id" />
       </IPDContext.Provider>
     );
@@ -138,7 +149,7 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <DrugChartView patientId="test-id" />
       </IPDContext.Provider>
     );
@@ -184,5 +195,74 @@ describe("DrugChartWrapper", () => {
       expect(screen.getByText(/Paracetamol/i)).toBeTruthy();
     });
     expect(screen.getByTestId("nextButton").disabled).toEqual(true);
+  });
+
+  it("should show current shift and next-shift button as disabled for read mode", async () => {
+    MockDate.set("2024-01-05 10:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    render(
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: true,
+          visitSummary: { stopDateTime: new Date() },
+        }}
+      >
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
+    const currentShiftButton = screen.getByTestId("currentShift");
+    expect(currentShiftButton.className).toContain("bx--btn--disabled");
+    expect(screen.getByTestId("nextButton").disabled).toEqual(true);
+  });
+  
+  it("should display not in current shift message when next shift button is clicked", async () => {
+    MockDate.set("2024-01-05 10:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    const { getByTestId, getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
+    getByTestId("nextButton").click();
+    await waitFor(() => {
+      expect(getByText("You're not viewing the current shift")).toBeTruthy();
+    });
+  });
+  it("should display not in current shift message when previous shift button is clicked", async () => {
+    MockDate.set("2024-01-05 10:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    const { getByTestId, getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugChartView patientId="test-id" />
+      </IPDContext.Provider>
+    );
+    getByTestId("previousButton").click();
+    await waitFor(() => {
+      expect(getByText("You're not viewing the current shift")).toBeTruthy();
+    });
+  });
+
+  it("should show PRN administered medication", async () => {
+    MockDate.set("2024-02-08 07:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartDataForPRN,
+    });
+    render(
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+        <AllMedicationsContext.Provider value={allMedicationData}>
+          <DrugChartView patientId="test-id" />
+        </AllMedicationsContext.Provider>
+      </IPDContext.Provider>
+    );
+    await waitFor(() => {
+      expect(screen.queryAllByText(/Zinc Oxide 20 mg Tablet/i)).toHaveLength(2);
+    });
   });
 });

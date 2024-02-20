@@ -50,6 +50,7 @@ export const CONFIG_BAHMNIENCOUNTER_URL =
   BAHMNI_CORE + "/config/bahmniencounter";
 export const PATIENT_MOVEMENT_URL = BAHMNI_CORE + "/bahmniencounter";
 export const DISCHARGE_PATIENT_MOVEMENT_URL = BAHMNI_CORE + "/discharge ";
+export const BED_INFORMATION_URL = RESTWS_V1 + "/beds";
 
 export const FSN_DISPOSITION_VALUE = "Disposition";
 export const BY_FSN_VALUE = "byFullySpecifiedName";
@@ -63,6 +64,12 @@ export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
   FIXED_SCHEDULE_FREQUENCY: "FIXED_SCHEDULE_FREQUENCY",
 };
+
+export const serviceType = {
+  AS_NEEDED_PLACEHOLDER: "AS_NEEDED_PLACEHOLDER",
+  AS_NEEDED_MEDICATION_REQUEST: "AS_NEEDED_MEDICATION_REQUEST",
+  MEDICATION_REQUEST: "MEDICATION_REQUEST",
+};
 export const BAHMNI_ENCOUNTER_URL = RESTWS_V1 + "/bahmnicore/bahmniencounter";
 export const ENCOUNTER_TYPE_URL = RESTWS_V1 + "/encountertype/{encounterType}";
 
@@ -71,6 +78,8 @@ export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
 export const dateFormat = "DD/MM/YYYY";
 export const displayShiftTimingsFormat = "DD MMM YYYY | HH:mm";
 export const RESOLUTION_VALUE = 1055;
+export const timeText24 = "24 hrs format";
+export const timeText12 = "12 hrs format";
 
 export const componentKeys = {
   ALLERGIES: "AL",
@@ -84,3 +93,4 @@ export const componentKeys = {
 export const performerFunction = "Performer";
 export const requesterFunction = "Witness";
 export const verifierFunction = "Verifier";
+export const asNeededPlaceholderConceptName = "AsNeededPlaceholder";

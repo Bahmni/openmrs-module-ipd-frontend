@@ -7,6 +7,7 @@ import {
   invalidTimeText12Hour,
   invalidTimeText24Hour,
 } from "../utils/DrugChartSliderUtils";
+import { timeText12, timeText24 } from "../../../constants";
 
 export const StartTimeSection = ({
   startTime,
@@ -22,7 +23,7 @@ export const StartTimeSection = ({
         <>
           <TimePicker24Hour
             data-modal-primary-focus
-            labelText={"Start Time"}
+            labelText={`Start Time (${timeText24})`}
             id={"start-time"}
             onChange={(time) => handleStartTime(time)}
             isRequired={true}
@@ -52,7 +53,7 @@ export const StartTimeSection = ({
             id={"start-time"}
             onChange={(time) => handleStartTime(time)}
             defaultTime={startTime}
-            labelText={"Start Time"}
+            labelText={`Start Time (${timeText12})`}
             isRequired={true}
             invalidText={invalidTimeText12Hour}
           />

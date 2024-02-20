@@ -9,6 +9,7 @@ import {
   mockDrugOrderFrequencies,
   mockScheduleFrequenciesWithTimings,
   mockScheduleDrugOrderForEdit,
+  mockScheduleDrugOrderAsNeeded,
 } from "../utils/DrugChartSliderTestUtils";
 import "@testing-library/jest-dom";
 import mockAdapter from "axios-mock-adapter";
@@ -162,6 +163,7 @@ describe("DrugChartSlider", () => {
       <SliderContext.Provider value={mockSliderContext}>
         <DrugChartSlider
           hostData={{
+            enable24HourTimers: true,
             scheduleFrequencies: mockScheduleFrequencies,
             startTimeFrequencies: mockStartTimeFrequencies,
             drugOrder: mockScheduleDrugOrder,
@@ -171,7 +173,7 @@ describe("DrugChartSlider", () => {
       </SliderContext.Provider>
     );
     await waitFor(() => {
-      const inputElement = screen.getByText("Schedule(s)");
+      const inputElement = screen.getByText("Schedule(s) (24 hrs format)");
       expect(inputElement).toBeTruthy();
     });
   });
@@ -181,6 +183,7 @@ describe("DrugChartSlider", () => {
       <SliderContext.Provider value={mockSliderContext}>
         <DrugChartSlider
           hostData={{
+            enable24HourTimers: true,
             scheduleFrequencies: mockScheduleFrequencies,
             startTimeFrequencies: mockStartTimeFrequencies,
             drugOrder: mockStartTimeDrugOrder,
@@ -190,7 +193,7 @@ describe("DrugChartSlider", () => {
       </SliderContext.Provider>
     );
     await waitFor(() => {
-      const inputElement = screen.getByText("Start Time");
+      const inputElement = screen.getByText("Start Time (24 hrs format)");
       expect(inputElement).toBeTruthy();
     });
   });
@@ -331,7 +334,7 @@ describe("DrugChartSlider", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Schedule time (start date)")
+        screen.getByText("Schedule time (start date, 24 hrs format)")
       ).toBeInTheDocument();
       expect(container).toMatchSnapshot();
     });
@@ -355,15 +358,39 @@ describe("DrugChartSlider", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Schedule(s)")).toBeInTheDocument();
+      expect(screen.getByText("Schedule(s) (24 hrs format)")).toBeInTheDocument();
       expect(container).toMatchSnapshot();
     });
     MockDate.reset();
   });
 
+  it("Should render Drug Chart Slider for As Needed medications with not time fields", async () => {
+    MockDate.set("2010-12-22T07:08:00.000");
+    const { getByText, queryByText } = render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            enable24HourTimers: true,
+            scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockScheduleDrugOrderAsNeeded,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(getByText("Add to Drug Chart")).toBeInTheDocument();
+    });
+    expect(queryByText("Schedule(s)")).toBeNull();
+    expect(queryByText("Start Time")).toBeNull();
+    MockDate.reset();
+  });
+
   it("should render with previous time on click of edit drug chart link", async () => {
     MockDate.set("2010-12-22T07:08:00.000");
-    const { container, getByText, debug } = render(
+    const { container, getByText } = render(
       <SliderContext.Provider value={mockSliderContext}>
         <DrugChartSlider
           hostData={{
@@ -378,7 +405,7 @@ describe("DrugChartSlider", () => {
     );
 
     await waitFor(() => {
-      expect(getByText("Schedule time (start date)")).toBeTruthy();
+      expect(getByText("Schedule time (start date, 24 hrs format)")).toBeTruthy();
     });
     expect(container).toMatchSnapshot();
     MockDate.reset();

@@ -1,14 +1,21 @@
 import axios from "axios";
 import moment from "moment";
-import { MEDICATIONS_BASE_URL, performerFunction } from "../../../../constants";
+import React from "react";
+import {
+  MEDICATIONS_BASE_URL,
+  performerFunction,
+  asNeededPlaceholderConceptName,
+} from "../../../../constants";
 import _ from "lodash";
+import { FormattedMessage } from "react-intl";
 
 export const fetchMedications = async (
   patientUuid,
   startDateTime,
-  endDateTime
+  endDateTime,
+  visitUuid
 ) => {
-  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}&view=drugChart`;
+  const FETCH_MEDICATIONS_URL = `${MEDICATIONS_BASE_URL}?patientUuid=${patientUuid}&startTime=${startDateTime}&endTime=${endDateTime}&view=drugChart&visitUuid=${visitUuid}`;
   try {
     return await axios.get(FETCH_MEDICATIONS_URL);
   } catch (error) {
@@ -134,9 +141,15 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
       slots = drugChartData[0].slots;
     }
     slots?.forEach((slot) => {
-      const { startTime, status, order, medicationAdministration } = slot;
+      const {
+        startTime,
+        status,
+        order,
+        medicationAdministration,
+        serviceType,
+      } = slot;
       const uuid = order?.uuid || medicationAdministration?.uuid;
-      if (orders[uuid]) {
+      if (orders[uuid] && serviceType != asNeededPlaceholderConceptName) {
         let administrationStatus = "Pending";
         if (medicationAdministration) {
           const { administeredDateTime } = medicationAdministration;
@@ -245,14 +258,14 @@ export const getUpdatedShiftArray = (shiftRange = "") => {
   return updatedShiftHoursArray;
 };
 
-export const currentShiftHoursArray = (shiftDetails = {}) => {
+export const currentShiftHoursArray = (date, shiftDetails = {}) => {
   const rangeArray = [];
   Object.values(shiftDetails).forEach((shift) => {
     rangeArray.push(`${shift.shiftStartTime}-${shift.shiftEndTime}`);
   });
 
   // finding the current hour range
-  const currentDate = new Date();
+  const currentDate = date;
   const currentHour = currentDate.getHours();
   let currentRange = rangeArray[0];
   let shiftIndex = 0;
@@ -311,6 +324,10 @@ export const getNextShiftDetails = (
   };
 };
 
+export const easeInOutQuad = (t) => {
+  return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+};
+
 export const getPreviousShiftDetails = (
   rangeArray,
   shiftIndex,
@@ -333,3 +350,43 @@ export const getPreviousShiftDetails = (
     previousShiftIndex,
   };
 };
+
+export const isCurrentShift = (
+  shiftConfig,
+  startDateTimeChange,
+  endDateTimeChange
+) => {
+  const shiftDetailsObj = currentShiftHoursArray(new Date(), shiftConfig);
+  const currentShift = shiftDetailsObj.currentShiftHoursArray;
+  let startDateTimeCurrent = getDateTime(new Date(), currentShift[0]);
+  let endDateTimeCurrent = getDateTime(
+    new Date(),
+    currentShift[currentShift.length - 1] + 1
+  );
+
+  if (startDateTimeCurrent > endDateTimeCurrent) {
+    const d = new Date();
+    const currentHour = d.getHours();
+    if (currentHour > 12) {
+      d.setDate(d.getDate() + 1);
+      endDateTimeCurrent = getDateTime(
+        d,
+        currentShift[currentShift.length - 1] + 1
+      );
+    } else {
+      d.setDate(d.getDate() - 1);
+      startDateTimeCurrent = getDateTime(d, currentShift[0]);
+    }
+  }
+  return (
+    startDateTimeCurrent == startDateTimeChange &&
+    endDateTimeCurrent == endDateTimeChange
+  );
+};
+
+export const NotCurrentShiftMessage = (
+  <FormattedMessage
+    id={"NOT_CURRENT_SHIFT_MESSAGE"}
+    defaultMessage={"You're not viewing the current shift"}
+  />
+);

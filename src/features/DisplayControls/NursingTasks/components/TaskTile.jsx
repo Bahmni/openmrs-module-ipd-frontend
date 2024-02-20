@@ -11,6 +11,7 @@ import { TooltipDefinition } from "carbon-components-react";
 import "../styles/TaskTile.scss";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
+import { asNeededPlaceholderConceptName } from "../../../../constants";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
@@ -36,6 +37,7 @@ export default function TaskTile(props) {
     stopTime,
     isDisabled,
     administeredTimeInEpochSeconds,
+    serviceType,
   } = newMedicationNursingTask;
 
   const isRelevantTask = getRelevantTaskStatus(
@@ -91,12 +93,17 @@ export default function TaskTile(props) {
             {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
             <span>&nbsp;-&nbsp;{drugRoute}</span>
           </div>
-          <div className="tile-content-subtext">
-            <Clock />
-            <div>
-              &nbsp;{getTime(administeredTimeInEpochSeconds, startTime)}
+          {!(
+            dosingInstructions?.asNeeded &&
+            serviceType === asNeededPlaceholderConceptName
+          ) && (
+            <div className="tile-content-subtext">
+              <Clock />
+              <div>
+                &nbsp;{getTime(administeredTimeInEpochSeconds, startTime)}
+              </div>
             </div>
-          </div>
+          )}
           {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
         </div>
       </div>

@@ -79,6 +79,17 @@
   }
 
   .shift-timing {
+    .not-current-shift-message-div {
+      display: flex;
+      align-items: center;
+
+      .not-current-shift-message {
+        padding: 2px;
+        color: #da1e28;
+        line-height: normal;
+        letter-spacing: 0.24px;
+      }
+    }
     .shift-time {
       display: flex;
       font-weight: 600;

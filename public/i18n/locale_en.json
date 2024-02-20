@@ -7,6 +7,7 @@
   "DRUG_CHART_MODAL_CLOSE": "Close",
   "DRUG_CHART_MODAL_CANCEL_MESSAGE": "No medication tasks have been scheduled.",
   "DRUG_CHART_MODAL_SAVE_MESSAGE": "Medication task(s) scheduled successfully.",
+  "DRUG_CHART_MODAL_SAVE_MESSAGE_PRN": "PRN task created successfully.",
   "DRUG_CHART_MODAL_START_TIME_PASSED": "Start Time entered has already passed!",
   "DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING": "Schedule entered has already passed!",
   "DRUG_CHART_MODAL_SCHEDULE_ORDER_WARNING": "Times entered should be in ascending order",
@@ -23,6 +24,7 @@
   "NO_VITALS_MESSAGE": "No Vitals available for this patient",
   "NO_TREATMENTS_MESSAGE": "No IPD Medication is prescribed for this patient yet",
   "ADD_TO_DRUG_CHART": "Add to Drug Chart",
+  "ADD_TO_TASKS": "Add PRN Tasks",
   "NO_ALLERGENS_MESSAGE": "No Allergen is captured for this patient yet.",
   "Temperature": "Temp",
   "BLOOD_PRESSURE": "BP",
@@ -75,5 +77,6 @@
   "STOP_DRUG_WARNING_TEXT": "Are you sure you want to stop this drug? You will not be able to reverse this decision",
   "STOP_DRUG_CANCEL_TEXT": "Cancel",
   "STOP_DRUG_SUCCESS_NOTIFICATION": "Medication stopped successfully",
-  "NO_CONFIG_MESSAGE": "Please specify IPD Dashboard configurations"
+  "NO_CONFIG_MESSAGE": "Please specify IPD Dashboard configurations",
+  "NOT_CURRENT_SHIFT_MESSAGE": "You're not viewing the current shift"
 }

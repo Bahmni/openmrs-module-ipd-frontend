@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import {
   getGender,
@@ -7,6 +7,7 @@ import {
   fetchPatientProfile,
   mapRelationships,
   fetchAddressMapping,
+  getBedInformation,
 } from "../utils/PatientHeaderUtils";
 import {
   Tile,
@@ -15,26 +16,28 @@ import {
   Column,
   SkeletonText,
   Link,
-  OverflowMenu, 
-  OverflowMenuItem
+  OverflowMenu,
+  OverflowMenuItem,
 } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
 import "../styles/PatientHeader.scss";
-import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
+import { ChevronDown20, ChevronUp20, HospitalBed16 } from "@carbon/icons-react";
 import { getPatientDashboardUrl } from "../../../../utils/CommonUtils";
 import PatientDetails from "./PatientDetails";
 import PatientMovementModal from "./PatientMovementModal";
 import { formatDate } from "../../../../utils/DateTimeUtils";
+import { IPDContext } from "../../../../context/IPDContext";
 
 export const PatientHeader = (props) => {
   const { patientId, openVisitSummary } = props;
+  const { isReadMode, visitSummary } = useContext(IPDContext);
   const [showPatientDetails, togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
   const [isLoading, updateIsLoading] = useState(true);
   const [contacts, setMappedContacts] = useState([]);
   const [relationships, setMappedRelationships] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [bedInformation, setBedInformation] = useState();
   const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
   const showDetails = (
     <FormattedMessage id="SHOW_PATIENT_DETAILS" defaultMessage="Show Details" />
@@ -60,11 +63,8 @@ export const PatientHeader = (props) => {
       defaultMessage="Patient Dashboard"
     />
   );
-  const visitSummary = (
-    <FormattedMessage
-      id="VISIT_SUMMARY"
-      defaultMessage="Visit Summaries"
-    />
+  const visitSummaryMessage = (
+    <FormattedMessage id="VISIT_SUMMARY" defaultMessage="Visit Summaries" />
   );
 
   const getContactDetailsConfigs = async () => {
@@ -117,6 +117,11 @@ export const PatientHeader = (props) => {
       const patientAttributes = extractPatientInfo(patientInfo, locationMap);
       const contactConfigs = await getContactDetailsConfigs();
       const patientRelatives = extractPatientRelationships(patientProfile);
+      const bedInformation = await getBedInformation(
+        patientId,
+        visitSummary.uuid
+      );
+      setBedInformation(bedInformation[0]);
       setMappedContacts(
         mapContact(patientAttributes, contactConfigs.contactDetails)
       );
@@ -152,33 +157,44 @@ export const PatientHeader = (props) => {
                         {patientDashboard}
                       </Link>
                       <Link onClick={() => openVisitSummary()}>
-                        {visitSummary}
+                        {visitSummaryMessage}
                       </Link>
                     </div>
-                    <OverflowMenu data-testid="overflow-menu" flipped={true} aria-label="overflow-menu" className="patient-movement-overflow">
-                      <OverflowMenuItem title="item-patient-movement" itemText="Patient Movement" onClick={() => updatePatientMovementModal(!isModalOpen)}/>
+                    <OverflowMenu
+                      data-testid="overflow-menu"
+                      flipped={true}
+                      aria-label="overflow-menu"
+                      className="patient-movement-overflow"
+                    >
+                      <OverflowMenuItem
+                        data-testid="overflow-menu-item1"
+                        title="item-patient-movement"
+                        itemText="Patient Movement"
+                        onClick={() => updatePatientMovementModal(!isModalOpen)}
+                        disabled={isReadMode}
+                      />
                     </OverflowMenu>
                   </Row>
                   <Row>
-                      {showPatientDetails ? (
-                        <Link
-                          kind="tertiary"
-                          className="show-more"
-                          size="sm"
-                          onClick={toggleDetailsView}
-                        >
-                          {hideDetails} <ChevronUp20 />{" "}
-                        </Link>
-                      ) : (
-                        <Link
-                          kind="tertiary"
-                          className="show-more"
-                          size="sm"
-                          onClick={toggleDetailsView}
-                        >
-                          {showDetails} <ChevronDown20 />
-                        </Link>
-                      )}
+                    {showPatientDetails ? (
+                      <Link
+                        kind="tertiary"
+                        className="show-more"
+                        size="sm"
+                        onClick={toggleDetailsView}
+                      >
+                        {hideDetails} <ChevronUp20 />{" "}
+                      </Link>
+                    ) : (
+                      <Link
+                        kind="tertiary"
+                        className="show-more"
+                        size="sm"
+                        onClick={toggleDetailsView}
+                      >
+                        {showDetails} <ChevronDown20 />
+                      </Link>
+                    )}
                     <div className="other-info">
                       <div className="patient-basic-info">
                         <h3 className="patient-info">
@@ -193,6 +209,16 @@ export const PatientHeader = (props) => {
                         <h3 className="patient-info">
                           {patientDetails?.identifier}
                         </h3>
+                        {bedInformation && (
+                          <div style={{ display: "flex" }}>
+                            <h3 className="patient-info">
+                              <HospitalBed16 />
+                            </h3>
+                            <h3 className="bed-information">
+                              {` ${bedInformation?.physicalLocation?.display} ${bedInformation?.bedNumber}`}
+                            </h3>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </Row>
@@ -211,7 +237,15 @@ export const PatientHeader = (props) => {
         )}
       </Tile>
       <div>
-        {isModalOpen && <div> <PatientMovementModal updatePatientMovementModal={(isOpen) => updatePatientMovementModal(isOpen)}/> </div> }
+        {isModalOpen && (
+          <div>
+            <PatientMovementModal
+              updatePatientMovementModal={(isOpen) =>
+                updatePatientMovementModal(isOpen)
+              }
+            />
+          </div>
+        )}
       </div>
     </>
   );

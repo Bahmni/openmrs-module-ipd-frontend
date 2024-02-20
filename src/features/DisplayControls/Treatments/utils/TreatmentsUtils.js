@@ -3,6 +3,7 @@ import {
   CLINICAL_CONFIG_URL,
   BAHMNI_ENCOUNTER_URL,
   ENCOUNTER_TYPE_URL,
+  MEDICATIONS_BASE_URL,
   requesterFunction,
   verifierFunction,
   defaultDateTimeFormat,
@@ -65,6 +66,24 @@ export const getConfigsForTreatments = async () => {
   }
 };
 
+export const getSlotsForAnOrderAndServiceType = async (
+  patientUuid,
+  orderUuids,
+  serviceType
+) => {
+  try {
+    const response = await axios.get(MEDICATIONS_BASE_URL, {
+      params: { patientUuid, orderUuids, serviceType },
+      withCredentials: true,
+    });
+
+    if (response.status !== 200) throw new Error(response.statusText);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const updateDrugOrderList = (drugOrderList) => {
   drugOrderList.forEach((ipdDrugOrder) => {
     ipdDrugOrder.uniformDosingType = {
@@ -93,6 +112,10 @@ export const AddToDrugChart = (
     id={"ADD_TO_DRUG_CHART"}
     defaultMessage={"Add to Drug Chart"}
   />
+);
+
+export const AddToTasks = (
+  <FormattedMessage id={"ADD_TO_TASKS"} defaultMessage={"Add to Tasks"} />
 );
 
 export const EditDrugChart = (
@@ -142,40 +165,32 @@ export const setDosingInstructions = (drugOrder) => {
 
 export const getDrugName = (drugOrderObject) => {
   const drugOrder = drugOrderObject.drugOrder;
-  if (
+  const isNotesIconDiv =
     drugOrder.drug &&
     (drugOrderObject.instructions ||
       drugOrderObject.additionalInstructions ||
       drugOrder.orderReasonConcept ||
-      drugOrder.orderReasonText)
-  ) {
-    return (
-      <div className="notes-icon-div">
-        <span
-          className={`treatments-drug-name ${
-            drugOrder.dateStopped && "strike-through"
-          }`}
-        >
-          <span>{drugOrder.drug.name}</span>
-          <NotesIcon className="notes-icon" data-testid="notes-icon" />
-        </span>
-        <div className={"display-tags"}>
-          <DisplayTags drugOrder={drugOrder.dosingInstructions} />
-        </div>
-      </div>
-    );
-  } else if (drugOrder.drug) {
-    return (
+      drugOrder.orderReasonText);
+
+  const drugNameValue = (
+    <div className={isNotesIconDiv ? "notes-icon-div" : "no-notes-icon-div"}>
       <span
         className={`treatments-drug-name ${
           drugOrder.dateStopped && "strike-through"
         }`}
       >
-        {drugOrder.drug.name}
+        <span>{drugOrder.drug.name}</span>
+        {isNotesIconDiv && (
+          <NotesIcon className="notes-icon" data-testid="notes-icon" />
+        )}
       </span>
-    );
-  }
-  return drugOrder.freeTextAnswer;
+      <div className="display-tags">
+        <DisplayTags drugOrder={drugOrder.dosingInstructions} />
+      </div>
+    </div>
+  );
+
+  return drugOrder.drug ? drugNameValue : drugOrder.freeTextAnswer;
 };
 
 export const stopDrugOrders = async (payload) => {
