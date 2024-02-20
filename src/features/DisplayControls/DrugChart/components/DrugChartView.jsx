@@ -312,7 +312,7 @@ export default function DrugChartWrapper(props) {
         <div className="loading-parent" data-testid="loading-icon">
           <Loading withOverlay={false} />
         </div>
-      ) : drugChartData && drugChartData.length === 0 ? (
+      ) : transformedData && transformedData.length === 0 ? (
         <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>
       ) : (
         <DrugChart
