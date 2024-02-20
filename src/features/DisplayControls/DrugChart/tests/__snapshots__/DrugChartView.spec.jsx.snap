@@ -17,8 +17,9 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
         Current Shift
       </button>
       <button
-        class="margin-right-6 bx--btn bx--btn--tertiary bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+        class="margin-right-6 bx--btn bx--btn--tertiary bx--btn--disabled bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
         data-testid="previousButton"
+        disabled=""
         tabindex="0"
         type="button"
       >
@@ -129,34 +130,410 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
       </div>
     </div>
     <div
-      class="loading-parent"
-      data-testid="loading-icon"
+      class="drug-chart-dashboard"
     >
       <div
-        aria-atomic="true"
-        aria-live="assertive"
-        class="bx--loading"
+        class="drug-chart"
+        style="height: 132px;"
       >
-        <label
-          class="bx--visually-hidden"
-          id="loading-id-1"
+        <div
+          class="drug-chart-left-panel"
+          data-testid="left-panel"
         >
-          Active loading indicator
-        </label>
-        <svg
-          class="bx--loading__svg"
-          viewBox="0 0 100 100"
+          <div
+            class="header"
+          >
+            <button
+              class="arrow-button bx--btn bx--btn--primary bx--btn--disabled"
+              data-testid="up-arrow"
+              disabled=""
+              tabindex="0"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="bx--btn__icon"
+                fill="currentColor"
+                focusable="false"
+                height="20"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 10L26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <table
+              style="overflow: hidden;"
+            >
+              <tbody>
+                <tr>
+                  <div
+                    class="drug-order-details"
+                  >
+                    <div
+                      class="order-details"
+                    >
+                      <div
+                        class="drug-name-container"
+                      >
+                        <span
+                          class="bx--tooltip--definition bx--tooltip--a11y name-tooltip"
+                        >
+                          <button
+                            aria-describedby="definition-tooltip-1"
+                            class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                            type="button"
+                          >
+                            <div
+                              class="drug-chart-drug-name"
+                            >
+                              Paracetamol 125 mg Suppository
+                            </div>
+                          </button>
+                          <span
+                            class="bx--assistive-text"
+                            id="definition-tooltip-1"
+                            role="tooltip"
+                          >
+                            Paracetamol 125 mg Suppository
+                          </span>
+                        </span>
+                         
+                        <div>
+                          TooltipCarbon
+                        </div>
+                      </div>
+                      <div>
+                        1
+                         - Tablet(s)
+                         - Oral
+                         -  3 Day(s)
+                      </div>
+                      <div />
+                    </div>
+                    <div
+                      class="medication-tags"
+                    >
+                      <div
+                        class="bx--tag bx--tag--sm bx--tag--blue"
+                        id="tag-1"
+                      >
+                        
+                        <span
+                          title="Rx"
+                        >
+                          Rx
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div
+          class="drug-chart-content"
+          data-testid="right-panel"
         >
-          <title>
-            Active loading indicator
-          </title>
-          <circle
-            class="bx--loading__stroke"
-            cx="50%"
-            cy="50%"
-            r="44"
-          />
-        </svg>
+          <div
+            class="calendar-header"
+          >
+            <div
+              style="display: flex;"
+            >
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                06:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                07:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                08:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                09:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                10:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                11:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                12:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                13:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                14:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                15:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                16:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                17:00
+              </div>
+            </div>
+          </div>
+          <table
+            class="drug-chart-calendar"
+          >
+            <tbody>
+              <tr>
+                <div
+                  style="display: flex;"
+                >
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class=""
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class=""
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class=""
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class=""
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class="highligtedCell"
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class=""
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class=""
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class=""
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class=""
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class=""
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class=""
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                  <div
+                    class="time-cell"
+                  >
+                    <div
+                      class=""
+                      data-testid="left-icon"
+                    />
+                    <div
+                      class=""
+                      data-testid="right-icon"
+                    />
+                  </div>
+                </div>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div
+        class="arrow-button-wrapper"
+      >
+        <button
+          class="arrow-button bx--btn bx--btn--primary bx--btn--disabled"
+          data-testid="down-arrow"
+          disabled=""
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="bx--btn__icon"
+            fill="currentColor"
+            focusable="false"
+            height="20"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        class="drug-chart-legend"
+      >
+        <div>
+          <test-file-stub />
+          Pending
+        </div>
+        <div>
+          <test-file-stub />
+          Late
+        </div>
+        <div>
+          <test-file-stub />
+          Administered
+        </div>
+        <div>
+          <test-file-stub />
+          Administered Late
+        </div>
+        <div>
+          <test-file-stub />
+          Not Administered
+        </div>
+        <div>
+          <test-file-stub />
+          Stopped
+        </div>
       </div>
     </div>
   </div>
@@ -302,7 +679,7 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
       >
         <label
           class="bx--visually-hidden"
-          id="loading-id-5"
+          id="loading-id-6"
         >
           Active loading indicator
         </label>

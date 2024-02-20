@@ -167,7 +167,7 @@ describe("PatientMovementModal", () => {
     const closeButton = screen.getByRole("button", { name: "close" });
     expect(closeButton).toBeTruthy();
     fireEvent.click(closeButton);
-    expect(closeMethod).toBeCalledTimes(1);
+    expect(closeMethod).toHaveBeenCalledTimes(1);
   });
 
   it("should close the patient modal when cancel button is clicked", async () => {
@@ -191,7 +191,7 @@ describe("PatientMovementModal", () => {
     const cancelButton = screen.getByText("Cancel");
     expect(cancelButton).toBeTruthy();
     fireEvent.click(cancelButton);
-    expect(cancelMethod).toBeCalledTimes(1);
+    expect(cancelMethod).toHaveBeenCalledTimes(1);
   });
 
   it("should display patient movement modal with a admit dropdown", async () => {

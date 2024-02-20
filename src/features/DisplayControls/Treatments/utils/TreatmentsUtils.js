@@ -184,7 +184,7 @@ export const getDrugName = (drugOrderObject) => {
           <NotesIcon className="notes-icon" data-testid="notes-icon" />
         )}
       </span>
-      <div className="display-tags">
+      <div className={"display-tags"}>
         <DisplayTags drugOrder={drugOrder.dosingInstructions} />
       </div>
     </div>

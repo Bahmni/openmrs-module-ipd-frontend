@@ -1,8 +1,10 @@
 import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
 import DrugChart from "../components/DrugChart";
 import { drugChartData, mockDrugChartDataLarge } from "./DrugChartMockData";
-import "@testing-library/jest-dom/extend-expect";
+import { IPDContext } from "../../../../context/IPDContext";
+import { mockConfig } from "../../../../utils/CommonUtils";
 
 const mockCalendar = jest.fn();
 jest.mock("../components/CalendarHeader", () => {
@@ -61,26 +63,34 @@ jest.mock("bahmni-carbon-ui", () => {
   };
 });
 
-describe.skip("DrugChart", () => {
+const renderDrugChart = () => {
+  return render(
+    <IPDContext.Provider value={{ config: mockConfig }}>
+      <DrugChart drugChartData={drugChartData} />
+    </IPDContext.Provider>
+  );
+};
+
+describe("DrugChart", () => {
   it("should match snapshot", () => {
-    const { asFragment } = render(<DrugChart drugChartData={drugChartData} />);
+    const { asFragment } = renderDrugChart();
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("should call register pane when ref is on rightpane", () => {
-    const { getByTestId } = render(<DrugChart drugChartData={drugChartData} />);
+    const { getByTestId } = renderDrugChart();
     const rightPanel = getByTestId("right-panel");
     expect(mockRegisterPane).toHaveBeenCalledWith(rightPanel);
   });
 
   it("should  unregisterPane when component is  unmounted", () => {
-    const { unmount } = render(<DrugChart drugChartData={drugChartData} />);
+    const { unmount } = renderDrugChart();
     unmount();
     expect(mockUnregisterPane).toHaveBeenCalled();
   });
 
   it("should synchronize scroll position of the right panel and the left panel when scrolled to bottom", () => {
-    const { getByTestId } = render(<DrugChart drugChartData={drugChartData} />);
+    const { getByTestId } = renderDrugChart();
     const leftPanel = getByTestId("left-panel");
     const rightPanel = getByTestId("right-panel");
     leftPanel.scrollBottom = 100;
