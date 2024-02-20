@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-} from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import DrugChartView from "../components/DrugChartView";
 import {
   drugChartData,

@@ -243,6 +243,7 @@ describe("AddEmergencyTasks", () => {
     const dosageInput = container.querySelector(
       'input[type="number"][id="Dropdown"]'
     );
+    expect(dosageInput.value).toEqual("1");
 
     // Set Administration Date
     const datePickerInput = container.querySelector(".bx--date-picker__input");
@@ -250,7 +251,6 @@ describe("AddEmergencyTasks", () => {
       target: { value: "01-01-2024" },
     });
     fireEvent.blur(datePickerInput);
-    const dateInputField = container.querySelector(".bx--date-picker__input");
 
     //Set Administration Time
     const startTimeSelector = container.querySelector(
@@ -313,6 +313,7 @@ describe("AddEmergencyTasks", () => {
     const dosageInput = container.querySelector(
       'input[type="number"][id="Dropdown"]'
     );
+    expect(dosageInput.value).toEqual("1");
 
     const cancelButton = screen.getAllByText("Cancel")[1];
     cancelButton.click();

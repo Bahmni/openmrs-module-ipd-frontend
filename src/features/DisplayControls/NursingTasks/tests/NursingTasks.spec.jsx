@@ -392,4 +392,4 @@ describe("NursingTasks", () => {
       expect(getByText("You're not viewing the current shift")).toBeTruthy();
     });
   });
-})
+});
