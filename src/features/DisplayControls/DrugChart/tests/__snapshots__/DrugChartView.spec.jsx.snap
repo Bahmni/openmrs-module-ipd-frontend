@@ -134,7 +134,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
     >
       <div
         class="drug-chart"
-        style="height: 132px;"
+        style="height: 135px;"
       >
         <div
           class="drug-chart-left-panel"
