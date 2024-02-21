@@ -11,14 +11,15 @@ import ClockIcon from "../../../../icons/clock.svg";
 import Administered from "../../../../icons/administered.svg";
 import NotAdministered from "../../../../icons/not-administered.svg";
 import "../styles/AdministeredMedicationList.scss";
-import moment from "moment";
+import { formatDate } from "../../../../utils/DateTimeUtils";
+import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
 
 const AdministeredMedicationList = ({ list, enable24Hour }) => {
   const getAdministeredTime = (date) => {
     return `${
       enable24Hour
-        ? moment(date).format("HH:mm")
-        : moment(date).format("hh:mm A")
+        ? formatDate(date, timeFormatfor24Hr)
+        : formatDate(date, timeFormatFor12hr)
     }`;
   };
 
