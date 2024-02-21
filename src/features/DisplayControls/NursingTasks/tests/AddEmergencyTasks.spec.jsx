@@ -39,7 +39,9 @@ jest.mock("carbon-components-react", () => {
 });
 
 jest.mock("../../../../utils/CommonUtils", () => {
+  const originalModule = jest.requireActual("../../../../utils/CommonUtils");
   return {
+    ...originalModule,
     searchDrugsByName: () => mockSearchDrug(),
   };
 });
@@ -219,6 +221,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should call save by confirming popup when emergency task is saved", async () => {
     MockDate.set("2024-01-05 12:00");
+    console.log("mockConfig", mockConfig);
     const { container, getByText } = render(
       <IPDContext.Provider value={{ config: mockConfig }}>
         <AddEmergencyTasks

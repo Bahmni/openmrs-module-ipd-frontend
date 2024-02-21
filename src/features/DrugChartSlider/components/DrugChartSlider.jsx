@@ -107,7 +107,7 @@ const DrugChartSlider = (props) => {
     if (!isInvalidTimeTextPresent(enable24HourTimers)) {
       setShowFirstDaySchedulePassedWarning((prevScheduleWarnings) => {
         const newSchedulePassedWarnings = [...prevScheduleWarnings];
-        newSchedulePassedWarnings[index] = isTimePassed(newSchedule);
+        newSchedulePassedWarnings[index] = isTimePassed(newSchedule, enable24HourTimers);
         return newSchedulePassedWarnings;
       });
     }
@@ -356,7 +356,7 @@ const DrugChartSlider = (props) => {
         finalScheduleCount > 0 &&
         finalScheduleCount === enableSchedule?.frequencyPerDay
       ) {
-        const currentTime = moment().format("HH:mm");
+        const currentTime = moment().format(enable24HourTimers? "HH:mm" : "hh:mm A");
         const getUpdatedFirstDaySchedules = () => {
           const updatedSchedule = Array.from(
             { length: finalScheduleCount - 1 },
