@@ -94,3 +94,4 @@ export const performerFunction = "Performer";
 export const requesterFunction = "Witness";
 export const verifierFunction = "Verifier";
 export const asNeededPlaceholderConceptName = "AsNeededPlaceholder";
+export const asNeededMedicationRequestConceptName = "AsNeededMedicationRequest";
