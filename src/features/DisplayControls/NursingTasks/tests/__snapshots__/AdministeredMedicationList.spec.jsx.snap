@@ -48,7 +48,7 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
           <span
             class="time"
           >
-            12:30
+            12:30 PM
           </span>
         </div>
         <div

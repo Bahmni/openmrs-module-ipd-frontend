@@ -570,7 +570,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                     class="titleText"
                   >
                     <span>
-                      Administration Time (12 hrs format) 
+                      Administration Time (24 hrs format) 
                     </span>
                     <span
                       class="required"
@@ -592,7 +592,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                       maxlength="5"
                       pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
                       placeholder="hh:mm"
-                      style="width: 100%; padding: 0px 0px 0px 1rem;"
+                      style="width: 250px; padding: 0px 0px 0px 1rem;"
                       type="text"
                       value="00:00"
                     />
@@ -1422,7 +1422,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                     class="titleText"
                   >
                     <span>
-                      Administration Time (12 hrs format) 
+                      Administration Time (24 hrs format) 
                     </span>
                     <span
                       class="required"
@@ -1444,7 +1444,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                       maxlength="5"
                       pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
                       placeholder="hh:mm"
-                      style="width: 100%; padding: 0px 0px 0px 1rem;"
+                      style="width: 250px; padding: 0px 0px 0px 1rem;"
                       type="text"
                       value="00:00"
                     />

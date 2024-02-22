@@ -11,12 +11,16 @@ import ClockIcon from "../../../../icons/clock.svg";
 import Administered from "../../../../icons/administered.svg";
 import NotAdministered from "../../../../icons/not-administered.svg";
 import "../styles/AdministeredMedicationList.scss";
+import { formatDate } from "../../../../utils/DateTimeUtils";
+import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
 
-const AdministeredMedicationList = ({ list }) => {
+const AdministeredMedicationList = ({ list, enable24Hour }) => {
   const getAdministeredTime = (date) => {
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    return `${hours}:${minutes}`;
+    return `${
+      enable24Hour
+        ? formatDate(date, timeFormatfor24Hr)
+        : formatDate(date, timeFormatFor12hr)
+    }`;
   };
 
   const getMedicationStatus = (status) => {
@@ -61,5 +65,6 @@ const AdministeredMedicationList = ({ list }) => {
 
 AdministeredMedicationList.propTypes = {
   list: PropTypes.object.isRequired,
+  enable24Hour: PropTypes.boolean,
 };
 export default AdministeredMedicationList;

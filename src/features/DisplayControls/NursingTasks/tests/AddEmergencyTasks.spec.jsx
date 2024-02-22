@@ -39,7 +39,9 @@ jest.mock("carbon-components-react", () => {
 });
 
 jest.mock("../../../../utils/CommonUtils", () => {
+  const originalModule = jest.requireActual("../../../../utils/CommonUtils");
   return {
+    ...originalModule,
     searchDrugsByName: () => mockSearchDrug(),
   };
 });
