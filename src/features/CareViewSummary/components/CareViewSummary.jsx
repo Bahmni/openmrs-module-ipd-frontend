@@ -67,8 +67,6 @@ export const CareViewSummary = (props) => {
               defaultMessage={"Total patients"}
             />
           </span>
-          <br />
-          <br />
           <span className={"value-text"}>{wardSummary.totalPatients || 0}</span>
         </Tile>
         <Tile className="summary-tile">
@@ -78,8 +76,6 @@ export const CareViewSummary = (props) => {
               defaultMessage={"My patients"}
             />
           </span>
-          <br />
-          <br />
           <span className={"value-text"}>{wardSummary.myPatients || 0}</span>
         </Tile>
         <Tile className="summary-tile">
@@ -89,8 +85,6 @@ export const CareViewSummary = (props) => {
               defaultMessage={"New patients"}
             />
           </span>
-          <br />
-          <br />
           <span className={"value-text"}>{wardSummary.newPatients || 0}</span>
         </Tile>
         <Tile className="summary-tile">
@@ -100,8 +94,6 @@ export const CareViewSummary = (props) => {
               defaultMessage={"Scheduled for OT"}
             />
           </span>
-          <br />
-          <br />
           <span className={"value-text"}>
             {wardSummary.scheduledForOT || 0}
           </span>
@@ -113,8 +105,6 @@ export const CareViewSummary = (props) => {
               defaultMessage={"To be discharged"}
             />
           </span>
-          <br />
-          <br />
           <span className={"value-text"}>
             {wardSummary.toBeDischarged || 0}
           </span>
