@@ -116,7 +116,7 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
           >
             <button
               aria-describedby="definition-tooltip-5"
-              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--top bx--tooltip--align-start"
               type="button"
             >
               <div
@@ -214,7 +214,7 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
           >
             <button
               aria-describedby="definition-tooltip-3"
-              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--top bx--tooltip--align-start"
               type="button"
             >
               <div
