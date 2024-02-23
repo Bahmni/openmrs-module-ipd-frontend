@@ -31,6 +31,7 @@ export const ExtractMedicationNursingTasksData = (
 ) => {
   const extractedData = [],
     pendingExtractedData = [],
+    prnExtractedData = [],
     completedExtractedData = [],
     stoppedExtractedData = [],
     skippedExtractedData = [];
@@ -102,6 +103,11 @@ export const ExtractMedicationNursingTasksData = (
             slot.status === "NOT_DONE",
         serviceType,
       };
+      
+      if (filterValue.id === "prn" && slotInfo.dosingInstructions.asNeeded 
+      ) {
+        prnExtractedData.push(slotInfo);
+      }
 
       if (
         (filterValue.id === "stopped" || filterValue.id === "allTasks") &&
@@ -180,6 +186,7 @@ export const ExtractMedicationNursingTasksData = (
     groupedData.push(...completedExtractedData.map((item) => [item]));
     groupedData.push(...stoppedExtractedData.map((item) => [item]));
     groupedData.push(...skippedExtractedData.map((item) => [item]));
+    groupedData.push(...prnExtractedData.map((item) => [item]));
   }
   return groupedData;
 };
