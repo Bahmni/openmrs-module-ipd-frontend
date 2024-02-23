@@ -16,6 +16,14 @@
       box-shadow: 6px 2px 4px 0 rgba(0, 0, 0, 0.1);
       padding: 8px;
     }
+    .admission-details {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .separator {
+      padding: 0 8px;
+    }
   }
 }
 
