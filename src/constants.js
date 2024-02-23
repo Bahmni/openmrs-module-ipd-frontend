@@ -75,7 +75,8 @@ export const ENCOUNTER_TYPE_URL = RESTWS_V1 + "/encountertype/{encounterType}";
 export const LIST_OF_WARDS_URL = RESTWS_V1 + "/admissionLocation";
 export const WARD_SUMMARY_URL = RESTWS_V1 + "/ipd/wards/{wardId}/summary";
 export const GET_PATIENT_LIST_URL = RESTWS_V1 + "/ipd/wards/{wardId}/patients";
-
+export const GET_SLOTS_FOR_PATIENTS_URL =
+  RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
 export const dateFormat = "DD/MM/YYYY";
