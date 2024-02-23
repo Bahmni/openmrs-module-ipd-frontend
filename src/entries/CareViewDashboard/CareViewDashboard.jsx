@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Header, Link, Loading } from "carbon-components-react";
-import { Home20, ListBulleted24 } from "@carbon/icons-react";
+import { Home20 } from "@carbon/icons-react";
 import { ArrowLeft } from "@carbon/icons-react/next";
 import "./CareViewDashboard.scss";
 import { CareViewSummary } from "../../features/CareViewSummary/components/CareViewSummary";
@@ -48,7 +48,6 @@ const CareViewDashboard = (props) => {
                 className="ward-view-nav-link"
                 onClick={() => hostApi?.onHome()}
               >
-                <ListBulleted24 data-testid={"List button"} size={20} />
                 <FormattedMessage
                   id={"WARD_LIST_VIEW_TEXT"}
                   defaultMessage="Ward List View"
