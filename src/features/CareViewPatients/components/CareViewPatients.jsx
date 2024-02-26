@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "../styles/CareViewPatients.scss";
 import { Dropdown, Pagination, Loading } from "carbon-components-react";
 import PropTypes from "prop-types";
-import { getSortedPatientList } from "../utils/CareViewPatientsUtils";
+import { fetchPatientsList } from "../utils/CareViewPatientsUtils";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { CareViewPatientsSummary } from "../../CareViewPatientsSummary/components/CareViewPatientsSummary";
 
@@ -16,13 +16,16 @@ export const CareViewPatients = () => {
   const getPatientsList = async () => {
     try {
       setIsLoading(true);
-      setPatientList(
-        await getSortedPatientList(
-          selectedWard.value,
-          (currentPage - 1) * limit,
-          limit
-        )
+      const response = await fetchPatientsList(
+        selectedWard.value,
+        (currentPage - 1) * limit,
+        limit
       );
+      if (response.status === 200) {
+        setPatientList(response.data);
+      } else {
+        throw new Error("Failed to fetch data");
+      }
     } catch (error) {
       setPatientList([]);
       console.error("Error fetching data:", error);
