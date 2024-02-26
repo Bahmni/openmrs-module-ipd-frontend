@@ -9,7 +9,6 @@ import DrugChartLegend from "../../../../components/AdministrationLegend/Adminis
 import { Button } from "carbon-components-react";
 import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
 import { throttle } from "lodash";
-import { easeInOutQuad } from "../utils/DrugChartUtils";
 
 export default function DrugChart(props) {
   const { drugChartData, currentShiftArray, selectedDate } = props;
@@ -83,15 +82,17 @@ export default function DrugChart(props) {
 
   const smoothScroll = useCallback((startScrollTop, endScrollTop) => {
     const startTime = Date.now();
-    const duration = 500;
+    const distanceToScroll = Math.abs(endScrollTop - startScrollTop);
+    const defaultDuration = 250;
+    const duration = Math.min(defaultDuration, distanceToScroll / 2);
 
     const scroll = () => {
       const elapsedTime = Date.now() - startTime;
-      const easing = easeInOutQuad(elapsedTime / duration);
+      const easing = Math.min(elapsedTime / duration, 1);
       const newScrollTop =
         startScrollTop + (endScrollTop - startScrollTop) * easing;
-      leftPane.current.scrollTop = newScrollTop;
-      rightPane.current.scrollTop = newScrollTop;
+      leftPane.current.scrollTop = Math.round(newScrollTop);
+      rightPane.current.scrollTop = Math.round(newScrollTop);
 
       if (elapsedTime < duration) {
         requestAnimationFrame(scroll);
