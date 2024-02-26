@@ -85,32 +85,6 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
         <a
           class="bx--link ward-view-nav-link"
         >
-          <svg
-            aria-hidden="true"
-            data-testid="List button"
-            fill="currentColor"
-            focusable="false"
-            height="24"
-            preserveAspectRatio="xMidYMid meet"
-            size="20"
-            viewBox="0 0 32 32"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="7"
-              cy="9"
-              r="3"
-            />
-            <circle
-              cx="7"
-              cy="23"
-              r="3"
-            />
-            <path
-              d="M16 22H30V24H16zM16 8H30V10H16z"
-            />
-          </svg>
           Ward List View
         </a>
       </div>
@@ -204,8 +178,6 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
             >
               Total patients
             </span>
-            <br />
-            <br />
             <span
               class="value-text"
             >
@@ -220,8 +192,6 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
             >
               My patients
             </span>
-            <br />
-            <br />
             <span
               class="value-text"
             >
@@ -236,8 +206,6 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
             >
               New patients
             </span>
-            <br />
-            <br />
             <span
               class="value-text"
             >
@@ -252,8 +220,6 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
             >
               Scheduled for OT
             </span>
-            <br />
-            <br />
             <span
               class="value-text"
             >
@@ -268,8 +234,6 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
             >
               To be discharged
             </span>
-            <br />
-            <br />
             <span
               class="value-text"
             >
