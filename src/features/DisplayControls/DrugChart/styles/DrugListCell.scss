@@ -25,6 +25,10 @@
     gap: 5px;
     .administration-details-tooltip {
       width: 100%;
+      [id*="definition-tooltip-"] {
+        color: #fff;
+        font-size: 0.75rem;
+      }
     }
     .administration-time-info {
       white-space: nowrap;
@@ -51,6 +55,10 @@
 
 .name-tooltip {
   max-width: 100%;
+  [id*="definition-tooltip-"] {
+    color: #fff;
+    font-size: 0.875rem;
+  }
 }
 
 .dosage {

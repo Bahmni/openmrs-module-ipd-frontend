@@ -14,8 +14,11 @@ jest.mock("carbon-components-react", () => {
   };
 });
 
-describe.skip("SVGImage", () => {
+describe("SVGImage", () => {
   const test = ["Not-Administered", "Pending", "Late"];
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   test.forEach((iconType) => {
     it(`should render ${iconType} icon`, () => {
@@ -28,8 +31,9 @@ describe.skip("SVGImage", () => {
     render(<SVGIcon iconType="Administered" info="info" />);
     expect(MockTooltipCarbon).toHaveBeenCalled();
     expect(MockTooltipCarbon).toHaveBeenCalledWith({
-      icon: expect.any(Function),
-      content: "info",
+      renderIcon: expect.any(Function),
+      children: "info",
+      autoOrientation: true,
     });
   });
 
@@ -37,8 +41,9 @@ describe.skip("SVGImage", () => {
     render(<SVGIcon iconType="Administered-Late" info="info" />);
     expect(MockTooltipCarbon).toHaveBeenCalled();
     expect(MockTooltipCarbon).toHaveBeenCalledWith({
-      icon: expect.any(Function),
-      content: "info",
+      renderIcon: expect.any(Function),
+      children: "info",
+      autoOrientation: true,
     });
   });
 });

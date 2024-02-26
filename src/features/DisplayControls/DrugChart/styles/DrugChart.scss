@@ -17,11 +17,11 @@
 }
 
 .drug-chart {
-  --time-cell-height: 66px;
+  --time-cell-height: 70px;
   --half-hour-width: 50px;
   --line-width: 1px;
-
-  max-height: calc(11 * var(--time-cell-height));
+  /* 65 px header */
+  max-height: calc(10 * var(--time-cell-height) + 65px);
   display: grid;
   grid-template-columns: 3fr 7fr;
   width: 100%;
@@ -64,7 +64,7 @@
       background-color: #f4f4f4;
     }
     tr {
-      height: 66px;
+      height: var(--time-cell-height);
       border-bottom: 0;
       td {
         line-height: 20px;

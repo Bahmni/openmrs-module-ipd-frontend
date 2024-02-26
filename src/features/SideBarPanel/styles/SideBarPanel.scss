@@ -34,19 +34,11 @@
   }
 }
 
-@media screen and (min-width: 640px) and (max-width: 1024px) {
-  .side-bar-nav {
-    width: 30%;
-    min-width: 540px;
-  }
+.side-bar-nav {
+  top: 48px;
 }
-
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 1055px) {
   .side-bar-nav {
     width: 100%;
   }
-}
-
-.side-bar-nav {
-  top: 48px;
 }

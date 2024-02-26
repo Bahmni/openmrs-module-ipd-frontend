@@ -14,10 +14,6 @@
   .administration-info {
     display: flex;
     gap: 10px;
-
-    [class*="bx--time-picker"] {
-      width: 100%;
-    }
   }
 
   .bx--list-box__wrapper {

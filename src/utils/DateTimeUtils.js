@@ -25,3 +25,7 @@ export const dateTimeToEpochUTCTime = (date) => {
 };
 
 export const convertDaystoSeconds = (days) => days * 86400;
+
+export const convertTo24Hour = (time12hr) => {
+  return moment(time12hr, ["hh:mm A"]).format("HH:mm");
+};
