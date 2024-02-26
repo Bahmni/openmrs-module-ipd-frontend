@@ -48,10 +48,8 @@ export const CareViewPatientsSummary = (props) => {
               <tr key={idx} className={"patient-row-container"}>
                 <td className={"patient-details-container"}>
                   <div className={"care-view-patient-details"}>
-                    <div>
-                      <HospitalBed16 />
-                      &nbsp;
-                      <span>{bedDetails.bedNumber}</span>&nbsp;
+                    <div className={"admission-details"}>
+                      <HospitalBed16 />|<span>{bedDetails.bedNumber}</span>|
                       <Link href={"#"} inline={true}>
                         <span>{patientDetails.display.split(" ")[0]}</span>
                       </Link>
@@ -62,7 +60,8 @@ export const CareViewPatientsSummary = (props) => {
                         defaultMessage={"Patient"}
                       />
                       : <span>{person.display}</span>&nbsp;(
-                      <span>{person.gender}</span>)&nbsp;.
+                      <span>{person.gender}</span>)
+                      <span className={"separator"}>|</span>
                       <span>{person.age}</span>
                       <FormattedMessage
                         id={"AGE_YEARS_LABEL"}
