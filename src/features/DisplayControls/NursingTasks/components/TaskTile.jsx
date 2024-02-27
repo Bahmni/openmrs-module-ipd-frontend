@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
+import moment from "moment";
 import Clock from "../../../../icons/clock.svg";
 import {
   getTime,
@@ -11,14 +12,15 @@ import { TooltipDefinition } from "carbon-components-react";
 import "../styles/TaskTile.scss";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
-import { asNeededPlaceholderConceptName } from "../../../../constants";
+import { asNeededPlaceholderConceptName, timeFormatFor12hr, timeFormatfor24Hr} from "../../../../constants";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
 
   const { config } = useContext(IPDContext);
-  const { nursingTasks = {} } = config;
+  const { nursingTasks = {}, enable24HourTime = {} } = config;
+  const enable24Hour = enable24HourTime;
 
   let isGroupedTask, taskCount;
   if (medicationNursingTask.length > 1) {
@@ -100,7 +102,7 @@ export default function TaskTile(props) {
             <div className="tile-content-subtext">
               <Clock />
               <div>
-                &nbsp;{getTime(administeredTimeInEpochSeconds, startTime)}
+                &nbsp;{enable24Hour? moment(getTime(administeredTimeInEpochSeconds, startTime),"hh:mm").format(timeFormatfor24Hr) : moment(getTime(administeredTimeInEpochSeconds, startTime),"hh:mm").format(timeFormatFor12hr)}
               </div>
             </div>
           )}

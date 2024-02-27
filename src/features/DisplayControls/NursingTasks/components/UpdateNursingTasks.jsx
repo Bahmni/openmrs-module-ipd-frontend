@@ -13,7 +13,7 @@ import {
   Toggle,
 } from "carbon-components-react";
 import moment from "moment";
-import { TimePicker24Hour, Title } from "bahmni-carbon-ui";
+import { TimePicker24Hour, Title, TimePicker} from "bahmni-carbon-ui";
 import AdministeredMedicationList from "./AdministeredMedicationList";
 import {
   saveAdministeredMedication,
@@ -24,7 +24,7 @@ import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanel
 import {
   performerFunction,
   timeText12,
-  timeText24,
+  timeText24, timeFormatFor12hr, timeFormatfor24Hr
 } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -50,7 +50,7 @@ const UpdateNursingTasks = (props) => {
   const [administeredTasks, setAdministeredTasks] = useState({});
   const [skippedTasks, setSkippedTasks] = useState({});
   const [showWarningNotification, setShowWarningNotification] = useState(false);
-  const invalidTimeText24Hour = (
+  const invalidTimeText = (
     <FormattedMessage
       id={"INVALID_TIME"}
       defaultMessage={"Please enter valid time"}
@@ -61,8 +61,8 @@ const UpdateNursingTasks = (props) => {
   };
 
   const { config } = useContext(IPDContext);
-  const { nursingTasks = {}, drugChart = {} } = config;
-  const enable24hour = drugChart.enable24HourTime;
+  const { nursingTasks = {}, enable24HourTime = {} } = config;
+  const enable24Hour = enable24HourTime;
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
   const saveAdministeredTasks = () => {
@@ -123,7 +123,7 @@ const UpdateNursingTasks = (props) => {
         {time && (
           <>
             <FormattedMessage id={"AT"} defaultMessage={"at"} />
-            &nbsp;{time.format("HH:mm")}
+            &nbsp;{ enable24Hour? time.format(timeFormatfor24Hr):time.format(timeFormatFor12hr)}
           </>
         )}
       </div>
@@ -153,6 +153,7 @@ const UpdateNursingTasks = (props) => {
         };
       });
     });
+    console.log("time",moment(medicationTasks[0].startTime,"hh:mm").format(timeFormatFor12hr));
   }, [medicationTasks]);
 
   useEffect(() => {
@@ -183,7 +184,7 @@ const UpdateNursingTasks = (props) => {
         [id]: {
           ...tasks[id],
           isTimeOutOfWindow: true,
-          actualTime: moment(time, "HH:mm"),
+          actualTime: enable24Hour? moment(time, timeFormatfor24Hr):moment(time, timeFormatFor12hr),
         },
       });
       updateErrors({
@@ -196,7 +197,7 @@ const UpdateNursingTasks = (props) => {
         [id]: {
           ...tasks[id],
           isTimeOutOfWindow: false,
-          actualTime: moment(time, "HH:mm"),
+          actualTime: enable24Hour? moment(time, timeFormatfor24Hr):moment(time, timeFormatFor12hr),
         },
       });
       delete errors[id];
@@ -204,7 +205,7 @@ const UpdateNursingTasks = (props) => {
   };
 
   const handleToggle = (checked, id) => {
-    const time = moment().format("HH:mm");
+    const time = enable24Hour? moment().format(timeFormatfor24Hr) : moment().format(timeFormatFor12hr);
     if (
       checked &&
       !isTimeWithinAdministeredWindow(time, tasks[id].startTime, nursingTasks)
@@ -316,7 +317,7 @@ const UpdateNursingTasks = (props) => {
       setShowWarningNotification(false);
     },
   };
-
+  
   return (
     <>
       <SideBarPanel
@@ -331,7 +332,7 @@ const UpdateNursingTasks = (props) => {
                 defaultMessage={"Scheduled for"}
               />
               <Clock />
-              {medicationTasks[0].startTime}
+              {enable24Hour ? moment(medicationTasks[0].startTime,"hh:mm").format(timeFormatfor24Hr) : moment(medicationTasks[0].startTime,"hh:mm").format(timeFormatFor12hr)}
             </div>
           )}
           {medicationTasks.map((medicationTask, index) => {
@@ -369,22 +370,35 @@ const UpdateNursingTasks = (props) => {
                   tasks[medicationTask.uuid]?.skipped) && (
                   <div style={{ display: "flex" }}>
                     {tasks[medicationTask.uuid]?.actualTime && (
-                      <TimePicker24Hour
+                      enable24Hour ? (<TimePicker24Hour
                         defaultTime={tasks[
-                          medicationTask.uuid
-                        ]?.actualTime.format("HH:mm")}
+                        medicationTask.uuid
+                        ]?.actualTime.format(timeFormatfor24Hr)}
                         onChange={(time) => {
                           handleTimeChange(time, medicationTask.uuid);
                         }}
                         labelText={
-                          enable24hour
+                          enable24Hour
                             ? `Task Time (${timeText24})`
                             : `Task Time (${timeText12})`
                         }
-                        invalidText={invalidTimeText24Hour}
+                        invalidText={invalidTimeText}
                         light={true}
                         width={"150px"}
-                      />
+                      />) : <TimePicker defaultTime={tasks[
+                        medicationTask.uuid
+                      ]?.actualTime.format(timeFormatFor12hr)}
+                      onChange={(time) => {
+                        handleTimeChange(time, medicationTask.uuid);
+                      }}
+                      labelText={
+                        enable24Hour
+                          ? `Task Time (${timeText24})`
+                          : `Task Time (${timeText12})`
+                      }
+                      invalidText={invalidTimeText}
+                      light={true}
+                      width={"150px"}/>
                     )}
                     <div
                       className={`${

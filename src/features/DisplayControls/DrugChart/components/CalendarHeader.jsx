@@ -5,18 +5,19 @@ import { IPDContext } from "../../../../context/IPDContext";
 
 export default function CalendarHeader(props) {
   const { config } = useContext(IPDContext);
-  const { drugChart = {} } = config;
+  const { enable24HourTime = {} } = config;
   const { currentShiftArray } = props;
-  const enable24hour = drugChart.enable24HourTime;
+  const enable24Hour = enable24HourTime;
 
   return (
     <div className="calendar-header">
       <div style={{ display: "flex" }}>
         {currentShiftArray.map((hour) => {
-          const transformedHour = enable24hour ? hour : hour % 12 || 12;
+          const transformedHour = enable24Hour ? hour : hour % 12 || 12;
+          const period = enable24Hour ? '' : hour < 12 ? 'am' : 'pm';
           const formattedHour = `${transformedHour.toLocaleString("en-US", {
             minimumIntegerDigits: 2,
-          })}:00`;
+          })}:00 ${period}`;
 
           return (
             <div data-testid="hour" key={hour} className={"hour-header"}>

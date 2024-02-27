@@ -23,7 +23,7 @@ import { FormattedMessage } from "react-intl";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";
 import { IPDContext } from "../../../../context/IPDContext";
-import { displayShiftTimingsFormat } from "../../../../constants";
+import { displayShiftTimingsFormat, timeFormatFor12hr, timeFormatfor24Hr, timeText12 } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
 
 const NoMedicationTaskMessage = (
@@ -36,7 +36,8 @@ const NoMedicationTaskMessage = (
 export default function DrugChartWrapper(props) {
   const { patientId } = props;
   const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
-  const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
+  const { shiftDetails: shiftConfig = {}, drugChart = {},enable24HourTime = {} } = config;
+  const enable24Hour = enable24HourTime;
   const [drugChartData, setDrugChartData] = useState([]);
   const [transformedData, setTransformedData] = useState([]);
   const [drugOrders, setDrugOrders] = useState({});
@@ -219,13 +220,13 @@ export default function DrugChartWrapper(props) {
     const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
     const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
 
-    const formattedShiftStartTime = drugChart.enable24HourTime
+    const formattedShiftStartTime = enable24Hour
       ? shiftStartTime
-      : formatDate(startEndDates.startDate, "hh:mm a");
+      : formatDate(startEndDates.startDate, timeFormatFor12hr);
 
-    const formattedShiftEndTime = drugChart.enable24HourTime
+    const formattedShiftEndTime = enable24Hour
       ? shiftEndTime
-      : formatDate(startEndDates.endDate - 60, "hh:mm a");
+      : formatDate(startEndDates.endDate - 60, timeFormatFor12hr);
 
     if (shiftStartDate === shiftEndDate) {
       return (

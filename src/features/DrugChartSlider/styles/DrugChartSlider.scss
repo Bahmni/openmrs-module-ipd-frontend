@@ -41,15 +41,16 @@
 
 .schedule-time,
 .schedule-time-remainder {
+  padding-right: 10px;
   input#time-selector,
   textarea.bx--text-area.notes-section {
     background-color: #efefef;
   }
 }
 
-.schedule-time-remainder {
-  width: 25%;
-}
+// .schedule-time-remainder {
+//   width: 25%;
+// }
 
 .start-time {
   input#time-selector,
@@ -82,6 +83,7 @@
     color: #000;
   }
   .inline-field {
+    flex-wrap: wrap;
     padding: 0;
   }
 }
