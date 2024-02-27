@@ -23,7 +23,10 @@ import { FormattedMessage } from "react-intl";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";
 import { IPDContext } from "../../../../context/IPDContext";
-import { displayShiftTimingsFormat, timeFormatFor12hr, timeFormatfor24Hr, timeText12 } from "../../../../constants";
+import {
+  displayShiftTimingsFormat,
+  timeFormatFor12hr,
+} from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
 
 const NoMedicationTaskMessage = (
@@ -36,7 +39,11 @@ const NoMedicationTaskMessage = (
 export default function DrugChartWrapper(props) {
   const { patientId } = props;
   const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
-  const { shiftDetails: shiftConfig = {}, drugChart = {},enable24HourTime = {} } = config;
+  const {
+    shiftDetails: shiftConfig = {},
+    drugChart = {},
+    enable24HourTime = {},
+  } = config;
   const [drugChartData, setDrugChartData] = useState([]);
   const [transformedData, setTransformedData] = useState([]);
   const [drugOrders, setDrugOrders] = useState({});

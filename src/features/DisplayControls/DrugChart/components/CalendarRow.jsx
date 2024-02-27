@@ -1,11 +1,9 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import TimeCell from "./TimeCell.jsx";
-import { areDatesSame } from "../../../../utils/DateTimeUtils.js";
-import moment from "moment";
+import { areDatesSame, formatDate } from "../../../../utils/DateTimeUtils.js";
 import { IPDContext } from "../../../../context/IPDContext";
 import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
-import { formatDate } from "../../../../utils/DateTimeUtils.js";
 
 export default function CalendarRow(props) {
   const { config } = useContext(IPDContext);
@@ -22,13 +20,19 @@ export default function CalendarRow(props) {
         administrationSummary.status
       )
     ) {
-      time = formatDate(medicationAdministration.administeredDateTime, timeFormatfor24Hr);
+      time = formatDate(
+        medicationAdministration.administeredDateTime,
+        timeFormatfor24Hr
+      );
       adminInfo = {
         notes: administrationSummary.notes,
         administrationInfo: `${administrationSummary.performerName} [${
           enable24HourTime
             ? time
-            : formatDate(medicationAdministration.administeredDateTime, timeFormatFor12hr)
+            : formatDate(
+                medicationAdministration.administeredDateTime,
+                timeFormatFor12hr
+              )
         }]`,
       };
     } else if (administrationSummary.status === "Not-Administered") {
