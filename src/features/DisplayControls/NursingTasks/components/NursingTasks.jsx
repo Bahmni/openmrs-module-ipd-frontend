@@ -54,7 +54,6 @@ export default function NursingTasks(props) {
   const [notCurrentShift, setNotCurrentShift] = useState(false);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const { shiftDetails: shiftConfig = {}, enable24HourTime = {} } = config;
-  const enable24Hour = enable24HourTime;
   const shiftDetails = currentShiftHoursArray(
     isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
     shiftConfig
@@ -327,11 +326,11 @@ export default function NursingTasks(props) {
     const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
     const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
 
-    const formattedShiftStartTime = enable24Hour
+    const formattedShiftStartTime = enable24HourTime
       ? shiftStartTime
       : formatDate(startEndDates.startDate, timeFormatFor12hr);
 
-    const formattedShiftEndTime = enable24Hour
+    const formattedShiftEndTime = enable24HourTime
       ? shiftEndTime
       : formatDate(startEndDates.endDate - 60, timeFormatFor12hr);
 
