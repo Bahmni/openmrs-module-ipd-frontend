@@ -13,7 +13,7 @@ export default function CalendarHeader(props) {
       <div style={{ display: "flex" }}>
         {currentShiftArray.map((hour) => {
           const transformedHour = enable24HourTime ? hour : hour % 12 || 12;
-          const period = enable24HourTime ? '' : hour < 12 ? 'am' : 'pm';
+          const period = enable24HourTime ? "" : hour < 12 ? "AM" : "PM";
           const formattedHour = `${transformedHour.toLocaleString("en-US", {
             minimumIntegerDigits: 2,
           })}:00 ${period}`;
