@@ -51,6 +51,9 @@ const Treatments = (props) => {
     visitSummary,
     provider,
   } = useContext(SliderContext);
+  const { config } = useContext(IPDContext);
+  const { enable24HourTime = {} } = config;
+  const enable24Hour = enable24HourTime;
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -360,7 +363,7 @@ const Treatments = (props) => {
       patientId: patientId,
       scheduleFrequencies: treatmentConfigs.scheduleFrequencies,
       startTimeFrequencies: treatmentConfigs.startTimeFrequencies,
-      enable24HourTimers: treatmentConfigs.enable24HourTimers,
+      enable24HourTimers: enable24Hour,
       drugOrder: null,
     });
     setIsLoading(false);

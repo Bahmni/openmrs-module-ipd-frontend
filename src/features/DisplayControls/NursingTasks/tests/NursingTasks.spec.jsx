@@ -9,7 +9,7 @@ import {
 } from "./NursingTasksUtilsMockData";
 import MockDate from "mockdate";
 import { SliderContext } from "../../../../context/SliderContext";
-import { mockConfig } from "../../../../utils/CommonUtils";
+import { mockConfig, mockConfigFor12HourFormat} from "../../../../utils/CommonUtils";
 
 const mockFetchMedicationNursingTasks = jest.fn();
 const mockGetTimeInSeconds = jest.fn();
@@ -184,6 +184,28 @@ describe("NursingTasks", () => {
     expect(getByText(/06:00/)).toBeTruthy();
     expect(getByText(/17:59/)).toBeTruthy();
   });
+
+  it("should show current date when in 12 hour format", async () => {
+    MockDate.set("2023-08-11 07:00 PM");
+
+    mockFetchMedicationNursingTasks.mockResolvedValueOnce(
+      mockNursingTasksResponse
+    );
+    const { getByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IPDContext.Provider value={{ config: mockConfigFor12HourFormat, isReadMode: false }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
+    });
+    expect(getByText(/11 Aug 2023/)).toBeTruthy();
+    expect(getByText(/06:00 AM/)).toBeTruthy();
+    expect(getByText(/05:59 PM/)).toBeTruthy();
+  });
+
   it("should show Correct Nursing Tasks when clicked on previous button", async () => {
     MockDate.set("2024-01-05");
     mockFetchMedicationNursingTasks

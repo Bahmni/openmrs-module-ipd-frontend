@@ -22,6 +22,7 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import {
   asNeededPlaceholderConceptName,
   componentKeys,
+  timeFormatFor12hr,
 } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -52,7 +53,8 @@ export default function NursingTasks(props) {
   const [successMessage, setSuccessMessage] = useState("");
   const [notCurrentShift, setNotCurrentShift] = useState(false);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
-  const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
+  const { shiftDetails: shiftConfig = {}, enable24HourTime = {} } = config;
+  const enable24Hour = enable24HourTime;
   const shiftDetails = currentShiftHoursArray(
     isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
     shiftConfig
@@ -300,7 +302,7 @@ export default function NursingTasks(props) {
               }
             }}
           >
-            <TaskTile medicationNursingTask={medicationNursingTask} is />
+            <TaskTile medicationNursingTask={medicationNursingTask} />
           </div>
         </div>
       );
@@ -334,13 +336,13 @@ export default function NursingTasks(props) {
     const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
     const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
 
-    const formattedShiftStartTime = drugChart.enable24HourTime
+    const formattedShiftStartTime = enable24Hour
       ? shiftStartTime
-      : formatDate(startEndDates.startDate, "hh:mm a");
+      : formatDate(startEndDates.startDate, timeFormatFor12hr);
 
-    const formattedShiftEndTime = drugChart.enable24HourTime
+    const formattedShiftEndTime = enable24Hour
       ? shiftEndTime
-      : formatDate(startEndDates.endDate - 60, "hh:mm a");
+      : formatDate(startEndDates.endDate - 60, timeFormatFor12hr);
 
     if (shiftStartDate === shiftEndDate) {
       return (
