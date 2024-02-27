@@ -25,6 +25,44 @@
       padding: 0 8px;
     }
   }
+
+  .slot-details-container {
+    min-width: 650px;
+    padding: 20px 0;
+    vertical-align: top;
+
+    .slot-details {
+      display: flex;
+
+      .item-padding {
+        padding: 0 5px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: start;
+        justify-content: space-evenly;
+        padding-left: 5px;
+        width: 50px;
+      }
+
+      .drug-details-wrapper {
+        display: flex;
+        flex-direction: column;
+        padding: 0 0 20px 20px;
+
+        .drug-details {
+          display: flex;
+          margin-top: 5px;
+
+          .drug-detail {
+            margin: 2px;
+            white-space: break-spaces;
+          }
+        }
+      }
+    }
+  }
 }
 
 .care-view-patient-table {
