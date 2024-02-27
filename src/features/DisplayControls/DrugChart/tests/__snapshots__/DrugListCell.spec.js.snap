@@ -128,7 +128,7 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
                 <span
                   style="color: rgb(82, 82, 82);"
                 >
-                  8:30
+                  08:30
                 </span>
               </div>
             </button>
@@ -137,7 +137,7 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
               id="definition-tooltip-5"
               role="tooltip"
             >
-              8:30
+              08:30
             </span>
           </span>
         </div>
@@ -226,7 +226,7 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
                 <span
                   style="color: rgb(255, 0, 0);"
                 >
-                  2:30
+                  02:30
                 </span>
               </div>
             </button>
@@ -235,7 +235,7 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
               id="definition-tooltip-3"
               role="tooltip"
             >
-              2:30
+              02:30
             </span>
           </span>
         </div>
