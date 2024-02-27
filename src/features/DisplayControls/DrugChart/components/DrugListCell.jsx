@@ -9,6 +9,7 @@ import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import moment from "moment";
 import { IPDContext } from "../../../../context/IPDContext";
 import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 
 export default function DrugListCell(props) {
   const { dosingInstructions, duration, name, slots, notes, orderReasonText } =
@@ -32,8 +33,8 @@ export default function DrugListCell(props) {
       administrationInfo.push({
         kind: slot.administrationSummary.status,
         time: enable24HourTime
-          ? moment(slot.startTime * 1000).format(timeFormatfor24Hr)
-          : moment(slot.startTime * 1000).format(timeFormatFor12hr),
+          ? formatDate(slot.startTime * 1000, timeFormatfor24Hr)
+          : formatDate(slot.startTime * 1000, timeFormatFor12hr),
       });
     }
   });
