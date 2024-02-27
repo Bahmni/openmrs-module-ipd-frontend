@@ -20,7 +20,6 @@ export default function TaskTile(props) {
 
   const { config } = useContext(IPDContext);
   const { nursingTasks = {}, enable24HourTime = {} } = config;
-  const enable24Hour = enable24HourTime;
 
   let isGroupedTask, taskCount;
   if (medicationNursingTask.length > 1) {
@@ -102,7 +101,7 @@ export default function TaskTile(props) {
             <div className="tile-content-subtext">
               <Clock />
               <div>
-                &nbsp;{enable24Hour? moment(getTime(administeredTimeInEpochSeconds, startTime),"hh:mm").format(timeFormatfor24Hr) : moment(getTime(administeredTimeInEpochSeconds, startTime),"hh:mm").format(timeFormatFor12hr)}
+                &nbsp;{enable24HourTime? moment(getTime(administeredTimeInEpochSeconds, startTime),"hh:mm").format(timeFormatfor24Hr) : moment(getTime(administeredTimeInEpochSeconds, startTime),"hh:mm").format(timeFormatFor12hr)}
               </div>
             </div>
           )}

@@ -16,7 +16,6 @@ export default function DrugListCell(props) {
   const { instructions, dosage, doseUnits, route } = dosingInstructions;
   const { config } = useContext(IPDContext);
   const { enable24HourTime = {} } = config;
-  const enable24Hour = enable24HourTime;
 
   const showInstructionsIcon =
     instructions?.instructions ||
@@ -32,7 +31,7 @@ export default function DrugListCell(props) {
     ) {
       administrationInfo.push({
         kind: slot.administrationSummary.status,
-        time: enable24Hour
+        time: enable24HourTime
           ? moment(slot.startTime * 1000).format(timeFormatfor24Hr)
           : moment(slot.startTime * 1000).format(timeFormatFor12hr),
       });
@@ -94,7 +93,7 @@ export default function DrugListCell(props) {
     let administeredTimes = [];
     administrationInfo.map((adminInfo) => {
       let adminInfoTime = adminInfo.time;
-      if (adminInfoTime && !enable24Hour) {
+      if (adminInfoTime && !enable24HourTime) {
         const [hours, minutes] = adminInfoTime.split(":");
         const hours12 = hours % 12 || 12;
         adminInfoTime = `${hours12}:${minutes}`;
@@ -125,7 +124,7 @@ export default function DrugListCell(props) {
                   <Clock className={"clock-icon"} />
                   {administrationInfo.map((adminInfo, index) => {
                     let adminInfoTime = adminInfo.time;
-                    if (adminInfoTime && !enable24Hour) {
+                    if (adminInfoTime && !enable24HourTime) {
                       const [hours, minutes] = adminInfoTime.split(":");
                       const hours12 = hours % 12 || 12;
                       adminInfoTime = `${hours12}:${minutes}`;

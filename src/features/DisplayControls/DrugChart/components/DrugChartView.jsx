@@ -37,7 +37,6 @@ export default function DrugChartWrapper(props) {
   const { patientId } = props;
   const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
   const { shiftDetails: shiftConfig = {}, drugChart = {},enable24HourTime = {} } = config;
-  const enable24Hour = enable24HourTime;
   const [drugChartData, setDrugChartData] = useState([]);
   const [transformedData, setTransformedData] = useState([]);
   const [drugOrders, setDrugOrders] = useState({});
@@ -220,11 +219,11 @@ export default function DrugChartWrapper(props) {
     const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
     const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
 
-    const formattedShiftStartTime = enable24Hour
+    const formattedShiftStartTime = enable24HourTime
       ? shiftStartTime
       : formatDate(startEndDates.startDate, timeFormatFor12hr);
 
-    const formattedShiftEndTime = enable24Hour
+    const formattedShiftEndTime = enable24HourTime
       ? shiftEndTime
       : formatDate(startEndDates.endDate - 60, timeFormatFor12hr);
 
