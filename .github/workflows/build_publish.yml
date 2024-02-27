@@ -2,7 +2,7 @@ name: 🏗️ Build and Publish
 on:
   push:
     branches:
-      - main
+      - "ipd-release-5th-March"
     paths-ignore:
       - "**.md"
   workflow_dispatch:
@@ -54,7 +54,7 @@ jobs:
           push: true
           tags: |
             bahmni/microfrontend-ipd:ipd-${{ github.run_number }}
-            bahmni/microfrontend-ipd:ipd
+            bahmni/microfrontend-ipd:ipd-release
       - name: Push Translations to Transifex
         run: |
           bash .github/scripts/transifex.sh
