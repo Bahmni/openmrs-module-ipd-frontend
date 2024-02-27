@@ -6,7 +6,6 @@ import { TooltipDefinition } from "carbon-components-react";
 import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
-import moment from "moment";
 import { IPDContext } from "../../../../context/IPDContext";
 import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
 import { formatDate } from "../../../../utils/DateTimeUtils";

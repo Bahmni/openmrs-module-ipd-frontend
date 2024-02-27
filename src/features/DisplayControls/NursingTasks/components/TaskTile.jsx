@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
-import moment from "moment";
 import Clock from "../../../../icons/clock.svg";
 import {
   getTime,
@@ -12,7 +11,11 @@ import { TooltipDefinition } from "carbon-components-react";
 import "../styles/TaskTile.scss";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
-import { asNeededPlaceholderConceptName, timeFormatFor12hr, timeFormatfor24Hr} from "../../../../constants";
+import {
+  asNeededPlaceholderConceptName,
+  timeFormatFor12hr,
+  timeFormatfor24Hr,
+} from "../../../../constants";
 import { formatTime } from "../../../../utils/DateTimeUtils";
 
 export default function TaskTile(props) {
@@ -102,7 +105,18 @@ export default function TaskTile(props) {
             <div className="tile-content-subtext">
               <Clock />
               <div>
-                &nbsp;{enable24HourTime? formatTime(getTime(administeredTimeInEpochSeconds, startTime), "hh:mm", timeFormatfor24Hr) : formatTime(getTime(administeredTimeInEpochSeconds, startTime), "hh:mm", timeFormatFor12hr)}
+                &nbsp;
+                {enable24HourTime
+                  ? formatTime(
+                      getTime(administeredTimeInEpochSeconds, startTime),
+                      "hh:mm",
+                      timeFormatfor24Hr
+                    )
+                  : formatTime(
+                      getTime(administeredTimeInEpochSeconds, startTime),
+                      "hh:mm",
+                      timeFormatFor12hr
+                    )}
               </div>
             </div>
           )}
