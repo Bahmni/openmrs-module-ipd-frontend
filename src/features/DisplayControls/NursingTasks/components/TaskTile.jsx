@@ -13,6 +13,7 @@ import "../styles/TaskTile.scss";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
 import { asNeededPlaceholderConceptName, timeFormatFor12hr, timeFormatfor24Hr} from "../../../../constants";
+import { formatTime } from "../../../../utils/DateTimeUtils";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
@@ -101,7 +102,7 @@ export default function TaskTile(props) {
             <div className="tile-content-subtext">
               <Clock />
               <div>
-                &nbsp;{enable24HourTime? moment(getTime(administeredTimeInEpochSeconds, startTime),"hh:mm").format(timeFormatfor24Hr) : moment(getTime(administeredTimeInEpochSeconds, startTime),"hh:mm").format(timeFormatFor12hr)}
+                &nbsp;{enable24HourTime? formatTime(getTime(administeredTimeInEpochSeconds, startTime), "hh:mm", timeFormatfor24Hr) : formatTime(getTime(administeredTimeInEpochSeconds, startTime), "hh:mm", timeFormatFor12hr)}
               </div>
             </div>
           )}

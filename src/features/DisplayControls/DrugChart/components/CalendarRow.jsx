@@ -5,6 +5,7 @@ import { areDatesSame } from "../../../../utils/DateTimeUtils.js";
 import moment from "moment";
 import { IPDContext } from "../../../../context/IPDContext";
 import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
+import { formatDate } from "../../../../utils/DateTimeUtils.js";
 
 export default function CalendarRow(props) {
   const { config } = useContext(IPDContext);
@@ -21,27 +22,23 @@ export default function CalendarRow(props) {
         administrationSummary.status
       )
     ) {
-      time = moment(medicationAdministration.administeredDateTime).format(
-        timeFormatfor24Hr
-      );
+      time = formatDate(medicationAdministration.administeredDateTime, timeFormatfor24Hr);
       adminInfo = {
         notes: administrationSummary.notes,
         administrationInfo: `${administrationSummary.performerName} [${
           enable24HourTime
             ? time
-            : moment(medicationAdministration.administeredDateTime).format(
-                timeFormatFor12hr
-              )
+            : formatDate(medicationAdministration.administeredDateTime, timeFormatFor12hr)
         }]`,
       };
     } else if (administrationSummary.status === "Not-Administered") {
-      time = moment(slot.startTime * 1000).format(timeFormatfor24Hr);
+      time = formatDate(slot.startTime * 1000, timeFormatfor24Hr);
       adminInfo = {
         notes: administrationSummary.notes,
         administrationInfo: administrationSummary.performerName,
       };
     } else {
-      time = moment(slot.startTime * 1000).format(timeFormatfor24Hr);
+      time = formatDate(slot.startTime * 1000, timeFormatfor24Hr);
     }
     const [hours, minutes] = time.split(":");
     transformedData[+hours] = transformedData[+hours] || [];

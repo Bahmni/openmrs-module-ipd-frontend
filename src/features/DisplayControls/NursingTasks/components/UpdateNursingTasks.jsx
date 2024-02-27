@@ -152,7 +152,6 @@ const UpdateNursingTasks = (props) => {
         };
       });
     });
-    console.log("time",moment(medicationTasks[0].startTime,"hh:mm").format(timeFormatFor12hr));
   }, [medicationTasks]);
 
   useEffect(() => {
