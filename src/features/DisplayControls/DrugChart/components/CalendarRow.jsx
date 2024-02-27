@@ -1,10 +1,10 @@
-import React ,{ useContext } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import TimeCell from "./TimeCell.jsx";
 import { areDatesSame } from "../../../../utils/DateTimeUtils.js";
 import moment from "moment";
 import { IPDContext } from "../../../../context/IPDContext";
-import {timeFormatFor12hr,timeFormatfor24Hr} from "../../../../constants";
+import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
 
 export default function CalendarRow(props) {
   const { config } = useContext(IPDContext);
@@ -21,19 +21,27 @@ export default function CalendarRow(props) {
         administrationSummary.status
       )
     ) {
-      time = enable24HourTime ? moment(medicationAdministration.administeredDateTime).format(timeFormatfor24Hr) : moment(medicationAdministration.administeredDateTime).format(timeFormatFor12hr);
+      time = moment(medicationAdministration.administeredDateTime).format(
+        timeFormatfor24Hr
+      );
       adminInfo = {
         notes: administrationSummary.notes,
-        administrationInfo: `${administrationSummary.performerName} [${time}]`,
+        administrationInfo: `${administrationSummary.performerName} [${
+          enable24HourTime
+            ? time
+            : moment(medicationAdministration.administeredDateTime).format(
+                timeFormatFor12hr
+              )
+        }]`,
       };
     } else if (administrationSummary.status === "Not-Administered") {
-      time = enable24HourTime ? moment(slot.startTime * 1000).format(timeFormatfor24Hr) :  moment(slot.startTime * 1000).format(timeFormatFor12hr);
+      time = moment(slot.startTime * 1000).format(timeFormatfor24Hr);
       adminInfo = {
         notes: administrationSummary.notes,
         administrationInfo: administrationSummary.performerName,
       };
     } else {
-      time = enable24HourTime ? moment(slot.startTime * 1000).format(timeFormatfor24Hr) : moment(slot.startTime * 1000).format(timeFormatFor12hr);
+      time = moment(slot.startTime * 1000).format(timeFormatfor24Hr);
     }
     const [hours, minutes] = time.split(":");
     transformedData[+hours] = transformedData[+hours] || [];
