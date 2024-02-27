@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Header, Link, Loading } from "carbon-components-react";
 import { Home20 } from "@carbon/icons-react";
 import { ArrowLeft } from "@carbon/icons-react/next";
+import _ from "lodash";
 import "./CareViewDashboard.scss";
 import { CareViewSummary } from "../../features/CareViewSummary/components/CareViewSummary";
 import { CareViewPatients } from "../../features/CareViewPatients/components/CareViewPatients";
@@ -10,12 +11,21 @@ import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 import { homePageUrl } from "../../constants";
 import { CareViewContext } from "../../context/CareViewContext";
+import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
 
 const CareViewDashboard = (props) => {
   const { hostApi } = props;
   const [selectedWard, setSelectedWard] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [wardSummary, setWardSummary] = useState({});
+  const [dashboardConfig, setDashboardConfig] = useState({});
+  const getConfig = async () => {
+    const config = await getConfigForCareViewDashboard();
+    setDashboardConfig(config);
+  };
+  useEffect(() => {
+    getConfig();
+  }, []);
   return (
     <I18nProvider>
       <main className="care-view-page">
@@ -36,6 +46,7 @@ const CareViewDashboard = (props) => {
               setWardSummary,
               selectedWard,
               setSelectedWard,
+              dashboardConfig,
             }}
           >
             <div className="care-view-navigations">
@@ -55,7 +66,9 @@ const CareViewDashboard = (props) => {
               </Link>
             </div>
             <CareViewSummary callbacks={{ setIsLoading }} />
-            <CareViewPatients callbacks={{ setIsLoading }} />
+            {!_.isEmpty(dashboardConfig) && (
+              <CareViewPatients callbacks={{ setIsLoading }} />
+            )}
           </CareViewContext.Provider>
         </section>
       </main>

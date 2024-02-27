@@ -1,5 +1,21 @@
-import { homePageUrl } from "../../constants";
+import { ADT_CONFIG_URL } from "../../constants";
+import axios from "axios";
+export const getConfigForCareViewDashboard = async () => {
+  try {
+    const response = await axios.get(ADT_CONFIG_URL, {
+      withCredentials: true,
+    });
 
-export const goToHome = () => {
-  window.location.href = homePageUrl;
+    if (response.status !== 200) throw new Error(response.statusText);
+    const dashboardConfig = response.data.config.careViewDashboard;
+    if (dashboardConfig === undefined) {
+      return {
+        pageSizeOptions: [10, 20, 30, 40, 50],
+        defaultPageSize: 10,
+      };
+    }
+    return dashboardConfig;
+  } catch (error) {
+    return error;
+  }
 };
