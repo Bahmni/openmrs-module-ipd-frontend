@@ -7,9 +7,10 @@ import { CareViewContext } from "../../../context/CareViewContext";
 import { CareViewPatientsSummary } from "../../CareViewPatientsSummary/components/CareViewPatientsSummary";
 
 export const CareViewPatients = () => {
-  const { selectedWard, wardSummary } = useContext(CareViewContext);
+  const { selectedWard, wardSummary, dashboardConfig } =
+    useContext(CareViewContext);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(dashboardConfig.defaultPageSize);
   const [patientList, setPatientList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -72,7 +73,7 @@ export const CareViewPatients = () => {
               page={currentPage}
               pageSize={limit}
               onChange={handlePaginationChange}
-              pageSizes={[10, 20, 30, 40, 50]}
+              pageSizes={dashboardConfig.pageSizeOptions}
               totalItems={wardSummary?.totalPatients || 0}
               itemsPerPageText={"Patients per page"}
             />
