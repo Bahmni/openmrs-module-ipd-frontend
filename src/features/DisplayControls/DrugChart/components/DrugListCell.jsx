@@ -8,15 +8,15 @@ import NoteIcon from "../../../../icons/note.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import moment from "moment";
 import { IPDContext } from "../../../../context/IPDContext";
+import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
 
 export default function DrugListCell(props) {
   const { dosingInstructions, duration, name, slots, notes, orderReasonText } =
     props.drugInfo;
   const { instructions, dosage, doseUnits, route } = dosingInstructions;
   const { config } = useContext(IPDContext);
-  const { drugChart = {} } = config;
-
-  const enable24hour = drugChart.enable24HourTime;
+  const { enable24HourTime = {} } = config;
+  const enable24Hour = enable24HourTime;
 
   const showInstructionsIcon =
     instructions?.instructions ||
@@ -32,7 +32,9 @@ export default function DrugListCell(props) {
     ) {
       administrationInfo.push({
         kind: slot.administrationSummary.status,
-        time: moment(slot.startTime * 1000).format("HH:mm"),
+        time: enable24Hour
+          ? moment(slot.startTime * 1000).format(timeFormatfor24Hr)
+          : moment(slot.startTime * 1000).format(timeFormatFor12hr),
       });
     }
   });
@@ -92,7 +94,7 @@ export default function DrugListCell(props) {
     let administeredTimes = [];
     administrationInfo.map((adminInfo) => {
       let adminInfoTime = adminInfo.time;
-      if (adminInfoTime && !enable24hour) {
+      if (adminInfoTime && !enable24Hour) {
         const [hours, minutes] = adminInfoTime.split(":");
         const hours12 = hours % 12 || 12;
         adminInfoTime = `${hours12}:${minutes}`;
@@ -123,7 +125,7 @@ export default function DrugListCell(props) {
                   <Clock className={"clock-icon"} />
                   {administrationInfo.map((adminInfo, index) => {
                     let adminInfoTime = adminInfo.time;
-                    if (adminInfoTime && !enable24hour) {
+                    if (adminInfoTime && !enable24Hour) {
                       const [hours, minutes] = adminInfoTime.split(":");
                       const hours12 = hours % 12 || 12;
                       adminInfoTime = `${hours12}:${minutes}`;
