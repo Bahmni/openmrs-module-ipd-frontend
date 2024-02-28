@@ -397,6 +397,7 @@ const AddEmergencyTasks = (props) => {
                     isRequired={true}
                     value={administrationDate}
                     dateFormat={"d M Y"}
+                    placeholder={"DD MMM YYYY"}
                     maxDate={new Date()}
                   />
                   {enable24HourTime ? (

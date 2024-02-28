@@ -491,7 +491,7 @@ exports[`DrugDetails should match snapshot 1`] = `
                 disabled=""
                 id="Dropdown"
                 pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
-                placeholder="mm/dd/yyyy"
+                placeholder="DD MM YYYY"
                 style="width: 250px;"
                 type="text"
               />
