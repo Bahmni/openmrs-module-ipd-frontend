@@ -6,7 +6,9 @@ import { mockPatientsList } from "./CareViewPatientsSummaryMock";
 describe("CareViewPatientsSummary", function () {
   it("should match snapshot", () => {
     const { container } = render(
-      <CareViewPatientsSummary patientsSummary={mockPatientsList} />
+      <CareViewPatientsSummary
+        patientsSummary={mockPatientsList.admittedPatients}
+      />
     );
     expect(container).toMatchSnapshot();
   });

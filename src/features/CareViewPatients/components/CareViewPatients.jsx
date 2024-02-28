@@ -23,7 +23,8 @@ export const CareViewPatients = () => {
         limit
       );
       if (response.status === 200) {
-        setPatientList(response.data);
+        const { admittedPatients } = response.data;
+        setPatientList(admittedPatients);
       } else {
         throw new Error("Failed to fetch data");
       }
