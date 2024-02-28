@@ -5,4 +5,5 @@ export const items = [
   { id: "prn", text: "PRN" },
   { id: "stopped", text: "Stopped" },
   { id: "skipped", text: "Skipped" },
+  { id: "missed", text: "Missed" },
 ];

@@ -33,7 +33,8 @@ export const ExtractMedicationNursingTasksData = (
     prnExtractedData = [],
     completedExtractedData = [],
     stoppedExtractedData = [],
-    skippedExtractedData = [];
+    skippedExtractedData = [],
+    missedExtractedData = [];
   medicationNursingTasksData.forEach((item) => {
     const { slots } = item;
 
@@ -142,6 +143,11 @@ export const ExtractMedicationNursingTasksData = (
         !slot.medicationAdministration
       ) {
         pendingExtractedData.push(slotInfo);
+      } else if (
+        (filterValue.id === "missed" || filterValue.id === "allTasks") &&
+        slot.status === "MISSED"
+      ) {
+        missedExtractedData.push({ ...slotInfo, status: "missed" });
       }
     });
   });
@@ -153,6 +159,9 @@ export const ExtractMedicationNursingTasksData = (
       a.administeredTimeInEpochSeconds - b.administeredTimeInEpochSeconds
   );
   stoppedExtractedData.sort(
+    (a, b) => a.startTimeInEpochSeconds - b.startTimeInEpochSeconds
+  );
+  missedExtractedData.sort(
     (a, b) => a.startTimeInEpochSeconds - b.startTimeInEpochSeconds
   );
   extractedData.push(...pendingExtractedData);
@@ -185,6 +194,7 @@ export const ExtractMedicationNursingTasksData = (
     groupedData.push(...stoppedExtractedData.map((item) => [item]));
     groupedData.push(...skippedExtractedData.map((item) => [item]));
     groupedData.push(...prnExtractedData.map((item) => [item]));
+    groupedData.push(...missedExtractedData.map((item) => [item]));
   }
   return groupedData;
 };
