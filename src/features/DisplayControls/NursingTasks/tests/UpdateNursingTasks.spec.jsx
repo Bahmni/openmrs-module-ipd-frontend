@@ -6,7 +6,10 @@ import {
   mockPRNMedicationTasks,
 } from "./NursingTasksUtilsMockData";
 import { IPDContext } from "../../../../context/IPDContext";
-import { mockConfig, mockConfigFor12HourFormat } from "../../../../utils/CommonUtils";
+import {
+  mockConfig,
+  mockConfigFor12HourFormat,
+} from "../../../../utils/CommonUtils";
 import MockDate from "mockdate";
 
 describe("UpdateNursingTasksSlider", function () {

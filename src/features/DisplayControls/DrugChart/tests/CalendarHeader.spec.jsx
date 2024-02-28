@@ -4,7 +4,10 @@ import CalendarHeader from "../components/CalendarHeader";
 import { currentShiftHoursArray } from "../utils/DrugChartUtils";
 import MockDate from "mockdate";
 import { IPDContext } from "../../../../context/IPDContext";
-import { mockConfig, mockConfigFor12HourFormat} from "../../../../utils/CommonUtils";
+import {
+  mockConfig,
+  mockConfigFor12HourFormat,
+} from "../../../../utils/CommonUtils";
 
 describe("CalendarHeader", () => {
   it("should match snapshot", () => {

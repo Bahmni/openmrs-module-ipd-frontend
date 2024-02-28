@@ -228,7 +228,7 @@ export default function NursingTasks(props) {
       defaultMessage={"No Stopped Task is available for the patient"}
     />
   );
-  
+
   const fetchNursingTasks = async (startDate, endDate) => {
     setIsLoading(true);
     const startDateTimeInSeconds = startDate / 1000;

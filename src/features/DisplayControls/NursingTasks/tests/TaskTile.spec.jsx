@@ -9,7 +9,10 @@ import {
   mockCompletedPRNTaskTileData,
   mockPendingPRNTaskTileData,
 } from "./NursingTasksUtilsMockData";
-import { mockConfig, mockConfigFor12HourFormat } from "../../../../utils/CommonUtils";
+import {
+  mockConfig,
+  mockConfigFor12HourFormat,
+} from "../../../../utils/CommonUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 
 describe("TaskTile", () => {

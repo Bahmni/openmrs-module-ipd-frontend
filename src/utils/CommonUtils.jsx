@@ -129,7 +129,6 @@ export const mockConfig = {
   },
 };
 
-
 export const mockConfigFor12HourFormat = {
   sections: [
     {
