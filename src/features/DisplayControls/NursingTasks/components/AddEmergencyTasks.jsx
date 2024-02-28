@@ -55,14 +55,16 @@ const AddEmergencyTasks = (props) => {
   const [routeOptions, setRouteOptions] = useState([]);
   const [providerOptions, setProviderOptions] = useState([]);
   const { config = {} } = useContext(IPDContext);
-  const { drugChart = {} } = config;
-  const enable24hour = drugChart.enable24HourTime;
+  const { enable24HourTime = {} } = config;
 
   const [selectedDrug, setSelectedDrug] = useState({});
   const [doseUnits, setDoseUnits] = useState({});
   const [administrationDate, setAdministrationDate] = useState(new Date());
   const [administrationTime, setAdministrationTime] = useState(
-    formatDate(new Date(), enable24hour ? timeFormatfor24Hr : timeFormatFor12hr)
+    formatDate(
+      new Date(),
+      enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
+    )
   );
   const [requestedProvider, setRequestedProvider] = useState({});
   const [routes, setRoutes] = useState({});
@@ -298,7 +300,7 @@ const AddEmergencyTasks = (props) => {
           time,
           formatDate(
             new Date(),
-            enable24hour ? timeFormatfor24Hr : timeFormatFor12hr
+            enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
           )
         )
       ) {
@@ -397,7 +399,7 @@ const AddEmergencyTasks = (props) => {
                     dateFormat={"d M Y"}
                     maxDate={new Date()}
                   />
-                  {enable24hour ? (
+                  {enable24HourTime ? (
                     <TimePicker24Hour
                       defaultTime={administrationTime}
                       onChange={(e) => {
@@ -492,7 +494,7 @@ const AddEmergencyTasks = (props) => {
           <hr />
           <AdministeredMedicationList
             list={popupMedicationData}
-            enable24Hour={enable24hour}
+            enable24Hour={enable24HourTime}
           />
         </Modal>
         <SaveAndCloseButtons

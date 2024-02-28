@@ -182,7 +182,7 @@ export const PatientHeader = (props) => {
                         className="show-more"
                         size="sm"
                         onClick={() => {
-                          setPatientDetailsOpen(!showPatientDetails)
+                          setPatientDetailsOpen(!showPatientDetails);
                           toggleDetailsView();
                         }}
                       >
@@ -194,7 +194,7 @@ export const PatientHeader = (props) => {
                         className="show-more"
                         size="sm"
                         onClick={() => {
-                          setPatientDetailsOpen(!showPatientDetails)
+                          setPatientDetailsOpen(!showPatientDetails);
                           toggleDetailsView();
                         }}
                       >
@@ -260,4 +260,5 @@ export const PatientHeader = (props) => {
 PatientHeader.propTypes = {
   patientId: PropTypes.string.isRequired,
   openVisitSummary: PropTypes.func.isRequired,
+  setPatientDetailsOpen: PropTypes.func.isRequired,
 };

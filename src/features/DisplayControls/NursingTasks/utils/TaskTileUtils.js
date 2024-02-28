@@ -1,5 +1,8 @@
 import React from "react";
-import { asNeededPlaceholderConceptName, asNeededMedicationRequestConceptName } from "../../../../constants";
+import {
+  asNeededPlaceholderConceptName,
+  asNeededMedicationRequestConceptName,
+} from "../../../../constants";
 
 export const getRelevantTaskStatus = (
   startTimeInEpochSeconds,
@@ -32,8 +35,7 @@ export const iconType = (task, nursingTasks) => {
     serviceType,
     status,
   } = task;
-  if (serviceType === asNeededPlaceholderConceptName)
-    return "Pending";
+  if (serviceType === asNeededPlaceholderConceptName) return "Pending";
   else if (serviceType === asNeededMedicationRequestConceptName) {
     return "Administered";
   }

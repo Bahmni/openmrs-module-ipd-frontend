@@ -11,14 +11,19 @@ import { TooltipDefinition } from "carbon-components-react";
 import "../styles/TaskTile.scss";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
-import { asNeededPlaceholderConceptName } from "../../../../constants";
+import {
+  asNeededPlaceholderConceptName,
+  timeFormatFor12hr,
+  timeFormatfor24Hr,
+} from "../../../../constants";
+import { formatTime } from "../../../../utils/DateTimeUtils";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
 
   const { config } = useContext(IPDContext);
-  const { nursingTasks = {} } = config;
+  const { nursingTasks = {}, enable24HourTime = {} } = config;
 
   let isGroupedTask, taskCount;
   if (medicationNursingTask.length > 1) {
@@ -100,7 +105,18 @@ export default function TaskTile(props) {
             <div className="tile-content-subtext">
               <Clock />
               <div>
-                &nbsp;{getTime(administeredTimeInEpochSeconds, startTime)}
+                &nbsp;
+                {enable24HourTime
+                  ? formatTime(
+                      getTime(administeredTimeInEpochSeconds, startTime),
+                      "hh:mm",
+                      timeFormatfor24Hr
+                    )
+                  : formatTime(
+                      getTime(administeredTimeInEpochSeconds, startTime),
+                      "hh:mm",
+                      timeFormatFor12hr
+                    )}
               </div>
             </div>
           )}
