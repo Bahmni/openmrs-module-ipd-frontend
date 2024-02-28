@@ -102,9 +102,8 @@ export const ExtractMedicationNursingTasksData = (
             slot.status === "NOT_DONE",
         serviceType,
       };
-      
-      if (filterValue.id === "prn" && slotInfo.dosingInstructions.asNeeded 
-      ) {
+
+      if (filterValue.id === "prn" && slotInfo.dosingInstructions.asNeeded) {
         prnExtractedData.push(slotInfo);
       }
 
