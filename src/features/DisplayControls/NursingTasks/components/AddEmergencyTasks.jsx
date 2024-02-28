@@ -61,7 +61,10 @@ const AddEmergencyTasks = (props) => {
   const [doseUnits, setDoseUnits] = useState({});
   const [administrationDate, setAdministrationDate] = useState(new Date());
   const [administrationTime, setAdministrationTime] = useState(
-    formatDate(new Date(), enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr)
+    formatDate(
+      new Date(),
+      enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
+    )
   );
   const [requestedProvider, setRequestedProvider] = useState({});
   const [routes, setRoutes] = useState({});

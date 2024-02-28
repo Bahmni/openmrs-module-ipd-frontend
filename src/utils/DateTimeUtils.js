@@ -7,7 +7,7 @@ export const formatDate = (value, format = defaultDateFormat) => {
 
 export const formatTime = (time, inputFormat, outputFormat) => {
   return moment(time, inputFormat).format(outputFormat);
-  }
+};
 
 export const areDatesSame = (date1, date2) => {
   return formatDate(date1) === formatDate(date2);

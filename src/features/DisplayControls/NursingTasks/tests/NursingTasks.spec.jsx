@@ -9,7 +9,10 @@ import {
 } from "./NursingTasksUtilsMockData";
 import MockDate from "mockdate";
 import { SliderContext } from "../../../../context/SliderContext";
-import { mockConfig, mockConfigFor12HourFormat} from "../../../../utils/CommonUtils";
+import {
+  mockConfig,
+  mockConfigFor12HourFormat,
+} from "../../../../utils/CommonUtils";
 
 const mockFetchMedicationNursingTasks = jest.fn();
 const mockGetTimeInSeconds = jest.fn();
@@ -193,7 +196,9 @@ describe("NursingTasks", () => {
     );
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfigFor12HourFormat, isReadMode: false }}>
+        <IPDContext.Provider
+          value={{ config: mockConfigFor12HourFormat, isReadMode: false }}
+        >
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
       </SliderContext.Provider>
