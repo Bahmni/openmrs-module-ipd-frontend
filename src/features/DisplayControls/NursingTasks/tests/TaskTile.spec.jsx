@@ -9,7 +9,10 @@ import {
   mockCompletedPRNTaskTileData,
   mockPendingPRNTaskTileData,
 } from "./NursingTasksUtilsMockData";
-import { mockConfig } from "../../../../utils/CommonUtils";
+import {
+  mockConfig,
+  mockConfigFor12HourFormat,
+} from "../../../../utils/CommonUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 
 describe("TaskTile", () => {
@@ -88,6 +91,18 @@ describe("TaskTile", () => {
     const administeredIcon = getByTestId("Administered");
     expect(administeredIcon).toBeTruthy();
     expect(getByText("Rx-PRN")).toBeTruthy();
-    expect(getByText("16:38 - 16:38 (actual)")).toBeTruthy();
+    expect(getByText("16:38")).toBeTruthy();
+  });
+
+  it("should render administered PRN task with time and Rx-PRN tag when time in 12 hour format", () => {
+    const { getByTestId, getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
+        <TaskTile medicationNursingTask={mockCompletedPRNTaskTileData} />
+      </IPDContext.Provider>
+    );
+    const administeredIcon = getByTestId("Administered");
+    expect(administeredIcon).toBeTruthy();
+    expect(getByText("Rx-PRN")).toBeTruthy();
+    expect(getByText("04:38 PM")).toBeTruthy();
   });
 });

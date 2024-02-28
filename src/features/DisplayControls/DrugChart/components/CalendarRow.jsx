@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import TimeCell from "./TimeCell.jsx";
-import { areDatesSame } from "../../../../utils/DateTimeUtils.js";
-import moment from "moment";
+import { areDatesSame, formatDate } from "../../../../utils/DateTimeUtils.js";
+import { IPDContext } from "../../../../context/IPDContext";
+import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
 
 export default function CalendarRow(props) {
+  const { config } = useContext(IPDContext);
+  const { enable24HourTime = {} } = config;
   const { rowData, currentShiftArray, selectedDate } = props;
   const { slots } = rowData;
   const transformedData = {};
@@ -17,21 +20,29 @@ export default function CalendarRow(props) {
         administrationSummary.status
       )
     ) {
-      time = moment(medicationAdministration.administeredDateTime).format(
-        "HH:mm"
+      time = formatDate(
+        medicationAdministration.administeredDateTime,
+        timeFormatfor24Hr
       );
       adminInfo = {
         notes: administrationSummary.notes,
-        administrationInfo: `${administrationSummary.performerName} [${time}]`,
+        administrationInfo: `${administrationSummary.performerName} [${
+          enable24HourTime
+            ? time
+            : formatDate(
+                medicationAdministration.administeredDateTime,
+                timeFormatFor12hr
+              )
+        }]`,
       };
     } else if (administrationSummary.status === "Not-Administered") {
-      time = moment(slot.startTime * 1000).format("HH:mm");
+      time = formatDate(slot.startTime * 1000, timeFormatfor24Hr);
       adminInfo = {
         notes: administrationSummary.notes,
         administrationInfo: administrationSummary.performerName,
       };
     } else {
-      time = moment(slot.startTime * 1000).format("HH:mm");
+      time = formatDate(slot.startTime * 1000, timeFormatfor24Hr);
     }
     const [hours, minutes] = time.split(":");
     transformedData[+hours] = transformedData[+hours] || [];

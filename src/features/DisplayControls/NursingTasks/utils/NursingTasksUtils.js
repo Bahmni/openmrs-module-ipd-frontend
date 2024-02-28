@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 import {
   MEDICATIONS_BASE_URL,
   ADMINISTERED_MEDICATIONS_BASE_URL,
@@ -103,9 +102,8 @@ export const ExtractMedicationNursingTasksData = (
             slot.status === "NOT_DONE",
         serviceType,
       };
-      
-      if (filterValue.id === "prn" && slotInfo.dosingInstructions.asNeeded 
-      ) {
+
+      if (filterValue.id === "prn" && slotInfo.dosingInstructions.asNeeded) {
         prnExtractedData.push(slotInfo);
       }
 
