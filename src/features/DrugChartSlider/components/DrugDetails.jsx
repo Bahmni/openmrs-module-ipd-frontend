@@ -77,6 +77,7 @@ export const DrugDetails = ({ hostData }) => {
           titleText={"Start Date"}
           title={"Start Date"}
           dateFormat={"d M Y"}
+          placeholder="DD MM YYYY"
           value={formatDate(hostData?.drugOrder?.drugOrder?.scheduledDate)}
           isDisabled={true}
         />
