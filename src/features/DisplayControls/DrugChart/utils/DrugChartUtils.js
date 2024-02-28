@@ -167,6 +167,8 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
         } else {
           if (slot.status === "STOPPED") {
             administrationStatus = "Stopped";
+          } else if (status === "MISSED") {
+            administrationStatus = "Not-Administered";
           } else if (isLateTask(startTime, drugChart)) {
             administrationStatus = "Late";
           }
@@ -196,7 +198,7 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
           ...slot,
           administrationSummary: {
             performerName,
-            notes,
+            notes: status === "MISSED" ? "Missed" : notes,
             status: administrationStatus,
           },
         });
