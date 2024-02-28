@@ -229,6 +229,13 @@ export default function NursingTasks(props) {
     />
   );
 
+  const NoPRNTasksMessageForStopped = (
+    <FormattedMessage
+      id={"NO_PRN_TASKS_MESSAGE_STOPPED"}
+      defaultMessage={"No PRN Task is available for the patient"}
+    />
+  );
+
   const fetchNursingTasks = async (startDate, endDate) => {
     setIsLoading(true);
     const startDateTimeInSeconds = startDate / 1000;
@@ -309,6 +316,8 @@ export default function NursingTasks(props) {
         return NoNursingTasksMessageForPending;
       case "stopped":
         return NoNursingTasksMessageForStopped;
+      case "prn":
+        return NoPRNTasksMessageForStopped;
       default:
         return NoNursingTasksMessage;
     }

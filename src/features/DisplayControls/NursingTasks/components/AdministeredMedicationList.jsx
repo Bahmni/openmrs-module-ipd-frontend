@@ -65,5 +65,6 @@ const AdministeredMedicationList = ({ list, enable24Hour }) => {
 
 AdministeredMedicationList.propTypes = {
   list: PropTypes.object.isRequired,
+  enable24Hour: PropTypes.boolean,
 };
 export default AdministeredMedicationList;

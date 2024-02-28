@@ -94,5 +94,6 @@ export const performerFunction = "Performer";
 export const requesterFunction = "Witness";
 export const verifierFunction = "Verifier";
 export const asNeededPlaceholderConceptName = "AsNeededPlaceholder";
+export const asNeededMedicationRequestConceptName = "AsNeededMedicationRequest";
 export const timeFormatfor24Hr = "HH:mm";
 export const timeFormatFor12hr = "hh:mm A";

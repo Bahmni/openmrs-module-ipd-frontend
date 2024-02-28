@@ -29,7 +29,7 @@ import { formatDate } from "../../../../utils/DateTimeUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 
 export const PatientHeader = (props) => {
-  const { patientId, openVisitSummary } = props;
+  const { patientId, openVisitSummary, setPatientDetailsOpen } = props;
   const { isReadMode, visitSummary } = useContext(IPDContext);
   const [showPatientDetails, togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
@@ -181,7 +181,10 @@ export const PatientHeader = (props) => {
                         kind="tertiary"
                         className="show-more"
                         size="sm"
-                        onClick={toggleDetailsView}
+                        onClick={() => {
+                          setPatientDetailsOpen(!showPatientDetails);
+                          toggleDetailsView();
+                        }}
                       >
                         {hideDetails} <ChevronUp20 />{" "}
                       </Link>
@@ -190,7 +193,10 @@ export const PatientHeader = (props) => {
                         kind="tertiary"
                         className="show-more"
                         size="sm"
-                        onClick={toggleDetailsView}
+                        onClick={() => {
+                          setPatientDetailsOpen(!showPatientDetails);
+                          toggleDetailsView();
+                        }}
                       >
                         {showDetails} <ChevronDown20 />
                       </Link>
@@ -254,4 +260,5 @@ export const PatientHeader = (props) => {
 PatientHeader.propTypes = {
   patientId: PropTypes.string.isRequired,
   openVisitSummary: PropTypes.func.isRequired,
+  setPatientDetailsOpen: PropTypes.func.isRequired,
 };

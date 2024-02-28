@@ -195,6 +195,9 @@ const Treatments = (props) => {
     setShowStopDrugSuccessNotification(true);
   };
 
+  const isPreviousVisitItem = (itemStartDateTime) =>
+    visitSummary.startDateTime > itemStartDateTime;
+
   const getActions = (
     showEditDrugChartLink,
     showStopDrugChartLink,
@@ -287,6 +290,7 @@ const Treatments = (props) => {
 
           const drugOrder = drugOrderObject.drugOrder;
           const actionsObjectValue =
+            !isPreviousVisitItem(drugOrder.dateActivated) &&
             !drugOrder.dateStopped &&
             getActions(
               showEditDrugChartLink,

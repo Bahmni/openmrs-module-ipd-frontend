@@ -50,6 +50,7 @@ export default function Dashboard(props) {
   const [dashboardConfig, setDashboardConfig] = useState({});
   const [isConfigLoaded, setIsConfigLoaded] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isShowPatientDetailsOpen, setPatientDetailsOpen] = useState(false);
 
   const noConfigDataMessage = (
     <FormattedMessage
@@ -88,7 +89,7 @@ export default function Dashboard(props) {
   const scrollToSection = (key) => {
     updateSelectedTab(key);
     window.scrollTo({
-      top: refs.current[key].offsetTop - 60,
+      top: refs.current[key].offsetTop - (isShowPatientDetailsOpen ? 240 : 60),
       behavior: "smooth",
     });
   };
@@ -202,6 +203,7 @@ export default function Dashboard(props) {
                 <PatientHeader
                   patientId={patient?.uuid}
                   openVisitSummary={handleVisitSummaryNavigation}
+                  setPatientDetailsOpen={setPatientDetailsOpen}
                 />
                 <Accordion className={"accordion"}>
                   <AllMedicationsContextProvider>

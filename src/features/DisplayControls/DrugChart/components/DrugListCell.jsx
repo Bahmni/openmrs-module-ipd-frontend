@@ -118,6 +118,7 @@ export default function DrugListCell(props) {
               <TooltipDefinition
                 tooltipText={getToolTipTextForAdministeredTime()}
                 className={"administration-details-tooltip"}
+                direction="top"
               >
                 <div className={"administration-time-info"}>
                   <Clock className={"clock-icon"} />
