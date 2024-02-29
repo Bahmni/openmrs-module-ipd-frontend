@@ -20,7 +20,7 @@ export const fetchWardSummary = async (wardId) => {
     return e;
   }
 };
-export const getSlotsForPatientsAndTime = async (
+export const getSlotsForPatients = async (
   patientUuids,
   startTime,
   endTime,

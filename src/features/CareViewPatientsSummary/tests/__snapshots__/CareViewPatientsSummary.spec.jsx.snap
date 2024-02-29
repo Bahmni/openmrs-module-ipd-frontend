@@ -12,6 +12,49 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
         >
           <td
             class="patient-details-container"
+          />
+          <td
+            class="slot-details-header"
+          >
+            <div
+              class="time"
+            >
+              17:00
+            </div>
+          </td>
+          <td
+            class="slot-details-header"
+          >
+            <div
+              class="time"
+            >
+              18:00
+            </div>
+          </td>
+          <td
+            class="slot-details-header"
+          >
+            <div
+              class="time"
+            >
+              19:00
+            </div>
+          </td>
+          <td
+            class="slot-details-header"
+          >
+            <div
+              class="time"
+            >
+              20:00
+            </div>
+          </td>
+        </tr>
+        <tr
+          class="patient-row-container"
+        >
+          <td
+            class="patient-details-container"
           >
             <div
               class="care-view-patient-details"
@@ -52,7 +95,8 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
               </div>
               <div>
                 Patient
-                : 
+                :
+                 
                 <span>
                   AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu
                 </span>
@@ -131,7 +175,8 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
               </div>
               <div>
                 Patient
-                : 
+                :
+                 
                 <span>
                   AnnonFN-Eifbqbgbnm AnnonMN-Vrystpswee AnnonLN-Idseppecxk
                 </span>

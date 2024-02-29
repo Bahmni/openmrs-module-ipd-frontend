@@ -4,35 +4,34 @@ import "../styles/CareViewPatientsSummary.scss";
 import { HospitalBed16 } from "@carbon/icons-react";
 import { Link } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
-import { getSlotsForPatientsAndTime } from "../../CareViewSummary/utils/CareViewSummary";
-import moment from "moment";
+import { getSlotsForPatients } from "../../CareViewSummary/utils/CareViewSummary";
 import Clock from "../../../icons/clock.svg";
-import { epochTo24HourTimeFormat } from "../../../utils/DateTimeUtils";
-import { getDashboardConfig } from "../../../utils/CommonUtils";
-import SVGIcon from "../../SVGIcon/SVGIcon";
 import {
-  isAdministeredLateTask,
-  isLateTask,
-} from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
+  epochTo24HourTimeFormat,
+  getPreviousNearbyHourEpoch,
+  getTimeInFuture,
+} from "../../../utils/DateTimeUtils";
+import {
+  getAdministrationStatus,
+  getDashboardConfig,
+} from "../../../utils/CommonUtils";
+import SVGIcon from "../../SVGIcon/SVGIcon";
 
 export const CareViewPatientsSummary = (props) => {
   const [slotDetails, setSlotDetails] = useState([]);
-  const [configValue, setConfigValue] = useState([]);
+  const [configValue, setConfigValue] = useState({});
   const { patientsSummary } = props;
-  const timeFrame = 4; // need to make it configurable
-
-  const getTimeInFuture = (offsetHours) => {
-    const futureTime = new Date();
-    futureTime.setHours(futureTime.getHours() + offsetHours);
-    const futureTimeUnix = Math.floor(futureTime.getTime() / 1000);
-    return futureTimeUnix.toString();
-  };
+  const timeframeLimitInHours = 4; // need to make it configurable
+  const currentEpoch = Math.floor(new Date().getTime() / 1000);
+  const nearestHourEpoch = getPreviousNearbyHourEpoch(currentEpoch);
 
   const fetchSlots = async (patients) => {
     const patientUuids = patients.map((patient) => patient.patientDetails.uuid);
-    const currentTime = Math.floor(Date.now() / 1000);
-    const endTime = getTimeInFuture(timeFrame);
-    const response = await getSlotsForPatientsAndTime(
+    const currentTime = getPreviousNearbyHourEpoch(
+      Math.floor(Date.now() / 1000)
+    );
+    const endTime = getTimeInFuture(currentTime, timeframeLimitInHours);
+    const response = await getSlotsForPatients(
       patientUuids,
       currentTime,
       endTime
@@ -46,41 +45,31 @@ export const CareViewPatientsSummary = (props) => {
     setConfigValue(config);
   };
 
+  useEffect(() => {
+    fetchConfig();
+  }, []);
+
+  useEffect(() => {
+    if (patientsSummary.length > 0) {
+      fetchSlots(patientsSummary);
+    }
+  }, [patientsSummary]);
+
   const renderStatusIcon = (slot) => {
     const { drugChart = {} } = configValue;
     const { startTime, status, medicationAdministration } = slot;
-    let administrationStatus = "Pending";
-    if (medicationAdministration) {
-      const { administeredDateTime } = medicationAdministration;
-      if (status === "COMPLETED") {
-        if (
-          isAdministeredLateTask(startTime, administeredDateTime, drugChart)
-        ) {
-          administrationStatus = "Administered-Late";
-        } else {
-          administrationStatus = "Administered";
-        }
-      } else if (status === "NOT_DONE") {
-        administrationStatus = "Not-Administered";
-      }
-    } else {
-      if (slot.status === "STOPPED") {
-        administrationStatus = "Stopped";
-      } else if (isLateTask(startTime, drugChart)) {
-        administrationStatus = "Late";
-      }
-    }
+    let administrationStatus = getAdministrationStatus(
+      medicationAdministration,
+      status,
+      startTime,
+      drugChart,
+      slot
+    );
     return (
       <div className="status-icon">
         <SVGIcon iconType={administrationStatus} />
       </div>
     );
-  };
-
-  const getPreviousNearbyHourEpoch = (time) => {
-    const currentMoment = moment.unix(time);
-    const nearestHourMoment = currentMoment.startOf("hour");
-    return nearestHourMoment.unix();
   };
 
   const getColumnData = (slot, startTime, endTime) => {
@@ -99,11 +88,7 @@ export const CareViewPatientsSummary = (props) => {
     return columnData.map((slotItem) => {
       const { dose, doseUnits, route } = slotItem.order;
       return (
-        <div
-          className="slot-details item-padding"
-          key={`${slotItem.uuid}`}
-          style={{ minWidth: "650px" }}
-        >
+        <div className="slot-details" key={`${slotItem.uuid}`}>
           <div className="logo">
             {renderStatusIcon(slotItem)}
             <Clock className="clock-icon" />
@@ -128,16 +113,13 @@ export const CareViewPatientsSummary = (props) => {
     });
   };
 
-  const renderTableColumns = (uuid) => {
+  const renderSlotDetailsCell = (uuid) => {
     const columns = [];
     const patientSlotDetail = slotDetails.find(
       (slotDetail) => slotDetail.patientUuid === uuid
     );
 
-    const currentEpoch = 1708685200;
-    const nearestHourEpoch = getPreviousNearbyHourEpoch(currentEpoch);
-
-    for (let i = 0; i < timeFrame; i++) {
+    for (let i = 0; i < timeframeLimitInHours; i++) {
       const startTime = nearestHourEpoch + i * 3600;
       const endTime = startTime + 3600;
 
@@ -158,50 +140,61 @@ export const CareViewPatientsSummary = (props) => {
     ));
   };
 
-  useEffect(() => {
-    fetchConfig();
-  }, []);
+  const renderHeaderRow = () => {
+    return (
+      <tr className="patient-row-container">
+        <td
+          className="patient-details-container"
+          key="patient-details-header"
+        ></td>
+        {Array.from({ length: timeframeLimitInHours }, (_, i) => {
+          const startTime = nearestHourEpoch + i * 3600;
+          return (
+            <td className="slot-details-header" key={`time-frame-header-${i}`}>
+              <div className="time">
+                {epochTo24HourTimeFormat(startTime, true)}
+              </div>
+            </td>
+          );
+        })}
+      </tr>
+    );
+  };
 
-  useEffect(() => {
-    if (patientsSummary.length > 0) {
-      fetchSlots(patientsSummary);
-    }
-  }, [patientsSummary]);
+  const renderPatientDetailsCell = (bedDetails, patientDetails, person) => {
+    return (
+      <td className={"patient-details-container"}>
+        <div className={"care-view-patient-details"}>
+          <div className={"admission-details"}>
+            <HospitalBed16 />|<span>{bedDetails.bedNumber}</span>|
+            <Link href={"#"} inline={true}>
+              <span>{patientDetails.display.split(" ")[0]}</span>
+            </Link>
+          </div>
+          <div>
+            <FormattedMessage id={"PATIENT"} defaultMessage={"Patient"} />:{" "}
+            <span>{person.display}</span>&nbsp;(
+            <span>{person.gender}</span>)<span className={"separator"}>|</span>
+            <span>{person.age}</span>
+            <FormattedMessage id={"AGE_YEARS_LABEL"} defaultMessage={"yrs"} />
+          </div>
+        </div>
+      </td>
+    );
+  };
 
   return (
     <div>
       <table className={"care-view-patient-table"}>
         <tbody>
+          {renderHeaderRow()}
           {patientsSummary.map((patientSummary, idx) => {
             const { patientDetails, bedDetails } = patientSummary;
             const { person, uuid } = patientDetails;
             return (
               <tr key={idx} className={"patient-row-container"}>
-                <td className={"patient-details-container"}>
-                  <div className={"care-view-patient-details"}>
-                    <div className={"admission-details"}>
-                      <HospitalBed16 />|<span>{bedDetails.bedNumber}</span>|
-                      <Link href={"#"} inline={true}>
-                        <span>{patientDetails.display.split(" ")[0]}</span>
-                      </Link>
-                    </div>
-                    <div>
-                      <FormattedMessage
-                        id={"PATIENT"}
-                        defaultMessage={"Patient"}
-                      />
-                      : <span>{person.display}</span>&nbsp;(
-                      <span>{person.gender}</span>)
-                      <span className={"separator"}>|</span>
-                      <span>{person.age}</span>
-                      <FormattedMessage
-                        id={"AGE_YEARS_LABEL"}
-                        defaultMessage={"yrs"}
-                      />
-                    </div>
-                  </div>
-                </td>
-                {renderTableColumns(uuid)}
+                {renderPatientDetailsCell(bedDetails, patientDetails, person)}
+                {renderSlotDetailsCell(uuid)}
               </tr>
             );
           })}

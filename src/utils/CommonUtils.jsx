@@ -5,6 +5,10 @@ import {
   CONFIG_BAHMNIENCOUNTER_URL,
   DASHBORAD_CONFIG_URL,
 } from "../constants";
+import {
+  isAdministeredLateTask,
+  isLateTask,
+} from "../features/DisplayControls/DrugChart/utils/DrugChartUtils";
 
 export const getPatientDashboardUrl = (patientUuid) =>
   `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard?currentTab=DASHBOARD_TAB_GENERAL_KEY`;
@@ -31,6 +35,35 @@ export const searchConceptsByFSN = async (s, name, v) => {
   } catch (error) {
     return error;
   }
+};
+
+export const getAdministrationStatus = (
+  medicationAdministration,
+  status,
+  startTime,
+  drugChart,
+  slot
+) => {
+  let administrationStatus = "Pending";
+  if (medicationAdministration) {
+    const { administeredDateTime } = medicationAdministration;
+    if (status === "COMPLETED") {
+      if (isAdministeredLateTask(startTime, administeredDateTime, drugChart)) {
+        administrationStatus = "Administered-Late";
+      } else {
+        administrationStatus = "Administered";
+      }
+    } else if (status === "NOT_DONE") {
+      administrationStatus = "Not-Administered";
+    }
+  } else {
+    if (slot.status === "STOPPED") {
+      administrationStatus = "Stopped";
+    } else if (isLateTask(startTime, drugChart)) {
+      administrationStatus = "Late";
+    }
+  }
+  return administrationStatus;
 };
 
 export const fetchVisitEncounterOrderTypes = async () => {
