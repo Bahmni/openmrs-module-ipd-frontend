@@ -279,9 +279,29 @@ export default function NursingTasks(props) {
     }
   };
   useEffect(() => {
-    setMedicationNursingTasks(
-      ExtractMedicationNursingTasksData(nursingTasks, filterValue, isReadMode)
+    const extractedTaskData = ExtractMedicationNursingTasksData(
+      nursingTasks,
+      filterValue,
+      isReadMode
     );
+    if (
+      !isCurrentShift(
+        shiftConfig,
+        startEndDates.startDate,
+        startEndDates.endDate
+      )
+    ) {
+      const filteredData = extractedTaskData
+        .map((extract) =>
+          extract.filter(
+            (data) => data.serviceType != asNeededPlaceholderConceptName
+          )
+        )
+        .filter((innerArray) => innerArray.length > 0);
+      setMedicationNursingTasks(filteredData);
+    } else {
+      setMedicationNursingTasks(extractedTaskData);
+    }
   }, [filterValue]);
 
   const showTaskTiles = () => {
