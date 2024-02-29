@@ -6,7 +6,10 @@ import {
   mockPRNMedicationTasks,
 } from "./NursingTasksUtilsMockData";
 import { IPDContext } from "../../../../context/IPDContext";
-import { mockConfig } from "../../../../utils/CommonUtils";
+import {
+  mockConfig,
+  mockConfigFor12HourFormat,
+} from "../../../../utils/CommonUtils";
 import MockDate from "mockdate";
 
 describe("UpdateNursingTasksSlider", function () {
@@ -94,6 +97,29 @@ describe("UpdateNursingTasksSlider", function () {
     expect(screen.getByText("Please enter notes")).toBeTruthy();
   });
 
+  it("should show warning for empty notes when time in 12 hour format is updated", function () {
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
+    );
+    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    fireEvent.click(toggleButton);
+
+    const timePicker = screen.getAllByRole("textbox")[0];
+    fireEvent.change(timePicker, { target: { value: "12:00 PM" } });
+    fireEvent.blur(timePicker);
+    const saveButton = screen.getAllByText("Save")[1];
+    fireEvent.click(saveButton);
+    expect(screen.getByText("Please enter notes")).toBeTruthy();
+  });
+
   it("should render confirmation modal on click of save button", function () {
     const { container } = render(
       <IPDContext.Provider value={{ config: mockConfig }}>
@@ -111,6 +137,35 @@ describe("UpdateNursingTasksSlider", function () {
 
     const timePicker = screen.getAllByRole("textbox")[0];
     fireEvent.change(timePicker, { target: { value: "12:00" } });
+    fireEvent.blur(timePicker);
+
+    const notes = screen.getAllByRole("textbox")[1];
+    fireEvent.change(notes, { target: { value: "test notes" } });
+    fireEvent.blur(notes);
+
+    const saveButton = screen.getAllByText("Save")[1];
+    fireEvent.click(saveButton);
+
+    expect(screen.getByText("Please confirm your nursing tasks")).toBeTruthy();
+  });
+
+  it("should render confirmation modal on click of save button when time is in 12 hour format", function () {
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
+    );
+    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    fireEvent.click(toggleButton);
+
+    const timePicker = screen.getAllByRole("textbox")[0];
+    fireEvent.change(timePicker, { target: { value: "12:00 PM" } });
     fireEvent.blur(timePicker);
 
     const notes = screen.getAllByRole("textbox")[1];
@@ -172,6 +227,38 @@ describe("UpdateNursingTasksSlider", function () {
     ).toBeTruthy();
   });
 
+  it("should render confirmation modal on click of cancel button when changes are made when time is in 12 hour format", function () {
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
+    );
+    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    fireEvent.click(toggleButton);
+
+    const timePicker = screen.getAllByRole("textbox")[0];
+    fireEvent.change(timePicker, { target: { value: "12:00 PM" } });
+    fireEvent.blur(timePicker);
+
+    const notes = screen.getAllByRole("textbox")[1];
+    fireEvent.change(notes, { target: { value: "test notes" } });
+    fireEvent.blur(notes);
+
+    const cancelButton = screen.getAllByText("Cancel")[1];
+    fireEvent.click(cancelButton);
+    expect(
+      screen.getByText(
+        "You will lose the details entered. Do you want to continue?"
+      )
+    ).toBeTruthy();
+  });
+
   it("should show notes error when time is greater than administered time window", function () {
     const { container } = render(
       <IPDContext.Provider value={{ config: mockConfig }}>
@@ -190,6 +277,36 @@ describe("UpdateNursingTasksSlider", function () {
 
     const timePicker = screen.getAllByRole("textbox")[0];
     fireEvent.change(timePicker, { target: { value: "12:00" } });
+    fireEvent.blur(timePicker);
+
+    const notes = screen.getAllByRole("textbox")[1];
+    fireEvent.change(notes, { target: { value: "test notes" } });
+    fireEvent.blur(notes);
+
+    const saveButton = screen.getAllByText("Save")[1];
+    fireEvent.click(saveButton);
+
+    expect("Please enter notes").toBeTruthy();
+  });
+
+  it("should show notes error when time in 12 hour format is greater than administered time window", function () {
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
+    );
+
+    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    fireEvent.click(toggleButton);
+
+    const timePicker = screen.getAllByRole("textbox")[0];
+    fireEvent.change(timePicker, { target: { value: "12:00 PM" } });
     fireEvent.blur(timePicker);
 
     const notes = screen.getAllByRole("textbox")[1];

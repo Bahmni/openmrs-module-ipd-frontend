@@ -51,6 +51,8 @@ const Treatments = (props) => {
     visitSummary,
     provider,
   } = useContext(SliderContext);
+  const { config } = useContext(IPDContext);
+  const { enable24HourTime = {} } = config;
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -193,6 +195,9 @@ const Treatments = (props) => {
     setShowStopDrugSuccessNotification(true);
   };
 
+  const isPreviousVisitItem = (itemStartDateTime) =>
+    visitSummary.startDateTime > itemStartDateTime;
+
   const getActions = (
     showEditDrugChartLink,
     showStopDrugChartLink,
@@ -285,6 +290,7 @@ const Treatments = (props) => {
 
           const drugOrder = drugOrderObject.drugOrder;
           const actionsObjectValue =
+            !isPreviousVisitItem(drugOrder.dateActivated) &&
             !drugOrder.dateStopped &&
             getActions(
               showEditDrugChartLink,
@@ -356,7 +362,7 @@ const Treatments = (props) => {
       patientId: patientId,
       scheduleFrequencies: treatmentConfigs.scheduleFrequencies,
       startTimeFrequencies: treatmentConfigs.startTimeFrequencies,
-      enable24HourTimers: treatmentConfigs.enable24HourTimers,
+      enable24HourTimers: enable24HourTime,
       drugOrder: null,
     });
     setIsLoading(false);

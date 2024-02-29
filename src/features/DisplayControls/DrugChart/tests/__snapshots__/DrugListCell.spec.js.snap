@@ -2,179 +2,260 @@
 
 exports[`DrugListCell should  match snapshot 1`] = `
 <div>
-  <td>
+  <div
+    class="drug-order-details"
+  >
     <div
-      class="drug-name-container"
+      class="order-details"
     >
       <div
-        class="drug-chart-drug-name"
+        class="drug-name-container"
       >
-        Suxamethonium Chloride 100 mg/2 mL Ampoule (50 mg/mL )
-      </div>
-      <div>
-        TooltipCarbon
-      </div>
-      <div
-        class="drug-list-drug-name-cell"
-      >
-        <div
-          class="bx--tag bx--tag--blue"
-          id="tag-1"
+        <span
+          class="bx--tooltip--definition bx--tooltip--a11y name-tooltip"
         >
-          
-          <span
-            title="Rx"
+          <button
+            aria-describedby="definition-tooltip-1"
+            class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+            type="button"
           >
-            Rx
+            <div
+              class="drug-chart-drug-name"
+            >
+              Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
+            </div>
+          </button>
+          <span
+            class="bx--assistive-text"
+            id="definition-tooltip-1"
+            role="tooltip"
+          >
+            Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
           </span>
+        </span>
+         
+        <div>
+          TooltipCarbon
         </div>
       </div>
+      <div>
+        10mg
+         - Topical
+         -  5 Day(s)
+      </div>
+      <div />
     </div>
     <div
-      class="dosage"
+      class="medication-tags"
     >
-      <span>
-        2
-      </span>
-      <span>
-         - 
-        mg
-      </span>
-      <span>
-         - 
-        Intravenous
-      </span>
-      <span>
-         - 
-        4 Day(s)
-      </span>
+      <div
+        class="bx--tag bx--tag--sm bx--tag--blue"
+        id="tag-1"
+      >
+        
+        <span
+          title="Rx"
+        >
+          Rx
+        </span>
+      </div>
     </div>
-  </td>
+  </div>
 </div>
 `;
 
 exports[`DrugListCell should  match snapshot for drug cell with admin info status as Administered 1`] = `
 <div>
-  <td>
+  <div
+    class="drug-order-details"
+  >
     <div
-      class="drug-name-container"
+      class="order-details"
     >
       <div
-        class="drug-chart-drug-name"
+        class="drug-name-container"
       >
-        Enalapril 5 mg Tablet
+        <span
+          class="bx--tooltip--definition bx--tooltip--a11y name-tooltip"
+        >
+          <button
+            aria-describedby="definition-tooltip-4"
+            class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+            type="button"
+          >
+            <div
+              class="drug-chart-drug-name"
+            >
+              Combintation Chlorpheniramine, Paracetamol and Pseudophedrine 100 mL Syrup (Cough and Cold Syrup)
+            </div>
+          </button>
+          <span
+            class="bx--assistive-text"
+            id="definition-tooltip-4"
+            role="tooltip"
+          >
+            Combintation Chlorpheniramine, Paracetamol and Pseudophedrine 100 mL Syrup (Cough and Cold Syrup)
+          </span>
+        </span>
+         
+        <div>
+          TooltipCarbon
+        </div>
       </div>
       <div>
-        TooltipCarbon
+        10ml
+         - Oral
+         -  10 Day(s)
       </div>
-      <div
-        class="drug-list-drug-name-cell"
-      >
+      <div>
         <div
-          class="bx--tag bx--tag--blue"
-          id="tag-3"
+          class="administration-details"
         >
-          
           <span
-            title="Rx"
+            class="bx--tooltip--definition bx--tooltip--a11y administration-details-tooltip"
           >
-            Rx
+            <button
+              aria-describedby="definition-tooltip-5"
+              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--top bx--tooltip--align-start"
+              type="button"
+            >
+              <div
+                class="administration-time-info"
+              >
+                <test-file-stub
+                  classname="clock-icon"
+                />
+                <span
+                  style="color: rgb(82, 82, 82);"
+                >
+                  08:30
+                </span>
+              </div>
+            </button>
+            <span
+              class="bx--assistive-text"
+              id="definition-tooltip-5"
+              role="tooltip"
+            >
+              08:30
+            </span>
           </span>
         </div>
       </div>
     </div>
     <div
-      class="dosage"
+      class="medication-tags"
     >
-      <span>
-        1
-      </span>
-      <span>
-         - 
-        Tablet(s)
-      </span>
-      <span>
-         - 
-        Oral
-      </span>
-      <span>
-         - 
-        4 Day(s)
-      </span>
-    </div>
-    <div
-      style="display: flex; align-items: center; gap: 5px;"
-    >
-      <test-file-stub />
-      <span
-        style="color: rgb(82, 82, 82);"
+      <div
+        class="bx--tag bx--tag--sm bx--tag--blue"
+        id="tag-3"
       >
-        8:45
-      </span>
+        
+        <span
+          title="Rx"
+        >
+          Rx
+        </span>
+      </div>
     </div>
-  </td>
+  </div>
 </div>
 `;
 
 exports[`DrugListCell should  match snapshot for for drug cell with admin info status as Administered-Late 1`] = `
 <div>
-  <td>
+  <div
+    class="drug-order-details"
+  >
     <div
-      class="drug-name-container"
+      class="order-details"
     >
       <div
-        class="drug-chart-drug-name"
+        class="drug-name-container"
       >
-        Enalapril 5 mg Tablet
+        <span
+          class="bx--tooltip--definition bx--tooltip--a11y name-tooltip"
+        >
+          <button
+            aria-describedby="definition-tooltip-2"
+            class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+            type="button"
+          >
+            <div
+              class="drug-chart-drug-name"
+            >
+              Combintation Chlorpheniramine, Paracetamol and Pseudophedrine 100 mL Syrup (Cough and Cold Syrup)
+            </div>
+          </button>
+          <span
+            class="bx--assistive-text"
+            id="definition-tooltip-2"
+            role="tooltip"
+          >
+            Combintation Chlorpheniramine, Paracetamol and Pseudophedrine 100 mL Syrup (Cough and Cold Syrup)
+          </span>
+        </span>
+         
+        <div>
+          TooltipCarbon
+        </div>
       </div>
       <div>
-        TooltipCarbon
+        10ml
+         - Oral
+         -  10 Day(s)
       </div>
-      <div
-        class="drug-list-drug-name-cell"
-      >
+      <div>
         <div
-          class="bx--tag bx--tag--blue"
-          id="tag-2"
+          class="administration-details"
         >
-          
           <span
-            title="Rx"
+            class="bx--tooltip--definition bx--tooltip--a11y administration-details-tooltip"
           >
-            Rx
+            <button
+              aria-describedby="definition-tooltip-3"
+              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--top bx--tooltip--align-start"
+              type="button"
+            >
+              <div
+                class="administration-time-info"
+              >
+                <test-file-stub
+                  classname="clock-icon"
+                />
+                <span
+                  style="color: rgb(255, 0, 0);"
+                >
+                  02:30
+                </span>
+              </div>
+            </button>
+            <span
+              class="bx--assistive-text"
+              id="definition-tooltip-3"
+              role="tooltip"
+            >
+              02:30
+            </span>
           </span>
         </div>
       </div>
     </div>
     <div
-      class="dosage"
+      class="medication-tags"
     >
-      <span>
-        1
-      </span>
-      <span>
-         - 
-        Tablet(s)
-      </span>
-      <span>
-         - 
-        Oral
-      </span>
-      <span>
-         - 
-        4 Day(s)
-      </span>
-    </div>
-    <div
-      style="display: flex; align-items: center; gap: 5px;"
-    >
-      <test-file-stub />
-      <span
-        style="color: rgb(218, 30, 40);"
+      <div
+        class="bx--tag bx--tag--sm bx--tag--blue"
+        id="tag-2"
       >
-        8:45
-      </span>
+        
+        <span
+          title="Rx"
+        >
+          Rx
+        </span>
+      </div>
     </div>
-  </td>
+  </div>
 </div>
 `;

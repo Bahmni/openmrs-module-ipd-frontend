@@ -87,7 +87,7 @@ describe("PatientHeader", () => {
       <IPDContext.Provider
         value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
       >
-        <PatientHeader patientId="123" />
+        <PatientHeader patientId="123" setPatientDetailsOpen={jest.fn} />
       </IPDContext.Provider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());

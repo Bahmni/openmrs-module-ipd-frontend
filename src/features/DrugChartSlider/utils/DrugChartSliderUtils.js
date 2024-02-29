@@ -20,9 +20,9 @@ export const isInvalidTimeTextPresent = (enable24HourTimers) => {
   return screenContent.includes(invalidTimeText);
 };
 
-export const isTimePassed = (newTime) => {
+export const isTimePassed = (newTime, enable24HourTimers = false) => {
   const currentTime = moment();
-  const enteredTime = moment(newTime, "HH:mm");
+  const enteredTime = moment(newTime, enable24HourTimers ? "HH:mm" : "hh:mm A");
   return currentTime.isAfter(enteredTime);
 };
 

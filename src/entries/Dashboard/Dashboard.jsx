@@ -21,6 +21,7 @@ import { SliderContext } from "../../context/SliderContext";
 import { IPDContext } from "../../context/IPDContext";
 import { AllMedicationsContextProvider } from "../../context/AllMedications";
 import { FormattedMessage } from "react-intl";
+import { RESOLUTION_VALUE } from "../../constants";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
@@ -43,12 +44,13 @@ export default function Dashboard(props) {
     emergencyTasks: false,
   });
   const [sections, setSections] = useState([]);
-  const [isSideNavExpanded, updateSideNav] = useState(true);
+  const [isSideNavExpanded, updateSideNav] = useState(false);
   const [selectedTab, updateSelectedTab] = useState(null);
   const refs = useRef([]);
-  const [windowWidth, updateWindowWidth] = useState(window.outerWidth);
   const [dashboardConfig, setDashboardConfig] = useState({});
   const [isConfigLoaded, setIsConfigLoaded] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isShowPatientDetailsOpen, setPatientDetailsOpen] = useState(false);
 
   const noConfigDataMessage = (
     <FormattedMessage
@@ -56,12 +58,6 @@ export default function Dashboard(props) {
       defaultMessage={"Please specify IPD Dashboard configurations"}
     />
   );
-  window.addEventListener("resize", () => {
-    updateWindowWidth(window.outerWidth);
-  });
-  useEffect(() => {
-    updateSideNav(window.outerWidth > 1024);
-  }, [windowWidth]);
 
   const fetchConfig = async () => {
     const configData = await getDashboardConfig();
@@ -78,16 +74,22 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     fetchConfig();
+    document.addEventListener("click", handleClickOutside);
+    window.addEventListener("resize", updateWindowWidth);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+      window.removeEventListener("resize", updateWindowWidth);
+    };
   }, []);
 
   const onClickSideNavExpand = () => {
-    updateSideNav((oldState) => !oldState);
+    updateSideNav(!isSideNavExpanded);
   };
 
   const scrollToSection = (key) => {
     updateSelectedTab(key);
     window.scrollTo({
-      top: refs.current[key].offsetTop - 60,
+      top: refs.current[key].offsetTop - (isShowPatientDetailsOpen ? 240 : 60),
       behavior: "smooth",
     });
   };
@@ -107,6 +109,17 @@ export default function Dashboard(props) {
         : el;
     });
     setSections(updatedSections);
+  };
+
+  const handleClickOutside = (event) => {
+    const navBar = document.getElementById("Side-Nav");
+    if (navBar && !navBar.contains(event.target)) {
+      updateSideNav(false);
+    }
+  };
+
+  const updateWindowWidth = () => {
+    setWindowWidth(window.innerWidth);
   };
 
   return (
@@ -146,13 +159,18 @@ export default function Dashboard(props) {
                 <HeaderMenuButton
                   aria-label="Open menu"
                   className="header-nav-toggle-btn"
+                  style={
+                    windowWidth < RESOLUTION_VALUE && checkSliderStatus()
+                      ? { display: "none" }
+                      : {}
+                  }
                   onClick={onClickSideNavExpand}
                   isActive={isSideNavExpanded}
                 />
                 <SideNav
+                  id="Side-Nav"
                   aria-label="Side navigation"
                   className="navbar-border"
-                  isPersistent={true}
                   expanded={isSideNavExpanded}
                 >
                   <SideNavItems>
@@ -185,6 +203,7 @@ export default function Dashboard(props) {
                 <PatientHeader
                   patientId={patient?.uuid}
                   openVisitSummary={handleVisitSummaryNavigation}
+                  setPatientDetailsOpen={setPatientDetailsOpen}
                 />
                 <Accordion className={"accordion"}>
                   <AllMedicationsContextProvider>

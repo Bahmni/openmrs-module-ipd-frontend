@@ -539,7 +539,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                       disabled=""
                       id="Dropdown"
                       pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
-                      placeholder="mm/dd/yyyy"
+                      placeholder="DD MM YYYY"
                       style="width: 250px;"
                       type="text"
                     />
@@ -1397,7 +1397,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                       disabled=""
                       id="Dropdown"
                       pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
-                      placeholder="mm/dd/yyyy"
+                      placeholder="DD MM YYYY"
                       style="width: 250px;"
                       type="text"
                     />
@@ -2412,7 +2412,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                       disabled=""
                       id="Dropdown"
                       pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
-                      placeholder="mm/dd/yyyy"
+                      placeholder="DD MM YYYY"
                       style="width: 250px;"
                       type="text"
                     />

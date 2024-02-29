@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 import {
   MEDICATIONS_BASE_URL,
   ADMINISTERED_MEDICATIONS_BASE_URL,
@@ -31,6 +30,7 @@ export const ExtractMedicationNursingTasksData = (
 ) => {
   const extractedData = [],
     pendingExtractedData = [],
+    prnExtractedData = [],
     completedExtractedData = [],
     stoppedExtractedData = [],
     skippedExtractedData = [];
@@ -102,6 +102,10 @@ export const ExtractMedicationNursingTasksData = (
             slot.status === "NOT_DONE",
         serviceType,
       };
+
+      if (filterValue.id === "prn" && slotInfo.dosingInstructions.asNeeded) {
+        prnExtractedData.push(slotInfo);
+      }
 
       if (
         (filterValue.id === "stopped" || filterValue.id === "allTasks") &&
@@ -180,6 +184,7 @@ export const ExtractMedicationNursingTasksData = (
     groupedData.push(...completedExtractedData.map((item) => [item]));
     groupedData.push(...stoppedExtractedData.map((item) => [item]));
     groupedData.push(...skippedExtractedData.map((item) => [item]));
+    groupedData.push(...prnExtractedData.map((item) => [item]));
   }
   return groupedData;
 };
@@ -211,7 +216,6 @@ export const isTimeWithinAdministeredWindow = (
   const timeWithinWindowInEpochSeconds =
     timeToEpoch(scheduledStartTime) +
     nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
-
   return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
 };
 export const getTimeInSeconds = (days) => days * 86400;

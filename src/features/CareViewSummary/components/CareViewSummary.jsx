@@ -16,12 +16,11 @@ export const CareViewSummary = (props) => {
   const getWardList = async () => {
     callbacks.setIsLoading(true);
     const wardList = await getWardDetails();
-    const wardOptions = [];
-    wardList?.forEach((ward) => {
-      wardOptions.push({
+    const wardOptions = wardList?.map((ward) => {
+      return {
         label: ward?.ward?.display,
         value: ward?.ward?.uuid,
-      });
+      };
     });
     setOptions(wardOptions);
     setSelectedWard(wardOptions[0]);

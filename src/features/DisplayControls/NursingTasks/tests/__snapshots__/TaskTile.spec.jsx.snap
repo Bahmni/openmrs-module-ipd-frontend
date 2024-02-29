@@ -73,7 +73,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
         >
           <test-file-stub />
           <div>
-             
+             Invalid date
           </div>
         </div>
         <div
@@ -169,7 +169,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
         >
           <test-file-stub />
           <div>
-             16:00 - 17:12 (actual)
+             16:00
           </div>
         </div>
       </div>

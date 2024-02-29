@@ -5,6 +5,10 @@ export const formatDate = (value, format = defaultDateFormat) => {
   return value ? moment(value).format(format) : value;
 };
 
+export const formatTime = (time, inputFormat, outputFormat) => {
+  return moment(time, inputFormat).format(outputFormat);
+};
+
 export const areDatesSame = (date1, date2) => {
   return formatDate(date1) === formatDate(date2);
 };
@@ -42,3 +46,7 @@ export const dateTimeToEpochUTCTime = (date) => {
 };
 
 export const convertDaystoSeconds = (days) => days * 86400;
+
+export const convertTo24Hour = (time12hr) => {
+  return moment(time12hr, ["hh:mm A"]).format("HH:mm");
+};

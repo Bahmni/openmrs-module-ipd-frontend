@@ -22,6 +22,7 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import {
   asNeededPlaceholderConceptName,
   componentKeys,
+  timeFormatFor12hr,
 } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -52,7 +53,7 @@ export default function NursingTasks(props) {
   const [successMessage, setSuccessMessage] = useState("");
   const [notCurrentShift, setNotCurrentShift] = useState(false);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
-  const { shiftDetails: shiftConfig = {}, drugChart = {} } = config;
+  const { shiftDetails: shiftConfig = {}, enable24HourTime = {} } = config;
   const shiftDetails = currentShiftHoursArray(
     isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
     shiftConfig
@@ -227,7 +228,14 @@ export default function NursingTasks(props) {
       defaultMessage={"No Stopped Task is available for the patient"}
     />
   );
-  
+
+  const NoPRNTasksMessageForStopped = (
+    <FormattedMessage
+      id={"NO_PRN_TASKS_MESSAGE_STOPPED"}
+      defaultMessage={"No PRN Task is available for the patient"}
+    />
+  );
+
   const fetchNursingTasks = async (startDate, endDate) => {
     setIsLoading(true);
     const startDateTimeInSeconds = startDate / 1000;
@@ -293,7 +301,7 @@ export default function NursingTasks(props) {
               }
             }}
           >
-            <TaskTile medicationNursingTask={medicationNursingTask} is />
+            <TaskTile medicationNursingTask={medicationNursingTask} />
           </div>
         </div>
       );
@@ -308,6 +316,8 @@ export default function NursingTasks(props) {
         return NoNursingTasksMessageForPending;
       case "stopped":
         return NoNursingTasksMessageForStopped;
+      case "prn":
+        return NoPRNTasksMessageForStopped;
       default:
         return NoNursingTasksMessage;
     }
@@ -325,13 +335,13 @@ export default function NursingTasks(props) {
     const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
     const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
 
-    const formattedShiftStartTime = drugChart.enable24HourTime
+    const formattedShiftStartTime = enable24HourTime
       ? shiftStartTime
-      : formatDate(startEndDates.startDate, "hh:mm a");
+      : formatDate(startEndDates.startDate, timeFormatFor12hr);
 
-    const formattedShiftEndTime = drugChart.enable24HourTime
+    const formattedShiftEndTime = enable24HourTime
       ? shiftEndTime
-      : formatDate(startEndDates.endDate - 60, "hh:mm a");
+      : formatDate(startEndDates.endDate - 60, timeFormatFor12hr);
 
     if (shiftStartDate === shiftEndDate) {
       return (
