@@ -220,7 +220,7 @@ const Treatments = (props) => {
               : AddToTasks}
           </Link>
         ),
-        isScheduled: !drugOrder.dosingInstructions?.asNeeded ? false : true,
+        isScheduled: drugOrder.dosingInstructions?.asNeeded,
       };
     } else if (!showStopDrugChartLink) {
       return {
@@ -277,10 +277,9 @@ const Treatments = (props) => {
               showStopDrugChartLink = true;
             }
           } else if (drugOrderObject.drugOrderSchedule != null) {
-            showStopDrugChartLink = drugOrderObject.drugOrderSchedule
-              .medicationAdministrationStarted
-              ? true
-              : false;
+            showStopDrugChartLink =
+              !!drugOrderObject.drugOrderSchedule
+                .medicationAdministrationStarted;
             showEditDrugChartLink = !showStopDrugChartLink;
           } else {
             showEditDrugChartLink = false;
@@ -296,20 +295,29 @@ const Treatments = (props) => {
               drugOrder,
               drugOrderObject.drugOrderSchedule
             );
-
+          const getStatus = () => {
+            if (drugOrder.dateStopped) {
+              return (
+                <span className={"red-text"}>
+                  <FormattedMessage id="STOPPED" defaultMessage="Stopped" />
+                </span>
+              );
+            } else if (drugOrderObject.drugOrderSchedule?.allSlotsAttended) {
+              return (
+                <FormattedMessage
+                  id={"COMPLETED"}
+                  defaultMessage={"Completed"}
+                />
+              );
+            }
+          };
           return {
             id: drugOrder.uuid,
             startDate: formatDate(drugOrder.effectiveStartDate),
             drugName: getDrugName(drugOrderObject),
             dosageDetails: setDosingInstructions(drugOrder),
             providerName: drugOrderObject.provider.name,
-            status: (
-              <span className={drugOrder.dateStopped && "red-text"}>
-                {drugOrder.dateStopped && (
-                  <FormattedMessage id="STOPPED" defaultMessage="Stopped" />
-                )}
-              </span>
-            ),
+            status: getStatus(),
             actions: actionsObjectValue.link,
             additionalData: {
               instructions: drugOrderObject.instructions
