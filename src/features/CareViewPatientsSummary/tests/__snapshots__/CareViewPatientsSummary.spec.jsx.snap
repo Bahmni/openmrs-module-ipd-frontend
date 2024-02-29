@@ -2,157 +2,216 @@
 
 exports[`CareViewPatientsSummary should match snapshot 1`] = `
 <div>
-  <table
-    class="care-view-patient-table"
-  >
-    <tbody>
-      <tr
-        class="patient-row-container"
-      >
-        <td
-          class="patient-details-container"
+  <div>
+    <table
+      class="care-view-patient-table"
+    >
+      <tbody>
+        <tr
+          class="patient-row-container"
         >
-          <div
-            class="care-view-patient-details"
+          <td
+            class="patient-details-container"
+          />
+          <td
+            class="slot-details-header"
           >
             <div
-              class="admission-details"
+              class="time"
             >
-              <svg
-                aria-hidden="true"
-                fill="currentColor"
-                focusable="false"
-                height="16"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 32 32"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
-                />
-                <path
-                  d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
-                />
-              </svg>
-              |
-              <span>
-                A-6
-              </span>
-              |
-              <a
-                class="bx--link bx--link--inline"
-                href="#"
-              >
-                <span>
-                  PT51140
-                </span>
-              </a>
+              19:00
             </div>
-            <div>
-              Patient
-              : 
-              <span>
-                AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu
-              </span>
-               (
-              <span>
-                M
-              </span>
-              )
-              <span
-                class="separator"
-              >
-                |
-              </span>
-              <span>
-                14
-              </span>
-              yrs
-            </div>
-          </div>
-        </td>
-        <td
-          style="min-width: 650px;"
-        />
-        <td
-          style="min-width: 650px;"
-        />
-      </tr>
-      <tr
-        class="patient-row-container"
-      >
-        <td
-          class="patient-details-container"
-        >
-          <div
-            class="care-view-patient-details"
+          </td>
+          <td
+            class="slot-details-header"
           >
             <div
-              class="admission-details"
+              class="time"
             >
-              <svg
-                aria-hidden="true"
-                fill="currentColor"
-                focusable="false"
-                height="16"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 32 32"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
-                />
-                <path
-                  d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
-                />
-              </svg>
-              |
-              <span>
-                C-1
-              </span>
-              |
-              <a
-                class="bx--link bx--link--inline"
-                href="#"
-              >
-                <span>
-                  PT49722
-                </span>
-              </a>
+              20:00
             </div>
-            <div>
-              Patient
-              : 
-              <span>
-                AnnonFN-Eifbqbgbnm AnnonMN-Vrystpswee AnnonLN-Idseppecxk
-              </span>
-               (
-              <span>
-                M
-              </span>
-              )
-              <span
-                class="separator"
+          </td>
+          <td
+            class="slot-details-header"
+          >
+            <div
+              class="time"
+            >
+              21:00
+            </div>
+          </td>
+          <td
+            class="slot-details-header"
+          >
+            <div
+              class="time"
+            >
+              22:00
+            </div>
+          </td>
+        </tr>
+        <tr
+          class="patient-row-container"
+        >
+          <td
+            class="patient-details-container"
+          >
+            <div
+              class="care-view-patient-details"
+            >
+              <div
+                class="admission-details"
               >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+                  />
+                  <path
+                    d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                  />
+                </svg>
                 |
-              </span>
-              <span>
-                10
-              </span>
-              yrs
+                <span>
+                  A-6
+                </span>
+                |
+                <a
+                  class="bx--link bx--link--inline"
+                  href="#"
+                >
+                  <span>
+                    PT51140
+                  </span>
+                </a>
+              </div>
+              <div>
+                Patient
+                :
+                 
+                <span>
+                  AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu
+                </span>
+                 (
+                <span>
+                  M
+                </span>
+                )
+                <span
+                  class="separator"
+                >
+                  |
+                </span>
+                <span>
+                  14
+                </span>
+                yrs
+              </div>
             </div>
-          </div>
-        </td>
-        <td
-          style="min-width: 650px;"
-        />
-        <td
-          style="min-width: 650px;"
-        />
-      </tr>
-    </tbody>
-  </table>
+          </td>
+          <td
+            class="slot-details-container"
+          />
+          <td
+            class="slot-details-container"
+          />
+          <td
+            class="slot-details-container"
+          />
+          <td
+            class="slot-details-container"
+          />
+        </tr>
+        <tr
+          class="patient-row-container"
+        >
+          <td
+            class="patient-details-container"
+          >
+            <div
+              class="care-view-patient-details"
+            >
+              <div
+                class="admission-details"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+                  />
+                  <path
+                    d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                  />
+                </svg>
+                |
+                <span>
+                  C-1
+                </span>
+                |
+                <a
+                  class="bx--link bx--link--inline"
+                  href="#"
+                >
+                  <span>
+                    PT49722
+                  </span>
+                </a>
+              </div>
+              <div>
+                Patient
+                :
+                 
+                <span>
+                  AnnonFN-Eifbqbgbnm AnnonMN-Vrystpswee AnnonLN-Idseppecxk
+                </span>
+                 (
+                <span>
+                  M
+                </span>
+                )
+                <span
+                  class="separator"
+                >
+                  |
+                </span>
+                <span>
+                  10
+                </span>
+                yrs
+              </div>
+            </div>
+          </td>
+          <td
+            class="slot-details-container"
+          />
+          <td
+            class="slot-details-container"
+          />
+          <td
+            class="slot-details-container"
+          />
+          <td
+            class="slot-details-container"
+          />
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 `;
