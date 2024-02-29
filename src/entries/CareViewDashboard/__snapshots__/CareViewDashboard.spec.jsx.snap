@@ -369,6 +369,11 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
               </div>
             </div>
           </div>
+          <table
+            class="care-view-patient-table"
+          >
+            <tbody />
+          </table>
           <div
             class="patient-pagination"
           >

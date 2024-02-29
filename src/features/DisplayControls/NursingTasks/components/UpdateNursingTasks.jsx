@@ -30,6 +30,7 @@ import {
 } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
+import { formatTime } from "../../../../utils/DateTimeUtils";
 
 const UpdateNursingTasks = (props) => {
   const {
@@ -179,8 +180,15 @@ const UpdateNursingTasks = (props) => {
   };
 
   const handleTimeChange = (time, id) => {
+    const taskTime = enable24HourTime
+      ? formatTime(time, timeFormatfor24Hr, timeFormatfor24Hr)
+      : formatTime(time, timeFormatFor12hr, timeFormatfor24Hr);
     if (
-      !isTimeWithinAdministeredWindow(time, tasks[id].startTime, nursingTasks)
+      !isTimeWithinAdministeredWindow(
+        taskTime,
+        tasks[id].startTime,
+        nursingTasks
+      )
     ) {
       updateTasks({
         ...tasks,
@@ -342,10 +350,14 @@ const UpdateNursingTasks = (props) => {
               />
               <Clock />
               {enable24HourTime
-                ? moment(medicationTasks[0].startTime, "hh:mm").format(
+                ? formatTime(
+                    medicationTasks[0].startTime,
+                    timeFormatfor24Hr,
                     timeFormatfor24Hr
                   )
-                : moment(medicationTasks[0].startTime, "hh:mm").format(
+                : formatTime(
+                    medicationTasks[0].startTime,
+                    timeFormatfor24Hr,
                     timeFormatFor12hr
                   )}
             </div>

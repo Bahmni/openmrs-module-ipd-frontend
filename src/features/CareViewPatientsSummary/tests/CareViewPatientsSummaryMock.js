@@ -466,3 +466,4 @@ export const mockSearchEmptyPatientsList = {
   admittedPatients: [],
   totalPatients: 0,
 };
+

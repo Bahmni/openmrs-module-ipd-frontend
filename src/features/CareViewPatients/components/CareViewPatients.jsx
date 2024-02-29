@@ -118,6 +118,7 @@ export const CareViewPatients = () => {
       defaultMessage={"No search result available"}
     />
   );
+
   return (
     <div className="care-view-patients-container">
       {isLoading ? (
@@ -153,6 +154,7 @@ export const CareViewPatients = () => {
           ) : (
             <></>
           )}
+
           <div className={"patient-pagination"}>
             <Pagination
               page={currentPage}
