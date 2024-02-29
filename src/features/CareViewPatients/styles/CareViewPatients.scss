@@ -1,12 +1,10 @@
 .care-view-patients-container {
-  border: 1px solid #e0e0e0;
-  background-color: #f4f4f4;
-  padding: 20px;
+  padding: 20px 5%;
   display: flex;
   justify-content: center;
 
   .care-view-patients {
-    width: 80%;
+    width: 100%;
   }
 
   .patient-section {
@@ -16,5 +14,14 @@
     display: flex;
     flex-flow: row;
     justify-content: end;
+  }
+
+  .patient-pagination {
+    max-width: max-content;
+    margin-left: auto;
+    .bx--btn.bx--btn--icon-only.bx--tooltip__trigger .bx--assistive-text {
+      color: white;
+      padding: 0.5rem 1rem;
+    }
   }
 }

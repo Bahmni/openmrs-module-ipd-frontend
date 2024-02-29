@@ -1,0 +1,65 @@
+.patient-row-container {
+  overflow-x: scroll;
+
+  .patient-details-container {
+    min-width: 420px;
+    position: sticky;
+    left: 0;
+    line-height: 1.8;
+
+    a {
+      color: #0f62fe;
+    }
+
+    .care-view-patient-details {
+      border-right: 1px solid #8d8d8d;
+      box-shadow: 6px 2px 4px 0 rgba(0, 0, 0, 0.1);
+      padding: 8px;
+    }
+    .admission-details {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .separator {
+      padding: 0 8px;
+    }
+  }
+}
+
+.care-view-patient-table {
+  display: block;
+  max-height: 500px;
+  overflow: scroll;
+  margin: 8px 0;
+  border: 1px solid #8d8d8d;
+
+  tbody tr:nth-child(even) td:first-child {
+    background-color: #f4f4f4;
+  }
+
+  tbody tr:nth-child(odd) td:first-child {
+    background-color: white;
+  }
+
+  tbody {
+    tr {
+      border-bottom: 0;
+
+      &:nth-child(even) {
+        background-color: #f4f4f4;
+      }
+
+      td {
+        border: 0;
+        padding: 0;
+        border-right: 1px solid #8d8d8d;
+
+        &:last-child,
+        &:first-child {
+          border-right: 0;
+        }
+      }
+    }
+  }
+}
