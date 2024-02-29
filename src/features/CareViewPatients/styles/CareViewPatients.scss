@@ -3,6 +3,13 @@
   display: flex;
   justify-content: center;
 
+  .no-search-results {
+    padding: 20px 0 20px 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #f4f4f4;
+  }
+
   .care-view-patients {
     width: 100%;
   }
@@ -15,7 +22,10 @@
     flex-flow: row;
     justify-content: end;
   }
-
+  .ward-patient-search {
+    margin-left: 420px;
+    margin-right: 16px;
+  }
   .patient-pagination {
     max-width: max-content;
     margin-left: auto;
@@ -24,4 +34,8 @@
       padding: 0.5rem 1rem;
     }
   }
+}
+
+.no-nursing-tasks {
+  padding-top: 10px;
 }

@@ -77,6 +77,8 @@ export const WARD_SUMMARY_URL = RESTWS_V1 + "/ipd/wards/{wardId}/summary";
 export const GET_PATIENT_LIST_URL = RESTWS_V1 + "/ipd/wards/{wardId}/patients";
 export const CARE_VIEW_DASHBOARD_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/careViewDashboard/app.json";
+export const GET_SEARCH_PATIENT_LIST_URL =
+  RESTWS_V1 + "/ipd/wards/{wardId}/patients/search";
 
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
@@ -102,3 +104,6 @@ export const asNeededPlaceholderConceptName = "AsNeededPlaceholder";
 export const asNeededMedicationRequestConceptName = "AsNeededMedicationRequest";
 export const timeFormatfor24Hr = "HH:mm";
 export const timeFormatFor12hr = "hh:mm A";
+
+export const IPD_WARD_SEARCH_PLACEHOLDER_TEXT =
+  "Type minimum 3 letters to search patient by name, bed number or patient ID";
