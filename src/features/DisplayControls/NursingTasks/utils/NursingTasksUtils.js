@@ -216,7 +216,6 @@ export const isTimeWithinAdministeredWindow = (
   const timeWithinWindowInEpochSeconds =
     timeToEpoch(scheduledStartTime) +
     nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
-
   return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
 };
 export const getTimeInSeconds = (days) => days * 86400;

@@ -179,8 +179,15 @@ const UpdateNursingTasks = (props) => {
   };
 
   const handleTimeChange = (time, id) => {
+    const taskTime = enable24HourTime
+      ? moment(time, timeFormatfor24Hr).format(timeFormatfor24Hr)
+      : moment(time, timeFormatFor12hr).format(timeFormatfor24Hr);
     if (
-      !isTimeWithinAdministeredWindow(time, tasks[id].startTime, nursingTasks)
+      !isTimeWithinAdministeredWindow(
+        taskTime,
+        tasks[id].startTime,
+        nursingTasks
+      )
     ) {
       updateTasks({
         ...tasks,
