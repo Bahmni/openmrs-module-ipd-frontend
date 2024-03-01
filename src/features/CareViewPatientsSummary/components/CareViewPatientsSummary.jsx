@@ -11,17 +11,13 @@ import {
   getPreviousNearbyHourEpoch,
   getTimeInFuture,
 } from "../../../utils/DateTimeUtils";
-import {
-  getAdministrationStatus,
-  getDashboardConfig,
-} from "../../../utils/CommonUtils";
+import { getAdministrationStatus } from "../../../utils/CommonUtils";
 import SVGIcon from "../../SVGIcon/SVGIcon";
 import { CareViewContext } from "../../../context/CareViewContext";
 
 export const CareViewPatientsSummary = (props) => {
   const [slotDetails, setSlotDetails] = useState([]);
-  const [configValue, setConfigValue] = useState({});
-  const { careViewConfig } = useContext(CareViewContext);
+  const { careViewConfig, ipdConfig } = useContext(CareViewContext);
   const { patientsSummary } = props;
   const timeframeLimitInHours = careViewConfig.timeframeLimitInHours;
   const currentEpoch = Math.floor(new Date().getTime() / 1000);
@@ -38,18 +34,8 @@ export const CareViewPatientsSummary = (props) => {
       currentTime,
       endTime
     );
-    setSlotDetails(response.data);
+    setSlotDetails(response);
   };
-
-  const fetchConfig = async () => {
-    const configData = await getDashboardConfig();
-    const config = configData.data || {};
-    setConfigValue(config);
-  };
-
-  useEffect(() => {
-    fetchConfig();
-  }, []);
 
   useEffect(() => {
     if (patientsSummary.length > 0) {
@@ -58,7 +44,7 @@ export const CareViewPatientsSummary = (props) => {
   }, [patientsSummary]);
 
   const renderStatusIcon = (slot) => {
-    const { drugChart = {} } = configValue;
+    const { drugChart = {} } = ipdConfig;
     const { startTime, status, medicationAdministration } = slot;
     let administrationStatus = getAdministrationStatus(
       medicationAdministration,
@@ -98,7 +84,7 @@ export const CareViewPatientsSummary = (props) => {
           <span>{epochTo24HourTimeFormat(slotItem.startTime)}</span>
           <div className="drug-details-wrapper">
             <span>{slotItem.order.drug.display}</span>
-            <div className="drug-details">
+            <div className="drug-details" data-testid="drug-details">
               {dose && <span className="drug-detail">{dose}</span>}
               {doseUnits && (
                 <span className="drug-detail">{doseUnits?.display}</span>
@@ -117,7 +103,7 @@ export const CareViewPatientsSummary = (props) => {
 
   const renderSlotDetailsCell = (uuid) => {
     const columns = [];
-    const patientSlotDetail = slotDetails.find(
+    const patientSlotDetail = slotDetails?.find(
       (slotDetail) => slotDetail.patientUuid === uuid
     );
 
@@ -148,12 +134,18 @@ export const CareViewPatientsSummary = (props) => {
         <td
           className="patient-details-container"
           key="patient-details-header"
+          data-testid="patient-details-header"
         ></td>
         {Array.from({ length: timeframeLimitInHours }, (_, i) => {
           const startTime = nearestHourEpoch + i * 3600;
+          let headerKey = `slot-details-header-${i}`;
           return (
-            <td className="slot-details-header" key={`time-frame-header-${i}`}>
-              <div className="time">
+            <td
+              className="slot-details-header"
+              key={headerKey}
+              data-testid={headerKey}
+            >
+              <div className="time" data-testid={`time-frame-${i}`}>
                 {epochTo24HourTimeFormat(startTime, true)}
               </div>
             </td>

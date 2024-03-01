@@ -12,21 +12,26 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
         >
           <td
             class="patient-details-container"
+            data-testid="patient-details-header"
           />
           <td
             class="slot-details-header"
+            data-testid="slot-details-header-0"
           >
             <div
               class="time"
+              data-testid="time-frame-0"
             >
               12:00
             </div>
           </td>
           <td
             class="slot-details-header"
+            data-testid="slot-details-header-1"
           >
             <div
               class="time"
+              data-testid="time-frame-1"
             >
               13:00
             </div>
@@ -168,6 +173,80 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 </span>
                 <span>
                   10
+                </span>
+                yrs
+              </div>
+            </div>
+          </td>
+          <td
+            class="slot-details-container"
+          />
+          <td
+            class="slot-details-container"
+          />
+        </tr>
+        <tr
+          class="patient-row-container"
+        >
+          <td
+            class="patient-details-container"
+          >
+            <div
+              class="care-view-patient-details"
+            >
+              <div
+                class="admission-details"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+                  />
+                  <path
+                    d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                  />
+                </svg>
+                |
+                <span>
+                  ICU1
+                </span>
+                |
+                <a
+                  class="bx--link bx--link--inline"
+                  href="#"
+                >
+                  <span>
+                    ET55749
+                  </span>
+                </a>
+              </div>
+              <div>
+                Patient
+                :
+                 
+                <span>
+                  user three
+                </span>
+                 (
+                <span>
+                  F
+                </span>
+                )
+                <span
+                  class="separator"
+                >
+                  |
+                </span>
+                <span>
+                  30
                 </span>
                 yrs
               </div>

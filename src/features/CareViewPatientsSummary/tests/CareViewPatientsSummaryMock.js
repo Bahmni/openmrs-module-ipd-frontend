@@ -108,6 +108,118 @@ export const mockPatientsList = {
       },
       newTreatments: 0,
     },
+    {
+      patientDetails: {
+        uuid: "3ab51ec0-4650-4400-9aaa-75f30ece0208",
+        display: "ET55749 - user three",
+        identifiers: [
+          {
+            uuid: "63743e38-9c84-4c1c-b312-69bc2558f6e0",
+            display: "Identification Number = ET55749",
+            links: [
+              {
+                rel: "self",
+                uri: "http://localhost/openmrs/ws/rest/v1/patient/3ab51ec0-4650-4400-9aaa-75f30ece0208/identifier/63743e38-9c84-4c1c-b312-69bc2558f6e0",
+                resourceAlias: "identifier",
+              },
+            ],
+          },
+        ],
+        person: {
+          uuid: "3ab51ec0-4650-4400-9aaa-75f30ece0208",
+          display: "user three",
+          gender: "F",
+          age: 30,
+          birthdate: "1994-02-19T00:00:00.000+0530",
+          birthdateEstimated: false,
+          dead: false,
+          deathDate: null,
+          causeOfDeath: null,
+          preferredName: {
+            uuid: "14626b64-0929-4cc4-a8e3-15f0722aa0f3",
+            display: "user three",
+            links: [
+              {
+                rel: "self",
+                uri: "http://localhost/openmrs/ws/rest/v1/person/3ab51ec0-4650-4400-9aaa-75f30ece0208/name/14626b64-0929-4cc4-a8e3-15f0722aa0f3",
+                resourceAlias: "name",
+              },
+            ],
+          },
+          preferredAddress: null,
+          attributes: [
+            {
+              uuid: "1c564589-9ef6-4aca-bc69-88b25603c9f0",
+              display: "registrationLocation = 57",
+              links: [
+                {
+                  rel: "self",
+                  uri: "http://localhost/openmrs/ws/rest/v1/person/3ab51ec0-4650-4400-9aaa-75f30ece0208/attribute/1c564589-9ef6-4aca-bc69-88b25603c9f0",
+                  resourceAlias: "attribute",
+                },
+              ],
+            },
+            {
+              uuid: "4bfeef33-4ff4-4931-9c58-69e38b7bebae",
+              display: "confirmedPatient = true",
+              links: [
+                {
+                  rel: "self",
+                  uri: "http://localhost/openmrs/ws/rest/v1/person/3ab51ec0-4650-4400-9aaa-75f30ece0208/attribute/4bfeef33-4ff4-4931-9c58-69e38b7bebae",
+                  resourceAlias: "attribute",
+                },
+              ],
+            },
+          ],
+          voided: false,
+          birthtime: null,
+          deathdateEstimated: false,
+          links: [
+            {
+              rel: "self",
+              uri: "http://localhost/openmrs/ws/rest/v1/person/3ab51ec0-4650-4400-9aaa-75f30ece0208",
+              resourceAlias: "person",
+            },
+            {
+              rel: "full",
+              uri: "http://localhost/openmrs/ws/rest/v1/person/3ab51ec0-4650-4400-9aaa-75f30ece0208?v=full",
+              resourceAlias: "person",
+            },
+          ],
+          resourceVersion: "1.11",
+        },
+        voided: false,
+        links: [
+          {
+            rel: "self",
+            uri: "http://localhost/openmrs/ws/rest/v1/patient/3ab51ec0-4650-4400-9aaa-75f30ece0208",
+            resourceAlias: "patient",
+          },
+          {
+            rel: "full",
+            uri: "http://localhost/openmrs/ws/rest/v1/patient/3ab51ec0-4650-4400-9aaa-75f30ece0208?v=full",
+            resourceAlias: "patient",
+          },
+        ],
+        resourceVersion: "1.8",
+      },
+      bedDetails: {
+        id: 72,
+        uuid: "8b6da147-11c4-4f10-8d15-cd9359305175",
+        bedNumber: "ICU1",
+        bedType: {
+          uuid: "3011f18b-5e12-11e9-9eee-000c29a2a768",
+          name: "normal",
+          displayName: "normal bed",
+          description: "NRM",
+          resourceVersion: "1.8",
+        },
+        row: 1,
+        column: 1,
+        status: "OCCUPIED",
+      },
+      newTreatments: 0,
+    },
   ],
   totalPatients: 25,
 };

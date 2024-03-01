@@ -13,6 +13,14 @@ const fetchWards = async () => {
   }
 };
 
+const fetchSlots = async (url) => {
+  try {
+    return await axios.get(url);
+  } catch (e) {
+    return e;
+  }
+};
+
 export const fetchWardSummary = async (wardId) => {
   try {
     return await axios.get(WARD_SUMMARY_URL.replace("{wardId}", wardId));
@@ -31,11 +39,11 @@ export const getSlotsForPatients = async (
     .map((uuid) => `patientUuids=${uuid}`)
     .join("&");
   const FETCH_SLOTS_URL = `${GET_SLOTS_FOR_PATIENTS_URL}?${patientUuidParams}&startTime=${startTime}&endTime=${endTime}&includePreviousSlot=${includePreviousSlot}&includeSlotDuration=${includeSlotDuration}`;
-  try {
-    return await axios.get(FETCH_SLOTS_URL);
-  } catch (e) {
-    return e;
+  const response = await fetchSlots(FETCH_SLOTS_URL);
+  if (response.status === 200) {
+    return response.data;
   }
+  return [];
 };
 
 export const getWardDetails = async () => {
