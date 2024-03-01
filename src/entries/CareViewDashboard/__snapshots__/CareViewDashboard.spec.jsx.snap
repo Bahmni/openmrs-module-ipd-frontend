@@ -253,7 +253,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           >
             <div
               aria-labelledby="ipd-ward-search-search"
-              class="bx--search bx--search--lg ward-patient-search"
+              class="bx--search bx--search--lg bx--search--light ward-patient-search"
               role="search"
             >
               <div
@@ -317,7 +317,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
             >
               
               <div
-                class="bx--dropdown bx--list-box"
+                class="bx--dropdown bx--dropdown--light bx--list-box bx--list-box--light"
                 id="default"
               >
                 <button

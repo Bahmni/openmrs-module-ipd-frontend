@@ -159,7 +159,9 @@ describe("CareViewPatients", () => {
     fireEvent.change(searchBox, { target: { value: "PT6" } });
     fireEvent.keyDown(searchBox, { key: "Enter", code: "Enter", charCode: 13 });
     await waitFor(() => {
-      expect(getByText("No search result available")).toBeTruthy();
+      expect(
+        getByText("Patient not found, please verify your search criteria")
+      ).toBeTruthy();
     });
     expect(queryByText("PT6")).not.toBeTruthy();
   });

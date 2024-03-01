@@ -5,13 +5,16 @@
 
   .no-search-results {
     padding: 20px 0 20px 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    background-color: #f4f4f4;
+    margin: 10px 135px 10px 420px;
+    border: 1px solid #0F62FE;
+    background-color: #D0E2FF73;
   }
 
   .care-view-patients {
     width: 100%;
+    background-color: #f4f4f4;
+    padding-top: 24px;
+    padding-right: 8px;
   }
 
   .patient-section {
@@ -22,15 +25,11 @@
     flex-flow: row;
     justify-content: end;
   }
-
-  .ward-patient-search {
-    margin-left: 420px;
-    margin-right: 16px;
-  }
   
   .patient-pagination {
     max-width: max-content;
     margin-left: auto;
+    background-color: white;
     .bx--btn.bx--btn--icon-only.bx--tooltip__trigger .bx--assistive-text {
       color: white;
       padding: 0.5rem 1rem;
@@ -40,4 +39,14 @@
 
 .no-nursing-tasks {
   padding-top: 10px;
+}
+
+.no-search-results {
+  display: flex;
+  align-items: center;
+
+  .no-search-results-span {
+    padding: 5px;
+    letter-spacing: 0.24px;
+  }
 }

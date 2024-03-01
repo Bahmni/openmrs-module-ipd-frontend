@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "../styles/CareViewPatients.scss";
-import { Dropdown, Pagination, Loading, Search } from "carbon-components-react";
+import { Pagination, Loading } from "carbon-components-react";
 import PropTypes from "prop-types";
 import {
   fetchPatientsList,
@@ -8,19 +8,21 @@ import {
 } from "../utils/CareViewPatientsUtils";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { CareViewPatientsSummary } from "../../CareViewPatientsSummary/components/CareViewPatientsSummary";
-import { IPD_WARD_SEARCH_PLACEHOLDER_TEXT } from "../../../constants";
 import { FormattedMessage } from "react-intl";
+import { CareViewPatientsHeader } from "../components/CareViewPatientsHeader";
+import { searchKeys } from "../utils/constants";
+import WarningIcon from "../../../icons/warning.svg";
 
 export const CareViewPatients = () => {
   const { selectedWard, dashboardConfig } = useContext(CareViewContext);
   const [currentPage, setCurrentPage] = useState(1);
+  const [previousPage, setPreviousPage] = useState(1);
   const [limit, setLimit] = useState(dashboardConfig.defaultPageSize);
   const [patientList, setPatientList] = useState([]);
   const [totalPatients, setTotalPatients] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, updateSearchValue] = useState("");
   const [isSearched, setIsSearched] = useState(false);
-  const searchKeys = ["bedNumber", "patientIdentifier", "patientName"];
   const getPatientsList = async () => {
     try {
       setIsLoading(true);
@@ -44,14 +46,14 @@ export const CareViewPatients = () => {
     }
   };
 
-  const getPatientsListBySearch = async () => {
+  const getPatientsListBySearch = async (offset = 1) => {
     try {
       setIsLoading(true);
       const response = await fetchPatientsListBySearch(
         selectedWard.value,
         searchKeys,
         searchValue,
-        (currentPage - 1) * limit,
+        (offset - 1) * limit,
         limit
       );
       if (response.status === 200) {
@@ -69,92 +71,76 @@ export const CareViewPatients = () => {
   };
 
   useEffect(() => {
-    if (currentPage > 1) {
-      setCurrentPage(1);
-    }
+    setCurrentPage(1);
+    updateSearchValue("");
+    setIsSearched((prevVal) => false);
   }, [selectedWard]);
 
   useEffect(() => {
     if (selectedWard.value) {
       if (isSearched) {
-        getPatientsListBySearch();
+        getPatientsListBySearch(currentPage);
       } else {
         getPatientsList();
       }
     }
-  }, [selectedWard, currentPage, limit]);
+  }, [selectedWard, currentPage, limit, isSearched]);
 
   const handlePaginationChange = (e) => {
     setCurrentPage(e.page);
     setLimit(e.pageSize);
   };
 
-  const handleSearchOnChange = (e) => {
-    updateSearchValue(e.target.value);
-  };
-
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       if (searchValue.length >= 3) {
-        setCurrentPage(1);
-        setIsSearched(true);
-        getPatientsListBySearch();
+        setIsSearched((prevVal) => true);
+        setPreviousPage(currentPage);
+        setCurrentPage((prevVal) => 1);
+        // getPatientsListBySearch(1);
       } else {
         setIsSearched(false);
       }
     }
   };
+
   const handleClear = () => {
     updateSearchValue("");
     setIsSearched(false);
-    if (selectedWard.value) {
-      getPatientsList();
-    }
+    setCurrentPage(previousPage);
+    // getPatientsList();
   };
 
   const noSearchResultsForPatientsWardMessage = (
     <FormattedMessage
       id={"NO_SEARCH_RESULTS_PATIENTS_WARD_MESSAGE"}
-      defaultMessage={"No search result available"}
+      defaultMessage={"Patient not found, please verify your search criteria"}
     />
   );
-
   return (
     <div className="care-view-patients-container">
       {isLoading ? (
         <Loading />
       ) : (
         <div className="care-view-patients">
-          <div className="task-type">
-            <Search
-              placeholder={IPD_WARD_SEARCH_PLACEHOLDER_TEXT}
-              size="lg"
-              id="ipd-ward-search"
-              onChange={handleSearchOnChange}
-              value={searchValue}
-              onKeyDown={handleKeyPress}
-              onClear={handleClear}
-              className="ward-patient-search"
-              labelText="Patient Search"
-            />
-            <Dropdown
-              id="default"
-              label="Dropdown menu options"
-              items={["All tasks", "Pending", "Done"]}
-              itemToString={(item) => (item ? item : "")}
-              selectedItem={"All tasks"}
-            />
-          </div>
+          <CareViewPatientsHeader
+            handleKeyPress={handleKeyPress}
+            handleClear={handleClear}
+            searchValue={searchValue}
+            updateSearchValue={updateSearchValue}
+          />
           {patientList.length > 0 ? (
             <CareViewPatientsSummary patientsSummary={patientList} />
           ) : isSearched ? (
             <div className="no-search-results">
-              {noSearchResultsForPatientsWardMessage}
+              <WarningIcon />
+              <span className="no-search-results-span">
+                {noSearchResultsForPatientsWardMessage}
+              </span>
             </div>
           ) : (
             <></>
           )}
-
           <div className={"patient-pagination"}>
             <Pagination
               page={currentPage}
