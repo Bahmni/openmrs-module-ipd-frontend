@@ -12,20 +12,31 @@ import { I18nProvider } from "../../features/i18n/I18nProvider";
 import { homePageUrl } from "../../constants";
 import { CareViewContext } from "../../context/CareViewContext";
 import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
+import { getDashboardConfig } from "../../utils/CommonUtils";
 
 const CareViewDashboard = (props) => {
   const { hostApi } = props;
   const [selectedWard, setSelectedWard] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [wardSummary, setWardSummary] = useState({});
-  const [dashboardConfig, setDashboardConfig] = useState({});
+  const [careViewConfig, setCareViewConfig] = useState({});
+  const [ipdConfig, setIpdConfig] = useState({});
   const getConfig = async () => {
     const config = await getConfigForCareViewDashboard();
-    setDashboardConfig(config);
+    setCareViewConfig(config);
   };
+
+  const getIpdConfig = async () => {
+    const configData = await getDashboardConfig();
+    const config = configData.data || {};
+    setIpdConfig(config);
+  };
+
   useEffect(() => {
     getConfig();
+    getIpdConfig();
   }, []);
+
   return (
     <I18nProvider>
       <main className="care-view-page">
@@ -46,7 +57,8 @@ const CareViewDashboard = (props) => {
               setWardSummary,
               selectedWard,
               setSelectedWard,
-              dashboardConfig,
+              careViewConfig,
+              ipdConfig,
             }}
           >
             <div className="care-view-navigations">
@@ -66,7 +78,7 @@ const CareViewDashboard = (props) => {
               </Link>
             </div>
             <CareViewSummary callbacks={{ setIsLoading }} />
-            {!_.isEmpty(dashboardConfig) && (
+            {!_.isEmpty(careViewConfig) && (
               <CareViewPatients callbacks={{ setIsLoading }} />
             )}
           </CareViewContext.Provider>

@@ -6,7 +6,7 @@ import { CareViewContext } from "../../../context/CareViewContext";
 import MockDate from "mockdate";
 
 const mockContext = {
-  dashboardConfig: { timeframeLimitInHours: 2 },
+  careViewConfig: { timeframeLimitInHours: 2 },
 };
 
 describe("CareViewPatientsSummary", function () {

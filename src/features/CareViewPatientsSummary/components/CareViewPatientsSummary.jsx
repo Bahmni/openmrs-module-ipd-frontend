@@ -21,9 +21,9 @@ import { CareViewContext } from "../../../context/CareViewContext";
 export const CareViewPatientsSummary = (props) => {
   const [slotDetails, setSlotDetails] = useState([]);
   const [configValue, setConfigValue] = useState({});
-  const { dashboardConfig } = useContext(CareViewContext);
+  const { careViewConfig } = useContext(CareViewContext);
   const { patientsSummary } = props;
-  const timeframeLimitInHours = dashboardConfig.timeframeLimitInHours;
+  const timeframeLimitInHours = careViewConfig.timeframeLimitInHours;
   const currentEpoch = Math.floor(new Date().getTime() / 1000);
   const nearestHourEpoch = getPreviousNearbyHourEpoch(currentEpoch);
 
