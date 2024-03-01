@@ -36,6 +36,7 @@ import {
   dateTimeToEpochUTCTime,
   areDatesSame,
   convertTo24Hour,
+  isTimeInFuture,
 } from "../../../../utils/DateTimeUtils";
 import AdministeredMedicationList from "./AdministeredMedicationList";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -79,7 +80,7 @@ const AddEmergencyTasks = (props) => {
   const [isTimeChanged, setIsTimeChanged] = useState(false);
   const [isDateChanged, setIsDateChanged] = useState(false);
   const [isInvalidTime, setIsInvalidTime] = useState(false);
-  const [invalidText, setInvalidText] = useState(false);
+  const [invalidText, setInvalidText] = useState();
   const invalidTimeText24Hour = (
     <FormattedMessage
       id={"INVALID_TIME"}
@@ -286,11 +287,6 @@ const AddEmergencyTasks = (props) => {
     customValidation(administrationTime);
   }, [administrationDate]);
 
-  const isTimeInFuture = (time1, time2) => {
-    const time1_24hr = convertTo24Hour(time1);
-    const time2_24hr = convertTo24Hour(time2);
-    return time1_24hr > time2_24hr;
-  };
 
   const customValidation = (time) => {
     if (time) {
