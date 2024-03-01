@@ -1,5 +1,5 @@
 import moment from "moment";
-import { defaultDateFormat } from "../constants";
+import { dateFormat, defaultDateFormat } from "../constants";
 
 export const formatDate = (value, format = defaultDateFormat) => {
   return value ? moment(value).format(format) : value;
@@ -17,7 +17,7 @@ export const epochTo24HourTimeFormat = (epochSeconds, includeDate = false) => {
   const formattedTime = moment.unix(epochSeconds).format("HH:mm");
 
   if (formattedTime === "00:00" && includeDate) {
-    const currentDate = moment.unix(epochSeconds).format("DD/MM/YYYY");
+    const currentDate = moment.unix(epochSeconds).format(dateFormat);
     return `${formattedTime} (${currentDate})`;
   } else {
     return formattedTime;

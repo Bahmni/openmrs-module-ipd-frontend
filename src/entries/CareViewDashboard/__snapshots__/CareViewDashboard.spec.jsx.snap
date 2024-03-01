@@ -319,42 +319,6 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   <td
                     class="patient-details-container"
                   />
-                  <td
-                    class="slot-details-header"
-                  >
-                    <div
-                      class="time"
-                    >
-                      19:00
-                    </div>
-                  </td>
-                  <td
-                    class="slot-details-header"
-                  >
-                    <div
-                      class="time"
-                    >
-                      20:00
-                    </div>
-                  </td>
-                  <td
-                    class="slot-details-header"
-                  >
-                    <div
-                      class="time"
-                    >
-                      21:00
-                    </div>
-                  </td>
-                  <td
-                    class="slot-details-header"
-                  >
-                    <div
-                      class="time"
-                    >
-                      22:00
-                    </div>
-                  </td>
                 </tr>
               </tbody>
             </table>

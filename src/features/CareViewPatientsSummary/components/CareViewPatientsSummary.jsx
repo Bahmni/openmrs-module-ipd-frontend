@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import propTypes from "prop-types";
 import "../styles/CareViewPatientsSummary.scss";
 import { HospitalBed16 } from "@carbon/icons-react";
@@ -16,12 +16,14 @@ import {
   getDashboardConfig,
 } from "../../../utils/CommonUtils";
 import SVGIcon from "../../SVGIcon/SVGIcon";
+import { CareViewContext } from "../../../context/CareViewContext";
 
 export const CareViewPatientsSummary = (props) => {
   const [slotDetails, setSlotDetails] = useState([]);
   const [configValue, setConfigValue] = useState({});
+  const { dashboardConfig } = useContext(CareViewContext);
   const { patientsSummary } = props;
-  const timeframeLimitInHours = 4; // need to make it configurable
+  const timeframeLimitInHours = dashboardConfig.timeframeLimitInHours;
   const currentEpoch = Math.floor(new Date().getTime() / 1000);
   const nearestHourEpoch = getPreviousNearbyHourEpoch(currentEpoch);
 
