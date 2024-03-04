@@ -361,6 +361,123 @@ export const mockNursingTasksResponseForStopped = [
   },
 ];
 
+export const mockNursingTasksResponseForMissed = [
+  {
+    id: 4,
+    uuid: "def24d1a-897b-4291-b0eb-53806aea4d67",
+    serviceType: "MedicationRequest",
+    comments: null,
+    startDate: 1709100657,
+    endDate: null,
+    slots: [
+      {
+        id: 92,
+        uuid: "f2bdf7dd-4890-4b54-a490-1ba572a708ab",
+        serviceType: "MedicationRequest",
+        status: "MISSED",
+        startTime: 1709130600,
+        order: {
+          uuid: "06a43e70-a976-4695-9e42-0b0ef44b85d4",
+          drug: {
+            uuid: "c2ec711b-fa16-4df9-8caf-d40fe174443f",
+            display: "Liquid Paraffin",
+          },
+          dose: 1,
+          doseUnits: {
+            uuid: "9d6540e1-3f10-11e4-adec-0800271c1b75",
+            display: "Drop",
+          },
+          frequency: {
+            display: "Every 2 hours",
+          },
+          asNeeded: false,
+          dosingInstructions: '{"instructions":"As directed"}',
+          duration: 1,
+          durationUnits: {
+            uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+            display: "Day(s)",
+          },
+          route: {
+            uuid: "33b16adb-8a92-11e4-977f-0800271c1b75",
+            display: "Topical",
+          },
+        },
+        medicationAdministration: null,
+        notes: "",
+      },
+      {
+        id: 103,
+        uuid: "4a09cf75-234b-4cc7-9be3-5bfd40c39ac0",
+        serviceType: "MedicationRequest",
+        status: "MISSED",
+        startTime: 1709128800,
+        order: {
+          uuid: "79da1b26-fb11-4a08-bc48-549bc7900432",
+          drug: {
+            uuid: "df491fe5-2434-4142-9a73-60b3922c92ea",
+            display: "Paracetamol 120 mg/5 mL Suspension",
+          },
+          dose: 1,
+          doseUnits: {
+            uuid: "9d65f54b-3f10-11e4-adec-0800271c1b75",
+            display: "ml",
+          },
+          dosingInstructions: '{"instructions":"As directed"}',
+          asNeeded: false,
+          duration: 1,
+          durationUnits: {
+            uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+            display: "Day(s)",
+          },
+          frequency: {
+            display: "Every 2 hours",
+          },
+          route: {
+            uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+            display: "Oral",
+          },
+        },
+        medicationAdministration: null,
+        notes: "",
+      },
+      {
+        id: 104,
+        uuid: "11d09d57-7b96-41b3-b9fb-697ac8bda3a9",
+        serviceType: "MedicationRequest",
+        status: "MISSED",
+        startTime: 1709136000,
+        order: {
+          uuid: "79da1b26-fb11-4a08-bc48-549bc7900432",
+          drug: {
+            uuid: "df491fe5-2434-4142-9a73-60b3922c92ea",
+            display: "Paracetamol 120 mg/5 mL Suspension",
+          },
+          dose: 1,
+          doseUnits: {
+            uuid: "9d65f54b-3f10-11e4-adec-0800271c1b75",
+            display: "ml",
+          },
+          frequency: {
+            display: "Every 2 hours",
+          },
+          asNeeded: false,
+          dosingInstructions: '{"instructions":"As directed"}',
+          duration: 1,
+          durationUnits: {
+            uuid: "9d7437a9-3f10-11e4-adec-0800271c1b75",
+            display: "Day(s)",
+          },
+          route: {
+            uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+            display: "Oral",
+          },
+        },
+        medicationAdministration: null,
+        notes: "",
+      },
+    ],
+  },
+];
 export const mockNursingTasksResponseForAllTasks = [
   {
     id: 1,
@@ -679,6 +796,68 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
       orderId: "paracetamol-125mg-tablet-uuid",
       serviceType: "MedicationRequest",
       isDisabled: true,
+    },
+  ],
+];
+export const mockExtractedMedicationNursingTasksDataForMissed = [
+  [
+    {
+      drugName: "Paracetamol 120 mg/5 mL Suspension",
+      drugRoute: "Oral",
+      duration: "1 Day(s)",
+      dosage: "1ml",
+      doseType: undefined,
+      uuid: "4a09cf75-234b-4cc7-9be3-5bfd40c39ac0",
+      startTimeInEpochSeconds: 1709128800,
+      dosingInstructions: {
+        asNeeded: false,
+        frequency: "Every 2 hours",
+      },
+      startTime: "14:00",
+      orderId: "79da1b26-fb11-4a08-bc48-549bc7900432",
+      isDisabled: false,
+      serviceType: "MedicationRequest",
+      status: "missed",
+    },
+  ],
+  [
+    {
+      drugName: "Liquid Paraffin",
+      drugRoute: "Topical",
+      duration: "1 Day(s)",
+      dosage: 1,
+      doseType: "Drop",
+      uuid: "f2bdf7dd-4890-4b54-a490-1ba572a708ab",
+      startTimeInEpochSeconds: 1709130600,
+      dosingInstructions: {
+        asNeeded: false,
+        frequency: "Every 2 hours",
+      },
+      startTime: "14:30",
+      orderId: "06a43e70-a976-4695-9e42-0b0ef44b85d4",
+      isDisabled: false,
+      serviceType: "MedicationRequest",
+      status: "missed",
+    },
+  ],
+  [
+    {
+      drugName: "Paracetamol 120 mg/5 mL Suspension",
+      drugRoute: "Oral",
+      duration: "1 Day(s)",
+      dosage: "1ml",
+      doseType: undefined,
+      uuid: "11d09d57-7b96-41b3-b9fb-697ac8bda3a9",
+      startTimeInEpochSeconds: 1709136000,
+      dosingInstructions: {
+        asNeeded: false,
+        frequency: "Every 2 hours",
+      },
+      startTime: "16:00",
+      orderId: "79da1b26-fb11-4a08-bc48-549bc7900432",
+      isDisabled: false,
+      serviceType: "MedicationRequest",
+      status: "missed",
     },
   ],
 ];
