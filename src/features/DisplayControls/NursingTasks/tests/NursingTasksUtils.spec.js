@@ -11,10 +11,12 @@ import {
   mockExtractedMedicationNursingTasksData,
   mockNursingTasksResponseForCompleted,
   mockExtractedMedicationNursingTasksDataForCompleted,
+  mockNursingTasksResponseForMissed,
   mockNursingTasksResponseForAllTasks,
   mockExtractedMedicationNursingTasksDataForAllTasks,
   mockNursingTasksResponseForStopped,
   mockExtractedMedicationNursingTasksDataForStopped,
+  mockExtractedMedicationNursingTasksDataForMissed,
 } from "./NursingTasksUtilsMockData";
 
 jest.mock("axios");
@@ -118,6 +120,16 @@ describe("NursingTasksUtils", () => {
       const extractedData = ExtractMedicationNursingTasksData(
         medicationNursingTasksData,
         { id: "allTasks", text: "All Tasks" }
+      );
+      expect(extractedData).toEqual(expectedData);
+    });
+
+    it("should return extracted data for missed sorted in ascending order", () => {
+      const medicationNursingTasksData = mockNursingTasksResponseForMissed;
+      const expectedData = mockExtractedMedicationNursingTasksDataForMissed;
+      const extractedData = ExtractMedicationNursingTasksData(
+        medicationNursingTasksData,
+        { id: "missed", text: "Missed" }
       );
       expect(extractedData).toEqual(expectedData);
     });

@@ -187,7 +187,7 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
           ...slot,
           administrationSummary: {
             performerName,
-            notes,
+            notes: status === "MISSED" ? "Missed" : notes,
             status: administrationStatus,
           },
         });

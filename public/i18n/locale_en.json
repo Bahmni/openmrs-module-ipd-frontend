@@ -40,6 +40,7 @@
   "NO_NURSING_TASKS_MESSAGE_COMPLETED": "No Completed Task is available for the patient",
   "NO_NURSING_TASKS_MESSAGE_PENDING": "No Pending Task is available for the patient",
   "NO_NURSING_TASKS_MESSAGE_STOPPED": "No Stopped Task is available for the patient",
+  "NO_NURSING_TASKS_MESSAGE_MISSED": "No Missed Task is available for the patient",
   "INVALID_TIME": "Please enter valid time",
   "DONE": "Done",
   "AT": "at",
@@ -78,5 +79,6 @@
   "STOP_DRUG_CANCEL_TEXT": "Cancel",
   "STOP_DRUG_SUCCESS_NOTIFICATION": "Medication stopped successfully",
   "NO_CONFIG_MESSAGE": "Please specify IPD Dashboard configurations",
-  "NOT_CURRENT_SHIFT_MESSAGE": "You're not viewing the current shift"
+  "NOT_CURRENT_SHIFT_MESSAGE": "You're not viewing the current shift",
+  "COMPLETED": "Completed"
 }

@@ -706,6 +706,60 @@ describe("Treatments", () => {
       expect(link).toBeTruthy();
     });
   });
+
+  it("should show status as Completed when all slots are attended", async () => {
+    const treatments = [
+      {
+        drugOrder: {
+          uuid: "1",
+          effectiveStartDate: 1704785404,
+          dateStopped: null,
+          dateActivated: 1704785404,
+          scheduledDate: 1704785404,
+          drug: {
+            name: "Drug 1",
+          },
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            route: "Oral",
+            frequency: "Once a day",
+            administrationInstructions:
+              '{"instructions":"As directed","additionalInstructions":"all good"}',
+          },
+          duration: 7,
+          durationUnits: "Day(s)",
+          careSetting: "INPATIENT",
+        },
+        drugOrderSchedule: {
+          allSlotsAttended: true,
+        },
+        provider: {
+          name: "Dr. John Doe",
+        },
+      },
+    ];
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
+        emergencyMedications: [],
+        ipdDrugOrders: treatments,
+      },
+    };
+    const { getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
+    );
+    await waitFor(() => {
+      expect(getByText(/drug 1/i)).toBeTruthy();
+    });
+    expect(getByText(/Completed/i)).toBeTruthy();
+  });
 });
 
 it("should render an Edit Drug Chart link disabled for IPD treatments read mode", async () => {

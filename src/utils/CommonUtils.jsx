@@ -59,6 +59,8 @@ export const getAdministrationStatus = (
   } else {
     if (slot.status === "STOPPED") {
       administrationStatus = "Stopped";
+    } else if (status === "MISSED") {
+      administrationStatus = "Not-Administered";
     } else if (isLateTask(startTime, drugChart)) {
       administrationStatus = "Late";
     }
