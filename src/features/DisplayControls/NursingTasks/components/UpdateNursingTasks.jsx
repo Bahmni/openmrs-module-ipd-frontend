@@ -215,10 +215,12 @@ const UpdateNursingTasks = (props) => {
             : moment(time, timeFormatFor12hr),
         },
       });
-      updateErrors({
-        ...errors,
-        [id]: Boolean(!tasks[id].notes),
-      });
+      if (!isPRNMedication) {
+        updateErrors({
+          ...errors,
+          [id]: Boolean(!tasks[id].notes),
+        });
+      }
     } else {
       updateTasks({
         ...tasks,
@@ -251,10 +253,12 @@ const UpdateNursingTasks = (props) => {
           actualTime: checked ? moment() : null,
         },
       });
-      updateErrors({
-        ...errors,
-        [id]: Boolean(!tasks[id].notes),
-      });
+      if (!isPRNMedication) {
+        updateErrors({
+          ...errors,
+          [id]: Boolean(!tasks[id].notes),
+        });
+      }
     } else {
       updateTasks({
         ...tasks,
@@ -280,7 +284,10 @@ const UpdateNursingTasks = (props) => {
     if (e.target.value) {
       delete errors[id];
     } else {
-      if (tasks[id].isTimeOutOfWindow || tasks[id].skipped) {
+      if (
+        !isPRNMedication &&
+        (tasks[id].isTimeOutOfWindow || tasks[id].skipped)
+      ) {
         updateErrors({
           ...errors,
           [id]: true,
@@ -487,8 +494,11 @@ const UpdateNursingTasks = (props) => {
                           <Title
                             text={"Notes"}
                             isRequired={
-                              tasks[medicationTask.uuid].isTimeOutOfWindow ||
-                              tasks[medicationTask.uuid].skipped
+                              isPRNMedication
+                                ? false
+                                : tasks[medicationTask.uuid]
+                                    .isTimeOutOfWindow ||
+                                  tasks[medicationTask.uuid].skipped
                             }
                           />
                         }
