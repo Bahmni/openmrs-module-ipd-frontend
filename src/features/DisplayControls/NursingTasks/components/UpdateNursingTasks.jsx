@@ -30,7 +30,11 @@ import {
 } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
-import { formatTime } from "../../../../utils/DateTimeUtils";
+import {
+  formatDate,
+  formatTime,
+  isTimeInFuture,
+} from "../../../../utils/DateTimeUtils";
 
 const UpdateNursingTasks = (props) => {
   const {
@@ -53,12 +57,23 @@ const UpdateNursingTasks = (props) => {
   const [administeredTasks, setAdministeredTasks] = useState({});
   const [skippedTasks, setSkippedTasks] = useState({});
   const [showWarningNotification, setShowWarningNotification] = useState(false);
+  const [isInvalidTime, setIsInvalidTime] = useState(false);
+  const [invalidText, setInvalidText] = useState();
+
   const invalidTimeText = (
     <FormattedMessage
       id={"INVALID_TIME"}
       defaultMessage={"Please enter valid time"}
     />
   );
+
+  const invalidFutureTimeText = (
+    <FormattedMessage
+      id={"FUTURE_TIME"}
+      defaultMessage={"Future time is not allowed"}
+    />
+  );
+
   const closeModal = () => {
     setOpenConfirmationModal(false);
   };
@@ -162,7 +177,7 @@ const UpdateNursingTasks = (props) => {
 
   useEffect(() => {
     checkFormStatus();
-  }, [tasks]);
+  }, [tasks, isInvalidTime]);
 
   const checkFormStatus = () => {
     let saveDisabled = true;
@@ -176,7 +191,7 @@ const UpdateNursingTasks = (props) => {
         setIsAnyMedicationSkipped(true);
       }
     });
-    updateIsSaveDisabled(saveDisabled);
+    updateIsSaveDisabled(saveDisabled || isInvalidTime);
   };
 
   const handleTimeChange = (time, id) => {
@@ -303,6 +318,8 @@ const UpdateNursingTasks = (props) => {
     } else {
       setShowWarningNotification(true);
     }
+    setIsInvalidTime(false);
+    setInvalidText("");
     updateShowErrors(false);
   };
 
@@ -329,10 +346,38 @@ const UpdateNursingTasks = (props) => {
     onCancel: () => {
       setShowWarningNotification(false);
       updateNursingTasksSlider(false);
+      setIsInvalidTime(false);
+      setInvalidText("");
     },
     onClose: () => {
+      setIsInvalidTime(false);
+      setInvalidText("");
       setShowWarningNotification(false);
     },
+  };
+
+  const customValidation = (time) => {
+    if (time) {
+      if (
+        isTimeInFuture(
+          time,
+          formatDate(
+            new Date(),
+            enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
+          )
+        )
+      ) {
+        setIsInvalidTime(true);
+        setInvalidText(invalidFutureTimeText);
+      } else {
+        setIsInvalidTime(false);
+      }
+    }
+  };
+
+  const actionForInvalidTime = (invalid) => {
+    setIsInvalidTime(invalid);
+    setInvalidText(invalidTimeText);
   };
 
   return (
@@ -405,12 +450,11 @@ const UpdateNursingTasks = (props) => {
                           onChange={(time) => {
                             handleTimeChange(time, medicationTask.uuid);
                           }}
-                          labelText={
-                            enable24HourTime
-                              ? `Task Time (${timeText24})`
-                              : `Task Time (${timeText12})`
-                          }
-                          invalidText={invalidTimeText}
+                          labelText={`Task Time (${timeText24})`}
+                          customValidation={customValidation}
+                          actionForInvalidTime={actionForInvalidTime}
+                          invalid={isInvalidTime}
+                          invalidText={invalidText}
                           light={true}
                           width={"150px"}
                         />
@@ -422,12 +466,11 @@ const UpdateNursingTasks = (props) => {
                           onChange={(time) => {
                             handleTimeChange(time, medicationTask.uuid);
                           }}
-                          labelText={
-                            enable24HourTime
-                              ? `Task Time (${timeText24})`
-                              : `Task Time (${timeText12})`
-                          }
-                          invalidText={invalidTimeText}
+                          labelText={`Task Time (${timeText12})`}
+                          customValidation={customValidation}
+                          actionForInvalidTime={actionForInvalidTime}
+                          invalid={isInvalidTime}
+                          invalidText={invalidText}
                           light={true}
                           width={"150px"}
                         />
