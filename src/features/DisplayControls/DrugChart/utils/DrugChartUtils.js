@@ -62,7 +62,7 @@ export const transformDrugOrders = (orders) => {
             dosingInstructions.administrationInstructions
           ),
         },
-        duration: duration + " " + durationUnits,
+        duration: duration ? duration + " " + durationUnits : null,
         slots: [],
         dateStopped: order.drugOrder.dateStopped,
         orderReasonText: orderReasonText,
