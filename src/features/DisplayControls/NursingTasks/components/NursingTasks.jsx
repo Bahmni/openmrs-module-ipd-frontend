@@ -265,7 +265,17 @@ export default function NursingTasks(props) {
           .filter((innerArray) => innerArray.length > 0);
         setMedicationNursingTasks(filteredData);
       } else {
-        setMedicationNursingTasks(extractedData);
+        const filteredData = extractedData
+          .map((extract) =>
+            extract.filter((data) => {
+              return (
+                data.serviceType != asNeededPlaceholderConceptName ||
+                data.endTimeInEpochSeconds > endDateTimeChange * 1000
+              );
+            })
+          )
+          .filter((innerArray) => innerArray.length > 0);
+        setMedicationNursingTasks(filteredData);
       }
       setIsLoading(false);
       setIsShiftsButtonsDisabled({
@@ -300,7 +310,17 @@ export default function NursingTasks(props) {
         .filter((innerArray) => innerArray.length > 0);
       setMedicationNursingTasks(filteredData);
     } else {
-      setMedicationNursingTasks(extractedTaskData);
+      const filteredData = extractedTaskData
+        .map((extract) =>
+          extract.filter((data) => {
+            return (
+              data.serviceType != asNeededPlaceholderConceptName ||
+              data.endTimeInEpochSeconds > startEndDates.endDate
+            );
+          })
+        )
+        .filter((innerArray) => innerArray.length > 0);
+      setMedicationNursingTasks(filteredData);
     }
   }, [filterValue]);
 
