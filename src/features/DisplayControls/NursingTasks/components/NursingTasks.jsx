@@ -253,7 +253,6 @@ export default function NursingTasks(props) {
         filterValue,
         isReadMode
       );
-      console.log("No, ", extractedData, startEndDates.endDate);
       if (
         !isCurrentShift(shiftConfig, startDateTimeChange, endDateTimeChange)
       ) {
@@ -295,7 +294,6 @@ export default function NursingTasks(props) {
       filterValue,
       isReadMode
     );
-    console.log("Yes, ", extractedTaskData, startEndDates.endDate);
     if (
       !isCurrentShift(
         shiftConfig,
