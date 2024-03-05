@@ -31,13 +31,20 @@ import { ScheduleSection } from "./ScheduleSection";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
-  const enableSchedule = hostData?.scheduleFrequencies?.find(
-    (frequency) =>
-      frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
-  );
-  const enableStartTime = hostData?.startTimeFrequencies?.includes(
-    hostData?.drugOrder?.uniformDosingType?.frequency
-  );
+  const enableSchedule =
+    hostData?.drugOrder?.uniformDosingType?.frequency &&
+    hostData?.drugOrder?.drugOrder?.duration
+      ? hostData?.scheduleFrequencies?.find(
+          (frequency) =>
+            frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
+        )
+      : null;
+  const enableStartTime =
+    hostData?.startTimeFrequencies?.includes(
+      hostData?.drugOrder?.uniformDosingType?.frequency
+    ) ||
+    !hostData?.drugOrder?.uniformDosingType?.frequency ||
+    !hostData?.drugOrder?.drugOrder?.duration;
   const enable24HourTimers = hostData?.enable24HourTimers || false;
   const isEdit = Boolean(hostData?.drugOrder?.drugOrderSchedule);
   const isAutoFill = Boolean(enableSchedule?.scheduleTiming) && !isEdit;

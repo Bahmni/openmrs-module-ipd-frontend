@@ -30,7 +30,11 @@ import {
 } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
-import { formatTime } from "../../../../utils/DateTimeUtils";
+import {
+  formatDate,
+  formatTime,
+  isTimeInFuture,
+} from "../../../../utils/DateTimeUtils";
 
 const UpdateNursingTasks = (props) => {
   const {
@@ -53,12 +57,23 @@ const UpdateNursingTasks = (props) => {
   const [administeredTasks, setAdministeredTasks] = useState({});
   const [skippedTasks, setSkippedTasks] = useState({});
   const [showWarningNotification, setShowWarningNotification] = useState(false);
+  const [isInvalidTime, setIsInvalidTime] = useState(false);
+  const [invalidText, setInvalidText] = useState();
+
   const invalidTimeText = (
     <FormattedMessage
       id={"INVALID_TIME"}
       defaultMessage={"Please enter valid time"}
     />
   );
+
+  const invalidFutureTimeText = (
+    <FormattedMessage
+      id={"FUTURE_TIME"}
+      defaultMessage={"Future time is not allowed"}
+    />
+  );
+
   const closeModal = () => {
     setOpenConfirmationModal(false);
   };
@@ -162,7 +177,7 @@ const UpdateNursingTasks = (props) => {
 
   useEffect(() => {
     checkFormStatus();
-  }, [tasks]);
+  }, [tasks, isInvalidTime]);
 
   const checkFormStatus = () => {
     let saveDisabled = true;
@@ -176,7 +191,7 @@ const UpdateNursingTasks = (props) => {
         setIsAnyMedicationSkipped(true);
       }
     });
-    updateIsSaveDisabled(saveDisabled);
+    updateIsSaveDisabled(saveDisabled || isInvalidTime);
   };
 
   const handleTimeChange = (time, id) => {
@@ -200,10 +215,12 @@ const UpdateNursingTasks = (props) => {
             : moment(time, timeFormatFor12hr),
         },
       });
-      updateErrors({
-        ...errors,
-        [id]: Boolean(!tasks[id].notes),
-      });
+      if (!isPRNMedication) {
+        updateErrors({
+          ...errors,
+          [id]: Boolean(!tasks[id].notes),
+        });
+      }
     } else {
       updateTasks({
         ...tasks,
@@ -236,10 +253,12 @@ const UpdateNursingTasks = (props) => {
           actualTime: checked ? moment() : null,
         },
       });
-      updateErrors({
-        ...errors,
-        [id]: Boolean(!tasks[id].notes),
-      });
+      if (!isPRNMedication) {
+        updateErrors({
+          ...errors,
+          [id]: Boolean(!tasks[id].notes),
+        });
+      }
     } else {
       updateTasks({
         ...tasks,
@@ -265,7 +284,10 @@ const UpdateNursingTasks = (props) => {
     if (e.target.value) {
       delete errors[id];
     } else {
-      if (tasks[id].isTimeOutOfWindow || tasks[id].skipped) {
+      if (
+        !isPRNMedication &&
+        (tasks[id].isTimeOutOfWindow || tasks[id].skipped)
+      ) {
         updateErrors({
           ...errors,
           [id]: true,
@@ -303,6 +325,8 @@ const UpdateNursingTasks = (props) => {
     } else {
       setShowWarningNotification(true);
     }
+    setIsInvalidTime(false);
+    setInvalidText("");
     updateShowErrors(false);
   };
 
@@ -329,10 +353,38 @@ const UpdateNursingTasks = (props) => {
     onCancel: () => {
       setShowWarningNotification(false);
       updateNursingTasksSlider(false);
+      setIsInvalidTime(false);
+      setInvalidText("");
     },
     onClose: () => {
+      setIsInvalidTime(false);
+      setInvalidText("");
       setShowWarningNotification(false);
     },
+  };
+
+  const customValidation = (time) => {
+    if (time) {
+      if (
+        isTimeInFuture(
+          time,
+          formatDate(
+            new Date(),
+            enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
+          )
+        )
+      ) {
+        setIsInvalidTime(true);
+        setInvalidText(invalidFutureTimeText);
+      } else {
+        setIsInvalidTime(false);
+      }
+    }
+  };
+
+  const actionForInvalidTime = (invalid) => {
+    setIsInvalidTime(invalid);
+    setInvalidText(invalidTimeText);
   };
 
   return (
@@ -405,12 +457,11 @@ const UpdateNursingTasks = (props) => {
                           onChange={(time) => {
                             handleTimeChange(time, medicationTask.uuid);
                           }}
-                          labelText={
-                            enable24HourTime
-                              ? `Task Time (${timeText24})`
-                              : `Task Time (${timeText12})`
-                          }
-                          invalidText={invalidTimeText}
+                          labelText={`Task Time (${timeText24})`}
+                          customValidation={customValidation}
+                          actionForInvalidTime={actionForInvalidTime}
+                          invalid={isInvalidTime}
+                          invalidText={invalidText}
                           light={true}
                           width={"150px"}
                         />
@@ -422,12 +473,11 @@ const UpdateNursingTasks = (props) => {
                           onChange={(time) => {
                             handleTimeChange(time, medicationTask.uuid);
                           }}
-                          labelText={
-                            enable24HourTime
-                              ? `Task Time (${timeText24})`
-                              : `Task Time (${timeText12})`
-                          }
-                          invalidText={invalidTimeText}
+                          labelText={`Task Time (${timeText12})`}
+                          customValidation={customValidation}
+                          actionForInvalidTime={actionForInvalidTime}
+                          invalid={isInvalidTime}
+                          invalidText={invalidText}
                           light={true}
                           width={"150px"}
                         />
@@ -444,8 +494,11 @@ const UpdateNursingTasks = (props) => {
                           <Title
                             text={"Notes"}
                             isRequired={
-                              tasks[medicationTask.uuid].isTimeOutOfWindow ||
-                              tasks[medicationTask.uuid].skipped
+                              isPRNMedication
+                                ? false
+                                : tasks[medicationTask.uuid]
+                                    .isTimeOutOfWindow ||
+                                  tasks[medicationTask.uuid].skipped
                             }
                           />
                         }

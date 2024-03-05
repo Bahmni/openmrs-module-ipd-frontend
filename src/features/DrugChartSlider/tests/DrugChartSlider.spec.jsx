@@ -10,6 +10,7 @@ import {
   mockScheduleFrequenciesWithTimings,
   mockScheduleDrugOrderForEdit,
   mockScheduleDrugOrderAsNeeded,
+  mockContinuousMedicationDrugOrder,
 } from "../utils/DrugChartSliderTestUtils";
 import "@testing-library/jest-dom";
 import mockAdapter from "axios-mock-adapter";
@@ -358,7 +359,9 @@ describe("DrugChartSlider", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Schedule(s) (24 hrs format)")).toBeInTheDocument();
+      expect(
+        screen.getByText("Schedule(s) (24 hrs format)")
+      ).toBeInTheDocument();
       expect(container).toMatchSnapshot();
     });
     MockDate.reset();
@@ -405,9 +408,31 @@ describe("DrugChartSlider", () => {
     );
 
     await waitFor(() => {
-      expect(getByText("Schedule time (start date, 24 hrs format)")).toBeTruthy();
+      expect(
+        getByText("Schedule time (start date, 24 hrs format)")
+      ).toBeTruthy();
     });
     expect(container).toMatchSnapshot();
     MockDate.reset();
+  });
+
+  it("should enable start time when frequency and duration is not present for continuous medications", async () => {
+    render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <DrugChartSlider
+          hostData={{
+            enable24HourTimers: true,
+            scheduleFrequencies: mockScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockContinuousMedicationDrugOrder,
+          }}
+          hostApi={{}}
+        />
+      </SliderContext.Provider>
+    );
+    await waitFor(() => {
+      const inputElement = screen.getByText("Start Time (24 hrs format)");
+      expect(inputElement).toBeTruthy();
+    });
   });
 });

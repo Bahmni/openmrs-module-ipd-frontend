@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import UpdateNursingTasks from "../components/UpdateNursingTasks";
 import {
@@ -75,6 +75,7 @@ describe("UpdateNursingTasksSlider", function () {
   });
 
   it("should show warning for empty notes when time is updated", function () {
+    MockDate.set("2024-01-01 01:00 PM");
     const { container } = render(
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
@@ -98,6 +99,7 @@ describe("UpdateNursingTasksSlider", function () {
   });
 
   it("should show warning for empty notes when time in 12 hour format is updated", function () {
+    MockDate.set("2024-01-01 01:00 PM");
     const { container } = render(
       <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
         <UpdateNursingTasks
@@ -196,6 +198,7 @@ describe("UpdateNursingTasksSlider", function () {
   });
 
   it("should render confirmation modal on click of cancel button when changes are made", function () {
+    MockDate.set("2024-01-01 13:00");
     const { container } = render(
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
@@ -228,6 +231,7 @@ describe("UpdateNursingTasksSlider", function () {
   });
 
   it("should render confirmation modal on click of cancel button when changes are made when time is in 12 hour format", function () {
+    MockDate.set("2024-01-01 01:00 PM");
     const { container } = render(
       <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
         <UpdateNursingTasks
@@ -260,6 +264,7 @@ describe("UpdateNursingTasksSlider", function () {
   });
 
   it("should show notes error when time is greater than administered time window", function () {
+    MockDate.set("2024-01-01 13:00");
     const { container } = render(
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks

@@ -50,3 +50,9 @@ export const convertDaystoSeconds = (days) => days * 86400;
 export const convertTo24Hour = (time12hr) => {
   return moment(time12hr, ["hh:mm A"]).format("HH:mm");
 };
+
+export const isTimeInFuture = (time1, time2) => {
+  const time1_24hr = convertTo24Hour(time1);
+  const time2_24hr = convertTo24Hour(time2);
+  return time1_24hr > time2_24hr;
+};

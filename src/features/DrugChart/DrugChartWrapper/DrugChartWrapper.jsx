@@ -20,9 +20,6 @@ export const TransformDrugChartData = (drugChartData) => {
         administrationInfo: [],
       };
 
-      if (order.duration) {
-        drugOrder.duration = order.duration + " " + order.durationUnits.display;
-      }
       if (order.doseUnits.display !== "ml") {
         drugOrder.dosage = order.dose;
         drugOrder.doseType = order.doseUnits.display;

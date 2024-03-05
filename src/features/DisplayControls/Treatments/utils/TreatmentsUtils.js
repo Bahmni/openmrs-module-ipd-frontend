@@ -146,19 +146,24 @@ export const isDrugOrderStoppedWithoutAdministration = (drugOrderObject) => {
 };
 
 export const setDosingInstructions = (drugOrder) => {
+  let dosingInstructions =
+    drugOrder.dosingInstructions.dose +
+    " " +
+    drugOrder.dosingInstructions.doseUnits +
+    " - " +
+    drugOrder.dosingInstructions.route;
+
+  if (drugOrder.dosingInstructions.frequency) {
+    dosingInstructions += " - " + drugOrder.dosingInstructions.frequency;
+  }
+
+  if (drugOrder.duration) {
+    dosingInstructions +=
+      " - for " + drugOrder.duration + " " + drugOrder.durationUnits;
+  }
   return (
     <div className={drugOrder.dateStopped && "strike-through"}>
-      {drugOrder.dosingInstructions.dose +
-        " " +
-        drugOrder.dosingInstructions.doseUnits +
-        " - " +
-        drugOrder.dosingInstructions.route +
-        " - " +
-        drugOrder.dosingInstructions.frequency +
-        " - for " +
-        drugOrder.duration +
-        " " +
-        drugOrder.durationUnits}
+      {dosingInstructions}
     </div>
   );
 };

@@ -1,0 +1,1 @@
+export const searchKeys = ["bedNumber", "patientIdentifier", "patientName"];

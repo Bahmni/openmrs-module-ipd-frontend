@@ -65,7 +65,7 @@ export const ExtractMedicationNursingTasksData = (
         }
         dosingInstructions = {
           asNeeded: order.asNeeded,
-          frequency: order.frequency.display,
+          frequency: order.frequency?.display,
         };
       }
       if (serviceType == "EmergencyMedicationRequest") {
