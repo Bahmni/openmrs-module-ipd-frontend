@@ -216,14 +216,14 @@ export const mockContinuousMedicationDrugOrder = {
   drugOrder: {
     drug: {
       uuid: "e2b83a8c-1d5f-11e0-b929-000c29ad1d07",
-      name: "Aspirin",
+      name: "Isoflurane",
     },
     instructions: "",
     additionalInstructions: "",
-    route: "Oral",
+    route: "Inhalation",
   },
   uniformDosingType: {
-    dose: 10,
-    doseUnits: "Tablet",
+    dose: 50,
+    doseUnits: "ml",
   },
 };
