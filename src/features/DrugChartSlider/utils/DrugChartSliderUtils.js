@@ -2,6 +2,8 @@ import axios from "axios";
 import {
   MEDICATIONS_BASE_URL,
   EDIT_MEDICATIONS_BASE_URL,
+  timeFormatfor24Hr,
+  timeFormatFor12hr,
 } from "../../../constants";
 import moment from "moment";
 import {
@@ -22,26 +24,35 @@ export const isInvalidTimeTextPresent = (enable24HourTimers) => {
 
 export const isTimePassed = (newTime, enable24HourTimers = false) => {
   const currentTime = moment();
-  const enteredTime = moment(newTime, enable24HourTimers ? "HH:mm" : "hh:mm A");
+  const enteredTime = moment(
+    newTime,
+    enable24HourTimers ? timeFormatfor24Hr : timeFormatFor12hr
+  );
   return currentTime.isAfter(enteredTime);
 };
 
-const areSchedulesInOrder = (allSchedule) => {
+const areSchedulesInOrder = (allSchedule, enable24HourTimers = false) => {
   return allSchedule.every((schedule, index) => {
     if (index === 0) return true;
-    const currentTime = moment(schedule, "HH:mm");
-    const prevTime = moment(allSchedule[index - 1], "HH:mm");
+    const currentTime = moment(
+      schedule,
+      enable24HourTimers ? timeFormatfor24Hr : timeFormatFor12hr
+    );
+    const prevTime = moment(
+      allSchedule[index - 1],
+      enable24HourTimers ? timeFormatfor24Hr : timeFormatFor12hr
+    );
     return currentTime.isAfter(prevTime);
   });
 };
 
-export const validateSchedules = async (schedules) => {
+export const validateSchedules = async (schedules, enable24HourTimers) => {
   if (schedules?.length > 0) {
     if (schedules.some((schedule) => schedule === "")) {
       return { isValid: false, warningType: "empty" };
     }
 
-    if (areSchedulesInOrder(schedules)) {
+    if (areSchedulesInOrder(schedules, enable24HourTimers)) {
       return { isValid: true, warningType: "" };
     } else {
       return { isValid: false, warningType: "passed" };
