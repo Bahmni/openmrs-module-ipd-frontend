@@ -73,7 +73,8 @@ export const CareViewPatients = () => {
   useEffect(() => {
     setCurrentPage(1);
     updateSearchValue("");
-    setIsSearched((prevVal) => false);
+    setIsSearched(false);
+    getPatientsList();
   }, [selectedWard]);
 
   useEffect(() => {
@@ -84,7 +85,7 @@ export const CareViewPatients = () => {
         getPatientsList();
       }
     }
-  }, [selectedWard, currentPage, limit, isSearched]);
+  }, [currentPage, limit]);
 
   const handlePaginationChange = (e) => {
     setCurrentPage(e.page);
@@ -94,10 +95,13 @@ export const CareViewPatients = () => {
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       if (searchValue.length >= 3) {
-        setIsSearched((prevVal) => true);
+        setIsSearched(true);
         setPreviousPage(currentPage);
-        setCurrentPage((prevVal) => 1);
-        // getPatientsListBySearch(1);
+        var isCurrentPageOne = currentPage === 1;
+        setCurrentPage(1);
+        if (isCurrentPageOne) {
+          getPatientsListBySearch(1);
+        }
       } else {
         setIsSearched(false);
       }
@@ -107,14 +111,17 @@ export const CareViewPatients = () => {
   const handleClear = () => {
     updateSearchValue("");
     setIsSearched(false);
+    var checkThePageForSame = currentPage === previousPage;
     setCurrentPage(previousPage);
-    // getPatientsList();
+    if (checkThePageForSame) {
+      getPatientsList();
+    }
   };
 
   const noSearchResultsForPatientsWardMessage = (
     <FormattedMessage
       id={"NO_SEARCH_RESULTS_PATIENTS_WARD_MESSAGE"}
-      defaultMessage={"Patient not found, please verify your search criteria"}
+      defaultMessage={"Patient not found, please update your search criteria"}
     />
   );
   return (

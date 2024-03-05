@@ -53,7 +53,7 @@ describe("CareViewPatients", () => {
     expect(screen.getByRole("searchbox")).toBeTruthy();
     expect(
       screen.getByPlaceholderText(
-        "Type minimum 3 letters to search patient by name, bed number or patient ID"
+        "Type a minimum of 3 characters to search patient by name, bed number or patient ID"
       )
     ).toBeTruthy();
   });
@@ -106,7 +106,7 @@ describe("CareViewPatients", () => {
   });
 
   it("should show inital ward patient info on click of clear search input button", async () => {
-    mockFetchPatientsList.mockResolvedValueOnce({
+    mockFetchPatientsList.mockResolvedValue({
       status: 200,
       data: mockPatientsList,
     });
@@ -160,7 +160,7 @@ describe("CareViewPatients", () => {
     fireEvent.keyDown(searchBox, { key: "Enter", code: "Enter", charCode: 13 });
     await waitFor(() => {
       expect(
-        getByText("Patient not found, please verify your search criteria")
+        getByText("Patient not found, please update your search criteria")
       ).toBeTruthy();
     });
     expect(queryByText("PT6")).not.toBeTruthy();

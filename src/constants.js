@@ -106,4 +106,4 @@ export const timeFormatfor24Hr = "HH:mm";
 export const timeFormatFor12hr = "hh:mm A";
 
 export const IPD_WARD_SEARCH_PLACEHOLDER_TEXT =
-  "Type minimum 3 letters to search patient by name, bed number or patient ID";
+  "Type a minimum of 3 characters to search patient by name, bed number or patient ID";
