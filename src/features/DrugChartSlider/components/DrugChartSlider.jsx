@@ -6,7 +6,11 @@ import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../i18n/I18nProvider";
 import SideBarPanel from "../../SideBarPanel/components/SideBarPanel";
 import "../styles/DrugChartSlider.scss";
-import { medicationFrequency, serviceType } from "../../../constants";
+import {
+  medicationFrequency,
+  serviceType,
+  timeFormatFor12hr,
+} from "../../../constants";
 import { SaveAndCloseButtons } from "../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import { SliderContext } from "../../../context/SliderContext";
 import {
@@ -23,6 +27,7 @@ import {
 import {
   epochTo24HourTimeFormat,
   epochTo12HourTimeFormat,
+  formatTime,
 } from "../../../utils/DateTimeUtils";
 import { DrugDetails } from "./DrugDetails";
 import { DrugInstructions } from "./DrugInstructions";
@@ -102,7 +107,7 @@ const DrugChartSlider = (props) => {
     const newScheduleArray = [...firstDaySchedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
-      : moment(newSchedule, "hh:mm A");
+      : formatTime(newSchedule, timeFormatFor12hr, timeFormatFor12hr);
     setFirstDaySchedules(newScheduleArray);
     if (!isInvalidTimeTextPresent(enable24HourTimers)) {
       setShowFirstDaySchedulePassedWarning((prevScheduleWarnings) => {
@@ -121,7 +126,7 @@ const DrugChartSlider = (props) => {
     const newScheduleArray = [...schedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
-      : moment(newSchedule, "hh:mm A");
+      : formatTime(newSchedule, timeFormatFor12hr, timeFormatFor12hr);
     setSchedules(newScheduleArray);
     if (!isInvalidTimeTextPresent(enable24HourTimers)) {
       setShowSchedulePassedWarning((prevScheduleWarnings) => {
@@ -137,7 +142,7 @@ const DrugChartSlider = (props) => {
     const newScheduleArray = [...finalDaySchedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
-      : moment(newSchedule, "hh:mm A");
+      : formatTime(newSchedule, timeFormatFor12hr, timeFormatFor12hr);
     setFinalDaySchedules(newScheduleArray);
   };
 
@@ -477,6 +482,7 @@ const DrugChartSlider = (props) => {
       />
     );
   }
+
   return (
     <I18nProvider>
       <SideBarPanel title={sliderTitle} closeSideBar={handleClose}>
