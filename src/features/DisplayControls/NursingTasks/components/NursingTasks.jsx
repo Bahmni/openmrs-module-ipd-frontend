@@ -111,6 +111,7 @@ export default function NursingTasks(props) {
     });
     fetchNursingTasks(startDateTimeChange, endDateTimeChange);
   }, []);
+
   const updateNursingTasksSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -270,7 +271,7 @@ export default function NursingTasks(props) {
             extract.filter((data) => {
               return (
                 data.serviceType != asNeededPlaceholderConceptName ||
-                data.endTimeInEpochSeconds > endDateTimeChange * 1000
+                data.endTimeInEpochSeconds > endDateTimeChange
               );
             })
           )
