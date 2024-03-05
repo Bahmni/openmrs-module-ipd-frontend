@@ -70,7 +70,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                 disabled=""
                 id="drug-name"
                 type="text"
-                value=""
+                value="Aspirin"
               />
             </div>
           </div>
@@ -287,14 +287,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                     class="bx--list-box__field"
                     disabled=""
                     id="downshift-69-toggle-button"
-                    title="Oral"
                     type="button"
                   >
                     <span
                       class="bx--list-box__label"
-                    >
-                      Oral
-                    </span>
+                    />
                     <div
                       class="bx--list-box__menu-icon"
                     >
@@ -367,7 +364,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                       pattern="[0-9]*"
                       step="1"
                       type="number"
-                      value="0"
+                      value="10"
                     />
                     <div
                       class="bx--number__controls"
@@ -928,7 +925,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                 disabled=""
                 id="drug-name"
                 type="text"
-                value=""
+                value="Aspirin"
               />
             </div>
           </div>
@@ -1145,14 +1142,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     class="bx--list-box__field"
                     disabled=""
                     id="downshift-65-toggle-button"
-                    title="Oral"
                     type="button"
                   >
                     <span
                       class="bx--list-box__label"
-                    >
-                      Oral
-                    </span>
+                    />
                     <div
                       class="bx--list-box__menu-icon"
                     >
@@ -1225,7 +1219,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                       pattern="[0-9]*"
                       step="1"
                       type="number"
-                      value="0"
+                      value="10"
                     />
                     <div
                       class="bx--number__controls"
