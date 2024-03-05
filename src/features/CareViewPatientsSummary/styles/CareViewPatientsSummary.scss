@@ -75,45 +75,50 @@
   }
 }
 
-.care-view-patient-table {
-  display: block;
-  max-height: 500px;
-  max-width: fit-content;
-  overflow: scroll;
-  margin: 8px 0;
-  border: 1px solid #8d8d8d;
+.care-view-table-wrapper {
+  text-align: -webkit-center;
 
-  tbody tr:nth-child(odd) td:first-child {
-    background-color: #f4f4f4;
-  }
+  .care-view-patient-table {
+    display: block;
+    max-height: 500px;
+    max-width: fit-content;
+    overflow: scroll;
+    margin: 8px 0;
+    border: 1px solid #8d8d8d;
 
-  tbody tr:nth-child(even) td:first-child {
-    background-color: white;
-  }
+    tbody tr:nth-child(odd) td:first-child {
+      background-color: #f4f4f4;
+    }
 
-  tbody {
-    tr {
-      border-bottom: 0;
+    tbody tr:nth-child(even) td:first-child {
+      background-color: white;
+    }
 
-      &:nth-child(odd) {
-        background-color: #f4f4f4;
-      }
+    tbody {
+      tr {
+        border-bottom: 0;
 
-      td {
-        border: 0;
-        padding: 0;
-        border-right: 1px solid #8d8d8d;
+        &:nth-child(odd) {
+          background-color: #f4f4f4;
+        }
 
-        &:last-child,
-        &:first-child {
-          border-right: 0;
+        td {
+          border: 0;
+          padding: 0;
+          border-right: 1px solid #8d8d8d;
+
+          &:last-child,
+          &:first-child {
+            border-right: 0;
+          }
         }
       }
-    }
-    tr:first-child {
-      td:first-child {
-        border-right: 1px solid #8d8d8d;
-        box-shadow: 6px 2px 4px 0 rgba(0, 0, 0, 0.1);
+
+      tr:first-child {
+        td:first-child {
+          border-right: 1px solid #8d8d8d;
+          box-shadow: 6px 2px 4px 0 rgba(0, 0, 0, 0.1);
+        }
       }
     }
   }
