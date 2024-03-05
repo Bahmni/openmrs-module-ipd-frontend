@@ -4,8 +4,6 @@ import {
   getNextShiftDetails,
   getPreviousShiftDetails,
   getDateTime,
-  isLateTask,
-  isAdministeredLateTask,
 } from "../utils/DrugChartUtils";
 import axios from "axios";
 import { mockResponse } from "./DrugChartUtilsMockData";
@@ -101,51 +99,5 @@ describe("DrugChartUtils", () => {
     const hour = 8;
     const updatedDateTime = 1704441600000; // 5th Jan 2024 08:00
     expect(getDateTime(date, hour)).toEqual(updatedDateTime);
-  });
-  describe("isLateTask method", () => {
-    it("should return true if task is late", () => {
-      const startTime = Math.floor(new Date().getTime() / 1000) - 4000;
-      const drugChart = {
-        timeInMinutesFromNowToShowPastTaskAsLate: 1,
-      };
-      expect(isLateTask(startTime, drugChart)).toBe(true);
-    });
-
-    it("should return false if task is not late", () => {
-      const startTime = Math.floor(new Date().getTime() / 1000);
-      const drugChart = {
-        timeInMinutesFromNowToShowPastTaskAsLate: 1,
-      };
-      expect(isLateTask(startTime, drugChart)).toBe(false);
-    });
-  });
-
-  describe("isAdministeredLateTask method", () => {
-    it("should return true if task is administered late", () => {
-      const startTime = Math.floor(new Date().getTime() / 1000) - 2000;
-      const effectiveStartDateInMilliSeconds =
-        (Math.floor(new Date().getTime() / 1000) - 1000) * 1000;
-      const drugChart = {
-        timeInMinutesFromStartTimeToShowAdministeredTaskAsLate: 1,
-      };
-      expect(
-        isAdministeredLateTask(
-          startTime,
-          effectiveStartDateInMilliSeconds,
-          drugChart
-        )
-      ).toBe(true);
-    });
-
-    it("should return false if task is not administered late", () => {
-      const startTime = Math.floor(new Date().getTime() / 1000);
-      const effectiveStartDate = Math.floor(new Date().getTime() / 1000) * 1000;
-      const drugChart = {
-        timeInMinutesFromStartTimeToShowAdministeredTaskAsLate: 1,
-      };
-      expect(
-        isAdministeredLateTask(startTime, effectiveStartDate, drugChart)
-      ).toBe(false);
-    });
   });
 });

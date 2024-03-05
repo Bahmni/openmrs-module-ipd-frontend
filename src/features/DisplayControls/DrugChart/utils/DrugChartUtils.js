@@ -107,29 +107,6 @@ export const transformDrugOrders = (orders) => {
   return medicationData;
 };
 
-export const isLateTask = (startTime, drugChart) => {
-  const currentTime = Math.floor(new Date().getTime() / 1000);
-  const lateTaskStatusWindowInSeconds =
-    drugChart.timeInMinutesFromNowToShowPastTaskAsLate * 60;
-
-  return startTime < currentTime - lateTaskStatusWindowInSeconds;
-};
-
-export const isAdministeredLateTask = (
-  startTime,
-  effectiveStartDate,
-  drugChart
-) => {
-  const lateTaskStatusWindowInMilliSeconds =
-    drugChart.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate *
-    60 *
-    1000;
-
-  return (
-    effectiveStartDate - startTime * 1000 > lateTaskStatusWindowInMilliSeconds
-  );
-};
-
 export const resetDrugOrdersSlots = (drugOrders) => {
   Object.keys(drugOrders).forEach((order) => {
     drugOrders[order].slots = [];

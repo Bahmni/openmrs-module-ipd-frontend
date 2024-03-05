@@ -5,11 +5,6 @@ import {
   CONFIG_BAHMNIENCOUNTER_URL,
   DASHBORAD_CONFIG_URL,
 } from "../constants";
-import {
-  isAdministeredLateTask,
-  isLateTask,
-} from "../features/DisplayControls/DrugChart/utils/DrugChartUtils";
-
 export const getPatientDashboardUrl = (patientUuid) =>
   `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard?currentTab=DASHBOARD_TAB_GENERAL_KEY`;
 
@@ -22,6 +17,25 @@ export const searchDrugsByName = async (query) => {
   } catch (e) {
     console.error(e);
   }
+};
+
+const isLateTask = (startTime, drugChart) => {
+  const currentTime = Math.floor(new Date().getTime() / 1000);
+  const lateTaskStatusWindowInSeconds =
+    drugChart.timeInMinutesFromNowToShowPastTaskAsLate * 60;
+
+  return startTime < currentTime - lateTaskStatusWindowInSeconds;
+};
+
+const isAdministeredLateTask = (startTime, effectiveStartDate, drugChart) => {
+  const lateTaskStatusWindowInMilliSeconds =
+    drugChart.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate *
+    60 *
+    1000;
+
+  return (
+    effectiveStartDate - startTime * 1000 > lateTaskStatusWindowInMilliSeconds
+  );
 };
 
 export const searchConceptsByFSN = async (s, name, v) => {

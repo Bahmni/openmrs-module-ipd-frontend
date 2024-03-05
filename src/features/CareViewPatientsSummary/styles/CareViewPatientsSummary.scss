@@ -3,7 +3,7 @@
 
   .patient-details-container {
     box-sizing: border-box;
-    min-width: 420px;
+    width: 420px;
     position: sticky;
     left: 0;
     line-height: 1.8;
@@ -30,7 +30,7 @@
   }
 
   .slot-details-header {
-    min-width: 650px;
+    width: 550px;
     padding: 10px 0;
     background-color: #f4f4f4;
     vertical-align: top;
@@ -41,7 +41,7 @@
   }
 
   .slot-details-container {
-    min-width: 650px;
+    width: 550px;
     padding: 20px 0;
     vertical-align: top;
 
@@ -78,6 +78,7 @@
 .care-view-patient-table {
   display: block;
   max-height: 500px;
+  max-width: fit-content;
   overflow: scroll;
   margin: 8px 0;
   border: 1px solid #8d8d8d;

@@ -188,3 +188,30 @@ export const mockSlotsData = [
     emergencyMedicationSlots: null,
   },
 ];
+export const mockColumnData = [
+  {
+    id: 197,
+    uuid: "4619c2ef-1b1e-47b1-ad55-d126447c8482",
+    serviceType: "MedicationRequest",
+    status: "SCHEDULED",
+    startTime: 1672575400,
+    order: {
+      uuid: "d806bd4c-e2b3-4ed7-9adc-9b713a805f87",
+      display: "(NEW) Amoxicillin/Clavulanic Acid 1000 mg Tablet: null",
+      drug: {
+        uuid: "0a6169b3-2192-4035-9e7d-4099af53ce76",
+        display: "Amoxicillin/Clavulanic Acid 1000 mg Tablet",
+      },
+      dose: 2,
+      doseUnits: {
+        uuid: "86239663-7b04-4563-b877-d7efc4fe6c46",
+        display: "Tablet(s)",
+      },
+      route: {
+        uuid: "9d6bc13f-3f10-11e4-adec-0800271c1b75",
+        display: "Oral",
+      },
+    },
+    medicationAdministration: null,
+  },
+];

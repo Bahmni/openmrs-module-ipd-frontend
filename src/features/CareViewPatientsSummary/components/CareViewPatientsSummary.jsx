@@ -4,7 +4,10 @@ import "../styles/CareViewPatientsSummary.scss";
 import { HospitalBed16 } from "@carbon/icons-react";
 import { Link } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
-import { getSlotsForPatients } from "../../CareViewSummary/utils/CareViewSummary";
+import {
+  getColumnData,
+  getSlotsForPatients,
+} from "../../CareViewSummary/utils/CareViewSummary";
 import Clock from "../../../icons/clock.svg";
 import {
   epochTo24HourTimeFormat,
@@ -58,16 +61,6 @@ export const CareViewPatientsSummary = (props) => {
         <SVGIcon iconType={administrationStatus} />
       </div>
     );
-  };
-
-  const getColumnData = (slot, startTime, endTime) => {
-    const columnData = [];
-    slot.currentSlots.forEach((slotItem) => {
-      if (slotItem.startTime >= startTime && slotItem.startTime < endTime) {
-        columnData.push(slotItem);
-      }
-    });
-    return columnData;
   };
 
   const renderColumnData = (columnData) => {

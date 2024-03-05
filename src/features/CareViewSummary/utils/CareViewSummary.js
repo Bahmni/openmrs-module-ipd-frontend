@@ -21,6 +21,16 @@ const fetchSlots = async (url) => {
   }
 };
 
+export const getColumnData = (slot, startTime, endTime) => {
+  const columnData = [];
+  slot.currentSlots.forEach((slotItem) => {
+    if (slotItem.startTime >= startTime && slotItem.startTime < endTime) {
+      columnData.push(slotItem);
+    }
+  });
+  return columnData;
+};
+
 export const fetchWardSummary = async (wardId) => {
   try {
     return await axios.get(WARD_SUMMARY_URL.replace("{wardId}", wardId));

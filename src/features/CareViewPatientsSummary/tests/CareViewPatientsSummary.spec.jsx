@@ -5,7 +5,10 @@ import { mockPatientsList } from "./CareViewPatientsSummaryMock";
 import { CareViewContext } from "../../../context/CareViewContext";
 import MockDate from "mockdate";
 import { mockConfig } from "../../../utils/CommonUtils";
-import { mockSlotsData } from "../../CareViewSummary/tests/CareViewSummaryMock";
+import {
+  mockColumnData,
+  mockSlotsData,
+} from "../../CareViewSummary/tests/CareViewSummaryMock";
 import "@testing-library/jest-dom/extend-expect";
 
 const mockContext = {
@@ -14,9 +17,11 @@ const mockContext = {
 };
 
 const mockGetSlotsForPatients = jest.fn();
+const mockGetColumnData = jest.fn();
 jest.mock("../../CareViewSummary/utils/CareViewSummary", () => {
   return {
     getSlotsForPatients: () => mockGetSlotsForPatients(),
+    getColumnData: () => mockGetColumnData(),
   };
 });
 
@@ -27,8 +32,9 @@ describe("CareViewPatientsSummary", function () {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockGetSlotsForPatients.mockReturnValue(mockSlotsData);
     MockDate.set("2023-01-01T12:00:00");
+    mockGetSlotsForPatients.mockReturnValue(mockSlotsData);
+    mockGetColumnData.mockReturnValue(mockColumnData);
   });
 
   it("should match snapshot", () => {
@@ -89,7 +95,7 @@ describe("CareViewPatientsSummary", function () {
   });
 
   it("renders slot details correctly", async () => {
-    const { queryByText, queryByTestId } = render(
+    const { queryAllByText, queryAllByTestId } = render(
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatientsSummary
           patientsSummary={mockPatientsList.admittedPatients}
@@ -99,9 +105,9 @@ describe("CareViewPatientsSummary", function () {
 
     await waitFor(() => {
       expect(
-        queryByText("Amoxicillin/Clavulanic Acid 1000 mg Tablet")
+        queryAllByText("Amoxicillin/Clavulanic Acid 1000 mg Tablet")
       ).toBeTruthy();
-      expect(queryByTestId("drug-details")).toHaveTextContent(
+      expect(queryAllByTestId("drug-details")[0]).toHaveTextContent(
         "2Tablet(s) | Oral"
       );
     });
