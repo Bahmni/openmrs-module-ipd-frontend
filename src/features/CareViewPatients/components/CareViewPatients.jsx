@@ -99,7 +99,7 @@ export const CareViewPatients = () => {
           setPreviousPage(currentPage);
         }
         setIsSearched(true);
-        var isCurrentPageOne = currentPage === 1;
+        const isCurrentPageOne = currentPage === 1;
         setCurrentPage(1);
         if (isCurrentPageOne) {
           getPatientsListBySearch(1);
@@ -113,7 +113,7 @@ export const CareViewPatients = () => {
   const handleClear = () => {
     updateSearchValue("");
     setIsSearched(false);
-    var checkThePageForSame = currentPage === previousPage;
+    const checkThePageForSame = currentPage === previousPage;
     setCurrentPage(previousPage);
     if (checkThePageForSame) {
       getPatientsList();
