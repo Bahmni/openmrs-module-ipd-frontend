@@ -95,9 +95,9 @@ export const ExtractMedicationNursingTasksData = (
           hourCycle: "h23",
         }),
         endTimeInEpochSeconds:
-          order.dateStopped != null
-            ? Math.floor(new Date(order.dateStopped).getTime() / 1000) * 1000
-            : Math.floor(new Date(order.autoExpireDate).getTime() / 1000) *
+          order?.dateStopped != null
+            ? Math.floor(new Date(order?.dateStopped).getTime() / 1000) * 1000
+            : Math.floor(new Date(order?.autoExpireDate).getTime() / 1000) *
               1000,
         orderId: order?.uuid,
         isDisabled: isReadMode
