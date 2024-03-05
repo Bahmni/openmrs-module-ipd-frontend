@@ -95,8 +95,10 @@ export const CareViewPatients = () => {
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       if (searchValue.length >= 3) {
+        if (!isSearched) {
+          setPreviousPage(currentPage);
+        }
         setIsSearched(true);
-        setPreviousPage(currentPage);
         var isCurrentPageOne = currentPage === 1;
         setCurrentPage(1);
         if (isCurrentPageOne) {
