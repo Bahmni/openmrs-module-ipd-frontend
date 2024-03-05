@@ -101,6 +101,10 @@ export const CareViewPatients = () => {
         setIsSearched(true);
         const isCurrentPageOne = currentPage === 1;
         setCurrentPage(1);
+        /* So whenever the currentPage is 1. THe use effect was not making a search api call.
+           To overcome that scenario added this below condition.
+           Happens when the inital page is loaded
+        */
         if (isCurrentPageOne) {
           getPatientsListBySearch(1);
         }
@@ -115,6 +119,9 @@ export const CareViewPatients = () => {
     setIsSearched(false);
     const checkThePageForSame = currentPage === previousPage;
     setCurrentPage(previousPage);
+    /* So whenever the currentPage and previousPage are same there was no api backend call being executed/called.
+       For that scenario added this below condition.
+    */
     if (checkThePageForSame) {
       getPatientsList();
     }
