@@ -483,12 +483,6 @@ const DrugChartSlider = (props) => {
     );
   }
 
-  useEffect(() => {
-    console.log("Schedules1 = ", firstDaySchedules);
-    console.log("Schedules2 = ", schedules);
-    console.log("Schedules3 = ", finalDaySchedules);
-  }, [firstDaySchedules, schedules, finalDaySchedules]);
-
   return (
     <I18nProvider>
       <SideBarPanel title={sliderTitle} closeSideBar={handleClose}>
