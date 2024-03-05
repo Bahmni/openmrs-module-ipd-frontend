@@ -7,18 +7,19 @@ import "./Notification.scss";
 
 export default function Notification(props) {
   const { hostData, hostApi } = props;
+  const { notificationKind, messageId, messageDuration = 2000 } = hostData;
   const getMessage = () => {
-    switch (hostData?.notificationKind) {
+    switch (notificationKind) {
       case "success":
         return (
           <I18nProvider>
-            <FormattedMessage id={hostData.messageId} />
+            <FormattedMessage id={messageId} />
           </I18nProvider>
         );
       case "warning":
         return (
           <I18nProvider>
-            <FormattedMessage id={hostData.messageId} />
+            <FormattedMessage id={messageId} />
           </I18nProvider>
         );
     }
@@ -35,6 +36,7 @@ export default function Notification(props) {
         hostApi?.onClose();
       }}
       hideCloseButton={true}
+      messageDuration={messageDuration}
     />
   );
 }
@@ -42,6 +44,8 @@ export default function Notification(props) {
 Notification.propTypes = {
   hostData: PropTypes.shape({
     notificationKind: PropTypes.string.isRequired,
+    messageDuration: PropTypes.number,
+    messageId: PropTypes.string,
   }),
   hostApi: PropTypes.shape({
     onClose: PropTypes.func,
