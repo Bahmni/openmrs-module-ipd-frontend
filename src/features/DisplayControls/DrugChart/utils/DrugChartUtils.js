@@ -8,6 +8,7 @@ import {
 } from "../../../../constants";
 import _ from "lodash";
 import { FormattedMessage } from "react-intl";
+import { getAdministrationStatus } from "../../../../utils/CommonUtils";
 
 export const fetchMedications = async (
   patientUuid,
@@ -106,25 +107,6 @@ export const transformDrugOrders = (orders) => {
   return medicationData;
 };
 
-const isLateTask = (startTime, drugChart) => {
-  const currentTime = Math.floor(new Date().getTime() / 1000);
-  const lateTaskStatusWindowInSeconds =
-    drugChart.timeInMinutesFromNowToShowPastTaskAsLate * 60;
-
-  return startTime < currentTime - lateTaskStatusWindowInSeconds;
-};
-
-const isAdministeredLateTask = (startTime, effectiveStartDate, drugChart) => {
-  const lateTaskStatusWindowInMilliSeconds =
-    drugChart.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate *
-    60 *
-    1000;
-
-  return (
-    effectiveStartDate - startTime * 1000 > lateTaskStatusWindowInMilliSeconds
-  );
-};
-
 export const resetDrugOrdersSlots = (drugOrders) => {
   Object.keys(drugOrders).forEach((order) => {
     drugOrders[order].slots = [];
@@ -150,29 +132,13 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
       } = slot;
       const uuid = order?.uuid || medicationAdministration?.uuid;
       if (orders[uuid] && serviceType != asNeededPlaceholderConceptName) {
-        let administrationStatus = "Pending";
-        if (medicationAdministration) {
-          const { administeredDateTime } = medicationAdministration;
-          if (status === "COMPLETED") {
-            if (
-              isAdministeredLateTask(startTime, administeredDateTime, drugChart)
-            ) {
-              administrationStatus = "Administered-Late";
-            } else {
-              administrationStatus = "Administered";
-            }
-          } else if (status === "NOT_DONE") {
-            administrationStatus = "Not-Administered";
-          }
-        } else {
-          if (slot.status === "STOPPED") {
-            administrationStatus = "Stopped";
-          } else if (status === "MISSED") {
-            administrationStatus = "Not-Administered";
-          } else if (isLateTask(startTime, drugChart)) {
-            administrationStatus = "Late";
-          }
-        }
+        let administrationStatus = getAdministrationStatus(
+          medicationAdministration,
+          status,
+          startTime,
+          drugChart,
+          slot
+        );
         let performerName = "",
           notes = "";
         if (medicationAdministration) {

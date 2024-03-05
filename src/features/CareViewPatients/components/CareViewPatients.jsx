@@ -14,10 +14,11 @@ import { searchKeys } from "../utils/constants";
 import WarningIcon from "../../../icons/warning.svg";
 
 export const CareViewPatients = () => {
-  const { selectedWard, dashboardConfig } = useContext(CareViewContext);
+  const { selectedWard, careViewConfig } =
+    useContext(CareViewContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [previousPage, setPreviousPage] = useState(1);
-  const [limit, setLimit] = useState(dashboardConfig.defaultPageSize);
+  const [limit, setLimit] = useState(careViewConfig.defaultPageSize);
   const [patientList, setPatientList] = useState([]);
   const [totalPatients, setTotalPatients] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -162,7 +163,7 @@ export const CareViewPatients = () => {
               page={currentPage}
               pageSize={limit}
               onChange={handlePaginationChange}
-              pageSizes={dashboardConfig.pageSizeOptions}
+              pageSizes={careViewConfig.pageSizeOptions}
               totalItems={totalPatients}
               itemsPerPageText={"Patients per page"}
             />

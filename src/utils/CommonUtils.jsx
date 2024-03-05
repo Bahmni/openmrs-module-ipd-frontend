@@ -5,7 +5,6 @@ import {
   CONFIG_BAHMNIENCOUNTER_URL,
   DASHBORAD_CONFIG_URL,
 } from "../constants";
-
 export const getPatientDashboardUrl = (patientUuid) =>
   `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard?currentTab=DASHBOARD_TAB_GENERAL_KEY`;
 
@@ -20,6 +19,25 @@ export const searchDrugsByName = async (query) => {
   }
 };
 
+const isLateTask = (startTime, drugChart) => {
+  const currentTime = Math.floor(new Date().getTime() / 1000);
+  const lateTaskStatusWindowInSeconds =
+    drugChart.timeInMinutesFromNowToShowPastTaskAsLate * 60;
+
+  return startTime < currentTime - lateTaskStatusWindowInSeconds;
+};
+
+const isAdministeredLateTask = (startTime, effectiveStartDate, drugChart) => {
+  const lateTaskStatusWindowInMilliSeconds =
+    drugChart.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate *
+    60 *
+    1000;
+
+  return (
+    effectiveStartDate - startTime * 1000 > lateTaskStatusWindowInMilliSeconds
+  );
+};
+
 export const searchConceptsByFSN = async (s, name, v) => {
   const url = `${SEARCH_CONCEPT_URL}?s=${s}&name=${name}&v=${v}`;
   try {
@@ -31,6 +49,37 @@ export const searchConceptsByFSN = async (s, name, v) => {
   } catch (error) {
     return error;
   }
+};
+
+export const getAdministrationStatus = (
+  medicationAdministration,
+  status,
+  startTime,
+  drugChart,
+  slot
+) => {
+  let administrationStatus = "Pending";
+  if (medicationAdministration) {
+    const { administeredDateTime } = medicationAdministration;
+    if (status === "COMPLETED") {
+      if (isAdministeredLateTask(startTime, administeredDateTime, drugChart)) {
+        administrationStatus = "Administered-Late";
+      } else {
+        administrationStatus = "Administered";
+      }
+    } else if (status === "NOT_DONE") {
+      administrationStatus = "Not-Administered";
+    }
+  } else {
+    if (slot.status === "STOPPED") {
+      administrationStatus = "Stopped";
+    } else if (status === "MISSED") {
+      administrationStatus = "Not-Administered";
+    } else if (isLateTask(startTime, drugChart)) {
+      administrationStatus = "Late";
+    }
+  }
+  return administrationStatus;
 };
 
 export const fetchVisitEncounterOrderTypes = async () => {

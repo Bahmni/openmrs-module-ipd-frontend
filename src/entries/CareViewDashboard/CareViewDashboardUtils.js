@@ -12,6 +12,7 @@ export const getConfigForCareViewDashboard = async () => {
       return {
         pageSizeOptions: [10, 20, 30, 40, 50],
         defaultPageSize: 10,
+        timeframeLimitInHours: 2,
       };
     }
     return dashboardConfig;

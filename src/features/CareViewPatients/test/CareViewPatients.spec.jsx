@@ -14,7 +14,7 @@ const mockContext = {
   wardSummary: {
     totalPatients: 27,
   },
-  dashboardConfig: {
+  careViewConfig: {
     defaultPageSize: 13,
     pageSizeOptions: [10, 20, 30, 40, 50],
   },

@@ -1,11 +1,13 @@
 .patient-row-container {
-  overflow-x: scroll;
+  display: flex;
 
   .patient-details-container {
-    min-width: 420px;
+    box-sizing: border-box;
+    width: 420px;
     position: sticky;
     left: 0;
     line-height: 1.8;
+    display: flex;
 
     a {
       color: #0f62fe;
@@ -15,6 +17,7 @@
       border-right: 1px solid #8d8d8d;
       box-shadow: 6px 2px 4px 0 rgba(0, 0, 0, 0.1);
       padding: 8px;
+      flex: 1;
     }
     .admission-details {
       display: flex;
@@ -25,20 +28,66 @@
       padding: 0 8px;
     }
   }
+
+  .slot-details-header {
+    width: 550px;
+    padding: 10px 0;
+    background-color: #f4f4f4;
+    vertical-align: top;
+    .time {
+      padding-left: 10px;
+      font-weight: 500;
+    }
+  }
+
+  .slot-details-container {
+    width: 550px;
+    padding: 20px 0;
+    vertical-align: top;
+
+    .slot-details {
+      display: flex;
+
+      .logo {
+        display: flex;
+        align-items: start;
+        justify-content: space-evenly;
+        padding-left: 5px;
+        width: 50px;
+      }
+
+      .drug-details-wrapper {
+        display: flex;
+        flex-direction: column;
+        padding: 0 0 20px 20px;
+
+        .drug-details {
+          display: flex;
+          margin-top: 5px;
+
+          .drug-detail {
+            margin: 2px;
+            white-space: break-spaces;
+          }
+        }
+      }
+    }
+  }
 }
 
 .care-view-patient-table {
   display: block;
   max-height: 500px;
+  max-width: fit-content;
   overflow: scroll;
   margin: 8px 0;
   border: 1px solid #8d8d8d;
 
-  tbody tr:nth-child(even) td:first-child {
+  tbody tr:nth-child(odd) td:first-child {
     background-color: #f4f4f4;
   }
 
-  tbody tr:nth-child(odd) td:first-child {
+  tbody tr:nth-child(even) td:first-child {
     background-color: white;
   }
 
@@ -46,7 +95,7 @@
     tr {
       border-bottom: 0;
 
-      &:nth-child(even) {
+      &:nth-child(odd) {
         background-color: #f4f4f4;
       }
 
@@ -59,6 +108,12 @@
         &:first-child {
           border-right: 0;
         }
+      }
+    }
+    tr:first-child {
+      td:first-child {
+        border-right: 1px solid #8d8d8d;
+        box-shadow: 6px 2px 4px 0 rgba(0, 0, 0, 0.1);
       }
     }
   }

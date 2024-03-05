@@ -1,5 +1,5 @@
 import moment from "moment";
-import { defaultDateFormat } from "../constants";
+import { dateFormat, defaultDateFormat } from "../constants";
 
 export const formatDate = (value, format = defaultDateFormat) => {
   return value ? moment(value).format(format) : value;
@@ -13,9 +13,26 @@ export const areDatesSame = (date1, date2) => {
   return formatDate(date1) === formatDate(date2);
 };
 
-export const epochTo24HourTimeFormat = (epochSeconds) => {
+export const epochTo24HourTimeFormat = (epochSeconds, includeDate = false) => {
   const formattedTime = moment.unix(epochSeconds).format("HH:mm");
-  return formattedTime;
+
+  if (formattedTime === "00:00" && includeDate) {
+    const currentDate = moment.unix(epochSeconds).format(dateFormat);
+    return `${formattedTime} (${currentDate})`;
+  } else {
+    return formattedTime;
+  }
+};
+
+export const getPreviousNearbyHourEpoch = (time) => {
+  const currentMoment = moment.unix(time);
+  const nearestHourMoment = currentMoment.startOf("hour");
+  return nearestHourMoment.unix();
+};
+
+export const getTimeInFuture = (startTimeEpoch, offsetHours) => {
+  const futureTime = moment.unix(startTimeEpoch).add(offsetHours, "hours");
+  return futureTime.unix();
 };
 
 export const epochTo12HourTimeFormat = (epochSeconds) => {
