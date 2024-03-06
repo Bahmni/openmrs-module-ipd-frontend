@@ -215,3 +215,20 @@ export const mockAllergiesIntolerenceResponse = {
     ],
   },
 };
+
+export const mockVisitSummaryData = {
+  data: {
+    uuid: "44832301-a09e-4bbb-b521-47144ed302cb",
+    startDateTime: 1709719136000,
+    stopDateTime: null,
+    visitType: "IPD",
+    admissionDetails: {
+      uuid: "3a0642ef-2403-469d-8fd9-b2478a71e931",
+      date: 1709719136000,
+      provider: "Super Man",
+      notes: null,
+    },
+    dischargeDetails: null,
+  },
+  status: 200,
+};

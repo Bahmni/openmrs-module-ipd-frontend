@@ -1,21 +1,52 @@
 import { render, waitFor, screen } from "@testing-library/react";
 import axios from "axios";
 import React from "react";
-import { mockAllergiesIntolerenceResponse } from "./AllergiesTestUtils";
+import {
+  mockAllergiesIntolerenceResponse,
+  mockVisitSummaryData,
+} from "./AllergiesTestUtils";
 import Allergies from "./Allergies";
 import "@testing-library/jest-dom/extend-expect";
+import { IPDContext } from "../../../../context/IPDContext";
 
 jest.mock("axios");
+
+const mockFetchVisitSummary = jest.fn();
+jest.mock("../../PatientHeader/utils/PatientMovementModalUtils", () => ({
+  fetchVisitSummary: () => mockFetchVisitSummary(),
+}));
+
 describe("Allergies", () => {
+  beforeEach(() => {
+    mockFetchVisitSummary.mockReturnValue(mockVisitSummaryData);
+  });
+
   it("should render Allergies", () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    render(
+      <IPDContext.Provider
+        value={{
+          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
+
     expect(screen.getByText("Allergen")).toBeInTheDocument();
   });
 
   it("should show data in the table", async () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    render(
+      <IPDContext.Provider
+        value={{
+          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
@@ -26,7 +57,15 @@ describe("Allergies", () => {
 
   it("should highlight column in red", async () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    render(
+      <IPDContext.Provider
+        value={{
+          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
@@ -38,7 +77,15 @@ describe("Allergies", () => {
 
   it("should sort Allergen in ASC order based on severity", async () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    render(
+      <IPDContext.Provider
+        value={{
+          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
@@ -60,7 +107,15 @@ describe("Allergies", () => {
 
   it("should show table skeleton on loading", async () => {
     axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    render(
+      <IPDContext.Provider
+        value={{
+          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
 
     expect(screen.getByTestId("datatable-skeleton")).toBeInTheDocument();
 
@@ -73,7 +128,15 @@ describe("Allergies", () => {
 
   it("should show no data message when there is no data", async () => {
     axios.get.mockResolvedValue({ data: { entry: undefined } });
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    render(
+      <IPDContext.Provider
+        value={{
+          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
 
     await waitFor(() => {
       expect(

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { DataTableSkeleton } from "carbon-components-react";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
@@ -9,10 +9,14 @@ import { formatDate } from "../../../../utils/DateTimeUtils";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import DiagnosisExpandableRow from "./DiagnosisExpandableRow";
 import NotesIcon from "../../../../icons/notes.svg";
+import { fetchVisitSummary } from "../../PatientHeader/utils/PatientMovementModalUtils";
+import { IPDContext } from "../../../../context/IPDContext";
 
 const Diagnosis = (props) => {
   const { patientId } = props;
+  const { visit } = useContext(IPDContext);
   const [diagnosis, setDiagnosis] = useState([]);
+  const [visitSummary, setVisitSummary] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [additionalData, setAdditionalData] = useState([]);
 
@@ -24,42 +28,43 @@ const Diagnosis = (props) => {
   );
 
   const mapDiagnosisData = (diagnosisList) => {
-    const mappedDiagnoses =
-      diagnosisList === undefined || !Array.isArray(diagnosisList)
-        ? []
-        : diagnosisList.map((diagnosis) => {
-            let status = diagnosis.diagnosisStatusConcept
-              ? "Inactive"
-              : "Active";
-            let diagnosisDate = formatDate(
-              diagnosis.diagnosisDateTime,
-            );
-            let diagnosisTime = formatDate(
-              diagnosis.diagnosisDateTime,
-              "HH:mm"
-            );
-            let diagnosisId = diagnosis.codedAnswer
-              ? diagnosis.codedAnswer.uuid
-              : diagnosis.freeTextAnswer + diagnosis.diagnosisDateTime;
-            let diagnosisNotes = diagnosis.comments ? diagnosis.comments : "";
-            let diagnosisName = getDrugName(diagnosis);
-            return {
-              id: diagnosisId,
-              diagnosis: diagnosisName,
-              order: diagnosis.order,
-              certainty: diagnosis.certainty,
-              status: status,
-              diagnosedBy: diagnosis.providers[0].name,
-              diagnosisDate: diagnosisDate,
-              additionalData: {
-                diagnosisTime: diagnosisTime,
-                diagnosisNotes: diagnosisNotes,
-              },
-            };
-          });
+    const diagnosisArray = [];
+    if (diagnosisList && Array.isArray(diagnosisList)) {
+      diagnosisList.forEach((diagnosis) => {
+        let status = diagnosis.diagnosisStatusConcept ? "Inactive" : "Active";
+        let diagnosisDate = formatDate(diagnosis.diagnosisDateTime);
+        let diagnosisTime = formatDate(diagnosis.diagnosisDateTime, "HH:mm");
+        let diagnosisId = diagnosis.codedAnswer
+          ? diagnosis.codedAnswer.uuid
+          : diagnosis.freeTextAnswer + diagnosis.diagnosisDateTime;
+        let diagnosisNotes = diagnosis.comments ? diagnosis.comments : "";
+        let diagnosisName = getDrugName(diagnosis);
 
-    setDiagnosis(mappedDiagnoses);
-    const additionalMappedData = mappedDiagnoses.map((diagnosis) => {
+        const isWithinVisitTime =
+          visitSummary.stopDateTime === null ||
+          (diagnosis.diagnosisDateTime >= visitSummary.startDateTime &&
+            diagnosis.diagnosisDateTime < visitSummary.stopDateTime);
+
+        if (isWithinVisitTime) {
+          diagnosisArray.push({
+            id: diagnosisId,
+            diagnosis: diagnosisName,
+            order: diagnosis.order,
+            certainty: diagnosis.certainty,
+            status: status,
+            diagnosedBy: diagnosis.providers[0].name,
+            diagnosisDate: diagnosisDate,
+            additionalData: {
+              diagnosisTime: diagnosisTime,
+              diagnosisNotes: diagnosisNotes,
+            },
+          });
+        }
+      });
+    }
+
+    setDiagnosis(diagnosisArray);
+    const additionalMappedData = diagnosisArray.map((diagnosis) => {
       return {
         id: diagnosis.id,
         diagnosisTime: diagnosis.additionalData.diagnosisTime,
@@ -90,8 +95,22 @@ const Diagnosis = (props) => {
     mapDiagnosisData(diagnosisList);
   };
 
+  const getVisitSummary = async () => {
+    const response = await fetchVisitSummary(visit);
+    console.log("response", response);
+    if (response.status === 200) {
+      setVisitSummary(response.data);
+    }
+  };
+
   useEffect(() => {
-    getDiagnosis();
+    if (visitSummary) {
+      getDiagnosis();
+    }
+  }, [visitSummary]);
+
+  useEffect(() => {
+    getVisitSummary();
   }, []);
 
   return (

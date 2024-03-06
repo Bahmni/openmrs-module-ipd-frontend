@@ -8,16 +8,21 @@ import {
   TableHeader,
   TableRow,
 } from "carbon-components-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFetchAllergiesIntolerance } from "../hooks/useFetchAllergiesIntolerance";
 import PropTypes from "prop-types";
 import "../styles/Allergies.scss";
 import { FormattedMessage } from "react-intl";
+import { dateTimeToEpochInMilliSeconds } from "../../../../utils/DateTimeUtils";
+import { IPDContext } from "../../../../context/IPDContext";
+import { fetchVisitSummary } from "../../PatientHeader/utils/PatientMovementModalUtils";
 
 const Allergies = (props) => {
   const { patientId } = props;
+  const { visit } = useContext(IPDContext);
 
   const { allergiesData, isLoading } = useFetchAllergiesIntolerance(patientId);
+  const [visitSummary, setVisitSummary] = useState([]);
   const [rows, setRows] = useState([]);
   const NoAllergenMessage = (
     <FormattedMessage
@@ -26,18 +31,39 @@ const Allergies = (props) => {
     />
   );
 
+  const getVisitSummary = async () => {
+    var response = await fetchVisitSummary(visit);
+    if (response.status === 200) {
+      setVisitSummary(response.data);
+    }
+  };
+
+  useEffect(() => {
+    getVisitSummary();
+  }, []);
+
   useEffect(() => {
     if (allergiesData && allergiesData.entry) {
       const allergies = [];
       allergiesData.entry?.map((allergy) => {
-        allergies.push({
+        const recordedDate = dateTimeToEpochInMilliSeconds(
+          allergy?.resource?.recordedDate
+        );
+        const allergyData = {
           allergen: allergy.resource.code.coding[0].display,
           id: allergy.resource.id,
           severity: getSeverity(allergy.resource.criticality),
           reaction: getAllergyReactions(allergy.resource.reaction),
           comments: getComments(allergy.resource.note),
           sortWeight: getSortingWait(getSeverity(allergy.resource.criticality)),
-        });
+        };
+
+        const isWithinVisitTime =
+          visitSummary.stopDateTime === null ||
+          (recordedDate >= visitSummary.startDateTime &&
+            recordedDate < visitSummary.stopDateTime);
+
+        if (isWithinVisitTime) allergies.push(allergyData);
       });
       setRows(sortedRow(allergies));
     }
