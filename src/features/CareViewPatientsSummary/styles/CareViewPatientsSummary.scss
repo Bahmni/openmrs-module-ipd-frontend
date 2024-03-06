@@ -75,6 +75,10 @@
   }
 }
 
+.care-view-table-wrapper {
+  text-align: -webkit-center;
+}
+
 .care-view-patient-table {
   display: block;
   max-height: 500px;
@@ -110,6 +114,7 @@
         }
       }
     }
+
     tr:first-child {
       td:first-child {
         border-right: 1px solid #8d8d8d;

@@ -2,7 +2,9 @@
 
 exports[`CareViewPatientsSummary should match snapshot 1`] = `
 <div>
-  <div>
+  <div
+    class="care-view-table-wrapper"
+  >
     <table
       class="care-view-patient-table"
     >
