@@ -16,7 +16,7 @@ const Diagnosis = (props) => {
   const { patientId } = props;
   const { visit } = useContext(IPDContext);
   const [diagnosis, setDiagnosis] = useState([]);
-  const [visitSummary, setVisitSummary] = useState([]);
+  const [visitSummary, setVisitSummary] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [additionalData, setAdditionalData] = useState([]);
 
@@ -97,7 +97,6 @@ const Diagnosis = (props) => {
 
   const getVisitSummary = async () => {
     const response = await fetchVisitSummary(visit);
-    console.log("response", response);
     if (response.status === 200) {
       setVisitSummary(response.data);
     }

@@ -31,6 +31,40 @@ jest.mock("../utils/DiagnosisUtils", () => ({
   diagnosisHeaders: headers,
 }));
 
+const mockDiagnosisDataOne = {
+  order: "PRIMARY",
+  certainty: "CONFIRMED",
+  codedAnswer: {
+    uuid: "diagnosis-one",
+    name: "Reactive arthropathy",
+  },
+  diagnosisDateTime: 1698412200000,
+  providers: [
+    {
+      name: "Provider Two",
+    },
+  ],
+  diagnosisStatusConcept: null,
+};
+
+const mockDiagnosisDataTwo = {
+  order: "PRIMARY",
+  certainty: "PRESUMED",
+  codedAnswer: {
+    uuid: "diagnosis-two",
+    name: "Arthropathy",
+  },
+  diagnosisDateTime: 1698308917000,
+  providers: [
+    {
+      name: "Provider One",
+    },
+  ],
+  diagnosisStatusConcept: {
+    name: "Ruled Out Diagnosis",
+  },
+};
+
 const mockFetchVisitSummary = jest.fn();
 jest.mock("../../PatientHeader/utils/PatientMovementModalUtils", () => ({
   fetchVisitSummary: () => mockFetchVisitSummary(),
@@ -68,38 +102,7 @@ describe("Diagnosis", () => {
 
   it("should show table skeleton on loading", async () => {
     getPatientDiagnosis.mockImplementation(() => {
-      return Promise.resolve([
-        {
-          order: "PRIMARY",
-          certainty: "CONFIRMED",
-          codedAnswer: {
-            name: "Reactive arthropathy",
-          },
-          diagnosisDateTime: 1698319572000,
-          providers: [
-            {
-              name: "Provider Two",
-            },
-          ],
-          diagnosisStatusConcept: null,
-        },
-        {
-          order: "PRIMARY",
-          certainty: "PRESUMED",
-          codedAnswer: {
-            name: "Arthropathy",
-          },
-          diagnosisDateTime: 1698308917000,
-          providers: [
-            {
-              name: "Provider One",
-            },
-          ],
-          diagnosisStatusConcept: {
-            name: "Ruled Out Diagnosis",
-          },
-        },
-      ]);
+      return Promise.resolve([mockDiagnosisDataOne, mockDiagnosisDataTwo]);
     });
     const { getByTestId, queryByTestId } = render(
       <IPDContext.Provider
@@ -174,5 +177,33 @@ describe("Diagnosis", () => {
     expect(screen.getByText("Inactive")).toBeTruthy();
     expect(screen.getByText("26 Oct 2023")).toBeTruthy();
     expect(screen.getByText("27 Oct 2023")).toBeTruthy();
+  });
+
+  it("should show diagnosis data exclusively for current and previous dates if it pertains to an inactive inpatient visit", async () => {
+    mockFetchVisitSummary.mockReturnValue({
+      ...mockVisitSummaryData,
+      data: { ...mockVisitSummaryData.data, stopDateTime: 1698316200000 },
+    });
+    getPatientDiagnosis.mockImplementation(() => {
+      return Promise.resolve([mockDiagnosisDataOne, mockDiagnosisDataTwo]);
+    });
+    const { queryByText } = render(
+      <IPDContext.Provider
+        value={{
+          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+        }}
+      >
+        <Diagnosis patientId="__test_patient_uuid__" />
+      </IPDContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("expandable-datatable")).toBeTruthy();
+    });
+    expect(queryByText("Arthropathy")).toBeTruthy();
+    expect(queryByText("Inactive")).toBeTruthy();
+    expect(queryByText("26 Oct 2023")).toBeTruthy();
+    expect(queryByText("Reactive arthropathy")).toBeFalsy();
+    expect(queryByText("27 Oct 2023")).toBeFalsy();
   });
 });

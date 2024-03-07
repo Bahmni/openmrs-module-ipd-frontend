@@ -7,6 +7,7 @@ export const mockAllergiesIntolerenceResponse = {
         resource: {
           resourceType: "AllergyIntolerance",
           id: "216e656d-f738-42ce-acbe-802f2bf658b6",
+          recordedDate: 1698316800000,
           type: "allergy",
           category: ["food"],
           criticality: "high",
@@ -59,6 +60,7 @@ export const mockAllergiesIntolerenceResponse = {
       {
         resource: {
           resourceType: "AllergyIntolerance",
+          recordedDate: 1698316000000,
           id: "400ccf4c-6290-4f62-9aff-eff1d9575b43",
           type: "allergy",
           category: ["food"],
@@ -109,6 +111,7 @@ export const mockAllergiesIntolerenceResponse = {
       {
         resource: {
           resourceType: "AllergyIntolerance",
+          recordedDate: 1698316000000,
           id: "8e8753f2-d8be-443f-b7ef-8bceb218c01d",
           type: "allergy",
           category: ["environment"],
@@ -155,6 +158,7 @@ export const mockAllergiesIntolerenceResponse = {
         resource: {
           resourceType: "AllergyIntolerance",
           id: "e1a00d00-f929-4817-af59-fffd7b509e77",
+          recordedDate: 1698316000000,
           type: "allergy",
           category: ["food"],
           criticality: "low",
@@ -219,12 +223,12 @@ export const mockAllergiesIntolerenceResponse = {
 export const mockVisitSummaryData = {
   data: {
     uuid: "44832301-a09e-4bbb-b521-47144ed302cb",
-    startDateTime: 1709719136000,
+    startDateTime: 1698301800000,
     stopDateTime: null,
     visitType: "IPD",
     admissionDetails: {
       uuid: "3a0642ef-2403-469d-8fd9-b2478a71e931",
-      date: 1709719136000,
+      date: 1698301800000,
       provider: "Super Man",
       notes: null,
     },

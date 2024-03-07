@@ -1,5 +1,4 @@
 import { render, waitFor, screen } from "@testing-library/react";
-import axios from "axios";
 import React from "react";
 import {
   mockAllergiesIntolerenceResponse,
@@ -9,20 +8,33 @@ import Allergies from "./Allergies";
 import "@testing-library/jest-dom/extend-expect";
 import { IPDContext } from "../../../../context/IPDContext";
 
-jest.mock("axios");
-
+const mockData1 = { ...mockAllergiesIntolerenceResponse.data };
+const mockUseFetchAllergiesIntolerance = jest.fn();
 const mockFetchVisitSummary = jest.fn();
-jest.mock("../../PatientHeader/utils/PatientMovementModalUtils", () => ({
-  fetchVisitSummary: () => mockFetchVisitSummary(),
-}));
+
+jest.mock("../hooks/useFetchAllergiesIntolerance", () => {
+  return {
+    useFetchAllergiesIntolerance: () => mockUseFetchAllergiesIntolerance(),
+  };
+});
+
+jest.mock("../../PatientHeader/utils/PatientMovementModalUtils", () => {
+  return {
+    fetchVisitSummary: () => mockFetchVisitSummary(),
+  };
+});
 
 describe("Allergies", () => {
   beforeEach(() => {
-    mockFetchVisitSummary.mockReturnValue(mockVisitSummaryData);
+    jest.clearAllMocks();
+    mockUseFetchAllergiesIntolerance.mockImplementation(() => ({
+      allergiesData: mockData1,
+      isLoading: false,
+    }));
+    mockFetchVisitSummary.mockImplementation(() => mockVisitSummaryData);
   });
 
   it("should render Allergies", () => {
-    axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
     render(
       <IPDContext.Provider
         value={{
@@ -37,7 +49,6 @@ describe("Allergies", () => {
   });
 
   it("should show data in the table", async () => {
-    axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
     render(
       <IPDContext.Provider
         value={{
@@ -49,14 +60,13 @@ describe("Allergies", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
+      expect(screen.getByTestId(/datatable-with-value/i)).toBeInTheDocument();
     });
     expect(screen.getByText("Beef")).toBeInTheDocument();
     expect(screen.getByText(/test comment/i)).toBeInTheDocument();
   });
 
   it("should highlight column in red", async () => {
-    axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
     render(
       <IPDContext.Provider
         value={{
@@ -68,7 +78,7 @@ describe("Allergies", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
+      expect(screen.getByTestId(/datatable-with-value/i)).toBeInTheDocument();
     });
     expect(screen.getAllByRole("cell", { name: /severe/i })[0]).toHaveClass(
       "high-severity-color"
@@ -76,7 +86,6 @@ describe("Allergies", () => {
   });
 
   it("should sort Allergen in ASC order based on severity", async () => {
-    axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
     render(
       <IPDContext.Provider
         value={{
@@ -88,7 +97,7 @@ describe("Allergies", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
+      expect(screen.getByTestId(/datatable-with-value/i)).toBeInTheDocument();
     });
 
     expect(screen.getAllByTestId("table-body-row")[0]).toHaveTextContent(
@@ -106,7 +115,10 @@ describe("Allergies", () => {
   });
 
   it("should show table skeleton on loading", async () => {
-    axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
+    mockUseFetchAllergiesIntolerance.mockImplementation(() => ({
+      allergiesData: mockData1,
+      isLoading: true,
+    }));
     render(
       <IPDContext.Provider
         value={{
@@ -118,16 +130,15 @@ describe("Allergies", () => {
     );
 
     expect(screen.getByTestId("datatable-skeleton")).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
-    });
-
-    expect(screen.queryByTestId("datatable-skeleton")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("datatable-with-value")
+    ).not.toBeInTheDocument();
   });
 
   it("should show no data message when there is no data", async () => {
-    axios.get.mockResolvedValue({ data: { entry: undefined } });
+    mockUseFetchAllergiesIntolerance.mockImplementationOnce(() => ({
+      allergiesData: { ...mockData1, entry: undefined },
+    }));
     render(
       <IPDContext.Provider
         value={{
@@ -142,6 +153,30 @@ describe("Allergies", () => {
       expect(
         screen.getByText(/No Allergen is captured for this patient yet/i)
       ).toBeInTheDocument();
+    });
+  });
+
+  it("should show Allergy data exclusively for current and previous dates if it pertains to an inactive inpatient visit", async () => {
+    mockFetchVisitSummary.mockReturnValue({
+      ...mockVisitSummaryData,
+      data: { ...mockVisitSummaryData.data, stopDateTime: 1698316200000 },
+    });
+
+    const { queryByText } = render(
+      <IPDContext.Provider
+        value={{
+          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("Milk products")).toBeFalsy();
+      expect(queryByText("Beef")).toBeTruthy();
+      expect(queryByText("Dust")).toBeTruthy();
+      expect(queryByText("Wheat")).toBeTruthy();
     });
   });
 });

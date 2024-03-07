@@ -22,7 +22,7 @@ const Allergies = (props) => {
   const { visit } = useContext(IPDContext);
 
   const { allergiesData, isLoading } = useFetchAllergiesIntolerance(patientId);
-  const [visitSummary, setVisitSummary] = useState([]);
+  const [visitSummary, setVisitSummary] = useState(null);
   const [rows, setRows] = useState([]);
   const NoAllergenMessage = (
     <FormattedMessage
@@ -43,7 +43,7 @@ const Allergies = (props) => {
   }, []);
 
   useEffect(() => {
-    if (allergiesData && allergiesData.entry) {
+    if (visitSummary && allergiesData && allergiesData.entry) {
       const allergies = [];
       allergiesData.entry?.map((allergy) => {
         const recordedDate = dateTimeToEpochInMilliSeconds(
@@ -67,7 +67,7 @@ const Allergies = (props) => {
       });
       setRows(sortedRow(allergies));
     }
-  }, [allergiesData]);
+  }, [allergiesData, visitSummary]);
 
   const getSortingWait = (severity) => {
     if (severity === "Severe") return -1;
@@ -138,14 +138,13 @@ const Allergies = (props) => {
   return allergiesData?.entry === undefined ? (
     <div className="no-allergen-message"> {NoAllergenMessage} </div>
   ) : (
-    <DataTable
-      rows={rows}
-      headers={headers}
-      useZebraStyles={true}
-      data-testid="datatable"
-    >
+    <DataTable rows={rows} headers={headers} useZebraStyles={true}>
       {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-        <Table {...getTableProps()} useZebraStyles>
+        <Table
+          {...getTableProps()}
+          useZebraStyles
+          data-testid="datatable-with-value"
+        >
           <TableHead>
             <TableRow>
               {headers.map((header, index) => (
