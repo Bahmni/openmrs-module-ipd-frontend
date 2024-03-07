@@ -37,6 +37,7 @@ import {
 } from "../../DrugChart/utils/DrugChartUtils";
 import { displayShiftTimingsFormat } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
+import moment from "moment";
 export default function NursingTasks(props) {
   const { patientId } = props;
   const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
@@ -291,28 +292,42 @@ export default function NursingTasks(props) {
     );
   }, [filterValue]);
 
+  const disableTaskTilePastNextSlotTime = (medicationNursingTasks, index) => {
+    if (index < medicationNursingTasks.length - 1) {
+      const currentTask = medicationNursingTasks[index];
+      const upcomingTask = medicationNursingTasks[index + 1];
+      const upcomingTaskTimeInEpoch = upcomingTask[0].startTimeInEpochSeconds;
+      const currentTimeInEpoch = moment().unix();
+      if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
+        currentTask[0].isDisabled = true;
+      }
+    }
+  };
   const showTaskTiles = () => {
-    return medicationNursingTasks.map((medicationNursingTask, index) => {
-      return (
-        <div key={index}>
-          <div
-            onClick={() => {
-              const isStoppedSlot = medicationNursingTask[0]?.stopTime;
-              if (
-                !isSliderOpen.nursingTasks &&
-                !medicationNursingTask[0].isDisabled &&
-                !isStoppedSlot
-              ) {
-                setSelectedMedicationTask(medicationNursingTask);
-                updateNursingTasksSlider(true);
-              }
-            }}
-          >
-            <TaskTile medicationNursingTask={medicationNursingTask} />
+    return medicationNursingTasks.map(
+      (medicationNursingTask, index, medicationNursingTasks) => {
+        return (
+          <div key={index}>
+            {disableTaskTilePastNextSlotTime(medicationNursingTasks, index)}
+            <div
+              onClick={() => {
+                const isStoppedSlot = medicationNursingTask[0]?.stopTime;
+                if (
+                  !isSliderOpen.nursingTasks &&
+                  !medicationNursingTask[0].isDisabled &&
+                  !isStoppedSlot
+                ) {
+                  setSelectedMedicationTask(medicationNursingTask);
+                  updateNursingTasksSlider(true);
+                }
+              }}
+            >
+              <TaskTile medicationNursingTask={medicationNursingTask} />
+            </div>
           </div>
-        </div>
-      );
-    });
+        );
+      }
+    );
   };
 
   const getNoTaskMessage = () => {

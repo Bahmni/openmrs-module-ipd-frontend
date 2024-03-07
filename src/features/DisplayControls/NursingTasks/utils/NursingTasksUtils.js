@@ -100,7 +100,8 @@ export const ExtractMedicationNursingTasksData = (
           ? true
           : !!administeredDateTime ||
             slot.status === "STOPPED" ||
-            slot.status === "NOT_DONE",
+            slot.status === "NOT_DONE" ||
+            slot.status === "MISSED",
         serviceType,
       };
 
