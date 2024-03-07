@@ -30,24 +30,14 @@ const headers = [
   },
 ];
 
-const mockFetchVisitSummary = jest.fn();
-
 jest.mock("../utils/DiagnosisUtils", () => ({
   getPatientDiagnosis: jest.fn(),
   diagnosisHeaders: headers,
 }));
 
-jest.mock("../../PatientHeader/utils/PatientMovementModalUtils", () => ({
-  fetchVisitSummary: () => mockFetchVisitSummary(),
-}));
-
 describe("Diagnosis", () => {
   afterEach(() => {
     jest.resetAllMocks();
-  });
-
-  beforeEach(() => {
-    mockFetchVisitSummary.mockReturnValue(mockVisitSummaryData);
   });
 
   it("should show no Diagnosis message if no diagnosis are captured for that patient", async () => {
@@ -57,7 +47,7 @@ describe("Diagnosis", () => {
     render(
       <IPDContext.Provider
         value={{
-          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Diagnosis patientId="__test_patient_uuid__" />
@@ -78,7 +68,7 @@ describe("Diagnosis", () => {
     render(
       <IPDContext.Provider
         value={{
-          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Diagnosis patientId="__test_patient_uuid__" />
@@ -101,7 +91,7 @@ describe("Diagnosis", () => {
     render(
       <IPDContext.Provider
         value={{
-          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Diagnosis patientId="__test_patient_uuid__" />
@@ -118,17 +108,16 @@ describe("Diagnosis", () => {
   });
 
   it("should show diagnosis data exclusively for current and previous dates if it pertains to an inactive inpatient visit", async () => {
-    mockFetchVisitSummary.mockReturnValue({
-      ...mockVisitSummaryData,
-      data: { ...mockVisitSummaryData.data, stopDateTime: 1698316200000 },
-    });
     getPatientDiagnosis.mockImplementation(() => {
       return Promise.resolve(mockDiagnosisDataOne);
     });
     render(
       <IPDContext.Provider
         value={{
-          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+          visitSummary: {
+            ...mockVisitSummaryData,
+            stopDateTime: 1698316200000,
+          },
         }}
       >
         <Diagnosis patientId="__test_patient_uuid__" />

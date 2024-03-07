@@ -15,14 +15,12 @@ import "../styles/Allergies.scss";
 import { FormattedMessage } from "react-intl";
 import { dateTimeToEpochInMilliSeconds } from "../../../../utils/DateTimeUtils";
 import { IPDContext } from "../../../../context/IPDContext";
-import { fetchVisitSummary } from "../../PatientHeader/utils/PatientMovementModalUtils";
 
 const Allergies = (props) => {
   const { patientId } = props;
-  const { visit } = useContext(IPDContext);
+  const { visitSummary } = useContext(IPDContext);
 
   const { allergiesData, isLoading } = useFetchAllergiesIntolerance(patientId);
-  const [visitSummary, setVisitSummary] = useState(null);
   const [rows, setRows] = useState([]);
   const NoAllergenMessage = (
     <FormattedMessage
@@ -31,19 +29,8 @@ const Allergies = (props) => {
     />
   );
 
-  const getVisitSummary = async () => {
-    var response = await fetchVisitSummary(visit);
-    if (response.status === 200) {
-      setVisitSummary(response.data);
-    }
-  };
-
   useEffect(() => {
-    getVisitSummary();
-  }, []);
-
-  useEffect(() => {
-    if (visitSummary && allergiesData && allergiesData.entry) {
+    if (allergiesData && allergiesData.entry) {
       const allergies = [];
       allergiesData.entry?.map((allergy) => {
         const recordedDate = dateTimeToEpochInMilliSeconds(
@@ -67,7 +54,7 @@ const Allergies = (props) => {
       });
       setRows(sortedRow(allergies));
     }
-  }, [allergiesData, visitSummary]);
+  }, [allergiesData]);
 
   const getSortingWait = (severity) => {
     if (severity === "Severe") return -1;

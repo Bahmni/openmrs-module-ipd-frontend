@@ -10,17 +10,10 @@ import { IPDContext } from "../../../../context/IPDContext";
 
 const mockData1 = { ...mockAllergiesIntolerenceResponse.data };
 const mockUseFetchAllergiesIntolerance = jest.fn();
-const mockFetchVisitSummary = jest.fn();
 
 jest.mock("../hooks/useFetchAllergiesIntolerance", () => {
   return {
     useFetchAllergiesIntolerance: () => mockUseFetchAllergiesIntolerance(),
-  };
-});
-
-jest.mock("../../PatientHeader/utils/PatientMovementModalUtils", () => {
-  return {
-    fetchVisitSummary: () => mockFetchVisitSummary(),
   };
 });
 
@@ -31,14 +24,13 @@ describe("Allergies", () => {
       allergiesData: mockData1,
       isLoading: false,
     }));
-    mockFetchVisitSummary.mockImplementation(() => mockVisitSummaryData);
   });
 
   it("should render Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -52,7 +44,7 @@ describe("Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -70,7 +62,7 @@ describe("Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -89,7 +81,7 @@ describe("Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -122,7 +114,7 @@ describe("Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -142,7 +134,7 @@ describe("Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -157,14 +149,13 @@ describe("Allergies", () => {
   });
 
   it("should show Allergy data exclusively for current and previous dates if it pertains to an inactive inpatient visit", async () => {
-    mockFetchVisitSummary.mockReturnValue({
-      ...mockVisitSummaryData,
-      data: { ...mockVisitSummaryData.data, stopDateTime: 1698316200000 },
-    });
     render(
       <IPDContext.Provider
         value={{
-          visit: "44832301-a09e-4bbb-b521-47144ed302cb",
+          visitSummary: {
+            ...mockVisitSummaryData,
+            stopDateTime: 1698316200000,
+          },
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />

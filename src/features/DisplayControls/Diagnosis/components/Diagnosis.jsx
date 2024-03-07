@@ -9,14 +9,12 @@ import { formatDate } from "../../../../utils/DateTimeUtils";
 import ExpandableDataTable from "../../../../components/ExpandableDataTable/ExpandableDataTable";
 import DiagnosisExpandableRow from "./DiagnosisExpandableRow";
 import NotesIcon from "../../../../icons/notes.svg";
-import { fetchVisitSummary } from "../../PatientHeader/utils/PatientMovementModalUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 
 const Diagnosis = (props) => {
   const { patientId } = props;
-  const { visit } = useContext(IPDContext);
+  const { visitSummary } = useContext(IPDContext);
   const [diagnosis, setDiagnosis] = useState([]);
-  const [visitSummary, setVisitSummary] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [additionalData, setAdditionalData] = useState([]);
 
@@ -95,21 +93,8 @@ const Diagnosis = (props) => {
     mapDiagnosisData(diagnosisList);
   };
 
-  const getVisitSummary = async () => {
-    const response = await fetchVisitSummary(visit);
-    if (response.status === 200) {
-      setVisitSummary(response.data);
-    }
-  };
-
   useEffect(() => {
-    if (visitSummary) {
-      getDiagnosis();
-    }
-  }, [visitSummary]);
-
-  useEffect(() => {
-    getVisitSummary();
+    getDiagnosis();
   }, []);
 
   return (
