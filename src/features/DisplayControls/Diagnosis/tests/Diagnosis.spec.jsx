@@ -4,6 +4,10 @@ import Diagnosis from "../components/Diagnosis";
 import { getPatientDiagnosis } from "../utils/DiagnosisUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockVisitSummaryData } from "../../Allergies/components/AllergiesTestUtils";
+import {
+  mockDiagnosisDataOne,
+  mockDiagnosisDataTwo,
+} from "./DiagnosisMockData";
 
 const headers = [
   {
@@ -26,46 +30,13 @@ const headers = [
   },
 ];
 
+const mockFetchVisitSummary = jest.fn();
+
 jest.mock("../utils/DiagnosisUtils", () => ({
   getPatientDiagnosis: jest.fn(),
   diagnosisHeaders: headers,
 }));
 
-const mockDiagnosisDataOne = {
-  order: "PRIMARY",
-  certainty: "CONFIRMED",
-  codedAnswer: {
-    uuid: "diagnosis-one",
-    name: "Reactive arthropathy",
-  },
-  diagnosisDateTime: 1698412200000,
-  providers: [
-    {
-      name: "Provider Two",
-    },
-  ],
-  diagnosisStatusConcept: null,
-};
-
-const mockDiagnosisDataTwo = {
-  order: "PRIMARY",
-  certainty: "PRESUMED",
-  codedAnswer: {
-    uuid: "diagnosis-two",
-    name: "Arthropathy",
-  },
-  diagnosisDateTime: 1698308917000,
-  providers: [
-    {
-      name: "Provider One",
-    },
-  ],
-  diagnosisStatusConcept: {
-    name: "Ruled Out Diagnosis",
-  },
-};
-
-const mockFetchVisitSummary = jest.fn();
 jest.mock("../../PatientHeader/utils/PatientMovementModalUtils", () => ({
   fetchVisitSummary: () => mockFetchVisitSummary(),
 }));
@@ -102,9 +73,9 @@ describe("Diagnosis", () => {
 
   it("should show table skeleton on loading", async () => {
     getPatientDiagnosis.mockImplementation(() => {
-      return Promise.resolve([mockDiagnosisDataOne, mockDiagnosisDataTwo]);
+      return Promise.resolve(mockDiagnosisDataOne);
     });
-    const { getByTestId, queryByTestId } = render(
+    render(
       <IPDContext.Provider
         value={{
           visit: "44832301-a09e-4bbb-b521-47144ed302cb",
@@ -114,51 +85,18 @@ describe("Diagnosis", () => {
       </IPDContext.Provider>
     );
 
-    expect(getByTestId("diagnosis-datatable-skeleton")).toBeTruthy();
+    expect(screen.getByTestId("diagnosis-datatable-skeleton")).toBeTruthy();
 
     await waitFor(() => {
-      expect(getByTestId("expandable-datatable")).toBeTruthy();
+      expect(screen.getByTestId("expandable-datatable")).toBeTruthy();
     });
 
-    expect(queryByTestId("diagnosis-datatable-skeleton")).toBeFalsy();
+    expect(screen.queryByTestId("diagnosis-datatable-skeleton")).toBeFalsy();
   });
 
   it("should show diagnosis data in the table", async () => {
     getPatientDiagnosis.mockImplementation(() => {
-      return Promise.resolve([
-        {
-          order: "PRIMARY",
-          certainty: "CONFIRMED",
-          codedAnswer: {
-            uuid: "diagnosis-one",
-            name: "Reactive arthropathy",
-          },
-          diagnosisDateTime: 1698412200000,
-          providers: [
-            {
-              name: "Provider Two",
-            },
-          ],
-          diagnosisStatusConcept: null,
-        },
-        {
-          order: "PRIMARY",
-          certainty: "PRESUMED",
-          codedAnswer: {
-            uuid: "diagnosis-two",
-            name: "Arthropathy",
-          },
-          diagnosisDateTime: 1698308917000,
-          providers: [
-            {
-              name: "Provider One",
-            },
-          ],
-          diagnosisStatusConcept: {
-            name: "Ruled Out Diagnosis",
-          },
-        },
-      ]);
+      return Promise.resolve(mockDiagnosisDataTwo);
     });
     render(
       <IPDContext.Provider
@@ -185,9 +123,9 @@ describe("Diagnosis", () => {
       data: { ...mockVisitSummaryData.data, stopDateTime: 1698316200000 },
     });
     getPatientDiagnosis.mockImplementation(() => {
-      return Promise.resolve([mockDiagnosisDataOne, mockDiagnosisDataTwo]);
+      return Promise.resolve(mockDiagnosisDataOne);
     });
-    const { queryByText } = render(
+    render(
       <IPDContext.Provider
         value={{
           visit: "44832301-a09e-4bbb-b521-47144ed302cb",
@@ -200,10 +138,10 @@ describe("Diagnosis", () => {
     await waitFor(() => {
       expect(screen.getByTestId("expandable-datatable")).toBeTruthy();
     });
-    expect(queryByText("Arthropathy")).toBeTruthy();
-    expect(queryByText("Inactive")).toBeTruthy();
-    expect(queryByText("26 Oct 2023")).toBeTruthy();
-    expect(queryByText("Reactive arthropathy")).toBeFalsy();
-    expect(queryByText("27 Oct 2023")).toBeFalsy();
+    expect(screen.queryByText("Arthropathy")).toBeTruthy();
+    expect(screen.queryByText("Inactive")).toBeTruthy();
+    expect(screen.queryByText("26 Oct 2023")).toBeTruthy();
+    expect(screen.queryByText("Reactive arthropathy")).toBeFalsy();
+    expect(screen.queryByText("27 Oct 2023")).toBeFalsy();
   });
 });

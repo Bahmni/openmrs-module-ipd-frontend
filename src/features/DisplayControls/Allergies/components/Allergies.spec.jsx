@@ -161,8 +161,7 @@ describe("Allergies", () => {
       ...mockVisitSummaryData,
       data: { ...mockVisitSummaryData.data, stopDateTime: 1698316200000 },
     });
-
-    const { queryByText } = render(
+    render(
       <IPDContext.Provider
         value={{
           visit: "44832301-a09e-4bbb-b521-47144ed302cb",
@@ -173,10 +172,10 @@ describe("Allergies", () => {
     );
 
     await waitFor(() => {
-      expect(queryByText("Milk products")).toBeFalsy();
-      expect(queryByText("Beef")).toBeTruthy();
-      expect(queryByText("Dust")).toBeTruthy();
-      expect(queryByText("Wheat")).toBeTruthy();
+      expect(screen.queryByText("Milk products")).toBeFalsy();
+      expect(screen.queryByText("Beef")).toBeTruthy();
+      expect(screen.queryByText("Dust")).toBeTruthy();
+      expect(screen.queryByText("Wheat")).toBeTruthy();
     });
   });
 });
