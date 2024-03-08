@@ -45,12 +45,11 @@ const Allergies = (props) => {
           sortWeight: getSortingWait(getSeverity(allergy.resource.criticality)),
         };
 
-        const isWithinVisitTime =
+        if (
           visitSummary.stopDateTime === null ||
-          (recordedDate >= visitSummary.startDateTime &&
-            recordedDate < visitSummary.stopDateTime);
-
-        if (isWithinVisitTime) allergies.push(allergyData);
+          recordedDate < visitSummary.stopDateTime
+        )
+          allergies.push(allergyData);
       });
       setRows(sortedRow(allergies));
     }

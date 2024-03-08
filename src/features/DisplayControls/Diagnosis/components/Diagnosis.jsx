@@ -38,12 +38,10 @@ const Diagnosis = (props) => {
         let diagnosisNotes = diagnosis.comments ? diagnosis.comments : "";
         let diagnosisName = getDrugName(diagnosis);
 
-        const isWithinVisitTime =
+        if (
           visitSummary.stopDateTime === null ||
-          (diagnosis.diagnosisDateTime >= visitSummary.startDateTime &&
-            diagnosis.diagnosisDateTime < visitSummary.stopDateTime);
-
-        if (isWithinVisitTime) {
+          diagnosis.diagnosisDateTime < visitSummary.stopDateTime
+        ) {
           diagnosisArray.push({
             id: diagnosisId,
             diagnosis: diagnosisName,
