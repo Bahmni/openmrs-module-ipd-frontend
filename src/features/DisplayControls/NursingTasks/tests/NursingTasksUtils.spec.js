@@ -3,6 +3,7 @@ import {
   GetUTCEpochForDate,
   ExtractMedicationNursingTasksData,
   saveAdministeredMedication,
+  disableTaskTilePastNextSlotTime,
 } from "../utils/NursingTasksUtils";
 import axios from "axios";
 import {
@@ -17,7 +18,9 @@ import {
   mockNursingTasksResponseForStopped,
   mockExtractedMedicationNursingTasksDataForStopped,
   mockExtractedMedicationNursingTasksDataForMissed,
+  mockMedicationNursingTasks,
 } from "./NursingTasksUtilsMockData";
+import MockDate from "mockdate";
 
 jest.mock("axios");
 
@@ -192,6 +195,16 @@ describe("NursingTasksUtils", () => {
       const response = await saveAdministeredMedication(administeredMedication);
 
       expect(response).toBeUndefined();
+    });
+  });
+
+  describe("disableTaskTilePastNextSlotTime", () => {
+    it("should disables the task tile when upcoming task time is in the past", () => {
+      const index = 0;
+      MockDate.set(new Date('2024-03-06T08:00:00'));
+      disableTaskTilePastNextSlotTime(mockMedicationNursingTasks, index);
+      expect(mockMedicationNursingTasks[0][0].isDisabled).toBe(true);
+      MockDate.reset();
     });
   });
 });

@@ -7,6 +7,7 @@ import { items } from "../utils/constants";
 import {
   fetchMedicationNursingTasks,
   ExtractMedicationNursingTasksData,
+  disableTaskTilePastNextSlotTime,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
 import {
@@ -292,17 +293,6 @@ export default function NursingTasks(props) {
     );
   }, [filterValue]);
 
-  const disableTaskTilePastNextSlotTime = (medicationNursingTasks, index) => {
-    if (index < medicationNursingTasks.length - 1) {
-      const currentTask = medicationNursingTasks[index];
-      const upcomingTask = medicationNursingTasks[index + 1];
-      const upcomingTaskTimeInEpoch = upcomingTask[0].startTimeInEpochSeconds;
-      const currentTimeInEpoch = moment().unix();
-      if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
-        currentTask[0].isDisabled = true;
-      }
-    }
-  };
   const showTaskTiles = () => {
     return medicationNursingTasks.map(
       (medicationNursingTask, index, medicationNursingTasks) => {

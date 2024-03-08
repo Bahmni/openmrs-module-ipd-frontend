@@ -229,4 +229,19 @@ export const isTimeWithinAdministeredWindow = (
     nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
   return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
 };
+
+export const disableTaskTilePastNextSlotTime = (
+  medicationNursingTasks,
+  index
+) => {
+  if (index < medicationNursingTasks.length - 1) {
+    const currentTask = medicationNursingTasks[index][0];
+    const upcomingTask = medicationNursingTasks[index + 1][0];
+    const upcomingTaskTimeInEpoch = upcomingTask.startTimeInEpochSeconds;
+    const currentTimeInEpoch = moment().unix();
+    if (upcomingTaskTimeInEpoch <= currentTimeInEpoch)
+      currentTask.isDisabled = true;
+  }
+};
+
 export const getTimeInSeconds = (days) => days * 86400;
