@@ -815,7 +815,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       },
       startTime: "14:00",
       orderId: "79da1b26-fb11-4a08-bc48-549bc7900432",
-      isDisabled: false,
+      isDisabled: true,
       serviceType: "MedicationRequest",
       status: "missed",
     },
@@ -835,7 +835,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       },
       startTime: "14:30",
       orderId: "06a43e70-a976-4695-9e42-0b0ef44b85d4",
-      isDisabled: false,
+      isDisabled: true,
       serviceType: "MedicationRequest",
       status: "missed",
     },
@@ -855,7 +855,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       },
       startTime: "16:00",
       orderId: "79da1b26-fb11-4a08-bc48-549bc7900432",
-      isDisabled: false,
+      isDisabled: true,
       serviceType: "MedicationRequest",
       status: "missed",
     },
@@ -1154,4 +1154,23 @@ export const mockShiftResponse = [
       },
     ],
   },
+];
+
+export const mockMedicationNursingTasks = [
+  [
+    {
+      drugName: "Paracetamol 120 mg/5 mL Suspension",
+      startTimeInEpochSeconds: 1709692200,
+      startTime: "08:00",
+      isDisabled: false,
+    },
+  ],
+  [
+    {
+      drugName: "Paracetamol 120 mg/5 mL Suspension",
+      startTimeInEpochSeconds: 1709695800,
+      startTime: "09:00",
+      isDisabled: false,
+    },
+  ],
 ];
