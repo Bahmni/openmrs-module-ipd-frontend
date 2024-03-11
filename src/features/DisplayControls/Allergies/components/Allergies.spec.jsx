@@ -52,7 +52,7 @@ describe("Allergies", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId(/datatable-with-value/i)).toBeInTheDocument();
+      expect(screen.getByRole(/table/i)).toBeInTheDocument();
     });
     expect(screen.getByText("Beef")).toBeInTheDocument();
     expect(screen.getByText(/test comment/i)).toBeInTheDocument();
@@ -70,7 +70,7 @@ describe("Allergies", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId(/datatable-with-value/i)).toBeInTheDocument();
+      expect(screen.getByRole(/table/i)).toBeInTheDocument();
     });
     expect(screen.getAllByRole("cell", { name: /severe/i })[0]).toHaveClass(
       "high-severity-color"
@@ -89,7 +89,7 @@ describe("Allergies", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId(/datatable-with-value/i)).toBeInTheDocument();
+      expect(screen.getByRole(/table/i)).toBeInTheDocument();
     });
 
     expect(screen.getAllByTestId("table-body-row")[0]).toHaveTextContent(
