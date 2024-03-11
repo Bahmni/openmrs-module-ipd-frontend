@@ -126,11 +126,7 @@ const Allergies = (props) => {
   ) : (
     <DataTable rows={rows} headers={headers} useZebraStyles={true}>
       {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-        <Table
-          {...getTableProps()}
-          useZebraStyles
-          data-testid="datatable-with-value"
-        >
+        <Table {...getTableProps()} useZebraStyles>
           <TableHead>
             <TableRow>
               {headers.map((header, index) => (

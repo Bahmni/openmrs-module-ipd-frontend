@@ -122,9 +122,12 @@ describe("Allergies", () => {
     );
 
     expect(screen.getByTestId("datatable-skeleton")).toBeInTheDocument();
-    expect(
-      screen.queryByTestId("datatable-with-value")
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText("Milk products")).toBeFalsy();
+      expect(screen.queryByText("Beef")).toBeFalsy();
+      expect(screen.queryByText("Dust")).toBeFalsy();
+      expect(screen.queryByText("Wheat")).toBeFalsy();
+    });
   });
 
   it("should show no data message when there is no data", async () => {
