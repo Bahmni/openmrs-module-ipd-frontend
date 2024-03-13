@@ -15,7 +15,7 @@ import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
 import { getDashboardConfig } from "../../utils/CommonUtils";
 
 const CareViewDashboard = (props) => {
-  const { hostApi } = props;
+  const { hostApi, hostData } = props;
   const [selectedWard, setSelectedWard] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [wardSummary, setWardSummary] = useState({});
@@ -56,6 +56,7 @@ const CareViewDashboard = (props) => {
               wardSummary,
               setWardSummary,
               selectedWard,
+              provider: hostData.provider,
               setSelectedWard,
               careViewConfig,
               ipdConfig,

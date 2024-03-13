@@ -19,27 +19,48 @@ export const PatientDetailsCell = (props) => {
   const { patientDetails, bedDetails } = props;
   const { person, uuid } = patientDetails;
   const { ipdConfig, provider } = useContext(CareViewContext);
+  const [bookmark, setBookmark] = useState(true);
   const { shiftDetails: shiftConfig = {} } = ipdConfig;
 
-  const [bookmark, setBookmark] = useState(true);
-  const handleBookmarkClick = async (uuid) => {
-    const shiftDetails = currentShiftHoursArray(new Date(), shiftConfig);
+  const getCurrentShiftTimes = (shiftConfig) => {
+    const { currentShiftHoursArray: currentShift } = currentShiftHoursArray(
+      new Date(),
+      shiftConfig
+    );
+    const firstHour = currentShift[0];
+    const lastHour = currentShift[currentShift.length - 1];
 
+    let startDateTime = getDateTimeForHour(firstHour);
+    let endDateTime = getDateTimeForHour(lastHour + 1);
+
+    if (lastHour < firstHour) {
+      const currentDate = new Date();
+      const currentHour = currentDate.getHours();
+
+      if (currentHour > 12) {
+        currentDate.setDate(currentDate.getDate() + 1);
+        endDateTime = getDateTimeForHour(lastHour + 1, currentDate);
+      } else {
+        currentDate.setDate(currentDate.getDate() - 1);
+        startDateTime = getDateTimeForHour(firstHour, currentDate);
+      }
+    }
+
+    return { startDateTime, endDateTime };
+  };
+
+  const getDateTimeForHour = (hour, date = new Date()) => {
+    return getDateTime(date, hour) / 1000;
+  };
+  const handleBookmarkClick = async (uuid) => {
+    const { startDateTime, endDateTime } = getCurrentShiftTimes(shiftConfig);
     const patientData = {
       patientUuid: uuid,
       careTeamParticipantsRequest: [
         {
           providerUuid: provider.uuid,
-          startTime:
-            getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0]) /
-            1000,
-          endTime:
-            getDateTime(
-              new Date(),
-              shiftDetails.currentShiftHoursArray[
-                shiftDetails.currentShiftHoursArray.length - 1
-              ] + 1
-            ) / 1000,
+          startTime: startDateTime,
+          endTime: endDateTime,
         },
       ],
     };

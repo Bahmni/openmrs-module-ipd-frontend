@@ -8,15 +8,15 @@
     left: 0;
     line-height: 1.8;
     display: flex;
+    border-right: 1px solid #8d8d8d;
+    box-shadow: 6px 2px 4px 0 rgba(0, 0, 0, 0.1);
+    padding: 8px;
 
     a {
       color: #0f62fe;
     }
 
     .care-view-patient-details {
-      border-right: 1px solid #8d8d8d;
-      box-shadow: 6px 2px 4px 0 rgba(0, 0, 0, 0.1);
-      padding: 8px;
       flex: 1;
     }
     .admission-details {
@@ -108,8 +108,7 @@
         padding: 0;
         border-right: 1px solid #8d8d8d;
 
-        &:last-child,
-        &:first-child {
+        &:last-child {
           border-right: 0;
         }
       }

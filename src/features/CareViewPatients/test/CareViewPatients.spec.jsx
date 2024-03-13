@@ -18,6 +18,12 @@ const mockContext = {
     defaultPageSize: 13,
     pageSizeOptions: [10, 20, 30, 40, 50],
   },
+  ipdConfig: {
+    shiftDetails: {
+      1: { shiftStartTime: "08:00", shiftEndTime: "19:00" },
+      2: { shiftStartTime: "19:00", shiftEndTime: "08:00" },
+    },
+  },
   setWardSummary: jest.fn,
 };
 const mockFetchPatientsList = jest.fn();

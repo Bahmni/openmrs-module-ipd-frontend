@@ -24,6 +24,8 @@ export const ADMINISTERED_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/scheduledMedicationAdministrations";
 export const EMERGENCY_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/adhocMedicationAdministrations";
+export const BOOKMARK_PATIENT_BASE_URL =
+  RESTWS_V1 + "/ipd/careteam/participants";
 export const PATIENT_URL = RESTWS_V1 + "/patient";
 
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
@@ -79,7 +81,8 @@ export const CARE_VIEW_DASHBOARD_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/careViewDashboard/app.json";
 export const GET_SEARCH_PATIENT_LIST_URL =
   RESTWS_V1 + "/ipd/wards/{wardId}/patients/search";
-export const GET_SLOTS_FOR_PATIENTS_URL = RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
+export const GET_SLOTS_FOR_PATIENTS_URL =
+  RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
 
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
