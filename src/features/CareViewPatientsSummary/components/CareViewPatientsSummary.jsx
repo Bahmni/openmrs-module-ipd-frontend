@@ -171,7 +171,7 @@ export const CareViewPatientsSummary = (props) => {
   };
 
   return (
-    <div>
+    <div className={"care-view-table-wrapper"}>
       <table className={"care-view-patient-table"}>
         <tbody>
           {renderHeaderRow()}

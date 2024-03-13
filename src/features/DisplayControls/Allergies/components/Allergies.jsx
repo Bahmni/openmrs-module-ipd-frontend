@@ -8,14 +8,17 @@ import {
   TableHeader,
   TableRow,
 } from "carbon-components-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFetchAllergiesIntolerance } from "../hooks/useFetchAllergiesIntolerance";
 import PropTypes from "prop-types";
 import "../styles/Allergies.scss";
 import { FormattedMessage } from "react-intl";
+import { dateTimeToEpochInMilliSeconds } from "../../../../utils/DateTimeUtils";
+import { IPDContext } from "../../../../context/IPDContext";
 
 const Allergies = (props) => {
   const { patientId } = props;
+  const { visitSummary } = useContext(IPDContext);
 
   const { allergiesData, isLoading } = useFetchAllergiesIntolerance(patientId);
   const [rows, setRows] = useState([]);
@@ -30,14 +33,23 @@ const Allergies = (props) => {
     if (allergiesData && allergiesData.entry) {
       const allergies = [];
       allergiesData.entry?.map((allergy) => {
-        allergies.push({
+        const recordedDate = dateTimeToEpochInMilliSeconds(
+          allergy?.resource?.recordedDate
+        );
+        const allergyData = {
           allergen: allergy.resource.code.coding[0].display,
           id: allergy.resource.id,
           severity: getSeverity(allergy.resource.criticality),
           reaction: getAllergyReactions(allergy.resource.reaction),
           comments: getComments(allergy.resource.note),
           sortWeight: getSortingWait(getSeverity(allergy.resource.criticality)),
-        });
+        };
+
+        if (
+          visitSummary.stopDateTime === null ||
+          recordedDate < visitSummary.stopDateTime
+        )
+          allergies.push(allergyData);
       });
       setRows(sortedRow(allergies));
     }
@@ -112,12 +124,7 @@ const Allergies = (props) => {
   return allergiesData?.entry === undefined ? (
     <div className="no-allergen-message"> {NoAllergenMessage} </div>
   ) : (
-    <DataTable
-      rows={rows}
-      headers={headers}
-      useZebraStyles={true}
-      data-testid="datatable"
-    >
+    <DataTable rows={rows} headers={headers} useZebraStyles={true}>
       {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
         <Table {...getTableProps()} useZebraStyles>
           <TableHead>

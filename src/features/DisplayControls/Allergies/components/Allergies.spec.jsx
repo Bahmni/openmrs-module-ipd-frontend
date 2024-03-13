@@ -1,35 +1,76 @@
 import { render, waitFor, screen } from "@testing-library/react";
-import axios from "axios";
 import React from "react";
-import { mockAllergiesIntolerenceResponse } from "./AllergiesTestUtils";
+import {
+  mockAllergiesIntolerenceResponse,
+  mockVisitSummaryData,
+} from "./AllergiesTestUtils";
 import Allergies from "./Allergies";
 import "@testing-library/jest-dom/extend-expect";
+import { IPDContext } from "../../../../context/IPDContext";
 
-jest.mock("axios");
+const mockData1 = { ...mockAllergiesIntolerenceResponse.data };
+const mockUseFetchAllergiesIntolerance = jest.fn();
+
+jest.mock("../hooks/useFetchAllergiesIntolerance", () => {
+  return {
+    useFetchAllergiesIntolerance: () => mockUseFetchAllergiesIntolerance(),
+  };
+});
+
 describe("Allergies", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockUseFetchAllergiesIntolerance.mockImplementation(() => ({
+      allergiesData: mockData1,
+      isLoading: false,
+    }));
+  });
+
   it("should render Allergies", () => {
-    axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    render(
+      <IPDContext.Provider
+        value={{
+          visitSummary: mockVisitSummaryData,
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
+
     expect(screen.getByText("Allergen")).toBeInTheDocument();
   });
 
   it("should show data in the table", async () => {
-    axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    render(
+      <IPDContext.Provider
+        value={{
+          visitSummary: mockVisitSummaryData,
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
 
     await waitFor(() => {
-      expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
+      expect(screen.getByRole(/table/i)).toBeInTheDocument();
     });
     expect(screen.getByText("Beef")).toBeInTheDocument();
     expect(screen.getByText(/test comment/i)).toBeInTheDocument();
   });
 
   it("should highlight column in red", async () => {
-    axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    render(
+      <IPDContext.Provider
+        value={{
+          visitSummary: mockVisitSummaryData,
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
 
     await waitFor(() => {
-      expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
+      expect(screen.getByRole(/table/i)).toBeInTheDocument();
     });
     expect(screen.getAllByRole("cell", { name: /severe/i })[0]).toHaveClass(
       "high-severity-color"
@@ -37,11 +78,18 @@ describe("Allergies", () => {
   });
 
   it("should sort Allergen in ASC order based on severity", async () => {
-    axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    render(
+      <IPDContext.Provider
+        value={{
+          visitSummary: mockVisitSummaryData,
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
 
     await waitFor(() => {
-      expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
+      expect(screen.getByRole(/table/i)).toBeInTheDocument();
     });
 
     expect(screen.getAllByTestId("table-body-row")[0]).toHaveTextContent(
@@ -59,26 +107,69 @@ describe("Allergies", () => {
   });
 
   it("should show table skeleton on loading", async () => {
-    axios.get.mockResolvedValue(mockAllergiesIntolerenceResponse);
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    mockUseFetchAllergiesIntolerance.mockImplementation(() => ({
+      allergiesData: mockData1,
+      isLoading: true,
+    }));
+    render(
+      <IPDContext.Provider
+        value={{
+          visitSummary: mockVisitSummaryData,
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
 
     expect(screen.getByTestId("datatable-skeleton")).toBeInTheDocument();
-
     await waitFor(() => {
-      expect(screen.getByTestId(/datatable/i)).toBeInTheDocument();
+      expect(screen.queryByText("Milk products")).toBeFalsy();
+      expect(screen.queryByText("Beef")).toBeFalsy();
+      expect(screen.queryByText("Dust")).toBeFalsy();
+      expect(screen.queryByText("Wheat")).toBeFalsy();
     });
-
-    expect(screen.queryByTestId("datatable-skeleton")).not.toBeInTheDocument();
   });
 
   it("should show no data message when there is no data", async () => {
-    axios.get.mockResolvedValue({ data: { entry: undefined } });
-    render(<Allergies patientId={"__test_patient_uuid__"} />);
+    mockUseFetchAllergiesIntolerance.mockImplementationOnce(() => ({
+      allergiesData: { ...mockData1, entry: undefined },
+    }));
+    render(
+      <IPDContext.Provider
+        value={{
+          visitSummary: mockVisitSummaryData,
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
 
     await waitFor(() => {
       expect(
         screen.getByText(/No Allergen is captured for this patient yet/i)
       ).toBeInTheDocument();
+    });
+  });
+
+  it("should show Allergy data exclusively for current and previous dates if it pertains to an inactive inpatient visit", async () => {
+    render(
+      <IPDContext.Provider
+        value={{
+          visitSummary: {
+            ...mockVisitSummaryData,
+            stopDateTime: 1698316200000,
+          },
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText("Milk products")).toBeFalsy();
+      expect(screen.queryByText("Beef")).toBeTruthy();
+      expect(screen.queryByText("Dust")).toBeTruthy();
+      expect(screen.queryByText("Wheat")).toBeTruthy();
     });
   });
 });

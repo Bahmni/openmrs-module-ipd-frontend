@@ -45,6 +45,9 @@ export const dateTimeToEpochUTCTime = (date) => {
   return epochTime;
 };
 
+export const dateTimeToEpochInMilliSeconds = (dateTimeString) => {
+  return moment(dateTimeString).unix() * 1000;
+};
 export const convertDaystoSeconds = (days) => days * 86400;
 
 export const convertTo24Hour = (time12hr) => {
