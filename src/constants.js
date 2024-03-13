@@ -79,7 +79,8 @@ export const CARE_VIEW_DASHBOARD_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/careViewDashboard/app.json";
 export const GET_SEARCH_PATIENT_LIST_URL =
   RESTWS_V1 + "/ipd/wards/{wardId}/patients/search";
-export const GET_SLOTS_FOR_PATIENTS_URL = RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
+export const GET_SLOTS_FOR_PATIENTS_URL =
+  RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
 
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
@@ -108,3 +109,6 @@ export const timeFormatFor12hr = "hh:mm A";
 
 export const IPD_WARD_SEARCH_PLACEHOLDER_TEXT =
   "Type a minimum of 3 characters to search patient by name, bed number or patient ID";
+
+export const MOBILE_BREAKPOINT = 480;
+export const TABLET_BREAKPOINT = 1024;

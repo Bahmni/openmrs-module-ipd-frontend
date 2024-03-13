@@ -63,3 +63,11 @@ export const getWardDetails = async () => {
   }
   return [];
 };
+
+export const getSlidesPerView = (isMobileView, isTabletView) => {
+  if (isMobileView) {
+    return 2;
+  } else if (isTabletView) {
+    return Math.floor((window.outerWidth * 0.9) / 142);
+  }
+};

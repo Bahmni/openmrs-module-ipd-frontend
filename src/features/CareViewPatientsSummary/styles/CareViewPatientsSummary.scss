@@ -118,3 +118,15 @@
     }
   }
 }
+
+@media screen and (max-width: 1024px) {
+  .patient-row-container .patient-details-container {
+    width: 25%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .patient-row-container .patient-details-container {
+    width: 180px;
+  }
+}
