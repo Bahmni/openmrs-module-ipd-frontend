@@ -124,8 +124,9 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   autocomplete="off"
                   class="bx--text-input bx--text-input--empty"
                   id="default"
+                  placeholder="Select a Ward"
                   role="combobox"
-                  style="width: 250px;"
+                  style="width: 200px;"
                   tabindex="0"
                   title=""
                   type="text"
@@ -168,78 +169,32 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           </div>
         </div>
         <div
-          class="summary-tiles"
+          class="bx--tile summary-tile"
         >
-          <div
-            class="bx--tile summary-tile"
+          <span
+            class="heading-text"
           >
-            <span
-              class="heading-text"
-            >
-              Total patients
-            </span>
-            <span
-              class="value-text"
-            >
-              0
-            </span>
-          </div>
-          <div
-            class="bx--tile summary-tile"
+            Total patients
+          </span>
+          <span
+            class="value-text"
           >
-            <span
-              class="heading-text"
-            >
-              My patients
-            </span>
-            <span
-              class="value-text"
-            >
-              0
-            </span>
-          </div>
-          <div
-            class="bx--tile summary-tile"
+            0
+          </span>
+        </div>
+        <div
+          class="bx--tile summary-tile"
+        >
+          <span
+            class="heading-text"
           >
-            <span
-              class="heading-text"
-            >
-              New patients
-            </span>
-            <span
-              class="value-text"
-            >
-              0
-            </span>
-          </div>
-          <div
-            class="bx--tile summary-tile"
+            My patient(s)
+          </span>
+          <span
+            class="value-text"
           >
-            <span
-              class="heading-text"
-            >
-              Scheduled for OT
-            </span>
-            <span
-              class="value-text"
-            >
-              0
-            </span>
-          </div>
-          <div
-            class="bx--tile summary-tile"
-          >
-            <span
-              class="heading-text"
-            >
-              To be discharged
-            </span>
-            <span
-              class="value-text"
-            >
-              0
-            </span>
-          </div>
+            0
+          </span>
         </div>
       </div>
       <div
