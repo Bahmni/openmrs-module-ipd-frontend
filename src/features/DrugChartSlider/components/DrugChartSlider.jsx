@@ -9,6 +9,7 @@ import "../styles/DrugChartSlider.scss";
 import { medicationFrequency, serviceType } from "../../../constants";
 import { SaveAndCloseButtons } from "../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import { SliderContext } from "../../../context/SliderContext";
+import { IPDContext } from "../../../context/IPDContext";
 import {
   isTimePassed,
   validateSchedules,
@@ -31,6 +32,11 @@ import { ScheduleSection } from "./ScheduleSection";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
+  const { config } = useContext(IPDContext);
+  const { drugChartSlider = {} } = config;
+  const timeWindowToDisableSlots =
+    drugChartSlider.timeInMinutesToDisableSlotPostScheduledTime;
+
   const enableSchedule =
     hostData?.drugOrder?.uniformDosingType?.frequency &&
     hostData?.drugOrder?.drugOrder?.duration
@@ -116,6 +122,7 @@ const DrugChartSlider = (props) => {
         const newSchedulePassedWarnings = [...prevScheduleWarnings];
         newSchedulePassedWarnings[index] = isTimePassed(
           newSchedule,
+          timeWindowToDisableSlots,
           enable24HourTimers
         );
         return newSchedulePassedWarnings;
@@ -133,7 +140,10 @@ const DrugChartSlider = (props) => {
     if (!isInvalidTimeTextPresent(enable24HourTimers)) {
       setShowSchedulePassedWarning((prevScheduleWarnings) => {
         const newSchedulePassedWarnings = [...prevScheduleWarnings];
-        newSchedulePassedWarnings[index] = isTimePassed(newSchedule);
+        newSchedulePassedWarnings[index] = isTimePassed(
+          newSchedule,
+          timeWindowToDisableSlots
+        );
         return newSchedulePassedWarnings;
       });
     }
@@ -226,7 +236,7 @@ const DrugChartSlider = (props) => {
     )
       ? setShowStartTimeBeyondNextDoseWarning(true)
       : setShowStartTimeBeyondNextDoseWarning(false);
-    isTimePassed(time)
+    isTimePassed(time, timeWindowToDisableSlots)
       ? setShowStartTimePassedWarning(true)
       : setShowStartTimePassedWarning(false);
 
@@ -353,7 +363,7 @@ const DrugChartSlider = (props) => {
         : enableSchedule?.scheduleTiming.map((time) => moment(time, "hh:mm A"));
       let finalScheduleCount = 0;
       scheduleTimings.forEach((schedule) => {
-        if (isTimePassed(schedule)) {
+        if (isTimePassed(schedule, timeWindowToDisableSlots)) {
           setFirstDaySchedules((prevSchedules) => [...prevSchedules, "hh:mm"]);
           finalScheduleCount = finalScheduleCount + 1;
           setFirstDaySlotsMissed((prevSlotNumber) => prevSlotNumber + 1);
