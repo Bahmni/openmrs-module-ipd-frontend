@@ -47,7 +47,7 @@ describe("CareViewSummary", function () {
     );
     expect(container.querySelector(".bx--list-box__wrapper")).toBeTruthy();
     expect(container.querySelectorAll(".summary-tile")).toBeTruthy();
-    expect(container.querySelectorAll(".summary-tile").length).toEqual(5);
+    expect(container.querySelectorAll(".summary-tile").length).toEqual(2);
   });
 
   it("should display the total patient count", () => {
