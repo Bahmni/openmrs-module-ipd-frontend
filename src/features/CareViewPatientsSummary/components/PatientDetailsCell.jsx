@@ -19,7 +19,7 @@ export const PatientDetailsCell = (props) => {
   const { patientDetails, bedDetails, careTeamDetails, nearestHourEpoch } =
     props;
   const { person, uuid } = patientDetails;
-  const { ipdConfig, provider, updatePatientList, setUpdatePatientList } =
+  const { ipdConfig, provider, handleRefreshPatientList } =
     useContext(CareViewContext);
   const [bookmark, setBookmark] = useState({});
   const { shiftDetails: shiftConfig = {} } = ipdConfig;
@@ -102,7 +102,7 @@ export const PatientDetailsCell = (props) => {
         });
         setBookmark({});
       } catch (e) {
-        setUpdatePatientList(!updatePatientList);
+        handleRefreshPatientList();
       }
     } else {
       try {
@@ -110,7 +110,7 @@ export const PatientDetailsCell = (props) => {
         const participant = getBookmarkStatus(response.data);
         setBookmark(participant);
       } catch (e) {
-        setUpdatePatientList(!updatePatientList);
+        handleRefreshPatientList();
       }
     }
   };
