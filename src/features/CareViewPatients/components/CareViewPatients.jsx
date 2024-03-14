@@ -14,7 +14,7 @@ import { searchKeys } from "../utils/constants";
 import WarningIcon from "../../../icons/warning.svg";
 
 export const CareViewPatients = () => {
-  const { selectedWard, careViewConfig } =
+  const { selectedWard, careViewConfig, updatePatientList } =
     useContext(CareViewContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [previousPage, setPreviousPage] = useState(1);
@@ -76,7 +76,7 @@ export const CareViewPatients = () => {
     updateSearchValue("");
     setIsSearched(false);
     getPatientsList();
-  }, [selectedWard]);
+  }, [selectedWard, updatePatientList]);
 
   useEffect(() => {
     if (selectedWard.value) {

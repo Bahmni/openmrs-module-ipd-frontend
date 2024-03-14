@@ -18,6 +18,7 @@ const CareViewDashboard = (props) => {
   const { hostApi, hostData } = props;
   const [selectedWard, setSelectedWard] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [updatePatientList, setUpdatePatientList] = useState(false);
   const [wardSummary, setWardSummary] = useState({});
   const [careViewConfig, setCareViewConfig] = useState({});
   const [ipdConfig, setIpdConfig] = useState({});
@@ -58,6 +59,8 @@ const CareViewDashboard = (props) => {
               selectedWard,
               provider: hostData.provider,
               setSelectedWard,
+              updatePatientList,
+              setUpdatePatientList,
               careViewConfig,
               ipdConfig,
             }}

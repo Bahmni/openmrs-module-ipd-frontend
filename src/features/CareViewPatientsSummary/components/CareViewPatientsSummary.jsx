@@ -48,13 +48,15 @@ export const CareViewPatientsSummary = (props) => {
             nearestHourEpoch={nearestHourEpoch}
           />
           {patientsSummary.map((patientSummary, idx) => {
-            const { patientDetails, bedDetails } = patientSummary;
+            const { patientDetails, bedDetails, careTeam } = patientSummary;
             const { uuid } = patientDetails;
             return (
               <tr key={idx} className={"patient-row-container"}>
                 <PatientDetailsCell
                   bedDetails={bedDetails}
                   patientDetails={patientDetails}
+                  careTeamDetails={careTeam}
+                  nearestHourEpoch={nearestHourEpoch}
                 />
                 <SlotDetailsCell
                   slotDetails={slotDetails}

@@ -27,6 +27,10 @@
     .separator {
       padding: 0 8px;
     }
+    .bookmark {
+      pointer-events: none;
+      opacity: 25%;
+    }
   }
 
   .slot-details-header {

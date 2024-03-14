@@ -39,9 +39,5 @@ export const fetchPatientsListBySearch = async (
 };
 
 export const bookmarkPatient = async (patientDetails) => {
-  try {
-    return await axios.post(BOOKMARK_PATIENT_BASE_URL, patientDetails);
-  } catch (error) {
-    console.error(error);
-  }
+  return await axios.post(BOOKMARK_PATIENT_BASE_URL, patientDetails);
 };
