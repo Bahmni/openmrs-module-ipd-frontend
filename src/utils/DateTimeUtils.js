@@ -35,6 +35,11 @@ export const getTimeInFuture = (startTimeEpoch, offsetHours) => {
   return futureTime.unix();
 };
 
+export const getTimeInPast = (startTimeEpoch, offsetHours) => {
+  const pastTime = moment.unix(startTimeEpoch).subtract(offsetHours, "hours");
+  return pastTime.unix();
+};
+
 export const epochTo12HourTimeFormat = (epochSeconds) => {
   const formattedTime = moment.unix(epochSeconds).format("hh:mm A");
   return formattedTime;

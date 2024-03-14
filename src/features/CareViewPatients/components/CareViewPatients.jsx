@@ -11,10 +11,17 @@ import { CareViewPatientsSummary } from "../../CareViewPatientsSummary/component
 import { FormattedMessage } from "react-intl";
 import { CareViewPatientsHeader } from "../components/CareViewPatientsHeader";
 import { searchKeys } from "../utils/constants";
+import {
+  getPreviousNearbyHourEpoch,
+  getTimeInFuture,
+  getTimeInPast,
+} from "../../../utils/DateTimeUtils";
 import WarningIcon from "../../../icons/warning.svg";
+import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
+import moment from "moment";
 
 export const CareViewPatients = () => {
-  const { selectedWard, careViewConfig } =
+  const { selectedWard, careViewConfig, ipdConfig } =
     useContext(CareViewContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [previousPage, setPreviousPage] = useState(1);
@@ -24,6 +31,23 @@ export const CareViewPatients = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, updateSearchValue] = useState("");
   const [isSearched, setIsSearched] = useState(false);
+  const currentEpoch = getPreviousNearbyHourEpoch(
+    Math.floor(new Date().getTime() / 1000)
+  );
+  const timeframeLimitInHours = careViewConfig.timeframeLimitInHours;
+  const [navHourEpoch, updateNavHourEpoch] = useState({
+    startHourEpoch: currentEpoch,
+    endHourEpoch: getTimeInFuture(currentEpoch, timeframeLimitInHours),
+  });
+  const [navButtonsDisabled, updateNavButtonsDisabled] = useState({
+    previous: false,
+    next: false,
+  });
+  const currentShiftArray =
+    ipdConfig.shiftDetails &&
+    currentShiftHoursArray(new Date(), ipdConfig.shiftDetails)
+      .currentShiftHoursArray;
+
   const getPatientsList = async () => {
     try {
       setIsLoading(true);
@@ -128,6 +152,138 @@ export const CareViewPatients = () => {
     }
   };
 
+  const handleNext = () => {
+    if (currentShiftArray) {
+      const startHour = Number(
+        moment.unix(navHourEpoch.endHourEpoch).format("HH")
+      );
+      const startTime = navHourEpoch.endHourEpoch;
+      const endTime = getTimeInFuture(
+        navHourEpoch.endHourEpoch,
+        timeframeLimitInHours
+      );
+      let newEndTime;
+      const endHour = Number(moment.unix(endTime).format("HH"));
+      let enableNext = true;
+      if (!checkWithinCurrentShift(currentShiftArray, startHour, endHour)) {
+        enableNext = false;
+        updateNavButtonsDisabled({
+          next: !enableNext,
+          previous: false,
+        });
+        newEndTime = getTimeInFuture(
+          navHourEpoch.endHourEpoch,
+          currentShiftArray.length - currentShiftArray.indexOf(startHour)
+        );
+      } else {
+        updateNavButtonsDisabled({
+          next: false,
+          previous: false,
+        });
+      }
+      if (!navButtonsDisabled.next) {
+        updateNavHourEpoch({
+          startHourEpoch: startTime,
+          endHourEpoch: enableNext ? endTime : newEndTime,
+        });
+      }
+    }
+  };
+
+  const checkWithinCurrentShift = (currentShiftArray, startHour, endHour) => {
+    return (
+      currentShiftArray.includes(startHour) &&
+      currentShiftArray.includes(endHour)
+    );
+  };
+
+  const handleNow = () => {
+    if (currentShiftArray) {
+      const currentEpoch = getPreviousNearbyHourEpoch(
+        Math.floor(new Date().getTime() / 1000)
+      );
+      const startTime = currentEpoch;
+      const endTime = getTimeInFuture(currentEpoch, timeframeLimitInHours);
+      const startHour = Number(moment.unix(startTime).format("HH"));
+      const endHour = Number(moment.unix(endTime).format("HH"));
+      const endShiftTime = getTimeInFuture(
+        startTime,
+        currentShiftArray.length - currentShiftArray.indexOf(startHour)
+      );
+      let newEndTime;
+      if (
+        !currentShiftArray.includes(startHour) ||
+        startHour == currentShiftArray[0]
+      ) {
+        updateNavButtonsDisabled({
+          next: false,
+          previous: true,
+        });
+      }
+      if (!currentShiftArray.includes(endHour)) {
+        updateNavButtonsDisabled({
+          next: true,
+          previous: false,
+        });
+        newEndTime = endShiftTime;
+      }
+      if (
+        checkWithinCurrentShift(currentShiftArray, startHour, endHour) &&
+        startHour != currentShiftArray[0]
+      ) {
+        updateNavButtonsDisabled({
+          next: false,
+          previous: false,
+        });
+      }
+      updateNavHourEpoch({
+        startHourEpoch: startTime,
+        endHourEpoch: newEndTime ? newEndTime : endTime,
+      });
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentShiftArray) {
+      const startTime = getTimeInPast(
+        navHourEpoch.startHourEpoch,
+        timeframeLimitInHours
+      );
+      const startHour = Number(moment.unix(startTime).format("HH"));
+      const endHour = Number(
+        moment.unix(navHourEpoch.startHourEpoch).format("HH")
+      );
+      const endTime = navHourEpoch.startHourEpoch;
+      let enablePrevious = true;
+      let newStartTime;
+      if (
+        !checkWithinCurrentShift(currentShiftArray, startHour, endHour) ||
+        startHour == currentShiftArray[0]
+      ) {
+        enablePrevious = false;
+        updateNavButtonsDisabled({
+          next: false,
+          previous: !enablePrevious,
+        });
+        newStartTime = getTimeInPast(
+          navHourEpoch.startHourEpoch,
+          currentShiftArray.indexOf(endHour)
+        );
+      } else {
+        updateNavButtonsDisabled({
+          next: false,
+          previous: false,
+        });
+      }
+      if (!navButtonsDisabled.previous) {
+        updateNavHourEpoch({
+          startHourEpoch: enablePrevious ? startTime : newStartTime,
+          endHourEpoch: endTime,
+        });
+      }
+    }
+  };
+
   const noSearchResultsForPatientsWardMessage = (
     <FormattedMessage
       id={"NO_SEARCH_RESULTS_PATIENTS_WARD_MESSAGE"}
@@ -145,9 +301,17 @@ export const CareViewPatients = () => {
             handleClear={handleClear}
             searchValue={searchValue}
             updateSearchValue={updateSearchValue}
+            navHourEpoch={navHourEpoch}
+            navButtonsDisabled={navButtonsDisabled}
+            handleNow={handleNow}
+            handleNext={handleNext}
+            handlePrevious={handlePrevious}
           />
           {patientList.length > 0 ? (
-            <CareViewPatientsSummary patientsSummary={patientList} />
+            <CareViewPatientsSummary
+              patientsSummary={patientList}
+              navHourEpoch={navHourEpoch}
+            />
           ) : isSearched ? (
             <div className="no-search-results">
               <WarningIcon />

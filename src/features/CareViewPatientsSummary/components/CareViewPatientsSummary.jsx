@@ -4,16 +4,14 @@ import "../styles/CareViewPatientsSummary.scss";
 import { HospitalBed16 } from "@carbon/icons-react";
 import { Link } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
+import { getIPDPatientDashboardUrl } from "../../../utils/CommonUtils";
+import WarningIcon from "../../../icons/warning.svg";
 import {
   getColumnData,
   getSlotsForPatients,
 } from "../../CareViewSummary/utils/CareViewSummary";
 import Clock from "../../../icons/clock.svg";
-import {
-  epochTo24HourTimeFormat,
-  getPreviousNearbyHourEpoch,
-  getTimeInFuture,
-} from "../../../utils/DateTimeUtils";
+import { epochTo24HourTimeFormat } from "../../../utils/DateTimeUtils";
 import { getAdministrationStatus } from "../../../utils/CommonUtils";
 import SVGIcon from "../../SVGIcon/SVGIcon";
 import { CareViewContext } from "../../../context/CareViewContext";
@@ -21,21 +19,15 @@ import { CareViewContext } from "../../../context/CareViewContext";
 export const CareViewPatientsSummary = (props) => {
   const [slotDetails, setSlotDetails] = useState([]);
   const { careViewConfig, ipdConfig } = useContext(CareViewContext);
-  const { patientsSummary } = props;
+  const { patientsSummary, navHourEpoch } = props;
   const timeframeLimitInHours = careViewConfig.timeframeLimitInHours;
-  const currentEpoch = Math.floor(new Date().getTime() / 1000);
-  const nearestHourEpoch = getPreviousNearbyHourEpoch(currentEpoch);
 
   const fetchSlots = async (patients) => {
     const patientUuids = patients.map((patient) => patient.patientDetails.uuid);
-    const currentTime = getPreviousNearbyHourEpoch(
-      Math.floor(Date.now() / 1000)
-    );
-    const endTime = getTimeInFuture(currentTime, timeframeLimitInHours);
     const response = await getSlotsForPatients(
       patientUuids,
-      currentTime,
-      endTime
+      navHourEpoch.startHourEpoch,
+      navHourEpoch.endHourEpoch
     );
     setSlotDetails(response);
   };
@@ -44,7 +36,7 @@ export const CareViewPatientsSummary = (props) => {
     if (patientsSummary.length > 0) {
       fetchSlots(patientsSummary);
     }
-  }, [patientsSummary]);
+  }, [patientsSummary, navHourEpoch]);
 
   const renderStatusIcon = (slot) => {
     const { drugChart = {} } = ipdConfig;
@@ -101,16 +93,17 @@ export const CareViewPatientsSummary = (props) => {
     );
 
     for (let i = 0; i < timeframeLimitInHours; i++) {
-      const startTime = nearestHourEpoch + i * 3600;
-      const endTime = startTime + 3600;
-
-      if (patientSlotDetail) {
-        const columnData = patientSlotDetail.prescribedOrderSlots.flatMap(
-          (slot) => getColumnData(slot, startTime, endTime)
-        );
-        columns.push({ startTime, endTime, columnData });
-      } else {
-        columns.push({ startTime, endTime, columnData: [] });
+      const startTime = navHourEpoch.startHourEpoch + i * 3600;
+      if (startTime < navHourEpoch.endHourEpoch) {
+        const endTime = startTime + 3600;
+        if (patientSlotDetail) {
+          const columnData = patientSlotDetail.prescribedOrderSlots.flatMap(
+            (slot) => getColumnData(slot, startTime, endTime)
+          );
+          columns.push({ startTime, endTime, columnData });
+        } else {
+          columns.push({ startTime, endTime, columnData: [] });
+        }
       }
     }
 
@@ -130,31 +123,51 @@ export const CareViewPatientsSummary = (props) => {
           data-testid="patient-details-header"
         ></td>
         {Array.from({ length: timeframeLimitInHours }, (_, i) => {
-          const startTime = nearestHourEpoch + i * 3600;
-          let headerKey = `slot-details-header-${i}`;
-          return (
-            <td
-              className="slot-details-header"
-              key={headerKey}
-              data-testid={headerKey}
-            >
-              <div className="time" data-testid={`time-frame-${i}`}>
-                {epochTo24HourTimeFormat(startTime, true)}
-              </div>
-            </td>
-          );
+          const startTime = navHourEpoch.startHourEpoch + i * 3600;
+          if (startTime < navHourEpoch.endHourEpoch) {
+            let headerKey = `slot-details-header-${i}`;
+            return (
+              <td
+                className="slot-details-header"
+                key={headerKey}
+                data-testid={headerKey}
+              >
+                <div className="time" data-testid={`time-frame-${i}`}>
+                  {epochTo24HourTimeFormat(startTime, true)}
+                </div>
+              </td>
+            );
+          }
         })}
       </tr>
     );
   };
 
-  const renderPatientDetailsCell = (bedDetails, patientDetails, person) => {
+  const renderPatientDetailsCell = (
+    visitDetails,
+    bedDetails,
+    patientDetails,
+    newTreatments,
+    person
+  ) => {
     return (
       <td className={"patient-details-container"}>
         <div className={"care-view-patient-details"}>
           <div className={"admission-details"}>
             <HospitalBed16 />|<span>{bedDetails.bedNumber}</span>|
-            <Link href={"#"} inline={true}>
+            <Link
+              data-testid="identifier-ipd-dashboard"
+              onClick={() => {
+                console.log("Inside onclick function");
+                return window.open(
+                  getIPDPatientDashboardUrl(
+                    patientDetails.uuid,
+                    visitDetails.uuid
+                  ),
+                  "From Ward to IPD Dashboard"
+                );
+              }}
+            >
               <span>{patientDetails.display.split(" ")[0]}</span>
             </Link>
           </div>
@@ -164,6 +177,33 @@ export const CareViewPatientsSummary = (props) => {
             <span>{person.gender}</span>)<span className={"separator"}>|</span>
             <span>{person.age}</span>
             <FormattedMessage id={"AGE_YEARS_LABEL"} defaultMessage={"yrs"} />
+            {newTreatments > 0 && (
+              <>
+                <div className="treatments-notification">
+                  <WarningIcon />
+                  <span className="treatments-notification-span">
+                    {newTreatments + " New treatment(s): "}
+                    <>
+                      <Link
+                        data-testid="treatments-ipd-dashboard"
+                        onClick={() => {
+                          console.log("Inside treatments onclick function");
+                          return window.open(
+                            getIPDPatientDashboardUrl(
+                              patientDetails.uuid,
+                              visitDetails.uuid
+                            ),
+                            "From Ward to IPD Dashboard"
+                          );
+                        }}
+                      >
+                        {"Schedule Treatments"}
+                      </Link>
+                    </>
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </td>
@@ -176,11 +216,18 @@ export const CareViewPatientsSummary = (props) => {
         <tbody>
           {renderHeaderRow()}
           {patientsSummary.map((patientSummary, idx) => {
-            const { patientDetails, bedDetails } = patientSummary;
+            const { patientDetails, newTreatments, bedDetails, visitDetails } =
+              patientSummary;
             const { person, uuid } = patientDetails;
             return (
               <tr key={idx} className={"patient-row-container"}>
-                {renderPatientDetailsCell(bedDetails, patientDetails, person)}
+                {renderPatientDetailsCell(
+                  visitDetails,
+                  bedDetails,
+                  patientDetails,
+                  newTreatments,
+                  person
+                )}
                 {renderSlotDetailsCell(uuid)}
               </tr>
             );
@@ -193,4 +240,5 @@ export const CareViewPatientsSummary = (props) => {
 
 CareViewPatientsSummary.propTypes = {
   patientsSummary: propTypes.array,
+  navHourEpoch: propTypes.object,
 };
