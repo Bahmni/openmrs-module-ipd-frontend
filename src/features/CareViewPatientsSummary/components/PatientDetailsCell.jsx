@@ -10,10 +10,7 @@ import { FormattedMessage } from "react-intl";
 import propTypes from "prop-types";
 import PropTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
-import {
-  currentShiftHoursArray,
-  getDateTime,
-} from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
+import { getCurrentShiftTimes } from "../../../utils/DateTimeUtils";
 
 export const PatientDetailsCell = (props) => {
   const { patientDetails, bedDetails, careTeamDetails, nearestHourEpoch } =
@@ -23,12 +20,16 @@ export const PatientDetailsCell = (props) => {
     useContext(CareViewContext);
   const [bookmark, setBookmark] = useState({});
   const { shiftDetails: shiftConfig = {} } = ipdConfig;
+  const nurse = bookmark?.provider;
+  const formattedNurseName = nurse?.display.includes(" - ")
+    ? nurse?.display.split(" - ")[1]
+    : nurse?.display;
+  const nurseName = nurse && formattedNurseName;
+  const isBookmarked = Object.keys(bookmark).length !== 0;
 
   const getBookmarkStatus = (careTeamDetailsData) => {
     const nearestHourEpochInMilliseconds = nearestHourEpoch * 1000;
-    if (!careTeamDetailsData) {
-      return {};
-    }
+    if (!careTeamDetailsData || !careTeamDetailsData.participants) return {};
 
     for (const participant of careTeamDetailsData.participants) {
       if (
@@ -38,44 +39,7 @@ export const PatientDetailsCell = (props) => {
         return participant;
       }
     }
-
     return {};
-  };
-
-  useEffect(() => {
-    const participant = getBookmarkStatus(careTeamDetails);
-    setBookmark(participant);
-  }, []);
-
-  const getCurrentShiftTimes = (shiftConfig) => {
-    const { currentShiftHoursArray: currentShift } = currentShiftHoursArray(
-      new Date(),
-      shiftConfig
-    );
-    const firstHour = currentShift[0];
-    const lastHour = currentShift[currentShift.length - 1];
-
-    let startDateTime = getDateTimeForHour(firstHour);
-    let endDateTime = getDateTimeForHour(lastHour + 1);
-
-    if (lastHour < firstHour) {
-      const currentDate = new Date();
-      const currentHour = currentDate.getHours();
-
-      if (currentHour > 12) {
-        currentDate.setDate(currentDate.getDate() + 1);
-        endDateTime = getDateTimeForHour(lastHour + 1, currentDate);
-      } else {
-        currentDate.setDate(currentDate.getDate() - 1);
-        startDateTime = getDateTimeForHour(firstHour, currentDate);
-      }
-    }
-
-    return { startDateTime, endDateTime };
-  };
-
-  const getDateTimeForHour = (hour, date = new Date()) => {
-    return getDateTime(date, hour) / 1000;
   };
   const handleBookmarkClick = async (uuid) => {
     const { startDateTime, endDateTime } = getCurrentShiftTimes(shiftConfig);
@@ -85,35 +49,37 @@ export const PatientDetailsCell = (props) => {
       endTime: endDateTime,
     };
 
+    const unBookmarkData = {
+      uuid: bookmark.uuid,
+      voided: true,
+    };
+
     const patientData = {
       patientUuid: uuid,
       careTeamParticipantsRequest: [bookmarkData],
     };
 
-    if (Object.keys(bookmark).length !== 0) {
-      const unBookmarkData = {
-        uuid: bookmark.uuid,
-        voided: true,
-      };
-      try {
+    try {
+      if (isBookmarked) {
         await bookmarkPatient({
           ...patientData,
           careTeamParticipantsRequest: [unBookmarkData],
         });
         setBookmark({});
-      } catch (e) {
-        handleRefreshPatientList();
-      }
-    } else {
-      try {
+      } else {
         const response = await bookmarkPatient(patientData);
         const participant = getBookmarkStatus(response.data);
         setBookmark(participant);
-      } catch (e) {
-        handleRefreshPatientList();
       }
+    } catch (e) {
+      handleRefreshPatientList();
     }
   };
+
+  useEffect(() => {
+    const participant = getBookmarkStatus(careTeamDetails);
+    setBookmark(participant);
+  }, []);
 
   return (
     <td className={"patient-details-container"}>
@@ -131,10 +97,16 @@ export const PatientDetailsCell = (props) => {
           <span>{person.age}</span>
           <FormattedMessage id={"AGE_YEARS_LABEL"} defaultMessage={"yrs"} />
         </div>
+        {isBookmarked && (
+          <div>
+            <FormattedMessage id={"NURSE"} defaultMessage={"Nurse"} />:{" "}
+            <span>{nurseName}</span>
+          </div>
+        )}
       </div>
-      {Object.keys(bookmark).length !== 0 ? (
+      {isBookmarked ? (
         <div
-          className={provider.uuid !== bookmark.provider.uuid && "bookmark"}
+          className={provider.uuid !== nurse?.uuid && "bookmark"}
           onClick={() => handleBookmarkClick(uuid)}
         >
           <BookmarkFilled20 />
