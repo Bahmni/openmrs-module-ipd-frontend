@@ -20,6 +20,7 @@ export const areDatesSame = (date1, date2) => {
 const getDateTimeForHour = (hour, date = new Date()) => {
   return getDateTime(date, hour) / 1000;
 };
+
 export const getCurrentShiftTimes = (shiftConfig) => {
   const { currentShiftHoursArray: currentShift } = currentShiftHoursArray(
     new Date(),

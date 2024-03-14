@@ -7,8 +7,12 @@ import SVGIcon from "../../SVGIcon/SVGIcon";
 import { CareViewContext } from "../../../context/CareViewContext";
 import propTypes from "prop-types";
 
-export const SlotDetailsCell = (props) => {
-  const { uuid, slotDetails, timeframeLimitInHours, nearestHourEpoch } = props;
+export const SlotDetailsCell = ({
+  uuid,
+  slotDetails,
+  timeframeLimitInHours,
+  nearestHourEpoch,
+}) => {
   const columns = [];
   const { ipdConfig } = useContext(CareViewContext);
 

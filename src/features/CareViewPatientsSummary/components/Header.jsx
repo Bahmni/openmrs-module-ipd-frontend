@@ -2,8 +2,7 @@ import { epochTo24HourTimeFormat } from "../../../utils/DateTimeUtils";
 import React from "react";
 import propTypes from "prop-types";
 
-export const Header = (props) => {
-  const { timeframeLimitInHours, nearestHourEpoch } = props;
+export const Header = ({ timeframeLimitInHours, nearestHourEpoch }) => {
   return (
     <tr className="patient-row-container">
       <td

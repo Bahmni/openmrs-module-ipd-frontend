@@ -11,10 +11,9 @@ import { PatientDetailsCell } from "./PatientDetailsCell";
 import { SlotDetailsCell } from "./SlotDetailsCell";
 import { Header } from "./Header";
 
-export const CareViewPatientsSummary = (props) => {
+export const CareViewPatientsSummary = ({ patientsSummary }) => {
   const [slotDetails, setSlotDetails] = useState([]);
   const { careViewConfig } = useContext(CareViewContext);
-  const { patientsSummary } = props;
   const timeframeLimitInHours = careViewConfig.timeframeLimitInHours;
   const currentEpoch = Math.floor(new Date().getTime() / 1000);
   const nearestHourEpoch = getPreviousNearbyHourEpoch(currentEpoch);

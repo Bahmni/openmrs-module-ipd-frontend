@@ -12,9 +12,12 @@ import PropTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { getCurrentShiftTimes } from "../../../utils/DateTimeUtils";
 
-export const PatientDetailsCell = (props) => {
-  const { patientDetails, bedDetails, careTeamDetails, nearestHourEpoch } =
-    props;
+export const PatientDetailsCell = ({
+  patientDetails,
+  bedDetails,
+  careTeamDetails,
+  nearestHourEpoch,
+}) => {
   const { person, uuid } = patientDetails;
   const { ipdConfig, provider, handleRefreshPatientList } =
     useContext(CareViewContext);
