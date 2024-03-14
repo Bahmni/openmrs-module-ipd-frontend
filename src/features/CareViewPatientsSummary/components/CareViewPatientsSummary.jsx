@@ -157,16 +157,15 @@ export const CareViewPatientsSummary = (props) => {
             <HospitalBed16 />|<span>{bedDetails.bedNumber}</span>|
             <Link
               data-testid="identifier-ipd-dashboard"
-              onClick={() => {
-                console.log("Inside onclick function");
-                return window.open(
+              onClick={() =>
+                window.open(
                   getIPDPatientDashboardUrl(
                     patientDetails.uuid,
                     visitDetails.uuid
                   ),
                   "From Ward to IPD Dashboard"
-                );
-              }}
+                )
+              }
             >
               <span>{patientDetails.display.split(" ")[0]}</span>
             </Link>
@@ -186,16 +185,15 @@ export const CareViewPatientsSummary = (props) => {
                     <>
                       <Link
                         data-testid="treatments-ipd-dashboard"
-                        onClick={() => {
-                          console.log("Inside treatments onclick function");
-                          return window.open(
+                        onClick={() =>
+                          window.open(
                             getIPDPatientDashboardUrl(
                               patientDetails.uuid,
                               visitDetails.uuid
                             ),
                             "From Ward to IPD Dashboard"
-                          );
-                        }}
+                          )
+                        }
                       >
                         {"Schedule Treatments"}
                       </Link>

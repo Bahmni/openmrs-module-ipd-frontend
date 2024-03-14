@@ -15,10 +15,10 @@ import {
   getPreviousNearbyHourEpoch,
   getTimeInFuture,
   getTimeInPast,
+  epochTo24HourFormat,
 } from "../../../utils/DateTimeUtils";
 import WarningIcon from "../../../icons/warning.svg";
 import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
-import moment from "moment";
 
 export const CareViewPatients = () => {
   const { selectedWard, careViewConfig, ipdConfig } =
@@ -154,16 +154,14 @@ export const CareViewPatients = () => {
 
   const handleNext = () => {
     if (currentShiftArray) {
-      const startHour = Number(
-        moment.unix(navHourEpoch.endHourEpoch).format("HH")
-      );
+      const startHour = epochTo24HourFormat(navHourEpoch.endHourEpoch);
       const startTime = navHourEpoch.endHourEpoch;
       const endTime = getTimeInFuture(
         navHourEpoch.endHourEpoch,
         timeframeLimitInHours
       );
       let newEndTime;
-      const endHour = Number(moment.unix(endTime).format("HH"));
+      const endHour = epochTo24HourFormat(endTime);
       let enableNext = true;
       if (!checkWithinCurrentShift(currentShiftArray, startHour, endHour)) {
         enableNext = false;
@@ -204,8 +202,8 @@ export const CareViewPatients = () => {
       );
       const startTime = currentEpoch;
       const endTime = getTimeInFuture(currentEpoch, timeframeLimitInHours);
-      const startHour = Number(moment.unix(startTime).format("HH"));
-      const endHour = Number(moment.unix(endTime).format("HH"));
+      const startHour = epochTo24HourFormat(startTime);
+      const endHour = epochTo24HourFormat(endTime);
       const endShiftTime = getTimeInFuture(
         startTime,
         currentShiftArray.length - currentShiftArray.indexOf(startHour)
@@ -249,10 +247,8 @@ export const CareViewPatients = () => {
         navHourEpoch.startHourEpoch,
         timeframeLimitInHours
       );
-      const startHour = Number(moment.unix(startTime).format("HH"));
-      const endHour = Number(
-        moment.unix(navHourEpoch.startHourEpoch).format("HH")
-      );
+      const startHour = epochTo24HourFormat(startTime);
+      const endHour = epochTo24HourFormat(navHourEpoch.startHourEpoch);
       const endTime = navHourEpoch.startHourEpoch;
       let enablePrevious = true;
       let newStartTime;

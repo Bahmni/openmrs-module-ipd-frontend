@@ -13,6 +13,10 @@ export const areDatesSame = (date1, date2) => {
   return formatDate(date1) === formatDate(date2);
 };
 
+export const epochTo24HourFormat = (epochSeconds) => {
+  return Number(moment.unix(epochSeconds).format("HH"));
+};
+
 export const epochTo24HourTimeFormat = (epochSeconds, includeDate = false) => {
   const formattedTime = moment.unix(epochSeconds).format("HH:mm");
 
