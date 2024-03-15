@@ -1,3 +1,4 @@
+@import "src/styles/styles";
 .care-view-summary {
   justify-content: center;
   gap: 15px;
@@ -59,7 +60,7 @@
   }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: $tablet-breakpoint) {
   .care-view-summary {
     .summary-tile {
       width: 100%;
@@ -68,7 +69,7 @@
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: $mobile-breakpoint) {
   .care-view-summary {
     .bx--list-box__wrapper {
       max-width: 100%;
