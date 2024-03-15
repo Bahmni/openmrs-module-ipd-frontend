@@ -165,6 +165,9 @@ export const mockConfig = {
     timeInMinutesFromNowToShowPastTaskAsLate: 60,
     timeInMinutesFromStartTimeToShowAdministeredTaskAsLate: 30,
   },
+  drugChartSlider: {
+    timeInMinutesToDisableSlotPostScheduledTime: 60,
+  },
   enable24HourTime: true,
   medicationTags: {
     asNeeded: "Rx-PRN",
@@ -225,6 +228,9 @@ export const mockConfigFor12HourFormat = {
   drugChart: {
     timeInMinutesFromNowToShowPastTaskAsLate: 60,
     timeInMinutesFromStartTimeToShowAdministeredTaskAsLate: 30,
+  },
+  drugChartSlider: {
+    timeInMinutesToDisableSlotPostScheduledTime: 60,
   },
   enable24HourTime: false,
   medicationTags: {
