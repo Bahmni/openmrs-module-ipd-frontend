@@ -82,9 +82,10 @@ export const GET_SEARCH_PATIENT_LIST_URL =
 export const GET_SLOTS_FOR_PATIENTS_URL = RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
 
 export const defaultDateFormat = "DD MMM YYYY";
-export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
+export const defaultDateTimeFormat = "DD MMM YYYY hh:mm A";
 export const dateFormat = "DD/MM/YYYY";
 export const displayShiftTimingsFormat = "DD MMM YYYY | HH:mm";
+export const displayPeriodTimingsFormat = "DD MMM YYYY | HH:mm";
 export const timeText24 = "24 hrs format";
 export const timeText12 = "12 hrs format";
 export const RESOLUTION_VALUE = 1055;
@@ -96,6 +97,7 @@ export const componentKeys = {
   TREATMENTS: "TR",
   NURSING_TASKS: "NT",
   DRUG_CHART: "DC",
+  INTAKE_OUTPUT: "IO",
 };
 
 export const performerFunction = "Performer";
