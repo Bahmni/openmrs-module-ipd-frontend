@@ -89,7 +89,7 @@ export default function Dashboard(props) {
   const scrollToSection = (key) => {
     updateSelectedTab(key);
     window.scrollTo({
-      top: refs.current[key].offsetTop - (isShowPatientDetailsOpen ? 240 : 60),
+      top: refs.current[key].offsetTop - (isShowPatientDetailsOpen ? 284 : 102),
       behavior: "smooth",
     });
   };
@@ -193,18 +193,20 @@ export default function Dashboard(props) {
               <section
                 className={checkSliderStatus() ? "main-with-slider" : "main"}
               >
-                <div className={"navigation-buttons"}>
-                  <ArrowLeft
-                    data-testid={"Back button"}
-                    size={20}
-                    onClick={() => window.history.back()}
+                <div className={"patient-header-navigation"}>
+                  <div className={"navigation-buttons"}>
+                    <ArrowLeft
+                      data-testid={"Back button"}
+                      size={20}
+                      onClick={() => window.history.back()}
+                    />
+                  </div>
+                  <PatientHeader
+                    patientId={patient?.uuid}
+                    openVisitSummary={handleVisitSummaryNavigation}
+                    setPatientDetailsOpen={setPatientDetailsOpen}
                   />
                 </div>
-                <PatientHeader
-                  patientId={patient?.uuid}
-                  openVisitSummary={handleVisitSummaryNavigation}
-                  setPatientDetailsOpen={setPatientDetailsOpen}
-                />
                 <Accordion className={"accordion"}>
                   <AllMedicationsContextProvider>
                     {sections?.map((el) => {
