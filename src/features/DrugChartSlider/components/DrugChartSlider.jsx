@@ -6,7 +6,12 @@ import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../i18n/I18nProvider";
 import SideBarPanel from "../../SideBarPanel/components/SideBarPanel";
 import "../styles/DrugChartSlider.scss";
-import { medicationFrequency, serviceType } from "../../../constants";
+import {
+  medicationFrequency,
+  serviceType,
+  timeFormatFor12hr,
+  timeFormatfor24Hr,
+} from "../../../constants";
 import { SaveAndCloseButtons } from "../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import { SliderContext } from "../../../context/SliderContext";
 import { IPDContext } from "../../../context/IPDContext";
@@ -356,22 +361,63 @@ const DrugChartSlider = (props) => {
     }
   };
 
+  const checkIfTimeSlotIsEnabled = (timeMomentObject) =>
+    moment().diff(timeMomentObject, "minutes") >= 0 &&
+    moment().diff(timeMomentObject, "minutes") <= timeWindowToDisableSlots;
+
   useEffect(() => {
     if (isAutoFill) {
       const scheduleTimings = enable24HourTimers
         ? enableSchedule?.scheduleTiming
-        : enableSchedule?.scheduleTiming.map((time) => moment(time, "hh:mm A"));
+        : enableSchedule?.scheduleTiming.map((time) =>
+            moment(time, timeFormatFor12hr)
+          );
+      const currentTimeMomentObject = moment(
+        moment(),
+        enable24HourTimers ? timeFormatfor24Hr : timeFormatFor12hr
+      );
       let finalScheduleCount = 0;
       scheduleTimings.forEach((schedule) => {
         if (isTimePassed(schedule, timeWindowToDisableSlots)) {
           setFirstDaySchedules((prevSchedules) => [...prevSchedules, "hh:mm"]);
           finalScheduleCount = finalScheduleCount + 1;
           setFirstDaySlotsMissed((prevSlotNumber) => prevSlotNumber + 1);
+        } else if (checkIfTimeSlotIsEnabled(schedule)) {
+          if (finalScheduleCount === 0) {
+            setSchedules((prevSchedules) => [
+              ...prevSchedules,
+              currentTimeMomentObject,
+            ]);
+          } else {
+            setFirstDaySchedules((prevSchedules) => [
+              ...prevSchedules,
+              currentTimeMomentObject,
+            ]);
+          }
         } else {
           setFirstDaySchedules((prevSchedules) => [...prevSchedules, schedule]);
         }
       });
-      setSchedules(scheduleTimings || []);
+
+      if (
+        finalScheduleCount === 0 &&
+        checkIfTimeSlotIsEnabled(scheduleTimings[0])
+      ) {
+        for (let i = 0; i < scheduleTimings.length; i++) {
+          const upcomingSchedule = moment(
+            scheduleTimings[i],
+            enable24HourTimers ? timeFormatfor24Hr : timeFormatFor12hr
+          );
+          if (i !== 0) {
+            setSchedules((prevSchedules) => [
+              ...prevSchedules,
+              upcomingSchedule,
+            ]);
+          }
+        }
+      } else {
+        setSchedules(scheduleTimings || []);
+      }
       if (
         finalScheduleCount > 0 &&
         finalScheduleCount === enableSchedule?.frequencyPerDay
