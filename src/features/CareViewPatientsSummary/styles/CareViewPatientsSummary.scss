@@ -136,3 +136,14 @@
     width: 180px;
   }
 }
+.treatments-notification {
+  display: flex;
+  align-items: center;
+  padding: 10px 10px 10px 20px;
+  background-color: #d0e2ff73;
+
+  .treatments-notification-span {
+    padding: 5px;
+    letter-spacing: 0.24px;
+  }
+}
