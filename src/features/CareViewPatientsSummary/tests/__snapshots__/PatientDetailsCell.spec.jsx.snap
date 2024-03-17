@@ -1,0 +1,567 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PatientDetailsCell should not show nurse name if the current time crossed the shift endTime 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <td
+        class="patient-details-container"
+      >
+        <div
+          class="care-view-patient-details"
+        >
+          <div
+            class="admission-details"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+              />
+              <path
+                d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+              />
+            </svg>
+            |
+            <span>
+              A-6
+            </span>
+            |
+            <a
+              class="bx--link bx--link--inline"
+              href="#"
+            >
+              <span>
+                PT51140
+              </span>
+            </a>
+          </div>
+          <div>
+            Patient
+            :
+             
+            <span>
+              AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu
+            </span>
+             (
+            <span>
+              M
+            </span>
+            )
+            <span
+              class="separator"
+            >
+              |
+            </span>
+            <span>
+              14
+            </span>
+            yrs
+          </div>
+        </div>
+        <div
+          data-testid="bookmark-add-icon"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            focusable="false"
+            height="20"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M24,16V26.7515l-7.0962-3.5894L16,22.7051l-.9009.456L8,26.748V4H18V2H8A2,2,0,0,0,6,4V30l10-5.0537L26,30V16Z"
+            />
+            <path
+              d="M26 6L26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
+            />
+          </svg>
+        </div>
+      </td>
+    </div>
+  </body>,
+  "container": <div>
+    <td
+      class="patient-details-container"
+    >
+      <div
+        class="care-view-patient-details"
+      >
+        <div
+          class="admission-details"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+            />
+            <path
+              d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+            />
+          </svg>
+          |
+          <span>
+            A-6
+          </span>
+          |
+          <a
+            class="bx--link bx--link--inline"
+            href="#"
+          >
+            <span>
+              PT51140
+            </span>
+          </a>
+        </div>
+        <div>
+          Patient
+          :
+           
+          <span>
+            AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu
+          </span>
+           (
+          <span>
+            M
+          </span>
+          )
+          <span
+            class="separator"
+          >
+            |
+          </span>
+          <span>
+            14
+          </span>
+          yrs
+        </div>
+      </div>
+      <div
+        data-testid="bookmark-add-icon"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          focusable="false"
+          height="20"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 32 32"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M24,16V26.7515l-7.0962-3.5894L16,22.7051l-.9009.456L8,26.748V4H18V2H8A2,2,0,0,0,6,4V30l10-5.0537L26,30V16Z"
+          />
+          <path
+            d="M26 6L26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
+          />
+        </svg>
+      </div>
+    </td>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`PatientDetailsCell should render patientDetailsCell component 1`] = `
+<div>
+  <td
+    class="patient-details-container"
+  >
+    <div
+      class="care-view-patient-details"
+    >
+      <div
+        class="admission-details"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          focusable="false"
+          height="16"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 32 32"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+          />
+          <path
+            d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+          />
+        </svg>
+        |
+        <span>
+          A-6
+        </span>
+        |
+        <a
+          class="bx--link bx--link--inline"
+          href="#"
+        >
+          <span>
+            PT51140
+          </span>
+        </a>
+      </div>
+      <div>
+        Patient
+        :
+         
+        <span>
+          AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu
+        </span>
+         (
+        <span>
+          M
+        </span>
+        )
+        <span
+          class="separator"
+        >
+          |
+        </span>
+        <span>
+          14
+        </span>
+        yrs
+      </div>
+    </div>
+    <div
+      data-testid="bookmark-add-icon"
+    >
+      <svg
+        aria-hidden="true"
+        fill="currentColor"
+        focusable="false"
+        height="20"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 32 32"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M24,16V26.7515l-7.0962-3.5894L16,22.7051l-.9009.456L8,26.748V4H18V2H8A2,2,0,0,0,6,4V30l10-5.0537L26,30V16Z"
+        />
+        <path
+          d="M26 6L26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
+        />
+      </svg>
+    </div>
+  </td>
+</div>
+`;
+
+exports[`PatientDetailsCell should show nurse name only if a nurse bookmarks a patient within the current shift 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <td
+        class="patient-details-container"
+      >
+        <div
+          class="care-view-patient-details"
+        >
+          <div
+            class="admission-details"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+              />
+              <path
+                d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+              />
+            </svg>
+            |
+            <span>
+              A-6
+            </span>
+            |
+            <a
+              class="bx--link bx--link--inline"
+              href="#"
+            >
+              <span>
+                PT51140
+              </span>
+            </a>
+          </div>
+          <div>
+            Patient
+            :
+             
+            <span>
+              AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu
+            </span>
+             (
+            <span>
+              M
+            </span>
+            )
+            <span
+              class="separator"
+            >
+              |
+            </span>
+            <span>
+              14
+            </span>
+            yrs
+          </div>
+          <div>
+            Nurse
+            :
+             
+            <span>
+              Super Man
+            </span>
+          </div>
+        </div>
+        <div
+          data-testid="bookmark-filled-icon"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            focusable="false"
+            height="20"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M24,2H8A2,2,0,0,0,6,4V30l10-5.0538L26,30V4A2,2,0,0,0,24,2Z"
+            />
+          </svg>
+        </div>
+      </td>
+    </div>
+  </body>,
+  "container": <div>
+    <td
+      class="patient-details-container"
+    >
+      <div
+        class="care-view-patient-details"
+      >
+        <div
+          class="admission-details"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+            />
+            <path
+              d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+            />
+          </svg>
+          |
+          <span>
+            A-6
+          </span>
+          |
+          <a
+            class="bx--link bx--link--inline"
+            href="#"
+          >
+            <span>
+              PT51140
+            </span>
+          </a>
+        </div>
+        <div>
+          Patient
+          :
+           
+          <span>
+            AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu
+          </span>
+           (
+          <span>
+            M
+          </span>
+          )
+          <span
+            class="separator"
+          >
+            |
+          </span>
+          <span>
+            14
+          </span>
+          yrs
+        </div>
+        <div>
+          Nurse
+          :
+           
+          <span>
+            Super Man
+          </span>
+        </div>
+      </div>
+      <div
+        data-testid="bookmark-filled-icon"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          focusable="false"
+          height="20"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 32 32"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M24,2H8A2,2,0,0,0,6,4V30l10-5.0538L26,30V4A2,2,0,0,0,24,2Z"
+          />
+        </svg>
+      </div>
+    </td>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

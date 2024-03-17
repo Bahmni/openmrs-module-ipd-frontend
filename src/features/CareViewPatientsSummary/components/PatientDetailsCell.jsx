@@ -109,13 +109,17 @@ export const PatientDetailsCell = ({
       </div>
       {isBookmarked ? (
         <div
-          className={provider.uuid !== nurse?.uuid && "bookmark"}
+          className={provider.uuid !== nurse?.uuid && "bookmark-disabled"}
           onClick={() => handleBookmarkClick(uuid)}
+          data-testid="bookmark-filled-icon"
         >
           <BookmarkFilled20 />
         </div>
       ) : (
-        <div onClick={() => handleBookmarkClick(uuid)}>
+        <div
+          data-testid="bookmark-add-icon"
+          onClick={() => handleBookmarkClick(uuid)}
+        >
           <BookmarkAdd20 />
         </div>
       )}

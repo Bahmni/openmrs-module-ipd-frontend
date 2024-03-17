@@ -105,7 +105,9 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 yrs
               </div>
             </div>
-            <div>
+            <div
+              data-testid="bookmark-add-icon"
+            >
               <svg
                 aria-hidden="true"
                 fill="currentColor"
@@ -198,7 +200,9 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 yrs
               </div>
             </div>
-            <div>
+            <div
+              data-testid="bookmark-add-icon"
+            >
               <svg
                 aria-hidden="true"
                 fill="currentColor"
@@ -291,7 +295,9 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 yrs
               </div>
             </div>
-            <div>
+            <div
+              data-testid="bookmark-add-icon"
+            >
               <svg
                 aria-hidden="true"
                 fill="currentColor"
