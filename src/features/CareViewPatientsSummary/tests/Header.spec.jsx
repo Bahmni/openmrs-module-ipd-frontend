@@ -6,14 +6,26 @@ import "@testing-library/jest-dom/extend-expect";
 describe("Header", () => {
   it("should render header component", () => {
     const { container } = render(
-      <Header timeframeLimitInHours={2} nearestHourEpoch={1710504000} />
+      <Header
+        timeframeLimitInHours={2}
+        navHourEpoch={{
+          startHourEpoch: 1710504000,
+          endHourEpoch: 1710511200,
+        }}
+      />
     );
     expect(container).toMatchSnapshot();
   });
 
   it("should render header details correctly", () => {
     const { queryByTestId } = render(
-      <Header timeframeLimitInHours={2} nearestHourEpoch={1710504000} />
+      <Header
+        timeframeLimitInHours={2}
+        navHourEpoch={{
+          startHourEpoch: 1710504000,
+          endHourEpoch: 1710511200,
+        }}
+      />
     );
     expect(queryByTestId("slot-details-header-0")).toBeTruthy();
     expect(queryByTestId("time-frame-0")).toHaveTextContent("12:00");

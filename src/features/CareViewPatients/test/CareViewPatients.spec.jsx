@@ -17,6 +17,7 @@ const mockContext = {
   careViewConfig: {
     defaultPageSize: 13,
     pageSizeOptions: [10, 20, 30, 40, 50],
+    timeframeLimitInHours: 2,
   },
   ipdConfig: {
     shiftDetails: {
@@ -47,7 +48,7 @@ describe("CareViewPatients", () => {
     jest.resetAllMocks();
   });
 
-  it("should show search button", async () => {
+  it("should show search box", async () => {
     const { container } = render(
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />

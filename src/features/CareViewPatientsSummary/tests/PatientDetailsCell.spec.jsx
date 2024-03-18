@@ -21,14 +21,23 @@ const mockContext = {
 };
 
 const mockBookmarkPatient = jest.fn();
+const mockGetCurrentShiftTimes = jest.fn();
 
 jest.mock("../../CareViewPatients/utils/CareViewPatientsUtils", () => ({
   bookmarkPatient: (payload) => mockBookmarkPatient(payload),
 }));
 
+jest.mock("../../../utils/DateTimeUtils", () => ({
+  getCurrentShiftTimes: () => mockGetCurrentShiftTimes(),
+}));
+
 describe("PatientDetailsCell", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockGetCurrentShiftTimes.mockReturnValue({
+      startDateTime: 1710662400,
+      endDateTime: 1710702000,
+    });
     mockBookmarkPatient.mockResolvedValue(mockParticipantData);
   });
 
@@ -39,7 +48,12 @@ describe("PatientDetailsCell", () => {
           patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
           bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
           careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
-          nearestHourEpoch={1672575400}
+          newTreatments={1}
+          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+          navHourEpoch={{
+            startHourEpoch: 1672575400,
+            endHourEpoch: 1710511200,
+          }}
         />
       </CareViewContext.Provider>
     );
@@ -53,7 +67,12 @@ describe("PatientDetailsCell", () => {
           patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
           bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
           careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
-          nearestHourEpoch={1672575400}
+          newTreatments={1}
+          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+          navHourEpoch={{
+            startHourEpoch: 1672575400,
+            endHourEpoch: 1710511200,
+          }}
         />
       </CareViewContext.Provider>
     );
@@ -75,7 +94,12 @@ describe("PatientDetailsCell", () => {
           patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
           bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
           careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
-          nearestHourEpoch={1710509100}
+          newTreatments={1}
+          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+          navHourEpoch={{
+            startHourEpoch: 1710509100,
+            endHourEpoch: 1710511200,
+          }}
         />
       </CareViewContext.Provider>
     );
@@ -95,7 +119,12 @@ describe("PatientDetailsCell", () => {
           patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
           bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
           careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
-          nearestHourEpoch={1710509500}
+          newTreatments={1}
+          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+          navHourEpoch={{
+            startHourEpoch: 1710509500,
+            endHourEpoch: 1710609500,
+          }}
         />
       </CareViewContext.Provider>
     );
@@ -115,7 +144,12 @@ describe("PatientDetailsCell", () => {
           patientDetails={mockPatientsList.admittedPatients[1].patientDetails}
           bedDetails={mockPatientsList.admittedPatients[1].bedDetails}
           careTeamDetails={mockPatientsList.admittedPatients[1].careTeam}
-          nearestHourEpoch={1710509100}
+          newTreatments={1}
+          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+          navHourEpoch={{
+            startHourEpoch: 1710509100,
+            endHourEpoch: 1710509100,
+          }}
         />
       </CareViewContext.Provider>
     );
@@ -145,7 +179,12 @@ describe("PatientDetailsCell", () => {
           patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
           bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
           careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
-          nearestHourEpoch={1710509100}
+          newTreatments={1}
+          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+          navHourEpoch={{
+            startHourEpoch: 1710509100,
+            endHourEpoch: 1710511200,
+          }}
         />
       </CareViewContext.Provider>
     );
@@ -176,7 +215,12 @@ describe("PatientDetailsCell", () => {
           patientDetails={mockPatientsList.admittedPatients[2].patientDetails}
           bedDetails={mockPatientsList.admittedPatients[2].bedDetails}
           careTeamDetails={mockPatientsList.admittedPatients[2].careTeam}
-          nearestHourEpoch={1710509100}
+          newTreatments={1}
+          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+          navHourEpoch={{
+            startHourEpoch: 1710509100,
+            endHourEpoch: 1710511200,
+          }}
         />
       </CareViewContext.Provider>
     );

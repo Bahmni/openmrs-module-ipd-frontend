@@ -11,12 +11,16 @@ import propTypes from "prop-types";
 import PropTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { getCurrentShiftTimes } from "../../../utils/DateTimeUtils";
+import WarningIcon from "../../../icons/warning.svg";
+import { getIPDPatientDashboardUrl } from "../../../utils/CommonUtils";
 
 export const PatientDetailsCell = ({
   patientDetails,
   bedDetails,
   careTeamDetails,
-  nearestHourEpoch,
+  navHourEpoch,
+  newTreatments,
+  visitDetails,
 }) => {
   const { person, uuid } = patientDetails;
   const { ipdConfig, provider, handleRefreshPatientList } =
@@ -31,7 +35,7 @@ export const PatientDetailsCell = ({
   const isBookmarked = Object.keys(bookmark).length !== 0;
 
   const getBookmarkStatus = (careTeamDetailsData) => {
-    const nearestHourEpochInMilliseconds = nearestHourEpoch * 1000;
+    const nearestHourEpochInMilliseconds = navHourEpoch.startHourEpoch * 1000;
     if (!careTeamDetailsData || !careTeamDetailsData.participants) return {};
 
     for (const participant of careTeamDetailsData.participants) {
@@ -89,7 +93,18 @@ export const PatientDetailsCell = ({
       <div className={"care-view-patient-details"}>
         <div className={"admission-details"}>
           <HospitalBed16 />|<span>{bedDetails.bedNumber}</span>|
-          <Link href={"#"} inline={true}>
+          <Link
+            data-testid="identifier-ipd-dashboard"
+            onClick={() =>
+              window.open(
+                getIPDPatientDashboardUrl(
+                  patientDetails.uuid,
+                  visitDetails.uuid
+                ),
+                "From Ward to IPD Dashboard"
+              )
+            }
+          >
             <span>{patientDetails.display.split(" ")[0]}</span>
           </Link>
         </div>
@@ -99,6 +114,32 @@ export const PatientDetailsCell = ({
           <span>{person.gender}</span>)<span className={"separator"}>|</span>
           <span>{person.age}</span>
           <FormattedMessage id={"AGE_YEARS_LABEL"} defaultMessage={"yrs"} />
+          {newTreatments > 0 && (
+            <>
+              <div className="treatments-notification">
+                <WarningIcon />
+                <span className="treatments-notification-span">
+                  {newTreatments + " New treatment(s): "}
+                  <>
+                    <Link
+                      data-testid="treatments-ipd-dashboard"
+                      onClick={() =>
+                        window.open(
+                          getIPDPatientDashboardUrl(
+                            patientDetails.uuid,
+                            visitDetails.uuid
+                          ),
+                          "From Ward to IPD Dashboard"
+                        )
+                      }
+                    >
+                      {"Schedule Treatments"}
+                    </Link>
+                  </>
+                </span>
+              </div>
+            </>
+          )}
         </div>
         {isBookmarked && (
           <div>
@@ -134,5 +175,7 @@ PatientDetailsCell.propTypes = {
   },
   bedDetails: propTypes.object.isRequired,
   careTeamDetails: propTypes.object.isRequired,
-  nearestHourEpoch: propTypes.number.isRequired,
+  navHourEpoch: propTypes.object.isRequired,
+  visitDetails: propTypes.object.isRequired,
+  newTreatments: propTypes.number.isRequired,
 };

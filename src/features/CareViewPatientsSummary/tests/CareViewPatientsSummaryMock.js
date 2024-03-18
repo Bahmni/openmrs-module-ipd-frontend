@@ -69,6 +69,10 @@ export const mockPatientsList = {
         ],
       },
       newTreatments: 0,
+      visitDetails: {
+        uuid: "626b822d-741e-4a86-95ff-626eea753c4c",
+        display: "IPD",
+      },
     },
     {
       patientDetails: {
@@ -122,7 +126,11 @@ export const mockPatientsList = {
         column: 1,
         status: "OCCUPIED",
       },
-      newTreatments: 0,
+      newTreatments: 1,
+      visitDetails: {
+        uuid: "626b822d-741e-4a86-95ff-636eea753c2c",
+        display: "IPD",
+      },
     },
     {
       patientDetails: {
@@ -251,6 +259,10 @@ export const mockPatientsList = {
         ],
       },
       newTreatments: 0,
+      visitDetails: {
+        uuid: "627b822d-741e-4a96-45ff-626eea753c4c",
+        display: "IPD",
+      },
     },
   ],
   totalPatients: 25,

@@ -17,6 +17,10 @@ export const areDatesSame = (date1, date2) => {
   return formatDate(date1) === formatDate(date2);
 };
 
+export const epochTo24HourFormat = (epochSeconds) => {
+  return Number(moment.unix(epochSeconds).format("HH"));
+};
+
 const getDateTimeForHour = (hour, date = new Date()) => {
   return getDateTime(date, hour) / 1000;
 };
@@ -67,6 +71,11 @@ export const getPreviousNearbyHourEpoch = (time) => {
 export const getTimeInFuture = (startTimeEpoch, offsetHours) => {
   const futureTime = moment.unix(startTimeEpoch).add(offsetHours, "hours");
   return futureTime.unix();
+};
+
+export const getTimeInPast = (startTimeEpoch, offsetHours) => {
+  const pastTime = moment.unix(startTimeEpoch).subtract(offsetHours, "hours");
+  return pastTime.unix();
 };
 
 export const epochTo12HourTimeFormat = (epochSeconds) => {

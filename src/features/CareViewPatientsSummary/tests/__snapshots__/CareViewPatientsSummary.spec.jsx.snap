@@ -74,8 +74,8 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 </span>
                 |
                 <a
-                  class="bx--link bx--link--inline"
-                  href="#"
+                  class="bx--link"
+                  data-testid="identifier-ipd-dashboard"
                 >
                   <span>
                     PT51140
@@ -169,8 +169,8 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 </span>
                 |
                 <a
-                  class="bx--link bx--link--inline"
-                  href="#"
+                  class="bx--link"
+                  data-testid="identifier-ipd-dashboard"
                 >
                   <span>
                     PT49722
@@ -198,6 +198,22 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                   10
                 </span>
                 yrs
+                <div
+                  class="treatments-notification"
+                >
+                  <test-file-stub />
+                  <span
+                    class="treatments-notification-span"
+                  >
+                    1 New treatment(s): 
+                    <a
+                      class="bx--link"
+                      data-testid="treatments-ipd-dashboard"
+                    >
+                      Schedule Treatments
+                    </a>
+                  </span>
+                </div>
               </div>
             </div>
             <div
@@ -264,8 +280,8 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 </span>
                 |
                 <a
-                  class="bx--link bx--link--inline"
-                  href="#"
+                  class="bx--link"
+                  data-testid="identifier-ipd-dashboard"
                 >
                   <span>
                     ET55749

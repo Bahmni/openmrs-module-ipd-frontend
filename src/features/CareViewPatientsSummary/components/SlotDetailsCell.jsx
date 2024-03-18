@@ -11,7 +11,7 @@ export const SlotDetailsCell = ({
   uuid,
   slotDetails,
   timeframeLimitInHours,
-  nearestHourEpoch,
+  navHourEpoch,
 }) => {
   const columns = [];
   const { ipdConfig } = useContext(CareViewContext);
@@ -21,16 +21,18 @@ export const SlotDetailsCell = ({
   );
 
   for (let i = 0; i < timeframeLimitInHours; i++) {
-    const startTime = nearestHourEpoch + i * 3600;
-    const endTime = startTime + 3600;
+    const startTime = navHourEpoch.startHourEpoch + i * 3600;
+    if (startTime < navHourEpoch.endHourEpoch) {
+      const endTime = startTime + 3600;
 
-    if (patientSlotDetail) {
-      const columnData = patientSlotDetail.prescribedOrderSlots.flatMap(
-        (slot) => getColumnData(slot, startTime, endTime)
-      );
-      columns.push({ startTime, endTime, columnData });
-    } else {
-      columns.push({ startTime, endTime, columnData: [] });
+      if (patientSlotDetail) {
+        const columnData = patientSlotDetail.prescribedOrderSlots.flatMap(
+          (slot) => getColumnData(slot, startTime, endTime)
+        );
+        columns.push({ startTime, endTime, columnData });
+      } else {
+        columns.push({ startTime, endTime, columnData: [] });
+      }
     }
   }
 
@@ -93,5 +95,5 @@ SlotDetailsCell.propTypes = {
   uuid: propTypes.string.isRequired,
   slotDetails: propTypes.object.isRequired,
   timeframeLimitInHours: propTypes.number.isRequired,
-  nearestHourEpoch: propTypes.number.isRequired,
+  navHourEpoch: propTypes.object.isRequired,
 };

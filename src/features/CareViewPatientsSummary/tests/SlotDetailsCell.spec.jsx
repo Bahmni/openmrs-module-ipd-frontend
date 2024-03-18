@@ -19,7 +19,10 @@ describe("SlotDetailsCell", () => {
           uuid={"3ab51ec0-4650-4400-9aaa-75f30ece0208"}
           slotDetails={mockSlotsData}
           timeframeLimitInHours={2}
-          nearestHourEpoch={1672575400}
+          navHourEpoch={{
+            startHourEpoch: 1672575400,
+            endHourEpoch: 1710511200,
+          }}
         />
       </CareViewContext.Provider>
     );
@@ -33,7 +36,10 @@ describe("SlotDetailsCell", () => {
           uuid={"3ab51ec0-4650-4400-9aaa-75f30ece0208"}
           slotDetails={mockSlotsData}
           timeframeLimitInHours={2}
-          nearestHourEpoch={1672575400}
+          navHourEpoch={{
+            startHourEpoch: 1672575400,
+            endHourEpoch: 1710511200,
+          }}
         />
       </CareViewContext.Provider>
     );
@@ -55,7 +61,10 @@ describe("SlotDetailsCell", () => {
           uuid={"98a4a9c5-c26e-46a1-8efc-ae6df95842bf"}
           slotDetails={mockSlotsData}
           timeframeLimitInHours={2}
-          nearestHourEpoch={1672575400}
+          navHourEpoch={{
+            startHourEpoch: 1672575400,
+            endHourEpoch: 1710511200,
+          }}
         />
       </CareViewContext.Provider>
     );
