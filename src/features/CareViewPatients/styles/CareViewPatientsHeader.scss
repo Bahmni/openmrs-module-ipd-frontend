@@ -1,5 +1,63 @@
 .ward-patient-search {
-    margin-left: 420px;
-    margin-right: 16px;
-    outline: 2px solid rgba(0, 0, 0, 0);
+  margin-right: 16px;
+  outline: 2px solid rgba(0, 0, 0, 0);
+}
+
+.navigation-header {
+  display: flex;
+  align-items: center;
+
+  .now-button {
+    margin-right: 10px;
+    display: inline-block;
   }
+  .now-button-text {
+    text-align: center;
+  }
+  .navigation-time {
+    width: 96px;
+    text-align: center;
+  }
+  .bx--btn.bx--btn--icon-only.bx--tooltip__trigger {
+    min-height: 32px;
+    padding: 5px 10px;
+    font-size: 14px;
+    line-height: 18px;
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
+  }
+
+  .bx--btn--expressive[disabled] {
+    color: #8d8d8d;
+    border: 1px solid #8d8d8d;
+  }
+
+  .margin-right-6 {
+    margin-right: 6px;
+  }
+
+  .margin-right-10 {
+    margin-right: 10px !important;
+  }
+
+  .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center::before {
+    display: none;
+  }
+
+  .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center::after {
+    display: none;
+  }
+
+  .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center
+    .bx--assistive-text {
+    display: none;
+  }
+  .bx--btn--tertiary {
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
+  }
+}

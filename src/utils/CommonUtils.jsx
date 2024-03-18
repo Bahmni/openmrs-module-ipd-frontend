@@ -8,6 +8,9 @@ import {
 export const getPatientDashboardUrl = (patientUuid) =>
   `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard?currentTab=DASHBOARD_TAB_GENERAL_KEY`;
 
+export const getIPDPatientDashboardUrl = (patientUuid, visitUuid) =>
+  `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard/visit/ipd/${visitUuid}/`;
+
 export const getADTDashboardUrl = (patientUuid, visitUuid, encounterUuid) =>
   `/bahmni/adt/#/patient/${patientUuid}/visit/${visitUuid}/encounter/${encounterUuid}/bed`;
 
