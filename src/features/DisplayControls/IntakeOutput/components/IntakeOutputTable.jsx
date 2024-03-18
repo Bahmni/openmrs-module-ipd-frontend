@@ -8,17 +8,11 @@ const IntakeOutputTable = (props) => {
   const { rows, headers, totalIntakeGroup, totalOutputGroup } = props;
   const [totalIntake, setTotalIntake] = useState({});
   const [totalOutput, setTotalOutput] = useState({});
-  const [columnWidth, setColumnWidth] = useState("");
 
   useEffect(() => {
     setTotalIntake(totalIntakeGroup);
     setTotalOutput(totalOutputGroup);
   }, [totalIntakeGroup, totalOutputGroup]);
-
-  useEffect(() => {
-    const numColumns = headers.length;
-    setColumnWidth(100 / numColumns + '%');
-  }, []);
 
   return (
     <DataTable
@@ -39,7 +33,7 @@ const IntakeOutputTable = (props) => {
           <TableHead>
             <TableRow className={"intput-output-table-header"}>
               {headers.map((header) => (
-                <TableHeader key={header.key} {...getHeaderProps({ header })} width={columnWidth}>
+                <TableHeader key={header.key} {...getHeaderProps({ header })}>
                   {header.header}
                 </TableHeader>
               ))}
@@ -54,14 +48,14 @@ const IntakeOutputTable = (props) => {
                 className={"intput-output-table-data"}
               >
                 {row.cells.map((cell) => (
-                  <TableCell key={cell.id} width={columnWidth}>
+                  <TableCell key={cell.id}>
                     {cell.value}
                   </TableCell>
                 ))}
               </TableRow>
             ))}
             {(totalIntake || totalOutput) && <TableRow className={"custom-row"}>
-              <TableCell width={columnWidth}></TableCell>
+              <TableCell></TableCell>
               <TableCell colSpan={2}>
                 <div className={"total-group-container"}>
                   {totalIntake && Object.keys(totalIntake).map((intake, index) => {
@@ -80,7 +74,7 @@ const IntakeOutputTable = (props) => {
                   })}
                 </div>
               </TableCell>
-              <TableCell width={columnWidth}></TableCell>
+              <TableCell></TableCell>
             </TableRow>}
           </TableBody>
       </Table>

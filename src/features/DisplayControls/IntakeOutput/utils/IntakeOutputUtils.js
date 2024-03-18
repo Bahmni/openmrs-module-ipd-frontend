@@ -1,16 +1,17 @@
 import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
 import { defaultDateTimeFormat } from "../../../../constants";
-import { formatDate, getDateWithHoursAndMinutes } from "../../../../utils/DateTimeUtils";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 import { FormattedMessage } from "react-intl";
+import moment from "moment";
 
 export const filterDataForRange = (data, timeConceptNames, startEndDates) => {
     return (data.filter((obs) => {
         const timeConcept = obs.groupMembers.find(member => timeConceptNames?.includes(member?.concept?.name));
-        const obsTime = getDateWithHoursAndMinutes(new Date(timeConcept?.value));
-        const startTime = getDateWithHoursAndMinutes(startEndDates.startDate);
-        const endTime = getDateWithHoursAndMinutes(startEndDates.endDate);
-        return obsTime.getTime() >= startTime.getTime() && obsTime.getTime() < endTime.getTime();
+        const obsTime = moment(timeConcept?.value).startOf('minute');
+        const startTime = moment(startEndDates.startDate).startOf('minute');
+        const endTime = moment(startEndDates.endDate).startOf('minute');
+        return obsTime.isBetween(startTime, endTime, null, '[)');
     }));
 };
 
@@ -142,20 +143,17 @@ export const intakeOutputHeaders = [
 ];
 
 export const currentPeriodRange = (date, periodConfig = {}) => {
-    const currentDate = new Date(date);
+    const currentDate = moment(date);
     const [hours, minutes] = periodConfig.startTime.split(':');
-    const startDate = new Date(date);
-    startDate.setHours(hours);
-    startDate.setMinutes(minutes);
-    startDate.setSeconds(0);
-    const endDate = new Date(startDate.getTime() + periodConfig.durationInHours * 60 * 60 * 1000);
+    const startDate = moment(date).clone().hour(hours).minute(minutes).second(0);
+    const endDate = moment(startDate).clone().add(periodConfig.durationInHours, 'hours');
     const currentRange = {};
-    if (currentDate.getTime() >= startDate.getTime() && currentDate.getTime() <= endDate.getTime()) {
+    if (currentDate.isBetween(startDate, endDate, null, '[]')) {
         currentRange.startDateTime = startDate;
         currentRange.endDateTime = endDate;
-    } else if (currentDate.getTime() <= startDate.getTime()) {
-        currentRange.startDateTime = new Date(startDate.getTime() - periodConfig.durationInHours * 60 * 60 * 1000);
-        currentRange.endDateTime = new Date(currentRange.startDateTime.getTime() + periodConfig.durationInHours * 60 * 60 * 1000);
+    } else if (currentDate.isSameOrBefore(startDate)) {
+        currentRange.startDateTime = moment(startDate).clone().subtract(periodConfig.durationInHours, 'hours');
+        currentRange.endDateTime = moment(currentRange.startDateTime).clone().add(periodConfig.durationInHours, 'hours');
     }
     return currentRange;
 };
@@ -170,15 +168,12 @@ export const NotCurrentPeriodMessage = (
 export const NoDataForSelectedPeriod = (
     <FormattedMessage
         id={"NO_IO_DATA_MESSAGE"}
-        defaultMessage={"No Intake Output Data is available for the patient in this period"}
+        defaultMessage={"No intake output data is available for the patient in this period"}
     />
 );
 
 export const isCurrentPeriod = (startEndDates, periodConfig = {}) => {
     const currentPeriod = currentPeriodRange(new Date(), periodConfig);
-    const tolerance = 1000;
-    return (
-        Math.abs(startEndDates.startDate.getTime() - currentPeriod.startDateTime.getTime()) <= tolerance &&
-        Math.abs(startEndDates.endDate.getTime() - currentPeriod.endDateTime.getTime()) <= tolerance
-    );
+    return ((moment(currentPeriod.startDateTime).startOf('minute')).isSame(moment(startEndDates.startDate).startOf('minute'))
+    && (moment(currentPeriod.endDateTime).startOf('minute')).isSame(moment(startEndDates.endDate).startOf('minute')))
 };

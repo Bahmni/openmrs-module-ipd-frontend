@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
+import moment from "moment";
 
 import { Button, Loading } from "carbon-components-react";
 
@@ -9,6 +10,7 @@ import {intakeOutputMockData} from "../utils/IntakeOutputMockData.js";
 import { IPDContext } from "../../../../context/IPDContext";
 import { displayPeriodTimingsFormat, timeFormatFor12hr } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 import { 
   getSortedObsData,
   transformObsData, 
@@ -56,7 +58,7 @@ const IntakeOutput = () => {
     setNotCurrentPeriod(true);
     setIsLoading(true);
     updatedStartEndDates({
-      startDate: new Date(startEndDates.startDate.getTime() - periodConfig.durationInHours * 60 * 60 * 1000),
+      startDate: moment(startEndDates.startDate).clone().subtract(periodConfig.durationInHours, 'hours'),
       endDate: startEndDates.startDate
     });
   };
@@ -66,7 +68,7 @@ const IntakeOutput = () => {
     setIsLoading(true);
     updatedStartEndDates({
       startDate: startEndDates.endDate,
-      endDate: new Date(startEndDates.endDate.getTime() + periodConfig.durationInHours * 60 * 60 * 1000)
+      endDate: moment(startEndDates.endDate).clone().add(periodConfig.durationInHours, 'hours')
     });
   };
 

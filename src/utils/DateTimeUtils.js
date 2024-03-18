@@ -59,15 +59,3 @@ export const isTimeInFuture = (time1, time2) => {
   const time2_24hr = convertTo24Hour(time2);
   return time1_24hr > time2_24hr;
 };
-
-export const getDateWithHoursAndMinutes = (date) => {
-  return new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-    date.getHours(),
-    date.getMinutes(),
-    0, // Set seconds to zero for consistency
-    0  // Set milliseconds to zero for consistency
-  );
-};
