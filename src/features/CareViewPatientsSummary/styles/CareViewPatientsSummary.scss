@@ -1,3 +1,4 @@
+@import "src/styles/styles";
 .patient-row-container {
   display: flex;
 
@@ -124,6 +125,17 @@
   }
 }
 
+@media screen and (max-width: $tablet-breakpoint) {
+  .patient-row-container .patient-details-container {
+    width: 25%;
+  }
+}
+
+@media screen and (max-width: $mobile-breakpoint) {
+  .patient-row-container .patient-details-container {
+    width: 180px;
+  }
+}
 .treatments-notification {
   display: flex;
   align-items: center;

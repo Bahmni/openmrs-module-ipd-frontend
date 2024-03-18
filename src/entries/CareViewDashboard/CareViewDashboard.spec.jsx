@@ -4,6 +4,16 @@ import CareViewDashboard from "./CareViewDashboard";
 import MockDate from "mockdate";
 
 const mockConfig = jest.fn();
+
+jest.mock("swiper/react", () => ({
+  Swiper: ({ children }) => children,
+  SwiperSlide: ({ children }) => children,
+}));
+jest.mock("swiper/modules", () => ({
+  Pagination: (props) => [props],
+}));
+jest.mock("swiper/css", () => jest.fn());
+jest.mock("swiper/css/pagination", () => jest.fn());
 jest.mock("./CareViewDashboardUtils", () => {
   return {
     getConfigForCareViewDashboard: () => mockConfig(),

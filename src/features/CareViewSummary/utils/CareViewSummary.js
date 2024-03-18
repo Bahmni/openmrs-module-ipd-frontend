@@ -63,3 +63,18 @@ export const getWardDetails = async () => {
   }
   return [];
 };
+
+/**
+NOTE: The below function calculates the number of slides to show based on screen resolution.
+ For mobile View We are expecting to show 2 tiles at a time.
+ The calculation is for the Tablet View to show as many tiles possible based the parent component size.
+ The size of each tile is 142 px and the width of the parent component is 90% of the Screen so the window.outerWidth *0.9 which is the parent component's width
+ and dividing by 142 gives the number of Tiles which can fit in the parent.
+ */
+export const getSlidesPerView = (isMobileView, isTabletView) => {
+  if (isMobileView) {
+    return 2;
+  } else if (isTabletView) {
+    return Math.floor((window.outerWidth * 0.9) / 142);
+  }
+};
