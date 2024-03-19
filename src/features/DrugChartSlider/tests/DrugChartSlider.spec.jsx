@@ -472,4 +472,31 @@ describe("DrugChartSlider", () => {
       expect(inputElement).toBeTruthy();
     });
   });
+
+  it("should enable schedule fields for the configurable time window and show system time for 12-hr format", async () => {
+    MockDate.set("2010-12-22T09:00:00.000");
+    render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <DrugChartSlider
+            hostData={{
+              enable24HourTimers: false,
+              scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+              startTimeFrequencies: mockStartTimeFrequencies,
+              drugOrder: mockScheduleDrugOrder,
+            }}
+            hostApi={{}}
+          />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      const startTimeInputs = document.querySelectorAll("#time-selector");
+      expect(startTimeInputs).toBeDefined();
+      expect(startTimeInputs[0].value).toBe("09:00");
+      expect(startTimeInputs[1].value).toBe("04:00");
+    });
+    MockDate.reset();
+  });
 });
