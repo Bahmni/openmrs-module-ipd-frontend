@@ -19,13 +19,14 @@ const mockContext = {
     pageSizeOptions: [10, 20, 30, 40, 50],
     timeframeLimitInHours: 2,
   },
-  setWardSummary: jest.fn,
   ipdConfig: {
     shiftDetails: {
       1: { shiftStartTime: "08:00", shiftEndTime: "19:00" },
       2: { shiftStartTime: "19:00", shiftEndTime: "08:00" },
     },
   },
+  setWardSummary: jest.fn,
+  refreshPatientList: false,
 };
 const mockFetchPatientsList = jest.fn();
 const mockFetchPatientsListBySearch = jest.fn();
@@ -252,6 +253,30 @@ describe("CareViewPatients", () => {
     await waitFor(() => {
       expect(getByText("A-6")).toBeTruthy();
       expect(getByText("PT51140")).toBeTruthy();
+    });
+  });
+
+  it("should update patient list when refresh patient list value is changed", async () => {
+    const { rerender } = render(
+      <CareViewContext.Provider value={mockContext}>
+        <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
+      </CareViewContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(mockFetchPatientsList).toHaveBeenCalledTimes(2);
+    });
+
+    rerender(
+      <CareViewContext.Provider
+        value={{ ...mockContext, refreshPatientList: true }}
+      >
+        <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
+      </CareViewContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(mockFetchPatientsList).toHaveBeenCalledTimes(3);
     });
   });
 });

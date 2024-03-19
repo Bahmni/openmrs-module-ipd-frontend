@@ -95,10 +95,12 @@ describe("CareViewPatientsSummary", function () {
     );
 
     await waitFor(() => {
-      expect(queryByText("ET55749")).toBeTruthy();
-      expect(queryByText("user three")).toBeTruthy();
-      expect(queryByText("ICU1")).toBeTruthy();
-      expect(queryByText("30")).toBeTruthy();
+      expect(queryByText("PT51140")).toBeTruthy();
+      expect(
+        queryByText("AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu")
+      ).toBeTruthy();
+      expect(queryByText("A-6")).toBeTruthy();
+      expect(queryByText("14")).toBeTruthy();
     });
   });
 

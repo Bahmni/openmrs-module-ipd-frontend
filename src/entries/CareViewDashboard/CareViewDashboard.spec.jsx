@@ -35,7 +35,11 @@ describe("CareViewDashboard", () => {
   });
 
   it("should match the snapshot", async () => {
-    const { container, getByLabelText } = render(<CareViewDashboard />);
+    const { container, getByLabelText } = render(
+      <CareViewDashboard
+        hostData={{ provider: "c61c0d60-b483-4c6a-ad97-8cdec7d48b08" }}
+      />
+    );
     await waitFor(() => {
       expect(getByLabelText("home-button")).toBeTruthy();
     });
@@ -43,7 +47,11 @@ describe("CareViewDashboard", () => {
   });
 
   it("should render the component", async () => {
-    const { getByLabelText } = render(<CareViewDashboard />);
+    const { getByLabelText } = render(
+      <CareViewDashboard
+        hostData={{ provider: "c61c0d60-b483-4c6a-ad97-8cdec7d48b08" }}
+      />
+    );
     await waitFor(() => {
       expect(getByLabelText("home-button")).toBeTruthy();
     });

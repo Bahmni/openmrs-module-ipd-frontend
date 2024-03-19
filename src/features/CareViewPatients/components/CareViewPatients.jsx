@@ -21,7 +21,7 @@ import WarningIcon from "../../../icons/warning.svg";
 import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 
 export const CareViewPatients = () => {
-  const { selectedWard, careViewConfig, ipdConfig } =
+  const { selectedWard, careViewConfig, refreshPatientList, ipdConfig } =
     useContext(CareViewContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [previousPage, setPreviousPage] = useState(1);
@@ -100,7 +100,7 @@ export const CareViewPatients = () => {
     updateSearchValue("");
     setIsSearched(false);
     getPatientsList();
-  }, [selectedWard]);
+  }, [selectedWard, refreshPatientList]);
 
   useEffect(() => {
     if (selectedWard.value) {

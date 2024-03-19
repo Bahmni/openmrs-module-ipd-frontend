@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SlotDetailsCell should render slotDetailsCell 1`] = `
+<div>
+  <td
+    class="slot-details-container"
+  >
+    <div
+      class="slot-details"
+    >
+      <div
+        class="logo"
+      >
+        <div
+          class="status-icon"
+        >
+          <div>
+            <test-file-stub />
+          </div>
+        </div>
+        <test-file-stub
+          classname="clock-icon"
+        />
+      </div>
+      <span>
+        12:16
+      </span>
+      <div
+        class="drug-details-wrapper"
+      >
+        <span>
+          Amoxicillin/Clavulanic Acid 1000 mg Tablet
+        </span>
+        <div
+          class="drug-details"
+          data-testid="drug-details"
+        >
+          <span
+            class="drug-detail"
+          >
+            2
+          </span>
+          <span
+            class="drug-detail"
+          >
+            Tablet(s)
+          </span>
+          <span
+            class="drug-detail"
+          >
+              |  Oral
+          </span>
+        </div>
+      </div>
+    </div>
+  </td>
+  <td
+    class="slot-details-container"
+  />
+</div>
+`;
