@@ -3,6 +3,7 @@ import {
   MEDICATIONS_BASE_URL,
   ADMINISTERED_MEDICATIONS_BASE_URL,
   asNeededPlaceholderConceptName,
+  NON_MEDICATION_BASE_URL,
 } from "../../../../constants";
 import moment from "moment";
 
@@ -18,6 +19,20 @@ export const fetchMedicationNursingTasks = async (
     return response.data;
   } catch (error) {
     console.error(error);
+  }
+};
+
+export const fetchNonMedicationTasks = async (
+  visitUuid,
+  startTime,
+  endTime
+) => {
+  const NON_MEDICATION_URL = `${NON_MEDICATION_BASE_URL}?visitUuid=${visitUuid}&startTime=${startTime}&endTime=${endTime}`;
+  try {
+    const response = await axios.get(NON_MEDICATION_URL);
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -239,9 +254,112 @@ export const disableTaskTilePastNextSlotTime = (
     const upcomingTask = medicationNursingTasks[index + 1][0];
     const upcomingTaskTimeInEpoch = upcomingTask.startTimeInEpochSeconds;
     const currentTimeInEpoch = moment().unix();
-    if (upcomingTaskTimeInEpoch <= currentTimeInEpoch)
+    if (
+      !currentTask.isANonMedicationTask &&
+      upcomingTaskTimeInEpoch <= currentTimeInEpoch
+    )
       currentTask.isDisabled = true;
   }
 };
 
 export const getTimeInSeconds = (days) => days * 86400;
+
+export const sortNursingTasks = (medicationNursingTasks) => {
+  medicationNursingTasks.sort((a, b) => {
+    const aTime =
+      a[0].startTimeInEpochSeconds ??
+      a[0].administeredTimeInEpochSeconds ??
+      a[0].executionEndTime;
+    const bTime =
+      b[0].startTimeInEpochSeconds ??
+      b[0].administeredTimeInEpochSeconds ??
+      b[0].executionEndTime;
+    return aTime - bTime;
+  });
+};
+
+export const ExtractNonMedicationTasks = (
+  nonMedicationTasks,
+  filterValue,
+  isReadMode
+) => {
+  const extractedData = [];
+  const groupedData = [],
+    completedExtractedData = [],
+    pendingExtractedData = [];
+  let currentStartTime = null;
+  let currentGroup = [];
+  nonMedicationTasks?.forEach((nonMedicationTask) => {
+    const { name, partOf, requestedStartTime, status, uuid, token, taskType } =
+      nonMedicationTask;
+    const startTimeInDate = new Date(requestedStartTime);
+    const taskInfo = {
+      drugName: name,
+      uuid,
+      startTimeInEpochSeconds: requestedStartTime / 1000,
+      startTime: startTimeInDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      }),
+      partOf,
+      isDisabled: isReadMode,
+      status,
+      isANonMedicationTask: true,
+      token,
+      taskType,
+    };
+    console.log("startTime", taskInfo.startTime, requestedStartTime);
+    if (
+      (filterValue.id === "pending" || filterValue.id === "allTasks") &&
+      taskInfo.status === "REQUESTED"
+    ) {
+      pendingExtractedData.push(taskInfo);
+    } else if (
+      (filterValue.id === "completed" || filterValue.id === "allTasks") &&
+      taskInfo.status === "COMPLETED"
+    ) {
+      completedExtractedData.push(taskInfo);
+    }
+  });
+  extractedData.push(...pendingExtractedData);
+  extractedData.push(...completedExtractedData);
+
+  extractedData.forEach((item) => {
+    if (item.partOf == null && item.taskType.display !== "nursing_activity") {
+      groupedData.push(item);
+    } else {
+      if (item.startTime !== currentStartTime && !item.stopTime) {
+        if (currentGroup.length > 0) {
+          groupedData.push(currentGroup);
+        }
+        currentGroup = [item];
+        currentStartTime = item.startTime;
+      } else {
+        currentGroup.push(item);
+      }
+    }
+  });
+  if (currentGroup.length > 0) {
+    groupedData.push(currentGroup);
+  }
+  extractedData.forEach((item) => {
+    if (item.partOf != null) {
+      for (let i = 0; i < groupedData.length; i++) {
+        const uuid =
+          groupedData[i].length > 0
+            ? groupedData[i][0].uuid
+            : groupedData[i].uuid;
+        if (item.partOf === uuid) {
+          if (Array.isArray(groupedData[i])) {
+            groupedData[i].push(item);
+          } else {
+            groupedData[i] = [groupedData[i], item];
+          }
+          break;
+        }
+      }
+    }
+  });
+  return groupedData;
+};

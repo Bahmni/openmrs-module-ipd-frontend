@@ -8,6 +8,9 @@ import {
   fetchMedicationNursingTasks,
   ExtractMedicationNursingTasksData,
   disableTaskTilePastNextSlotTime,
+  ExtractNonMedicationTasks,
+  sortNursingTasks,
+  fetchNonMedicationTasks,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
 import {
@@ -75,7 +78,14 @@ export default function NursingTasks(props) {
   });
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
+  const [nonMedicationTasks, setNonMedicationTasks] = useState([]);
   let startDateTimeChange, endDateTimeChange;
+
+  useEffect(() => {
+    if (medicationNursingTasks.length > 0) {
+      sortNursingTasks(medicationNursingTasks);
+    }
+  }, [medicationNursingTasks]);
 
   useEffect(() => {
     const currentShift = shiftDetails.currentShiftHoursArray;
@@ -248,6 +258,13 @@ export default function NursingTasks(props) {
     setIsLoading(true);
     const startDateTimeInSeconds = startDate / 1000;
     const endDateTimeInSeconds = endDate / 1000 - 60;
+    const arrayOfNonMedicationTasks = await fetchNonMedicationTasks(
+      visit,
+      startDateTimeInSeconds * 1000,
+      endDateTimeInSeconds * 1000
+    );
+    setNonMedicationTasks(arrayOfNonMedicationTasks);
+
     const nursingTasks = await fetchMedicationNursingTasks(
       patientId,
       startDateTimeInSeconds,
@@ -255,7 +272,13 @@ export default function NursingTasks(props) {
       visit
     );
     setNursingTasks(nursingTasks);
-    if (nursingTasks) {
+
+    if (nursingTasks && arrayOfNonMedicationTasks) {
+      const extractedNonMedicationTasks = ExtractNonMedicationTasks(
+        arrayOfNonMedicationTasks,
+        filterValue,
+        isReadMode
+      );
       const extractedData = ExtractMedicationNursingTasksData(
         nursingTasks,
         filterValue,
@@ -271,14 +294,24 @@ export default function NursingTasks(props) {
             )
           )
           .filter((innerArray) => innerArray.length > 0);
-        setMedicationNursingTasks(filteredData);
+        setMedicationNursingTasks(
+          extractedNonMedicationTasks.length > 0
+            ? [...filteredData, ...extractedNonMedicationTasks]
+            : filteredData
+        );
       } else {
-        setMedicationNursingTasks(extractedData);
+        setMedicationNursingTasks(
+          extractedNonMedicationTasks.length > 0
+            ? [...extractedData, ...extractedNonMedicationTasks]
+            : extractedData
+        );
       }
       setIsLoading(false);
       setIsShiftsButtonsDisabled({
         previous:
-          (isReadMode && nursingTasks.length === 0) ||
+          (isReadMode &&
+            nursingTasks.length === 0 &&
+            arrayOfNonMedicationTasks.length === 0) ||
           nursingTasks[0].startDate > startDateTimeInSeconds,
         next:
           startDateTimeInSeconds >= nextShiftMaxHour ||
@@ -287,10 +320,18 @@ export default function NursingTasks(props) {
     }
   };
   useEffect(() => {
-    setMedicationNursingTasks(
-      ExtractMedicationNursingTasksData(nursingTasks, filterValue, isReadMode)
-    );
-  }, [filterValue]);
+    const sortedNursingTasks = [
+      ...ExtractMedicationNursingTasksData(
+        nursingTasks,
+        filterValue,
+        isReadMode
+      ),
+      ...ExtractNonMedicationTasks(nonMedicationTasks, filterValue, isReadMode),
+    ];
+    sortNursingTasks(sortedNursingTasks);
+    console.log("sortedNursingTasks", sortedNursingTasks);
+    setMedicationNursingTasks(sortedNursingTasks);
+  }, [filterValue, nursingTasks, nonMedicationTasks]);
 
   const showTaskTiles = () => {
     return medicationNursingTasks.map(
@@ -304,7 +345,8 @@ export default function NursingTasks(props) {
                 if (
                   !isSliderOpen.nursingTasks &&
                   !medicationNursingTask[0].isDisabled &&
-                  !isStoppedSlot
+                  !isStoppedSlot &&
+                  !medicationNursingTask[0].isANonMedicationTask
                 ) {
                   setSelectedMedicationTask(medicationNursingTask);
                   updateNursingTasksSlider(true);

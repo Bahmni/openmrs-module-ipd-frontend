@@ -43,6 +43,7 @@ export default function TaskTile(props) {
     isDisabled,
     administeredTimeInEpochSeconds,
     serviceType,
+    isANonMedicationTask,
   } = newMedicationNursingTask;
 
   const isRelevantTask = getRelevantTaskStatus(
@@ -65,9 +66,9 @@ export default function TaskTile(props) {
   return (
     <div className="tile-parent-container">
       <div
-        className={`nursing-tasks-tile ${
-          isRelevantTask && !stopTime && "relevant-task-tile"
-        } 
+        className={`${
+          isANonMedicationTask ? "nonMedicationTile" : "nursing-tasks-tile"
+        } ${isRelevantTask && !stopTime && "relevant-task-tile"} 
         ${isDisabled && "disabled-tile"}`}
       >
         <div className="tile-content">
@@ -125,9 +126,9 @@ export default function TaskTile(props) {
       </div>
       {isGroupedTask && (
         <div
-          className={`nursing-tasks-tile stacked-tile ${
-            isRelevantTask && "relevant-task-tile"
-          }`}
+          className={`${
+            isANonMedicationTask ? "nonMedicationTile" : "nursing-tasks-tile"
+          } stacked-tile ${isRelevantTask && "relevant-task-tile"}`}
         ></div>
       )}
     </div>

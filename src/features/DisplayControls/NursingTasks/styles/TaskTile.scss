@@ -12,6 +12,20 @@
   }
 }
 
+.nonMedicationTile {
+  border: 2px solid #0f62fe;
+  background: #e1f3fe;
+  width: 500px;
+  height: 95px;
+  position: relative;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    background-color: #aedbf7;
+  }
+}
+
 .disabled-tile {
   border: 2px solid #92c4c3 !important;
   background-color: #edf8e6 !important;
