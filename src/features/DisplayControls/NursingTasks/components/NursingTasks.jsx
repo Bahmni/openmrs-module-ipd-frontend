@@ -38,7 +38,6 @@ import {
 } from "../../DrugChart/utils/DrugChartUtils";
 import { displayShiftTimingsFormat } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
-import moment from "moment";
 export default function NursingTasks(props) {
   const { patientId } = props;
   const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
