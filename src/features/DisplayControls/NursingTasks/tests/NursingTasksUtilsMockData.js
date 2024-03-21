@@ -1114,6 +1114,21 @@ export const mockPendingPRNTaskTileData = [
   },
 ];
 
+export const mockNonMedicationTileData = [
+  {
+    drugName: "Paracetamol 125 mg Tablet",
+    uuid: "72af0cfa-be74-42a8-b650-45f6978314dd",
+    isDisabled: false,
+    partOf: null,
+    taskType: { display: "nursing_activity" },
+    creator: {
+      uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
+      display: "bailly.rurangirwa",
+    },
+    isANonMedicationTask: true,
+  },
+];
+
 export const mockShiftResponse = [
   {
     id: 14,

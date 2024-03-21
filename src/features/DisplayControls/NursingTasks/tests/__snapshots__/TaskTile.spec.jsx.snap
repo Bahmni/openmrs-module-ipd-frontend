@@ -64,9 +64,6 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
           style="color: rgb(82, 82, 82);"
         >
           <span />
-          <span>
-             - 
-          </span>
         </div>
         <div
           class="tile-content-subtext"

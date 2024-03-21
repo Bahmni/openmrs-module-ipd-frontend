@@ -50,7 +50,7 @@ export const ExtractMedicationNursingTasksData = (
     stoppedExtractedData = [],
     skippedExtractedData = [],
     missedExtractedData = [];
-  medicationNursingTasksData.forEach((item) => {
+  medicationNursingTasksData?.forEach((item) => {
     const { slots } = item;
 
     slots.forEach((slot) => {
@@ -301,6 +301,7 @@ export const ExtractNonMedicationTasks = (
       token,
       taskType,
       creator,
+      executionEndTime,
     } = nonMedicationTask;
     const startTimeInDate = new Date(requestedStartTime);
     const taskInfo = {
@@ -313,7 +314,7 @@ export const ExtractNonMedicationTasks = (
         hourCycle: "h23",
       }),
       partOf,
-      isDisabled: isReadMode,
+      isDisabled: isReadMode ? true : !!executionEndTime,
       status,
       isANonMedicationTask: true,
       token,

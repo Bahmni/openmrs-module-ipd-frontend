@@ -82,7 +82,7 @@ describe("AddEmergencyTasks", () => {
   });
 
   it("should render the component with loading state", () => {
-    const { getByText, container } = render(
+    const { getAllByText, container } = render(
       <IPDContext.Provider value={{ config: mockConfig }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
@@ -90,7 +90,7 @@ describe("AddEmergencyTasks", () => {
         />
       </IPDContext.Provider>
     );
-    expect(getByText("Loading...")).toBeTruthy();
+    expect(getAllByText("Loading...")).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
 
