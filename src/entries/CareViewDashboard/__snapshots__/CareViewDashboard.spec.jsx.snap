@@ -169,7 +169,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           </div>
         </div>
         <div
-          class="bx--tile summary-tile"
+          class="bx--tile summary-tile selected-header"
         >
           <span
             class="heading-text"
@@ -183,7 +183,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           </span>
         </div>
         <div
-          class="bx--tile summary-tile"
+          class="bx--tile summary-tile false"
         >
           <span
             class="heading-text"

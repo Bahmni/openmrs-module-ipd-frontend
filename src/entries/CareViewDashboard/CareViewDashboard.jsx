@@ -17,6 +17,7 @@ import { getDashboardConfig } from "../../utils/CommonUtils";
 const CareViewDashboard = (props) => {
   const { hostApi, hostData } = props;
   const [selectedWard, setSelectedWard] = useState({});
+  const [headerSelected, setHeaderSelected] = useState("TOTAL_PATIENTS");
   const [isLoading, setIsLoading] = useState(false);
   const [refreshPatientList, setRefreshPatientList] = useState(false);
   const [wardSummary, setWardSummary] = useState({});
@@ -67,6 +68,8 @@ const CareViewDashboard = (props) => {
               handleRefreshPatientList,
               careViewConfig,
               ipdConfig,
+              headerSelected,
+              setHeaderSelected,
             }}
           >
             <div className="care-view-navigations">
