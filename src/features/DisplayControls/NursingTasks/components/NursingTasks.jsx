@@ -81,11 +81,6 @@ export default function NursingTasks(props) {
   const [nonMedicationTasks, setNonMedicationTasks] = useState([]);
   let startDateTimeChange, endDateTimeChange;
 
-  useEffect(() => {
-    if (medicationNursingTasks.length > 0) {
-      sortNursingTasks(medicationNursingTasks);
-    }
-  }, [medicationNursingTasks]);
 
   useEffect(() => {
     const currentShift = shiftDetails.currentShiftHoursArray;
@@ -329,7 +324,6 @@ export default function NursingTasks(props) {
       ...ExtractNonMedicationTasks(nonMedicationTasks, filterValue, isReadMode),
     ];
     sortNursingTasks(sortedNursingTasks);
-    console.log("sortedNursingTasks", sortedNursingTasks);
     setMedicationNursingTasks(sortedNursingTasks);
   }, [filterValue, nursingTasks, nonMedicationTasks]);
 

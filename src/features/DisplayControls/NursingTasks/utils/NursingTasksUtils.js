@@ -267,13 +267,15 @@ export const getTimeInSeconds = (days) => days * 86400;
 export const sortNursingTasks = (medicationNursingTasks) => {
   medicationNursingTasks.sort((a, b) => {
     const aTime =
-      a[0].startTimeInEpochSeconds ??
-      a[0].administeredTimeInEpochSeconds ??
-      a[0].executionEndTime;
+      a &&
+      (a[0]?.startTimeInEpochSeconds ??
+        a[0]?.administeredTimeInEpochSeconds ??
+        a[0]?.executionEndTime);
     const bTime =
-      b[0].startTimeInEpochSeconds ??
-      b[0].administeredTimeInEpochSeconds ??
-      b[0].executionEndTime;
+      b &&
+      (b[0]?.startTimeInEpochSeconds ??
+        b[0]?.administeredTimeInEpochSeconds ??
+        b[0]?.executionEndTime);
     return aTime - bTime;
   });
 };
@@ -290,8 +292,16 @@ export const ExtractNonMedicationTasks = (
   let currentStartTime = null;
   let currentGroup = [];
   nonMedicationTasks?.forEach((nonMedicationTask) => {
-    const { name, partOf, requestedStartTime, status, uuid, token, taskType } =
-      nonMedicationTask;
+    const {
+      name,
+      partOf,
+      requestedStartTime,
+      status,
+      uuid,
+      token,
+      taskType,
+      creator,
+    } = nonMedicationTask;
     const startTimeInDate = new Date(requestedStartTime);
     const taskInfo = {
       drugName: name,
@@ -308,8 +318,9 @@ export const ExtractNonMedicationTasks = (
       isANonMedicationTask: true,
       token,
       taskType,
+      creator,
     };
-    console.log("startTime", taskInfo.startTime, requestedStartTime);
+
     if (
       (filterValue.id === "pending" || filterValue.id === "allTasks") &&
       taskInfo.status === "REQUESTED"
@@ -324,42 +335,45 @@ export const ExtractNonMedicationTasks = (
   });
   extractedData.push(...pendingExtractedData);
   extractedData.push(...completedExtractedData);
-
-  extractedData.forEach((item) => {
-    if (item.partOf == null && item.taskType.display !== "nursing_activity") {
-      groupedData.push(item);
-    } else {
-      if (item.startTime !== currentStartTime && !item.stopTime) {
-        if (currentGroup.length > 0) {
-          groupedData.push(currentGroup);
-        }
-        currentGroup = [item];
-        currentStartTime = item.startTime;
+  if (filterValue.id === "pending") {
+    extractedData.forEach((item) => {
+      if (item.partOf == null && item.taskType.display !== "nursing_activity") {
+        groupedData.push(item);
       } else {
-        currentGroup.push(item);
-      }
-    }
-  });
-  if (currentGroup.length > 0) {
-    groupedData.push(currentGroup);
-  }
-  extractedData.forEach((item) => {
-    if (item.partOf != null) {
-      for (let i = 0; i < groupedData.length; i++) {
-        const uuid =
-          groupedData[i].length > 0
-            ? groupedData[i][0].uuid
-            : groupedData[i].uuid;
-        if (item.partOf === uuid) {
-          if (Array.isArray(groupedData[i])) {
-            groupedData[i].push(item);
-          } else {
-            groupedData[i] = [groupedData[i], item];
+        if (item.startTime !== currentStartTime && !item.stopTime) {
+          if (currentGroup.length > 0) {
+            groupedData.push(currentGroup);
           }
-          break;
+          currentGroup = [item];
+          currentStartTime = item.startTime;
+        } else {
+          currentGroup.push(item);
         }
       }
+    });
+    if (currentGroup.length > 0) {
+      groupedData.push(currentGroup);
     }
-  });
+    extractedData.forEach((item) => {
+      if (item.partOf != null) {
+        for (let i = 0; i < groupedData.length; i++) {
+          const uuid =
+            groupedData[i].length > 0
+              ? groupedData[i][0].uuid
+              : groupedData[i].uuid;
+          if (item.partOf === uuid) {
+            if (Array.isArray(groupedData[i])) {
+              groupedData[i].push(item);
+            } else {
+              groupedData[i] = [groupedData[i], item];
+            }
+            break;
+          }
+        }
+      }
+    });
+  } else if (extractedData.length > 0) {
+    groupedData.push(extractedData);
+  }
   return groupedData;
 };

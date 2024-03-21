@@ -44,6 +44,7 @@ export default function TaskTile(props) {
     administeredTimeInEpochSeconds,
     serviceType,
     isANonMedicationTask,
+    creator,
   } = newMedicationNursingTask;
 
   const isRelevantTask = getRelevantTaskStatus(
@@ -88,16 +89,19 @@ export default function TaskTile(props) {
               </TooltipDefinition>
             </div>
           </div>
-          <div className="tile-name-cell">
-            <DisplayTags drugOrder={dosingInstructions} />
-          </div>
+          {!isANonMedicationTask && (
+            <div className="tile-name-cell">
+              <DisplayTags drugOrder={dosingInstructions} />
+            </div>
+          )}
           <div
             className="tile-content-subtext"
             style={{ color: isRelevantTask ? "#393939" : "#525252" }}
           >
             <span>{dosage}</span>
+            {creator && <span>{creator.display}</span>}
             {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
-            <span>&nbsp;-&nbsp;{drugRoute}</span>
+            {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
           </div>
           {!(
             dosingInstructions?.asNeeded &&
