@@ -14,6 +14,8 @@ const mockContext = {
     totalPatients: 27,
   },
   setWardSummary: jest.fn,
+  headerSelected: "TOTAL_PATIENTS",
+  setHeaderSelected: jest.fn,
 };
 
 jest.mock("swiper/react", () => ({

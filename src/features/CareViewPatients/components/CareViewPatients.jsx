@@ -21,8 +21,14 @@ import WarningIcon from "../../../icons/warning.svg";
 import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 
 export const CareViewPatients = () => {
-  const { selectedWard, careViewConfig, refreshPatientList, ipdConfig } =
-    useContext(CareViewContext);
+  const {
+    selectedWard,
+    careViewConfig,
+    refreshPatientList,
+    ipdConfig,
+    provider,
+    headerSelected,
+  } = useContext(CareViewContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [previousPage, setPreviousPage] = useState(1);
   const [limit, setLimit] = useState(careViewConfig.defaultPageSize);
@@ -54,7 +60,9 @@ export const CareViewPatients = () => {
       const response = await fetchPatientsList(
         selectedWard.value,
         (currentPage - 1) * limit,
-        limit
+        limit,
+        headerSelected,
+        provider.uuid
       );
       if (response.status === 200) {
         const { admittedPatients, totalPatients } = response.data;
@@ -100,7 +108,7 @@ export const CareViewPatients = () => {
     updateSearchValue("");
     setIsSearched(false);
     getPatientsList();
-  }, [selectedWard, refreshPatientList]);
+  }, [selectedWard, refreshPatientList, headerSelected]);
 
   useEffect(() => {
     if (selectedWard.value) {
