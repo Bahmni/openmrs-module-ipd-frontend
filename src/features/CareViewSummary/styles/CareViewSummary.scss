@@ -38,22 +38,37 @@
     &:hover {
       background-color: #f4f4f4;
       border: 2px solid #0f62fe;
+      cursor: pointer;
 
+      .heading-text {
+        color: #393939;
+      }
       .value-text {
         color: #0f62fe;
       }
     }
+  }
+  .selected-header {
+    background-color: #a8a8a8;
+    border: 1px solid #ededed;
 
-    .selected-header {
-      background-color: #a8a8a8;
-      border: 1px solid #ededed;
+    .heading-text {
+      color: #fff;
+    }
+
+    .value-text {
+      color: #fff;
+    }
+    &:hover {
+      background-color: #f4f4f4;
+      border: 2px solid #0f62fe;
+      cursor: pointer;
 
       .heading-text {
-        color: #fff;
+        color: #393939;
       }
-
       .value-text {
-        color: #fff;
+        color: #0f62fe;
       }
     }
   }
