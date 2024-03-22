@@ -28,7 +28,7 @@
     }
 
     .value-text {
-      color: #004144;
+      color: #0f62fe;
       font-size: 28px;
       line-height: 36px;
       letter-spacing: 0.01em;
@@ -43,11 +43,13 @@
       .heading-text {
         color: #393939;
       }
+
       .value-text {
         color: #0f62fe;
       }
     }
   }
+
   .selected-header {
     background-color: #a8a8a8;
     border: 1px solid #ededed;
@@ -59,16 +61,18 @@
     .value-text {
       color: #fff;
     }
+
     &:hover {
-      background-color: #f4f4f4;
-      border: 2px solid #0f62fe;
-      cursor: pointer;
+      background-color: #a8a8a8;
+      border: 1px solid #ededed;
+      cursor: not-allowed;
 
       .heading-text {
-        color: #393939;
+        color: #fff;
       }
+
       .value-text {
-        color: #0f62fe;
+        color: #fff;
       }
     }
   }
