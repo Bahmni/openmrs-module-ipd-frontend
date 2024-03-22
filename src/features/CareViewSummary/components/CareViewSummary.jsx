@@ -38,6 +38,7 @@ export const CareViewSummary = (props) => {
     setWardSummary,
     headerSelected,
     setHeaderSelected,
+    provider,
   } = useContext(CareViewContext);
   const getWardList = async () => {
     callbacks.setIsLoading(true);
@@ -54,7 +55,7 @@ export const CareViewSummary = (props) => {
   };
   const getWardSummary = async () => {
     callbacks.setIsLoading(true);
-    const response = await fetchWardSummary(selectedWard.value);
+    const response = await fetchWardSummary(selectedWard.value, provider.uuid);
     if (response.status === 200) {
       setWardSummary(response.data);
     } else {
@@ -105,7 +106,9 @@ export const CareViewSummary = (props) => {
       <span className={"heading-text"}>
         <FormattedMessage id={"MY_PATIENTS"} defaultMessage={"My patient(s)"} />
       </span>
-      <span className={"value-text"}>{wardSummary.myPatients || 0}</span>
+      <span className={"value-text"}>
+        {wardSummary.totalProviderPatients || 0}
+      </span>
     </Tile>
   );
   return (

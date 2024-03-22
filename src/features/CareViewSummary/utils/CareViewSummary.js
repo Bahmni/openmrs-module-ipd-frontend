@@ -31,9 +31,11 @@ export const getColumnData = (slot, startTime, endTime) => {
   return columnData;
 };
 
-export const fetchWardSummary = async (wardId) => {
+export const fetchWardSummary = async (wardId, providerUuid) => {
   try {
-    return await axios.get(WARD_SUMMARY_URL.replace("{wardId}", wardId));
+    return await axios.get(WARD_SUMMARY_URL.replace("{wardId}", wardId), {
+      params: { providerUuid },
+    });
   } catch (e) {
     return e;
   }
