@@ -70,7 +70,13 @@ export default function TaskTile(props) {
         className={`${
           isANonMedicationTask ? "nonMedicationTile" : "nursing-tasks-tile"
         } ${isRelevantTask && !stopTime && "relevant-task-tile"} 
-        ${isDisabled && "disabled-tile"}`}
+        ${
+          isDisabled
+            ? isANonMedicationTask
+              ? "non-medication-disabled-tile"
+              : "disabled-tile"
+            : ""
+        }`}
       >
         <div className="tile-content">
           <div className={`tile-title ${stopTime && "red-text"}`}>

@@ -254,11 +254,9 @@ export const disableTaskTilePastNextSlotTime = (
     const upcomingTask = medicationNursingTasks[index + 1][0];
     const upcomingTaskTimeInEpoch = upcomingTask.startTimeInEpochSeconds;
     const currentTimeInEpoch = moment().unix();
-    if (
-      !currentTask.isANonMedicationTask &&
-      upcomingTaskTimeInEpoch <= currentTimeInEpoch
-    )
+    if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
       currentTask.isDisabled = true;
+    }
   }
 };
 

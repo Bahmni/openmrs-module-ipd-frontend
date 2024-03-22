@@ -35,6 +35,15 @@
   }
 }
 
+.non-medication-disabled-tile {
+  border: 2px solid #0f62fe !important;
+  background-color: #e1f3fe !important;
+  cursor: not-allowed;
+  &:hover {
+    background-color: #e1f3fe !important;
+  }
+}
+
 .relevant-task-tile {
   background-color: #e3fed1;
   border: 2px solid #007d79;
