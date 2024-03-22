@@ -23,8 +23,12 @@ export const PatientDetailsCell = ({
   visitDetails,
 }) => {
   const { person, uuid } = patientDetails;
-  const { ipdConfig, provider, handleRefreshPatientList } =
-    useContext(CareViewContext);
+  const {
+    ipdConfig,
+    provider,
+    handleRefreshPatientList,
+    handleRefreshSummary,
+  } = useContext(CareViewContext);
   const [bookmark, setBookmark] = useState({});
   const { shiftDetails: shiftConfig = {} } = ipdConfig;
   const nurse = bookmark?.provider;
@@ -78,6 +82,7 @@ export const PatientDetailsCell = ({
         const participant = getBookmarkStatus(response.data);
         setBookmark(participant);
       }
+      handleRefreshSummary();
     } catch (e) {
       handleRefreshPatientList();
     }
