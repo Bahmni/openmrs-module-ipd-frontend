@@ -39,6 +39,7 @@ export const CareViewSummary = (props) => {
     headerSelected,
     setHeaderSelected,
     provider,
+    refreshSummary,
   } = useContext(CareViewContext);
   const getWardList = async () => {
     callbacks.setIsLoading(true);
@@ -70,7 +71,7 @@ export const CareViewSummary = (props) => {
     if (!_.isEmpty(selectedWard)) {
       getWardSummary();
     }
-  }, [selectedWard]);
+  }, [selectedWard, refreshSummary]);
   useEffect(() => {
     setIsTabletView(false);
     setIsMobileView(false);
