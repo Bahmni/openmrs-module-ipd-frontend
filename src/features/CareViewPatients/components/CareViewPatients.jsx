@@ -19,6 +19,7 @@ import {
 } from "../../../utils/DateTimeUtils";
 import WarningIcon from "../../../icons/warning.svg";
 import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
+import { items } from "../utils/constants";
 
 export const CareViewPatients = () => {
   const {
@@ -37,6 +38,7 @@ export const CareViewPatients = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, updateSearchValue] = useState("");
   const [isSearched, setIsSearched] = useState(false);
+  const [filterValue, setFilterValue] = useState(items[0]);
   const currentEpoch = getPreviousNearbyHourEpoch(
     Math.floor(new Date().getTime() / 1000)
   );
@@ -310,11 +312,14 @@ export const CareViewPatients = () => {
             handleNow={handleNow}
             handleNext={handleNext}
             handlePrevious={handlePrevious}
+            filterValue={filterValue}
+            setFilterValue={setFilterValue}
           />
           {patientList.length > 0 ? (
             <CareViewPatientsSummary
               patientsSummary={patientList}
               navHourEpoch={navHourEpoch}
+              filterValue={filterValue}
             />
           ) : isSearched ? (
             <div className="no-search-results">

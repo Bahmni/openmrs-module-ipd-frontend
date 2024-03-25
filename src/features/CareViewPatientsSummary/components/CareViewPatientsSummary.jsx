@@ -1,14 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import propTypes from "prop-types";
 import "../styles/CareViewPatientsSummary.scss";
-import { getSlotsForPatients } from "../../CareViewSummary/utils/CareViewSummary";
+import {
+  getSlotsForPatients,
+  getTasksForPatients,
+} from "../../CareViewSummary/utils/CareViewSummary";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { PatientDetailsCell } from "./PatientDetailsCell";
 import { SlotDetailsCell } from "./SlotDetailsCell";
 import { Header } from "./Header";
 
-export const CareViewPatientsSummary = ({ patientsSummary, navHourEpoch }) => {
+export const CareViewPatientsSummary = ({
+  patientsSummary,
+  navHourEpoch,
+  filterValue,
+}) => {
   const [slotDetails, setSlotDetails] = useState([]);
+  const [nonMedicationDetails, setNonMedicationDetails] = useState({});
   const { careViewConfig } = useContext(CareViewContext);
   const timeframeLimitInHours = careViewConfig.timeframeLimitInHours;
 
@@ -22,9 +30,20 @@ export const CareViewPatientsSummary = ({ patientsSummary, navHourEpoch }) => {
     setSlotDetails(response);
   };
 
+  const fetchTasks = async (patients) => {
+    const patientUuids = patients.map((patient) => patient.patientDetails.uuid);
+    const response = await getTasksForPatients(
+      patientUuids,
+      navHourEpoch.startHourEpoch,
+      navHourEpoch.endHourEpoch
+    );
+    setNonMedicationDetails(response);
+  };
+
   useEffect(() => {
     if (patientsSummary.length > 0) {
       fetchSlots(patientsSummary);
+      fetchTasks(patientsSummary);
     }
   }, [patientsSummary, navHourEpoch]);
 
@@ -60,6 +79,8 @@ export const CareViewPatientsSummary = ({ patientsSummary, navHourEpoch }) => {
                   uuid={uuid}
                   timeframeLimitInHours={timeframeLimitInHours}
                   navHourEpoch={navHourEpoch}
+                  nonMedicationDetails={nonMedicationDetails}
+                  filterValue={filterValue}
                 />
               </tr>
             );
