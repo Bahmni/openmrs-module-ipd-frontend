@@ -57,7 +57,7 @@ export default function TaskTile(props) {
       className="drug-title"
       style={{
         color: stopTime ? "#FF0000" : isRelevantTask ? "#393939" : "#525252",
-        fontWeight: isRelevantTask ? 500 : 400,
+        fontWeight: !isANonMedicationTask && isRelevantTask ? 500 : 400,
       }}
     >
       {drugName}
@@ -69,7 +69,12 @@ export default function TaskTile(props) {
       <div
         className={`${
           isANonMedicationTask ? "nonMedicationTile" : "nursing-tasks-tile"
-        } ${isRelevantTask && !stopTime && "relevant-task-tile"} 
+        } ${
+          !isANonMedicationTask &&
+          isRelevantTask &&
+          !stopTime &&
+          "relevant-task-tile"
+        } 
         ${
           isDisabled
             ? isANonMedicationTask
@@ -138,7 +143,9 @@ export default function TaskTile(props) {
         <div
           className={`${
             isANonMedicationTask ? "nonMedicationTile" : "nursing-tasks-tile"
-          } stacked-tile ${isRelevantTask && "relevant-task-tile"}`}
+          } stacked-tile ${
+            !isANonMedicationTask && isRelevantTask && "relevant-task-tile"
+          }`}
         ></div>
       )}
     </div>
