@@ -245,9 +245,13 @@ const AddEmergencyTasks = (props) => {
     const utcTimeEpoch = dateTimeToEpochUTCTime(scheduleDate);
     const nonMedicationPayload = {
       name: task,
-      restrictionPeriodEndTime: utcTimeEpoch,
+      requestedStartTime: utcTimeEpoch * 1000,
+      requestedEndTime: utcTimeEpoch * 1000,
       patientUuid: patientId,
       encounterUuid: encounterUuid.encounterUuid,
+      intent:"ORDER",
+      taskType:"nursing_activity",
+      status:"REQUESTED"
     };
     return nonMedicationPayload;
   };
@@ -564,10 +568,6 @@ const AddEmergencyTasks = (props) => {
                       labelText={`Schedule Time (${timeText24})`}
                       width={"250px"}
                       isRequired={true}
-                      // customValidation={customValidation}
-                      // actionForInvalidTime={actionForInvalidTime}
-                      // invalid={isInvalidTime}
-                      // invalidText={invalidText}
                     />
                   ) : (
                     <TimePicker
@@ -579,10 +579,6 @@ const AddEmergencyTasks = (props) => {
                       labelText={`Schedule Time (${timeText12})`}
                       width={"155px"}
                       isRequired={true}
-                      // customValidation={customValidation}
-                      // actionForInvalidTime={actionForInvalidTime}
-                      // invalid={isInvalidTime}
-                      // invalidText={invalidText}
                     />
                   )}
                 </div>

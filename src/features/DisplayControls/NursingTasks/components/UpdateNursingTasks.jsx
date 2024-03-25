@@ -50,6 +50,7 @@ const UpdateNursingTasks = (props) => {
   const [showErrors, updateShowErrors] = useState(false);
   const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
   const [isPRNMedication, updateIsPRNMedication] = useState(false);
+  const [isNonMedication, updateIsNonMedication] = useState(false);
   const [isAnyMedicationSkipped, setIsAnyMedicationSkipped] = useState(false);
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
   const [isAnyMedicationAdministered, setIsAnyMedicationAdministered] =
@@ -86,6 +87,13 @@ const UpdateNursingTasks = (props) => {
     setShowSuccessNotification(true);
     setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
     setOpenConfirmationModal(false);
+    updateNursingTasksSlider(false);
+    updateIsPRNMedication(false);
+  };
+
+  const saveAdministeredNonMedicationTasks = () => {
+    setShowSuccessNotification(true);
+    setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
     updateNursingTasksSlider(false);
     updateIsPRNMedication(false);
   };
@@ -151,7 +159,8 @@ const UpdateNursingTasks = (props) => {
   };
   useEffect(() => {
     medicationTasks.map((medicationTask) => {
-      updateIsPRNMedication(medicationTask?.dosingInstructions.asNeeded);
+      updateIsPRNMedication(medicationTask?.dosingInstructions?.asNeeded);
+      updateIsNonMedication(medicationTask?.taskType?.display)
       updateTasks((prev) => {
         return {
           ...prev,
@@ -298,8 +307,12 @@ const UpdateNursingTasks = (props) => {
 
   const handleSave = () => {
     if (Object.keys(errors).length === 0) {
-      setOpenConfirmationModal(true);
+        if(!isNonMedication)
+        {
+          setOpenConfirmationModal(true)
+        };
     }
+   if (!isNonMedication) {
     updateShowErrors(true);
     setAdministeredTasks({});
     setSkippedTasks({});
@@ -315,7 +328,11 @@ const UpdateNursingTasks = (props) => {
           [key]: { ...tasks[key], status: "not-done" },
         }));
       }
-    });
+    })}
+    else {
+       const response = 200;
+       response === 200 ? saveAdministeredNonMedicationTasks() : null;
+    };
   };
 
   const handleClose = () => {
@@ -428,23 +445,42 @@ const UpdateNursingTasks = (props) => {
                     disabled={!tasks[medicationTask.uuid]?.isRelevantTask}
                   />
                 )}
-                <div className={"medication-name"}>
-                  <div
+                 <div className={"medication-name"}>
+                 {!isNonMedication ? (<div
                     className={`name ${
                       tasks[medicationTask.uuid]?.skipped && "red-text"
                     }`}
                   >
                     {medicationTask.drugName}
-                  </div>
-                  <DisplayTags drugOrder={medicationTask.dosingInstructions} />
+                  </div>) : (<div
+                    className={`name ${
+                      tasks[medicationTask.uuid]?.skipped && "red-text"
+                    }`}
+                  >
+                    <FormattedMessage
+                  id={"NON_MEDICATION_SCHEDULE_TEXT"}
+                  defaultMessage={"Patient has a specialist appointment at "}/>
+                {enable24HourTime
+                ? formatTime(
+                    medicationTasks[0].startTime,
+                    timeFormatfor24Hr,
+                    timeFormatfor24Hr
+                  )
+                : formatTime(
+                    medicationTasks[0].startTime,
+                    timeFormatfor24Hr,
+                    timeFormatFor12hr
+                  )}
+                  </div>)}
+                 {!isNonMedication ? <DisplayTags drugOrder={medicationTask.dosingInstructions} />:<></>}
                 </div>
-                <div className="medication-details">
+                {tasks[medicationTask.uuid]?.route ? (<div className="medication-details">
                   <span>{medicationTask.dosage}</span>
                   {medicationTask.doseType && (
                     <span>&nbsp;-&nbsp;{medicationTask.doseType}</span>
                   )}
                   <span>&nbsp;-&nbsp;{medicationTask.drugRoute}</span>
-                </div>
+                </div>):<></>}
                 {(tasks[medicationTask.uuid]?.actualTime ||
                   tasks[medicationTask.uuid]?.skipped) && (
                   <div style={{ display: "flex" }}>
@@ -482,7 +518,7 @@ const UpdateNursingTasks = (props) => {
                           width={"150px"}
                         />
                       ))}
-                    <div
+                    {!isNonMedication ? (<div
                       className={`${
                         Boolean(tasks[medicationTask.uuid]?.actualTime) &&
                         "notes-text-area"
@@ -518,10 +554,10 @@ const UpdateNursingTasks = (props) => {
                           />
                         </div>
                       )}
-                    </div>
+                    </div>):<></>}
                   </div>
                 )}
-                {!tasks[medicationTask.uuid]?.dosingInstructions.asNeeded && (
+                {!tasks[medicationTask.uuid]?.dosingInstructions?.asNeeded && (
                   <OverflowMenu
                     flipped={true}
                     disabled={tasks[medicationTask.uuid]?.isSelected}

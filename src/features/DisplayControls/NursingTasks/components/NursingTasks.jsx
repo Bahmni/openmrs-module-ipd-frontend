@@ -339,8 +339,8 @@ export default function NursingTasks(props) {
                 if (
                   !isSliderOpen.nursingTasks &&
                   !medicationNursingTask[0].isDisabled &&
-                  !isStoppedSlot &&
-                  !medicationNursingTask[0].isANonMedicationTask
+                  !isStoppedSlot 
+                  // !medicationNursingTask[0].isANonMedicationTask
                 ) {
                   setSelectedMedicationTask(medicationNursingTask);
                   updateNursingTasksSlider(true);

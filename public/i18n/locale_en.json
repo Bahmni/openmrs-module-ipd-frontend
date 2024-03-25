@@ -17,7 +17,7 @@
   "ADMINISTERED_LATE": "Administered Late",
   "NOT_ADMINISTERED": "Not Administered",
   "LATE": "Late",
-  "ADMINISTERED": "Administered",
+  "ADMINISTERED": "Completed",
   "PENDING": "Pending",
   "NOTE": "Note",
   "NO_DIAGNOSIS_MESSAGE": "No Diagnosis found for this patient",
@@ -82,5 +82,6 @@
   "STOP_DRUG_SUCCESS_NOTIFICATION": "Medication stopped successfully",
   "NO_CONFIG_MESSAGE": "Please specify IPD Dashboard configurations",
   "NOT_CURRENT_SHIFT_MESSAGE": "You're not viewing the current shift",
-  "COMPLETED": "Completed"
+  "COMPLETED": "Completed",
+  "NON_MEDICATION_SCHEDULE_TEXT": "Patient has a specialist appointment at "
 }

@@ -1116,8 +1116,10 @@ export const mockPendingPRNTaskTileData = [
 
 export const mockNonMedicationTileData = [
   {
-    drugName: "Paracetamol 125 mg Tablet",
+    drugName: "Non-Medication task",
     uuid: "72af0cfa-be74-42a8-b650-45f6978314dd",
+    startTimeInEpochSeconds: 1703601000,
+    startTime: "16:38",
     isDisabled: false,
     partOf: null,
     taskType: { display: "nursing_activity" },
