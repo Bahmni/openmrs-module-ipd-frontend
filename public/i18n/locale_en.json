@@ -69,7 +69,7 @@
   "EMERGENCY_TASK_CONFIRMATION": "Please confirm the emergency medication task",
   "NON_MEDICATION_TASK_CONFIRMATION": "Please confirm the non-medication task",
   "EMERGENCY_TASK_SAVE_MESSAGE": "Emergency Medication task created successfully.",
-  "NON_MEDICATION_TASK_SAVE_MESSAGE": "Non Medication task created successfully.",
+  "NON_MEDICATION_TASK_SAVE_MESSAGE": "Non-Medication task created successfully.",
   "PATIENT_DASHBOARD": "Patient Dashboard",
   "VISIT_SUMMARY": "Visit Summaries",
   "EDIT_DRUG_CHART": "Edit Drug Chart",
