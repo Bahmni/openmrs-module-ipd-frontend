@@ -88,6 +88,9 @@ export const GET_SLOTS_FOR_PATIENTS_URL =
   RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
 export const NON_MEDICATION_BASE_URL = RESTWS_V1 + "/tasks";
 
+export const GET_TASKS_FOR_PATIENTS_URL =
+  RESTWS_V1 + "/tasks";
+
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
 export const dateFormat = "DD/MM/YYYY";

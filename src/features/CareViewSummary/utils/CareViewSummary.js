@@ -3,6 +3,7 @@ import {
   GET_SLOTS_FOR_PATIENTS_URL,
   LIST_OF_WARDS_URL,
   WARD_SUMMARY_URL,
+  GET_TASKS_FOR_PATIENTS_URL,
 } from "../../../constants";
 
 const fetchWards = async () => {
@@ -26,6 +27,21 @@ export const getColumnData = (slot, startTime, endTime) => {
   slot.currentSlots.forEach((slotItem) => {
     if (slotItem.startTime >= startTime && slotItem.startTime < endTime) {
       columnData.push(slotItem);
+    }
+  });
+  return columnData;
+};
+
+export const getTaskColumnData = (tasks, startTime, endTime) => {
+  let columnData = [];
+  tasks?.forEach((task) => {
+    const taskStartTime = task.requestedStartTime / 1000;
+    if (taskStartTime >= startTime && taskStartTime < endTime) {
+      columnData.push({
+        ...task,
+        startTime: taskStartTime,
+        isNonMedication: true,
+      });
     }
   });
   return columnData;
@@ -56,6 +72,18 @@ export const getSlotsForPatients = async (
     return response.data;
   }
   return [];
+};
+
+export const getTasksForPatients = async (patientUuids, startTime, endTime) => {
+  const patientUuidParams = patientUuids
+    .map((uuid) => `patientUuids=${uuid}`)
+    .join("&");
+  const TASK_URL = `${GET_TASKS_FOR_PATIENTS_URL}?${patientUuidParams}&startTime=${startTime}&endTime=${endTime}`;
+  const response = await axios.get(TASK_URL);
+  if (response.status === 200) {
+    return response.data;
+  }
+  return {};
 };
 
 export const getWardDetails = async () => {
