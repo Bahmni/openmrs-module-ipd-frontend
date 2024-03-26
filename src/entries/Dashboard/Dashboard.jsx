@@ -4,24 +4,31 @@ import {
   AccordionItem,
   Header,
   HeaderMenuButton,
+  Link,
   Loading,
   SideNav,
   SideNavItems,
   SideNavLink,
 } from "carbon-components-react";
 import { ArrowLeft } from "@carbon/icons-react/next";
+import { Application24, Home24, UserActivity24 } from "@carbon/icons-react";
 import { componentMapping } from "./componentMapping";
 import "./Dashboard.scss";
 import PropTypes from "prop-types";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
-import { getDashboardConfig } from "../../utils/CommonUtils";
+import {
+  getAppLandingPageUrl,
+  getDashboardConfig,
+  getPatientDashboardUrl,
+} from "../../utils/CommonUtils";
 import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
 import RefreshDisplayControl from "../../context/RefreshDisplayControl";
 import { SliderContext } from "../../context/SliderContext";
 import { IPDContext } from "../../context/IPDContext";
 import { AllMedicationsContextProvider } from "../../context/AllMedications";
 import { FormattedMessage } from "react-intl";
-import { RESOLUTION_VALUE, IPD_PAGE_TITLE } from "../../constants";
+import { homePageUrl, RESOLUTION_VALUE, IPD_PAGE_TITLE } from "../../constants";
+import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
@@ -32,6 +39,7 @@ export default function Dashboard(props) {
     provider,
     isReadMode = false,
     visitSummary,
+    source,
   } = hostData;
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
@@ -51,6 +59,7 @@ export default function Dashboard(props) {
   const [isConfigLoaded, setIsConfigLoaded] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isShowPatientDetailsOpen, setPatientDetailsOpen] = useState(false);
+  document.title = "IPD";
 
   const noConfigDataMessage = (
     <FormattedMessage
@@ -161,20 +170,31 @@ export default function Dashboard(props) {
           >
             <main className="ipd-page">
               <Header
-                className="border-bottom-0 header-bg-color"
+                className="border-bottom-0 header-bg-color ipd-header"
                 aria-label="IBM Platform Name"
               >
-                <HeaderMenuButton
-                  aria-label="Open menu"
-                  className="header-nav-toggle-btn"
-                  style={
-                    windowWidth < RESOLUTION_VALUE && checkSliderStatus()
-                      ? { display: "none" }
-                      : {}
-                  }
-                  onClick={onClickSideNavExpand}
-                  isActive={isSideNavExpanded}
-                />
+                <div className={"header-nav"}>
+                  <HeaderMenuButton
+                    aria-label="Open menu"
+                    className="header-nav-toggle-btn"
+                    style={
+                      windowWidth < RESOLUTION_VALUE && checkSliderStatus()
+                        ? { display: "none" }
+                        : {}
+                    }
+                    onClick={onClickSideNavExpand}
+                    isActive={isSideNavExpanded}
+                  />
+                  <Link href={homePageUrl} renderIcon={Home24} />
+                  <Link
+                    href={getAppLandingPageUrl(source)}
+                    renderIcon={Application24}
+                  />
+                  <Link
+                    href={getPatientDashboardUrl(patient?.uuid)}
+                    renderIcon={UserActivity24}
+                  />
+                </div>
                 <SideNav
                   id="Side-Nav"
                   aria-label="Side navigation"
@@ -196,6 +216,7 @@ export default function Dashboard(props) {
                     })}
                   </SideNavItems>
                 </SideNav>
+                <ProviderActions onLogOut={hostApi.onLogOut} />
               </Header>
 
               <section

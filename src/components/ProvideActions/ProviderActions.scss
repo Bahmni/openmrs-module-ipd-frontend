@@ -1,0 +1,29 @@
+.provider-actions {
+  gap: 16px;
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  > * {
+    cursor: pointer;
+  }
+  .provider-menu {
+    display: flex;
+  }
+  .username {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .dropdown {
+    position: absolute;
+    top: 3rem;
+    right: 0;
+    background-color: #007d79;
+    width: 200px;
+    > * {
+      height: 3rem;
+      line-height: 3rem;
+      text-align: center;
+    }
+  }
+}
