@@ -1,28 +1,27 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
+  fetchAddressMapping,
+  fetchPatientProfile,
+  getBedInformation,
+  getConfigsForPatientContactDetails,
   getGender,
   mapContact,
-  getConfigsForPatientContactDetails,
-  fetchPatientProfile,
   mapRelationships,
-  fetchAddressMapping,
-  getBedInformation,
 } from "../utils/PatientHeaderUtils";
 import {
-  Tile,
-  Grid,
-  Row,
   Column,
-  SkeletonText,
+  Grid,
   Link,
   OverflowMenu,
   OverflowMenuItem,
+  Row,
+  SkeletonText,
+  Tile,
 } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
 import "../styles/PatientHeader.scss";
 import { ChevronDown20, ChevronUp20, HospitalBed16 } from "@carbon/icons-react";
-import { getPatientDashboardUrl } from "../../../../utils/CommonUtils";
 import PatientDetails from "./PatientDetails";
 import PatientMovementModal from "./PatientMovementModal";
 import { formatDate } from "../../../../utils/DateTimeUtils";
@@ -57,19 +56,12 @@ export const PatientHeader = (props) => {
       <FormattedMessage id={"Relationships"} defaultMessage={"Relationships"} />
     ),
   };
-  const patientDashboard = (
-    <FormattedMessage
-      id="PATIENT_DASHBOARD"
-      defaultMessage="Patient Dashboard"
-    />
-  );
   const visitSummaryMessage = (
     <FormattedMessage id="VISIT_SUMMARY" defaultMessage="Visit Summaries" />
   );
 
   const getContactDetailsConfigs = async () => {
-    const patientContactConfigs = await getConfigsForPatientContactDetails();
-    return patientContactConfigs;
+    return await getConfigsForPatientContactDetails();
   };
 
   const extractPatientInfo = (patientInfo, locationMap) => {
@@ -146,16 +138,6 @@ export const PatientHeader = (props) => {
                       <h1 className="patient-name">
                         {patientDetails?.fullName}
                       </h1>
-                      <Link
-                        onClick={() =>
-                          window.open(
-                            getPatientDashboardUrl(patientId),
-                            "_blank"
-                          )
-                        }
-                      >
-                        {patientDashboard}
-                      </Link>
                       <Link onClick={() => openVisitSummary()}>
                         {visitSummaryMessage}
                       </Link>

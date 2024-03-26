@@ -68,7 +68,6 @@
   "NURSING_TASKS_SAVE_MESSAGE": "Medication task(s) updated successfully",
   "EMERGENCY_TASK_CONFIRMATION": "Please confirm the emergency medication task",
   "EMERGENCY_TASK_SAVE_MESSAGE": "Emergency Medication task created successfully.",
-  "PATIENT_DASHBOARD": "Patient Dashboard",
   "VISIT_SUMMARY": "Visit Summaries",
   "EDIT_DRUG_CHART": "Edit Drug Chart",
   "DRUG_CHART_MODAL_EDIT_MESSAGE": "Medication task(s) updated successfully",
