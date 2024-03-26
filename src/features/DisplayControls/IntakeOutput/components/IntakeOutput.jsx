@@ -6,30 +6,34 @@ import { Button, Loading } from "carbon-components-react";
 
 import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
 import IntakeOutputTable from "./IntakeOutputTable";
-import {intakeOutputMockData} from "../utils/IntakeOutputMockData.js";
 import { IPDContext } from "../../../../context/IPDContext";
 import { displayPeriodTimingsFormat, timeFormatFor12hr } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
 import { formatDate } from "../../../../utils/DateTimeUtils";
-import { 
+import {
   getSortedObsData,
-  transformObsData, 
-  intakeOutputHeaders, 
-  currentPeriodRange, 
-  NotCurrentPeriodMessage, 
+  transformObsData,
+  intakeOutputHeaders,
+  currentPeriodRange,
+  NotCurrentPeriodMessage,
   NoDataForSelectedPeriod,
   isCurrentPeriod,
-  filterDataForRange } from "../utils/IntakeOutputUtils.js";
-
+  filterDataForRange,
+  fetchIntakeOutputData,
+} from "../utils/IntakeOutputUtils.js";
 
 const IntakeOutput = () => {
-  const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
-  const {intakeOutputConfig = {} } = config;
+  const { config, isReadMode, visitSummary, patient } = useContext(IPDContext);
+  const { intakeOutputConfig = {} } = config;
   const [consolidatedIOData, setConsolidatedIOData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [notCurrentPeriod, setNotCurrentPeriod] = useState(false);
+  const [intakeOutputData, setIntakeOutputData] = useState([]);
   const { enable24HourTime = {} } = config;
-  const { periodDetails: periodConfig = {} } = intakeOutputConfig;
+  const {
+    periodDetails: periodConfig = {},
+    dashboardConfig: dashboardConfig = {},
+  } = intakeOutputConfig;
   const currentPeriod = currentPeriodRange(
     isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
     periodConfig
@@ -45,6 +49,20 @@ const IntakeOutput = () => {
     next: isReadMode ? true : false,
   });
 
+  const callFetchIntakeAndOutputData = async () => {
+    try {
+      const response = await fetchIntakeOutputData(
+        patient.uuid,
+        dashboardConfig.conceptNames,
+        dashboardConfig.numberOfVisits
+      );
+      setIntakeOutputData(response);
+    } catch (e) {
+      return e;
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleCurrent = () => {
     setNotCurrentPeriod(false);
     setIsLoading(true);
@@ -52,6 +70,7 @@ const IntakeOutput = () => {
       startDate: currentPeriod.startDateTime,
       endDate: currentPeriod.endDateTime
     });
+    callFetchIntakeAndOutputData();
   };
 
   const handlePrevious = () => {
@@ -61,6 +80,7 @@ const IntakeOutput = () => {
       startDate: moment(startEndDates.startDate).clone().subtract(periodConfig.durationInHours, 'hours'),
       endDate: startEndDates.startDate
     });
+    callFetchIntakeAndOutputData();
   };
 
   const handleNext = () => {
@@ -70,6 +90,7 @@ const IntakeOutput = () => {
       startDate: startEndDates.endDate,
       endDate: moment(startEndDates.endDate).clone().add(periodConfig.durationInHours, 'hours')
     });
+    callFetchIntakeAndOutputData();
   };
 
   const periodTiming = () => {
@@ -137,19 +158,19 @@ const IntakeOutput = () => {
       ? setNotCurrentPeriod(false)
       : setNotCurrentPeriod(true);
     
-    const filteredData = filterDataForRange(intakeOutputMockData, intakeOutputConfig.timeConceptNames, startEndDates)
+    const filteredData = filterDataForRange(intakeOutputData, intakeOutputConfig.timeConceptNames, startEndDates)
     const sortedObsData = getSortedObsData(filteredData, intakeOutputConfig.timeConceptNames);
     setConsolidatedIOData(transformObsData(sortedObsData, intakeOutputConfig));
     setIsLoading(false);
-  },[startEndDates]);
+  }, [startEndDates, intakeOutputData]);
 
   useEffect(() => {
     updatedStartEndDates({
       startDate: currentPeriod.startDateTime,
       endDate: currentPeriod.endDateTime,
     });
+    callFetchIntakeAndOutputData();
   }, []);
-
   return (
     <div className="intake-output-content-container display-container">
       <div className={"intake-output-navigation"}>

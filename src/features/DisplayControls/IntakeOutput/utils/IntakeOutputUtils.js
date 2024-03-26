@@ -1,9 +1,13 @@
 import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
-import { defaultDateTimeFormat } from "../../../../constants";
+import {
+  defaultDateTimeFormat,
+  INTAKE_OUTPUT_DATA_BASE_URL,
+} from "../../../../constants";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { FormattedMessage } from "react-intl";
 import moment from "moment";
+import axios from "axios";
 
 export const filterDataForRange = (data, timeConceptNames, startEndDates) => {
     return (data.filter((obs) => {
@@ -176,4 +180,24 @@ export const isCurrentPeriod = (startEndDates, periodConfig = {}) => {
     const currentPeriod = currentPeriodRange(new Date(), periodConfig);
     return ((moment(currentPeriod.startDateTime).startOf('minute')).isSame(moment(startEndDates.startDate).startOf('minute'))
     && (moment(currentPeriod.endDateTime).startOf('minute')).isSame(moment(startEndDates.endDate).startOf('minute')))
+};
+
+export const fetchIntakeOutputData = async (
+  patientUuid,
+  conceptNames,
+  numberOfVisits
+) => {
+  const conceptParams = conceptNames
+    .map((concept) => `concept=${concept.replace(" ", "+")}`)
+    .join("&");
+  const INTAKE_OUTPUT_URL = `${INTAKE_OUTPUT_DATA_BASE_URL}${conceptParams}&numberOfVisits=${numberOfVisits}&patientUuid=${patientUuid}`;
+  try {
+    const response = await axios.get(INTAKE_OUTPUT_URL, {
+      withCredentials: true,
+    });
+    if (response.status !== 200) throw new Error(response.statusText);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
 };
