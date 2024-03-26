@@ -105,6 +105,12 @@ const AddEmergencyTasks = (props) => {
       defaultMessage={"Future time is not allowed"}
     />
   );
+  const invalidPastTimeText = (
+    <FormattedMessage
+      id={"FUTURE_TIME"}
+      defaultMessage={"Past time is not allowed"}
+    />
+  );
   const fetchDrugOrderConfig = async () => {
     setIsLoading(true);
     const drugOrderConfigResponse = await getDrugOrdersConfig();
@@ -249,9 +255,9 @@ const AddEmergencyTasks = (props) => {
       requestedEndTime: utcTimeEpoch * 1000,
       patientUuid: patientId,
       encounterUuid: encounterUuid.encounterUuid,
-      intent:"ORDER",
-      taskType:"nursing_activity",
-      status:"REQUESTED"
+      intent: "ORDER",
+      taskType: "nursing_activity",
+      status: "REQUESTED",
     };
     return nonMedicationPayload;
   };
@@ -379,6 +385,25 @@ const AddEmergencyTasks = (props) => {
         setInvalidText(invalidFutureTimeText);
       } else {
         setIsInvalidTime(false);
+      }
+    }
+  };
+
+  const customNonMedicationTaskValidation = (time) => {
+    if (time) {
+      if (
+        isTimeInFuture(
+          time,
+          formatDate(
+            new Date(),
+            enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
+          )
+        )
+      ) {
+        setIsInvalidTime(false);
+      } else {
+        setIsInvalidTime(true);
+        setInvalidText(invalidPastTimeText);
       }
     }
   };
@@ -568,6 +593,10 @@ const AddEmergencyTasks = (props) => {
                       labelText={`Schedule Time (${timeText24})`}
                       width={"250px"}
                       isRequired={true}
+                      customValidation={customNonMedicationTaskValidation}
+                      actionForInvalidTime={actionForInvalidTime}
+                      invalid={isInvalidTime}
+                      invalidText={invalidText}
                     />
                   ) : (
                     <TimePicker
@@ -579,6 +608,10 @@ const AddEmergencyTasks = (props) => {
                       labelText={`Schedule Time (${timeText12})`}
                       width={"155px"}
                       isRequired={true}
+                      customValidation={customNonMedicationTaskValidation}
+                      actionForInvalidTime={actionForInvalidTime}
+                      invalid={isInvalidTime}
+                      invalidText={invalidText}
                     />
                   )}
                 </div>

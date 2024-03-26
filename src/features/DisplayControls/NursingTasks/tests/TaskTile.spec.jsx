@@ -113,6 +113,6 @@ describe("TaskTile", () => {
         <TaskTile medicationNursingTask={mockNonMedicationTileData} />
       </IPDContext.Provider>
     );
-    expect(getByText("bailly.rurangirwa")).toBeTruthy();
+    expect(getByText("Bailly Rurangirwa")).toBeTruthy();
   });
 });
