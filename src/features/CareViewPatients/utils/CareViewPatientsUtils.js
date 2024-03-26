@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  BOOKMARK_PATIENT_BASE_URL,
   GET_PATIENT_LIST_URL,
   GET_SEARCH_PATIENT_LIST_URL,
 } from "../../../constants";
@@ -35,4 +36,8 @@ export const fetchPatientsListBySearch = async (
   } catch (e) {
     return e;
   }
+};
+
+export const bookmarkPatient = async (patientDetails) => {
+  return await axios.post(BOOKMARK_PATIENT_BASE_URL, patientDetails);
 };

@@ -1,5 +1,9 @@
 import moment from "moment";
 import { dateFormat, defaultDateFormat } from "../constants";
+import {
+  currentShiftHoursArray,
+  getDateTime,
+} from "../features/DisplayControls/DrugChart/utils/DrugChartUtils";
 
 export const formatDate = (value, format = defaultDateFormat) => {
   return value ? moment(value).format(format) : value;
@@ -11,6 +15,40 @@ export const formatTime = (time, inputFormat, outputFormat) => {
 
 export const areDatesSame = (date1, date2) => {
   return formatDate(date1) === formatDate(date2);
+};
+
+export const epochTo24HourFormat = (epochSeconds) => {
+  return Number(moment.unix(epochSeconds).format("HH"));
+};
+
+const getDateTimeForHour = (hour, date = new Date()) => {
+  return getDateTime(date, hour) / 1000;
+};
+
+export const getCurrentShiftTimes = (shiftConfig) => {
+  const { currentShiftHoursArray: currentShift } = currentShiftHoursArray(
+    new Date(),
+    shiftConfig
+  );
+  const firstHour = currentShift[0];
+
+  const lastHour = currentShift[currentShift.length - 1];
+  let startDateTime = getDateTimeForHour(firstHour);
+
+  let endDateTime = getDateTimeForHour(lastHour + 1);
+  if (lastHour < firstHour) {
+    const currentDate = new Date();
+
+    const currentHour = currentDate.getHours();
+    if (currentHour > 12) {
+      currentDate.setDate(currentDate.getDate() + 1);
+      endDateTime = getDateTimeForHour(lastHour + 1, currentDate);
+    } else {
+      currentDate.setDate(currentDate.getDate() - 1);
+      startDateTime = getDateTimeForHour(firstHour, currentDate);
+    }
+  }
+  return { startDateTime, endDateTime };
 };
 
 export const epochTo24HourTimeFormat = (epochSeconds, includeDate = false) => {
@@ -33,6 +71,11 @@ export const getPreviousNearbyHourEpoch = (time) => {
 export const getTimeInFuture = (startTimeEpoch, offsetHours) => {
   const futureTime = moment.unix(startTimeEpoch).add(offsetHours, "hours");
   return futureTime.unix();
+};
+
+export const getTimeInPast = (startTimeEpoch, offsetHours) => {
+  const pastTime = moment.unix(startTimeEpoch).subtract(offsetHours, "hours");
+  return pastTime.unix();
 };
 
 export const epochTo12HourTimeFormat = (epochSeconds) => {

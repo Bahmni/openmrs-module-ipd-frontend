@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header should render header component 1`] = `
+<div>
+  <tr
+    class="patient-row-container"
+  >
+    <td
+      class="patient-details-container"
+      data-testid="patient-details-header"
+    />
+    <td
+      class="slot-details-header"
+      data-testid="slot-details-header-0"
+    >
+      <div
+        class="time"
+        data-testid="time-frame-0"
+      >
+        12:00
+      </div>
+    </td>
+    <td
+      class="slot-details-header"
+      data-testid="slot-details-header-1"
+    >
+      <div
+        class="time"
+        data-testid="time-frame-1"
+      >
+        13:00
+      </div>
+    </td>
+  </tr>
+</div>
+`;

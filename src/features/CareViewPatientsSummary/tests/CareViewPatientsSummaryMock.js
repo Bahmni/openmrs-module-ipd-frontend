@@ -52,7 +52,27 @@ export const mockPatientsList = {
         column: 3,
         status: "OCCUPIED",
       },
+      careTeam: {
+        uuid: "ce879c0f-db82-4dcf-9ea7-b6701ebe987b",
+        patientUuid: "17fd50c7-8f9e-48da-b9ed-88c1bd358798",
+        participants: [
+          {
+            uuid: "fc4d7a50-da94-4266-980e-eced24a64533",
+            provider: {
+              uuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
+              display: "Super Man",
+            },
+            startTime: 1710469800000,
+            endTime: 1710509400000,
+            voided: false,
+          },
+        ],
+      },
       newTreatments: 0,
+      visitDetails: {
+        uuid: "626b822d-741e-4a86-95ff-626eea753c4c",
+        display: "IPD",
+      },
     },
     {
       patientDetails: {
@@ -106,7 +126,11 @@ export const mockPatientsList = {
         column: 1,
         status: "OCCUPIED",
       },
-      newTreatments: 0,
+      newTreatments: 1,
+      visitDetails: {
+        uuid: "626b822d-741e-4a86-95ff-636eea753c2c",
+        display: "IPD",
+      },
     },
     {
       patientDetails: {
@@ -218,12 +242,57 @@ export const mockPatientsList = {
         column: 1,
         status: "OCCUPIED",
       },
+      careTeam: {
+        uuid: "ce879c0f-db82-4dcf-9ea7-b6701ebe987b",
+        patientUuid: "3ab51ec0-4650-4400-9aaa-75f30ece0208",
+        participants: [
+          {
+            uuid: "fc4d7a50-da94-4266-980e-eced24a64533",
+            provider: {
+              uuid: "c1c26908-3f10-11e4-adec-0800271c1b7",
+              display: "Super Man",
+            },
+            startTime: 1710469800000,
+            endTime: 1710509400000,
+            voided: false,
+          },
+        ],
+      },
       newTreatments: 0,
+      visitDetails: {
+        uuid: "627b822d-741e-4a96-45ff-626eea753c4c",
+        display: "IPD",
+      },
     },
   ],
   totalPatients: 25,
 };
 
+export const mockParticipantData = {
+  data: {
+    uuid: "ce879c0f-db82-4dcf-9ea7-b6701ebe987b",
+    patientUuid: "7278eb93-8c1d-4ef4-bcbf-4c6ee91365f7",
+    participants: [
+      {
+        uuid: "fc4d7a50-da94-4266-980e-eced24a64533",
+        provider: {
+          uuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
+          display: "Super Man",
+          links: [
+            {
+              rel: "self",
+              uri: "http://localhost/openmrs/ws/rest/v1/provider/c1c26908-3f10-11e4-adec-0800271c1b75",
+              resourceAlias: "provider",
+            },
+          ],
+        },
+        startTime: 1710469800000,
+        endTime: 1710509400000,
+        voided: false,
+      },
+    ],
+  },
+};
 export const mockSearchPatientsList = {
   admittedPatients: [
     {
@@ -578,4 +647,3 @@ export const mockSearchEmptyPatientsList = {
   admittedPatients: [],
   totalPatients: 0,
 };
-

@@ -82,5 +82,11 @@
   "STOP_DRUG_SUCCESS_NOTIFICATION": "Medication stopped successfully",
   "NO_CONFIG_MESSAGE": "Please specify IPD Dashboard configurations",
   "NOT_CURRENT_SHIFT_MESSAGE": "You're not viewing the current shift",
-  "COMPLETED": "Completed"
+  "COMPLETED": "Completed",
+  "MY_PATIENTS": "My patient(s)",
+  "TOTAL_PATIENTS": "Total patients",
+  "TOTAL_TEXT": "Total",
+  "CURRENT_PERIOD": "Current Period",
+  "NOT_CURRENT_PERIOD_MESSAGE": "You're not viewing the current period",
+  "NO_IO_DATA_MESSAGE": "No intake output data is available for the patient in this period"
 }

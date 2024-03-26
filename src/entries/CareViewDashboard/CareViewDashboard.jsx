@@ -15,15 +15,20 @@ import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
 import { getDashboardConfig } from "../../utils/CommonUtils";
 
 const CareViewDashboard = (props) => {
-  const { hostApi } = props;
+  const { hostApi, hostData } = props;
   const [selectedWard, setSelectedWard] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [refreshPatientList, setRefreshPatientList] = useState(false);
   const [wardSummary, setWardSummary] = useState({});
   const [careViewConfig, setCareViewConfig] = useState({});
   const [ipdConfig, setIpdConfig] = useState({});
   const getConfig = async () => {
     const config = await getConfigForCareViewDashboard();
     setCareViewConfig(config);
+  };
+
+  const handleRefreshPatientList = () => {
+    setRefreshPatientList(!refreshPatientList);
   };
 
   const getIpdConfig = async () => {
@@ -56,7 +61,10 @@ const CareViewDashboard = (props) => {
               wardSummary,
               setWardSummary,
               selectedWard,
+              provider: hostData.provider,
               setSelectedWard,
+              refreshPatientList,
+              handleRefreshPatientList,
               careViewConfig,
               ipdConfig,
             }}

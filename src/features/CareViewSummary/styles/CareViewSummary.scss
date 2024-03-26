@@ -1,40 +1,83 @@
+@import "src/styles/styles";
 .care-view-summary {
-  display: flex;
-  flex-flow: row;
   justify-content: center;
   gap: 15px;
-  padding: 0 5% 20px 5%;
+  padding: 0 5%;
   border-bottom: 1px solid #007d79;
 
-  .bx--dropdown__wrapper.bx--list-box__wrapper {
-    padding: 0 20px;
+  .bx--list-box__wrapper {
+    max-width: 200px;
+  }
+
+  .summary-tile {
+    height: 96px;
+    display: flex;
+    width: 200px;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    margin: 20px 0;
+
+    .heading-text {
+      font-weight: 600;
+      line-height: 18px;
+      letter-spacing: 0.01em;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .value-text {
+      color: #004144;
+      font-size: 28px;
+      line-height: 36px;
+      letter-spacing: 0.01em;
+      text-align: left;
+    }
   }
 
   .summary-tiles {
     display: flex;
-    flex: 1;
-    flex-flow: row wrap;
     gap: 15px;
-    margin-top: 15px;
-    .summary-tile {
-      height: 96px;
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+
       display: flex;
-      flex: 1;
-      flex-direction: column;
-      justify-content: space-between;
-      .heading-text {
-        font-weight: 600;
-        line-height: 18px;
-        letter-spacing: 0.01em;
-        text-align: left;
-      }
-      .value-text {
-        color: #004144;
-        font-size: 28px;
-        line-height: 36px;
-        letter-spacing: 0.01em;
-        text-align: left;
-      }
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .swiper-pagination-bullet {
+    opacity: 1;
+    background-color: #d9d9d9;
+  }
+
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+    background-color: #8d8d8d !important;
+  }
+}
+
+@media screen and (max-width: $tablet-breakpoint) {
+  .care-view-summary {
+    .summary-tile {
+      width: 100%;
+      margin: 20px 0 30px 0;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-breakpoint) {
+  .care-view-summary {
+    .bx--list-box__wrapper {
+      max-width: 100%;
+    }
+
+    .summary-tile {
+      width: 100%;
+      margin: 20px 0 30px 0;
     }
   }
 }

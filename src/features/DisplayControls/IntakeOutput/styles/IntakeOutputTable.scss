@@ -1,0 +1,140 @@
+.intake-output-datatable tbody td,
+.intake-output-datatable thead th {
+  border: none !important;
+}
+
+.intake-output-datatable tbody .intput-output-table-data td:nth-child(odd),
+.intake-output-datatable thead .intput-output-table-header th:nth-child(odd)
+{
+  border-right: 1px solid #8D8D8D !important;
+}
+
+.intake-output-datatable tbody .custom-row td {
+  border-top: 1px solid #8D8D8D !important;
+  border-right: 1px solid #8D8D8D !important;
+  border-bottom: 1px solid #8D8D8D !important;
+}
+
+.intake-output-datatable tbody .custom-row td:last-child {
+  border-right: none !important;
+}
+
+.red-text {
+  color: #ff0000;
+}
+
+.concept-name {
+  padding-left: 10px;
+}
+
+.notes-icon-div {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 5px;
+}
+
+.total-group-container {
+  display: grid;
+  grid-gap: 10px;
+  font-weight: bold;
+}
+
+.total-group-container div:nth-child(2n + 1) {
+  grid-row: 1;
+}
+
+.total-group-container div:nth-child(2n + 2) {
+  grid-row: 2;
+}
+
+.intake-output-content-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .intake-output-period-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .bx--btn--expressive {
+      min-height: 32px;
+      padding: 5px 10px;
+      font-size: 14px;
+      line-height: 18px;
+      &:hover,
+      &:focus {
+        color: #fff;
+      }
+    }
+
+    .bx--btn--expressive[disabled] {
+      color: #8d8d8d;
+      border: 1px solid #8d8d8d;
+    }
+
+    .margin-right-6 {
+      margin-right: 6px;
+    }
+
+    .margin-right-10 {
+      margin-right: 10px;
+    }
+
+    .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center::before {
+      display: none;
+    }
+
+    .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center::after {
+      display: none;
+    }
+
+    .bx--tooltip__trigger.bx--btn--icon-only--top.bx--tooltip--align-center
+      .bx--assistive-text {
+      display: none;
+    }
+  }
+
+  .intake-output-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+    flex-wrap: wrap;
+  }
+
+  .period-timing {
+    .not-current-period-message-div {
+      display: flex;
+      align-items: center;
+
+      .not-current-period-message {
+        padding: 2px;
+        color: #da1e28;
+        line-height: normal;
+        letter-spacing: 0.24px;
+      }
+    }
+    .period-time {
+      display: flex;
+      font-weight: 600;
+      svg {
+        margin-right: 2px;
+      }
+      .to-text {
+        margin: 0 6px;
+        font-weight: 400;
+      }
+      .mr-5 {
+        margin: 0 5px;
+      }
+    }
+    .period-title {
+      font-size: 12px;
+    }
+  }
+}
+
+.no-io-data {
+  padding-top: 10px;
+}

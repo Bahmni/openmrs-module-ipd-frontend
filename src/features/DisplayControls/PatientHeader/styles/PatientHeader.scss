@@ -1,9 +1,6 @@
 .patient-header {
   margin: 10px 0 10px 0;
   padding: 0;
-  position: sticky;
-  top: 48px;
-  z-index: 1000;
   .patient-name {
     color: #393939;
     font-size: 20px;
@@ -80,8 +77,8 @@
   .show-more {
     font-size: 0.875rem;
     position: absolute;
-    right: 1px;
-    top: 45px;
+    right: 4px;
+    top: 78px;
   }
 
   .other-info {

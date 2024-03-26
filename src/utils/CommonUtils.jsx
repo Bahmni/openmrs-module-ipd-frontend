@@ -8,6 +8,9 @@ import {
 export const getPatientDashboardUrl = (patientUuid) =>
   `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard?currentTab=DASHBOARD_TAB_GENERAL_KEY`;
 
+export const getIPDPatientDashboardUrl = (patientUuid, visitUuid) =>
+  `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard/visit/ipd/${visitUuid}/`;
+
 export const getADTDashboardUrl = (patientUuid, visitUuid, encounterUuid) =>
   `/bahmni/adt/#/patient/${patientUuid}/visit/${visitUuid}/encounter/${encounterUuid}/bed`;
 
@@ -165,6 +168,9 @@ export const mockConfig = {
     timeInMinutesFromNowToShowPastTaskAsLate: 60,
     timeInMinutesFromStartTimeToShowAdministeredTaskAsLate: 30,
   },
+  drugChartSlider: {
+    timeInMinutesToDisableSlotPostScheduledTime: 60,
+  },
   enable24HourTime: true,
   medicationTags: {
     asNeeded: "Rx-PRN",
@@ -225,6 +231,9 @@ export const mockConfigFor12HourFormat = {
   drugChart: {
     timeInMinutesFromNowToShowPastTaskAsLate: 60,
     timeInMinutesFromStartTimeToShowAdministeredTaskAsLate: 30,
+  },
+  drugChartSlider: {
+    timeInMinutesToDisableSlotPostScheduledTime: 60,
   },
   enable24HourTime: false,
   medicationTags: {

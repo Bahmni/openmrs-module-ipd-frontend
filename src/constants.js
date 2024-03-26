@@ -25,6 +25,8 @@ export const ADMINISTERED_MEDICATIONS_BASE_URL =
 export const EMERGENCY_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/adhocMedicationAdministrations";
 export const NON_MEDICATION_URL = RESTWS_V1 + "/tasks";
+export const BOOKMARK_PATIENT_BASE_URL =
+  RESTWS_V1 + "/ipd/careteam/participants";
 export const PATIENT_URL = RESTWS_V1 + "/patient";
 
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
@@ -88,6 +90,7 @@ export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
 export const dateFormat = "DD/MM/YYYY";
 export const displayShiftTimingsFormat = "DD MMM YYYY | HH:mm";
+export const displayPeriodTimingsFormat = "DD MMM YYYY | HH:mm";
 export const timeText24 = "24 hrs format";
 export const timeText12 = "12 hrs format";
 export const RESOLUTION_VALUE = 1055;
@@ -99,6 +102,7 @@ export const componentKeys = {
   TREATMENTS: "TR",
   NURSING_TASKS: "NT",
   DRUG_CHART: "DC",
+  INTAKE_OUTPUT: "IO",
 };
 
 export const performerFunction = "Performer";
@@ -111,3 +115,6 @@ export const timeFormatFor12hr = "hh:mm A";
 
 export const IPD_WARD_SEARCH_PLACEHOLDER_TEXT =
   "Type a minimum of 3 characters to search patient by name, bed number or patient ID";
+
+export const MOBILE_BREAKPOINT = 480;
+export const TABLET_BREAKPOINT = 1024;

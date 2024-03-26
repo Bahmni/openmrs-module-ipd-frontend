@@ -22,4 +22,7 @@ export const componentMapping = {
   [componentKeys.DRUG_CHART]: lazy(() =>
     import("../../features/DisplayControls/DrugChart/components/DrugChartView")
   ),
+  [componentKeys.INTAKE_OUTPUT]: lazy(() =>
+    import("../../features/DisplayControls/IntakeOutput/components/IntakeOutput")
+  ),
 };

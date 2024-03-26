@@ -5,6 +5,11 @@ on:
       - main
     paths-ignore:
       - "**.md"
+  workflow_run:
+    workflows: [Pull Translations from Transifex]
+    types: [completed]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
