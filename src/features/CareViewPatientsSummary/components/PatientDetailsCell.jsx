@@ -94,16 +94,11 @@ export const PatientDetailsCell = ({
         <div className={"admission-details"}>
           <HospitalBed16 />|<span>{bedDetails.bedNumber}</span>|
           <Link
+            href={getIPDPatientDashboardUrl(
+              patientDetails.uuid,
+              visitDetails.uuid
+            )}
             data-testid="identifier-ipd-dashboard"
-            onClick={() =>
-              window.open(
-                getIPDPatientDashboardUrl(
-                  patientDetails.uuid,
-                  visitDetails.uuid
-                ),
-                "From Ward to IPD Dashboard"
-              )
-            }
           >
             <span>{patientDetails.display.split(" ")[0]}</span>
           </Link>
@@ -122,18 +117,16 @@ export const PatientDetailsCell = ({
                   {newTreatments + " New treatment(s): "}
                   <>
                     <Link
+                      href={getIPDPatientDashboardUrl(
+                        patientDetails.uuid,
+                        visitDetails.uuid
+                      )}
                       data-testid="treatments-ipd-dashboard"
-                      onClick={() =>
-                        window.open(
-                          getIPDPatientDashboardUrl(
-                            patientDetails.uuid,
-                            visitDetails.uuid
-                          ),
-                          "From Ward to IPD Dashboard"
-                        )
-                      }
                     >
-                      {"Schedule Treatments"}
+                      <FormattedMessage
+                        id={"SCHEDULE_TREATMENTS"}
+                        defaultMessage={"Schedule Treatments"}
+                      />
                     </Link>
                   </>
                 </span>
