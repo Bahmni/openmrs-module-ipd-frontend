@@ -8,8 +8,12 @@ import {
 export const getPatientDashboardUrl = (patientUuid) =>
   `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard?currentTab=DASHBOARD_TAB_GENERAL_KEY`;
 
-export const getIPDPatientDashboardUrl = (patientUuid, visitUuid) =>
-  `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard/visit/ipd/${visitUuid}/`;
+export const getIPDPatientDashboardUrl = (
+  patientUuid,
+  visitUuid,
+  source = "clinical"
+) =>
+  `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard/visit/ipd/${visitUuid}?source=${source}`;
 
 export const getADTDashboardUrl = (patientUuid, visitUuid, encounterUuid) =>
   `/bahmni/adt/#/patient/${patientUuid}/visit/${visitUuid}/encounter/${encounterUuid}/bed`;
@@ -21,7 +25,23 @@ export const searchDrugsByName = async (query) => {
     console.error(e);
   }
 };
+export const adtHomePageUrl = "/bahmni/adt/#/home";
+export const clinicalHomePageUrl =
+  "/bahmni/clinical/index.html#/default/patient/search";
+export const careViewDashboardUrl = "/bahmni/adt/#/home/careViewDashboard";
 
+export const getAppLandingPageUrl = (source) => {
+  switch (source) {
+    case "adt":
+      return adtHomePageUrl;
+    case "clinical":
+      return clinicalHomePageUrl;
+    case "careViewDashboard":
+      return careViewDashboardUrl;
+    default:
+      return clinicalHomePageUrl;
+  }
+};
 const isLateTask = (startTime, drugChart) => {
   const currentTime = Math.floor(new Date().getTime() / 1000);
   const lateTaskStatusWindowInSeconds =
