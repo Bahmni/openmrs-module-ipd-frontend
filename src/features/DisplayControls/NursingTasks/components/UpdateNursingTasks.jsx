@@ -459,10 +459,6 @@ const UpdateNursingTasks = (props) => {
                         tasks[medicationTask.uuid]?.skipped && "red-text"
                       }`}
                     >
-                      <FormattedMessage
-                        id={"NON_MEDICATION_SCHEDULE_TEXT"}
-                        defaultMessage={"Patient has a "}
-                      />
                       {medicationTask.drugName}
                       <FormattedMessage id={"AT"} defaultMessage={" at "} />
                       {enable24HourTime

@@ -82,6 +82,5 @@
   "STOP_DRUG_SUCCESS_NOTIFICATION": "Medication stopped successfully",
   "NO_CONFIG_MESSAGE": "Please specify IPD Dashboard configurations",
   "NOT_CURRENT_SHIFT_MESSAGE": "You're not viewing the current shift",
-  "COMPLETED": "Completed",
-  "NON_MEDICATION_SCHEDULE_TEXT": "Patient has a "
+  "COMPLETED": "Completed"
 }
