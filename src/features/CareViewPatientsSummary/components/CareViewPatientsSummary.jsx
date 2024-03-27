@@ -16,7 +16,7 @@ export const CareViewPatientsSummary = ({
   filterValue,
 }) => {
   const [slotDetails, setSlotDetails] = useState([]);
-  const [nonMedicationDetails, setNonMedicationDetails] = useState({});
+  const [nonMedicationDetails, setNonMedicationDetails] = useState([]);
   const { careViewConfig } = useContext(CareViewContext);
   const timeframeLimitInHours = careViewConfig.timeframeLimitInHours;
 
@@ -34,8 +34,8 @@ export const CareViewPatientsSummary = ({
     const patientUuids = patients.map((patient) => patient.patientDetails.uuid);
     const response = await getTasksForPatients(
       patientUuids,
-      navHourEpoch.startHourEpoch,
-      navHourEpoch.endHourEpoch
+      navHourEpoch.startHourEpoch * 1000,
+      navHourEpoch.endHourEpoch * 1000
     );
     setNonMedicationDetails(response);
   };
@@ -94,4 +94,5 @@ export const CareViewPatientsSummary = ({
 CareViewPatientsSummary.propTypes = {
   patientsSummary: propTypes.array,
   navHourEpoch: propTypes.object,
+  filterValue: propTypes.object,
 };

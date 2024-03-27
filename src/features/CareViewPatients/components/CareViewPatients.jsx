@@ -99,6 +99,7 @@ export const CareViewPatients = () => {
         throw new Error("Failed to fetch data");
       }
     } catch (error) {
+      setPatientList([]);
       console.error("Error fetching data:", error);
     } finally {
       setIsLoading(false);
@@ -296,6 +297,13 @@ export const CareViewPatients = () => {
       defaultMessage={"Patient not found, please update your search criteria"}
     />
   );
+
+  const emptyResultsForPatientsWardMessage = (
+    <FormattedMessage
+      id={"NO_SEARCH_RESULTS_PATIENTS_WARD_MESSAGE"}
+      defaultMessage={"No Patient found"}
+    />
+  );
   return (
     <div className="care-view-patients-container">
       {isLoading ? (
@@ -329,7 +337,12 @@ export const CareViewPatients = () => {
               </span>
             </div>
           ) : (
-            <></>
+            <div className="no-search-results">
+              <WarningIcon />
+              <span className="no-search-results-span">
+                {emptyResultsForPatientsWardMessage}
+              </span>
+            </div>
           )}
           <div className={"patient-pagination"}>
             <Pagination
