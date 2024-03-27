@@ -16,16 +16,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 16px;
     height: 48px;
     color: white;
   }
 
   .home {
     background-color: #007d79;
-    fill: #ffffff;
+    color: #ffffff;
     outline: none;
     border: none;
+    padding: 12px 8px;
+    margin-left: 8px;
+    height: 3rem;
+    &:hover,
+    &:focus {
+      outline: none;
+      background-color: #004144;
+    }
   }
 
   .border-bottom-0 {

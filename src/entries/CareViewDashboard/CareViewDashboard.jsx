@@ -51,8 +51,8 @@ const CareViewDashboard = (props) => {
           className="border-bottom-0 header-bg-color care-view-header"
           aria-label="IBM Platform Name"
         >
-          <Link href={homePageUrl}>
-            <Home24 className="home" aria-label="home-button" />
+          <Link href={homePageUrl} className={"home"}>
+            <Home24 aria-label="home-button" />
           </Link>
           <ProviderActions onLogOut={onLogOut} />
         </Header>

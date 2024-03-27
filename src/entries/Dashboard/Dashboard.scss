@@ -52,14 +52,12 @@
 
   .header-nav-toggle-btn {
     border: none;
-    width: 20px;
-  }
-
-  .header-nav-toggle-btn:hover {
-    background-color: #007d79;
-    fill: #ffffff;
-    outline: none;
-    border: none;
+    &:hover {
+      background-color: #007d79;
+      fill: #ffffff;
+      outline: none;
+      border: none;
+    }
   }
 
   .bx--accordion__heading {
@@ -114,12 +112,20 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 16px;
+    padding-right: 16px;
   }
   .header-nav {
     display: flex;
     align-items: center;
-    gap: 16px;
+    > * {
+      padding: 10px;
+      height: 3rem;
+      &:hover,
+      &:focus {
+        outline: none;
+        background-color: #004144;
+      }
+    }
     .bx--link__icon {
       margin-left: 0;
     }
