@@ -77,6 +77,7 @@ export const PatientDetailsCell = ({
           careTeamParticipantsRequest: [unBookmarkData],
         });
         setBookmark({});
+        handleRefreshPatientList();
       } else {
         const response = await bookmarkPatient(patientData);
         const participant = getBookmarkStatus(response.data);

@@ -25,6 +25,10 @@ export const SlotDetailsCell = ({
     (slotDetail) => slotDetail.patientUuid === uuid
   );
 
+  const patientTaskDetail = nonMedicationDetails?.find(
+    (taskDetail) => taskDetail.patientUuid === uuid
+  );
+
   for (let i = 0; i < timeframeLimitInHours; i++) {
     const startTime = navHourEpoch.startHourEpoch + i * 3600;
     if (startTime < navHourEpoch.endHourEpoch) {
@@ -38,11 +42,10 @@ export const SlotDetailsCell = ({
             )
           : [];
       taskColumnData =
-        nonMedicationDetails &&
-        nonMedicationDetails[uuid] &&
+        patientTaskDetail &&
         (filterValue.id === "allTasks" ||
           filterValue.id === "nonMedicationTasks")
-          ? getTaskColumnData(nonMedicationDetails[uuid], startTime, endTime)
+          ? getTaskColumnData(patientTaskDetail.tasks, startTime, endTime)
           : [];
       columnData = slotColumnData.concat(...taskColumnData);
       if (columnData) {
@@ -75,23 +78,29 @@ export const SlotDetailsCell = ({
 
     return columnData.map((slotItem) => {
       if (slotItem.isNonMedication) {
+        const taskItem = slotItem;
         return (
-          <div className="slot-details" key={`${slotItem.uuid}`}>
+          <div className="slot-details" key={`${taskItem.uuid}`}>
             <div className="logo">
-              <div className="status-icon">
-                <SVGIcon iconType={"Pending"} />
+              <div className="status-icon" data-testid={taskItem.status}>
+                {taskItem.status === "REQUESTED" && (
+                  <SVGIcon iconType={"Pending"} />
+                )}
+                {taskItem.status === "COMPLETED" && (
+                  <SVGIcon iconType={"Administered"} />
+                )}
               </div>
               <Clock className="clock-icon" />
             </div>
             <span>
-              {epochTo24HourTimeFormat(slotItem.requestedStartTime / 1000)}
+              {epochTo24HourTimeFormat(taskItem.requestedStartTime / 1000)}
             </span>
             <div className="drug-details-wrapper">
-              <span>{slotItem.name}</span>
+              <span>{taskItem.name}</span>
               <div className="drug-details" data-testid="drug-details">
-                {slotItem.creator && (
+                {taskItem.creator && (
                   <span className="drug-detail">
-                    {slotItem.creator.display}
+                    {taskItem.creator.display}
                   </span>
                 )}
               </div>
