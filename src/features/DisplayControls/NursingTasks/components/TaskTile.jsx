@@ -52,14 +52,8 @@ export default function TaskTile(props) {
     nursingTasks
   );
 
-  const capitalizeWords = (name) => {
-    return name.replace(/\b\w/g, function (char) {
-      return char.toUpperCase();
-    });
-  };
   const creatorName = (creator) => {
     var formattedName = creator.split(".").join(" ");
-    formattedName = capitalizeWords(formattedName);
     return formattedName;
   };
 
@@ -121,7 +115,11 @@ export default function TaskTile(props) {
             style={{ color: isRelevantTask ? "#393939" : "#525252" }}
           >
             <span>{dosage}</span>
-            {creator && <span>{creatorName(creator.display)}</span>}
+            {creator && (
+              <span style={{ textTransform: "capitalize" }}>
+                {creatorName(creator.display)}
+              </span>
+            )}
             {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
             {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
           </div>
