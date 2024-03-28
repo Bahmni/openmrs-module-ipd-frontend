@@ -98,12 +98,11 @@ exports[`AddEmergencyTasks should render the component 1`] = `
               </button>
             </li>
             <li
-              class="bx--tabs--scrollable__nav-item bx--tabs__nav-item--disabled bx--tabs--scrollable__nav-item--disabled"
+              class="bx--tabs--scrollable__nav-item"
               role="presentation"
             >
               <button
                 aria-controls="Non - Medication__panel"
-                aria-disabled="true"
                 aria-selected="false"
                 class="bx--tabs--scrollable__nav-link"
                 href="#"
@@ -724,8 +723,90 @@ exports[`AddEmergencyTasks should render the component 1`] = `
           hidden=""
           id="Non - Medication__panel"
           role="tabpanel"
-          tabindex="0"
-        />
+        >
+          <div
+            class="emergency-task-slider-content"
+          >
+            <div
+              class="bx--form-item"
+            >
+              <div
+                class="bx--text-area__label-wrapper"
+              >
+                <label
+                  class="bx--label"
+                >
+                  <div
+                    class="titleText"
+                  >
+                    <span>
+                      Task Name 
+                    </span>
+                    <span
+                      class="required"
+                    >
+                      *
+                    </span>
+                  </div>
+                </label>
+              </div>
+              <div
+                class="bx--text-area__wrapper"
+              >
+                <textarea
+                  class="bx--text-area"
+                  cols="50"
+                  placeholder="Enter a title for the task "
+                  rows="1"
+                />
+              </div>
+            </div>
+            <div
+              class="time-info"
+            >
+              <div
+                class="bx--form-item"
+              >
+                <label
+                  class="bx--label"
+                  for="time-selector"
+                >
+                  <div
+                    class="titleText"
+                  >
+                    <span>
+                      Schedule Time (24 hrs format) 
+                    </span>
+                    <span
+                      class="required"
+                    >
+                      *
+                    </span>
+                  </div>
+                </label>
+                <div
+                  class="bx--time-picker"
+                >
+                  <div
+                    class="bx--time-picker__input"
+                  >
+                    <input
+                      autocomplete="off"
+                      class="bx--time-picker__input-field bx--text-input"
+                      id="time-selector"
+                      maxlength="5"
+                      pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
+                      placeholder="hh:mm"
+                      style="width: 250px; padding: 0px 0px 0px 1rem;"
+                      type="text"
+                      value="00:00"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div
         class="bx--modal bx--modal-tall"
@@ -947,12 +1028,11 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
               </button>
             </li>
             <li
-              class="bx--tabs--scrollable__nav-item bx--tabs__nav-item--disabled bx--tabs--scrollable__nav-item--disabled"
+              class="bx--tabs--scrollable__nav-item"
               role="presentation"
             >
               <button
                 aria-controls="Non - Medication__panel"
-                aria-disabled="true"
                 aria-selected="false"
                 class="bx--tabs--scrollable__nav-link"
                 href="#"
@@ -1575,8 +1655,95 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
           hidden=""
           id="Non - Medication__panel"
           role="tabpanel"
-          tabindex="0"
-        />
+        >
+          <div>
+            <div>
+              Loading...
+            </div>
+          </div>
+          <div
+            class="emergency-task-slider-content"
+          >
+            <div
+              class="bx--form-item"
+            >
+              <div
+                class="bx--text-area__label-wrapper"
+              >
+                <label
+                  class="bx--label"
+                >
+                  <div
+                    class="titleText"
+                  >
+                    <span>
+                      Task Name 
+                    </span>
+                    <span
+                      class="required"
+                    >
+                      *
+                    </span>
+                  </div>
+                </label>
+              </div>
+              <div
+                class="bx--text-area__wrapper"
+              >
+                <textarea
+                  class="bx--text-area"
+                  cols="50"
+                  placeholder="Enter a title for the task "
+                  rows="1"
+                />
+              </div>
+            </div>
+            <div
+              class="time-info"
+            >
+              <div
+                class="bx--form-item"
+              >
+                <label
+                  class="bx--label"
+                  for="time-selector"
+                >
+                  <div
+                    class="titleText"
+                  >
+                    <span>
+                      Schedule Time (24 hrs format) 
+                    </span>
+                    <span
+                      class="required"
+                    >
+                      *
+                    </span>
+                  </div>
+                </label>
+                <div
+                  class="bx--time-picker"
+                >
+                  <div
+                    class="bx--time-picker__input"
+                  >
+                    <input
+                      autocomplete="off"
+                      class="bx--time-picker__input-field bx--text-input"
+                      id="time-selector"
+                      maxlength="5"
+                      pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
+                      placeholder="hh:mm"
+                      style="width: 250px; padding: 0px 0px 0px 1rem;"
+                      type="text"
+                      value="00:00"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div
         class="bx--modal bx--modal-tall"

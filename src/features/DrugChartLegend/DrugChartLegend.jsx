@@ -20,7 +20,7 @@ export default function DrugChartLegend() {
       </div>
       <div>
         <AdministeredIcon />
-        <FormattedMessage id="ADMINISTERED" defaultMessage={"Administered"} />
+        <FormattedMessage id="COMPLETED" defaultMessage={"COMPLETED"} />
       </div>
       <div>
         <AdministeredLateIcon />

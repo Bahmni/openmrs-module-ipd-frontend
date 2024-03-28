@@ -3,7 +3,10 @@ import {
   DRUG_ORDERS_CONFIG_URL,
   GET_ALL_PROVIDERS_URL,
   MEDICATION_CONFIG_URL,
-  EMERGENCY_MEDICATIONS_BASE_URL
+  EMERGENCY_MEDICATIONS_BASE_URL,
+  ENCOUNTER_TYPE_URL,
+  PATIENT_MOVEMENT_URL,
+  NON_MEDICATION_URL,
 } from "../../../../constants";
 
 export const getDrugOrdersConfig = async () => {
@@ -52,5 +55,33 @@ export const saveEmergencyMedication = async (emergencyMedication) => {
     );
   } catch (error) {
     return error;
+  }
+};
+
+export const saveNonMedicationTask = async (nonMedicationTask) => {
+  try {
+    return await axios.post(NON_MEDICATION_URL, nonMedicationTask);
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getEncounterType = async (encounterType) => {
+  try {
+    const response = await axios.get(
+      ENCOUNTER_TYPE_URL.replace("{encounterType}", encounterType)
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getEncounterUuid = async (payload) => {
+  try {
+    const response = await axios.post(PATIENT_MOVEMENT_URL, payload);
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
 };

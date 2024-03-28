@@ -43,6 +43,8 @@ export default function TaskTile(props) {
     isDisabled,
     administeredTimeInEpochSeconds,
     serviceType,
+    isANonMedicationTask,
+    creator,
   } = newMedicationNursingTask;
 
   const isRelevantTask = getRelevantTaskStatus(
@@ -50,12 +52,17 @@ export default function TaskTile(props) {
     nursingTasks
   );
 
+  const creatorName = (creator) => {
+    var formattedName = creator.split(".").join(" ");
+    return formattedName;
+  };
+
   const drugNameText = (
     <div
       className="drug-title"
       style={{
         color: stopTime ? "#FF0000" : isRelevantTask ? "#393939" : "#525252",
-        fontWeight: isRelevantTask ? 500 : 400,
+        fontWeight: !isANonMedicationTask && isRelevantTask ? 500 : 400,
       }}
     >
       {drugName}
@@ -65,10 +72,21 @@ export default function TaskTile(props) {
   return (
     <div className="tile-parent-container">
       <div
-        className={`nursing-tasks-tile ${
-          isRelevantTask && !stopTime && "relevant-task-tile"
+        className={`${
+          isANonMedicationTask ? "nonMedicationTile" : "nursing-tasks-tile"
+        } ${
+          !isANonMedicationTask &&
+          isRelevantTask &&
+          !stopTime &&
+          "relevant-task-tile"
         } 
-        ${isDisabled && "disabled-tile"}`}
+        ${
+          isDisabled
+            ? isANonMedicationTask
+              ? "non-medication-disabled-tile"
+              : "disabled-tile"
+            : ""
+        }`}
       >
         <div className="tile-content">
           <div className={`tile-title ${stopTime && "red-text"}`}>
@@ -87,16 +105,23 @@ export default function TaskTile(props) {
               </TooltipDefinition>
             </div>
           </div>
-          <div className="tile-name-cell">
-            <DisplayTags drugOrder={dosingInstructions} />
-          </div>
+          {!isANonMedicationTask && (
+            <div className="tile-name-cell">
+              <DisplayTags drugOrder={dosingInstructions} />
+            </div>
+          )}
           <div
             className="tile-content-subtext"
             style={{ color: isRelevantTask ? "#393939" : "#525252" }}
           >
             <span>{dosage}</span>
+            {creator && (
+              <span style={{ textTransform: "capitalize" }}>
+                {creatorName(creator.display)}
+              </span>
+            )}
             {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
-            <span>&nbsp;-&nbsp;{drugRoute}</span>
+            {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
           </div>
           {!(
             dosingInstructions?.asNeeded &&
@@ -125,8 +150,10 @@ export default function TaskTile(props) {
       </div>
       {isGroupedTask && (
         <div
-          className={`nursing-tasks-tile stacked-tile ${
-            isRelevantTask && "relevant-task-tile"
+          className={`${
+            isANonMedicationTask ? "nonMedicationTile" : "nursing-tasks-tile"
+          } stacked-tile ${
+            !isANonMedicationTask && isRelevantTask && "relevant-task-tile"
           }`}
         ></div>
       )}

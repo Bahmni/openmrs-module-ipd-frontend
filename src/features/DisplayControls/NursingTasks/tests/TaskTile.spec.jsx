@@ -8,6 +8,7 @@ import {
   mockTaskTileDataForGroupedTask,
   mockCompletedPRNTaskTileData,
   mockPendingPRNTaskTileData,
+  mockNonMedicationTileData,
 } from "./NursingTasksUtilsMockData";
 import {
   mockConfig,
@@ -104,5 +105,14 @@ describe("TaskTile", () => {
     expect(administeredIcon).toBeTruthy();
     expect(getByText("Rx-PRN")).toBeTruthy();
     expect(getByText("04:38 PM")).toBeTruthy();
+  });
+
+  it("should dislay provider name in the non-medication task tile", () => {
+    const { getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
+        <TaskTile medicationNursingTask={mockNonMedicationTileData} />
+      </IPDContext.Provider>
+    );
+    expect(getByText("bailly rurangirwa")).toBeTruthy();
   });
 });

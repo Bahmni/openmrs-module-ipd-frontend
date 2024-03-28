@@ -4,6 +4,7 @@ import UpdateNursingTasks from "../components/UpdateNursingTasks";
 import {
   mockMedicationTasks,
   mockPRNMedicationTasks,
+  mockNonMedicationTileData
 } from "./NursingTasksUtilsMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import {
@@ -11,6 +12,10 @@ import {
   mockConfigFor12HourFormat,
 } from "../../../../utils/CommonUtils";
 import MockDate from "mockdate";
+
+const mockSetShowSuccessNotification = jest.fn();
+const mockSetSuccessMessage = jest.fn();
+const mockUpdateEmergencyTasksSlider = jest.fn();
 
 describe("UpdateNursingTasksSlider", function () {
   afterEach(() => {
@@ -72,6 +77,58 @@ describe("UpdateNursingTasksSlider", function () {
     expect(timePicker).toBeTruthy();
     const notes = container.querySelectorAll(".bx--text-area")[0];
     expect(notes).toBeTruthy();
+  });
+
+  it("should show time when toggle switch is On for Non medication tasks", function () {
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockNonMedicationTileData}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn}
+        />
+      </IPDContext.Provider>
+    );
+    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    fireEvent.click(toggleButton);
+  
+    const timePicker = container.querySelectorAll(
+      ".bx--time-picker"
+    )[0];
+    expect(timePicker).toBeTruthy();
+  });
+
+  it("should save when toggle switch is and Time is entered for Non medication tasks", async () => {
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <UpdateNursingTasks
+          medicationTasks={mockNonMedicationTileData}
+          updateNursingTasksSlider={mockUpdateEmergencyTasksSlider}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowSuccessNotification={mockSetShowSuccessNotification}
+          setSuccessMessage={mockSetSuccessMessage}
+        />
+      </IPDContext.Provider>
+    );
+    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    fireEvent.click(toggleButton);
+   
+    const timePicker = container.querySelectorAll(
+      ".bx--time-picker"
+    )[0];
+    expect(timePicker).toBeTruthy();
+
+    const saveButton = screen.getAllByText("Save")[1];
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(mockSetShowSuccessNotification).toHaveBeenCalledTimes(1);
+      expect(mockSetSuccessMessage).toHaveBeenCalledTimes(1);
+      expect(mockUpdateEmergencyTasksSlider).toHaveBeenCalledTimes(1);
+    });
   });
 
   it("should show warning for empty notes when time is updated", function () {
