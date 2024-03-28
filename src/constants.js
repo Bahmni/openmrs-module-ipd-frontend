@@ -83,6 +83,8 @@ export const GET_SEARCH_PATIENT_LIST_URL =
   RESTWS_V1 + "/ipd/wards/{wardId}/patients/search";
 export const GET_SLOTS_FOR_PATIENTS_URL =
   RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
+export const INTAKE_OUTPUT_DATA_BASE_URL =
+  BAHMNI_CORE + "/observations?";
 
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
