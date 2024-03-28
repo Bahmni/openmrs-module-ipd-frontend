@@ -334,6 +334,7 @@ export const ExtractNonMedicationTasks = (
   });
   extractedData.push(...pendingExtractedData);
   extractedData.push(...completedExtractedData);
+  // grouping non-medication tasks together when the filter.id is pending
   if (filterValue.id === "pending") {
     extractedData.forEach((item) => {
       if (item.partOf == null && item.taskType.display !== "nursing_activity") {
@@ -353,18 +354,19 @@ export const ExtractNonMedicationTasks = (
     if (currentGroup.length > 0) {
       groupedData.push(currentGroup);
     }
+    // stacking logic for non-medication tasks
     extractedData.forEach((item) => {
       if (item.partOf != null) {
-        for (let i = 0; i < groupedData.length; i++) {
+        for (let index = 0; index < groupedData.length; index++) {
           const uuid =
-            groupedData[i].length > 0
-              ? groupedData[i][0].uuid
-              : groupedData[i].uuid;
+            groupedData[index].length > 0
+              ? groupedData[index][0].uuid
+              : groupedData[index].uuid;
           if (item.partOf === uuid) {
-            if (Array.isArray(groupedData[i])) {
-              groupedData[i].push(item);
+            if (Array.isArray(groupedData[index])) {
+              groupedData[index].push(item);
             } else {
-              groupedData[i] = [groupedData[i], item];
+              groupedData[index] = [groupedData[index], item];
             }
             break;
           }
