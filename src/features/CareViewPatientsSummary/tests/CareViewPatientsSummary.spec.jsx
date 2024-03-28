@@ -20,11 +20,16 @@ const mockNavHourEpoch = {
   endHourEpoch: 1704117600,
 };
 
+const mockFilterValue = {
+  id: "allTasks",
+};
 const mockGetSlotsForPatients = jest.fn();
+const mockGetTasksForPatients = jest.fn();
 const mockGetColumnData = jest.fn();
 jest.mock("../../CareViewSummary/utils/CareViewSummary", () => {
   return {
     getSlotsForPatients: () => mockGetSlotsForPatients(),
+    getTasksForPatients: () => mockGetTasksForPatients(),
     getColumnData: () => mockGetColumnData(),
   };
 });
@@ -38,6 +43,7 @@ describe("CareViewPatientsSummary", function () {
     jest.clearAllMocks();
     MockDate.set("2023-01-01T12:00:00");
     mockGetSlotsForPatients.mockReturnValue(mockSlotsData);
+    mockGetTasksForPatients.mockReturnValue([]);
     mockGetColumnData.mockReturnValue(mockColumnData);
   });
 
@@ -47,6 +53,7 @@ describe("CareViewPatientsSummary", function () {
         <CareViewPatientsSummary
           patientsSummary={mockPatientsList.admittedPatients}
           navHourEpoch={mockNavHourEpoch}
+          filterValue={mockFilterValue}
         />
       </CareViewContext.Provider>
     );
@@ -59,6 +66,7 @@ describe("CareViewPatientsSummary", function () {
         <CareViewPatientsSummary
           patientsSummary={mockPatientsList.admittedPatients}
           navHourEpoch={mockNavHourEpoch}
+          filterValue={mockFilterValue}
         />
       </CareViewContext.Provider>
     );
@@ -72,6 +80,7 @@ describe("CareViewPatientsSummary", function () {
         <CareViewPatientsSummary
           patientsSummary={mockPatientsList.admittedPatients}
           navHourEpoch={mockNavHourEpoch}
+          filterValue={mockFilterValue}
         />
       </CareViewContext.Provider>
     );
@@ -90,6 +99,7 @@ describe("CareViewPatientsSummary", function () {
         <CareViewPatientsSummary
           patientsSummary={mockPatientsList.admittedPatients}
           navHourEpoch={mockNavHourEpoch}
+          filterValue={mockFilterValue}
         />
       </CareViewContext.Provider>
     );
@@ -110,6 +120,7 @@ describe("CareViewPatientsSummary", function () {
         <CareViewPatientsSummary
           patientsSummary={mockPatientsList.admittedPatients}
           navHourEpoch={mockNavHourEpoch}
+          filterValue={mockFilterValue}
         />
       </CareViewContext.Provider>
     );
@@ -130,6 +141,7 @@ describe("CareViewPatientsSummary", function () {
         <CareViewPatientsSummary
           patientsSummary={mockPatientsList.admittedPatients}
           navHourEpoch={mockNavHourEpoch}
+          filterValue={mockFilterValue}
         />
       </CareViewContext.Provider>
     );
@@ -144,6 +156,7 @@ describe("CareViewPatientsSummary", function () {
         <CareViewPatientsSummary
           patientsSummary={mockPatientsList.admittedPatients}
           navHourEpoch={mockNavHourEpoch}
+          filterValue={mockFilterValue}
         />
       </CareViewContext.Provider>
     );
@@ -171,6 +184,7 @@ describe("CareViewPatientsSummary", function () {
         <CareViewPatientsSummary
           patientsSummary={mockPatientsList.admittedPatients}
           navHourEpoch={mockNavHourEpoch}
+          filterValue={mockFilterValue}
         />
       </CareViewContext.Provider>
     );

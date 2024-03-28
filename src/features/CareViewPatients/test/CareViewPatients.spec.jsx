@@ -27,6 +27,9 @@ const mockContext = {
   },
   setWardSummary: jest.fn,
   refreshPatientList: false,
+  headerSelected: "TOTAL_PATIENTS",
+  setHeaderSelected: jest.fn,
+  provider: { uuid: "provider-uuid" },
 };
 const mockFetchPatientsList = jest.fn();
 const mockFetchPatientsListBySearch = jest.fn();

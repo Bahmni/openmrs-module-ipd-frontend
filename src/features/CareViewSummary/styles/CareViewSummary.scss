@@ -1,4 +1,5 @@
 @import "src/styles/styles";
+
 .care-view-summary {
   justify-content: center;
   gap: 15px;
@@ -27,17 +28,59 @@
     }
 
     .value-text {
-      color: #004144;
+      color: #0f62fe;
       font-size: 28px;
       line-height: 36px;
       letter-spacing: 0.01em;
       text-align: left;
+    }
+
+    &:hover {
+      background-color: #f4f4f4;
+      border: 2px solid #0f62fe;
+      cursor: pointer;
+
+      .heading-text {
+        color: #393939;
+      }
+
+      .value-text {
+        color: #0f62fe;
+      }
+    }
+  }
+
+  .selected-header {
+    background-color: #a8a8a8;
+    border: 1px solid #ededed;
+
+    .heading-text {
+      color: #fff;
+    }
+
+    .value-text {
+      color: #fff;
+    }
+
+    &:hover {
+      background-color: #a8a8a8;
+      border: 1px solid #ededed;
+      cursor: not-allowed;
+
+      .heading-text {
+        color: #fff;
+      }
+
+      .value-text {
+        color: #fff;
+      }
     }
   }
 
   .summary-tiles {
     display: flex;
     gap: 15px;
+
     .swiper-slide {
       text-align: center;
       font-size: 18px;

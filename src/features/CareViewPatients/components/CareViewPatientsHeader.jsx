@@ -6,6 +6,7 @@ import { IPD_WARD_SEARCH_PLACEHOLDER_TEXT } from "../../../constants";
 import { Dropdown, Search, Button } from "carbon-components-react";
 import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
 import { epochTo24HourTimeFormat } from "../../../utils/DateTimeUtils";
+import { items } from "../utils/constants";
 export const CareViewPatientsHeader = (props) => {
   const {
     handleKeyPress,
@@ -17,6 +18,8 @@ export const CareViewPatientsHeader = (props) => {
     handleNow,
     handleNext,
     handlePrevious,
+    filterValue,
+    setFilterValue,
   } = props;
 
   const handleSearchOnChange = (e) => {
@@ -85,9 +88,14 @@ export const CareViewPatientsHeader = (props) => {
       <Dropdown
         id="default"
         label="Dropdown menu options"
-        items={["All tasks", "Pending", "Done"]}
-        itemToString={(item) => (item ? item : "")}
-        selectedItem={"All tasks"}
+        selectedItem={filterValue}
+        items={items}
+        itemToString={(item) => (item ? item.text : "")}
+        onChange={(event) => {
+          event.selectedItem
+            ? setFilterValue(event.selectedItem)
+            : setFilterValue(items[2]);
+        }}
         light={true}
       />
     </div>

@@ -31,8 +31,16 @@ export const CareViewSummary = (props) => {
       window.removeEventListener("resize", setWindowWidth);
     };
   }, []);
-  const { selectedWard, setSelectedWard, wardSummary, setWardSummary } =
-    useContext(CareViewContext);
+  const {
+    selectedWard,
+    setSelectedWard,
+    wardSummary,
+    setWardSummary,
+    headerSelected,
+    setHeaderSelected,
+    provider,
+    refreshSummary,
+  } = useContext(CareViewContext);
   const getWardList = async () => {
     callbacks.setIsLoading(true);
     const wardList = await getWardDetails();
@@ -48,7 +56,7 @@ export const CareViewSummary = (props) => {
   };
   const getWardSummary = async () => {
     callbacks.setIsLoading(true);
-    const response = await fetchWardSummary(selectedWard.value);
+    const response = await fetchWardSummary(selectedWard.value, provider.uuid);
     if (response.status === 200) {
       setWardSummary(response.data);
     } else {
@@ -63,7 +71,7 @@ export const CareViewSummary = (props) => {
     if (!_.isEmpty(selectedWard)) {
       getWardSummary();
     }
-  }, [selectedWard]);
+  }, [selectedWard, refreshSummary]);
   useEffect(() => {
     setIsTabletView(false);
     setIsMobileView(false);
@@ -74,7 +82,12 @@ export const CareViewSummary = (props) => {
     }
   }, [screenSize]);
   const totalPatientsTile = (
-    <Tile className="summary-tile">
+    <Tile
+      className={`summary-tile ${
+        headerSelected === "TOTAL_PATIENTS" && "selected-header"
+      }`}
+      onClick={() => setHeaderSelected("TOTAL_PATIENTS")}
+    >
       <span className={"heading-text"}>
         <FormattedMessage
           id={"TOTAL_PATIENTS"}
@@ -85,11 +98,18 @@ export const CareViewSummary = (props) => {
     </Tile>
   );
   const myPatientsTile = (
-    <Tile className="summary-tile">
+    <Tile
+      className={`summary-tile ${
+        headerSelected === "MY_PATIENTS" && "selected-header"
+      }`}
+      onClick={() => setHeaderSelected("MY_PATIENTS")}
+    >
       <span className={"heading-text"}>
         <FormattedMessage id={"MY_PATIENTS"} defaultMessage={"My patient(s)"} />
       </span>
-      <span className={"value-text"}>{wardSummary.myPatients || 0}</span>
+      <span className={"value-text"}>
+        {wardSummary.totalProviderPatients || 0}
+      </span>
     </Tile>
   );
   return (

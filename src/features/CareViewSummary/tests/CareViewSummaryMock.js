@@ -24,6 +24,49 @@ export const mockWardList = [
     occupiedBeds: 27,
   },
 ];
+export const mockNonMedicationData = [
+  {
+    patientUuid: "98a4a9c5-c26e-46a1-8efc-ae6df95842bf",
+    tasks: [
+      {
+        uuid: "2de6214d-9d50-4ea5-85b1-8293fbb3fb56",
+        name: "Non Medication Task 1",
+        patientUuid: "98a4a9c5-c26e-46a1-8efc-ae6df95842bf",
+        requestedStartTime: 1711384200000,
+        requestedEndTime: 1711395000000,
+        status: "REQUESTED",
+        intent: "ORDER",
+        partOf: null,
+        taskType: {
+          uuid: "91e3eeba-e840-11ee-b597-0242ac120005",
+          display: "nursing_activity",
+        },
+        creator: {
+          uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
+          display: "superman",
+        },
+      },
+      {
+        uuid: "41ad6aa9-6756-4db4-a072-8ded979bb73b",
+        name: "Non Medication Task 2",
+        patientUuid: "98a4a9c5-c26e-46a1-8efc-ae6df95842bf",
+        requestedStartTime: 1711384200000,
+        requestedEndTime: 1711395000000,
+        status: "COMPLETED",
+        intent: "ORDER",
+        partOf: null,
+        taskType: {
+          uuid: "91e3eeba-e840-11ee-b597-0242ac120005",
+          display: "nursing_activity",
+        },
+        creator: {
+          uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
+          display: "Nurse One",
+        },
+      },
+    ],
+  },
+];
 
 export const mockSlotsData = [
   {
