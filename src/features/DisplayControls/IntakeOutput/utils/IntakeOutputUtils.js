@@ -9,14 +9,23 @@ import { FormattedMessage } from "react-intl";
 import moment from "moment";
 import axios from "axios";
 
-export const filterDataForRange = (data, timeConceptNames, startEndDates) => {
-    return (data.filter((obs) => {
-        const timeConcept = obs.groupMembers.find(member => timeConceptNames?.includes(member?.concept?.name));
-        const obsTime = moment(timeConcept?.value).startOf('minute');
-        const startTime = moment(startEndDates.startDate).startOf('minute');
-        const endTime = moment(startEndDates.endDate).startOf('minute');
-        return obsTime.isBetween(startTime, endTime, null, '[)');
-    }));
+export const filterDataForRange = (
+  data,
+  timeConceptNames,
+  startEndDates,
+  visitStartDateTime
+) => {
+  return data.filter((obs) => {
+    if (obs.visitStartDateTime === visitStartDateTime) {
+      const timeConcept = obs.groupMembers.find((member) =>
+        timeConceptNames?.includes(member?.concept?.name)
+      );
+      const obsTime = moment(timeConcept?.value).startOf("minute");
+      const startTime = moment(startEndDates.startDate).startOf("minute");
+      const endTime = moment(startEndDates.endDate).startOf("minute");
+      return obsTime.isBetween(startTime, endTime, null, "[)");
+    }
+  });
 };
 
 export const getSortedObsData = (obsData, sortConceptNames) => {

@@ -48,6 +48,7 @@ const IntakeOutput = () => {
     previous: false,
     next: isReadMode ? true : false,
   });
+  const visitStartDateTime = visitSummary.startDateTime;
 
   const callFetchIntakeAndOutputData = async () => {
     try {
@@ -70,7 +71,6 @@ const IntakeOutput = () => {
       startDate: currentPeriod.startDateTime,
       endDate: currentPeriod.endDateTime
     });
-    callFetchIntakeAndOutputData();
   };
 
   const handlePrevious = () => {
@@ -80,7 +80,6 @@ const IntakeOutput = () => {
       startDate: moment(startEndDates.startDate).clone().subtract(periodConfig.durationInHours, 'hours'),
       endDate: startEndDates.startDate
     });
-    callFetchIntakeAndOutputData();
   };
 
   const handleNext = () => {
@@ -90,7 +89,6 @@ const IntakeOutput = () => {
       startDate: startEndDates.endDate,
       endDate: moment(startEndDates.endDate).clone().add(periodConfig.durationInHours, 'hours')
     });
-    callFetchIntakeAndOutputData();
   };
 
   const periodTiming = () => {
@@ -157,12 +155,33 @@ const IntakeOutput = () => {
     isCurrentPeriod(startEndDates, periodConfig)
       ? setNotCurrentPeriod(false)
       : setNotCurrentPeriod(true);
-    
-    const filteredData = filterDataForRange(intakeOutputData, intakeOutputConfig.timeConceptNames, startEndDates)
-    const sortedObsData = getSortedObsData(filteredData, intakeOutputConfig.timeConceptNames);
+    const filteredData = filterDataForRange(
+      intakeOutputData,
+      intakeOutputConfig.timeConceptNames,
+      startEndDates,
+      visitSummary.startDateTime
+    );
+    const sortedObsData = getSortedObsData(
+      filteredData,
+      intakeOutputConfig.timeConceptNames
+    );
+
+    setPeriodButtonsDisabled({
+      previous:
+        (isReadMode && intakeOutputData.length === 0) ||
+        moment(visitStartDateTime).isBetween(
+          startEndDates.startDate,
+          startEndDates.endDate,
+          null,
+          "[)"
+        ),
+      next: moment(visitSummary.stopDateTime).isBefore(
+        startEndDates.endDate,
+      ),
+    });
     setConsolidatedIOData(transformObsData(sortedObsData, intakeOutputConfig));
     setIsLoading(false);
-  }, [startEndDates, intakeOutputData]);
+  }, [startEndDates, intakeOutputData, visitStartDateTime]);
 
   useEffect(() => {
     updatedStartEndDates({
@@ -235,7 +254,6 @@ const IntakeOutput = () => {
   );
 };
 
-IntakeOutput.propTypes = {
-};
+IntakeOutput.propTypes = {};
 
 export default IntakeOutput;
