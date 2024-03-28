@@ -81,7 +81,6 @@ export default function NursingTasks(props) {
   const [nonMedicationTasks, setNonMedicationTasks] = useState([]);
   let startDateTimeChange, endDateTimeChange;
 
-
   useEffect(() => {
     const currentShift = shiftDetails.currentShiftHoursArray;
     const firstHour = currentShift[0];
@@ -339,8 +338,7 @@ export default function NursingTasks(props) {
                 if (
                   !isSliderOpen.nursingTasks &&
                   !medicationNursingTask[0].isDisabled &&
-                  !isStoppedSlot 
-                  // !medicationNursingTask[0].isANonMedicationTask
+                  !isStoppedSlot
                 ) {
                   setSelectedMedicationTask(medicationNursingTask);
                   updateNursingTasksSlider(true);
