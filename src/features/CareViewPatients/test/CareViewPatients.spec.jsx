@@ -35,9 +35,11 @@ const mockFetchPatientsList = jest.fn();
 const mockFetchPatientsListBySearch = jest.fn();
 
 jest.mock("../utils/CareViewPatientsUtils", () => {
+  const originalModule = jest.requireActual("../utils/CareViewPatientsUtils");
   return {
-    fetchPatientsList: () => mockFetchPatientsList(),
-    fetchPatientsListBySearch: () => mockFetchPatientsListBySearch(),
+    ...originalModule,
+    fetchPatientsList: () => mockFetchPatientsList,
+    fetchPatientsListBySearch: () => mockFetchPatientsListBySearch,
   };
 });
 describe("CareViewPatients", () => {
