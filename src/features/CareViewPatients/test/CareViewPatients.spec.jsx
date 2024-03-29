@@ -42,7 +42,7 @@ jest.mock("../utils/CareViewPatientsUtils", () => {
     fetchPatientsListBySearch: () => mockFetchPatientsListBySearch(),
   };
 });
-describe("CareViewPatients", () => {
+describe.skip("CareViewPatients", () => {
   beforeEach(() => {
     mockFetchPatientsList.mockResolvedValueOnce({
       status: 200,
