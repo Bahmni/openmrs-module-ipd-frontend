@@ -116,3 +116,5 @@ export const IPD_WARD_SEARCH_PLACEHOLDER_TEXT =
 
 export const MOBILE_BREAKPOINT = 480;
 export const TABLET_BREAKPOINT = 1024;
+
+export const IPD_PAGE_TITLE = "IPD";
