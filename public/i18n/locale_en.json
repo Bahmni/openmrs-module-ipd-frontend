@@ -15,7 +15,7 @@
   "DRUG_CHART_MODAL_EMPTY_START_TIME_WARNING": "Please enter Start Time",
   "DRUG_CHART_MODAL_START_TIME_BEYOND_NEXT_DOSE": "Start Time does not match with the frequency",
   "ADMINISTERED_LATE": "Administered Late",
-  "NOT_ADMINISTERED": "Not Administered",
+  "NOT_ADMINISTERED": "Missed",
   "LATE": "Late",
   "ADMINISTERED": "Completed",
   "PENDING": "Pending",

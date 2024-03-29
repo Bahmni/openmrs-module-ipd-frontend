@@ -1,9 +1,9 @@
 import React from "react";
-import AdministeredIcon from "../../icons/administered.svg";
+import AdministeredIcon from "../../icons/completed.svg";
 
 import AdministeredLateIcon from "../../icons/administered-late.svg";
 import LateIcon from "../../icons/late.svg";
-import NotAdministeredIcon from "../../icons/not-administered.svg";
+import NotAdministeredIcon from "../../icons/missed.svg";
 import PendingIcon from "../../icons/pending.svg";
 import StoppedIcon from "../../icons/stopped.svg";
 import "./AdministrationLegend.scss";
