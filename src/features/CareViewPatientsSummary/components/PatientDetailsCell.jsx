@@ -120,7 +120,7 @@ export const PatientDetailsCell = ({
                     <Link
                       href={getIPDPatientDashboardUrl(
                         patientDetails.uuid,
-                        visitDetails.uuid,
+                        visitDetails?.uuid,
                         "careViewDashboard"
                       )}
                       data-testid="treatments-ipd-dashboard"
