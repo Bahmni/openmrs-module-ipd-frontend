@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Logout24,
   UserAvatar24,
   ChevronUp16,
   ChevronDown16,
+  IbmCloudHyperProtectCryptoServices24,
 } from "@carbon/icons-react";
 import "./ProviderActions.scss";
 import { FormattedMessage } from "react-intl";
@@ -21,17 +22,34 @@ export const ProviderActions = (props) => {
   const handleMenu = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (!event.target.closest(".provider-actions")) {
+        setIsDropdownOpen(false);
+      }
+    };
+    window.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      window.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
+
   return (
     <div className={"provider-actions"}>
-      <UserAvatar24 />
       <div>
-        <div className={"provider-menu"} onClick={handleMenu}>
+        <div
+          className={`provider-menu ${isDropdownOpen && "menu-selected"}`}
+          onClick={handleMenu}
+        >
+          <UserAvatar24 className={"user-avatar"} />
           <div className={"username"}>{username}</div>
           {isDropdownOpen ? <ChevronUp16 /> : <ChevronDown16 />}
         </div>
         {isDropdownOpen && (
           <div className={"dropdown"}>
             <div onClick={handleChangePassword}>
+              <IbmCloudHyperProtectCryptoServices24 />
               <FormattedMessage
                 id={"CHANGE_PASSWORD"}
                 defaultMessage={"Change Password"}
@@ -40,7 +58,7 @@ export const ProviderActions = (props) => {
           </div>
         )}
       </div>
-      <Logout24 onClick={onLogOut} />
+      <Logout24 onClick={onLogOut} className={"logout"} />
     </div>
   );
 };
