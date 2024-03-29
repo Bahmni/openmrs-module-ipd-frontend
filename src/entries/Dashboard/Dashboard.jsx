@@ -21,7 +21,7 @@ import { SliderContext } from "../../context/SliderContext";
 import { IPDContext } from "../../context/IPDContext";
 import { AllMedicationsContextProvider } from "../../context/AllMedications";
 import { FormattedMessage } from "react-intl";
-import { RESOLUTION_VALUE } from "../../constants";
+import { RESOLUTION_VALUE, IPD_PAGE_TITLE } from "../../constants";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
@@ -79,6 +79,14 @@ export default function Dashboard(props) {
     return () => {
       document.removeEventListener("click", handleClickOutside);
       window.removeEventListener("resize", updateWindowWidth);
+    };
+  }, []);
+
+  useEffect(() => {
+    const prevTitle = document.title;
+    document.title = IPD_PAGE_TITLE;
+    return () => {
+      document.title = prevTitle;
     };
   }, []);
 
