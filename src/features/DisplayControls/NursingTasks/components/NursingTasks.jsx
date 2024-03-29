@@ -79,31 +79,37 @@ export default function NursingTasks(props) {
   let startDateTimeChange, endDateTimeChange;
 
   useEffect(() => {
-    const currentShift = shiftDetails.currentShiftHoursArray;
-    const firstHour = currentShift[0];
-    const lastHour = currentShift[currentShift.length - 1];
+    const currentShiftHour = shiftDetails.currentShiftHoursArray;
+    const currentShiftMinute = shiftDetails.currentShiftMinutesArray;
+    const firstHour = currentShiftHour[0];
+    const lastHour = currentShiftHour[currentShiftHour.length - 1];
     startDateTimeChange = getDateTime(
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      currentShift[0]
+      currentShiftHour[0], currentShiftMinute[0]
     );
     endDateTimeChange = getDateTime(
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      currentShift[currentShift.length - 1] + 1
+      currentShiftHour[currentShiftHour.length - 1] + 1,
+      currentShiftMinute[0]
     );
 
     /** if the shift is going on two different dates */
     if (lastHour < firstHour) {
       const d = isReadMode ? new Date(visitSummary.stopDateTime) : new Date();
       const currentHour = d.getHours();
+      const currentMinute = d.getMinutes();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTimeChange = getDateTime(
-          d,
-          currentShift[currentShift.length - 1] + 1
-        );
+        if(currentMinute > 30)
+          endDateTimeChange = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1,currentShiftMinute[currentShiftMinute.length - 1] + 1);
+        else 
+          endDateTimeChange = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1, currentShiftMinute[0])
       } else {
         d.setDate(d.getDate() - 1);
-        startDateTimeChange = getDateTime(d, currentShift[0]);
+        if(currentMinute > 30)
+          startDateTimeChange = getDateTime(d, currentShiftHour[0], currentShiftMinute[currentShiftMinute.length - 1] + 1);
+        else
+        startDateTimeChange = getDateTime(d, currentShiftHour[0], currentShiftMinute[0]);
       }
     }
 
@@ -173,27 +179,33 @@ export default function NursingTasks(props) {
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
       shiftConfig
     );
-    const currentShift = shiftDetailsObj.currentShiftHoursArray;
+    const currentShiftHour = shiftDetailsObj.currentShiftHoursArray;
+    const currentShiftMinute = shiftDetailsObj.currentShiftMinutesArray;
     const updatedShiftIndex = shiftDetailsObj.shiftIndex;
-    const firstHour = currentShift[0];
-    const lastHour = currentShift[currentShift.length - 1];
-    startDateTimeChange = getDateTime(new Date(), currentShift[0]);
+    const firstHour = currentShiftHour[0];
+    const lastHour = currentShiftHour[currentShiftHour.length - 1];
+    startDateTimeChange = getDateTime(new Date(), currentShiftHour[0], currentShiftMinute[0]);
     endDateTimeChange = getDateTime(
       new Date(),
-      currentShift[currentShift.length - 1] + 1
+      currentShiftHour[currentShiftHour.length - 1] + 1,
+      currentShiftMinute[currentShiftMinute.length - 1] + 1
     );
     if (lastHour < firstHour) {
       const d = new Date();
       const currentHour = d.getHours();
+      const currentMinute = d.getMinutes();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTimeChange = getDateTime(
-          d,
-          currentShift[currentShift.length - 1] + 1
-        );
+        if(currentMinute > 30)
+          endDateTimeChange = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1,currentShiftMinute[currentShiftMinute.length - 1] + 1);
+        else 
+          endDateTimeChange = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1, currentShiftMinute[0])
       } else {
         d.setDate(d.getDate() - 1);
-        startDateTimeChange = getDateTime(d, currentShift[0]);
+        if(currentMinute > 30)
+          startDateTimeChange = getDateTime(d, currentShiftHour[0], currentShiftMinute[currentShiftMinute.length - 1] + 1);
+        else
+        startDateTimeChange = getDateTime(d, currentShiftHour[0], currentShiftMinute[0]);
       }
     }
     setNotCurrentShift(false);
