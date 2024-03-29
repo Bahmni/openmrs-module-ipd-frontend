@@ -33,6 +33,16 @@ const mockContext = {
 };
 const mockFetchPatientsList = jest.fn();
 const mockFetchPatientsListBySearch = jest.fn();
+const mockGetSlotsForPatients = jest.fn();
+const mockGetTasksForPatients = jest.fn();
+
+//These are being called in the CareViewPatientSummary child component inside use effect
+jest.mock("../../CareViewSummary/utils/CareViewSummary", () => {
+  return {
+    getSlotsForPatients: () => mockGetSlotsForPatients(),
+    getTasksForPatients: () => mockGetTasksForPatients(),
+  };
+});
 
 jest.mock("../utils/CareViewPatientsUtils", () => {
   const originalModule = jest.requireActual("../utils/CareViewPatientsUtils");
@@ -42,12 +52,15 @@ jest.mock("../utils/CareViewPatientsUtils", () => {
     fetchPatientsListBySearch: () => mockFetchPatientsListBySearch(),
   };
 });
-describe.skip("CareViewPatients", () => {
+
+describe("CareViewPatients", () => {
   beforeEach(() => {
-    mockFetchPatientsList.mockResolvedValueOnce({
+    mockFetchPatientsList.mockResolvedValue({
       status: 200,
       data: mockPatientsList,
     });
+    mockGetSlotsForPatients.mockReturnValue([]);
+    mockGetTasksForPatients.mockReturnValue([]);
   });
   afterEach(() => {
     jest.resetAllMocks();
@@ -92,7 +105,7 @@ describe.skip("CareViewPatients", () => {
   });
 
   it("should call backend search api when the search value is more than equal to 3", async () => {
-    mockFetchPatientsListBySearch.mockResolvedValueOnce({
+    mockFetchPatientsListBySearch.mockResolvedValue({
       status: 200,
       data: mockSearchPatientsList,
     });
@@ -151,8 +164,8 @@ describe.skip("CareViewPatients", () => {
     expect(getByText("PT51140")).toBeTruthy();
   });
 
-  it.skip("should show No search result message when searched value is not found", async () => {
-    mockFetchPatientsListBySearch.mockResolvedValueOnce({
+  it("should show No search result message when searched value is not found", async () => {
+    mockFetchPatientsListBySearch.mockResolvedValue({
       status: 200,
       data: mockSearchEmptyPatientsList,
     });
@@ -179,8 +192,8 @@ describe.skip("CareViewPatients", () => {
     expect(queryByText("PT6")).not.toBeTruthy();
   });
 
-  it.skip("should be searched by bed number", async () => {
-    mockFetchPatientsListBySearch.mockResolvedValueOnce({
+  it("should be searched by bed number", async () => {
+    mockFetchPatientsListBySearch.mockResolvedValue({
       status: 200,
       data: mockSearchPatientsList,
     });
@@ -207,8 +220,8 @@ describe.skip("CareViewPatients", () => {
     });
   });
 
-  it.skip("should be searched by patient identifier", async () => {
-    mockFetchPatientsListBySearch.mockResolvedValueOnce({
+  it("should be searched by patient identifier", async () => {
+    mockFetchPatientsListBySearch.mockResolvedValue({
       status: 200,
       data: mockSearchPatientsList,
     });
@@ -235,8 +248,8 @@ describe.skip("CareViewPatients", () => {
     });
   });
 
-  it.skip("should be searched by patient name", async () => {
-    mockFetchPatientsListBySearch.mockResolvedValueOnce({
+  it("should be searched by patient name", async () => {
+    mockFetchPatientsListBySearch.mockResolvedValue({
       status: 200,
       data: mockSearchPatientsList,
     });
@@ -261,7 +274,7 @@ describe.skip("CareViewPatients", () => {
     });
   });
 
-  it.skip("should update patient list when refresh patient list value is changed", async () => {
+  it("should update patient list when refresh patient list value is changed", async () => {
     const { rerender } = render(
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
