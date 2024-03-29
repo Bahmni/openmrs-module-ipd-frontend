@@ -5,6 +5,7 @@
   display: flex;
   height: var(--time-cell-height);
   align-items: stretch;
+  fill: none;
   .note-icon-container {
     margin: 0;
   }
@@ -29,6 +30,17 @@
     text-align: center;
     &:last-child {
       border-left: 1px dashed #c6c6c6;
+    }
+  }
+  svg {
+    fill: none;
+  }
+  .bx--tooltip__trigger {
+    &:hover,
+    &:focus {
+      svg {
+        fill: none;
+      }
     }
   }
 
