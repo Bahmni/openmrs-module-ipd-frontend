@@ -117,34 +117,36 @@ export default function DrugChartWrapper(props) {
   useEffect(() => {
     const currentShiftHours = shiftDetails.currentShiftHoursArray;
     const currentShiftMinutes = shiftDetails.currentShiftMinutesArray;
-    console.log("Hey ", shiftDetails);
     const firstHour = currentShiftHours[0];
     const lastHour = currentShiftHours[currentShiftHours.length - 1];
     let startDateTime = getDateTime(
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
       currentShiftHours[0], currentShiftMinutes[0]
     );
-    let endDateTime = getDateTime(
-      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      currentShiftHours[currentShiftHours.length - 1] + 1, 
-      currentShiftMinutes[currentShiftMinutes.length - 1] + 1
-    );
+    let endDateTime;
+    if(currentShiftMinutes[currentShiftMinutes.length - 1] + 1 == 60){
+      endDateTime = getDateTime(
+        isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+        currentShiftHours[currentShiftHours.length - 1], 
+        currentShiftMinutes[currentShiftMinutes.length - 1] + 1
+      );
+    } else {
+      endDateTime = getDateTime(
+        isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+        currentShiftHours[currentShiftHours.length - 1] + 1, 
+        currentShiftMinutes[currentShiftMinutes.length - 1] + 1
+      );
+    }
     /** if shift is going on two different dates */
     if (lastHour < firstHour) {
       const d = isReadMode ? new Date(visitSummary.stopDateTime) : new Date();
       const currentHour = d.getHours();
-      const currentMinute = d.getMinutes();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        if(currentMinute > 30)
-          endDateTime = getDateTime(d, currentShiftHours[currentShiftHours.length - 1] + 1, currentShiftMinutes[currentShiftMinutes.length - 1] + 1);
-        else 
-          endDateTime = getDateTime(d, currentShiftHours[currentShiftHours.length - 1] + 1, currentShiftMinutes[0])
+
+        endDateTime = getDateTime(d, currentShiftHours[currentShiftHours.length - 1] + 1, currentShiftMinutes[currentShiftMinutes.length - 1] + 1)
       } else {
         d.setDate(d.getDate() - 1);
-        if(currentMinute > 30)
-          startDateTime = getDateTime(d, currentShiftHours[0], currentShiftMinutes[currentShiftMinutes.length - 1] + 1);
-        else
         startDateTime = getDateTime(d, currentShiftHours[0], currentShiftMinutes[0]);
       }
     }
@@ -197,32 +199,34 @@ export default function DrugChartWrapper(props) {
       shiftConfig
     );
     const currentShiftHour = shiftDetailsObj.currentShiftHoursArray;
-    const currentShiftMinute = shiftDetailsObj.currentShiftHoursArray;
+    const currentShiftMinute = shiftDetailsObj.currentShiftMinutesArray;
     const updatedShiftIndex = shiftDetailsObj.shiftIndex;
     const firstHour = currentShiftHour[0];
     const lastHour = currentShiftHour[currentShiftHour.length - 1];
     let startDateTime = getDateTime(new Date(), currentShiftHour[0], currentShiftMinute[0]);
-    let endDateTime = getDateTime(
-      new Date(),
-      currentShiftHour[currentShiftHour.length - 1] + 1,
-      currentShiftMinute[currentShiftMinute.length - 1] + 1
-    );
+    let endDateTime;
+    if(currentShiftMinute[currentShiftMinute.length - 1] + 1 == 60){
+      endDateTime = getDateTime(
+        isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+        currentShiftHour[currentShiftHour.length - 1], 
+        currentShiftMinute[currentShiftMinute.length - 1] + 1
+      );
+    } else {
+      endDateTime = getDateTime(
+        isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+        currentShiftHour[currentShiftHour.length - 1] + 1, 
+        currentShiftMinute[currentShiftMinute.length - 1] + 1
+      );
+    }
     if (lastHour < firstHour) {
       const d = new Date();
       const currentHour = d.getHours();
-      const currentMinute = d.getMinutes();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        if(currentMinute > 30)
-          endDateTime = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1, currentShiftMinute[currentShiftMinute.length - 1] + 1);
-        else 
-          endDateTime = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1, currentShiftMinute[0])
+        endDateTime = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1, currentShiftMinute[currentShiftMinute.length - 1] + 1);
       } else {
         d.setDate(d.getDate() - 1);
-        if(currentMinute > 30)
-          startDateTime = getDateTime(d, currentShiftHour[0], currentShiftMinute[currentShiftMinute.length - 1] + 1);
-        else
-          startDateTime = getDateTime(d, currentShiftHour[0], currentShiftMinute[0]);
+        startDateTime = getDateTime(d, currentShiftHour[0], currentShiftMinute[0]);
       }
     }
     setNotCurrentShift(false);

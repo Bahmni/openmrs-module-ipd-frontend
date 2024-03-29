@@ -38,7 +38,6 @@ import {
 } from "../../DrugChart/utils/DrugChartUtils";
 import { displayShiftTimingsFormat } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
-import moment from "moment";
 export default function NursingTasks(props) {
   const { patientId } = props;
   const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
@@ -61,7 +60,7 @@ export default function NursingTasks(props) {
     shiftConfig
   );
   const allowedForthShfts =
-    getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0]) / 1000 +
+    getDateTime(new Date(), shiftDetails.currentShiftHoursArray[0], shiftDetails.currentShiftMinutesArray[0]) / 1000 +
     convertDaystoSeconds(2);
   const [startEndDates, updatedStartEndDates] = useState({
     startDate: isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
@@ -87,28 +86,30 @@ export default function NursingTasks(props) {
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
       currentShiftHour[0], currentShiftMinute[0]
     );
-    endDateTimeChange = getDateTime(
-      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      currentShiftHour[currentShiftHour.length - 1] + 1,
-      currentShiftMinute[0]
-    );
+    let endDateTimeChange;
+    if(currentShiftMinute[currentShiftMinute.length - 1] + 1 == 60){
+      endDateTimeChange = getDateTime(
+        isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+        currentShiftHour[currentShiftHour.length - 1], 
+        currentShiftMinute[currentShiftMinute.length - 1] + 1
+      );
+    } else {
+      endDateTimeChange = getDateTime(
+        isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+        currentShiftHour[currentShiftHour.length - 1] + 1, 
+        currentShiftMinute[currentShiftMinute.length - 1] + 1
+      );
+    }
 
     /** if the shift is going on two different dates */
     if (lastHour < firstHour) {
       const d = isReadMode ? new Date(visitSummary.stopDateTime) : new Date();
       const currentHour = d.getHours();
-      const currentMinute = d.getMinutes();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        if(currentMinute > 30)
-          endDateTimeChange = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1,currentShiftMinute[currentShiftMinute.length - 1] + 1);
-        else 
-          endDateTimeChange = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1, currentShiftMinute[0])
+        endDateTimeChange = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1, currentShiftMinute[currentShiftMinute.length - 1] + 1)
       } else {
         d.setDate(d.getDate() - 1);
-        if(currentMinute > 30)
-          startDateTimeChange = getDateTime(d, currentShiftHour[0], currentShiftMinute[currentShiftMinute.length - 1] + 1);
-        else
         startDateTimeChange = getDateTime(d, currentShiftHour[0], currentShiftMinute[0]);
       }
     }
@@ -185,26 +186,29 @@ export default function NursingTasks(props) {
     const firstHour = currentShiftHour[0];
     const lastHour = currentShiftHour[currentShiftHour.length - 1];
     startDateTimeChange = getDateTime(new Date(), currentShiftHour[0], currentShiftMinute[0]);
-    endDateTimeChange = getDateTime(
-      new Date(),
-      currentShiftHour[currentShiftHour.length - 1] + 1,
-      currentShiftMinute[currentShiftMinute.length - 1] + 1
-    );
+    let endDateTimeChange;
+    if(currentShiftMinute[currentShiftMinute.length - 1] + 1 == 60){
+      endDateTimeChange = getDateTime(
+        isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+        currentShiftHour[currentShiftHour.length - 1], 
+        currentShiftMinute[currentShiftMinute.length - 1] + 1
+      );
+    } else {
+      endDateTimeChange = getDateTime(
+        isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+        currentShiftHour[currentShiftHour.length - 1] + 1, 
+        currentShiftMinute[currentShiftMinute.length - 1] + 1
+      );
+    }
+    
     if (lastHour < firstHour) {
       const d = new Date();
       const currentHour = d.getHours();
-      const currentMinute = d.getMinutes();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        if(currentMinute > 30)
-          endDateTimeChange = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1,currentShiftMinute[currentShiftMinute.length - 1] + 1);
-        else 
-          endDateTimeChange = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1, currentShiftMinute[0])
+        endDateTimeChange = getDateTime(d, currentShiftHour[currentShiftHour.length - 1] + 1, currentShiftMinute[currentShiftMinute.length - 1] + 1)
       } else {
         d.setDate(d.getDate() - 1);
-        if(currentMinute > 30)
-          startDateTimeChange = getDateTime(d, currentShiftHour[0], currentShiftMinute[currentShiftMinute.length - 1] + 1);
-        else
         startDateTimeChange = getDateTime(d, currentShiftHour[0], currentShiftMinute[0]);
       }
     }
