@@ -7,7 +7,7 @@ exports[`DrugChart should match snapshot 1`] = `
   >
     <div
       class="drug-chart"
-      style="height: 205px;"
+      style="height: 209px;"
     >
       <div
         class="drug-chart-left-panel"
