@@ -79,7 +79,7 @@ export default function TaskTile(props) {
           isRelevantTask &&
           !stopTime &&
           "relevant-task-tile"
-        } 
+        }
         ${
           isDisabled
             ? isANonMedicationTask
@@ -112,7 +112,10 @@ export default function TaskTile(props) {
           )}
           <div
             className="tile-content-subtext"
-            style={{ color: isRelevantTask ? "#393939" : "#525252" }}
+            style={{
+              color: isRelevantTask ? "#393939" : "#525252",
+              paddingLeft: "25px",
+            }}
           >
             <span>{dosage}</span>
             {creator && (
@@ -129,7 +132,7 @@ export default function TaskTile(props) {
           ) && (
             <div className="tile-content-subtext">
               <Clock />
-              <div>
+              <div className="tile-content-subtext-time">
                 &nbsp;
                 {enable24HourTime
                   ? formatTime(
