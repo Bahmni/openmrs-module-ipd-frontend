@@ -20,7 +20,7 @@ export default function DrugChart(props) {
   const { registerPane, unregisterPane } = useScrollSync({
     vertical: true,
   });
-  const drugChartRowHeight = 70;
+  const drugChartRowHeight = 72;
   /* 65px header */
   const drugChartHeight = drugChartData?.length * drugChartRowHeight + 65;
 
