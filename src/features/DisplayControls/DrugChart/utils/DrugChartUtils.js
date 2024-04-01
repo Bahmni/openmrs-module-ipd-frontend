@@ -188,41 +188,45 @@ export const ifMedicationNotesPresent = (medicationNotes, side) =>
     side === "Not-Administered") &&
   Boolean(medicationNotes);
 
-export const getDateTime = (date, hour) => {
+export const getDateTime = (date, time) => {
+  const [hour, minute] = time.split(":");
   let currentShiftStartTime = new Date(
     date.getFullYear(),
     date.getMonth(),
-    date.getDate()
+    date.getDate(),
+    parseInt(hour),
+    parseInt(minute)
   );
-  return currentShiftStartTime.setHours(hour);
+  return currentShiftStartTime.getTime();
 };
 
 const getShiftHours = (shiftRange) => {
   const [startTime, endTime] = shiftRange.split("-");
-  let [firstHour] = startTime.split(":");
-  let [lastHour] = endTime.split(":");
-  firstHour = +firstHour;
-  lastHour = +lastHour;
+  const startMoment = moment(startTime, "HH:mm");
+  const endMoment = moment(endTime, "HH:mm");
   let shiftTimeInHours = 0;
-  if (lastHour > firstHour) {
-    shiftTimeInHours = lastHour - firstHour;
+  if (endMoment.isAfter(startMoment)) {
+    shiftTimeInHours = endMoment.diff(startMoment, "hours", true);
   } else {
-    shiftTimeInHours = 24 - (firstHour - lastHour);
+    shiftTimeInHours = 24 - startMoment.diff(endMoment, "hours", true);
   }
-  return shiftTimeInHours;
+  return Math.ceil(shiftTimeInHours);
 };
 
 export const getUpdatedShiftArray = (shiftRange = "") => {
   const updatedShiftHoursArray = [];
   const shiftTimeInHours = getShiftHours(shiftRange);
   const [startTime] = shiftRange.split("-");
-  let [lowestHour] = startTime.split(":");
+  let [lowestHour, lowestMinute] = startTime.split(":");
   let j = 0;
-  while (j < shiftTimeInHours) {
-    updatedShiftHoursArray.push(lowestHour % 24);
+  while (j <= shiftTimeInHours) { 
+    const formattedHour = (lowestHour % 24).toString().padStart(2, "0");
+    const formattedMinute = lowestMinute.toString().padStart(2, "0");
+    updatedShiftHoursArray.push(`${formattedHour}:${formattedMinute}`);
     lowestHour++;
     j++;
   }
+  console.log(updatedShiftHoursArray);
   return updatedShiftHoursArray;
 };
 
@@ -232,36 +236,32 @@ export const currentShiftHoursArray = (date, shiftDetails = {}) => {
     rangeArray.push(`${shift.shiftStartTime}-${shift.shiftEndTime}`);
   });
 
-  // finding the current hour range
-  const currentDate = date;
-  const currentHour = currentDate.getHours();
+  const currentMoment = moment(date);
   let currentRange = rangeArray[0];
   let shiftIndex = 0;
   rangeArray.forEach((range, index) => {
     const [startTime, endTime] = range.split("-");
-    let [firstHour] = startTime.split(":");
-    let [lastHour] = endTime.split(":");
-    firstHour = +firstHour;
-    lastHour = +lastHour;
-
+    const startMoment = moment(startTime, "HH:mm");
+    const endMoment = moment(endTime, "HH:mm");
+    
     /* if the shift is on same date */
-    if (lastHour > firstHour) {
-      if (currentHour >= firstHour && currentHour <= lastHour) {
-        currentRange = range;
-        shiftIndex = index;
+    if (endMoment.isAfter(startMoment)) {
+      if (currentMoment.isBetween(startMoment, endMoment)) {
+      currentRange = range;
+      shiftIndex = index;
       }
     } else {
       /* else shift is on different dates */
-      if (currentHour < 12) {
-        if (currentHour <= lastHour && currentHour <= firstHour) {
-          currentRange = range;
-          shiftIndex = index;
-        }
+      if (currentMoment.hour() < 12) {
+      if (currentMoment.isSameOrBefore(endMoment) && currentMoment.isSameOrBefore(startMoment)) {
+        currentRange = range;
+        shiftIndex = index;
+      }
       } else {
-        if (currentHour >= firstHour && currentHour >= lastHour) {
-          currentRange = range;
-          shiftIndex = index;
-        }
+      if (currentMoment.isSameOrAfter(startMoment) && currentMoment.isSameOrAfter(endMoment)) {
+        currentRange = range;
+        shiftIndex = index;
+      }
       }
     }
   });
