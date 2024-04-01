@@ -24,6 +24,7 @@ export const ADMINISTERED_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/scheduledMedicationAdministrations";
 export const EMERGENCY_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/adhocMedicationAdministrations";
+export const NON_MEDICATION_URL = RESTWS_V1 + "/tasks";
 export const BOOKMARK_PATIENT_BASE_URL =
   RESTWS_V1 + "/ipd/careteam/participants";
 export const PATIENT_URL = RESTWS_V1 + "/patient";
@@ -85,6 +86,7 @@ export const GET_SLOTS_FOR_PATIENTS_URL =
   RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
 export const INTAKE_OUTPUT_DATA_BASE_URL =
   BAHMNI_CORE + "/observations?";
+export const NON_MEDICATION_BASE_URL = RESTWS_V1 + "/tasks";
 
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
@@ -118,3 +120,5 @@ export const IPD_WARD_SEARCH_PLACEHOLDER_TEXT =
 
 export const MOBILE_BREAKPOINT = 480;
 export const TABLET_BREAKPOINT = 1024;
+
+export const IPD_PAGE_TITLE = "IPD";

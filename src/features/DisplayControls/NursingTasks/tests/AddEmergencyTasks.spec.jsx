@@ -20,6 +20,7 @@ const mockUpdateEmergencyTasksSlider = jest.fn();
 const mockSetShowSuccessNotification = jest.fn();
 const mockSetSuccessMessage = jest.fn();
 const mockSaveEmergencyMedication = jest.fn();
+window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
 jest.mock("../utils/EmergencyTasksUtils", () => {
   return {
@@ -82,7 +83,7 @@ describe("AddEmergencyTasks", () => {
   });
 
   it("should render the component with loading state", () => {
-    const { getByText, container } = render(
+    const { getAllByText, container } = render(
       <IPDContext.Provider value={{ config: mockConfig }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
@@ -90,7 +91,7 @@ describe("AddEmergencyTasks", () => {
         />
       </IPDContext.Provider>
     );
-    expect(getByText("Loading...")).toBeTruthy();
+    expect(getAllByText("Loading...")).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
 
@@ -325,5 +326,84 @@ describe("AddEmergencyTasks", () => {
         "You will lose the details entered. Do you want to continue?"
       )
     ).toBeTruthy();
+  });
+
+  it("should save button be disabled when fields are not filled", async () => {
+    MockDate.set("2024-01-05 12:00");
+    const { container, getByText, getAllByText, getByRole } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <AddEmergencyTasks
+          patientId={"__patient_uuid__"}
+          providerId={"__provider_uuid__"}
+          updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+          setShowSuccessNotification={mockSetShowSuccessNotification}
+          setSuccessMessage={mockSetSuccessMessage}
+        />
+      </IPDContext.Provider>
+    );
+  
+    await waitFor(() => {
+      expect (getAllByText("Add Nursing Task")).toBeTruthy();
+      })
+
+    const Role = screen.getByRole('tab', {
+      name: /non \- medication/i
+    });
+    Role.click();
+    await waitFor(() => {
+      expect(getAllByText("Task Name")).toBeTruthy();
+    })
+    const saveButton = screen.getAllByText("Save")[1];
+    expect(saveButton.disabled).toEqual(true);
+
+  });
+
+  it("should enable save when all fields are added for Non medication tasks", async () => {
+    MockDate.set("2024-01-05 12:00");
+    const { container, getByText, getAllByText, getByRole } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <AddEmergencyTasks
+          patientId={"__patient_uuid__"}
+          providerId={"__provider_uuid__"}
+          updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+          setShowSuccessNotification={mockSetShowSuccessNotification}
+          setSuccessMessage={mockSetSuccessMessage}
+        />
+      </IPDContext.Provider>
+    );
+  
+    await waitFor(() => {
+      expect (getAllByText("Add Nursing Task")).toBeTruthy();
+      })
+
+    const Role = screen.getByRole('tab', {
+      name: /non \- medication/i
+    });
+    Role.click();
+    await waitFor(() => {
+      expect(getAllByText("Task Name")).toBeTruthy();
+    })
+    const saveButton = screen.getAllByText("Save")[1];
+    expect(saveButton.disabled).toEqual(true);
+
+    const startTimeSelector = container.querySelector(
+      ".bx--time-picker__input-field"
+    );
+    fireEvent.change(startTimeSelector, { target: { value: "9:30" } });
+    fireEvent.blur(startTimeSelector);
+
+    const tasksInput = container.querySelector("textarea");
+    fireEvent.change(tasksInput, { target: { value: "Test Task" } });
+    expect(tasksInput.value).toEqual("Test Task");
+    
+    saveButton.click();
+    
+    await waitFor(() => {
+      expect(mockSetShowSuccessNotification).toHaveBeenCalledTimes(1);
+      expect(mockSetSuccessMessage).toHaveBeenCalledTimes(1);
+      expect(mockUpdateEmergencyTasksSlider).toHaveBeenCalledTimes(1);
+      expect(mockSaveEmergencyMedication).toHaveBeenCalledTimes(1);
+    })
+
   });
 });

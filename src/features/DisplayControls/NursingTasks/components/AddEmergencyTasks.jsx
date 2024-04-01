@@ -11,6 +11,9 @@ import {
   getDrugOrdersConfig,
   getProviders,
   saveEmergencyMedication,
+  getEncounterUuid,
+  getEncounterType,
+  saveNonMedicationTask,
 } from "../utils/EmergencyTasksUtils";
 import {
   NumberInputCarbon,
@@ -40,6 +43,7 @@ import {
 } from "../../../../utils/DateTimeUtils";
 import AdministeredMedicationList from "./AdministeredMedicationList";
 import { IPDContext } from "../../../../context/IPDContext";
+import { getCookies } from "../../../../utils/CommonUtils";
 
 const AddEmergencyTasks = (props) => {
   const {
@@ -55,6 +59,7 @@ const AddEmergencyTasks = (props) => {
   const [unitOptions, setUnitOptions] = useState([]);
   const [routeOptions, setRouteOptions] = useState([]);
   const [providerOptions, setProviderOptions] = useState([]);
+  const [activeTab, setActiveTab] = useState("Medication");
   const { config = {} } = useContext(IPDContext);
   const { enable24HourTime = {} } = config;
 
@@ -67,13 +72,20 @@ const AddEmergencyTasks = (props) => {
       enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
     )
   );
+  const [scheduleTime, setScheduleTime] = useState(
+    formatDate(
+      new Date(),
+      enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
+    )
+  );
+
   const [requestedProvider, setRequestedProvider] = useState({});
   const [routes, setRoutes] = useState({});
   const [dosage, setDosage] = useState(undefined);
   const [notes, setNotes] = useState("");
+  const [task, setTask] = useState("");
   const [emergencyTask, setEmergencyTask] = useState({});
   const [popupMedicationData, setPopupMedicationData] = useState({});
-
   const [showWarningNotification, setShowWarningNotification] = useState(false);
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
   const [atleastOneFieldFilled, setAtleastOneFieldFilled] = useState(false);
@@ -91,6 +103,12 @@ const AddEmergencyTasks = (props) => {
     <FormattedMessage
       id={"FUTURE_TIME"}
       defaultMessage={"Future time is not allowed"}
+    />
+  );
+  const invalidPastTimeText = (
+    <FormattedMessage
+      id={"FUTURE_TIME"}
+      defaultMessage={"Past time is not allowed"}
     />
   );
   const fetchDrugOrderConfig = async () => {
@@ -215,6 +233,35 @@ const AddEmergencyTasks = (props) => {
     return emergencyMedicationPayload;
   };
 
+  const createNonMedicationTaskPayload = async () => {
+    const cookies = getCookies();
+    const { uuid: encounterTypeUuid } = await getEncounterType("Consultation");
+    const { uuid: locationUuid } = JSON.parse(cookies["bahmni.user.location"]);
+    const activeEncounterPayload = {
+      patientUuid: patientId,
+      locationUuid: locationUuid,
+      encounterTypeUuid: encounterTypeUuid,
+    };
+    const encounterUuid = await getEncounterUuid(activeEncounterPayload);
+    const scheduleTimein24Hour = convertTo24Hour(scheduleTime);
+    const scheduleDate = new Date();
+    const time = scheduleTimein24Hour.split(":");
+    scheduleDate.setHours(time[0]);
+    scheduleDate.setMinutes(time[1]);
+    const utcTimeEpoch = dateTimeToEpochUTCTime(scheduleDate);
+    const nonMedicationPayload = {
+      name: task,
+      requestedStartTime: utcTimeEpoch * 1000,
+      requestedEndTime: utcTimeEpoch * 1000,
+      patientUuid: patientId,
+      encounterUuid: encounterUuid.encounterUuid,
+      intent: "ORDER",
+      taskType: "nursing_activity",
+      status: "REQUESTED",
+    };
+    return nonMedicationPayload;
+  };
+
   const handlePrimaryButtonClick = async () => {
     updateIsSaveDisabled(true);
     const response = await saveEmergencyMedication(emergencyTask);
@@ -231,9 +278,24 @@ const AddEmergencyTasks = (props) => {
     updateEmergencyTasksSlider(false);
   };
 
-  const handleSave = () => {
-    setEmergencyTask(createEmergencyMedicationPayload());
-    setOpenConfirmationModal(true);
+  const saveNonMedicationAdhocTasks = () => {
+    setShowSuccessNotification(true);
+    setSuccessMessage("NON_MEDICATION_TASK_SAVE_MESSAGE");
+    updateEmergencyTasksSlider(false);
+  };
+
+  const handleSave = async () => {
+    if (activeTab === "Medication") {
+      setEmergencyTask(createEmergencyMedicationPayload());
+      setOpenConfirmationModal(true);
+    } else {
+      const nonMedicationTaskPayload = await createNonMedicationTaskPayload();
+      const response = await saveNonMedicationTask(nonMedicationTaskPayload);
+      if (response.status === 200) {
+        updateIsSaveDisabled(false);
+        saveNonMedicationAdhocTasks();
+      }
+    }
   };
 
   useEffect(() => {
@@ -242,7 +304,19 @@ const AddEmergencyTasks = (props) => {
     fetchAllProviders();
   }, []);
 
-  useEffect(() => {
+  const handleNonMedicationSaveButton = () => {
+    if (task && scheduleTime && !(_.isEmpty(task) || _.isEmpty(scheduleTime))) {
+      updateIsSaveDisabled(false);
+    } else {
+      updateIsSaveDisabled(true);
+      setAtleastOneFieldFilled(false);
+      if (task) {
+        setAtleastOneFieldFilled(true);
+      }
+    }
+  };
+
+  const handleMedicationSaveButton = () => {
     if (
       dosage &&
       administrationDate &&
@@ -271,6 +345,10 @@ const AddEmergencyTasks = (props) => {
         setAtleastOneFieldFilled(true);
       }
     }
+  };
+
+  useEffect(() => {
+    handleMedicationSaveButton();
   }, [
     selectedDrug,
     dosage,
@@ -284,9 +362,12 @@ const AddEmergencyTasks = (props) => {
   ]);
 
   useEffect(() => {
+    handleNonMedicationSaveButton();
+  }, [task, scheduleTime]);
+
+  useEffect(() => {
     customValidation(administrationTime);
   }, [administrationDate]);
-
 
   const customValidation = (time) => {
     if (time) {
@@ -304,6 +385,25 @@ const AddEmergencyTasks = (props) => {
         setInvalidText(invalidFutureTimeText);
       } else {
         setIsInvalidTime(false);
+      }
+    }
+  };
+
+  const customNonMedicationTaskValidation = (time) => {
+    if (time) {
+      if (
+        isTimeInFuture(
+          time,
+          formatDate(
+            new Date(),
+            enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
+          )
+        )
+      ) {
+        setIsInvalidTime(false);
+      } else {
+        setIsInvalidTime(true);
+        setInvalidText(invalidPastTimeText);
       }
     }
   };
@@ -328,6 +428,10 @@ const AddEmergencyTasks = (props) => {
           <Tabs>
             <Tab
               id="Medication"
+              onClick={() => {
+                setActiveTab("Medication");
+                handleMedicationSaveButton();
+              }}
               label={
                 <FormattedMessage
                   id={"MEDICATION"}
@@ -452,14 +556,67 @@ const AddEmergencyTasks = (props) => {
             </Tab>
             <Tab
               id="Non - Medication"
-              disabled
+              onClick={() => {
+                setActiveTab("Non-Medication");
+                handleNonMedicationSaveButton();
+              }}
               label={
                 <FormattedMessage
                   id={"NON_MEDICATION"}
                   defaultMessage={"Non - Medication"}
                 />
               }
-            ></Tab>
+            >
+              {isLoading && (
+                <div>
+                  <Loading />
+                </div>
+              )}
+              <div className="emergency-task-slider-content">
+                <TextArea
+                  labelText={<Title text={"Task Name"} isRequired={true} />}
+                  onChange={(e) => {
+                    setTask(e.target.value);
+                  }}
+                  placeholder={"Enter a title for the task "}
+                  maxCount={10}
+                  rows={1}
+                />
+                <div className="time-info">
+                  {enable24HourTime ? (
+                    <TimePicker24Hour
+                      defaultTime={scheduleTime}
+                      onChange={(e) => {
+                        e != "" && setScheduleTime(e);
+                        setIsTimeChanged(true);
+                      }}
+                      labelText={`Schedule Time (${timeText24})`}
+                      width={"250px"}
+                      isRequired={true}
+                      customValidation={customNonMedicationTaskValidation}
+                      actionForInvalidTime={actionForInvalidTime}
+                      invalid={isInvalidTime}
+                      invalidText={invalidText}
+                    />
+                  ) : (
+                    <TimePicker
+                      defaultTime={scheduleTime}
+                      onChange={(e) => {
+                        e != "" && setScheduleTime(e);
+                        setIsTimeChanged(true);
+                      }}
+                      labelText={`Schedule Time (${timeText12})`}
+                      width={"155px"}
+                      isRequired={true}
+                      customValidation={customNonMedicationTaskValidation}
+                      actionForInvalidTime={actionForInvalidTime}
+                      invalid={isInvalidTime}
+                      invalidText={invalidText}
+                    />
+                  )}
+                </div>
+              </div>
+            </Tab>
           </Tabs>
         </div>
         <Modal

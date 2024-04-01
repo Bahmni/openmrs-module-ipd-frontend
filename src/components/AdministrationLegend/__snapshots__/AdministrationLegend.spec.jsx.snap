@@ -15,7 +15,7 @@ exports[`AdministrationLegend should render without crashing 1`] = `
     </div>
     <div>
       <test-file-stub />
-      Administered
+      Completed
     </div>
     <div>
       <test-file-stub />

@@ -11,7 +11,7 @@ describe("AdministrationLegend", () => {
     const { getByText } = render(<AdministrationLegend />);
     expect(getByText("Pending")).toBeTruthy();
     expect(getByText("Late")).toBeTruthy();
-    expect(getByText("Administered")).toBeTruthy();
+    expect(getByText("Completed")).toBeTruthy();
     expect(getByText("Administered Late")).toBeTruthy();
     expect(getByText("Not Administered")).toBeTruthy();
   });

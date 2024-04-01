@@ -99,7 +99,7 @@ exports[`DrugChart should match snapshot 1`] = `
       </div>
       <div>
         <test-file-stub />
-        Administered
+        COMPLETED
       </div>
       <div>
         <test-file-stub />

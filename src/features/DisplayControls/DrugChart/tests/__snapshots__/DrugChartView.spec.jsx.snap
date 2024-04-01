@@ -520,7 +520,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
         </div>
         <div>
           <test-file-stub />
-          Administered
+          Completed
         </div>
         <div>
           <test-file-stub />

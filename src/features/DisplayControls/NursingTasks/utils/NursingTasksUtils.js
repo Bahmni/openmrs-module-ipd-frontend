@@ -3,6 +3,7 @@ import {
   MEDICATIONS_BASE_URL,
   ADMINISTERED_MEDICATIONS_BASE_URL,
   asNeededPlaceholderConceptName,
+  NON_MEDICATION_BASE_URL,
 } from "../../../../constants";
 import moment from "moment";
 
@@ -21,6 +22,20 @@ export const fetchMedicationNursingTasks = async (
   }
 };
 
+export const fetchNonMedicationTasks = async (
+  visitUuid,
+  startTime,
+  endTime
+) => {
+  const NON_MEDICATION_URL = `${NON_MEDICATION_BASE_URL}?visitUuid=${visitUuid}&startTime=${startTime}&endTime=${endTime}`;
+  try {
+    const response = await axios.get(NON_MEDICATION_URL);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const GetUTCEpochForDate = (viewDate) => moment.utc(viewDate).unix();
 
 export const ExtractMedicationNursingTasksData = (
@@ -35,7 +50,7 @@ export const ExtractMedicationNursingTasksData = (
     stoppedExtractedData = [],
     skippedExtractedData = [],
     missedExtractedData = [];
-  medicationNursingTasksData.forEach((item) => {
+  medicationNursingTasksData?.forEach((item) => {
     const { slots } = item;
 
     slots.forEach((slot) => {
@@ -239,9 +254,127 @@ export const disableTaskTilePastNextSlotTime = (
     const upcomingTask = medicationNursingTasks[index + 1][0];
     const upcomingTaskTimeInEpoch = upcomingTask.startTimeInEpochSeconds;
     const currentTimeInEpoch = moment().unix();
-    if (upcomingTaskTimeInEpoch <= currentTimeInEpoch)
+    if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
       currentTask.isDisabled = true;
+    }
   }
 };
 
 export const getTimeInSeconds = (days) => days * 86400;
+
+export const sortNursingTasks = (medicationNursingTasks) => {
+  medicationNursingTasks.sort((a, b) => {
+    const aTime =
+      a &&
+      (a[0]?.startTimeInEpochSeconds ??
+        a[0]?.administeredTimeInEpochSeconds ??
+        a[0]?.executionEndTime);
+    const bTime =
+      b &&
+      (b[0]?.startTimeInEpochSeconds ??
+        b[0]?.administeredTimeInEpochSeconds ??
+        b[0]?.executionEndTime);
+    return aTime - bTime;
+  });
+};
+
+export const ExtractNonMedicationTasks = (
+  nonMedicationTasks,
+  filterValue,
+  isReadMode
+) => {
+  const extractedData = [];
+  const groupedData = [],
+    completedExtractedData = [],
+    pendingExtractedData = [];
+  let currentStartTime = null;
+  let currentGroup = [];
+  nonMedicationTasks?.forEach((nonMedicationTask) => {
+    const {
+      name,
+      partOf,
+      requestedStartTime,
+      status,
+      uuid,
+      token,
+      taskType,
+      creator,
+      executionEndTime,
+    } = nonMedicationTask;
+    const startTimeInDate = new Date(requestedStartTime);
+    const taskInfo = {
+      drugName: name,
+      uuid,
+      startTimeInEpochSeconds: requestedStartTime / 1000,
+      startTime: startTimeInDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      }),
+      partOf,
+      isDisabled: isReadMode ? true : !!executionEndTime,
+      status,
+      isANonMedicationTask: true,
+      token,
+      taskType,
+      creator,
+    };
+
+    if (
+      (filterValue.id === "pending" || filterValue.id === "allTasks") &&
+      taskInfo.status === "REQUESTED"
+    ) {
+      pendingExtractedData.push(taskInfo);
+    } else if (
+      (filterValue.id === "completed" || filterValue.id === "allTasks") &&
+      taskInfo.status === "COMPLETED"
+    ) {
+      completedExtractedData.push(taskInfo);
+    }
+  });
+  extractedData.push(...pendingExtractedData);
+  extractedData.push(...completedExtractedData);
+  // grouping non-medication tasks together when the filter.id is pending
+  if (filterValue.id === "pending") {
+    extractedData.forEach((item) => {
+      if (item.partOf == null && item.taskType.display !== "nursing_activity") {
+        groupedData.push(item);
+      } else {
+        if (item.startTime !== currentStartTime && !item.stopTime) {
+          if (currentGroup.length > 0) {
+            groupedData.push(currentGroup);
+          }
+          currentGroup = [item];
+          currentStartTime = item.startTime;
+        } else {
+          currentGroup.push(item);
+        }
+      }
+    });
+    if (currentGroup.length > 0) {
+      groupedData.push(currentGroup);
+    }
+    // stacking logic for non-medication tasks
+    extractedData.forEach((item) => {
+      if (item.partOf != null) {
+        for (let index = 0; index < groupedData.length; index++) {
+          const uuid =
+            groupedData[index].length > 0
+              ? groupedData[index][0].uuid
+              : groupedData[index].uuid;
+          if (item.partOf === uuid) {
+            if (Array.isArray(groupedData[index])) {
+              groupedData[index].push(item);
+            } else {
+              groupedData[index] = [groupedData[index], item];
+            }
+            break;
+          }
+        }
+      }
+    });
+  } else if (extractedData.length > 0) {
+    groupedData.push(extractedData);
+  }
+  return groupedData;
+};

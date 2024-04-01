@@ -22,7 +22,7 @@ export default function AdministrationLegend() {
       </div>
       <div>
         <AdministeredIcon />
-        <FormattedMessage id="ADMINISTERED" defaultMessage={"Administered"} />
+        <FormattedMessage id="COMPLETED" defaultMessage={"Completed"} />
       </div>
       <div>
         <AdministeredLateIcon />
