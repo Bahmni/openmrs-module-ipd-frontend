@@ -277,13 +277,18 @@ export const getNextShiftDetails = (
   endDate
 ) => {
   const currentShiftRange = rangeArray[shiftIndex];
-  const currentshiftInHours = getShiftHours(currentShiftRange);
-  const nextStartDate = moment(startDate).add(currentshiftInHours, "h");
+  const [currentStartTime, currentEndTime] = currentShiftRange.split("-");
+  const currentStartTimeMoment = moment(getDateTime(new Date(startDate), currentStartTime));
+  const currentEndTimeMoment = moment(getDateTime(new Date(endDate), currentEndTime));
 
   const nextShiftIndex = (shiftIndex + 1) % rangeArray.length;
   const nextShiftRange = rangeArray[nextShiftIndex];
-  const nextShiftInHours = getShiftHours(nextShiftRange);
-  const nextEndDate = moment(endDate).add(nextShiftInHours, "h");
+  const [nextStartTime, nextEndTime] = nextShiftRange.split("-");
+  const nextStartDateMoment = moment(getDateTime(new Date(startDate), nextStartTime));
+  const nextEndDateMoment = moment(getDateTime(new Date(endDate), nextEndTime));
+
+  let nextStartDate = nextStartDateMoment.diff(currentStartTimeMoment, "hours", true) < 0 ? nextStartDateMoment.add(1, "days") : nextStartDateMoment;
+  let nextEndDate = nextEndDateMoment.diff(currentEndTimeMoment, "hours", true) < 0 ? nextEndDateMoment.add(1, "days") : nextEndDateMoment;
 
   return {
     startDateTime: +nextStartDate,
@@ -298,19 +303,24 @@ export const getPreviousShiftDetails = (
   startDate,
   endDate
 ) => {
-  const currentShiftRange = rangeArray[shiftIndex];
-  const currentshiftInHours = getShiftHours(currentShiftRange);
-  const nextEndDate = moment(endDate).subtract(currentshiftInHours, "h");
-
   const previousShiftIndex =
     shiftIndex - 1 < 0 ? rangeArray.length - 1 : shiftIndex - 1;
   const previousShiftRange = rangeArray[previousShiftIndex];
-  const previousShiftInHours = getShiftHours(previousShiftRange);
-  const nextStartDate = moment(startDate).subtract(previousShiftInHours, "h");
+  const [previousStartTime, previousEndTime] = previousShiftRange.split("-");
+  const previousStartTimeMoment = moment(getDateTime(new Date(startDate), previousStartTime));
+  const previousEndTimeMoment = moment(getDateTime(new Date(endDate), previousEndTime));
+
+  const currentShiftRange = rangeArray[shiftIndex];
+  const [currentStartTime, currentEndTime] = currentShiftRange.split("-");
+  const currentStartTimeMoment = moment(getDateTime(new Date(startDate), currentStartTime));
+  const currentEndTimeMoment = moment(getDateTime(new Date(endDate), currentEndTime));
+
+  let previousStartDate = previousStartTimeMoment.diff(currentStartTimeMoment, "hours", true) > 0 ? previousStartTimeMoment.subtract(1, "days") : previousStartTimeMoment;
+  let previousEndDate = previousEndTimeMoment.diff(currentEndTimeMoment, "hours", true) > 0 ? previousEndTimeMoment.subtract(1, "days") : previousEndTimeMoment;
 
   return {
-    startDateTime: +nextStartDate,
-    endDateTime: +nextEndDate,
+    startDateTime: +previousStartDate,
+    endDateTime: +previousEndDate,
     previousShiftIndex,
   };
 };
