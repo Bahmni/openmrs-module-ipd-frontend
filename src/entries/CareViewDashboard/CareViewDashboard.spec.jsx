@@ -136,7 +136,7 @@ describe("CareViewDashboard", () => {
       ".bx--tile.summary-tile.selected-header"
     );
     expect(
-      within(totalPatientsSummary).getByText(/Total patients/i)
+      within(totalPatientsSummary).getByText(/Total patient/i)
     ).toBeTruthy();
     expect(within(totalPatientsSummary).getByText(/5/i)).toBeTruthy();
 

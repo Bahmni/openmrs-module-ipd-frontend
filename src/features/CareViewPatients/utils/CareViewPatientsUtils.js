@@ -4,6 +4,7 @@ import {
   GET_PATIENT_LIST_URL,
   GET_SEARCH_PATIENT_LIST_URL,
   GET_MY_PATIENT_LIST_URL,
+  WARD_SUMMARY_HEADER,
 } from "../../../constants";
 
 export const fetchPatientsList = async (
@@ -13,11 +14,11 @@ export const fetchPatientsList = async (
   headerSelected,
   providerUuid
 ) => {
-  if (headerSelected === "TOTAL_PATIENTS") {
+  if (headerSelected === WARD_SUMMARY_HEADER.TOTAL_PATIENTS) {
     return await axios.get(GET_PATIENT_LIST_URL.replace("{wardId}", wardId), {
       params: { offset, limit },
     });
-  } else if (headerSelected === "MY_PATIENTS") {
+  } else if (headerSelected === WARD_SUMMARY_HEADER.MY_PATIENTS) {
     return await axios.get(
       GET_MY_PATIENT_LIST_URL.replace("{wardId}", wardId),
       {

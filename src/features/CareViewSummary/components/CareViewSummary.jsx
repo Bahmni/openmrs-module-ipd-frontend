@@ -15,7 +15,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
-import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from "../../../constants";
+import {
+  MOBILE_BREAKPOINT,
+  TABLET_BREAKPOINT,
+  WARD_SUMMARY_HEADER,
+} from "../../../constants";
 export const CareViewSummary = (props) => {
   const { callbacks } = props;
   const [options, setOptions] = useState([]);
@@ -84,14 +88,15 @@ export const CareViewSummary = (props) => {
   const totalPatientsTile = (
     <Tile
       className={`summary-tile ${
-        headerSelected === "TOTAL_PATIENTS" && "selected-header"
+        headerSelected === WARD_SUMMARY_HEADER.TOTAL_PATIENTS &&
+        "selected-header"
       }`}
-      onClick={() => setHeaderSelected("TOTAL_PATIENTS")}
+      onClick={() => setHeaderSelected(WARD_SUMMARY_HEADER.TOTAL_PATIENTS)}
     >
       <span className={"heading-text"}>
         <FormattedMessage
-          id={"TOTAL_PATIENTS"}
-          defaultMessage={"Total patients"}
+          id={WARD_SUMMARY_HEADER.TOTAL_PATIENTS}
+          defaultMessage={"Total patient(s)"}
         />
       </span>
       <span className={"value-text"}>{wardSummary.totalPatients || 0}</span>
@@ -100,12 +105,15 @@ export const CareViewSummary = (props) => {
   const myPatientsTile = (
     <Tile
       className={`summary-tile ${
-        headerSelected === "MY_PATIENTS" && "selected-header"
+        headerSelected === WARD_SUMMARY_HEADER.MY_PATIENTS && "selected-header"
       }`}
-      onClick={() => setHeaderSelected("MY_PATIENTS")}
+      onClick={() => setHeaderSelected(WARD_SUMMARY_HEADER.MY_PATIENTS)}
     >
       <span className={"heading-text"}>
-        <FormattedMessage id={"MY_PATIENTS"} defaultMessage={"My patient(s)"} />
+        <FormattedMessage
+          id={WARD_SUMMARY_HEADER.MY_PATIENTS}
+          defaultMessage={"My patient(s)"}
+        />
       </span>
       <span className={"value-text"}>
         {wardSummary.totalProviderPatients || 0}

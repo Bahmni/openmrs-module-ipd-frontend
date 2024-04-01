@@ -165,7 +165,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           <span
             class="heading-text"
           >
-            Total patients
+            Total patient(s)
           </span>
           <span
             class="value-text"
