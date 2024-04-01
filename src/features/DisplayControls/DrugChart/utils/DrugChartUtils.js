@@ -226,7 +226,6 @@ export const getUpdatedShiftArray = (shiftRange = "") => {
     lowestHour++;
     j++;
   }
-  console.log(updatedShiftHoursArray);
   return updatedShiftHoursArray;
 };
 
@@ -326,30 +325,28 @@ export const getPreviousShiftDetails = (
 };
 
 export const isCurrentShift = (
+  shiftDetails,
   shiftConfig,
   startDateTimeChange,
   endDateTimeChange
 ) => {
   const shiftDetailsObj = currentShiftHoursArray(new Date(), shiftConfig);
   const currentShift = shiftDetailsObj.currentShiftHoursArray;
-  let startDateTimeCurrent = getDateTime(new Date(), currentShift[0]);
-  let endDateTimeCurrent = getDateTime(
-    new Date(),
-    currentShift[currentShift.length - 1] + 1
-  );
+  const [start, end] = shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
+  const [, startMinute] = start.split(":");
+  const [, endMinute] = end.split(":");
+  let startDateTimeCurrent = getDateTime(new Date(),currentShift[0].replace(/:\d+$/, `:${startMinute}`));
+  let endDateTimeCurrent = getDateTime(new Date(),currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}}`));
 
   if (startDateTimeCurrent > endDateTimeCurrent) {
     const d = new Date();
     const currentHour = d.getHours();
     if (currentHour > 12) {
       d.setDate(d.getDate() + 1);
-      endDateTimeCurrent = getDateTime(
-        d,
-        currentShift[currentShift.length - 1] + 1
-      );
+      endDateTimeCurrent = getDateTime(d,currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`));
     } else {
       d.setDate(d.getDate() - 1);
-      startDateTimeCurrent = getDateTime(d, currentShift[0]);
+      startDateTimeCurrent = getDateTime(d, currentShift[0].replace(/:\d+$/, `:${startMinute}`));
     }
   }
   return (

@@ -155,7 +155,7 @@ export default function DrugChartWrapper(props) {
       );
     const previousShiftRange = shiftRangeArray[previousShiftIndex];
     const previousShiftArray = getUpdatedShiftArray(previousShiftRange);
-    isCurrentShift(shiftConfig, startDateTime, endDateTime)
+    isCurrentShift(shiftDetails, shiftConfig, startDateTime, endDateTime)
       ? setNotCurrentShift(false)
       : setNotCurrentShift(true);
     updateShiftArray(previousShiftArray);
@@ -174,7 +174,7 @@ export default function DrugChartWrapper(props) {
     );
     const nextShiftRange = shiftRangeArray[nextShiftIndex];
     const nextShiftArray = getUpdatedShiftArray(nextShiftRange);
-    isCurrentShift(shiftConfig, startDateTime, endDateTime)
+    isCurrentShift(shiftDetails, shiftConfig, startDateTime, endDateTime)
       ? setNotCurrentShift(false)
       : setNotCurrentShift(true);
     updateShiftArray(nextShiftArray);
