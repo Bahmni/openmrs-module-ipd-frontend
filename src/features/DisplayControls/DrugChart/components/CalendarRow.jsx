@@ -4,6 +4,7 @@ import TimeCell from "./TimeCell.jsx";
 import { areDatesSame, formatDate } from "../../../../utils/DateTimeUtils.js";
 import { IPDContext } from "../../../../context/IPDContext";
 import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
+import moment from "moment";
 
 export default function CalendarRow(props) {
   const { config } = useContext(IPDContext);
@@ -44,28 +45,30 @@ export default function CalendarRow(props) {
     } else {
       time = formatDate(slot.startTime * 1000, timeFormatfor24Hr);
     }
-    const [hours, minutes] = time.split(":");
+    const [hours] = time.split(":");
     transformedData[+hours] = transformedData[+hours] || [];
     transformedData[+hours].push({
-      minutes,
+      time,
       status: administrationSummary.status,
       ...adminInfo,
     });
   });
   return (
     <div style={{ display: "flex" }}>
-      {currentShiftArray.map((hour) => {
-        const date = new Date();
-        const currentHour = date.getHours();
-        const currentMinute = date.getMinutes();
+      {currentShiftArray.map((time, index) => {
+        const shiftArrayTime = moment(time, timeFormatfor24Hr);
+        const nextShiftArrayTime = moment(currentShiftArray[index + 1], timeFormatfor24Hr);
+        const date = moment();
         const sameDate = areDatesSame(date, selectedDate);
-        const isCurrentHour = hour === currentHour && sameDate;
-        const highlightedCell = currentMinute < 30 ? "left" : "right";
-        if (transformedData[hour]) {
+        const isCurrentHour = date.isBetween(shiftArrayTime, nextShiftArrayTime) && sameDate;
+        const highlightedCell = date.diff(shiftArrayTime) < nextShiftArrayTime.diff(date) ? "left" : "right";
+        if (transformedData[shiftArrayTime.hour()]) {
           return (
             <TimeCell
-              slotInfo={transformedData[hour]}
-              key={hour}
+              slotInfo={transformedData[shiftArrayTime.hour()]}
+              startTime={shiftArrayTime}
+              endTime={nextShiftArrayTime} 
+              key={time}
               doHighlightCell={isCurrentHour}
               highlightedCell={highlightedCell}
             />
@@ -73,7 +76,7 @@ export default function CalendarRow(props) {
         }
         return (
           <TimeCell
-            key={hour}
+            key={time}
             doHighlightCell={isCurrentHour}
             highlightedCell={highlightedCell}
           />

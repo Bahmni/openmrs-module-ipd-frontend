@@ -5,14 +5,17 @@ import "../styles/TimeCell.scss";
 import SVGIcon from "./SVGIcon.jsx";
 import NoteIcon from "../../../../icons/note.svg";
 import { ifMedicationNotesPresent } from "../utils/DrugChartUtils";
+import { timeFormatfor24Hr } from "../../../../constants.js";
+import moment from "moment";
 
 export default function TimeCell(props) {
-  const { slotInfo = [], doHighlightCell, highlightedCell } = props;
+  const { slotInfo = [], startTime = "", endTime = "", doHighlightCell, highlightedCell } = props;
   const left = [],
     right = [];
   slotInfo.map((slot) => {
-    const { minutes } = slot;
-    if (+minutes < 30) {
+    const { time } = slot;
+    const momentTime = moment(time, timeFormatfor24Hr);
+    if (momentTime.diff(startTime) < endTime.diff(momentTime)) {
       left.push(slot);
     } else {
       right.push(slot);
@@ -79,4 +82,6 @@ TimeCell.propTypes = {
   slotInfo: PropTypes.array,
   doHighlightCell: PropTypes.bool,
   highlightedCell: PropTypes.string,
+  startTime: PropTypes.object,
+  endTime: PropTypes.object
 };

@@ -83,15 +83,18 @@ export default function NursingTasks(props) {
 
   useEffect(() => {
     const currentShift = shiftDetails.currentShiftHoursArray;
-    const firstHour = currentShift[0];
-    const lastHour = currentShift[currentShift.length - 1];
+    const [start, end] = shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
+    const [, startMinute] = start.split(":");
+    const [, endMinute] = end.split(":");
+    const firstHour = currentShift[0].replace(/:\d+$/, `:${startMinute}`);
+    const lastHour = currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`);
     startDateTimeChange = getDateTime(
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      currentShift[0]
+      currentShift[0].replace(/:\d+$/, `:${startMinute}`)
     );
     endDateTimeChange = getDateTime(
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      currentShift[currentShift.length - 1] + 1
+      currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}}`)
     );
 
     /** if the shift is going on two different dates */
@@ -100,16 +103,12 @@ export default function NursingTasks(props) {
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTimeChange = getDateTime(
-          d,
-          currentShift[currentShift.length - 1] + 1
-        );
+        endDateTimeChange = getDateTime(d,currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`));
       } else {
         d.setDate(d.getDate() - 1);
-        startDateTimeChange = getDateTime(d, currentShift[0]);
+        startDateTimeChange = getDateTime(d, currentShift[0].replace(/:\d+$/, `:${startMinute}`));
       }
     }
-
     updatedStartEndDates({
       startDate: startDateTimeChange,
       endDate: endDateTimeChange,
@@ -144,7 +143,7 @@ export default function NursingTasks(props) {
       );
     startDateTimeChange = startDateTime;
     endDateTimeChange = endDateTime;
-    isCurrentShift(shiftConfig, startDateTimeChange, endDateTimeChange)
+    isCurrentShift(shiftDetails, shiftConfig, startDateTimeChange, endDateTimeChange)
       ? setNotCurrentShift(false)
       : setNotCurrentShift(true);
     updateShiftIndex(previousShiftIndex);
@@ -162,7 +161,7 @@ export default function NursingTasks(props) {
     );
     startDateTimeChange = startDateTime;
     endDateTimeChange = endDateTime;
-    isCurrentShift(shiftConfig, startDateTimeChange, endDateTimeChange)
+    isCurrentShift(shiftDetails, shiftConfig, startDateTimeChange, endDateTimeChange)
       ? setNotCurrentShift(false)
       : setNotCurrentShift(true);
     updateShiftIndex(nextShiftIndex);
@@ -178,25 +177,25 @@ export default function NursingTasks(props) {
     );
     const currentShift = shiftDetailsObj.currentShiftHoursArray;
     const updatedShiftIndex = shiftDetailsObj.shiftIndex;
-    const firstHour = currentShift[0];
-    const lastHour = currentShift[currentShift.length - 1];
-    startDateTimeChange = getDateTime(new Date(), currentShift[0]);
+    const [start, end] = shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
+    const [, startMinute] = start.split(":");
+    const [, endMinute] = end.split(":");
+    const firstHour = currentShift[0].replace(/:\d+$/, `:${startMinute}`);
+    const lastHour = currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`);
+    startDateTimeChange = getDateTime(new Date(), currentShift[0].replace(/:\d+$/, `:${startMinute}`));
     endDateTimeChange = getDateTime(
       new Date(),
-      currentShift[currentShift.length - 1] + 1
+      currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`)
     );
     if (lastHour < firstHour) {
       const d = new Date();
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTimeChange = getDateTime(
-          d,
-          currentShift[currentShift.length - 1] + 1
-        );
+        endDateTimeChange = getDateTime(d, currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`));
       } else {
         d.setDate(d.getDate() - 1);
-        startDateTimeChange = getDateTime(d, currentShift[0]);
+        startDateTimeChange = getDateTime(d, currentShift[0].replace(/:\d+$/, `:${startMinute}`));
       }
     }
     setNotCurrentShift(false);
@@ -279,7 +278,7 @@ export default function NursingTasks(props) {
         isReadMode
       );
       if (
-        !isCurrentShift(shiftConfig, startDateTimeChange, endDateTimeChange)
+        !isCurrentShift(shiftDetails, shiftConfig, startDateTimeChange, endDateTimeChange)
       ) {
         const filteredData = extractedData
           .map((extract) =>
