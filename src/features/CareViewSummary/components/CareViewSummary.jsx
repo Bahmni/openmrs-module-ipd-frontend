@@ -15,7 +15,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
-import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from "../../../constants";
+import {
+  MOBILE_BREAKPOINT,
+  TABLET_BREAKPOINT,
+  WARD_SUMMARY_HEADER,
+} from "../../../constants";
 export const CareViewSummary = (props) => {
   const { callbacks } = props;
   const [options, setOptions] = useState([]);
@@ -31,8 +35,16 @@ export const CareViewSummary = (props) => {
       window.removeEventListener("resize", setWindowWidth);
     };
   }, []);
-  const { selectedWard, setSelectedWard, wardSummary, setWardSummary } =
-    useContext(CareViewContext);
+  const {
+    selectedWard,
+    setSelectedWard,
+    wardSummary,
+    setWardSummary,
+    headerSelected,
+    setHeaderSelected,
+    provider,
+    refreshSummary,
+  } = useContext(CareViewContext);
   const getWardList = async () => {
     callbacks.setIsLoading(true);
     const wardList = await getWardDetails();
@@ -48,7 +60,7 @@ export const CareViewSummary = (props) => {
   };
   const getWardSummary = async () => {
     callbacks.setIsLoading(true);
-    const response = await fetchWardSummary(selectedWard.value);
+    const response = await fetchWardSummary(selectedWard.value, provider.uuid);
     if (response.status === 200) {
       setWardSummary(response.data);
     } else {
@@ -63,7 +75,7 @@ export const CareViewSummary = (props) => {
     if (!_.isEmpty(selectedWard)) {
       getWardSummary();
     }
-  }, [selectedWard]);
+  }, [selectedWard, refreshSummary]);
   useEffect(() => {
     setIsTabletView(false);
     setIsMobileView(false);
@@ -74,22 +86,38 @@ export const CareViewSummary = (props) => {
     }
   }, [screenSize]);
   const totalPatientsTile = (
-    <Tile className="summary-tile">
+    <Tile
+      className={`summary-tile ${
+        headerSelected === WARD_SUMMARY_HEADER.TOTAL_PATIENTS &&
+        "selected-header"
+      }`}
+      onClick={() => setHeaderSelected(WARD_SUMMARY_HEADER.TOTAL_PATIENTS)}
+    >
       <span className={"heading-text"}>
         <FormattedMessage
-          id={"TOTAL_PATIENTS"}
-          defaultMessage={"Total patients"}
+          id={WARD_SUMMARY_HEADER.TOTAL_PATIENTS}
+          defaultMessage={"Total patient(s)"}
         />
       </span>
       <span className={"value-text"}>{wardSummary.totalPatients || 0}</span>
     </Tile>
   );
   const myPatientsTile = (
-    <Tile className="summary-tile">
+    <Tile
+      className={`summary-tile ${
+        headerSelected === WARD_SUMMARY_HEADER.MY_PATIENTS && "selected-header"
+      }`}
+      onClick={() => setHeaderSelected(WARD_SUMMARY_HEADER.MY_PATIENTS)}
+    >
       <span className={"heading-text"}>
-        <FormattedMessage id={"MY_PATIENTS"} defaultMessage={"My patient(s)"} />
+        <FormattedMessage
+          id={WARD_SUMMARY_HEADER.MY_PATIENTS}
+          defaultMessage={"My patient(s)"}
+        />
       </span>
-      <span className={"value-text"}>{wardSummary.myPatients || 0}</span>
+      <span className={"value-text"}>
+        {wardSummary.totalProviderPatients || 0}
+      </span>
     </Tile>
   );
   return (
