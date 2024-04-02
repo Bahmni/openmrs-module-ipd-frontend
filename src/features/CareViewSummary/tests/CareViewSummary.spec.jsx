@@ -1,8 +1,9 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { CareViewSummary } from "../components/CareViewSummary";
 import { mockWardList } from "./CareViewSummaryMock";
 import { CareViewContext } from "../../../context/CareViewContext";
+import { WARD_SUMMARY_HEADER } from "../../../constants";
 
 const mockGetWardDetails = jest.fn();
 const mockFetchWardSummary = jest.fn();
@@ -12,8 +13,12 @@ const mockContext = {
   setSelectedWard: jest.fn,
   wardSummary: {
     totalPatients: 27,
+    totalProviderPatients: 5,
   },
   setWardSummary: jest.fn,
+  headerSelected: WARD_SUMMARY_HEADER.TOTAL_PATIENTS,
+  setHeaderSelected: jest.fn(),
+  provider: { uuid: "provider-uuid" },
 };
 
 jest.mock("swiper/react", () => ({
@@ -61,5 +66,59 @@ describe("CareViewSummary", function () {
       </CareViewContext.Provider>
     );
     expect(getByText("27")).toBeTruthy();
+  });
+
+  it("should display the my patient count", () => {
+    mockGetWardDetails.mockReturnValue(mockWardList);
+    const { getByText } = render(
+      <CareViewContext.Provider value={mockContext}>
+        <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
+      </CareViewContext.Provider>
+    );
+    expect(getByText("5")).toBeTruthy();
+  });
+
+  it("should select total patients tile by default", async () => {
+    mockGetWardDetails.mockReturnValue(mockWardList);
+    mockFetchWardSummary.mockReturnValue({
+      totalPatients: 27,
+    });
+    const { container } = render(
+      <CareViewContext.Provider value={mockContext}>
+        <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
+      </CareViewContext.Provider>
+    );
+
+    const activeTiles = container.querySelectorAll(".bx--tile.summary-tile");
+    expect(activeTiles).toBeTruthy();
+
+    activeTiles.forEach((div, index) => {
+      expect(div).toBeTruthy();
+      expect(div.classList.contains("selected-header")).toBe(index === 0);
+    });
+    expect(mockContext.setHeaderSelected).toHaveBeenCalledTimes(0);
+  });
+
+  it("should set my patients when the my patients tile is clicked", async () => {
+    mockGetWardDetails.mockReturnValue(mockWardList);
+    mockFetchWardSummary.mockReturnValue({
+      totalPatients: 27,
+    });
+    const { container } = render(
+      <CareViewContext.Provider value={mockContext}>
+        <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
+      </CareViewContext.Provider>
+    );
+
+    await waitFor(() => {
+      const activeTiles = container.querySelectorAll(".bx--tile.summary-tile");
+      expect(activeTiles).toBeTruthy();
+      expect(mockContext.setHeaderSelected).toHaveBeenCalledTimes(0);
+      const myPatientsTile = activeTiles[1];
+      fireEvent.click(myPatientsTile);
+      expect(mockContext.setHeaderSelected).toHaveBeenCalledWith(
+        WARD_SUMMARY_HEADER.MY_PATIENTS
+      );
+    });
   });
 });

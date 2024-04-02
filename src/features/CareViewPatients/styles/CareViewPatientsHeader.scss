@@ -61,10 +61,6 @@
     display: flex;
   }
 
-  .margin-right-6 {
-    margin-right: 6px;
-  }
-
   .margin-right-10 {
     margin-right: 10px !important;
   }
@@ -105,5 +101,11 @@
 @media screen and  (max-width: 890px){
   .task-type{
     flex-wrap: wrap;
+  }
+}
+
+.task-type {
+  .bx--dropdown {
+    width: 210px;
   }
 }

@@ -7,6 +7,7 @@ import {
   mockSearchEmptyPatientsList,
 } from "../../CareViewPatientsSummary/tests/CareViewPatientsSummaryMock";
 import { CareViewContext } from "../../../context/CareViewContext";
+import { WARD_SUMMARY_HEADER } from "../../../constants";
 
 const mockContext = {
   selectedWard: { label: "ward", value: "uuid" },
@@ -27,22 +28,40 @@ const mockContext = {
   },
   setWardSummary: jest.fn,
   refreshPatientList: false,
+  headerSelected: WARD_SUMMARY_HEADER.TOTAL_PATIENTS,
+  setHeaderSelected: jest.fn,
+  provider: { uuid: "provider-uuid" },
 };
 const mockFetchPatientsList = jest.fn();
 const mockFetchPatientsListBySearch = jest.fn();
+const mockGetSlotsForPatients = jest.fn();
+const mockGetTasksForPatients = jest.fn();
+
+//These are being called in the CareViewPatientSummary child component inside use effect
+jest.mock("../../CareViewSummary/utils/CareViewSummary", () => {
+  return {
+    getSlotsForPatients: () => mockGetSlotsForPatients(),
+    getTasksForPatients: () => mockGetTasksForPatients(),
+  };
+});
 
 jest.mock("../utils/CareViewPatientsUtils", () => {
+  const originalModule = jest.requireActual("../utils/CareViewPatientsUtils");
   return {
+    ...originalModule,
     fetchPatientsList: () => mockFetchPatientsList(),
     fetchPatientsListBySearch: () => mockFetchPatientsListBySearch(),
   };
 });
+
 describe("CareViewPatients", () => {
   beforeEach(() => {
-    mockFetchPatientsList.mockResolvedValueOnce({
+    mockFetchPatientsList.mockResolvedValue({
       status: 200,
       data: mockPatientsList,
     });
+    mockGetSlotsForPatients.mockReturnValue([]);
+    mockGetTasksForPatients.mockReturnValue([]);
   });
   afterEach(() => {
     jest.resetAllMocks();
@@ -87,7 +106,7 @@ describe("CareViewPatients", () => {
   });
 
   it("should call backend search api when the search value is more than equal to 3", async () => {
-    mockFetchPatientsListBySearch.mockResolvedValueOnce({
+    mockFetchPatientsListBySearch.mockResolvedValue({
       status: 200,
       data: mockSearchPatientsList,
     });
@@ -147,7 +166,7 @@ describe("CareViewPatients", () => {
   });
 
   it("should show No search result message when searched value is not found", async () => {
-    mockFetchPatientsListBySearch.mockResolvedValueOnce({
+    mockFetchPatientsListBySearch.mockResolvedValue({
       status: 200,
       data: mockSearchEmptyPatientsList,
     });
@@ -175,7 +194,7 @@ describe("CareViewPatients", () => {
   });
 
   it("should be searched by bed number", async () => {
-    mockFetchPatientsListBySearch.mockResolvedValueOnce({
+    mockFetchPatientsListBySearch.mockResolvedValue({
       status: 200,
       data: mockSearchPatientsList,
     });
@@ -203,7 +222,7 @@ describe("CareViewPatients", () => {
   });
 
   it("should be searched by patient identifier", async () => {
-    mockFetchPatientsListBySearch.mockResolvedValueOnce({
+    mockFetchPatientsListBySearch.mockResolvedValue({
       status: 200,
       data: mockSearchPatientsList,
     });
@@ -231,7 +250,7 @@ describe("CareViewPatients", () => {
   });
 
   it("should be searched by patient name", async () => {
-    mockFetchPatientsListBySearch.mockResolvedValueOnce({
+    mockFetchPatientsListBySearch.mockResolvedValue({
       status: 200,
       data: mockSearchPatientsList,
     });

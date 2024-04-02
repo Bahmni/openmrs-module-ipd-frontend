@@ -17,12 +17,19 @@ import {
   getTimeInPast,
   epochTo24HourFormat,
 } from "../../../utils/DateTimeUtils";
-import WarningIcon from "../../../icons/warning.svg";
 import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
+import { items } from "../utils/constants";
+import { WarningAlt20 } from "@carbon/icons-react";
 
 export const CareViewPatients = () => {
-  const { selectedWard, careViewConfig, refreshPatientList, ipdConfig } =
-    useContext(CareViewContext);
+  const {
+    selectedWard,
+    careViewConfig,
+    refreshPatientList,
+    ipdConfig,
+    provider,
+    headerSelected,
+  } = useContext(CareViewContext);
   const { enable24HourTime = {} } = ipdConfig;
   const [currentPage, setCurrentPage] = useState(1);
   const [previousPage, setPreviousPage] = useState(1);
@@ -32,6 +39,7 @@ export const CareViewPatients = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, updateSearchValue] = useState("");
   const [isSearched, setIsSearched] = useState(false);
+  const [filterValue, setFilterValue] = useState(items[0]);
   const currentEpoch = getPreviousNearbyHourEpoch(
     Math.floor(new Date().getTime() / 1000)
   );
@@ -55,7 +63,9 @@ export const CareViewPatients = () => {
       const response = await fetchPatientsList(
         selectedWard.value,
         (currentPage - 1) * limit,
-        limit
+        limit,
+        headerSelected,
+        provider.uuid
       );
       if (response.status === 200) {
         const { admittedPatients, totalPatients } = response.data;
@@ -90,6 +100,7 @@ export const CareViewPatients = () => {
         throw new Error("Failed to fetch data");
       }
     } catch (error) {
+      setPatientList([]);
       console.error("Error fetching data:", error);
     } finally {
       setIsLoading(false);
@@ -101,7 +112,7 @@ export const CareViewPatients = () => {
     updateSearchValue("");
     setIsSearched(false);
     getPatientsList();
-  }, [selectedWard, refreshPatientList]);
+  }, [selectedWard, refreshPatientList, headerSelected]);
 
   useEffect(() => {
     if (selectedWard.value) {
@@ -287,6 +298,13 @@ export const CareViewPatients = () => {
       defaultMessage={"Patient not found, please update your search criteria"}
     />
   );
+
+  const emptyResultsForPatientsWardMessage = (
+    <FormattedMessage
+      id={"NO_SEARCH_RESULTS_PATIENTS_WARD_MESSAGE"}
+      defaultMessage={"No Patient found"}
+    />
+  );
   return (
     <div className="care-view-patients-container">
       {isLoading ? (
@@ -304,32 +322,42 @@ export const CareViewPatients = () => {
             handleNext={handleNext}
             handlePrevious={handlePrevious}
             enable24HourTime={enable24HourTime}
+            filterValue={filterValue}
+            setFilterValue={setFilterValue}
           />
           {patientList.length > 0 ? (
-            <CareViewPatientsSummary
-              patientsSummary={patientList}
-              navHourEpoch={navHourEpoch}
-            />
+            <>
+              <CareViewPatientsSummary
+                patientsSummary={patientList}
+                navHourEpoch={navHourEpoch}
+                filterValue={filterValue}
+              />
+              <div className={"patient-pagination"}>
+                <Pagination
+                  page={currentPage}
+                  pageSize={limit}
+                  onChange={handlePaginationChange}
+                  pageSizes={careViewConfig.pageSizeOptions}
+                  totalItems={totalPatients}
+                  itemsPerPageText={"Patients per page"}
+                />
+              </div>
+            </>
           ) : isSearched ? (
             <div className="no-search-results">
-              <WarningIcon />
+              <WarningAlt20 className={"warning-icon-20"} />
               <span className="no-search-results-span">
                 {noSearchResultsForPatientsWardMessage}
               </span>
             </div>
           ) : (
-            <></>
+            <div className="no-search-results">
+              <WarningAlt20 className={"warning-icon-20"} />
+              <span className="no-search-results-span">
+                {emptyResultsForPatientsWardMessage}
+              </span>
+            </div>
           )}
-          <div className={"patient-pagination"}>
-            <Pagination
-              page={currentPage}
-              pageSize={limit}
-              onChange={handlePaginationChange}
-              pageSizes={careViewConfig.pageSizeOptions}
-              totalItems={totalPatients}
-              itemsPerPageText={"Patients per page"}
-            />
-          </div>
         </div>
       )}
     </div>

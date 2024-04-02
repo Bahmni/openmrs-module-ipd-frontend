@@ -2,6 +2,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { CareViewPatientsHeader } from "../components/CareViewPatientsHeader";
 import { mockPatientsList } from "../../CareViewPatientsSummary/tests/CareViewPatientsSummaryMock";
+import { items } from "../utils/constants";
 
 const mockHandleKeyPress = jest.fn();
 const mockHandleClear = jest.fn();
@@ -12,6 +13,7 @@ const mockNavButtonsDisabled = jest.fn();
 const mockHandleNow = jest.fn();
 const mockHandleNext = jest.fn();
 const mockHandlePrevious = jest.fn();
+const mockSetFilterValue = jest.fn();
 
 const mockNavigationHourEpoch = {
   startHourEpoch: 1704110400, //12
@@ -107,5 +109,52 @@ describe("CareViewPatientsHeader", () => {
     expect(mockHandleNext).toHaveBeenCalledTimes(0);
     fireEvent.click(screen.getByTestId("next-button"));
     expect(mockHandleNext).toHaveBeenCalledTimes(1);
+  });
+
+  it("should have All Tasks as the default dropdown", async () => {
+    render(
+      <CareViewPatientsHeader
+        patientsSummary={mockPatientsList.admittedPatients}
+        handleKeyPress={mockHandleKeyPress}
+        handleClear={mockHandleClear}
+        searchValue={mockSearchValue}
+        updateSearchValue={mockUpdateSearchValue}
+        navHourEpoch={mockNavigationHourEpoch}
+        navButtonsDisabled={mockNavButtonsDisabled}
+        handleNow={mockHandleNow}
+        handleNext={mockHandleNext}
+        handlePrevious={mockHandlePrevious}
+        filterValue={items[0]}
+        setFilterValue={mockSetFilterValue}
+      />
+    );
+    expect(screen.getByText("All Tasks")).toBeTruthy();
+  });
+
+  it("should have other options in the dropdown", async () => {
+    render(
+      <CareViewPatientsHeader
+        patientsSummary={mockPatientsList.admittedPatients}
+        handleKeyPress={mockHandleKeyPress}
+        handleClear={mockHandleClear}
+        searchValue={mockSearchValue}
+        updateSearchValue={mockUpdateSearchValue}
+        navHourEpoch={mockNavigationHourEpoch}
+        navButtonsDisabled={mockNavButtonsDisabled}
+        handleNow={mockHandleNow}
+        handleNext={mockHandleNext}
+        handlePrevious={mockHandlePrevious}
+        filterValue={items[0]}
+        setFilterValue={items}
+      />
+    );
+
+    fireEvent.click(screen.getByText("All Tasks"));
+    const withoutDefaultDropDown = items.filter(
+      (item) => item.text !== "All Tasks"
+    );
+    withoutDefaultDropDown.forEach((item) => {
+      expect(screen.getByText(item.text)).toBeTruthy();
+    });
   });
 });

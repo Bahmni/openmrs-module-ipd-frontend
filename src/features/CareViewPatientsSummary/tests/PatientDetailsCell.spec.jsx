@@ -10,7 +10,7 @@ import {
 } from "./CareViewPatientsSummaryMock";
 
 const mockHandleRefreshPatientList = jest.fn();
-
+const mockHandleRefreshSummary = jest.fn();
 const mockContext = {
   careViewConfig: { timeframeLimitInHours: 2 },
   ipdConfig: mockConfig,
@@ -18,6 +18,7 @@ const mockContext = {
     uuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
   },
   handleRefreshPatientList: mockHandleRefreshPatientList,
+  handleRefreshSummary: mockHandleRefreshSummary,
 };
 
 const mockBookmarkPatient = jest.fn();
@@ -232,6 +233,38 @@ describe("PatientDetailsCell", () => {
       expect(container.queryByTestId("bookmark-filled-icon")).toHaveClass(
         "bookmark-disabled"
       );
+    });
+  });
+
+  it("should call handleRefreshSummary api when bookmark filled and un filled icon is clicked", async () => {
+    const container = render(
+      <CareViewContext.Provider value={mockContext}>
+        <PatientDetailsCell
+          patientDetails={mockPatientsList.admittedPatients[1].patientDetails}
+          bedDetails={mockPatientsList.admittedPatients[1].bedDetails}
+          careTeamDetails={mockPatientsList.admittedPatients[1].careTeam}
+          newTreatments={1}
+          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+          navHourEpoch={{
+            startHourEpoch: 1710509100,
+            endHourEpoch: 1710509100,
+          }}
+        />
+      </CareViewContext.Provider>
+    );
+
+    fireEvent.click(container.queryByTestId("bookmark-add-icon"));
+    expect(mockContext.handleRefreshSummary).toHaveBeenCalledTimes(0);
+    await waitFor(() => {
+      expect(container.queryByTestId("bookmark-filled-icon")).toBeTruthy();
+      expect(mockContext.handleRefreshSummary).toHaveBeenCalledTimes(1);
+    });
+
+    fireEvent.click(container.queryByTestId("bookmark-filled-icon"));
+
+    await waitFor(() => {
+      expect(container.queryByTestId("bookmark-add-icon")).toBeTruthy();
+      expect(mockContext.handleRefreshSummary).toHaveBeenCalledTimes(2);
     });
   });
 });
