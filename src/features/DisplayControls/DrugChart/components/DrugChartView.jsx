@@ -116,18 +116,19 @@ export default function DrugChartWrapper(props) {
 
   useEffect(() => {
     const currentShift = shiftDetails.currentShiftHoursArray;
-    const [start, end] = shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
-    const [, startMinute] = start.split(":");
-    const [, endMinute] = end.split(":");
-    const firstHour = currentShift[0].replace(/:\d+$/, `:${startMinute}`);
-    const lastHour = currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`);
+    const [start, end] =
+      shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
+    const [startHour, startMinute] = start.split(":");
+    const [endHour, endMinute] = end.split(":");
+    const firstHour = `${startHour}:${startMinute}`;
+    const lastHour = `${endHour}:${endMinute}`;
     let startDateTime = getDateTime(
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      currentShift[0].replace(/:\d+$/, `:${startMinute}`)
+      firstHour
     );
     let endDateTime = getDateTime(
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}}`)
+      lastHour
     );
     /** if shift is going on two different dates */
     if (lastHour < firstHour) {
@@ -135,10 +136,19 @@ export default function DrugChartWrapper(props) {
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTime = getDateTime(d, currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`));
+        endDateTime = getDateTime(
+          d,
+          currentShift[currentShift.length - 1].replace(
+            /:\d+$/,
+            `:${endMinute}`
+          )
+        );
       } else {
         d.setDate(d.getDate() - 1);
-        startDateTime = getDateTime(d, currentShift[0].replace(/:\d+$/, `:${startMinute}`));
+        startDateTime = getDateTime(
+          d,
+          currentShift[0].replace(/:\d+$/, `:${startMinute}`)
+        );
       }
     }
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
@@ -191,25 +201,32 @@ export default function DrugChartWrapper(props) {
     );
     const currentShift = shiftDetailsObj.currentShiftHoursArray;
     const updatedShiftIndex = shiftDetailsObj.shiftIndex;
-    const [start, end] = shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
-    const [, startMinute] = start.split(":");
-    const [, endMinute] = end.split(":");
-    const firstHour = currentShift[0].replace(/:\d+$/, `:${startMinute}`);
-    const lastHour = currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`);
-    let startDateTime = getDateTime(new Date(), currentShift[0].replace(/:\d+$/, `:${startMinute}`));
-    let endDateTime = getDateTime(
-      new Date(),
-      currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`)
-    );
+    const [start, end] =
+      shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
+    const [startHour, startMinute] = start.split(":");
+    const [endHour, endMinute] = end.split(":");
+    const firstHour = `${startHour}:${startMinute}`;
+    const lastHour = `${endHour}:${endMinute}`;
+    let startDateTime = getDateTime(new Date(), firstHour);
+    let endDateTime = getDateTime(new Date(), lastHour);
     if (lastHour < firstHour) {
       const d = new Date();
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTime = getDateTime(d, currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`));
+        endDateTime = getDateTime(
+          d,
+          currentShift[currentShift.length - 1].replace(
+            /:\d+$/,
+            `:${endMinute}`
+          )
+        );
       } else {
         d.setDate(d.getDate() - 1);
-        startDateTime = getDateTime(d, currentShift[0].replace(/:\d+$/, `:${startMinute}`));
+        startDateTime = getDateTime(
+          d,
+          currentShift[0].replace(/:\d+$/, `:${startMinute}`)
+        );
       }
     }
     setNotCurrentShift(false);

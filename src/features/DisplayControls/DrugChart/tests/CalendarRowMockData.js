@@ -281,4 +281,13 @@ export const calendarRowData = {
   ],
 };
 
-export const currentShiftArray = [14, 15, 16, 17, 18, 19, 20, 21];
+export const currentShiftArray = [
+  "14:00",
+  "15:00",
+  "16:00",
+  "17:00",
+  "18:00",
+  "19:00",
+  "20:00",
+  "21:00",
+];

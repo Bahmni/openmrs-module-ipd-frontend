@@ -41,7 +41,20 @@ jest.mock("../../DrugChart/utils/DrugChartUtils", () => {
   return {
     ...originalModule,
     currentShiftHoursArray: () => ({
-      currentShiftHoursArray: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      currentShiftHoursArray: [
+        "06:00",
+        "07:00",
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+      ],
       rangeArray: ["06:00-18:00", "18:00-06:00"],
       shiftIndex: 0,
     }),

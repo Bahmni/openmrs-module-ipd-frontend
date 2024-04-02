@@ -12,6 +12,7 @@ export default function CalendarRow(props) {
   const { rowData, currentShiftArray, selectedDate } = props;
   const { slots } = rowData;
   const transformedData = {};
+  const currentShiftMinute = currentShiftArray[0].split(":")[1];
   slots.forEach((slot) => {
     let time;
     const { medicationAdministration, administrationSummary } = slot;
@@ -45,7 +46,10 @@ export default function CalendarRow(props) {
     } else {
       time = formatDate(slot.startTime * 1000, timeFormatfor24Hr);
     }
-    const [hours] = time.split(":");
+    let [hours, minutes] = time.split(":");
+    if (currentShiftMinute > minutes) {
+      hours = +hours - 1;
+    }
     transformedData[+hours] = transformedData[+hours] || [];
     transformedData[+hours].push({
       time,
@@ -57,17 +61,24 @@ export default function CalendarRow(props) {
     <div style={{ display: "flex" }}>
       {currentShiftArray.map((time, index) => {
         const shiftArrayTime = moment(time, timeFormatfor24Hr);
-        const nextShiftArrayTime = moment(currentShiftArray[index + 1], timeFormatfor24Hr);
+        const nextShiftArrayTime = moment(
+          currentShiftArray[index + 1],
+          timeFormatfor24Hr
+        );
         const date = moment();
         const sameDate = areDatesSame(date, selectedDate);
-        const isCurrentHour = date.isBetween(shiftArrayTime, nextShiftArrayTime) && sameDate;
-        const highlightedCell = date.diff(shiftArrayTime) < nextShiftArrayTime.diff(date) ? "left" : "right";
+        const isCurrentHour =
+          date.isBetween(shiftArrayTime, nextShiftArrayTime) && sameDate;
+        const highlightedCell =
+          date.diff(shiftArrayTime) < nextShiftArrayTime.diff(date)
+            ? "left"
+            : "right";
         if (transformedData[shiftArrayTime.hour()]) {
           return (
             <TimeCell
               slotInfo={transformedData[shiftArrayTime.hour()]}
               startTime={shiftArrayTime}
-              endTime={nextShiftArrayTime} 
+              endTime={nextShiftArrayTime}
               key={time}
               doHighlightCell={isCurrentHour}
               highlightedCell={highlightedCell}

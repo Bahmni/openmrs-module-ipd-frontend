@@ -55,7 +55,20 @@ describe("DrugChartUtils", () => {
     MockDate.set("2023-12-19 16:00:00");
     expect(
       currentShiftHoursArray(new Date(), shiftDetails).currentShiftHoursArray
-    ).toEqual([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
+    ).toEqual([
+      "06:00",
+      "07:00",
+      "08:00",
+      "09:00",
+      "10:00",
+      "11:00",
+      "12:00",
+      "13:00",
+      "14:00",
+      "15:00",
+      "16:00",
+      "17:00",
+    ]);
   });
   it("test getNextShiftDetails method", () => {
     const rangeArray = ["06:00-18:00", "18:00-06:00"];
@@ -70,34 +83,34 @@ describe("DrugChartUtils", () => {
       startDate,
       endDate
     );
-    const nextExpectedStartDateTime = 1706704200000; // 31st Jan 2024 18:00
-    const nextExpectedEndDateTime = 1706747400000; // 1st Feb 2024 06:00
+    const nextExpectedStartDateTime = 1706724000000; // 31st Jan 2024 18:00
+    const nextExpectedEndDateTime = 1706767200000; // 1st Feb 2024 06:00
     expect(startDateTime).toEqual(nextExpectedStartDateTime);
     expect(endDateTime).toEqual(nextExpectedEndDateTime);
   });
   it("test getPreviousShiftDetails method", () => {
     const rangeArray = ["06:00-18:00", "18:00-06:00"];
     const shiftIndex = 1;
-    /** startDate = 31st Jan 2024 18:00 */
-    const startDate = new Date(1706704200000);
-    /** endDate = 1st Feb 2024 06:00 */
-    const endDate = new Date(1706747400000);
+    /** startDate = 31st Jan 2024 18:00 GMT */
+    const startDate = 1706704200000;
+    /** endDate = 1st Feb 2024 06:00 GMT */
+    const endDate = 1706747400000;
     const { startDateTime, endDateTime } = getPreviousShiftDetails(
       rangeArray,
       shiftIndex,
       startDate,
       endDate
     );
-    const nextExpectedStartDateTime = 1706661000000; // 31st Jan 2024 06:00
-    const nextExpectedEndDateTime = 1706704200000; // 31st Jan 2024 18:00
+    const nextExpectedStartDateTime = 1706680800000; // 31st Jan 2024 06:00 GMT
+    const nextExpectedEndDateTime = 1706724000000; // 31st Jan 2024 18:00 GMT
     expect(startDateTime).toEqual(nextExpectedStartDateTime);
     expect(endDateTime).toEqual(nextExpectedEndDateTime);
   });
   it("test getDateTime method", () => {
     /** 5th Jan 2024 */
     const date = new Date(1704448800000);
-    const hour = 8;
+    const time = "08:00";
     const updatedDateTime = 1704441600000; // 5th Jan 2024 08:00
-    expect(getDateTime(date, hour)).toEqual(updatedDateTime);
+    expect(getDateTime(date, time)).toEqual(updatedDateTime);
   });
 });

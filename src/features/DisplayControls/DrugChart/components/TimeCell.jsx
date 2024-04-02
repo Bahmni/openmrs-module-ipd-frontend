@@ -9,13 +9,26 @@ import { timeFormatfor24Hr } from "../../../../constants.js";
 import moment from "moment";
 
 export default function TimeCell(props) {
-  const { slotInfo = [], startTime = "", endTime = "", doHighlightCell, highlightedCell } = props;
+  const {
+    slotInfo = [],
+    startTime = "",
+    endTime = "",
+    doHighlightCell,
+    highlightedCell,
+  } = props;
   const left = [],
     right = [];
   slotInfo.map((slot) => {
     const { time } = slot;
     const momentTime = moment(time, timeFormatfor24Hr);
-    if (momentTime.diff(startTime) < endTime.diff(momentTime)) {
+    let diffStartTime = momentTime.diff(startTime);
+    let diffEndTime = endTime.diff(momentTime);
+
+    if (endTime.isBefore(startTime)) {
+      const midnight = moment("00:00", timeFormatfor24Hr);
+      diffEndTime = momentTime.diff(midnight) + midnight.diff(endTime);
+    }
+    if (diffStartTime < diffEndTime) {
       left.push(slot);
     } else {
       right.push(slot);
@@ -83,5 +96,5 @@ TimeCell.propTypes = {
   doHighlightCell: PropTypes.bool,
   highlightedCell: PropTypes.string,
   startTime: PropTypes.object,
-  endTime: PropTypes.object
+  endTime: PropTypes.object,
 };
