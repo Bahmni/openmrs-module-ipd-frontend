@@ -31,6 +31,17 @@
       border-left: 1px dashed #c6c6c6;
     }
   }
+  svg {
+    fill: none;
+  }
+  .bx--tooltip__trigger {
+    &:hover,
+    &:focus {
+      svg {
+        fill: none;
+      }
+    }
+  }
 
   .highligtedCell {
     background-color: #e3f1fa;
