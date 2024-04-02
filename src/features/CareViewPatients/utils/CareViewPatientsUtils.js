@@ -3,12 +3,29 @@ import {
   BOOKMARK_PATIENT_BASE_URL,
   GET_PATIENT_LIST_URL,
   GET_SEARCH_PATIENT_LIST_URL,
+  GET_MY_PATIENT_LIST_URL,
+  WARD_SUMMARY_HEADER,
 } from "../../../constants";
 
-export const fetchPatientsList = async (wardId, offset, limit = 3) => {
-  return await axios.get(GET_PATIENT_LIST_URL.replace("{wardId}", wardId), {
-    params: { offset, limit },
-  });
+export const fetchPatientsList = async (
+  wardId,
+  offset,
+  limit = 3,
+  headerSelected,
+  providerUuid
+) => {
+  if (headerSelected === WARD_SUMMARY_HEADER.TOTAL_PATIENTS) {
+    return await axios.get(GET_PATIENT_LIST_URL.replace("{wardId}", wardId), {
+      params: { offset, limit },
+    });
+  } else if (headerSelected === WARD_SUMMARY_HEADER.MY_PATIENTS) {
+    return await axios.get(
+      GET_MY_PATIENT_LIST_URL.replace("{wardId}", wardId),
+      {
+        params: { offset, limit, providerUuid },
+      }
+    );
+  }
 };
 
 export const fetchPatientsListBySearch = async (

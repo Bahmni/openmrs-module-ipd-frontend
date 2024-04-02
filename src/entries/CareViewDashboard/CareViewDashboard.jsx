@@ -9,7 +9,7 @@ import { CareViewSummary } from "../../features/CareViewSummary/components/CareV
 import { CareViewPatients } from "../../features/CareViewPatients/components/CareViewPatients";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
-import { homePageUrl } from "../../constants";
+import { homePageUrl, WARD_SUMMARY_HEADER } from "../../constants";
 import { CareViewContext } from "../../context/CareViewContext";
 import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
 import { getDashboardConfig } from "../../utils/CommonUtils";
@@ -19,8 +19,12 @@ const CareViewDashboard = (props) => {
   const { hostApi, hostData } = props;
   const { onHome, onLogOut } = hostApi;
   const [selectedWard, setSelectedWard] = useState({});
+  const [headerSelected, setHeaderSelected] = useState(
+    WARD_SUMMARY_HEADER.TOTAL_PATIENTS
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [refreshPatientList, setRefreshPatientList] = useState(false);
+  const [refreshSummary, setRefreshSummary] = useState(false);
   const [wardSummary, setWardSummary] = useState({});
   const [careViewConfig, setCareViewConfig] = useState({});
   const [ipdConfig, setIpdConfig] = useState({});
@@ -31,6 +35,10 @@ const CareViewDashboard = (props) => {
 
   const handleRefreshPatientList = () => {
     setRefreshPatientList(!refreshPatientList);
+  };
+
+  const handleRefreshSummary = () => {
+    setRefreshSummary(!refreshSummary);
   };
 
   const getIpdConfig = async () => {
@@ -70,6 +78,10 @@ const CareViewDashboard = (props) => {
               handleRefreshPatientList,
               careViewConfig,
               ipdConfig,
+              headerSelected,
+              setHeaderSelected,
+              refreshSummary,
+              handleRefreshSummary,
             }}
           >
             <div className="care-view-navigations">

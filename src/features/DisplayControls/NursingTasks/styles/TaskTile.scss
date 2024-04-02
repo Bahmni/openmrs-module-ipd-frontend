@@ -121,10 +121,15 @@
   letter-spacing: 0.12px;
   align-items: center;
   display: flex;
+  padding-left: 2px;
+}
+
+.tile-content-subtext-time {
+  padding-left: 5px;
 }
 
 .nursing-task-icon-container {
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 .more-info {

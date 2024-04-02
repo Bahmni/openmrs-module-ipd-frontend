@@ -8,8 +8,8 @@ import {
 import PropTypes from "prop-types";
 import { getMedicationDetails } from "../utils/TaskTileUtils";
 import ClockIcon from "../../../../icons/clock.svg";
-import Administered from "../../../../icons/administered.svg";
-import NotAdministered from "../../../../icons/not-administered.svg";
+import Administered from "../../../../icons/completed.svg";
+import NotAdministered from "../../../../icons/missed.svg";
 import "../styles/AdministeredMedicationList.scss";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";

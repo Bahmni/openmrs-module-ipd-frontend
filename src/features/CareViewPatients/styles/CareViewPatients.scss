@@ -1,13 +1,25 @@
+@import "src/styles/styles";
 .care-view-patients-container {
   padding: 20px 5%;
   display: flex;
   justify-content: center;
 
   .no-search-results {
-    padding: 20px 0 20px 20px;
-    margin: 10px 135px 10px 420px;
+    padding-left: 15px;
+    margin: 35px 226px 35px 295px;
     border: 1px solid #0f62fe;
     background-color: #d0e2ff73;
+    height: 50px;
+  }
+
+  .warning-icon-20 {
+    fill: #da1e28;
+  }
+
+  @media screen and (max-width: $tablet-breakpoint) {
+    .no-search-results {
+      margin: 35px 0;
+    }
   }
 
   .care-view-patients {
@@ -47,7 +59,7 @@
   align-items: center;
 
   .no-search-results-span {
-    padding: 5px;
+    padding: 15px;
     letter-spacing: 0.24px;
   }
 }

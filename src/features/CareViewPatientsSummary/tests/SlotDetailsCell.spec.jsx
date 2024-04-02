@@ -1,7 +1,10 @@
 import { SlotDetailsCell } from "../components/SlotDetailsCell";
-import { mockSlotsData } from "../../CareViewSummary/tests/CareViewSummaryMock";
+import {
+  mockSlotsData,
+  mockNonMedicationData,
+} from "../../CareViewSummary/tests/CareViewSummaryMock";
 import React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor, within } from "@testing-library/react";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { mockConfig } from "../../../utils/CommonUtils";
 import "@testing-library/jest-dom/extend-expect";
@@ -9,6 +12,14 @@ import "@testing-library/jest-dom/extend-expect";
 const mockContext = {
   careViewConfig: { timeframeLimitInHours: 2 },
   ipdConfig: mockConfig,
+};
+
+const mockFilterValue = {
+  id: "allTasks",
+};
+
+const mockNonMedicationValue = {
+  id: "nonMedicationTasks",
 };
 
 describe("SlotDetailsCell", () => {
@@ -23,6 +34,7 @@ describe("SlotDetailsCell", () => {
             startHourEpoch: 1672575400,
             endHourEpoch: 1710511200,
           }}
+          filterValue={mockFilterValue}
         />
       </CareViewContext.Provider>
     );
@@ -40,6 +52,7 @@ describe("SlotDetailsCell", () => {
             startHourEpoch: 1672575400,
             endHourEpoch: 1710511200,
           }}
+          filterValue={mockFilterValue}
         />
       </CareViewContext.Provider>
     );
@@ -65,6 +78,7 @@ describe("SlotDetailsCell", () => {
             startHourEpoch: 1672575400,
             endHourEpoch: 1710511200,
           }}
+          filterValue={mockFilterValue}
         />
       </CareViewContext.Provider>
     );
@@ -74,6 +88,48 @@ describe("SlotDetailsCell", () => {
         queryAllByText("Amoxicillin/Clavulanic Acid 1000 mg Tablet")
       ).toEqual([]);
       expect(queryAllByTestId("drug-details")).toEqual([]);
+    });
+  });
+
+  it("should render non medication tasks data with different status", async () => {
+    const { container } = render(
+      <CareViewContext.Provider value={mockContext}>
+        <SlotDetailsCell
+          uuid={"98a4a9c5-c26e-46a1-8efc-ae6df95842bf"}
+          slotDetails={mockSlotsData}
+          timeframeLimitInHours={2}
+          navHourEpoch={{
+            startHourEpoch: 1711384200,
+            endHourEpoch: 1711395000,
+          }}
+          nonMedicationDetails={mockNonMedicationData}
+          filterValue={mockNonMedicationValue}
+        />
+      </CareViewContext.Provider>
+    );
+
+    const tasksData = [
+      {
+        startTime: "16:30",
+        name: "Non Medication Task 1",
+        creator: "superman",
+        status: "REQUESTED",
+      },
+      {
+        startTime: "16:30",
+        name: "Non Medication Task 2",
+        creator: "Nurse One",
+        status: "COMPLETED",
+      },
+    ];
+    await waitFor(() => {
+      const slotDetails = container.querySelectorAll(".slot-details");
+      slotDetails.forEach((slot, idx) => {
+        expect(within(slot).getByText(tasksData[idx].startTime)).toBeTruthy();
+        expect(within(slot).getByText(tasksData[idx].name)).toBeTruthy();
+        expect(within(slot).getByText(tasksData[idx].creator)).toBeTruthy();
+        expect(within(slot).getByTestId(tasksData[idx].status)).toBeTruthy();
+      });
     });
   });
 });

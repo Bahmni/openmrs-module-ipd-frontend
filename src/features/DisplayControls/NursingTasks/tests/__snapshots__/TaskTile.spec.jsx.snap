@@ -6,7 +6,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
     class="tile-parent-container"
   >
     <div
-      class="nursing-tasks-tile false 
+      class="nursing-tasks-tile false
         "
     >
       <div
@@ -61,7 +61,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
         </div>
         <div
           class="tile-content-subtext"
-          style="color: rgb(82, 82, 82);"
+          style="color: rgb(82, 82, 82); padding-left: 25px;"
         >
           <span />
         </div>
@@ -69,7 +69,9 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
           class="tile-content-subtext"
         >
           <test-file-stub />
-          <div>
+          <div
+            class="tile-content-subtext-time"
+          >
              Invalid date
           </div>
         </div>
@@ -93,7 +95,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
     class="tile-parent-container"
   >
     <div
-      class="nursing-tasks-tile false 
+      class="nursing-tasks-tile false
         disabled-tile"
     >
       <div
@@ -152,7 +154,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
         </div>
         <div
           class="tile-content-subtext"
-          style="color: rgb(82, 82, 82);"
+          style="color: rgb(82, 82, 82); padding-left: 25px;"
         >
           <span>
             1ml
@@ -165,7 +167,9 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
           class="tile-content-subtext"
         >
           <test-file-stub />
-          <div>
+          <div
+            class="tile-content-subtext-time"
+          >
              16:00
           </div>
         </div>
