@@ -59,7 +59,6 @@ export default function Dashboard(props) {
   const [isConfigLoaded, setIsConfigLoaded] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isShowPatientDetailsOpen, setPatientDetailsOpen] = useState(false);
-  document.title = "IPD";
 
   const noConfigDataMessage = (
     <FormattedMessage

@@ -76,7 +76,7 @@ const CareViewDashboard = (props) => {
               <ArrowLeft
                 data-testid={"Back button"}
                 size={20}
-                onClick={history.back}
+                onClick={() => hostApi?.onHome()}
               />
               <Link className="ward-view-nav-link" onClick={onHome}>
                 <FormattedMessage

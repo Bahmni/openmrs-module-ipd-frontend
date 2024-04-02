@@ -58,7 +58,9 @@ export const ProviderActions = (props) => {
           </div>
         )}
       </div>
-      <Logout24 onClick={onLogOut} className={"logout"} />
+      <span onClick={onLogOut} className={"logout"}>
+        <Logout24 />
+      </span>
     </div>
   );
 };
