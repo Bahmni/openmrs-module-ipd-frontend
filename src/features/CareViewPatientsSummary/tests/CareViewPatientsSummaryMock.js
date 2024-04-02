@@ -366,6 +366,10 @@ export const mockSearchPatientsList = {
         status: "OCCUPIED",
       },
       newTreatments: 0,
+      visitDetails: {
+        uuid: "visit_id",
+        display: "IPD",
+      },
     },
     {
       patientDetails: {
@@ -436,6 +440,10 @@ export const mockSearchPatientsList = {
         status: "OCCUPIED",
       },
       newTreatments: 1,
+      visitDetails: {
+        uuid: "visit_id",
+        display: "IPD",
+      },
     },
     {
       patientDetails: {
@@ -506,6 +514,10 @@ export const mockSearchPatientsList = {
         status: "OCCUPIED",
       },
       newTreatments: 0,
+      visitDetails: {
+        uuid: "visit_id",
+        display: "IPD",
+      },
     },
     {
       patientDetails: {
@@ -572,6 +584,10 @@ export const mockSearchPatientsList = {
         status: "OCCUPIED",
       },
       newTreatments: 0,
+      visitDetails: {
+        uuid: "visit_id",
+        display: "IPD",
+      },
     },
     {
       patientDetails: {
@@ -638,6 +654,10 @@ export const mockSearchPatientsList = {
         status: "OCCUPIED",
       },
       newTreatments: 0,
+      visitDetails: {
+        uuid: "visit_id",
+        display: "IPD",
+      },
     },
   ],
   totalPatients: 5,

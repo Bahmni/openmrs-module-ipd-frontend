@@ -76,6 +76,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 <a
                   class="bx--link"
                   data-testid="identifier-ipd-dashboard"
+                  href="/bahmni/clinical/#/default/patient/17fd50c7-8f9e-48da-b9ed-88c1bd358798/dashboard/visit/ipd/626b822d-741e-4a86-95ff-626eea753c4c?source=careViewDashboard"
                 >
                   <span>
                     PT51140
@@ -171,6 +172,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 <a
                   class="bx--link"
                   data-testid="identifier-ipd-dashboard"
+                  href="/bahmni/clinical/#/default/patient/7278eb93-8c1d-4ef4-bcbf-4c6ee91365f7/dashboard/visit/ipd/626b822d-741e-4a86-95ff-636eea753c2c?source=careViewDashboard"
                 >
                   <span>
                     PT49722
@@ -209,6 +211,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                     <a
                       class="bx--link"
                       data-testid="treatments-ipd-dashboard"
+                      href="/bahmni/clinical/#/default/patient/7278eb93-8c1d-4ef4-bcbf-4c6ee91365f7/dashboard/visit/ipd/626b822d-741e-4a86-95ff-636eea753c2c?source=careViewDashboard"
                     >
                       Schedule Treatments
                     </a>
@@ -282,6 +285,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 <a
                   class="bx--link"
                   data-testid="identifier-ipd-dashboard"
+                  href="/bahmni/clinical/#/default/patient/3ab51ec0-4650-4400-9aaa-75f30ece0208/dashboard/visit/ipd/627b822d-741e-4a96-45ff-626eea753c4c?source=careViewDashboard"
                 >
                   <span>
                     ET55749
