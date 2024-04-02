@@ -7,6 +7,7 @@ import {
   mockSearchEmptyPatientsList,
 } from "../../CareViewPatientsSummary/tests/CareViewPatientsSummaryMock";
 import { CareViewContext } from "../../../context/CareViewContext";
+import { WARD_SUMMARY_HEADER } from "../../../constants";
 
 const mockContext = {
   selectedWard: { label: "ward", value: "uuid" },
@@ -27,7 +28,7 @@ const mockContext = {
   },
   setWardSummary: jest.fn,
   refreshPatientList: false,
-  headerSelected: "TOTAL_PATIENTS",
+  headerSelected: WARD_SUMMARY_HEADER.TOTAL_PATIENTS,
   setHeaderSelected: jest.fn,
   provider: { uuid: "provider-uuid" },
 };

@@ -17,9 +17,9 @@ import {
   getTimeInPast,
   epochTo24HourFormat,
 } from "../../../utils/DateTimeUtils";
-import WarningIcon from "../../../icons/warning.svg";
 import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 import { items } from "../utils/constants";
+import { WarningAlt20 } from "@carbon/icons-react";
 
 export const CareViewPatients = () => {
   const {
@@ -324,36 +324,38 @@ export const CareViewPatients = () => {
             setFilterValue={setFilterValue}
           />
           {patientList.length > 0 ? (
-            <CareViewPatientsSummary
-              patientsSummary={patientList}
-              navHourEpoch={navHourEpoch}
-              filterValue={filterValue}
-            />
+            <>
+              <CareViewPatientsSummary
+                patientsSummary={patientList}
+                navHourEpoch={navHourEpoch}
+                filterValue={filterValue}
+              />
+              <div className={"patient-pagination"}>
+                <Pagination
+                  page={currentPage}
+                  pageSize={limit}
+                  onChange={handlePaginationChange}
+                  pageSizes={careViewConfig.pageSizeOptions}
+                  totalItems={totalPatients}
+                  itemsPerPageText={"Patients per page"}
+                />
+              </div>
+            </>
           ) : isSearched ? (
             <div className="no-search-results">
-              <WarningIcon />
+              <WarningAlt20 className={"warning-icon-20"} />
               <span className="no-search-results-span">
                 {noSearchResultsForPatientsWardMessage}
               </span>
             </div>
           ) : (
             <div className="no-search-results">
-              <WarningIcon />
+              <WarningAlt20 className={"warning-icon-20"} />
               <span className="no-search-results-span">
                 {emptyResultsForPatientsWardMessage}
               </span>
             </div>
           )}
-          <div className={"patient-pagination"}>
-            <Pagination
-              page={currentPage}
-              pageSize={limit}
-              onChange={handlePaginationChange}
-              pageSizes={careViewConfig.pageSizeOptions}
-              totalItems={totalPatients}
-              itemsPerPageText={"Patients per page"}
-            />
-          </div>
         </div>
       )}
     </div>

@@ -14,6 +14,7 @@ import {
   mockWithMyPatientList,
 } from "../../features/CareViewPatientsSummary/tests/CareViewPatientsSummaryMock";
 import MockDate from "mockdate";
+import { WARD_SUMMARY_HEADER } from "../../constants";
 
 const mockConfig = jest.fn();
 const mockGetWardDetails = jest.fn();
@@ -47,7 +48,7 @@ const mockContext = {
     totalProviderPatients: 2,
   },
   setWardSummary: jest.fn,
-  headerSelected: "TOTAL_PATIENTS",
+  headerSelected: WARD_SUMMARY_HEADER.TOTAL_PATIENTS,
   setHeaderSelected: jest.fn(),
   provider: { uuid: "provider-uuid" },
 };

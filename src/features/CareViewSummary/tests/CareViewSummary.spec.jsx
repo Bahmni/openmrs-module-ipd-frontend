@@ -3,6 +3,7 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import { CareViewSummary } from "../components/CareViewSummary";
 import { mockWardList } from "./CareViewSummaryMock";
 import { CareViewContext } from "../../../context/CareViewContext";
+import { WARD_SUMMARY_HEADER } from "../../../constants";
 
 const mockGetWardDetails = jest.fn();
 const mockFetchWardSummary = jest.fn();
@@ -15,7 +16,7 @@ const mockContext = {
     totalProviderPatients: 5,
   },
   setWardSummary: jest.fn,
-  headerSelected: "TOTAL_PATIENTS",
+  headerSelected: WARD_SUMMARY_HEADER.TOTAL_PATIENTS,
   setHeaderSelected: jest.fn(),
   provider: { uuid: "provider-uuid" },
 };
@@ -115,7 +116,9 @@ describe("CareViewSummary", function () {
       expect(mockContext.setHeaderSelected).toHaveBeenCalledTimes(0);
       const myPatientsTile = activeTiles[1];
       fireEvent.click(myPatientsTile);
-      expect(mockContext.setHeaderSelected).toHaveBeenCalledWith("MY_PATIENTS");
+      expect(mockContext.setHeaderSelected).toHaveBeenCalledWith(
+        WARD_SUMMARY_HEADER.MY_PATIENTS
+      );
     });
   });
 });
