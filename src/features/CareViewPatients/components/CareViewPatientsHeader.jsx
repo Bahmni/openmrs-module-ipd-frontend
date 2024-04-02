@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import "../styles/CareViewPatientsHeader.scss";
-import { IPD_WARD_SEARCH_PLACEHOLDER_TEXT } from "../../../constants";
+import { IPD_WARD_SEARCH_PLACEHOLDER_TEXT, displayShiftTimings12HourFormat, displayShiftTimingsFormat } from "../../../constants";
 import { Dropdown, Search, Button } from "carbon-components-react";
-import { ChevronLeft16, ChevronRight16 } from "@carbon/icons-react";
-import { epochTo24HourTimeFormat } from "../../../utils/DateTimeUtils";
+import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
+import { formatDate } from "../../../utils/DateTimeUtils";
+
 export const CareViewPatientsHeader = (props) => {
   const {
     handleKeyPress,
@@ -17,8 +18,8 @@ export const CareViewPatientsHeader = (props) => {
     handleNow,
     handleNext,
     handlePrevious,
+    enable24HourTime
   } = props;
-
   const handleSearchOnChange = (e) => {
     updateSearchValue(e.target.value);
   };
@@ -27,6 +28,35 @@ export const CareViewPatientsHeader = (props) => {
     handleNow();
   }, []);
 
+const shiftTiming = () => {
+  const  shiftTimingsFormat  = enable24HourTime ? displayShiftTimingsFormat : displayShiftTimings12HourFormat;
+  let shiftStartDateTime = formatDate(
+    navHourEpoch.startHourEpoch * 1000,
+    shiftTimingsFormat
+  );
+  console.log("shift", shiftStartDateTime);
+  let shiftEndDateTime = formatDate(
+    navHourEpoch.endHourEpoch * 1000 - 60,
+    shiftTimingsFormat
+  );
+  const [shiftStartDate, shiftStartTime] = shiftStartDateTime.split(" | ");
+  const [shiftEndDate, shiftEndTime] = shiftEndDateTime.split(" | ");
+   
+    if(shiftStartDate === shiftEndDate){ 
+      return(<div className="shift-time">
+      {shiftStartDate} <span className="navigation-time" data-testid="navigation-time">|</span> <Time16 />{" "}
+      {shiftStartTime} <span className="to-text">to</span>{" "}
+      <Time16 /> {shiftEndTime}
+    </div>);
+    }
+    else {
+      return(<div className="shift-time">
+      {shiftStartDate} <span className="navigation-time" data-testid="navigation-time">|</span> <Time16 />{" "}
+      {shiftStartTime} <span className="to-text">to</span>{" "}{shiftEndDate}
+      <Time16 /> {shiftEndTime}
+    </div>);
+    }
+}
   return (
     <div className="task-type">
       {/* nursingTask-shift-header */}
@@ -39,7 +69,7 @@ export const CareViewPatientsHeader = (props) => {
           data-testid="now-button"
         >
           <span className="now-button-text">
-            <FormattedMessage id={"NOW-BUTTON"} defaultMessage={"Now"} />
+            <FormattedMessage id={"CURRENT_SHIFT"} defaultMessage={"Current Shift"} />
           </span>
         </Button>
         <Button
@@ -53,11 +83,6 @@ export const CareViewPatientsHeader = (props) => {
           data-testid="previous-button"
           disabled={navButtonsDisabled.previous}
         />
-        <span className="navigation-time" data-testid="navigation-time">
-          {epochTo24HourTimeFormat(navHourEpoch.startHourEpoch) +
-            " - " +
-            epochTo24HourTimeFormat(navHourEpoch.endHourEpoch)}
-        </span>
         <Button
           // disabled={isShiftsButtonsDisabled.next}
           renderIcon={ChevronRight16}
@@ -69,7 +94,9 @@ export const CareViewPatientsHeader = (props) => {
           data-testid="next-button"
           disabled={navButtonsDisabled.next}
         />
+        {shiftTiming()}
       </div>
+      <div className= "search-and-tasklist"> 
       <Search
         placeholder={IPD_WARD_SEARCH_PLACEHOLDER_TEXT}
         size="lg"
@@ -90,8 +117,10 @@ export const CareViewPatientsHeader = (props) => {
         selectedItem={"All tasks"}
         light={true}
       />
+      </div>
     </div>
   );
+
 };
 
 CareViewPatientsHeader.propTypes = {

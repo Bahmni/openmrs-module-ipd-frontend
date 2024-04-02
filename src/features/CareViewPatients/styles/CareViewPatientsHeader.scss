@@ -1,23 +1,43 @@
 .ward-patient-search {
   margin-right: 16px;
   outline: 2px solid rgba(0, 0, 0, 0);
+  width: auto;
 }
-
+.task-type{
+  display :flex;
+  justify-content: space-between;
+ 
+.search-and-tasklist{
+  display: flex;
+}  
 .navigation-header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 
   .now-button {
     margin-right: 10px;
     display: inline-block;
+    padding: 5px 10px;
   }
+  
   .now-button-text {
     text-align: center;
   }
+
   .navigation-time {
-    width: 96px;
-    text-align: center;
+   margin: 0 5px;
   }
+
+  .to-text {
+    margin: 0 6px;
+    font-weight: 400;
+  }
+
+  svg {
+    margin-right: 2px;
+  }
+
   .bx--btn.bx--btn--icon-only.bx--tooltip__trigger {
     min-height: 32px;
     padding: 5px 10px;
@@ -32,6 +52,13 @@
   .bx--btn--expressive[disabled] {
     color: #8d8d8d;
     border: 1px solid #8d8d8d;
+  }
+
+  .shift-time {
+    min-width: max-content;
+    font-weight: 600;
+    align-items: center;
+    display: flex;
   }
 
   .margin-right-6 {
@@ -59,5 +86,24 @@
     &:focus {
       color: #fff;
     }
+  }
+}
+}
+
+@media screen and  (min-width: 1521px){
+  .task-type{
+    width: 1521px;
+  }
+}
+
+@media screen and  (max-width: 1521px){
+  .task-type{
+    width: 100%;
+  }
+}
+
+@media screen and  (max-width: 890px){
+  .task-type{
+    flex-wrap: wrap;
   }
 }

@@ -23,6 +23,7 @@ import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/Dr
 export const CareViewPatients = () => {
   const { selectedWard, careViewConfig, refreshPatientList, ipdConfig } =
     useContext(CareViewContext);
+  const { enable24HourTime = {} } = ipdConfig;
   const [currentPage, setCurrentPage] = useState(1);
   const [previousPage, setPreviousPage] = useState(1);
   const [limit, setLimit] = useState(careViewConfig.defaultPageSize);
@@ -302,6 +303,7 @@ export const CareViewPatients = () => {
             handleNow={handleNow}
             handleNext={handleNext}
             handlePrevious={handlePrevious}
+            enable24HourTime={enable24HourTime}
           />
           {patientList.length > 0 ? (
             <CareViewPatientsSummary

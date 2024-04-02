@@ -1,7 +1,7 @@
 import { getColumnData } from "../../CareViewSummary/utils/CareViewSummary";
 import React, { useContext } from "react";
 import Clock from "../../../icons/clock.svg";
-import { epochTo24HourTimeFormat } from "../../../utils/DateTimeUtils";
+import { epochTo12HourTimeFormat, epochTo24HourTimeFormat } from "../../../utils/DateTimeUtils";
 import { getAdministrationStatus } from "../../../utils/CommonUtils";
 import SVGIcon from "../../SVGIcon/SVGIcon";
 import { CareViewContext } from "../../../context/CareViewContext";
@@ -15,6 +15,7 @@ export const SlotDetailsCell = ({
 }) => {
   const columns = [];
   const { ipdConfig } = useContext(CareViewContext);
+  const { enable24HourTime={} } = ipdConfig;
 
   const patientSlotDetail = slotDetails?.find(
     (slotDetail) => slotDetail.patientUuid === uuid
@@ -64,7 +65,7 @@ export const SlotDetailsCell = ({
             {renderStatusIcon(slotItem)}
             <Clock className="clock-icon" />
           </div>
-          <span>{epochTo24HourTimeFormat(slotItem.startTime)}</span>
+          <span>{enable24HourTime ? epochTo24HourTimeFormat(slotItem.startTime) : epochTo12HourTimeFormat(slotItem.startTime)}</span>
           <div className="drug-details-wrapper">
             <span>{slotItem.order.drug.display}</span>
             <div className="drug-details" data-testid="drug-details">

@@ -61,14 +61,16 @@ describe("CareViewPatientsHeader", () => {
       />
     );
     expect(mockHandleNow).toHaveBeenCalledTimes(1);
-    expect(screen.getByText("Now")).toBeTruthy();
-    fireEvent.click(screen.getByText("Now"));
+    expect(screen.getByText("Current Shift")).toBeTruthy();
+    fireEvent.click(screen.getByText("Current Shift"));
     expect(mockHandleNow).toHaveBeenCalledTimes(2);
-    expect(screen.getByText(/12:00 - 14:00/i)).toBeTruthy();
+    expect(screen.getByText(/12:00/i)).toBeTruthy();
+    expect(screen.getByText(/13:59/i)).toBeTruthy();
+    expect(screen.getByText(/01 Jan 2024/i)).toBeTruthy();
   });
 
   it("should have called handle previous callback on click of left arrow button", async () => {
-    render(
+    render( 
       <CareViewPatientsHeader
         patientsSummary={mockPatientsList.admittedPatients}
         handleKeyPress={mockHandleKeyPress}

@@ -1,8 +1,11 @@
-import { epochTo24HourTimeFormat } from "../../../utils/DateTimeUtils";
-import React from "react";
+import { epochTo12HourTimeFormat, epochTo24HourTimeFormat } from "../../../utils/DateTimeUtils";
+import React, { useContext} from "react";
 import propTypes from "prop-types";
+import { CareViewContext } from "../../../context/CareViewContext";
 
 export const Header = ({ timeframeLimitInHours, navHourEpoch }) => {
+  const { ipdConfig } = useContext(CareViewContext);
+  const { enable24HourTime={} } = ipdConfig;
   return (
     <tr className="patient-row-container">
       <td
@@ -21,7 +24,7 @@ export const Header = ({ timeframeLimitInHours, navHourEpoch }) => {
               data-testid={headerKey}
             >
               <div className="time" data-testid={`time-frame-${i}`}>
-                {epochTo24HourTimeFormat(startTime, true)}
+                { enable24HourTime ? epochTo24HourTimeFormat(startTime, true):epochTo12HourTimeFormat(startTime, true)}
               </div>
             </td>
           );
