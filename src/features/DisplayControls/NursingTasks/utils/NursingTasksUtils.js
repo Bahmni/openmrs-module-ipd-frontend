@@ -255,7 +255,14 @@ export const disableTaskTilePastNextSlotTime = (
     const upcomingTaskTimeInEpoch = upcomingTask.startTimeInEpochSeconds;
     const currentTimeInEpoch = moment().unix();
     if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
-      currentTask.isDisabled = !currentTask.isANonMedicationTask && true;
+      if (
+        currentTask.isANonMedicationTask &&
+        currentTask.taskType !== "nursing_activity"
+      ) {
+        currentTask.isDisabled = false;
+      } else {
+        currentTask.isDisabled = true;
+      }
     }
   }
 };
@@ -337,45 +344,19 @@ export const ExtractNonMedicationTasks = (
   // grouping non-medication tasks together when the filter.id is pending
   if (filterValue.id === "pending") {
     extractedData.forEach((item) => {
-      if (
-        item.partOf == null &&
-        item.taskType?.display !== "nursing_activity"
-      ) {
-        groupedData.push([item]);
-      } else {
-        if (item.startTime !== currentStartTime && !item.stopTime) {
-          if (currentGroup.length > 0) {
-            groupedData.push(currentGroup);
-          }
-          currentGroup = [item];
-          currentStartTime = item.startTime;
-        } else {
-          currentGroup.push(item);
+      if (item.startTime !== currentStartTime && !item.stopTime) {
+        if (currentGroup.length > 0) {
+          groupedData.push(currentGroup);
         }
+        currentGroup = [item];
+        currentStartTime = item.startTime;
+      } else {
+        currentGroup.push(item);
       }
     });
     if (currentGroup.length > 0) {
       groupedData.push(currentGroup);
     }
-    // stacking logic for non-medication tasks
-    extractedData.forEach((item) => {
-      if (item.partOf != null) {
-        for (let index = 0; index < groupedData.length; index++) {
-          const uuid =
-            groupedData[index].length > 0
-              ? groupedData[index][0].uuid
-              : groupedData[index].uuid;
-          if (item.partOf === uuid) {
-            if (Array.isArray(groupedData[index])) {
-              groupedData[index].push(item);
-            } else {
-              groupedData[index] = [groupedData[index], item];
-            }
-            break;
-          }
-        }
-      }
-    });
   } else if (extractedData.length > 0) {
     groupedData.push(extractedData);
   }
