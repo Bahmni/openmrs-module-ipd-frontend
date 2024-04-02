@@ -255,7 +255,7 @@ export const disableTaskTilePastNextSlotTime = (
     const upcomingTaskTimeInEpoch = upcomingTask.startTimeInEpochSeconds;
     const currentTimeInEpoch = moment().unix();
     if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
-      currentTask.isDisabled = true;
+      currentTask.isDisabled = !currentTask.isANonMedicationTask && true;
     }
   }
 };
@@ -337,8 +337,11 @@ export const ExtractNonMedicationTasks = (
   // grouping non-medication tasks together when the filter.id is pending
   if (filterValue.id === "pending") {
     extractedData.forEach((item) => {
-      if (item.partOf == null && item.taskType.display !== "nursing_activity") {
-        groupedData.push(item);
+      if (
+        item.partOf == null &&
+        item.taskType?.display !== "nursing_activity"
+      ) {
+        groupedData.push([item]);
       } else {
         if (item.startTime !== currentStartTime && !item.stopTime) {
           if (currentGroup.length > 0) {
