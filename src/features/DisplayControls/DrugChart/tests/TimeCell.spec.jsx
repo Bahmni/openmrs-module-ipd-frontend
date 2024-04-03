@@ -3,7 +3,7 @@ import TimeCell from "../components/TimeCell";
 import "@testing-library/jest-dom/extend-expect";
 import { render, waitFor } from "@testing-library/react";
 import moment from "moment";
-import { timeFormatfor24Hr } from "../../../../constants";
+import { timeFormatFor24Hr } from "../../../../constants";
 
 const MockTooltipCarbon = jest.fn();
 jest.mock("../../../../icons/note.svg");
@@ -49,8 +49,8 @@ const slotInfoWithNotes = [
 
 describe("TimeCell", () => {
   it("should render icon on left side of cell if minutes is less than 30", () => {
-    const startTime = moment("10:00", timeFormatfor24Hr);
-    const endTime = moment("11:00", timeFormatfor24Hr);
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
     const component = render(
       <TimeCell
         slotInfo={[slotInfoWithin30MinDuration[0]]}
@@ -62,8 +62,8 @@ describe("TimeCell", () => {
   });
 
   it("should render icon on left side of cell since time is close to startTime", () => {
-    const startTime = moment("10:30", timeFormatfor24Hr);
-    const endTime = moment("11:30", timeFormatfor24Hr);
+    const startTime = moment("10:30", timeFormatFor24Hr);
+    const endTime = moment("11:30", timeFormatFor24Hr);
     const component = render(
       <TimeCell
         slotInfo={[slotInfo[0]]}
@@ -75,8 +75,8 @@ describe("TimeCell", () => {
   });
 
   it("should render timecell with 2 icons on left", async () => {
-    const startTime = moment("10:00", timeFormatfor24Hr);
-    const endTime = moment("11:00", timeFormatfor24Hr);
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
     const component = render(
       <TimeCell
         slotInfo={slotInfoWithin30MinDuration}
@@ -91,8 +91,8 @@ describe("TimeCell", () => {
   });
 
   it("should render icon on right side of cell if minutes is greater than 30", async () => {
-    const startTime = moment("10:00", timeFormatfor24Hr);
-    const endTime = moment("11:00", timeFormatfor24Hr);
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
     const component = render(
       <TimeCell slotInfo={slotInfo} startTime={startTime} endTime={endTime} />
     );
@@ -102,8 +102,8 @@ describe("TimeCell", () => {
   });
 
   it("should show notes icon when notes is present", () => {
-    const startTime = moment("10:00", timeFormatfor24Hr);
-    const endTime = moment("11:00", timeFormatfor24Hr);
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
     const component = render(
       <TimeCell
         slotInfo={slotInfoWithNotes}
@@ -116,8 +116,8 @@ describe("TimeCell", () => {
   });
 
   it("should highlight only left side of the cell if highligted flag is true", () => {
-    const startTime = moment("10:00", timeFormatfor24Hr);
-    const endTime = moment("11:00", timeFormatfor24Hr);
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
     const component = render(
       <TimeCell
         slotInfo={slotInfo}
@@ -135,8 +135,8 @@ describe("TimeCell", () => {
   });
 
   it("should highlight only right side of the cell if highligted flag is true", () => {
-    const startTime = moment("10:00", timeFormatfor24Hr);
-    const endTime = moment("11:00", timeFormatfor24Hr);
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
     const component = render(
       <TimeCell
         slotInfo={slotInfo}
@@ -154,8 +154,8 @@ describe("TimeCell", () => {
   });
 
   it("should not highlight if highligted flag cell is false", () => {
-    const startTime = moment("10:00", timeFormatfor24Hr);
-    const endTime = moment("11:00", timeFormatfor24Hr);
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
     const component = render(
       <TimeCell
         slotInfo={slotInfo}

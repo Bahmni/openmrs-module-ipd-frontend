@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import TimeCell from "./TimeCell.jsx";
 import { areDatesSame, formatDate } from "../../../../utils/DateTimeUtils.js";
 import { IPDContext } from "../../../../context/IPDContext";
-import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
+import { timeFormatFor12Hr, timeFormatFor24Hr } from "../../../../constants";
 import moment from "moment";
 
 export default function CalendarRow(props) {
@@ -24,7 +24,7 @@ export default function CalendarRow(props) {
     ) {
       time = formatDate(
         medicationAdministration.administeredDateTime,
-        timeFormatfor24Hr
+        timeFormatFor24Hr
       );
       adminInfo = {
         notes: administrationSummary.notes,
@@ -33,18 +33,18 @@ export default function CalendarRow(props) {
             ? time
             : formatDate(
                 medicationAdministration.administeredDateTime,
-                timeFormatFor12hr
+                timeFormatFor12Hr
               )
         }]`,
       };
     } else if (administrationSummary.status === "Not-Administered") {
-      time = formatDate(slot.startTime * 1000, timeFormatfor24Hr);
+      time = formatDate(slot.startTime * 1000, timeFormatFor24Hr);
       adminInfo = {
         notes: administrationSummary.notes,
         administrationInfo: administrationSummary.performerName,
       };
     } else {
-      time = formatDate(slot.startTime * 1000, timeFormatfor24Hr);
+      time = formatDate(slot.startTime * 1000, timeFormatFor24Hr);
     }
     let [hours, minutes] = time.split(":");
     if (currentShiftMinute > minutes) {
@@ -60,11 +60,11 @@ export default function CalendarRow(props) {
   return (
     <div style={{ display: "flex" }}>
       {currentShiftArray.map((time, index) => {
-        const shiftArrayTime = moment(time, timeFormatfor24Hr);
+        const shiftArrayTime = moment(time, timeFormatFor24Hr);
         const nextShiftArrayTime =
           index + 1 != currentShiftArray.length
-            ? moment(currentShiftArray[index + 1], timeFormatfor24Hr)
-            : moment(time, timeFormatfor24Hr).add(1, "hour");
+            ? moment(currentShiftArray[index + 1], timeFormatFor24Hr)
+            : moment(time, timeFormatFor24Hr).add(1, "hour");
         const date = moment();
         const sameDate = areDatesSame(date, selectedDate);
         const isCurrentHour =

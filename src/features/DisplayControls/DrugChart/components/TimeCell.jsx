@@ -5,7 +5,7 @@ import "../styles/TimeCell.scss";
 import SVGIcon from "./SVGIcon.jsx";
 import NoteIcon from "../../../../icons/note.svg";
 import { ifMedicationNotesPresent } from "../utils/DrugChartUtils";
-import { timeFormatfor24Hr } from "../../../../constants.js";
+import { timeFormatFor24Hr } from "../../../../constants.js";
 import moment from "moment";
 
 export default function TimeCell(props) {
@@ -20,12 +20,12 @@ export default function TimeCell(props) {
     right = [];
   slotInfo.map((slot) => {
     const { time } = slot;
-    const momentTime = moment(time, timeFormatfor24Hr);
+    const momentTime = moment(time, timeFormatFor24Hr);
     let diffStartTime = momentTime.diff(startTime);
     let diffEndTime = endTime.diff(momentTime);
 
     if (endTime.isBefore(startTime)) {
-      const midnight = moment("00:00", timeFormatfor24Hr);
+      const midnight = moment("00:00", timeFormatFor24Hr);
       if (momentTime.isAfter(midnight)) {
         diffStartTime = midnight.diff(startTime) + momentTime.diff(midnight);
       } else {

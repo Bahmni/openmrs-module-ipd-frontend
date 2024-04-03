@@ -10,6 +10,7 @@ import ExpandableDataTable from "../../../../components/ExpandableDataTable/Expa
 import DiagnosisExpandableRow from "./DiagnosisExpandableRow";
 import NotesIcon from "../../../../icons/notes.svg";
 import { IPDContext } from "../../../../context/IPDContext";
+import { timeFormatFor24Hr } from "../../../../constants";
 
 const Diagnosis = (props) => {
   const { patientId } = props;
@@ -31,7 +32,10 @@ const Diagnosis = (props) => {
       diagnosisList.forEach((diagnosis) => {
         let status = diagnosis.diagnosisStatusConcept ? "Inactive" : "Active";
         let diagnosisDate = formatDate(diagnosis.diagnosisDateTime);
-        let diagnosisTime = formatDate(diagnosis.diagnosisDateTime, "HH:mm");
+        let diagnosisTime = formatDate(
+          diagnosis.diagnosisDateTime,
+          timeFormatFor24Hr
+        );
         let diagnosisId = diagnosis.codedAnswer
           ? diagnosis.codedAnswer.uuid
           : diagnosis.freeTextAnswer + diagnosis.diagnosisDateTime;

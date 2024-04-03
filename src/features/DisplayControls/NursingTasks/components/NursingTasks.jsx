@@ -26,7 +26,7 @@ import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import {
   asNeededPlaceholderConceptName,
   componentKeys,
-  timeFormatFor12hr,
+  timeFormatFor12Hr,
 } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -386,11 +386,11 @@ export default function NursingTasks(props) {
 
     const formattedShiftStartTime = enable24HourTime
       ? shiftStartTime
-      : formatDate(startEndDates.startDate, timeFormatFor12hr);
+      : formatDate(startEndDates.startDate, timeFormatFor12Hr);
 
     const formattedShiftEndTime = enable24HourTime
       ? shiftEndTime
-      : formatDate(startEndDates.endDate - 60, timeFormatFor12hr);
+      : formatDate(startEndDates.endDate - 60, timeFormatFor12Hr);
 
     if (shiftStartDate === shiftEndDate) {
       return (

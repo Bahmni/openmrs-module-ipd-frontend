@@ -5,6 +5,7 @@ import {
   MEDICATIONS_BASE_URL,
   performerFunction,
   asNeededPlaceholderConceptName,
+  timeFormatFor24Hr,
 } from "../../../../constants";
 import _ from "lodash";
 import { FormattedMessage } from "react-intl";
@@ -202,8 +203,8 @@ export const getDateTime = (date, time) => {
 
 const getShiftHours = (shiftRange) => {
   const [startTime, endTime] = shiftRange.split("-");
-  const startMoment = moment(startTime, "HH:mm");
-  const endMoment = moment(endTime, "HH:mm");
+  const startMoment = moment(startTime, timeFormatFor24Hr);
+  const endMoment = moment(endTime, timeFormatFor24Hr);
   let shiftTimeInHours = 0;
   if (endMoment.isAfter(startMoment)) {
     shiftTimeInHours = endMoment.diff(startMoment, "hours", true);
@@ -240,8 +241,8 @@ export const currentShiftHoursArray = (date, shiftDetails = {}) => {
   let shiftIndex = 0;
   rangeArray.forEach((range, index) => {
     const [startTime, endTime] = range.split("-");
-    const startMoment = moment(startTime, "HH:mm");
-    const endMoment = moment(endTime, "HH:mm");
+    const startMoment = moment(startTime, timeFormatFor24Hr);
+    const endMoment = moment(endTime, timeFormatFor24Hr);
 
     /* if the shift is on same date */
     if (endMoment.isAfter(startMoment)) {
