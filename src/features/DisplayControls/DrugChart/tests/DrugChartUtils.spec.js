@@ -88,6 +88,31 @@ describe("DrugChartUtils", () => {
     expect(startDateTime).toEqual(nextExpectedStartDateTime);
     expect(endDateTime).toEqual(nextExpectedEndDateTime);
   });
+
+  it("test getNextShiftDetails method with change in minutes", () => {
+    const shiftDetails = {
+      1: { shiftStartTime: "06:30", shiftEndTime: "18:00" },
+      2: { shiftStartTime: "18:00", shiftEndTime: "06:30" },
+    };
+    MockDate.set("2023-12-19 16:00:00");
+    expect(
+      currentShiftHoursArray(new Date(), shiftDetails).currentShiftHoursArray
+    ).toEqual([
+      "06:30",
+      "07:30",
+      "08:30",
+      "09:30",
+      "10:30",
+      "11:30",
+      "12:30",
+      "13:30",
+      "14:30",
+      "15:30",
+      "16:30",
+      "17:30",
+    ]);
+  });
+
   it("test getPreviousShiftDetails method", () => {
     const rangeArray = ["06:00-18:00", "18:00-06:00"];
     const shiftIndex = 1;

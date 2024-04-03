@@ -61,6 +61,19 @@ describe("TimeCell", () => {
     expect(component.getByTestId("left-icon")).toBeTruthy();
   });
 
+  it("should render icon on left side of cell since time is close to startTime", () => {
+    const startTime = moment("10:30", timeFormatfor24Hr);
+    const endTime = moment("11:30", timeFormatfor24Hr);
+    const component = render(
+      <TimeCell
+        slotInfo={[slotInfo[0]]}
+        startTime={startTime}
+        endTime={endTime}
+      />
+    );
+    expect(component.getByTestId("left-icon")).toBeTruthy();
+  });
+
   it("should render timecell with 2 icons on left", async () => {
     const startTime = moment("10:00", timeFormatfor24Hr);
     const endTime = moment("11:00", timeFormatfor24Hr);
