@@ -61,10 +61,10 @@ export default function CalendarRow(props) {
     <div style={{ display: "flex" }}>
       {currentShiftArray.map((time, index) => {
         const shiftArrayTime = moment(time, timeFormatfor24Hr);
-        const nextShiftArrayTime = moment(
-          currentShiftArray[index + 1],
-          timeFormatfor24Hr
-        );
+        const nextShiftArrayTime =
+          index + 1 != currentShiftArray.length
+            ? moment(currentShiftArray[index + 1], timeFormatfor24Hr)
+            : moment(time, timeFormatfor24Hr).add(1, "hour");
         const date = moment();
         const sameDate = areDatesSame(date, selectedDate);
         const isCurrentHour =

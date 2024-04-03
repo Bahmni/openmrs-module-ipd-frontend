@@ -26,7 +26,11 @@ export default function TimeCell(props) {
 
     if (endTime.isBefore(startTime)) {
       const midnight = moment("00:00", timeFormatfor24Hr);
-      diffEndTime = momentTime.diff(midnight) + midnight.diff(endTime);
+      if (momentTime.isAfter(midnight)) {
+        diffStartTime = midnight.diff(startTime) + momentTime.diff(midnight);
+      } else {
+        diffEndTime = momentTime.diff(midnight) + midnight.diff(endTime);
+      }
     }
     if (diffStartTime < diffEndTime) {
       left.push(slot);
