@@ -7,22 +7,21 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
   >
     <header
       aria-label="IBM Platform Name"
-      class="bx--header border-bottom-0 header-bg-color"
+      class="bx--header border-bottom-0 header-bg-color care-view-header"
     >
       <a
-        class="bx--link"
+        class="bx--link home"
         href="/bahmni/home/#/dashboard"
       >
         <svg
           aria-label="home-button"
-          class="home"
           fill="currentColor"
           focusable="false"
-          height="20"
+          height="24"
           preserveAspectRatio="xMidYMid meet"
           role="img"
           viewBox="0 0 32 32"
-          width="20"
+          width="24"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -30,40 +29,76 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           />
         </svg>
       </a>
+      <div
+        class="provider-actions"
+      >
+        <div>
+          <div
+            class="provider-menu false"
+          >
+            <svg
+              aria-hidden="true"
+              class="user-avatar"
+              fill="currentColor"
+              focusable="false"
+              height="24"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16,8a5,5,0,1,0,5,5A5,5,0,0,0,16,8Zm0,8a3,3,0,1,1,3-3A3.0034,3.0034,0,0,1,16,16Z"
+              />
+              <path
+                d="M16,2A14,14,0,1,0,30,16,14.0158,14.0158,0,0,0,16,2ZM10,26.3765V25a3.0033,3.0033,0,0,1,3-3h6a3.0033,3.0033,0,0,1,3,3v1.3765a11.8989,11.8989,0,0,1-12,0Zm13.9925-1.4507A5.0016,5.0016,0,0,0,19,20H13a5.0016,5.0016,0,0,0-4.9925,4.9258,12,12,0,1,1,15.985,0Z"
+              />
+            </svg>
+            <div
+              class="username"
+            />
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+              />
+            </svg>
+          </div>
+        </div>
+        <span
+          class="logout"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            focusable="false"
+            height="24"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 32 32"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6,30H18a2.0023,2.0023,0,0,0,2-2V25H18v3H6V4H18V7h2V4a2.0023,2.0023,0,0,0-2-2H6A2.0023,2.0023,0,0,0,4,4V28A2.0023,2.0023,0,0,0,6,30Z"
+            />
+            <path
+              d="M20.586 20.586L24.172 17 10 17 10 15 24.172 15 20.586 11.414 22 10 28 16 22 22 20.586 20.586z"
+            />
+          </svg>
+        </span>
+      </div>
     </header>
     <section
       class="main"
     >
-      <div
-        class="bx--loading-overlay"
-      >
-        <div
-          aria-atomic="true"
-          aria-live="assertive"
-          class="bx--loading"
-        >
-          <label
-            class="bx--visually-hidden"
-            id="loading-id-1"
-          >
-            Active loading indicator
-          </label>
-          <svg
-            class="bx--loading__svg"
-            viewBox="0 0 100 100"
-          >
-            <title>
-              Active loading indicator
-            </title>
-            <circle
-              class="bx--loading__stroke"
-              cx="50%"
-              cy="50%"
-              r="44"
-            />
-          </svg>
-        </div>
-      </div>
       <div
         class="care-view-navigations"
       >
@@ -122,17 +157,38 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   aria-expanded="false"
                   aria-haspopup="listbox"
                   autocomplete="off"
-                  class="bx--text-input bx--text-input--empty"
+                  class="bx--text-input"
                   id="default"
                   placeholder="Select a Ward"
                   role="combobox"
                   style="width: 200px;"
                   tabindex="0"
-                  title=""
+                  title="General Ward"
                   type="text"
-                  value=""
+                  value="General Ward"
                 />
-                
+                <button
+                  aria-label="Clear selected item"
+                  class="bx--list-box__selection"
+                  tabindex="0"
+                  title="Clear selected item"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
+                    />
+                  </svg>
+                </button>
                 <button
                   aria-haspopup="true"
                   aria-label="Open"
@@ -169,21 +225,21 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           </div>
         </div>
         <div
-          class="bx--tile summary-tile"
+          class="bx--tile summary-tile selected-header"
         >
           <span
             class="heading-text"
           >
-            Total patients
+            Total patient(s)
           </span>
           <span
             class="value-text"
           >
-            0
+            5
           </span>
         </div>
         <div
-          class="bx--tile summary-tile"
+          class="bx--tile summary-tile false"
         >
           <span
             class="heading-text"
@@ -193,7 +249,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           <span
             class="value-text"
           >
-            0
+            2
           </span>
         </div>
       </div>
@@ -201,33 +257,227 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
         class="care-view-patients-container"
       >
         <div
-          class="bx--loading-overlay"
+          class="care-view-patients"
         >
           <div
-            aria-atomic="true"
-            aria-live="assertive"
-            class="bx--loading"
+            class="task-type"
           >
-            <label
-              class="bx--visually-hidden"
-              id="loading-id-2"
+            <div
+              class="navigation-header"
             >
-              Active loading indicator
-            </label>
+              <button
+                class="now-button bx--btn bx--btn--sm bx--btn--tertiary"
+                data-testid="now-button"
+                tabindex="0"
+                type="button"
+              >
+                <span
+                  class="now-button-text"
+                >
+                  Now
+                </span>
+              </button>
+              <button
+                class="bx--btn bx--btn--sm bx--btn--tertiary bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+                data-testid="previous-button"
+                tabindex="0"
+                type="button"
+              >
+                <div
+                  class="bx--assistive-text"
+                />
+                <svg
+                  aria-hidden="true"
+                  class="bx--btn__icon"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 8L10 3 10.7 3.7 6.4 8 10.7 12.3 10 13z"
+                  />
+                </svg>
+              </button>
+              <span
+                class="navigation-time"
+                data-testid="navigation-time"
+              >
+                12:00 - 14:00
+              </span>
+              <button
+                class="margin-right-10 bx--btn bx--btn--sm bx--btn--tertiary bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+                data-testid="next-button"
+                tabindex="0"
+                type="button"
+              >
+                <div
+                  class="bx--assistive-text"
+                />
+                <svg
+                  aria-hidden="true"
+                  class="bx--btn__icon"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div
+              aria-labelledby="ipd-ward-search-search"
+              class="bx--search bx--search--lg bx--search--light ward-patient-search"
+              role="search"
+            >
+              <div
+                class="bx--search-magnifier"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="bx--search-magnifier-icon"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15,14.3L10.7,10c1.9-2.3,1.6-5.8-0.7-7.7S4.2,0.7,2.3,3S0.7,8.8,3,10.7c2,1.7,5,1.7,7,0l4.3,4.3L15,14.3z M2,6.5	C2,4,4,2,6.5,2S11,4,11,6.5S9,11,6.5,11S2,9,2,6.5z"
+                  />
+                </svg>
+              </div>
+              <label
+                class="bx--label"
+                for="ipd-ward-search"
+                id="ipd-ward-search-search"
+              >
+                Patient Search
+              </label>
+              <input
+                autocomplete="off"
+                class="bx--search-input"
+                id="ipd-ward-search"
+                placeholder="Type a minimum of 3 characters to search patient by name, bed number or patient ID"
+                role="searchbox"
+                type="text"
+                value=""
+              />
+              <button
+                aria-label="Clear search input"
+                class="bx--search-close bx--search-close--hidden"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div
+              class="bx--dropdown__wrapper bx--list-box__wrapper"
+            >
+              
+              <div
+                class="bx--dropdown bx--dropdown--light bx--list-box bx--list-box--light"
+                id="default"
+              >
+                <button
+                  aria-disabled="false"
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-labelledby="downshift-1-label downshift-1-toggle-button"
+                  class="bx--list-box__field"
+                  id="downshift-1-toggle-button"
+                  title="All Tasks"
+                  type="button"
+                >
+                  <span
+                    class="bx--list-box__label"
+                  >
+                    All Tasks
+                  </span>
+                  <div
+                    class="bx--list-box__menu-icon"
+                  >
+                    <svg
+                      aria-label="Open menu"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      name="chevron--down"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                      />
+                      <title>
+                        Open menu
+                      </title>
+                    </svg>
+                  </div>
+                </button>
+                <div
+                  aria-labelledby="downshift-1-label"
+                  class="bx--list-box__menu"
+                  id="downshift-1-menu"
+                  role="listbox"
+                  tabindex="-1"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="no-search-results"
+          >
             <svg
-              class="bx--loading__svg"
-              viewBox="0 0 100 100"
+              aria-hidden="true"
+              class="warning-icon-20"
+              fill="currentColor"
+              focusable="false"
+              height="20"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <title>
-                Active loading indicator
-              </title>
-              <circle
-                class="bx--loading__stroke"
-                cx="50%"
-                cy="50%"
-                r="44"
+              <path
+                d="M16 23a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 23zM15 12H17V21H15z"
+              />
+              <path
+                d="M29,30H3a1,1,0,0,1-.8872-1.4614l13-25a1,1,0,0,1,1.7744,0l13,25A1,1,0,0,1,29,30ZM4.6507,28H27.3493l.002-.0033L16.002,6.1714h-.004L4.6487,27.9967Z"
               />
             </svg>
+            <span
+              class="no-search-results-span"
+            >
+              No Patient found
+            </span>
           </div>
         </div>
       </div>

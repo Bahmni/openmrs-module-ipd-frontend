@@ -1,4 +1,7 @@
-import { getColumnData } from "../../CareViewSummary/utils/CareViewSummary";
+import {
+  getColumnData,
+  getTaskColumnData,
+} from "../../CareViewSummary/utils/CareViewSummary";
 import React, { useContext } from "react";
 import Clock from "../../../icons/clock.svg";
 import { epochTo24HourTimeFormat } from "../../../utils/DateTimeUtils";
@@ -12,6 +15,8 @@ export const SlotDetailsCell = ({
   slotDetails,
   timeframeLimitInHours,
   navHourEpoch,
+  nonMedicationDetails,
+  filterValue,
 }) => {
   const columns = [];
   const { ipdConfig } = useContext(CareViewContext);
@@ -20,15 +25,30 @@ export const SlotDetailsCell = ({
     (slotDetail) => slotDetail.patientUuid === uuid
   );
 
+  const patientTaskDetail = nonMedicationDetails?.find(
+    (taskDetail) => taskDetail.patientUuid === uuid
+  );
+
   for (let i = 0; i < timeframeLimitInHours; i++) {
     const startTime = navHourEpoch.startHourEpoch + i * 3600;
     if (startTime < navHourEpoch.endHourEpoch) {
       const endTime = startTime + 3600;
-
-      if (patientSlotDetail) {
-        const columnData = patientSlotDetail.prescribedOrderSlots.flatMap(
-          (slot) => getColumnData(slot, startTime, endTime)
-        );
+      let columnData, slotColumnData, taskColumnData;
+      slotColumnData =
+        patientSlotDetail &&
+        (filterValue.id === "allTasks" || filterValue.id === "medicationTasks")
+          ? patientSlotDetail?.prescribedOrderSlots.flatMap((slot) =>
+              getColumnData(slot, startTime, endTime)
+            )
+          : [];
+      taskColumnData =
+        patientTaskDetail &&
+        (filterValue.id === "allTasks" ||
+          filterValue.id === "nonMedicationTasks")
+          ? getTaskColumnData(patientTaskDetail.tasks, startTime, endTime)
+          : [];
+      columnData = slotColumnData.concat(...taskColumnData);
+      if (columnData) {
         columns.push({ startTime, endTime, columnData });
       } else {
         columns.push({ startTime, endTime, columnData: [] });
@@ -57,30 +77,62 @@ export const SlotDetailsCell = ({
     columnData.sort((a, b) => a.startTime - b.startTime);
 
     return columnData.map((slotItem) => {
-      const { dose, doseUnits, route } = slotItem.order;
-      return (
-        <div className="slot-details" key={`${slotItem.uuid}`}>
-          <div className="logo">
-            {renderStatusIcon(slotItem)}
-            <Clock className="clock-icon" />
-          </div>
-          <span>{epochTo24HourTimeFormat(slotItem.startTime)}</span>
-          <div className="drug-details-wrapper">
-            <span>{slotItem.order.drug.display}</span>
-            <div className="drug-details" data-testid="drug-details">
-              {dose && <span className="drug-detail">{dose}</span>}
-              {doseUnits && (
-                <span className="drug-detail">{doseUnits?.display}</span>
-              )}
-              {route && (
-                <span className="drug-detail">
-                  {route?.display && `  |  ${route.display}`}
-                </span>
-              )}
+      if (slotItem.isNonMedication) {
+        const taskItem = slotItem;
+        return (
+          <div className="slot-details" key={`${taskItem.uuid}`}>
+            <div className="logo">
+              <div className="status-icon" data-testid={taskItem.status}>
+                {taskItem.status === "REQUESTED" && (
+                  <SVGIcon iconType={"Pending"} />
+                )}
+                {taskItem.status === "COMPLETED" && (
+                  <SVGIcon iconType={"Administered"} />
+                )}
+              </div>
+              <Clock className="clock-icon" />
+            </div>
+            <span>
+              {epochTo24HourTimeFormat(taskItem.requestedStartTime / 1000)}
+            </span>
+            <div className="drug-details-wrapper">
+              <span>{taskItem.name}</span>
+              <div className="drug-details" data-testid="drug-details">
+                {taskItem.creator && (
+                  <span className="drug-detail">
+                    {taskItem.creator.display}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      );
+        );
+      } else {
+        const { dose, doseUnits, route } = slotItem.order;
+        return (
+          <div className="slot-details" key={`${slotItem.uuid}`}>
+            <div className="logo">
+              {renderStatusIcon(slotItem)}
+              <Clock className="clock-icon" />
+            </div>
+            <span>{epochTo24HourTimeFormat(slotItem.startTime)}</span>
+            <div className="drug-details-wrapper">
+              <span>{slotItem.order.drug.display}</span>
+              <div className="drug-details" data-testid="drug-details">
+                {dose && <span className="drug-detail">{dose}</span>}
+                {doseUnits && (
+                  <span className="drug-detail">{doseUnits?.display}</span>
+                )}
+                {route && (
+                  <span className="drug-detail">
+                    {route?.display && `  |  ${route.display}`}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      }
     });
   };
 

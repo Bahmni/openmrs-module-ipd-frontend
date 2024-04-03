@@ -78,6 +78,8 @@ export const ENCOUNTER_TYPE_URL = RESTWS_V1 + "/encountertype/{encounterType}";
 export const LIST_OF_WARDS_URL = RESTWS_V1 + "/admissionLocation";
 export const WARD_SUMMARY_URL = RESTWS_V1 + "/ipd/wards/{wardId}/summary";
 export const GET_PATIENT_LIST_URL = RESTWS_V1 + "/ipd/wards/{wardId}/patients";
+export const GET_MY_PATIENT_LIST_URL =
+  RESTWS_V1 + "/ipd/wards/{wardId}/myPatients";
 export const CARE_VIEW_DASHBOARD_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/careViewDashboard/app.json";
 export const GET_SEARCH_PATIENT_LIST_URL =
@@ -87,6 +89,8 @@ export const GET_SLOTS_FOR_PATIENTS_URL =
 export const INTAKE_OUTPUT_DATA_BASE_URL =
   BAHMNI_CORE + "/observations?";
 export const NON_MEDICATION_BASE_URL = RESTWS_V1 + "/tasks";
+
+export const GET_TASKS_FOR_PATIENTS_URL = RESTWS_V1 + "/tasks";
 
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
@@ -122,3 +126,7 @@ export const MOBILE_BREAKPOINT = 480;
 export const TABLET_BREAKPOINT = 1024;
 
 export const IPD_PAGE_TITLE = "IPD";
+export const WARD_SUMMARY_HEADER = {
+  TOTAL_PATIENTS: "TOTAL_PATIENTS",
+  MY_PATIENTS: "MY_PATIENTS",
+};

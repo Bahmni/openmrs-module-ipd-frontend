@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Header, Link, Loading } from "carbon-components-react";
-import { Home20 } from "@carbon/icons-react";
+import { Home24 } from "@carbon/icons-react";
 import { ArrowLeft } from "@carbon/icons-react/next";
 import _ from "lodash";
 import "./CareViewDashboard.scss";
@@ -9,16 +9,22 @@ import { CareViewSummary } from "../../features/CareViewSummary/components/CareV
 import { CareViewPatients } from "../../features/CareViewPatients/components/CareViewPatients";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
-import { homePageUrl } from "../../constants";
+import { homePageUrl, WARD_SUMMARY_HEADER } from "../../constants";
 import { CareViewContext } from "../../context/CareViewContext";
 import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
 import { getDashboardConfig } from "../../utils/CommonUtils";
+import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
 
 const CareViewDashboard = (props) => {
   const { hostApi, hostData } = props;
+  const { onHome, onLogOut } = hostApi;
   const [selectedWard, setSelectedWard] = useState({});
+  const [headerSelected, setHeaderSelected] = useState(
+    WARD_SUMMARY_HEADER.TOTAL_PATIENTS
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [refreshPatientList, setRefreshPatientList] = useState(false);
+  const [refreshSummary, setRefreshSummary] = useState(false);
   const [wardSummary, setWardSummary] = useState({});
   const [careViewConfig, setCareViewConfig] = useState({});
   const [ipdConfig, setIpdConfig] = useState({});
@@ -29,6 +35,10 @@ const CareViewDashboard = (props) => {
 
   const handleRefreshPatientList = () => {
     setRefreshPatientList(!refreshPatientList);
+  };
+
+  const handleRefreshSummary = () => {
+    setRefreshSummary(!refreshSummary);
   };
 
   const getIpdConfig = async () => {
@@ -46,12 +56,13 @@ const CareViewDashboard = (props) => {
     <I18nProvider>
       <main className="care-view-page">
         <Header
-          className="border-bottom-0 header-bg-color"
+          className="border-bottom-0 header-bg-color care-view-header"
           aria-label="IBM Platform Name"
         >
-          <Link href={homePageUrl}>
-            <Home20 className="home" aria-label="home-button" />
+          <Link href={homePageUrl} className={"home"}>
+            <Home24 aria-label="home-button" />
           </Link>
+          <ProviderActions onLogOut={onLogOut} />
         </Header>
 
         <section className="main">
@@ -67,6 +78,10 @@ const CareViewDashboard = (props) => {
               handleRefreshPatientList,
               careViewConfig,
               ipdConfig,
+              headerSelected,
+              setHeaderSelected,
+              refreshSummary,
+              handleRefreshSummary,
             }}
           >
             <div className="care-view-navigations">
@@ -75,10 +90,7 @@ const CareViewDashboard = (props) => {
                 size={20}
                 onClick={() => hostApi?.onHome()}
               />
-              <Link
-                className="ward-view-nav-link"
-                onClick={() => hostApi?.onHome()}
-              >
+              <Link className="ward-view-nav-link" onClick={onHome}>
                 <FormattedMessage
                   id={"WARD_LIST_VIEW_TEXT"}
                   defaultMessage="Ward List View"

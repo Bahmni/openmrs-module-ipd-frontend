@@ -12,13 +12,29 @@
     height: 100%;
     padding: 16px 0;
   }
+  .care-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 48px;
+    color: white;
+  }
 
   .home {
     background-color: #007d79;
-    fill: #ffffff;
+    color: #ffffff;
     outline: none;
     border: none;
-    margin-left: 16px;
+    padding: 12px 8px;
+    height: 3rem;
+    width: 50px;
+    justify-content: center;
+    &:hover,
+    &:focus {
+      outline: none;
+      background-color: #004144;
+      color: #fff;
+    }
   }
 
   .border-bottom-0 {

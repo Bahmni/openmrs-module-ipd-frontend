@@ -1,0 +1,53 @@
+.provider-actions {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  .options {
+    cursor: pointer;
+    padding: 0 8px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    &:hover,
+    &:focus {
+      outline: none;
+      background-color: #004144;
+    }
+  }
+  .menu-selected {
+    background-color: #004144;
+  }
+  .provider-menu {
+    @extend .options;
+  }
+  .logout {
+    width: 50px;
+    justify-content: center;
+    box-sizing: border-box;
+    @extend .options;
+  }
+  .user-avatar {
+    margin-right: 8px;
+  }
+  .username {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 8px;
+  }
+  .dropdown {
+    position: absolute;
+    top: 3rem;
+    right: 3rem;
+    background-color: #004144;
+    cursor: pointer;
+    > * {
+      height: 3rem;
+      padding: 12px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+}

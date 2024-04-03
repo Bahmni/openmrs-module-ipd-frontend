@@ -52,13 +52,12 @@
 
   .header-nav-toggle-btn {
     border: none;
-  }
-
-  .header-nav-toggle-btn:hover {
-    background-color: #007d79;
-    fill: #ffffff;
-    outline: none;
-    border: none;
+    &:hover {
+      background-color: #007d79;
+      fill: #ffffff;
+      outline: none;
+      border: none;
+    }
   }
 
   .bx--accordion__heading {
@@ -107,6 +106,34 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .ipd-header {
+    color: #fff !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-nav {
+    display: flex;
+    align-items: center;
+    > * {
+      padding: 10px;
+      height: 3rem;
+      justify-content: center;
+      width: 50px;
+      border-radius: 0;
+      &:hover,
+      &:focus {
+        outline: none;
+        background-color: #004144;
+      }
+    }
+    .bx--link__icon {
+      margin-left: 0;
+    }
+    svg {
+      fill: #fff;
+    }
   }
 }
 
