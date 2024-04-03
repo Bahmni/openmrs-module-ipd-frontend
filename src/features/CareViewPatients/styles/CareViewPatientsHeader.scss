@@ -1,19 +1,22 @@
 .ward-patient-search {
   margin-right: 16px;
   outline: 2px solid rgba(0, 0, 0, 0);
-  width: auto;
+  // width: auto;
 }
 .task-type{
   display :flex;
   justify-content: space-between;
+  width: 100%;
  
 .search-and-tasklist{
   display: flex;
+  width: 50%;
 }  
 .navigation-header {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  width: 50%;
 
   .now-button {
     margin-right: 10px;
@@ -84,18 +87,6 @@
     }
   }
 }
-}
-
-@media screen and  (min-width: 1521px){
-  .task-type{
-    width: 1521px;
-  }
-}
-
-@media screen and  (max-width: 1521px){
-  .task-type{
-    width: 100%;
-  }
 }
 
 @media screen and  (max-width: 890px){

@@ -37,7 +37,6 @@ const shiftTiming = () => {
     navHourEpoch.startHourEpoch * 1000,
     shiftTimingsFormat
   );
-  console.log("shift", shiftStartDateTime);
   let shiftEndDateTime = formatDate(
     navHourEpoch.endHourEpoch * 1000 - 60,
     shiftTimingsFormat
@@ -81,6 +80,7 @@ const shiftTiming = () => {
           hasIconOnly
           size="sm"
           onClick={handlePrevious}
+          className="margin-right-10"
           data-testid="previous-button"
           disabled={navButtonsDisabled.previous}
         />
@@ -140,4 +140,5 @@ CareViewPatientsHeader.propTypes = {
   handlePrevious: PropTypes.func,
   filterValue: PropTypes.object,
   setFilterValue: PropTypes.func,
+  enable24HourTime: PropTypes.boolean
 };
