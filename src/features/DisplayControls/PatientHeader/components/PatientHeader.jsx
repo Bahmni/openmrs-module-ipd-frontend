@@ -7,6 +7,7 @@ import {
   getConfigsForPatientContactDetails,
   getGender,
   mapContact,
+  fetchPatientProfilePicture,
   mapRelationships,
 } from "../utils/PatientHeaderUtils";
 import {
@@ -37,6 +38,7 @@ export const PatientHeader = (props) => {
   const [relationships, setMappedRelationships] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bedInformation, setBedInformation] = useState();
+  const [profilePicture, setProfilePicture] = useState();
   const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
   const showDetails = (
     <FormattedMessage id="SHOW_PATIENT_DETAILS" defaultMessage="Show Details" />
@@ -105,6 +107,8 @@ export const PatientHeader = (props) => {
     const getPatientInfo = async () => {
       const patientProfile = await fetchPatientProfile(patientId);
       const patientInfo = patientProfile?.patient;
+      const patientProfilePicture = await fetchPatientProfilePicture(patientId);
+      setProfilePicture(patientProfilePicture);
       const locationMap = await fetchAddressMapping();
       const patientAttributes = extractPatientInfo(patientInfo, locationMap);
       const contactConfigs = await getContactDetailsConfigs();
@@ -131,7 +135,7 @@ export const PatientHeader = (props) => {
           <>
             <Grid>
               <Row className="patient-image-and-details">
-                <div className={"patient-image"} />
+                <img className={"patient-image"} src={profilePicture} alt="patient-image"/>
                 <Column>
                   <Row className="header-title-row">
                     <div className="patient-name-and-navigations">

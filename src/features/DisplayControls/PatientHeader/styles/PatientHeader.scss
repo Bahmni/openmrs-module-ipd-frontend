@@ -52,9 +52,10 @@
   }
 
   .patient-image {
-    width: 56px;
     height: 56px;
-    background-color: #007d79;
+    width: auto;
+    border: 1px solid #ccc;
+    border-radius: 100%;
   }
 
   .patient-header-loading {

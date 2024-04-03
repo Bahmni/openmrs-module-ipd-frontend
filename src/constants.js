@@ -28,6 +28,7 @@ export const NON_MEDICATION_URL = RESTWS_V1 + "/tasks";
 export const BOOKMARK_PATIENT_BASE_URL =
   RESTWS_V1 + "/ipd/careteam/participants";
 export const PATIENT_URL = RESTWS_V1 + "/patient";
+export const PATIENT_IMAGE_URL = RESTWS_V1 + "/patientImage?"
 
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
 export const ALL_DRUG_ORDERS_URL = (visitUuid) =>
