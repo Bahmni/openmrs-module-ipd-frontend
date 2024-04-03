@@ -14,6 +14,7 @@ import {
   mapDrugOrdersAndSlots,
   isCurrentShift,
   NotCurrentShiftMessage,
+  setCurrentShiftTimes,
 } from "../utils/DrugChartUtils";
 import {
   convertDaystoSeconds,
@@ -115,42 +116,11 @@ export default function DrugChartWrapper(props) {
   }, [allMedications.data]);
 
   useEffect(() => {
-    const currentShift = shiftDetails.currentShiftHoursArray;
-    const [start, end] =
-      shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
-    const [startHour, startMinute] = start.split(":");
-    const [endHour, endMinute] = end.split(":");
-    const firstHour = `${startHour}:${startMinute}`;
-    const lastHour = `${endHour}:${endMinute}`;
-    let startDateTime = getDateTime(
-      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      firstHour
+    const [startDateTime, endDateTime] = setCurrentShiftTimes(
+      shiftDetails,
+      isReadMode,
+      visitSummary
     );
-    let endDateTime = getDateTime(
-      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      lastHour
-    );
-    /** if shift is going on two different dates */
-    if (lastHour < firstHour) {
-      const d = isReadMode ? new Date(visitSummary.stopDateTime) : new Date();
-      const currentHour = d.getHours();
-      if (currentHour > 12) {
-        d.setDate(d.getDate() + 1);
-        endDateTime = getDateTime(
-          d,
-          currentShift[currentShift.length - 1].replace(
-            /:\d+$/,
-            `:${endMinute}`
-          )
-        );
-      } else {
-        d.setDate(d.getDate() - 1);
-        startDateTime = getDateTime(
-          d,
-          currentShift[0].replace(/:\d+$/, `:${startMinute}`)
-        );
-      }
-    }
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   }, []);

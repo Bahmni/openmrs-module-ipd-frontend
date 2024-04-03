@@ -402,3 +402,44 @@ export const NotCurrentShiftMessage = (
     defaultMessage={"You're not viewing the current shift"}
   />
 );
+
+export const setCurrentShiftTimes = (
+  shiftDetails,
+  isReadMode,
+  visitSummary
+) => {
+  const currentShift = shiftDetails.currentShiftHoursArray;
+  const [start, end] =
+    shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
+  const [startHour, startMinute] = start.split(":");
+  const [endHour, endMinute] = end.split(":");
+  const firstHour = `${startHour}:${startMinute}`;
+  const lastHour = `${endHour}:${endMinute}`;
+  let startDateTime = getDateTime(
+    isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+    firstHour
+  );
+  let endDateTime = getDateTime(
+    isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
+    lastHour
+  );
+  /** if shift is going on two different dates */
+  if (lastHour < firstHour) {
+    const d = isReadMode ? new Date(visitSummary.stopDateTime) : new Date();
+    const currentHour = d.getHours();
+    if (currentHour > 12) {
+      d.setDate(d.getDate() + 1);
+      endDateTime = getDateTime(
+        d,
+        currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`)
+      );
+    } else {
+      d.setDate(d.getDate() - 1);
+      startDateTime = getDateTime(
+        d,
+        currentShift[0].replace(/:\d+$/, `:${startMinute}`)
+      );
+    }
+  }
+  return [startDateTime, endDateTime];
+};
