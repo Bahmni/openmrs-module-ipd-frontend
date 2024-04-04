@@ -294,8 +294,6 @@ export const ExtractNonMedicationTasks = (
   const groupedData = [],
     completedExtractedData = [],
     pendingExtractedData = [];
-  let currentStartTime = null;
-  let currentGroup = [];
   nonMedicationTasks?.forEach((nonMedicationTask) => {
     const {
       name,
@@ -343,22 +341,45 @@ export const ExtractNonMedicationTasks = (
   extractedData.push(...completedExtractedData);
   // grouping non-medication tasks together when the filter.id is pending
   if (filterValue.id === "pending") {
-    extractedData.forEach((item) => {
-      if (item.startTime !== currentStartTime && !item.stopTime) {
-        if (currentGroup.length > 0) {
-          groupedData.push(currentGroup);
-        }
-        currentGroup = [item];
-        currentStartTime = item.startTime;
-      } else {
-        currentGroup.push(item);
-      }
-    });
-    if (currentGroup.length > 0) {
-      groupedData.push(currentGroup);
+    const nursingActivityTask = extractedData.filter(
+      (data) => data.taskType?.display === "nursing_activity"
+    );
+    const systemGeneratedTasks = extractedData.filter(
+      (data) => data.taskType?.display !== "nursing_activity"
+    );
+    const extractedNursingActivityTask = groupTasks(
+      nursingActivityTask,
+      groupedData
+    );
+    const extractedSystemGeneratedTasks = groupTasks(
+      systemGeneratedTasks,
+      groupedData
+    );
+    if (extractedNursingActivityTask.length > 0) {
+      groupedData.push(extractedNursingActivityTask);
+    }
+    if (extractedSystemGeneratedTasks.length > 0) {
+      groupedData.push(extractedSystemGeneratedTasks);
     }
   } else if (extractedData.length > 0) {
     groupedData.push(extractedData);
   }
   return groupedData;
+};
+
+const groupTasks = (extractedData, groupedData) => {
+  let currentGroup = [];
+  let currentStartTime = null;
+  extractedData.forEach((item) => {
+    if (item.startTime !== currentStartTime && !item.stopTime) {
+      if (currentGroup.length > 0) {
+        groupedData.push(currentGroup);
+      }
+      currentGroup = [item];
+      currentStartTime = item.startTime;
+    } else {
+      currentGroup.push(item);
+    }
+  });
+  return currentGroup;
 };
