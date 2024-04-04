@@ -12,10 +12,12 @@ import { IPDContext } from "../../../../context/IPDContext";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import MockDate from "mockdate";
 import { mockConfig } from "../../../../utils/CommonUtils";
+import { after } from "lodash";
 
 const mockFetchMedications = jest.fn();
 const MockTooltipCarbon = jest.fn();
 const mockGetTimeInSeconds = jest.fn();
+const mockCurrentShiftHoursArray = jest.fn();
 
 jest.mock("bahmni-carbon-ui", () => {
   return {
@@ -31,11 +33,7 @@ jest.mock("../utils/DrugChartUtils", () => {
   return {
     ...originalModule,
     fetchMedications: () => mockFetchMedications(),
-    currentShiftHoursArray: () => ({
-      currentShiftHoursArray: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-      rangeArray: ["06:00-18:00", "18:00-06:00"],
-      shiftIndex: 0,
-    }),
+    currentShiftHoursArray: () => mockCurrentShiftHoursArray(),
     getTimeInSeconds: () => mockGetTimeInSeconds(),
   };
 });
@@ -47,9 +45,6 @@ jest.mock("../../../../utils/DateTimeUtils", () => {
   };
 });
 
-afterEach(() => {
-  MockDate.reset();
-});
 const renderDrugChartView = (mockOrders) => {
   return render(
     <AllMedicationsContext.Provider
@@ -62,6 +57,31 @@ const renderDrugChartView = (mockOrders) => {
   );
 };
 describe("DrugChartWrapper", () => {
+  beforeEach(() => {
+    mockCurrentShiftHoursArray.mockReturnValue({
+      currentShiftHoursArray: [
+        "06:00",
+        "07:00",
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+      ],
+      rangeArray: ["06:00-18:00", "18:00-06:00"],
+      shiftIndex: 0,
+    });
+  });
+
+  afterEach(() => {
+    MockDate.reset();
+  });
+
   // mocked current Date i.e new Date() to 5th Jan 2024
   MockDate.set("2024-01-05 10:00");
 
@@ -235,6 +255,83 @@ describe("DrugChartWrapper", () => {
     );
     await waitFor(() => {
       expect(screen.queryAllByText(/Zinc Oxide 20 mg Tablet/i)).toHaveLength(2);
+    });
+  });
+});
+
+describe("DrugChartWrapper with half hour shift time start", () => {
+  beforeEach(() => {
+    mockCurrentShiftHoursArray.mockReturnValue({
+      currentShiftHoursArray: [
+        "06:30",
+        "07:30",
+        "08:30",
+        "09:30",
+        "10:30",
+        "11:30",
+        "12:30",
+        "13:30",
+        "14:30",
+        "15:30",
+        "16:30",
+        "17:30",
+      ],
+      rangeArray: ["06:30-18:00", "18:00-06:30"],
+      shiftIndex: 0,
+    });
+  });
+
+  afterEach(() => {
+    MockDate.reset();
+  });
+
+  // mocked current Date i.e new Date() to 5th Jan 2024
+  MockDate.set("2024-01-05 10:00");
+
+  it("should show previous shift on previous button click", async () => {
+    MockDate.set("2024-01-05 10:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    renderDrugChartView(mockDrugOrders);
+    const previousButton = screen.getByTestId("previousButton");
+    fireEvent.click(previousButton);
+    await waitFor(() => {
+      expect(screen.getByText(/04 Jan 2024/)).toBeTruthy();
+      expect(screen.getByText(/18:00/)).toBeTruthy();
+      expect(screen.getByText(/05 Jan 2024/)).toBeTruthy();
+      expect(screen.getByText(/06:29/)).toBeTruthy();
+    });
+  });
+
+  it("should show next shift on next button click", async () => {
+    MockDate.set("2024-01-05 10:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    renderDrugChartView(mockDrugOrders);
+    const nextButton = screen.getByTestId("nextButton");
+    fireEvent.click(nextButton);
+    await waitFor(() => {
+      expect(screen.getByText(/05 Jan 2024/)).toBeTruthy();
+      expect(screen.getByText(/18:00/)).toBeTruthy();
+      expect(screen.getByText(/06 Jan 2024/)).toBeTruthy();
+      expect(screen.getByText(/06:29/)).toBeTruthy();
+    });
+  });
+
+  it("should show current shift on current button click", async () => {
+    MockDate.set("2024-01-05 10:00");
+    mockFetchMedications.mockResolvedValue({
+      data: drugChartData,
+    });
+    renderDrugChartView(mockDrugOrders);
+    const currentShiftButton = screen.getByTestId("currentShift");
+    fireEvent.click(currentShiftButton);
+    await waitFor(() => {
+      expect(screen.getByText(/05 Jan 2024/)).toBeTruthy();
+      expect(screen.getByText(/06:30/)).toBeTruthy();
+      expect(screen.getByText(/17:59/)).toBeTruthy();
     });
   });
 });

@@ -27,8 +27,8 @@ import _ from "lodash";
 import {
   performerFunction,
   requesterFunction,
-  timeFormatFor12hr,
-  timeFormatfor24Hr,
+  timeFormatFor12Hr,
+  timeFormatFor24Hr,
   timeText12,
   timeText24,
 } from "../../../../constants";
@@ -69,13 +69,13 @@ const AddEmergencyTasks = (props) => {
   const [administrationTime, setAdministrationTime] = useState(
     formatDate(
       new Date(),
-      enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
+      enable24HourTime ? timeFormatFor24Hr : timeFormatFor12Hr
     )
   );
   const [scheduleTime, setScheduleTime] = useState(
     formatDate(
       new Date(),
-      enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
+      enable24HourTime ? timeFormatFor24Hr : timeFormatFor12Hr
     )
   );
 
@@ -377,7 +377,7 @@ const AddEmergencyTasks = (props) => {
           time,
           formatDate(
             new Date(),
-            enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
+            enable24HourTime ? timeFormatFor24Hr : timeFormatFor12Hr
           )
         )
       ) {
@@ -396,7 +396,7 @@ const AddEmergencyTasks = (props) => {
           time,
           formatDate(
             new Date(),
-            enable24HourTime ? timeFormatfor24Hr : timeFormatFor12hr
+            enable24HourTime ? timeFormatFor24Hr : timeFormatFor12Hr
           )
         )
       ) {

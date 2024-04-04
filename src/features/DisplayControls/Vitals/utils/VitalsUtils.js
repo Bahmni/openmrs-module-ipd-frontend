@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from "react";
-import { PATIENT_VITALS_URL } from "../../../../constants";
+import { PATIENT_VITALS_URL, timeFormatFor12Hr } from "../../../../constants";
 import { defaultDateTimeFormat } from "../../../../constants";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { FormattedMessage } from "react-intl";
@@ -31,7 +31,7 @@ const getLatestDate = (tabularData) => {
 };
 const setDateAndTime = (latestDateAndTime, setVitalsDate, setVitalsTime) => {
   const date = formatDate(latestDateAndTime);
-  const time = formatDate(latestDateAndTime, "hh:mm A");
+  const time = formatDate(latestDateAndTime, timeFormatFor12Hr);
   setVitalsDate(date);
   setVitalsTime(time);
 };
@@ -90,7 +90,12 @@ export const getPatientVitalsHistory = async (patientUuid) => {
   }
 };
 
-export const mapVitalsData = (VitalsList,vitalsHistoryList ,setVitalsDate, setVitalsTime) => {
+export const mapVitalsData = (
+  VitalsList,
+  vitalsHistoryList,
+  setVitalsDate,
+  setVitalsTime
+) => {
   let mappedVitals = {};
   let latestVisitDate = null;
   let latestEntryDate = null;
@@ -98,7 +103,6 @@ export const mapVitalsData = (VitalsList,vitalsHistoryList ,setVitalsDate, setVi
     const VitalsValues = VitalsList.tabularData;
     latestVisitDate = getLatestDate(VitalsValues);
     latestEntryDate = getLatestDate(vitalsHistoryList.tabularData);
-
 
     if (latestVisitDate !== null) {
       setDateAndTime(latestEntryDate, setVitalsDate, setVitalsTime);
@@ -217,8 +221,16 @@ export const mapVitalsHistory = (vitalsHistoryList) => {
             : false,
       },
     };
-    if( innerMappedVitals?.Pulse || innerMappedVitals?.SpO2 || innerMappedVitals?.Temperature || innerMappedVitals?.["Respiratory Rate"] || innerMappedVitals?.["Systolic Blood Pressure"] || innerMappedVitals?.["Diastolic Blood Pressure"])
-     { vitalsHistory.push(pairedVital); }
+    if (
+      innerMappedVitals?.Pulse ||
+      innerMappedVitals?.SpO2 ||
+      innerMappedVitals?.Temperature ||
+      innerMappedVitals?.["Respiratory Rate"] ||
+      innerMappedVitals?.["Systolic Blood Pressure"] ||
+      innerMappedVitals?.["Diastolic Blood Pressure"]
+    ) {
+      vitalsHistory.push(pairedVital);
+    }
   }
   return vitalsHistory;
 };
@@ -264,8 +276,14 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
           : false,
       },
     };
-    if(innerMappedbiometrics?.BMI || innerMappedbiometrics?.HEIGHT || innerMappedbiometrics?.WEIGHT || innerMappedbiometrics?.MUAC)
-    {biometricsHistory.push(pairedBiometrics);}
+    if (
+      innerMappedbiometrics?.BMI ||
+      innerMappedbiometrics?.HEIGHT ||
+      innerMappedbiometrics?.WEIGHT ||
+      innerMappedbiometrics?.MUAC
+    ) {
+      biometricsHistory.push(pairedBiometrics);
+    }
   }
   return biometricsHistory;
 };

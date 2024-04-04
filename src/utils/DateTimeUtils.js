@@ -1,5 +1,10 @@
 import moment from "moment";
-import { dateFormat, defaultDateFormat } from "../constants";
+import {
+  dateFormat,
+  defaultDateFormat,
+  timeFormatFor12Hr,
+  timeFormatFor24Hr,
+} from "../constants";
 import {
   currentShiftHoursArray,
   getDateTime,
@@ -21,8 +26,8 @@ export const epochTo24HourFormat = (epochSeconds) => {
   return Number(moment.unix(epochSeconds).format("HH"));
 };
 
-const getDateTimeForHour = (hour, date = new Date()) => {
-  return getDateTime(date, hour) / 1000;
+const getDateTimeForHour = (time, date = new Date()) => {
+  return getDateTime(date, time) / 1000;
 };
 
 export const getCurrentShiftTimes = (shiftConfig) => {
@@ -52,7 +57,7 @@ export const getCurrentShiftTimes = (shiftConfig) => {
 };
 
 export const epochTo24HourTimeFormat = (epochSeconds, includeDate = false) => {
-  const formattedTime = moment.unix(epochSeconds).format("HH:mm");
+  const formattedTime = moment.unix(epochSeconds).format(timeFormatFor24Hr);
 
   if (formattedTime === "00:00" && includeDate) {
     const currentDate = moment.unix(epochSeconds).format(dateFormat);
@@ -79,7 +84,7 @@ export const getTimeInPast = (startTimeEpoch, offsetHours) => {
 };
 
 export const epochTo12HourTimeFormat = (epochSeconds) => {
-  const formattedTime = moment.unix(epochSeconds).format("hh:mm A");
+  const formattedTime = moment.unix(epochSeconds).format(timeFormatFor12Hr);
   return formattedTime;
 };
 
@@ -94,11 +99,23 @@ export const dateTimeToEpochInMilliSeconds = (dateTimeString) => {
 export const convertDaystoSeconds = (days) => days * 86400;
 
 export const convertTo24Hour = (time12hr) => {
-  return moment(time12hr, ["hh:mm A"]).format("HH:mm");
+  return moment(time12hr, [timeFormatFor12Hr]).format(timeFormatFor24Hr);
 };
 
 export const isTimeInFuture = (time1, time2) => {
   const time1_24hr = convertTo24Hour(time1);
   const time2_24hr = convertTo24Hour(time2);
   return time1_24hr > time2_24hr;
+};
+
+export const getFormattedDateTime = (
+  hours,
+  minutes,
+  enable24hrsFormat = true
+) => {
+  const time = moment().set({ hour: hours, minute: minutes });
+  if (enable24hrsFormat) {
+    return time.format(timeFormatFor24Hr);
+  }
+  return time.format(timeFormatFor12Hr);
 };

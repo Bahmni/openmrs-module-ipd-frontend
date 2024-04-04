@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import TimeCell from "./TimeCell.jsx";
 import { areDatesSame, formatDate } from "../../../../utils/DateTimeUtils.js";
 import { IPDContext } from "../../../../context/IPDContext";
-import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
+import { timeFormatFor12Hr, timeFormatFor24Hr } from "../../../../constants";
+import moment from "moment";
 
 export default function CalendarRow(props) {
   const { config } = useContext(IPDContext);
@@ -11,6 +12,7 @@ export default function CalendarRow(props) {
   const { rowData, currentShiftArray, selectedDate } = props;
   const { slots } = rowData;
   const transformedData = {};
+  const currentShiftMinute = currentShiftArray[0].split(":")[1];
   slots.forEach((slot) => {
     let time;
     const { medicationAdministration, administrationSummary } = slot;
@@ -22,7 +24,7 @@ export default function CalendarRow(props) {
     ) {
       time = formatDate(
         medicationAdministration.administeredDateTime,
-        timeFormatfor24Hr
+        timeFormatFor24Hr
       );
       adminInfo = {
         notes: administrationSummary.notes,
@@ -31,41 +33,53 @@ export default function CalendarRow(props) {
             ? time
             : formatDate(
                 medicationAdministration.administeredDateTime,
-                timeFormatFor12hr
+                timeFormatFor12Hr
               )
         }]`,
       };
     } else if (administrationSummary.status === "Not-Administered") {
-      time = formatDate(slot.startTime * 1000, timeFormatfor24Hr);
+      time = formatDate(slot.startTime * 1000, timeFormatFor24Hr);
       adminInfo = {
         notes: administrationSummary.notes,
         administrationInfo: administrationSummary.performerName,
       };
     } else {
-      time = formatDate(slot.startTime * 1000, timeFormatfor24Hr);
+      time = formatDate(slot.startTime * 1000, timeFormatFor24Hr);
     }
-    const [hours, minutes] = time.split(":");
+    let [hours, minutes] = time.split(":");
+    if (currentShiftMinute > minutes) {
+      hours = +hours - 1;
+    }
     transformedData[+hours] = transformedData[+hours] || [];
     transformedData[+hours].push({
-      minutes,
+      time,
       status: administrationSummary.status,
       ...adminInfo,
     });
   });
   return (
     <div style={{ display: "flex" }}>
-      {currentShiftArray.map((hour) => {
-        const date = new Date();
-        const currentHour = date.getHours();
-        const currentMinute = date.getMinutes();
+      {currentShiftArray.map((time, index) => {
+        const shiftArrayTime = moment(time, timeFormatFor24Hr);
+        const nextShiftArrayTime =
+          index + 1 != currentShiftArray.length
+            ? moment(currentShiftArray[index + 1], timeFormatFor24Hr)
+            : moment(time, timeFormatFor24Hr).add(1, "hour");
+        const date = moment();
         const sameDate = areDatesSame(date, selectedDate);
-        const isCurrentHour = hour === currentHour && sameDate;
-        const highlightedCell = currentMinute < 30 ? "left" : "right";
-        if (transformedData[hour]) {
+        const isCurrentHour =
+          date.isBetween(shiftArrayTime, nextShiftArrayTime) && sameDate;
+        const highlightedCell =
+          date.diff(shiftArrayTime) < nextShiftArrayTime.diff(date)
+            ? "left"
+            : "right";
+        if (transformedData[shiftArrayTime.hour()]) {
           return (
             <TimeCell
-              slotInfo={transformedData[hour]}
-              key={hour}
+              slotInfo={transformedData[shiftArrayTime.hour()]}
+              startTime={shiftArrayTime}
+              endTime={nextShiftArrayTime}
+              key={time}
               doHighlightCell={isCurrentHour}
               highlightedCell={highlightedCell}
             />
@@ -73,7 +87,7 @@ export default function CalendarRow(props) {
         }
         return (
           <TimeCell
-            key={hour}
+            key={time}
             doHighlightCell={isCurrentHour}
             highlightedCell={highlightedCell}
           />

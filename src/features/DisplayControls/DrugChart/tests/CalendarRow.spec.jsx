@@ -3,10 +3,7 @@ import { render } from "@testing-library/react";
 import CalendarRow from "../components/CalendarRow";
 import { calendarRowData, currentShiftArray } from "./CalendarRowMockData";
 import MockDate from "mockdate";
-import {
-  mockConfig,
-  mockConfigFor12HourFormat,
-} from "../../../../utils/CommonUtils";
+import { mockConfig } from "../../../../utils/CommonUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 
 const mockTimeCell = jest.fn();

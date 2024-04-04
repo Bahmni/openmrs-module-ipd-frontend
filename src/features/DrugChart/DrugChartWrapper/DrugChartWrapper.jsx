@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import DrugChart from "../DrugChart";
 import { useFetchMedications } from "../../../hooks/useFetchMedications";
+import { timeFormatFor24Hr } from "../../../constants";
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
   const slotDataByOrder = [];
@@ -34,7 +35,9 @@ export const TransformDrugChartData = (drugChartData) => {
       let adminInfo, administeredTime;
       if (slot.admin) {
         const { administeredBy, administeredAt } = slot.admin;
-        administeredTime = moment(new Date(administeredAt)).format("HH:mm");
+        administeredTime = moment(new Date(administeredAt)).format(
+          timeFormatFor24Hr
+        );
         adminInfo = administeredBy + " [" + administeredTime + "]";
       } else {
         adminInfo = "";

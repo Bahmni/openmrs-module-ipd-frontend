@@ -17,6 +17,7 @@ import {
 const mockFetchMedicationNursingTasks = jest.fn();
 const mockGetTimeInSeconds = jest.fn();
 const mockFetchhNonMedicationTasks = jest.fn();
+const mockCurrentShiftHoursArray = jest.fn();
 
 jest.mock("../utils/NursingTasksUtils", () => {
   const originalModule = jest.requireActual("../utils/NursingTasksUtils");
@@ -40,11 +41,7 @@ jest.mock("../../DrugChart/utils/DrugChartUtils", () => {
   );
   return {
     ...originalModule,
-    currentShiftHoursArray: () => ({
-      currentShiftHoursArray: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-      rangeArray: ["06:00-18:00", "18:00-06:00"],
-      shiftIndex: 0,
-    }),
+    currentShiftHoursArray: () => mockCurrentShiftHoursArray()
   };
 });
 
@@ -56,6 +53,27 @@ const mockProviderValue = {
 };
 
 describe("NursingTasks", () => {
+  beforeEach(() => {
+    mockCurrentShiftHoursArray.mockReturnValue({
+      currentShiftHoursArray: [
+        "06:00",
+        "07:00",
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+      ],
+      rangeArray: ["06:00-18:00", "18:00-06:00"],
+      shiftIndex: 0,
+    })
+  });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -472,5 +490,76 @@ describe("NursingTasks", () => {
       ).toBeTruthy();
       expect(getAllByText("Test Task")).toBeTruthy();
     });
+  });
+});
+
+describe("NursingTasks - half hour shifts", () => {
+  beforeEach(() => {
+    mockCurrentShiftHoursArray.mockReturnValue({
+      currentShiftHoursArray: [
+        "06:30",
+        "07:30",
+        "08:30",
+        "09:30",
+        "10:30",
+        "11:30",
+        "12:30",
+        "13:30",
+        "14:30",
+        "15:30",
+        "16:30",
+        "17:30",
+      ],
+      rangeArray: ["06:30-18:00", "18:00-06:30"],
+      shiftIndex: 0,
+    })
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it("should show current date", async () => {
+    MockDate.set("2023-08-11 07:00");
+    mockFetchhNonMedicationTasks.mockResolvedValue([]);
+    mockFetchMedicationNursingTasks.mockResolvedValueOnce(
+      mockNursingTasksResponse
+    );
+    const { getByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
+    });
+    expect(getByText(/11 Aug 2023/)).toBeTruthy();
+    expect(getByText(/06:30/)).toBeTruthy();
+    expect(getByText(/17:59/)).toBeTruthy();
+  });
+
+  it("should show current date when in 12 hour format", async () => {
+    MockDate.set("2023-08-11 07:00 PM");
+    mockFetchhNonMedicationTasks.mockResolvedValue([]);
+    mockFetchMedicationNursingTasks.mockResolvedValueOnce(
+      mockNursingTasksResponse
+    );
+    const { getByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IPDContext.Provider
+          value={{ config: mockConfigFor12HourFormat, isReadMode: false }}
+        >
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(mockFetchMedicationNursingTasks).toHaveBeenCalledTimes(1);
+    });
+    expect(getByText(/11 Aug 2023/)).toBeTruthy();
+    expect(getByText(/06:30 AM/)).toBeTruthy();
+    expect(getByText(/05:59 PM/)).toBeTruthy();
   });
 });

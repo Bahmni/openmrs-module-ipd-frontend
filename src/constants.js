@@ -86,8 +86,7 @@ export const GET_SEARCH_PATIENT_LIST_URL =
   RESTWS_V1 + "/ipd/wards/{wardId}/patients/search";
 export const GET_SLOTS_FOR_PATIENTS_URL =
   RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
-export const INTAKE_OUTPUT_DATA_BASE_URL =
-  BAHMNI_CORE + "/observations?";
+export const INTAKE_OUTPUT_DATA_BASE_URL = BAHMNI_CORE + "/observations?";
 export const NON_MEDICATION_BASE_URL = RESTWS_V1 + "/tasks";
 
 export const GET_TASKS_FOR_PATIENTS_URL = RESTWS_V1 + "/tasks";
@@ -116,8 +115,8 @@ export const requesterFunction = "Witness";
 export const verifierFunction = "Verifier";
 export const asNeededPlaceholderConceptName = "AsNeededPlaceholder";
 export const asNeededMedicationRequestConceptName = "AsNeededMedicationRequest";
-export const timeFormatfor24Hr = "HH:mm";
-export const timeFormatFor12hr = "hh:mm A";
+export const timeFormatFor24Hr = "HH:mm";
+export const timeFormatFor12Hr = "hh:mm A";
 
 export const IPD_WARD_SEARCH_PLACEHOLDER_TEXT =
   "Type a minimum of 3 characters to search patient by name, bed number or patient ID";

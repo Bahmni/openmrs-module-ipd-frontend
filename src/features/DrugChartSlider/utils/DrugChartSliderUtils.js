@@ -2,6 +2,8 @@ import axios from "axios";
 import {
   MEDICATIONS_BASE_URL,
   EDIT_MEDICATIONS_BASE_URL,
+  timeFormatFor24Hr,
+  timeFormatFor12Hr,
 } from "../../../constants";
 import moment from "moment";
 import {
@@ -28,7 +30,7 @@ export const isTimePassed = (
   const currentTime = moment();
   const enteredTime = moment(
     newTime,
-    enable24HourTimers ? "HH:mm" : "hh:mm A"
+    enable24HourTimers ? timeFormatFor24Hr : timeFormatFor12Hr
   ).add(timeInMinutesToDisableSlots, "minutes");
   return currentTime.isAfter(enteredTime);
 };
@@ -36,8 +38,8 @@ export const isTimePassed = (
 const areSchedulesInOrder = (allSchedule) => {
   return allSchedule.every((schedule, index) => {
     if (index === 0) return true;
-    const currentTime = moment(schedule, "HH:mm");
-    const prevTime = moment(allSchedule[index - 1], "HH:mm");
+    const currentTime = moment(schedule, timeFormatFor24Hr);
+    const prevTime = moment(allSchedule[index - 1], timeFormatFor24Hr);
     return currentTime.isAfter(prevTime);
   });
 };
@@ -117,7 +119,7 @@ export const updateMedication = async (medication) => {
 export const getUTCTimeEpoch = (time, enable24HourTimers, scheduledDate) => {
   const [hours, minutes] = enable24HourTimers
     ? time.split(":")
-    : moment(time, "hh:mm A").format("HH:mm").split(":");
+    : moment(time, timeFormatFor12Hr).format(timeFormatFor24Hr).split(":");
   const [day, month, year] = moment(scheduledDate)
     .format("DD-MM-YYYY")
     .split("-");

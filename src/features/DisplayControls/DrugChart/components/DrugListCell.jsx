@@ -7,7 +7,7 @@ import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
-import { timeFormatFor12hr, timeFormatfor24Hr } from "../../../../constants";
+import { timeFormatFor12Hr, timeFormatFor24Hr } from "../../../../constants";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 
 export default function DrugListCell(props) {
@@ -32,8 +32,8 @@ export default function DrugListCell(props) {
       administrationInfo.push({
         kind: slot.administrationSummary.status,
         time: enable24HourTime
-          ? formatDate(slot.startTime * 1000, timeFormatfor24Hr)
-          : formatDate(slot.startTime * 1000, timeFormatFor12hr),
+          ? formatDate(slot.startTime * 1000, timeFormatFor24Hr)
+          : formatDate(slot.startTime * 1000, timeFormatFor12Hr),
       });
     }
   });

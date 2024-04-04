@@ -14,6 +14,7 @@ import {
   mapDrugOrdersAndSlots,
   isCurrentShift,
   NotCurrentShiftMessage,
+  setCurrentShiftTimes,
 } from "../utils/DrugChartUtils";
 import {
   convertDaystoSeconds,
@@ -25,7 +26,7 @@ import "../styles/DrugChartView.scss";
 import { IPDContext } from "../../../../context/IPDContext";
 import {
   displayShiftTimingsFormat,
-  timeFormatFor12hr,
+  timeFormatFor12Hr,
 } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
 
@@ -115,29 +116,11 @@ export default function DrugChartWrapper(props) {
   }, [allMedications.data]);
 
   useEffect(() => {
-    const currentShift = shiftDetails.currentShiftHoursArray;
-    const firstHour = currentShift[0];
-    const lastHour = currentShift[currentShift.length - 1];
-    let startDateTime = getDateTime(
-      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      currentShift[0]
+    const [startDateTime, endDateTime] = setCurrentShiftTimes(
+      shiftDetails,
+      isReadMode,
+      visitSummary
     );
-    let endDateTime = getDateTime(
-      isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-      currentShift[currentShift.length - 1] + 1
-    );
-    /** if shift is going on two different dates */
-    if (lastHour < firstHour) {
-      const d = isReadMode ? new Date(visitSummary.stopDateTime) : new Date();
-      const currentHour = d.getHours();
-      if (currentHour > 12) {
-        d.setDate(d.getDate() + 1);
-        endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
-      } else {
-        d.setDate(d.getDate() - 1);
-        startDateTime = getDateTime(d, currentShift[0]);
-      }
-    }
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   }, []);
@@ -152,7 +135,7 @@ export default function DrugChartWrapper(props) {
       );
     const previousShiftRange = shiftRangeArray[previousShiftIndex];
     const previousShiftArray = getUpdatedShiftArray(previousShiftRange);
-    isCurrentShift(shiftConfig, startDateTime, endDateTime)
+    isCurrentShift(shiftDetails, shiftConfig, startDateTime, endDateTime)
       ? setNotCurrentShift(false)
       : setNotCurrentShift(true);
     updateShiftArray(previousShiftArray);
@@ -171,7 +154,7 @@ export default function DrugChartWrapper(props) {
     );
     const nextShiftRange = shiftRangeArray[nextShiftIndex];
     const nextShiftArray = getUpdatedShiftArray(nextShiftRange);
-    isCurrentShift(shiftConfig, startDateTime, endDateTime)
+    isCurrentShift(shiftDetails, shiftConfig, startDateTime, endDateTime)
       ? setNotCurrentShift(false)
       : setNotCurrentShift(true);
     updateShiftArray(nextShiftArray);
@@ -188,22 +171,32 @@ export default function DrugChartWrapper(props) {
     );
     const currentShift = shiftDetailsObj.currentShiftHoursArray;
     const updatedShiftIndex = shiftDetailsObj.shiftIndex;
-    const firstHour = currentShift[0];
-    const lastHour = currentShift[currentShift.length - 1];
-    let startDateTime = getDateTime(new Date(), currentShift[0]);
-    let endDateTime = getDateTime(
-      new Date(),
-      currentShift[currentShift.length - 1] + 1
-    );
+    const [start, end] =
+      shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
+    const [startHour, startMinute] = start.split(":");
+    const [endHour, endMinute] = end.split(":");
+    const firstHour = `${startHour}:${startMinute}`;
+    const lastHour = `${endHour}:${endMinute}`;
+    let startDateTime = getDateTime(new Date(), firstHour);
+    let endDateTime = getDateTime(new Date(), lastHour);
     if (lastHour < firstHour) {
       const d = new Date();
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTime = getDateTime(d, currentShift[currentShift.length - 1] + 1);
+        endDateTime = getDateTime(
+          d,
+          currentShift[currentShift.length - 1].replace(
+            /:\d+$/,
+            `:${endMinute}`
+          )
+        );
       } else {
         d.setDate(d.getDate() - 1);
-        startDateTime = getDateTime(d, currentShift[0]);
+        startDateTime = getDateTime(
+          d,
+          currentShift[0].replace(/:\d+$/, `:${startMinute}`)
+        );
       }
     }
     setNotCurrentShift(false);
@@ -228,11 +221,11 @@ export default function DrugChartWrapper(props) {
 
     const formattedShiftStartTime = enable24HourTime
       ? shiftStartTime
-      : formatDate(startEndDates.startDate, timeFormatFor12hr);
+      : formatDate(startEndDates.startDate, timeFormatFor12Hr);
 
     const formattedShiftEndTime = enable24HourTime
       ? shiftEndTime
-      : formatDate(startEndDates.endDate - 60, timeFormatFor12hr);
+      : formatDate(startEndDates.endDate - 60, timeFormatFor12Hr);
 
     if (shiftStartDate === shiftEndDate) {
       return (

@@ -13,8 +13,8 @@ import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
 import {
   asNeededPlaceholderConceptName,
-  timeFormatFor12hr,
-  timeFormatfor24Hr,
+  timeFormatFor12Hr,
+  timeFormatFor24Hr,
 } from "../../../../constants";
 import { formatTime } from "../../../../utils/DateTimeUtils";
 
@@ -138,12 +138,12 @@ export default function TaskTile(props) {
                   ? formatTime(
                       getTime(administeredTimeInEpochSeconds, startTime),
                       "hh:mm",
-                      timeFormatfor24Hr
+                      timeFormatFor24Hr
                     )
                   : formatTime(
                       getTime(administeredTimeInEpochSeconds, startTime),
                       "hh:mm",
-                      timeFormatFor12hr
+                      timeFormatFor12Hr
                     )}
               </div>
             </div>

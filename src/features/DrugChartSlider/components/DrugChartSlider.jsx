@@ -9,8 +9,8 @@ import "../styles/DrugChartSlider.scss";
 import {
   medicationFrequency,
   serviceType,
-  timeFormatFor12hr,
-  timeFormatfor24Hr,
+  timeFormatFor12Hr,
+  timeFormatFor24Hr,
 } from "../../../constants";
 import { SaveAndCloseButtons } from "../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import { SliderContext } from "../../../context/SliderContext";
@@ -120,7 +120,7 @@ const DrugChartSlider = (props) => {
     const newScheduleArray = [...firstDaySchedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
-      : moment(newSchedule, "hh:mm A");
+      : moment(newSchedule, timeFormatFor12Hr);
     setFirstDaySchedules(newScheduleArray);
     if (!isInvalidTimeTextPresent(enable24HourTimers)) {
       setShowFirstDaySchedulePassedWarning((prevScheduleWarnings) => {
@@ -140,7 +140,7 @@ const DrugChartSlider = (props) => {
     const newScheduleArray = [...schedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
-      : moment(newSchedule, "hh:mm A");
+      : moment(newSchedule, timeFormatFor12Hr);
     setSchedules(newScheduleArray);
     if (!isInvalidTimeTextPresent(enable24HourTimers)) {
       setShowSchedulePassedWarning((prevScheduleWarnings) => {
@@ -159,7 +159,7 @@ const DrugChartSlider = (props) => {
     const newScheduleArray = [...finalDaySchedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
-      : moment(newSchedule, "hh:mm A");
+      : moment(newSchedule, timeFormatFor12Hr);
     setFinalDaySchedules(newScheduleArray);
   };
 
@@ -212,8 +212,8 @@ const DrugChartSlider = (props) => {
   const isStartTimeExceedingFrequency = (time, frequency) => {
     const currentTime = moment();
     const enteredTime = enable24HourTimers
-      ? moment(time, "HH:mm")
-      : moment(time, "hh:mm A");
+      ? moment(time, timeFormatFor24Hr)
+      : moment(time, timeFormatFor12Hr);
     const updatedTime = updateStartTimeBasedOnFrequency(frequency, currentTime);
     return enteredTime.isAfter(updatedTime);
   };
@@ -229,8 +229,9 @@ const DrugChartSlider = (props) => {
       setShowEmptyStartTimeWarning(false);
     }
     if (
-      (enable24HourTimers && !moment(time, "HH:mm", true).isValid()) ||
-      (!enable24HourTimers && !moment(time, "hh:mm A", true).isValid())
+      (enable24HourTimers &&
+        !moment(time, timeFormatFor24Hr, true).isValid()) ||
+      (!enable24HourTimers && !moment(time, timeFormatFor12Hr, true).isValid())
     ) {
       setStartTime(time);
       return;
@@ -247,7 +248,7 @@ const DrugChartSlider = (props) => {
 
     enable24HourTimers
       ? setStartTime(time)
-      : setStartTime(moment(time, "hh:mm A"));
+      : setStartTime(moment(time, timeFormatFor12Hr));
   };
 
   const createDrugChartPayload = () => {
@@ -370,11 +371,11 @@ const DrugChartSlider = (props) => {
       const scheduleTimings = enable24HourTimers
         ? enableSchedule?.scheduleTiming
         : enableSchedule?.scheduleTiming.map((time) =>
-            moment(time, timeFormatFor12hr)
+            moment(time, timeFormatFor12Hr)
           );
       const currentTimeMomentObject = moment(
         moment(),
-        enable24HourTimers ? timeFormatfor24Hr : timeFormatFor12hr
+        enable24HourTimers ? timeFormatFor24Hr : timeFormatFor12Hr
       );
       let finalScheduleCount = 0;
       scheduleTimings.forEach((schedule) => {
@@ -406,7 +407,7 @@ const DrugChartSlider = (props) => {
         for (let i = 0; i < scheduleTimings.length; i++) {
           const upcomingSchedule = moment(
             scheduleTimings[i],
-            enable24HourTimers ? timeFormatfor24Hr : timeFormatFor12hr
+            enable24HourTimers ? timeFormatFor24Hr : timeFormatFor12Hr
           );
           if (i !== 0) {
             setSchedules((prevSchedules) => [
@@ -423,7 +424,7 @@ const DrugChartSlider = (props) => {
         finalScheduleCount === enableSchedule?.frequencyPerDay
       ) {
         const currentTime = moment().format(
-          enable24HourTimers ? "HH:mm" : "hh:mm A"
+          enable24HourTimers ? timeFormatFor24Hr : timeFormatFor12Hr
         );
         const getUpdatedFirstDaySchedules = () => {
           const updatedSchedule = Array.from(
@@ -449,7 +450,9 @@ const DrugChartSlider = (props) => {
   useEffect(() => {
     const scheduleTimings = enable24HourTimers
       ? enableSchedule?.scheduleTiming
-      : enableSchedule?.scheduleTiming?.map((time) => moment(time, "hh:mm A"));
+      : enableSchedule?.scheduleTiming?.map((time) =>
+          moment(time, timeFormatFor12Hr)
+        );
     if (scheduleTimings && firstDaySlotsMissed > 0 && isAutoFill) {
       setFinalDaySchedules(scheduleTimings.slice(0, firstDaySlotsMissed) || []);
       const quantity =
