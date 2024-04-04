@@ -209,7 +209,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                 <span
                   class="now-button-text"
                 >
-                  Current Shift
+                  Current Period
                 </span>
               </button>
               <button

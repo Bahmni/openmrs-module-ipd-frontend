@@ -65,8 +65,8 @@ describe("CareViewPatientsHeader", () => {
       />
     );
     expect(mockHandleNow).toHaveBeenCalledTimes(1);
-    expect(screen.getByText("Current Shift")).toBeTruthy();
-    fireEvent.click(screen.getByText("Current Shift"));
+    expect(screen.getByText("Current Period")).toBeTruthy();
+    fireEvent.click(screen.getByText("Current Period"));
     expect(mockHandleNow).toHaveBeenCalledTimes(2);
     expect(screen.getByText(/10:00 AM/i)).toBeTruthy();
     expect(screen.getByText(/12:00 PM/i)).toBeTruthy();
@@ -90,8 +90,8 @@ describe("CareViewPatientsHeader", () => {
       />
     );
     expect(mockHandleNow).toHaveBeenCalledTimes(1);
-    expect(screen.getByText("Current Shift")).toBeTruthy();
-    fireEvent.click(screen.getByText("Current Shift"));
+    expect(screen.getByText("Current Period")).toBeTruthy();
+    fireEvent.click(screen.getByText("Current Period"));
     expect(mockHandleNow).toHaveBeenCalledTimes(2);
     expect(screen.getByText(/10:00/i)).toBeTruthy();
     expect(screen.getByText(/12:00/i)).toBeTruthy();
