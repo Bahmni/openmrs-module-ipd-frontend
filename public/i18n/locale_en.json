@@ -86,6 +86,7 @@
   "TOTAL_PATIENTS": "Total patient(s)",
   "TOTAL_TEXT": "Total",
   "CURRENT_PERIOD": "Current Period",
+  "CURRENT_SHIFT": "Current Shift",
   "NOT_CURRENT_PERIOD_MESSAGE": "You're not viewing the current period",
   "NO_IO_DATA_MESSAGE": "No intake output data is available for the patient in this period"
 }
