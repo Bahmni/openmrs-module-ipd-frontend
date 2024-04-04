@@ -7,7 +7,10 @@ import { Button, Loading } from "carbon-components-react";
 import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
 import IntakeOutputTable from "./IntakeOutputTable";
 import { IPDContext } from "../../../../context/IPDContext";
-import { displayPeriodTimingsFormat, timeFormatFor12hr } from "../../../../constants";
+import {
+  displayPeriodTimingsFormat,
+  timeFormatFor12Hr,
+} from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import {
@@ -69,7 +72,7 @@ const IntakeOutput = () => {
     setIsLoading(true);
     updatedStartEndDates({
       startDate: currentPeriod.startDateTime,
-      endDate: currentPeriod.endDateTime
+      endDate: currentPeriod.endDateTime,
     });
   };
 
@@ -77,8 +80,10 @@ const IntakeOutput = () => {
     setNotCurrentPeriod(true);
     setIsLoading(true);
     updatedStartEndDates({
-      startDate: moment(startEndDates.startDate).clone().subtract(periodConfig.durationInHours, 'hours'),
-      endDate: startEndDates.startDate
+      startDate: moment(startEndDates.startDate)
+        .clone()
+        .subtract(periodConfig.durationInHours, "hours"),
+      endDate: startEndDates.startDate,
     });
   };
 
@@ -87,7 +92,9 @@ const IntakeOutput = () => {
     setIsLoading(true);
     updatedStartEndDates({
       startDate: startEndDates.endDate,
-      endDate: moment(startEndDates.endDate).clone().add(periodConfig.durationInHours, 'hours')
+      endDate: moment(startEndDates.endDate)
+        .clone()
+        .add(periodConfig.durationInHours, "hours"),
     });
   };
 
@@ -105,11 +112,11 @@ const IntakeOutput = () => {
 
     const formattedPeriodStartTime = enable24HourTime
       ? periodStartTime
-      : formatDate(startEndDates.startDate, timeFormatFor12hr);
+      : formatDate(startEndDates.startDate, timeFormatFor12Hr);
 
     const formattedPeriodEndTime = enable24HourTime
       ? periodEndTime
-      : formatDate(startEndDates.endDate, timeFormatFor12hr);
+      : formatDate(startEndDates.endDate, timeFormatFor12Hr);
 
     if (periodStartDate === periodEndDate) {
       return (
@@ -175,9 +182,7 @@ const IntakeOutput = () => {
           null,
           "[)"
         ),
-      next: moment(visitSummary.stopDateTime).isBefore(
-        startEndDates.endDate,
-      ),
+      next: moment(visitSummary.stopDateTime).isBefore(startEndDates.endDate),
     });
     setConsolidatedIOData(transformObsData(sortedObsData, intakeOutputConfig));
     setIsLoading(false);
@@ -194,7 +199,7 @@ const IntakeOutput = () => {
     <div className="intake-output-content-container display-container">
       <div className={"intake-output-navigation"}>
         <div className="intake-output-period-header">
-        <Button
+          <Button
             kind="tertiary"
             isExpressive
             size="small"
@@ -230,7 +235,7 @@ const IntakeOutput = () => {
             className="margin-right-10"
             data-testid="next-shift"
           />
-          {periodTiming()}        
+          {periodTiming()}
         </div>
       </div>
       <div>
@@ -238,17 +243,17 @@ const IntakeOutput = () => {
           <div className="loading-parent" data-testid="loading-icon">
             <Loading withOverlay={false} />
           </div>
-        ) : consolidatedIOData.transformedData && consolidatedIOData.transformedData.length === 0 ? (
-          <div className="no-io-data">
-            {NoDataForSelectedPeriod}
-          </div>
-        ) : 
-        <IntakeOutputTable 
-          rows={consolidatedIOData.transformedData || []}
-          headers={intakeOutputHeaders}
-          totalIntakeGroup={consolidatedIOData.totalIntakeMap || {} }
-          totalOutputGroup={consolidatedIOData.totalOutputMap || {}}/>   
-        }
+        ) : consolidatedIOData.transformedData &&
+          consolidatedIOData.transformedData.length === 0 ? (
+          <div className="no-io-data">{NoDataForSelectedPeriod}</div>
+        ) : (
+          <IntakeOutputTable
+            rows={consolidatedIOData.transformedData || []}
+            headers={intakeOutputHeaders}
+            totalIntakeGroup={consolidatedIOData.totalIntakeMap || {}}
+            totalOutputGroup={consolidatedIOData.totalOutputMap || {}}
+          />
+        )}
       </div>
     </div>
   );
