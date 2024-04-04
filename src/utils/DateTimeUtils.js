@@ -107,3 +107,15 @@ export const isTimeInFuture = (time1, time2) => {
   const time2_24hr = convertTo24Hour(time2);
   return time1_24hr > time2_24hr;
 };
+
+export const getFormattedDateTime = (
+  hours,
+  minutes,
+  enable24hrsFormat = true
+) => {
+  const time = moment().set({ hour: hours, minute: minutes });
+  if (enable24hrsFormat) {
+    return time.format(timeFormatFor24Hr);
+  }
+  return time.format(timeFormatFor12Hr);
+};

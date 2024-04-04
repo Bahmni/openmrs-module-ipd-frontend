@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import "../styles/CalendarHeader.scss";
 import { IPDContext } from "../../../../context/IPDContext";
+import { getFormattedDateTime } from "../../../../utils/DateTimeUtils";
 
 export default function CalendarHeader(props) {
   const { config } = useContext(IPDContext);
@@ -13,15 +14,14 @@ export default function CalendarHeader(props) {
       <div style={{ display: "flex" }}>
         {currentShiftArray.map((time) => {
           const [hour, minute] = time.split(":");
-          const transformedHour = enable24HourTime ? hour : (hour % 12) || 12;
-          const period = enable24HourTime ? "" : hour < 12 ? "AM" : "PM";
-          const formattedHour = `${transformedHour.toLocaleString("en-US", {
-            minimumIntegerDigits: 2,
-          })}:${minute} ${period}`;
-
+          const transformedTime = getFormattedDateTime(
+            hour,
+            minute,
+            enable24HourTime
+          );
           return (
             <div data-testid="hour" key={time} className={"hour-header"}>
-              {formattedHour}
+              {transformedTime}
             </div>
           );
         })}
