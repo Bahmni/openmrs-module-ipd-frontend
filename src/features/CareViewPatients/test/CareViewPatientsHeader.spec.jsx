@@ -16,8 +16,8 @@ const mockHandlePrevious = jest.fn();
 const mockSetFilterValue = jest.fn();
 
 const mockNavigationHourEpoch = {
-  startHourEpoch: 1704110400, //12
-  endHourEpoch: 1704117600, //14
+  startHourEpoch: 1712138451, //10
+  endHourEpoch: 1712145651, //12
 };
 
 describe("CareViewPatientsHeader", () => {
@@ -32,11 +32,12 @@ describe("CareViewPatientsHeader", () => {
         handleClear={mockHandleClear}
         searchValue={mockSearchValue}
         updateSearchValue={mockUpdateSearchValue}
-        navHourEpoch={mockNavHourEpoch}
+        navHourEpoch={mockNavigationHourEpoch}
         navButtonsDisabled={mockNavButtonsDisabled}
         handleNow={mockHandleNow}
         handleNext={mockHandleNext}
         handlePrevious={mockHandlePrevious}
+        enable24HourTime={false}
       />
     );
 
@@ -47,6 +48,31 @@ describe("CareViewPatientsHeader", () => {
 
     screen.debug();
   });
+  it("should have called handle now callback on click of Now Button in 12 houre format", async () => {
+    render(
+      <CareViewPatientsHeader
+        patientsSummary={mockPatientsList.admittedPatients}
+        handleKeyPress={mockHandleKeyPress}
+        handleClear={mockHandleClear}
+        searchValue={mockSearchValue}
+        updateSearchValue={mockUpdateSearchValue}
+        navHourEpoch={mockNavigationHourEpoch}
+        navButtonsDisabled={mockNavButtonsDisabled}
+        handleNow={mockHandleNow}
+        handleNext={mockHandleNext}
+        handlePrevious={mockHandlePrevious}
+        enable24HourTime={false}
+      />
+    );
+    expect(mockHandleNow).toHaveBeenCalledTimes(1);
+    expect(screen.getByText("Current Period")).toBeTruthy();
+    fireEvent.click(screen.getByText("Current Period"));
+    expect(mockHandleNow).toHaveBeenCalledTimes(2);
+    expect(screen.getByText(/10:00 AM/i)).toBeTruthy();
+    expect(screen.getByText(/12:00 PM/i)).toBeTruthy();
+    expect(screen.getByText(/03 Apr 2024/i)).toBeTruthy();
+  });
+
   it("should have called handle now callback on click of Now Button", async () => {
     render(
       <CareViewPatientsHeader
@@ -60,17 +86,20 @@ describe("CareViewPatientsHeader", () => {
         handleNow={mockHandleNow}
         handleNext={mockHandleNext}
         handlePrevious={mockHandlePrevious}
+        enable24HourTime={true}
       />
     );
     expect(mockHandleNow).toHaveBeenCalledTimes(1);
-    expect(screen.getByText("Now")).toBeTruthy();
-    fireEvent.click(screen.getByText("Now"));
+    expect(screen.getByText("Current Period")).toBeTruthy();
+    fireEvent.click(screen.getByText("Current Period"));
     expect(mockHandleNow).toHaveBeenCalledTimes(2);
-    expect(screen.getByText(/12:00 - 14:00/i)).toBeTruthy();
+    expect(screen.getByText(/10:00/i)).toBeTruthy();
+    expect(screen.getByText(/12:00/i)).toBeTruthy();
+    expect(screen.getByText(/03 Apr 2024/i)).toBeTruthy();
   });
 
   it("should have called handle previous callback on click of left arrow button", async () => {
-    render(
+    render( 
       <CareViewPatientsHeader
         patientsSummary={mockPatientsList.admittedPatients}
         handleKeyPress={mockHandleKeyPress}

@@ -80,16 +80,11 @@
   }
 }
 
-.care-view-table-wrapper {
-  text-align: -webkit-center;
-}
-
 .care-view-patient-table {
-  display: block;
+  display: grid;
   max-height: 500px;
-  max-width: fit-content;
   overflow: scroll;
-  margin: 8px 0;
+  margin-top: 8px;
   border: 1px solid #8d8d8d;
 
   tbody tr:nth-child(odd) td:first-child {
@@ -130,7 +125,7 @@
 
 @media screen and (max-width: $tablet-breakpoint) {
   .patient-row-container .patient-details-container {
-    width: 25%;
+    width: 280px;
   }
 }
 

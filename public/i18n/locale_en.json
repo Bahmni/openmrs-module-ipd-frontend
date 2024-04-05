@@ -74,7 +74,6 @@
   "EDIT_DRUG_CHART": "Edit Drug Chart",
   "DRUG_CHART_MODAL_EDIT_MESSAGE": "Medication task(s) updated successfully",
   "NO_MEDICATION_DRUG_CHART_MESSAGE": "No Medication has been scheduled in this shift",
-  "CURRENT_SHIFT": "Current Shift",
   "STOP_DRUG": "Stop drug",
   "STOP_DRUG_WARNING_TEXT": "Are you sure you want to stop this drug? You will not be able to reverse this decision",
   "STOP_DRUG_CANCEL_TEXT": "Cancel",
@@ -86,6 +85,7 @@
   "TOTAL_PATIENTS": "Total patient(s)",
   "TOTAL_TEXT": "Total",
   "CURRENT_PERIOD": "Current Period",
+  "CURRENT_SHIFT": "Current Shift",
   "NOT_CURRENT_PERIOD_MESSAGE": "You're not viewing the current period",
   "NO_IO_DATA_MESSAGE": "No intake output data is available for the patient in this period",
   "SCHEDULE_TREATMENTS": "Schedule Treatments"

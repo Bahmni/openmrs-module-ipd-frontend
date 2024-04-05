@@ -274,11 +274,11 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                 <span
                   class="now-button-text"
                 >
-                  Now
+                  Current Period
                 </span>
               </button>
               <button
-                class="bx--btn bx--btn--sm bx--btn--tertiary bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+                class="margin-right-10 bx--btn bx--btn--sm bx--btn--tertiary bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
                 data-testid="previous-button"
                 tabindex="0"
                 type="button"
@@ -302,12 +302,6 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   />
                 </svg>
               </button>
-              <span
-                class="navigation-time"
-                data-testid="navigation-time"
-              >
-                12:00 - 14:00
-              </span>
               <button
                 class="margin-right-10 bx--btn bx--btn--sm bx--btn--tertiary bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
                 data-testid="next-button"
@@ -333,52 +327,18 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   />
                 </svg>
               </button>
-            </div>
-            <div
-              aria-labelledby="ipd-ward-search-search"
-              class="bx--search bx--search--lg bx--search--light ward-patient-search"
-              role="search"
-            >
               <div
-                class="bx--search-magnifier"
+                class="shift-time"
               >
-                <svg
-                  aria-hidden="true"
-                  class="bx--search-magnifier-icon"
-                  fill="currentColor"
-                  focusable="false"
-                  height="16"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 16 16"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
+                01 Jan 2023
+                 
+                <span
+                  class="navigation-time"
+                  data-testid="navigation-time"
                 >
-                  <path
-                    d="M15,14.3L10.7,10c1.9-2.3,1.6-5.8-0.7-7.7S4.2,0.7,2.3,3S0.7,8.8,3,10.7c2,1.7,5,1.7,7,0l4.3,4.3L15,14.3z M2,6.5	C2,4,4,2,6.5,2S11,4,11,6.5S9,11,6.5,11S2,9,2,6.5z"
-                  />
-                </svg>
-              </div>
-              <label
-                class="bx--label"
-                for="ipd-ward-search"
-                id="ipd-ward-search-search"
-              >
-                Patient Search
-              </label>
-              <input
-                autocomplete="off"
-                class="bx--search-input"
-                id="ipd-ward-search"
-                placeholder="Type a minimum of 3 characters to search patient by name, bed number or patient ID"
-                role="searchbox"
-                type="text"
-                value=""
-              />
-              <button
-                aria-label="Clear search input"
-                class="bx--search-close bx--search-close--hidden"
-                type="button"
-              >
+                  |
+                </span>
+                 
                 <svg
                   aria-hidden="true"
                   fill="currentColor"
@@ -390,65 +350,161 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
+                    d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                  />
+                  <path
+                    d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
                   />
                 </svg>
-              </button>
+                 
+                12:00
+                 
+                <span
+                  class="to-text"
+                >
+                  to
+                </span>
+                 
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="16"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+                  />
+                  <path
+                    d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
+                  />
+                </svg>
+                 
+                13:59
+              </div>
             </div>
             <div
-              class="bx--dropdown__wrapper bx--list-box__wrapper"
+              class="search-and-tasklist"
             >
-              
               <div
-                class="bx--dropdown bx--dropdown--light bx--list-box bx--list-box--light"
-                id="default"
+                aria-labelledby="ipd-ward-search-search"
+                class="bx--search bx--search--lg bx--search--light ward-patient-search"
+                role="search"
               >
+                <div
+                  class="bx--search-magnifier"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="bx--search-magnifier-icon"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15,14.3L10.7,10c1.9-2.3,1.6-5.8-0.7-7.7S4.2,0.7,2.3,3S0.7,8.8,3,10.7c2,1.7,5,1.7,7,0l4.3,4.3L15,14.3z M2,6.5	C2,4,4,2,6.5,2S11,4,11,6.5S9,11,6.5,11S2,9,2,6.5z"
+                    />
+                  </svg>
+                </div>
+                <label
+                  class="bx--label"
+                  for="ipd-ward-search"
+                  id="ipd-ward-search-search"
+                >
+                  Patient Search
+                </label>
+                <input
+                  autocomplete="off"
+                  class="bx--search-input"
+                  id="ipd-ward-search"
+                  placeholder="Type a minimum of 3 characters to search patient by name, bed number or patient ID"
+                  role="searchbox"
+                  type="text"
+                  value=""
+                />
                 <button
-                  aria-disabled="false"
-                  aria-expanded="false"
-                  aria-haspopup="listbox"
-                  aria-labelledby="downshift-1-label downshift-1-toggle-button"
-                  class="bx--list-box__field"
-                  id="downshift-1-toggle-button"
-                  title="All Tasks"
+                  aria-label="Clear search input"
+                  class="bx--search-close bx--search-close--hidden"
                   type="button"
                 >
-                  <span
-                    class="bx--list-box__label"
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    All Tasks
-                  </span>
-                  <div
-                    class="bx--list-box__menu-icon"
-                  >
-                    <svg
-                      aria-label="Open menu"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      name="chevron--down"
-                      preserveAspectRatio="xMidYMid meet"
-                      role="img"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
-                      />
-                      <title>
-                        Open menu
-                      </title>
-                    </svg>
-                  </div>
+                    <path
+                      d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
+                    />
+                  </svg>
                 </button>
+              </div>
+              <div
+                class="bx--dropdown__wrapper bx--list-box__wrapper"
+              >
+                
                 <div
-                  aria-labelledby="downshift-1-label"
-                  class="bx--list-box__menu"
-                  id="downshift-1-menu"
-                  role="listbox"
-                  tabindex="-1"
-                />
+                  class="bx--dropdown bx--dropdown--light bx--list-box bx--list-box--light"
+                  id="default"
+                >
+                  <button
+                    aria-disabled="false"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby="downshift-1-label downshift-1-toggle-button"
+                    class="bx--list-box__field"
+                    id="downshift-1-toggle-button"
+                    title="All Tasks"
+                    type="button"
+                  >
+                    <span
+                      class="bx--list-box__label"
+                    >
+                      All Tasks
+                    </span>
+                    <div
+                      class="bx--list-box__menu-icon"
+                    >
+                      <svg
+                        aria-label="Open menu"
+                        fill="currentColor"
+                        focusable="false"
+                        height="16"
+                        name="chevron--down"
+                        preserveAspectRatio="xMidYMid meet"
+                        role="img"
+                        viewBox="0 0 16 16"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        />
+                        <title>
+                          Open menu
+                        </title>
+                      </svg>
+                    </div>
+                  </button>
+                  <div
+                    aria-labelledby="downshift-1-label"
+                    class="bx--list-box__menu"
+                    id="downshift-1-menu"
+                    role="listbox"
+                    tabindex="-1"
+                  />
+                </div>
               </div>
             </div>
           </div>
