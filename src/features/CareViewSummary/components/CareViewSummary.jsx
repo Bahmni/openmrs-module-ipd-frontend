@@ -46,11 +46,9 @@ export const CareViewSummary = (props) => {
     refreshSummary,
   } = useContext(CareViewContext);
 
-  let localSelectedWard;
-  if (localStorage.getItem("selected_ward")) {
-    const { label } = JSON.parse(localStorage.getItem("selected_ward"));
-    localSelectedWard = label;
-  }
+  const localSelectedWard = JSON.parse(
+    localStorage.getItem("selected_ward")
+  )?.label;
 
   const getWardList = async () => {
     callbacks.setIsLoading(true);
