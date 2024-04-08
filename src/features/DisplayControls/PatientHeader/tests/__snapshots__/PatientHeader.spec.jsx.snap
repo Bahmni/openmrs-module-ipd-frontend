@@ -11,8 +11,10 @@ exports[`PatientHeader should display all details of the patient 1`] = `
       <div
         class="patient-image-and-details bx--row"
       >
-        <div
+        <img
+          alt="patient-image"
           class="patient-image"
+          src="AxiosError: Network Error"
         />
         <div
           class="bx--col"
@@ -318,8 +320,10 @@ exports[`PatientHeader should display patient movement item on click of overflow
       <div
         class="patient-image-and-details bx--row"
       >
-        <div
+        <img
+          alt="patient-image"
           class="patient-image"
+          src="AxiosError: Network Error"
         />
         <div
           class="bx--col"
@@ -486,8 +490,10 @@ exports[`PatientHeader should display patient movement overflow menu item as dis
       <div
         class="patient-image-and-details bx--row"
       >
-        <div
+        <img
+          alt="patient-image"
           class="patient-image"
+          src="AxiosError: Network Error"
         />
         <div
           class="bx--col"

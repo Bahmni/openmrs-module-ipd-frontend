@@ -45,6 +45,11 @@ export const CareViewSummary = (props) => {
     provider,
     refreshSummary,
   } = useContext(CareViewContext);
+
+  const localSelectedWard = JSON.parse(
+    localStorage.getItem("selected_ward")
+  )?.label;
+
   const getWardList = async () => {
     callbacks.setIsLoading(true);
     const wardList = await getWardDetails();
@@ -55,7 +60,13 @@ export const CareViewSummary = (props) => {
       };
     });
     setOptions(wardOptions);
-    setSelectedWard(wardOptions[0]);
+    if (localSelectedWard) {
+      setSelectedWard(
+        wardOptions.find((ward) => ward.label === localSelectedWard)
+      );
+    } else {
+      setSelectedWard(wardOptions[0]);
+    }
     callbacks.setIsLoading(false);
   };
   const getWardSummary = async () => {
@@ -73,6 +84,7 @@ export const CareViewSummary = (props) => {
   }, []);
   useEffect(() => {
     if (!_.isEmpty(selectedWard)) {
+      localStorage.setItem("selected_ward", JSON.stringify(selectedWard));
       getWardSummary();
     }
   }, [selectedWard, refreshSummary]);

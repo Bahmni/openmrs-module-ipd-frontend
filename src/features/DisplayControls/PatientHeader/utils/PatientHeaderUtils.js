@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PATIENT_URL ,CLINICAL_CONFIG_URL,PATIENT_PROFILE, ADDRESS_HEIRARCHY, BED_INFORMATION_URL} from "../../../../constants";
+import { PATIENT_URL ,CLINICAL_CONFIG_URL,PATIENT_PROFILE, ADDRESS_HEIRARCHY, BED_INFORMATION_URL, PATIENT_IMAGE_URL} from "../../../../constants";
 
 export const fetchPatientProfile= async (patientUuid) => {
   const url = `${PATIENT_PROFILE}/${patientUuid}?v=full`;
@@ -13,6 +13,21 @@ export const fetchPatientProfile= async (patientUuid) => {
     return error;
   }
 };
+
+export const fetchPatientProfilePicture = async (patientUuid) => {
+  const url = `${PATIENT_IMAGE_URL}patientUuid=${patientUuid}`;
+  try {
+    const response = await axios.get(url, {
+      withCredentials: true,
+    });
+    if (response.status !== 200) throw new Error(response.statusText);
+    return response.request.responseURL;
+  }
+  catch (error) {
+    return error;
+  }
+};
+
 export const getBedInformation = async (patientUuid, visitUuid) => {
   const url = `${BED_INFORMATION_URL}?patientUuid=${patientUuid}&visitUuid=${visitUuid}&v=full`;
   try {
