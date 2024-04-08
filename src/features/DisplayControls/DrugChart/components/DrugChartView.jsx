@@ -184,19 +184,10 @@ export default function DrugChartWrapper(props) {
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTime = getDateTime(
-          d,
-          currentShift[currentShift.length - 1].replace(
-            /:\d+$/,
-            `:${endMinute}`
-          )
-        );
+        endDateTime = getDateTime(d, lastHour);
       } else {
         d.setDate(d.getDate() - 1);
-        startDateTime = getDateTime(
-          d,
-          currentShift[0].replace(/:\d+$/, `:${startMinute}`)
-        );
+        startDateTime = getDateTime(d, firstHour);
       }
     }
     setNotCurrentShift(false);

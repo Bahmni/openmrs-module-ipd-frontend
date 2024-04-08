@@ -363,8 +363,6 @@ export const isCurrentShift = (
   startDateTimeChange,
   endDateTimeChange
 ) => {
-  const shiftDetailsObj = currentShiftHoursArray(new Date(), shiftConfig);
-  const currentShift = shiftDetailsObj.currentShiftHoursArray;
   const [start, end] =
     shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
   const [startHour, startMinute] = start.split(":");
@@ -373,22 +371,15 @@ export const isCurrentShift = (
   const lastHour = `${endHour}:${endMinute}`;
   let startDateTimeCurrent = getDateTime(new Date(), firstHour);
   let endDateTimeCurrent = getDateTime(new Date(), lastHour);
-
   if (startDateTimeCurrent > endDateTimeCurrent) {
     const d = new Date();
     const currentHour = d.getHours();
     if (currentHour > 12) {
       d.setDate(d.getDate() + 1);
-      endDateTimeCurrent = getDateTime(
-        d,
-        currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`)
-      );
+      endDateTimeCurrent = getDateTime(d, lastHour);
     } else {
       d.setDate(d.getDate() - 1);
-      startDateTimeCurrent = getDateTime(
-        d,
-        currentShift[0].replace(/:\d+$/, `:${startMinute}`)
-      );
+      startDateTimeCurrent = getDateTime(d, firstHour);
     }
   }
   return (
@@ -409,7 +400,6 @@ export const setCurrentShiftTimes = (
   isReadMode,
   visitSummary
 ) => {
-  const currentShift = shiftDetails.currentShiftHoursArray;
   const [start, end] =
     shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
   const [startHour, startMinute] = start.split(":");
@@ -430,16 +420,10 @@ export const setCurrentShiftTimes = (
     const currentHour = d.getHours();
     if (currentHour > 12) {
       d.setDate(d.getDate() + 1);
-      endDateTime = getDateTime(
-        d,
-        currentShift[currentShift.length - 1].replace(/:\d+$/, `:${endMinute}`)
-      );
+      endDateTime = getDateTime(d, lastHour);
     } else {
       d.setDate(d.getDate() - 1);
-      startDateTime = getDateTime(
-        d,
-        currentShift[0].replace(/:\d+$/, `:${startMinute}`)
-      );
+      startDateTime = getDateTime(d, firstHour);
     }
   }
   return [startDateTime, endDateTime];
