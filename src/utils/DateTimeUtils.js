@@ -23,7 +23,7 @@ export const areDatesSame = (date1, date2) => {
 };
 
 export const epochTo24HourFormat = (epochSeconds) => {
-  return Number(moment.unix(epochSeconds).format("HH"));
+  return moment.unix(epochSeconds).format(timeFormatFor24Hr);
 };
 
 const getDateTimeForHour = (time, date = new Date()) => {
