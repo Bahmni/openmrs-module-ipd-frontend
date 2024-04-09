@@ -5,6 +5,7 @@
   gap: 15px;
   padding: 0 5%;
   border-bottom: 1px solid #007d79;
+  position: relative;
 
   .bx--list-box__wrapper {
     max-width: 200px;
@@ -100,6 +101,12 @@
   .swiper-pagination-bullet-active {
     opacity: 1;
     background-color: #8d8d8d !important;
+  }
+
+  .ward-view-nav-link {
+    position: absolute;
+    top: 0;
+    right: 5%;
   }
 }
 
