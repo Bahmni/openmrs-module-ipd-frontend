@@ -166,7 +166,6 @@ export default function NursingTasks(props) {
       isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
       shiftConfig
     );
-    const currentShift = shiftDetailsObj.currentShiftHoursArray;
     const updatedShiftIndex = shiftDetailsObj.shiftIndex;
     const [start, end] =
       shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
@@ -181,19 +180,10 @@ export default function NursingTasks(props) {
       const currentHour = d.getHours();
       if (currentHour > 12) {
         d.setDate(d.getDate() + 1);
-        endDateTimeChange = getDateTime(
-          d,
-          currentShift[currentShift.length - 1].replace(
-            /:\d+$/,
-            `:${endMinute}`
-          )
-        );
+        endDateTimeChange = getDateTime(d, lastHour);
       } else {
         d.setDate(d.getDate() - 1);
-        startDateTimeChange = getDateTime(
-          d,
-          currentShift[0].replace(/:\d+$/, `:${startMinute}`)
-        );
+        startDateTimeChange = getDateTime(d, firstHour);
       }
     }
     setNotCurrentShift(false);

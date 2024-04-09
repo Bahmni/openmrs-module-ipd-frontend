@@ -20,6 +20,8 @@ import {
 import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 import { items } from "../utils/constants";
 import { WarningAlt20 } from "@carbon/icons-react";
+import moment from "moment";
+import { timeFormatFor24Hr } from "../../../constants";
 
 export const CareViewPatients = () => {
   const {
@@ -209,9 +211,23 @@ export const CareViewPatients = () => {
 
   const handleNow = () => {
     if (currentShiftArray) {
-      const currentEpoch = getPreviousNearbyHourEpoch(
-        Math.floor(new Date().getTime() / 1000)
-      );
+      const currentMoment = moment();
+      let startTimeString = currentShiftArray[0];
+      startTimeString = currentShiftArray.find((time, index) => {
+        return (
+          currentMoment.diff(moment(time, timeFormatFor24Hr)) > 0 &&
+          currentMoment.diff(
+            moment(currentShiftArray[index + 1], timeFormatFor24Hr)
+          ) < 0
+        );
+      });
+      if (!startTimeString) {
+        startTimeString = currentShiftArray[currentShiftArray.length - 1];
+      }
+      const currentEpoch = moment()
+        .startOf("day")
+        .add(startTimeString, "hours")
+        .unix();
       const startTime = currentEpoch;
       const endTime = getTimeInFuture(currentEpoch, timeframeLimitInHours);
       const startHour = epochTo24HourFormat(startTime);
