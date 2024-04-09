@@ -100,30 +100,6 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
       class="main"
     >
       <div
-        class="care-view-navigations"
-      >
-        <svg
-          aria-hidden="true"
-          data-testid="Back button"
-          fill="currentColor"
-          focusable="false"
-          height="20"
-          preserveAspectRatio="xMidYMid meet"
-          viewBox="0 0 32 32"
-          width="20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14 26L15.41 24.59 7.83 17 28 17 28 15 7.83 15 15.41 7.41 14 6 4 16 14 26z"
-          />
-        </svg>
-        <a
-          class="bx--link ward-view-nav-link"
-        >
-          Ward List View
-        </a>
-      </div>
-      <div
         class="care-view-summary"
       >
         <div
@@ -252,6 +228,11 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
             2
           </span>
         </div>
+        <a
+          class="bx--link ward-view-nav-link"
+        >
+          Ward List View
+        </a>
       </div>
       <div
         class="care-view-patients-container"

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "../styles/CareViewSummary.scss";
-import { Tile } from "carbon-components-react";
+import { Tile, Link } from "carbon-components-react";
 import { Dropdown } from "bahmni-carbon-ui";
 import propTypes from "prop-types";
 import _ from "lodash";
@@ -21,7 +21,7 @@ import {
   WARD_SUMMARY_HEADER,
 } from "../../../constants";
 export const CareViewSummary = (props) => {
-  const { callbacks } = props;
+  const { callbacks, onHome } = props;
   const [options, setOptions] = useState([]);
   const [screenSize, setScreenSize] = useState(window.outerWidth);
   const [isTabletView, setIsTabletView] = useState(false);
@@ -152,10 +152,17 @@ export const CareViewSummary = (props) => {
           <SwiperSlide>{myPatientsTile}</SwiperSlide>
         </Swiper>
       )}
+      <Link className="ward-view-nav-link" onClick={onHome}>
+        <FormattedMessage
+          id={"WARD_LIST_VIEW_TEXT"}
+          defaultMessage="Ward List View"
+        />
+      </Link>
     </div>
   );
 };
 
 CareViewSummary.propTypes = {
   callbacks: propTypes.object,
+  onHome: propTypes.func,
 };

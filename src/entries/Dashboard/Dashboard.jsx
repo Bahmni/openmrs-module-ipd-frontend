@@ -10,7 +10,6 @@ import {
   SideNavItems,
   SideNavLink,
 } from "carbon-components-react";
-import { ArrowLeft } from "@carbon/icons-react/next";
 import { Application24, Home24, UserActivity24 } from "@carbon/icons-react";
 import { componentMapping } from "./componentMapping";
 import "./Dashboard.scss";
@@ -222,13 +221,6 @@ export default function Dashboard(props) {
                 className={checkSliderStatus() ? "main-with-slider" : "main"}
               >
                 <div className={"patient-header-navigation"}>
-                  <div className={"navigation-buttons"}>
-                    <ArrowLeft
-                      data-testid={"Back button"}
-                      size={20}
-                      onClick={() => window.history.back()}
-                    />
-                  </div>
                   <PatientHeader
                     patientId={patient?.uuid}
                     openVisitSummary={handleVisitSummaryNavigation}
