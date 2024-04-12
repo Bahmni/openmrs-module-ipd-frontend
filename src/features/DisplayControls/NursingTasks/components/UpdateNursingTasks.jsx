@@ -39,6 +39,7 @@ import {
 const UpdateNursingTasks = (props) => {
   const {
     medicationTasks,
+    groupSlotsByOrderId,
     updateNursingTasksSlider,
     patientId,
     providerId,
@@ -403,6 +404,29 @@ const UpdateNursingTasks = (props) => {
     setInvalidText(invalidTimeText);
   };
 
+  const disableDoneTogglePostNextTaskTime = (medicationTask) => {
+    const filteredSlots = groupSlotsByOrderId[medicationTask.orderId];
+    const taskWithJustGreaterTime = [];
+    for (let i = 0; i < filteredSlots.length; i++) {
+      if (
+        medicationTask.startTimeInEpochSeconds <
+        filteredSlots[i].startTimeInEpochSeconds
+      ) {
+        taskWithJustGreaterTime.push(filteredSlots[i]);
+        break;
+      }
+    }
+    if (taskWithJustGreaterTime.length === 0) return false;
+
+    const currentTimeInEpoch = moment().unix();
+    if (
+      currentTimeInEpoch >= taskWithJustGreaterTime[0].startTimeInEpochSeconds
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <>
       <SideBarPanel
@@ -441,7 +465,12 @@ const UpdateNursingTasks = (props) => {
                     labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
                     labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
                     onToggle={handleToggle}
-                    disabled={!tasks[medicationTask.uuid]?.isRelevantTask}
+                    disabled={
+                      !tasks[medicationTask.uuid]?.isRelevantTask ||
+                      (!medicationTask.isANonMedicationTask &&
+                        medicationTask.serviceType !== "AsNeededPlaceholder" &&
+                        disableDoneTogglePostNextTaskTime(medicationTask))
+                    }
                   />
                 )}
                 <div className={"medication-name"}>
@@ -677,6 +706,7 @@ const UpdateNursingTasks = (props) => {
 
 UpdateNursingTasks.propTypes = {
   medicationTasks: PropTypes.array.isRequired,
+  groupSlotsByOrderId: PropTypes.object.isRequired,
   updateNursingTasksSlider: PropTypes.func.isRequired,
   patientId: PropTypes.string.isRequired,
   providerId: PropTypes.string.isRequired,

@@ -188,6 +188,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             <input
               class="bx--toggle-input bx--toggle-input--small"
               data-testid="done-toggle"
+              disabled=""
               id="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
               type="checkbox"
             />
@@ -611,6 +612,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             <input
               class="bx--toggle-input bx--toggle-input--small"
               data-testid="done-toggle"
+              disabled=""
               id="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
               type="checkbox"
             />

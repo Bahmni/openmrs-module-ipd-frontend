@@ -80,6 +80,7 @@ export default function NursingTasks(props) {
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
   const [nonMedicationTasks, setNonMedicationTasks] = useState([]);
+  const [groupSlotsByOrderId, setGroupSlotsByOrderId] = useState({});
   let startDateTimeChange, endDateTimeChange;
 
   useEffect(() => {
@@ -305,6 +306,20 @@ export default function NursingTasks(props) {
       });
     }
   };
+
+  const groupTasksByOrderId = (sortedNursingTasks) => {
+    let slots = {};
+    sortedNursingTasks.forEach((task) => {
+      task.forEach((slot) => {
+        if (!slots[slot.orderId]) {
+          slots[slot.orderId] = [];
+        }
+        slots[slot.orderId].push(slot);
+      });
+    });
+    setGroupSlotsByOrderId(slots);
+  };
+
   useEffect(() => {
     const sortedNursingTasks = [
       ...ExtractMedicationNursingTasksData(
@@ -314,6 +329,7 @@ export default function NursingTasks(props) {
       ),
       ...ExtractNonMedicationTasks(nonMedicationTasks, filterValue, isReadMode),
     ];
+    groupTasksByOrderId(sortedNursingTasks);
     sortNursingTasks(sortedNursingTasks);
     setMedicationNursingTasks(sortedNursingTasks);
   }, [filterValue, nursingTasks, nonMedicationTasks]);
@@ -323,7 +339,8 @@ export default function NursingTasks(props) {
       (medicationNursingTask, index, medicationNursingTasks) => {
         return (
           <div key={index}>
-            {disableTaskTilePastNextSlotTime(medicationNursingTasks, index)}
+            {medicationNursingTask[0].isANonMedicationTask &&
+              disableTaskTilePastNextSlotTime(medicationNursingTasks, index)}
             <div
               onClick={() => {
                 const isStoppedSlot = medicationNursingTask[0]?.stopTime;
@@ -497,6 +514,7 @@ export default function NursingTasks(props) {
       {isSliderOpen.nursingTasks && (
         <UpdateNursingTasks
           medicationTasks={selectedMedicationTask}
+          groupSlotsByOrderId={groupSlotsByOrderId}
           updateNursingTasksSlider={updateNursingTasksSlider}
           patientId={patientId}
           providerId={provider.uuid}

@@ -1016,6 +1016,7 @@ export const mockMedicationTasks = [
     },
     dosage: "30mg",
     uuid: "d9ae1992-63ac-4e05-8dfb-13f021102ec6",
+    orderId: "a526538e-67e0-482f-afdc-939e6d7c75c7",
     startTimeInEpochSeconds: 1700620200,
     startTime: "08:00",
   },
@@ -1027,11 +1028,84 @@ export const mockMedicationTasks = [
       asNeeded: false,
     },
     dosage: "25mg",
+    orderId: "3d7305c3-e70d-49f4-a3cf-942d4bbc2485",
     uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
     startTimeInEpochSeconds: 1700620200,
     startTime: "08:00",
   },
 ];
+
+export const mockGroupSlotsByOrderId = {
+  "a526538e-67e0-482f-afdc-939e6d7c75c7": [
+    {
+      drugName:
+        "Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension",
+      drugRoute: "Topical",
+      duration: "2 Day(s)",
+      dosage: "1mg",
+      uuid: "161889ae-7be5-4ddd-ad7d-a52680d95f88",
+      startTimeInEpochSeconds: 1712917800,
+      dosingInstructions: {
+        asNeeded: false,
+        frequency: "Four times a day / Every 6 hours",
+      },
+      startTime: "16:00",
+      orderId: "a526538e-67e0-482f-afdc-939e6d7c75c7",
+      isDisabled: false,
+      serviceType: "MedicationRequest",
+    },
+  ],
+  "3d7305c3-e70d-49f4-a3cf-942d4bbc2485": [
+    {
+      drugName: "Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)",
+      drugRoute: "Intravenous",
+      duration: "1 Day(s)",
+      dosage: "1mg",
+      uuid: "c9684ff1-d8fa-4ebc-bbed-556a1678a54f",
+      startTimeInEpochSeconds: 1712889000,
+      dosingInstructions: {
+        asNeeded: false,
+        frequency: "Every 4 hours",
+      },
+      startTime: "08:00",
+      orderId: "3d7305c3-e70d-49f4-a3cf-942d4bbc2485",
+      isDisabled: false,
+      serviceType: "MedicationRequest",
+    },
+    {
+      drugName: "Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)",
+      drugRoute: "Intravenous",
+      duration: "1 Day(s)",
+      dosage: "1mg",
+      uuid: "7fc727ca-a713-41a8-b285-ba7497d0d28d",
+      startTimeInEpochSeconds: 1712903400,
+      dosingInstructions: {
+        asNeeded: false,
+        frequency: "Every 4 hours",
+      },
+      startTime: "12:00",
+      orderId: "3d7305c3-e70d-49f4-a3cf-942d4bbc2485",
+      isDisabled: false,
+      serviceType: "MedicationRequest",
+    },
+    {
+      drugName: "Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)",
+      drugRoute: "Intravenous",
+      duration: "1 Day(s)",
+      dosage: "1mg",
+      uuid: "197afe15-0d59-4a21-a82a-fc59837db954",
+      startTimeInEpochSeconds: 1712917800,
+      dosingInstructions: {
+        asNeeded: false,
+        frequency: "Every 4 hours",
+      },
+      startTime: "16:00",
+      orderId: "3d7305c3-e70d-49f4-a3cf-942d4bbc2485",
+      isDisabled: false,
+      serviceType: "MedicationRequest",
+    },
+  ],
+};
 
 export const mockPRNMedicationTasks = [
   {
@@ -1044,6 +1118,7 @@ export const mockPRNMedicationTasks = [
     dosage: "25mg",
     uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
     startTimeInEpochSeconds: 1700620200,
+    serviceType: "AsNeededPlaceholder",
     startTime: "08:00",
   },
 ];
