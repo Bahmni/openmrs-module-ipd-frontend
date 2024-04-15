@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo } from "react";
 import "../styles/CareViewPatients.scss";
 import { Pagination, Loading } from "carbon-components-react";
 import PropTypes from "prop-types";
@@ -16,6 +16,7 @@ import {
   getTimeInFuture,
   getTimeInPast,
   epochTo24HourFormat,
+  dateTimeToEpochInMilliSeconds,
 } from "../../../utils/DateTimeUtils";
 import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 import { items } from "../utils/constants";
@@ -54,10 +55,20 @@ export const CareViewPatients = () => {
     previous: false,
     next: false,
   });
-  const currentShiftArray =
-    ipdConfig.shiftDetails &&
-    currentShiftHoursArray(new Date(), ipdConfig.shiftDetails)
-      .currentShiftHoursArray;
+  const { currentShiftArray, rangeArray, shiftIndex } = useMemo(() => {
+    return {
+      currentShiftArray:
+        ipdConfig.shiftDetails &&
+        currentShiftHoursArray(new Date(), ipdConfig.shiftDetails)
+          .currentShiftHoursArray,
+      rangeArray:
+        ipdConfig.shiftDetails &&
+        currentShiftHoursArray(new Date(), ipdConfig.shiftDetails).rangeArray,
+      shiftIndex:
+        ipdConfig.shiftDetails &&
+        currentShiftHoursArray(new Date(), ipdConfig.shiftDetails).shiftIndex,
+    };
+  }, [ipdConfig.shiftDetails]);
 
   const getPatientsList = async () => {
     try {
@@ -183,10 +194,10 @@ export const CareViewPatients = () => {
           next: !enableNext,
           previous: false,
         });
-        newEndTime = getTimeInFuture(
-          navHourEpoch.endHourEpoch,
-          currentShiftArray.length - currentShiftArray.indexOf(startHour)
-        );
+        newEndTime =
+          dateTimeToEpochInMilliSeconds(
+            moment(rangeArray[shiftIndex].split("-")[1], timeFormatFor24Hr)
+          ) / 1000;
       } else {
         updateNavButtonsDisabled({
           next: false,
@@ -232,10 +243,10 @@ export const CareViewPatients = () => {
       const endTime = getTimeInFuture(currentEpoch, timeframeLimitInHours);
       const startHour = epochTo24HourFormat(startTime);
       const endHour = epochTo24HourFormat(endTime);
-      const endShiftTime = getTimeInFuture(
-        startTime,
-        currentShiftArray.length - currentShiftArray.indexOf(startHour)
-      );
+      const endShiftTime =
+        dateTimeToEpochInMilliSeconds(
+          moment(rangeArray[shiftIndex].split("-")[1], timeFormatFor24Hr)
+        ) / 1000;
       let newEndTime;
       if (
         !currentShiftArray.includes(startHour) ||
