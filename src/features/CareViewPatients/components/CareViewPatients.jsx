@@ -194,10 +194,18 @@ export const CareViewPatients = () => {
           next: !enableNext,
           previous: false,
         });
-        newEndTime =
-          dateTimeToEpochInMilliSeconds(
-            moment(rangeArray[shiftIndex].split("-")[1], timeFormatFor24Hr)
-          ) / 1000;
+        const newEndTimeMoment = moment(
+          rangeArray[shiftIndex].split("-")[1],
+          timeFormatFor24Hr
+        );
+        const endTimeMoment = moment.unix(endTime);
+        newEndTimeMoment.set({
+          year: endTimeMoment.year(),
+          month: endTimeMoment.month(),
+          date: endTimeMoment.date(),
+        });
+
+        newEndTime = dateTimeToEpochInMilliSeconds(newEndTimeMoment) / 1000;
       } else {
         updateNavButtonsDisabled({
           next: false,
@@ -243,10 +251,19 @@ export const CareViewPatients = () => {
       const endTime = getTimeInFuture(currentEpoch, timeframeLimitInHours);
       const startHour = epochTo24HourFormat(startTime);
       const endHour = epochTo24HourFormat(endTime);
+
+      const newEndTimeMoment = moment(
+        rangeArray[shiftIndex].split("-")[1],
+        timeFormatFor24Hr
+      );
+      const endTimeMoment = moment.unix(endTime);
+      newEndTimeMoment.set({
+        year: endTimeMoment.year(),
+        month: endTimeMoment.month(),
+        date: endTimeMoment.date(),
+      });
       const endShiftTime =
-        dateTimeToEpochInMilliSeconds(
-          moment(rangeArray[shiftIndex].split("-")[1], timeFormatFor24Hr)
-        ) / 1000;
+        dateTimeToEpochInMilliSeconds(newEndTimeMoment) / 1000;
       let newEndTime;
       if (
         !currentShiftArray.includes(startHour) ||
