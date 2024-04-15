@@ -18,6 +18,7 @@ import AdministeredMedicationList from "./AdministeredMedicationList";
 import {
   saveAdministeredMedication,
   isTimeWithinAdministeredWindow,
+  disableDoneTogglePostNextTaskTime,
 } from "../utils/NursingTasksUtils";
 import { saveEmergencyMedication } from "../utils/EmergencyTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
@@ -39,6 +40,7 @@ import {
 const UpdateNursingTasks = (props) => {
   const {
     medicationTasks,
+    groupSlotsByOrderId,
     updateNursingTasksSlider,
     patientId,
     providerId,
@@ -441,7 +443,15 @@ const UpdateNursingTasks = (props) => {
                     labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
                     labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
                     onToggle={handleToggle}
-                    disabled={!tasks[medicationTask.uuid]?.isRelevantTask}
+                    disabled={
+                      !tasks[medicationTask.uuid]?.isRelevantTask ||
+                      (!medicationTask.isANonMedicationTask &&
+                        medicationTask.serviceType !== "AsNeededPlaceholder" &&
+                        disableDoneTogglePostNextTaskTime(
+                          medicationTask,
+                          groupSlotsByOrderId
+                        ))
+                    }
                   />
                 )}
                 <div className={"medication-name"}>
@@ -677,6 +687,7 @@ const UpdateNursingTasks = (props) => {
 
 UpdateNursingTasks.propTypes = {
   medicationTasks: PropTypes.array.isRequired,
+  groupSlotsByOrderId: PropTypes.object.isRequired,
   updateNursingTasksSlider: PropTypes.func.isRequired,
   patientId: PropTypes.string.isRequired,
   providerId: PropTypes.string.isRequired,

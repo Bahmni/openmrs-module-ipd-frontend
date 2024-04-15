@@ -1016,6 +1016,7 @@ export const mockMedicationTasks = [
     },
     dosage: "30mg",
     uuid: "d9ae1992-63ac-4e05-8dfb-13f021102ec6",
+    orderId: "a526538e-67e0-482f-afdc-939e6d7c75c7",
     startTimeInEpochSeconds: 1700620200,
     startTime: "08:00",
   },
@@ -1027,11 +1028,59 @@ export const mockMedicationTasks = [
       asNeeded: false,
     },
     dosage: "25mg",
+    orderId: "3d7305c3-e70d-49f4-a3cf-942d4bbc2485",
     uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
     startTimeInEpochSeconds: 1700620200,
     startTime: "08:00",
   },
 ];
+
+export const mockGroupSlotsByOrderId = {
+  "a526538e-67e0-482f-afdc-939e6d7c75c7": [
+    {
+      drugName:
+        "Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension",
+      drugRoute: "Topical",
+      duration: "4 Day(s)",
+      dosingInstructions: {
+        asNeeded: false,
+      },
+      dosage: "30mg",
+      uuid: "d9ae1992-63ac-4e05-8dfb-13f021102ec6",
+      orderId: "a526538e-67e0-482f-afdc-939e6d7c75c7",
+      startTimeInEpochSeconds: 1700620200,
+      startTime: "08:00",
+    },
+  ],
+  "3d7305c3-e70d-49f4-a3cf-942d4bbc2485": [
+    {
+      drugName: "Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)",
+      drugRoute: "Intravenous",
+      duration: "6 Day(s)",
+      dosingInstructions: {
+        asNeeded: false,
+      },
+      dosage: "25mg",
+      orderId: "3d7305c3-e70d-49f4-a3cf-942d4bbc2485",
+      uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
+      startTimeInEpochSeconds: 1700620200,
+      startTime: "08:00",
+    },
+    {
+      drugName: "Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)",
+      drugRoute: "Intravenous",
+      duration: "6 Day(s)",
+      dosingInstructions: {
+        asNeeded: false,
+      },
+      dosage: "25mg",
+      orderId: "3d7305c3-e70d-49f4-a3cf-942d4bbc2485",
+      uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
+      startTimeInEpochSeconds: 1712917800,
+      startTime: "16:00",
+    },
+  ],
+};
 
 export const mockPRNMedicationTasks = [
   {
@@ -1044,6 +1093,7 @@ export const mockPRNMedicationTasks = [
     dosage: "25mg",
     uuid: "b9904678-eb07-4eb0-8d03-53fcaa1d20d0",
     startTimeInEpochSeconds: 1700620200,
+    serviceType: "AsNeededPlaceholder",
     startTime: "08:00",
   },
 ];

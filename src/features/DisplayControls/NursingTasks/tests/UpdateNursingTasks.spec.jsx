@@ -4,7 +4,8 @@ import UpdateNursingTasks from "../components/UpdateNursingTasks";
 import {
   mockMedicationTasks,
   mockPRNMedicationTasks,
-  mockNonMedicationTileData
+  mockNonMedicationTileData, 
+  mockGroupSlotsByOrderId,
 } from "./NursingTasksUtilsMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import {
@@ -27,6 +28,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -42,6 +44,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -61,6 +64,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -84,6 +88,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockNonMedicationTileData}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -105,6 +110,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockNonMedicationTileData}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={mockUpdateEmergencyTasksSlider}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -137,6 +143,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -161,6 +168,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -184,6 +192,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -213,6 +222,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -242,6 +252,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -260,6 +271,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -293,6 +305,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -326,6 +339,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -356,6 +370,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -386,6 +401,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -401,6 +417,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -419,6 +436,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={[mockMedicationTasks[0]]}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -439,6 +457,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={[mockMedicationTasks[0]]}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -462,6 +481,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockPRNMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -477,6 +497,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockPRNMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
@@ -496,6 +517,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
           medicationTasks={mockPRNMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
