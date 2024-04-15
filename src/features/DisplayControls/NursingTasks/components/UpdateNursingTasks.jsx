@@ -18,6 +18,7 @@ import AdministeredMedicationList from "./AdministeredMedicationList";
 import {
   saveAdministeredMedication,
   isTimeWithinAdministeredWindow,
+  disableDoneTogglePostNextTaskTime,
 } from "../utils/NursingTasksUtils";
 import { saveEmergencyMedication } from "../utils/EmergencyTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
@@ -404,29 +405,6 @@ const UpdateNursingTasks = (props) => {
     setInvalidText(invalidTimeText);
   };
 
-  const disableDoneTogglePostNextTaskTime = (medicationTask) => {
-    const filteredSlots = groupSlotsByOrderId[medicationTask.orderId];
-    const taskWithJustGreaterTime = [];
-    for (let i = 0; i < filteredSlots.length; i++) {
-      if (
-        medicationTask.startTimeInEpochSeconds <
-        filteredSlots[i].startTimeInEpochSeconds
-      ) {
-        taskWithJustGreaterTime.push(filteredSlots[i]);
-        break;
-      }
-    }
-    if (taskWithJustGreaterTime.length === 0) return false;
-
-    const currentTimeInEpoch = moment().unix();
-    if (
-      currentTimeInEpoch >= taskWithJustGreaterTime[0].startTimeInEpochSeconds
-    ) {
-      return true;
-    }
-    return false;
-  };
-
   return (
     <>
       <SideBarPanel
@@ -469,7 +447,10 @@ const UpdateNursingTasks = (props) => {
                       !tasks[medicationTask.uuid]?.isRelevantTask ||
                       (!medicationTask.isANonMedicationTask &&
                         medicationTask.serviceType !== "AsNeededPlaceholder" &&
-                        disableDoneTogglePostNextTaskTime(medicationTask))
+                        disableDoneTogglePostNextTaskTime(
+                          medicationTask,
+                          groupSlotsByOrderId
+                        ))
                     }
                   />
                 )}

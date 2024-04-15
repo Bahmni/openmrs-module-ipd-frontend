@@ -255,11 +255,7 @@ export const disableTaskTilePastNextSlotTime = (
     const upcomingTaskTimeInEpoch = upcomingTask.startTimeInEpochSeconds;
     const currentTimeInEpoch = moment().unix();
     if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
-      if (currentTask.taskType !== "nursing_activity") {
-        currentTask.isDisabled = false;
-      } else {
-        currentTask.isDisabled = true;
-      }
+      currentTask.isDisabled = currentTask.taskType === "nursing_activity";
     }
   }
 };
@@ -379,4 +375,22 @@ const groupTasks = (extractedData, groupedData) => {
     }
   });
   return currentGroup;
+};
+
+export const disableDoneTogglePostNextTaskTime = (
+  medicationTask,
+  groupSlotsByOrderId
+) => {
+  const filteredSlots = groupSlotsByOrderId[medicationTask.orderId];
+  const taskWithJustGreaterTime = filteredSlots.find(
+    (slot) =>
+      medicationTask.startTimeInEpochSeconds < slot.startTimeInEpochSeconds
+  );
+
+  const currentTimeInEpoch = moment().unix();
+
+  return (
+    taskWithJustGreaterTime &&
+    currentTimeInEpoch >= taskWithJustGreaterTime.startTimeInEpochSeconds
+  );
 };
