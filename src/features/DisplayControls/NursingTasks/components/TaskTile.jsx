@@ -16,7 +16,6 @@ import {
   timeFormatFor12Hr,
   timeFormatFor24Hr,
 } from "../../../../constants";
-import { formatTime } from "../../../../utils/DateTimeUtils";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
@@ -135,13 +134,11 @@ export default function TaskTile(props) {
               <div className="tile-content-subtext-time">
                 &nbsp;
                 {enable24HourTime
-                  ? formatTime(
-                      getTime(administeredTimeInEpochSeconds, startTime),
+                  ? getTime(administeredTimeInEpochSeconds, startTime,
                       "hh:mm",
                       timeFormatFor24Hr
                     )
-                  : formatTime(
-                      getTime(administeredTimeInEpochSeconds, startTime),
+                  : getTime(administeredTimeInEpochSeconds, startTime,
                       "hh:mm",
                       timeFormatFor12Hr
                     )}

@@ -54,6 +54,7 @@ const UpdateNursingTasks = (props) => {
   const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
   const [isPRNMedication, updateIsPRNMedication] = useState(false);
   const [isNonMedication, updateIsNonMedication] = useState(false);
+  const [isSystemGeneratedNonMedication, updateIsSystemGeneratedNonMedication] = useState(false);
   const [isAnyMedicationSkipped, setIsAnyMedicationSkipped] = useState(false);
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
   const [isAnyMedicationAdministered, setIsAnyMedicationAdministered] =
@@ -96,7 +97,7 @@ const UpdateNursingTasks = (props) => {
 
   const saveAdministeredNonMedicationTasks = () => {
     setShowSuccessNotification(true);
-    setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
+    setSuccessMessage("NON_MEDICATION_TASK_UPDATE_MESSAGE");
     updateNursingTasksSlider(false);
     updateIsPRNMedication(false);
   };
@@ -164,6 +165,7 @@ const UpdateNursingTasks = (props) => {
     medicationTasks.map((medicationTask) => {
       updateIsPRNMedication(medicationTask?.dosingInstructions?.asNeeded);
       updateIsNonMedication(medicationTask?.taskType?.display);
+      updateIsSystemGeneratedNonMedication(medicationTask?.taskType?.display == "nursing_activity_system");
       updateTasks((prev) => {
         return {
           ...prev,
@@ -334,13 +336,26 @@ const UpdateNursingTasks = (props) => {
     } else {
       setSkippedTasks({});
       const nonMedicationPayload = [];
-      const utcTimeEpoch = moment.utc().unix();
+      let saveDisabled = true;
       Object.keys(tasks).forEach((key) => {
+        if (tasks[key].isSelected) {
+          saveDisabled = false;
+          const time = new Date(tasks[key].actualTime);
+          const utcTimeEpoch = moment.utc(time).unix() * 1000;
+          nonMedicationPayload.push({
+            uuid: key,
+            status: "COMPLETED",
+            executionStartTime: utcTimeEpoch,
+            executionEndTime: utcTimeEpoch,
+            comment: tasks[key].notes
+          });
+        }
         if (tasks[key].skipped) {
           setSkippedTasks((prev) => ({
             ...prev,
             [key]: { ...tasks[key], status: "not-done" },
           }));
+          const utcTimeEpoch = moment.utc().unix() * 1000;
           nonMedicationPayload.push({
             uuid: key,
             executionStartTime: utcTimeEpoch,
@@ -350,6 +365,7 @@ const UpdateNursingTasks = (props) => {
           });
         }
       });
+      updateIsSaveDisabled(saveDisabled || isInvalidTime);
       const response = await updateNonMedicationTask(nonMedicationPayload);
       response.status === 200 ? saveAdministeredNonMedicationTasks() : null;
     }
@@ -525,7 +541,7 @@ const UpdateNursingTasks = (props) => {
                 {(tasks[medicationTask.uuid]?.actualTime ||
                   tasks[medicationTask.uuid]?.skipped) && (
                   <div style={{ display: "flex" }}>
-                    {tasks[medicationTask.uuid]?.actualTime &&
+                    {tasks[medicationTask.uuid]?.actualTime && !isSystemGeneratedNonMedication &&
                       (enable24HourTime ? (
                         <TimePicker24Hour
                           defaultTime={tasks[
@@ -571,6 +587,7 @@ const UpdateNursingTasks = (props) => {
                           <Title
                             text={"Notes"}
                             isRequired={
+                              (isNonMedication && !tasks[medicationTask.uuid].skipped) ? false :
                               isPRNMedication
                                 ? false
                                 : tasks[medicationTask.uuid]
