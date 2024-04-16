@@ -32,6 +32,9 @@
       pointer-events: none;
       opacity: 25%;
     }
+    .warning_icon {
+      margin-top: 4px;
+    }
   }
 
   .slot-details-header {
@@ -136,7 +139,6 @@
 }
 .treatments-notification {
   display: flex;
-  align-items: center;
   padding: 10px 10px 10px 20px;
   background-color: #d0e2ff73;
 

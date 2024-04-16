@@ -9,6 +9,8 @@ import { CareViewContext } from "../../../context/CareViewContext";
 import { PatientDetailsCell } from "./PatientDetailsCell";
 import { SlotDetailsCell } from "./SlotDetailsCell";
 import { Header } from "./Header";
+import { setCurrentShiftTimes, getPreviousShiftDetails } from "../../CareViewSummary/utils/CareViewSummary";
+import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 
 export const CareViewPatientsSummary = ({
   patientsSummary,
@@ -17,8 +19,17 @@ export const CareViewPatientsSummary = ({
 }) => {
   const [slotDetails, setSlotDetails] = useState([]);
   const [nonMedicationDetails, setNonMedicationDetails] = useState([]);
-  const { careViewConfig } = useContext(CareViewContext);
+  const [previousShiftNonMedicationDetails, setPreviousShiftNonMedicationDetails] = useState([]);
+  const { careViewConfig, ipdConfig } = useContext(CareViewContext);
+  const { shiftDetails: shiftConfig = {} } = ipdConfig;
   const timeframeLimitInHours = careViewConfig.timeframeLimitInHours;
+  const shiftDetails = currentShiftHoursArray(
+    new Date(),
+    shiftConfig
+  );
+  const shiftRangeArray = shiftDetails.rangeArray;
+  const shiftIndex = shiftDetails.shiftIndex;
+ 
 
   const fetchSlots = async (patients) => {
     const patientUuids = patients.map((patient) => patient.patientDetails.uuid);
@@ -40,8 +51,47 @@ export const CareViewPatientsSummary = ({
     setNonMedicationDetails(response);
   };
 
-  useEffect(() => {
+  const fetchPreviousShiftTasks = async (patients) => {
+    const [startDateTime, endDateTime] =  setCurrentShiftTimes(
+      shiftDetails
+    );
+    const previousShiftDetails =
+    getPreviousShiftDetails(
+      shiftRangeArray,
+      shiftIndex,
+      startDateTime,
+      endDateTime
+    );
+    const patientUuids = patients.map((patient) => patient.patientDetails.uuid);
+    const response = await getTasksForPatients(
+      patientUuids,
+      previousShiftDetails.startDateTime ,
+      previousShiftDetails.endDateTime 
+    );
+    const groupedData = [];
+    response.forEach(patientData => {
+    const patientUuid = patientData.patientUuid;
+    const patientTasks = [];
+    patientData.tasks.forEach(task => {
+      if (task.taskType.display === "nursing_activity_system" && task.status === "REQUESTED") {
+        
+          patientTasks.push({
+              taskName: task.name,
+              taskId: task.uuid 
+          });
+      }
+    });
+    groupedData.push({
+      patient: patientUuid,
+      tasks: patientTasks
+    });
+  });
+    setPreviousShiftNonMedicationDetails(groupedData);
+  }
+ 
+  useEffect(() => { 
     if (patientsSummary.length > 0) {
+      fetchPreviousShiftTasks(patientsSummary);
       fetchSlots(patientsSummary);
       fetchTasks(patientsSummary);
     }
@@ -61,9 +111,11 @@ export const CareViewPatientsSummary = ({
               bedDetails,
               careTeam,
               newTreatments,
-              visitDetails,
+              visitDetails
             } = patientSummary;
             const { uuid } = patientDetails;
+            const matchingShift = previousShiftNonMedicationDetails.find(shift => shift.patient === uuid);
+            const tasks = matchingShift ? matchingShift.tasks : [];
             return (
               <tr key={idx} className={"patient-row-container"}>
                 <PatientDetailsCell
@@ -73,6 +125,7 @@ export const CareViewPatientsSummary = ({
                   navHourEpoch={navHourEpoch}
                   newTreatments={newTreatments}
                   visitDetails={visitDetails}
+                  previousShiftPendingTasks={tasks}
                 />
                 <SlotDetailsCell
                   slotDetails={slotDetails}

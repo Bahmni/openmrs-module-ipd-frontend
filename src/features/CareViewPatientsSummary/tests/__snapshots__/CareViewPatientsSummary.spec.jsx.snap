@@ -203,19 +203,27 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 <div
                   class="treatments-notification"
                 >
-                  <test-file-stub />
-                  <span
+                  <div
+                    class="warning_icon"
+                  >
+                    <test-file-stub />
+                     
+                  </div>
+                  <div
                     class="treatments-notification-span"
                   >
-                    1 New treatment(s): 
-                    <a
-                      class="bx--link"
-                      data-testid="treatments-ipd-dashboard"
-                      href="/bahmni/clinical/#/default/patient/7278eb93-8c1d-4ef4-bcbf-4c6ee91365f7/dashboard/visit/ipd/626b822d-741e-4a86-95ff-636eea753c2c?source=careViewDashboard"
-                    >
-                      Schedule Treatments
-                    </a>
-                  </span>
+                    <div>
+                      • 
+                      1 New treatment(s): 
+                      <a
+                        class="bx--link"
+                        data-testid="treatments-ipd-dashboard"
+                        href="/bahmni/clinical/#/default/patient/7278eb93-8c1d-4ef4-bcbf-4c6ee91365f7/dashboard/visit/ipd/626b822d-741e-4a86-95ff-636eea753c2c?source=careViewDashboard"
+                      >
+                        Schedule Treatments
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

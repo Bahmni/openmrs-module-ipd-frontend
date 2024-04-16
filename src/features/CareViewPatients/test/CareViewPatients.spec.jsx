@@ -36,12 +36,18 @@ const mockFetchPatientsList = jest.fn();
 const mockFetchPatientsListBySearch = jest.fn();
 const mockGetSlotsForPatients = jest.fn();
 const mockGetTasksForPatients = jest.fn();
+const mockCurrentShiftHoursArray = jest.fn();
+const mockSetCurrentShiftTimes = jest.fn();
+const mockGetPreviousShiftDetails = jest.fn();
 
 //These are being called in the CareViewPatientSummary child component inside use effect
 jest.mock("../../CareViewSummary/utils/CareViewSummary", () => {
   return {
     getSlotsForPatients: () => mockGetSlotsForPatients(),
     getTasksForPatients: () => mockGetTasksForPatients(),
+    setCurrentShiftTimes: ()=> mockSetCurrentShiftTimes(),
+    currentShiftHoursArray: ()=> mockCurrentShiftHoursArray(),
+    getPreviousShiftDetails: ()=>mockGetPreviousShiftDetails(),
   };
 });
 
@@ -62,6 +68,32 @@ describe("CareViewPatients", () => {
     });
     mockGetSlotsForPatients.mockReturnValue([]);
     mockGetTasksForPatients.mockReturnValue([]);
+    mockCurrentShiftHoursArray.mockReturnValue({
+      currentShiftHoursArray: [
+        "06:00",
+        "07:00",
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+      ],
+      rangeArray: ["06:00-18:00", "18:00-06:00"],
+      shiftIndex: 0,
+    });
+    mockSetCurrentShiftTimes.mockReturnValue([
+       "1713234600000",
+       "1713274200000"]
+    )
+    mockGetPreviousShiftDetails.mockReturnValue({
+      endDateTime: "1713234600000",
+      previousShiftIndex: 1,
+      startDateTime: "1713187800000"})
   });
   afterEach(() => {
     jest.resetAllMocks();
