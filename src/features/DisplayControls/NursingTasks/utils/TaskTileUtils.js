@@ -3,6 +3,7 @@ import {
   asNeededPlaceholderConceptName,
   asNeededMedicationRequestConceptName,
 } from "../../../../constants";
+import { formatTime } from "../../../../utils/DateTimeUtils";
 
 export const getRelevantTaskStatus = (
   startTimeInEpochSeconds,
@@ -33,6 +34,7 @@ export const iconType = (task, nursingTasks) => {
     administeredTimeInEpochSeconds,
     startTimeInEpochSeconds,
     serviceType,
+    taskType,
     status,
   } = task;
   if (serviceType === asNeededPlaceholderConceptName) return "Pending";
@@ -41,7 +43,7 @@ export const iconType = (task, nursingTasks) => {
   }
   if (stopTime) return "Stopped";
   if (status === "Not Done" || status === "missed") return "Not-Administered";
-  if (administeredTimeInEpochSeconds) {
+  if (administeredTimeInEpochSeconds || (status === "COMPLETED" && taskType.display)) {
     const administeredLateWindowInSeconds =
       startTimeInEpochSeconds +
       nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
@@ -54,20 +56,18 @@ export const iconType = (task, nursingTasks) => {
   return isLateTask(startTimeInEpochSeconds, nursingTasks) ? "Late" : "Pending";
 };
 
-export const getTime = (administeredTimeInEpochmilliSeconds, startTime) => {
-  if (administeredTimeInEpochmilliSeconds) {
-    const administeredTimeInSeconds =
-      administeredTimeInEpochmilliSeconds / 1000;
+export const getTime = (administeredTimeInEpochSeconds, startTime, inputFormat, outputFormat) => {
+  if (administeredTimeInEpochSeconds) {
     const administeredTime = new Date(
-      administeredTimeInSeconds * 1000
+      administeredTimeInEpochSeconds * 1000
     ).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
       hourCycle: "h23",
     });
-    return startTime + " - " + administeredTime + " (actual)";
+    return formatTime(startTime, inputFormat,  outputFormat) + " - " + formatTime(administeredTime, inputFormat,  outputFormat) + " (actual)";
   }
-  return startTime;
+  return formatTime(startTime, inputFormat,  outputFormat);
 };
 
 export const getMedicationDetails = (medication) => {

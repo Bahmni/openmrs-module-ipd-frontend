@@ -6,7 +6,7 @@ import {
   EMERGENCY_MEDICATIONS_BASE_URL,
   ENCOUNTER_TYPE_URL,
   PATIENT_MOVEMENT_URL,
-  NON_MEDICATION_URL,
+  NON_MEDICATION_BASE_URL,
 } from "../../../../constants";
 
 export const getDrugOrdersConfig = async () => {
@@ -60,11 +60,12 @@ export const saveEmergencyMedication = async (emergencyMedication) => {
 
 export const saveNonMedicationTask = async (nonMedicationTask) => {
   try {
-    return await axios.post(NON_MEDICATION_URL, nonMedicationTask);
+    return await axios.post(NON_MEDICATION_BASE_URL, nonMedicationTask);
   } catch (error) {
     return error;
   }
 };
+
 
 export const getEncounterType = async (encounterType) => {
   try {

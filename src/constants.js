@@ -24,7 +24,6 @@ export const ADMINISTERED_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/scheduledMedicationAdministrations";
 export const EMERGENCY_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/adhocMedicationAdministrations";
-export const NON_MEDICATION_URL = RESTWS_V1 + "/tasks";
 export const BOOKMARK_PATIENT_BASE_URL =
   RESTWS_V1 + "/ipd/careteam/participants";
 export const PATIENT_URL = RESTWS_V1 + "/patient";

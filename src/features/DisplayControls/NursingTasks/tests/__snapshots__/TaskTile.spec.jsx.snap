@@ -170,7 +170,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
           <div
             class="tile-content-subtext-time"
           >
-             16:00
+             16:00 - 07:23 (actual)
           </div>
         </div>
       </div>

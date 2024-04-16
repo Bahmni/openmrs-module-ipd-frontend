@@ -4,7 +4,6 @@ import {
   ADMINISTERED_MEDICATIONS_BASE_URL,
   asNeededPlaceholderConceptName,
   NON_MEDICATION_BASE_URL,
-  NON_MEDICATION_URL,
 } from "../../../../constants";
 import moment from "moment";
 
@@ -229,9 +228,9 @@ export const saveAdministeredMedication = async (administeredMedication) => {
 
 export const updateNonMedicationTask = async (updateNonMedicationPayload) => {
   try {
-    return await axios.put(NON_MEDICATION_URL, updateNonMedicationPayload);
+    return await axios.put(NON_MEDICATION_BASE_URL, updateNonMedicationPayload);
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -324,6 +323,8 @@ export const ExtractNonMedicationTasks = (
       isDisabled: isReadMode
         ? true
         : !!executionEndTime || status === "REJECTED",
+      administeredTime: executionEndTime,
+      administeredTimeInEpochSeconds: executionEndTime / 1000,
       status,
       isANonMedicationTask: true,
       token,
@@ -351,31 +352,30 @@ export const ExtractNonMedicationTasks = (
   extractedData.push(...pendingExtractedData);
   extractedData.push(...skippedExtractedData);
   extractedData.push(...completedExtractedData);
-  // grouping non-medication tasks together when the filter.id is pending
-  if (filterValue.id === "pending" || filterValue.id === "allTasks") {
-    const nursingActivityTask = extractedData.filter(
-      (data) => data.taskType?.display === "nursing_activity"
-    );
-    const systemGeneratedTasks = extractedData.filter(
-      (data) => data.taskType?.display !== "nursing_activity"
-    );
-    const extractedNursingActivityTask = groupTasks(
-      nursingActivityTask,
-      groupedData
-    );
-    const extractedSystemGeneratedTasks = groupTasks(
-      systemGeneratedTasks,
-      groupedData
-    );
-    if (extractedNursingActivityTask.length > 0) {
-      groupedData.push(extractedNursingActivityTask);
-    }
-    if (extractedSystemGeneratedTasks.length > 0) {
-      groupedData.push(extractedSystemGeneratedTasks);
-    }
-  } else if (extractedData.length > 0) {
-    groupedData.push(...extractedData.map((item) => [item]));
+  // grouping pending non-medication tasks together
+  const nursingActivityTask = pendingExtractedData.filter(
+    (data) => data.taskType?.display === "nursing_activity"
+  );
+  const systemGeneratedTasks = pendingExtractedData.filter(
+    (data) => data.taskType?.display !== "nursing_activity"
+  );
+  const extractedNursingActivityTask = groupTasks(
+    nursingActivityTask,
+    groupedData
+  );
+  const extractedSystemGeneratedTasks = groupTasks(
+    systemGeneratedTasks,
+    groupedData
+  );
+  if (extractedNursingActivityTask.length > 0) {
+    groupedData.push(extractedNursingActivityTask);
   }
+  if (extractedSystemGeneratedTasks.length > 0) {
+    groupedData.push(extractedSystemGeneratedTasks);
+  }
+
+  groupedData.push(...completedExtractedData.map((item) => [item]));
+  groupedData.push(...skippedExtractedData.map((item) => [item]));
   return groupedData;
 };
 

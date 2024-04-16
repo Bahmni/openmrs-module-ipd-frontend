@@ -92,7 +92,7 @@ describe("TaskTile", () => {
     const administeredIcon = getByTestId("Administered");
     expect(administeredIcon).toBeTruthy();
     expect(getByText("Rx-PRN")).toBeTruthy();
-    expect(getByText("16:38")).toBeTruthy();
+    expect(getByText("16:38 - 07:10 (actual)")).toBeTruthy();
   });
 
   it("should render administered PRN task with time and Rx-PRN tag when time in 12 hour format", () => {
@@ -104,7 +104,7 @@ describe("TaskTile", () => {
     const administeredIcon = getByTestId("Administered");
     expect(administeredIcon).toBeTruthy();
     expect(getByText("Rx-PRN")).toBeTruthy();
-    expect(getByText("04:38 PM")).toBeTruthy();
+    expect(getByText("04:38 PM - 07:10 AM (actual)")).toBeTruthy();
   });
 
   it("should dislay provider name in the non-medication task tile", () => {
