@@ -259,12 +259,12 @@ export const disableTaskTilePastNextSlotTime = (
   index
 ) => {
   if (index < medicationNursingTasks.length - 1) {
-    // const currentTask = medicationNursingTasks[index][0];
+    const currentTask = medicationNursingTasks[index][0];
     const upcomingTask = medicationNursingTasks[index + 1][0];
     const upcomingTaskTimeInEpoch = upcomingTask.startTimeInEpochSeconds;
     const currentTimeInEpoch = moment().unix();
     if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
-      // currentTask.isDisabled = currentTask.taskType === "nursing_activity";
+      currentTask.isDisabled = currentTask.taskType === "nursing_activity";
     }
   }
 };
