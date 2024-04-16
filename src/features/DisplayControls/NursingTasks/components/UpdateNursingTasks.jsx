@@ -19,6 +19,7 @@ import {
   saveAdministeredMedication,
   isTimeWithinAdministeredWindow,
   disableDoneTogglePostNextTaskTime,
+  updateNonMedicationTask,
 } from "../utils/NursingTasksUtils";
 import { saveEmergencyMedication } from "../utils/EmergencyTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
@@ -307,7 +308,7 @@ const UpdateNursingTasks = (props) => {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (Object.keys(errors).length === 0) {
       if (!isNonMedication) {
         setOpenConfirmationModal(true);
@@ -331,8 +332,26 @@ const UpdateNursingTasks = (props) => {
         }
       });
     } else {
-      const response = 200;
-      response === 200 ? saveAdministeredNonMedicationTasks() : null;
+      setSkippedTasks({});
+      const nonMedicationPayload = [];
+      const utcTimeEpoch = moment.utc().unix();
+      Object.keys(tasks).forEach((key) => {
+        if (tasks[key].skipped) {
+          setSkippedTasks((prev) => ({
+            ...prev,
+            [key]: { ...tasks[key], status: "not-done" },
+          }));
+          nonMedicationPayload.push({
+            uuid: key,
+            executionStartTime: utcTimeEpoch,
+            executionEndTime: utcTimeEpoch,
+            comment: tasks[key].notes,
+            status: "REJECTED",
+          });
+        }
+      });
+      const response = await updateNonMedicationTask(nonMedicationPayload);
+      response.status === 200 ? saveAdministeredNonMedicationTasks() : null;
     }
   };
 
@@ -540,47 +559,43 @@ const UpdateNursingTasks = (props) => {
                           width={"150px"}
                         />
                       ))}
-                    {!isNonMedication ? (
-                      <div
-                        className={`${
-                          Boolean(tasks[medicationTask.uuid]?.actualTime) &&
-                          "notes-text-area"
-                        }`}
-                        style={{ width: "100%" }}
-                      >
-                        <TextArea
-                          labelText={
-                            <Title
-                              text={"Notes"}
-                              isRequired={
-                                isPRNMedication
-                                  ? false
-                                  : tasks[medicationTask.uuid]
-                                      .isTimeOutOfWindow ||
-                                    tasks[medicationTask.uuid].skipped
-                              }
-                            />
-                          }
-                          onChange={(e) => {
-                            handleNotes(e, medicationTask.uuid);
-                          }}
-                          maxCount={250}
-                          rows={1}
-                          cols={50}
-                          light={true}
-                        />
-                        {showErrors && errors[medicationTask.uuid] && (
-                          <div className={"error"}>
-                            <FormattedMessage
-                              id={"NOTES_ERROR_MESSAGE"}
-                              defaultMessage={"Please enter notes"}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <></>
-                    )}
+                    <div
+                      className={`${
+                        Boolean(tasks[medicationTask.uuid]?.actualTime) &&
+                        "notes-text-area"
+                      }`}
+                      style={{ width: "100%" }}
+                    >
+                      <TextArea
+                        labelText={
+                          <Title
+                            text={"Notes"}
+                            isRequired={
+                              isPRNMedication
+                                ? false
+                                : tasks[medicationTask.uuid]
+                                    .isTimeOutOfWindow ||
+                                  tasks[medicationTask.uuid].skipped
+                            }
+                          />
+                        }
+                        onChange={(e) => {
+                          handleNotes(e, medicationTask.uuid);
+                        }}
+                        maxCount={250}
+                        rows={1}
+                        cols={50}
+                        light={true}
+                      />
+                      {showErrors && errors[medicationTask.uuid] && (
+                        <div className={"error"}>
+                          <FormattedMessage
+                            id={"NOTES_ERROR_MESSAGE"}
+                            defaultMessage={"Please enter notes"}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
                 {!tasks[medicationTask.uuid]?.dosingInstructions?.asNeeded && (
@@ -591,14 +606,16 @@ const UpdateNursingTasks = (props) => {
                   >
                     {tasks[medicationTask.uuid]?.skipped ? (
                       <OverflowMenuItem
-                        itemText={"Un-Skip Drug"}
+                        itemText={
+                          !isNonMedication ? "Un-Skip Drug" : "Un-Skip Task"
+                        }
                         onClick={() => {
                           handleSkipDrug(medicationTask, false);
                         }}
                       />
                     ) : (
                       <OverflowMenuItem
-                        itemText={"Skip Drug"}
+                        itemText={!isNonMedication ? "Skip Drug" : "Skip Task"}
                         onClick={() => {
                           handleSkipDrug(medicationTask, true);
                         }}

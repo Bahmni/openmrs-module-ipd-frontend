@@ -45,6 +45,46 @@ export const mockResponse = {
     ],
   },
 };
+export const mockUpdateResponse = {
+  data: [
+    {
+      uuid: "31ad1cb8-b0d9-4799-8a7d-68b373088d30",
+      name: "sample NM 4",
+      patientUuid: "7fb04950-28ce-47b2-9a63-5ac91b348e69",
+      requestedStartTime: 1713240277000,
+      requestedEndTime: 1713240000,
+      status: "REJECTED",
+      intent: "ORDER",
+      partOf: null,
+      taskType: {
+        uuid: "a5ea9d94-f662-11ee-8850-0242ac120006",
+        display: "nursing_activity",
+        links: [
+          {
+            rel: "self",
+            uri: "http://localhost/openmrs/ws/rest/v1/concept/a5ea9d94-f662-11ee-8850-0242ac120006",
+            resourceAlias: "concept",
+          },
+        ],
+      },
+      creator: {
+        uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
+        display: "superman",
+        links: [
+          {
+            rel: "self",
+            uri: "http://localhost/openmrs/ws/rest/v1/user/c1c21e11-3f10-11e4-adec-0800271c1b75",
+            resourceAlias: "user",
+          },
+        ],
+      },
+      executionStartTime: 1713240000,
+      executionEndTime: null,
+      comment: "sam",
+    },
+  ],
+  status: 200,
+};
 
 export const mockNursingTasksResponse = [
   {

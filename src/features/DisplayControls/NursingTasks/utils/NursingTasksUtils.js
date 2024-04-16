@@ -4,6 +4,7 @@ import {
   ADMINISTERED_MEDICATIONS_BASE_URL,
   asNeededPlaceholderConceptName,
   NON_MEDICATION_BASE_URL,
+  NON_MEDICATION_URL,
 } from "../../../../constants";
 import moment from "moment";
 
@@ -226,6 +227,14 @@ export const saveAdministeredMedication = async (administeredMedication) => {
   }
 };
 
+export const updateNonMedicationTask = async (updateNonMedicationPayload) => {
+  try {
+    return await axios.put(NON_MEDICATION_URL, updateNonMedicationPayload);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const timeToEpoch = (time) => {
   const [hours, minutes] = time.split(":").map(Number);
   const specificTime = new Date();
@@ -250,12 +259,12 @@ export const disableTaskTilePastNextSlotTime = (
   index
 ) => {
   if (index < medicationNursingTasks.length - 1) {
-    const currentTask = medicationNursingTasks[index][0];
+    // const currentTask = medicationNursingTasks[index][0];
     const upcomingTask = medicationNursingTasks[index + 1][0];
     const upcomingTaskTimeInEpoch = upcomingTask.startTimeInEpochSeconds;
     const currentTimeInEpoch = moment().unix();
     if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
-      currentTask.isDisabled = currentTask.taskType === "nursing_activity";
+      // currentTask.isDisabled = currentTask.taskType === "nursing_activity";
     }
   }
 };
@@ -286,7 +295,8 @@ export const ExtractNonMedicationTasks = (
   const extractedData = [];
   const groupedData = [],
     completedExtractedData = [],
-    pendingExtractedData = [];
+    pendingExtractedData = [],
+    skippedExtractedData = [];
   nonMedicationTasks?.forEach((nonMedicationTask) => {
     const {
       name,
@@ -310,7 +320,9 @@ export const ExtractNonMedicationTasks = (
         hourCycle: "h23",
       }),
       partOf,
-      isDisabled: isReadMode ? true : !!executionEndTime,
+      isDisabled: isReadMode
+        ? true
+        : !!executionEndTime || status === "REJECTED",
       status,
       isANonMedicationTask: true,
       token,
@@ -324,6 +336,11 @@ export const ExtractNonMedicationTasks = (
     ) {
       pendingExtractedData.push(taskInfo);
     } else if (
+      (filterValue.id === "skipped" || filterValue.id === "allTasks") &&
+      taskInfo.status === "REJECTED"
+    ) {
+      skippedExtractedData.push({ ...taskInfo, status: "Not Done" });
+    } else if (
       (filterValue.id === "completed" || filterValue.id === "allTasks") &&
       taskInfo.status === "COMPLETED"
     ) {
@@ -331,9 +348,10 @@ export const ExtractNonMedicationTasks = (
     }
   });
   extractedData.push(...pendingExtractedData);
+  extractedData.push(...skippedExtractedData);
   extractedData.push(...completedExtractedData);
   // grouping non-medication tasks together when the filter.id is pending
-  if (filterValue.id === "pending") {
+  if (filterValue.id === "pending" || filterValue.id === "allTasks") {
     const nursingActivityTask = extractedData.filter(
       (data) => data.taskType?.display === "nursing_activity"
     );
@@ -355,7 +373,7 @@ export const ExtractNonMedicationTasks = (
       groupedData.push(extractedSystemGeneratedTasks);
     }
   } else if (extractedData.length > 0) {
-    groupedData.push(extractedData);
+    groupedData.push(...extractedData.map((item) => [item]));
   }
   return groupedData;
 };
