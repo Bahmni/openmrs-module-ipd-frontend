@@ -359,7 +359,6 @@ export const getPreviousShiftDetails = (
 
 export const isCurrentShift = (
   shiftDetails,
-  shiftConfig,
   startDateTimeChange,
   endDateTimeChange
 ) => {
@@ -397,8 +396,8 @@ export const NotCurrentShiftMessage = (
 
 export const setCurrentShiftTimes = (
   shiftDetails,
-  isReadMode,
-  visitSummary
+  isReadMode = false,
+  visitSummary = ""
 ) => {
   const [start, end] =
     shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");

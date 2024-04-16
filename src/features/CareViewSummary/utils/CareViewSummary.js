@@ -5,9 +5,8 @@ import {
   LIST_OF_WARDS_URL,
   WARD_SUMMARY_URL,
   GET_TASKS_FOR_PATIENTS_URL,
-  timeFormatFor24Hr
 } from "../../../constants";
-import { getUpdatedShiftArray, getDateTime } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
+import { getDateTime } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 
 const fetchWards = async () => {
   try {
@@ -112,39 +111,6 @@ export const getSlidesPerView = (isMobileView, isTabletView) => {
   }
 };
 
-export const setCurrentShiftTimes = (
-  shiftDetails,
-  isReadMode = false,
-  visitSummary = ""
-) => {
-  const [start, end] =
-    shiftDetails.rangeArray[shiftDetails.shiftIndex].split("-");
-  const [startHour, startMinute] = start.split(":");
-  const [endHour, endMinute] = end.split(":");
-  const firstHour = `${startHour}:${startMinute}`;
-  const lastHour = `${endHour}:${endMinute}`;
-  let startDateTime = getDateTime(
-    isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-    firstHour
-  );
-  let endDateTime = getDateTime(
-    isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
-    lastHour
-  );
-  /** if shift is going on two different dates */
-  if (lastHour < firstHour) {
-    const d = isReadMode ? new Date(visitSummary.stopDateTime) : new Date();
-    const currentHour = d.getHours();
-    if (currentHour > 12) {
-      d.setDate(d.getDate() + 1);
-      endDateTime = getDateTime(d, lastHour);
-    } else {
-      d.setDate(d.getDate() - 1);
-      startDateTime = getDateTime(d, firstHour);
-    }
-  }
-  return [startDateTime, endDateTime];
-};
 
 export const getPreviousShiftDetails = (
   rangeArray,

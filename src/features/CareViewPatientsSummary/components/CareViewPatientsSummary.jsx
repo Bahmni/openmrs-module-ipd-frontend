@@ -9,8 +9,8 @@ import { CareViewContext } from "../../../context/CareViewContext";
 import { PatientDetailsCell } from "./PatientDetailsCell";
 import { SlotDetailsCell } from "./SlotDetailsCell";
 import { Header } from "./Header";
-import { setCurrentShiftTimes, getPreviousShiftDetails } from "../../CareViewSummary/utils/CareViewSummary";
-import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
+import { getPreviousShiftDetails } from "../../CareViewSummary/utils/CareViewSummary";
+import { currentShiftHoursArray, setCurrentShiftTimes } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 
 export const CareViewPatientsSummary = ({
   patientsSummary,

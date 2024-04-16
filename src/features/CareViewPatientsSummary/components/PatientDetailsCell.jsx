@@ -4,6 +4,7 @@ import {
   BookmarkAdd20,
   BookmarkFilled20,
   HospitalBed16,
+  WarningAlt20,
 } from "@carbon/icons-react";
 import { Link } from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
@@ -11,7 +12,6 @@ import propTypes from "prop-types";
 import PropTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { getCurrentShiftTimes } from "../../../utils/DateTimeUtils";
-import WarningIcon from "../../../icons/warning.svg";
 import { getIPDPatientDashboardUrl } from "../../../utils/CommonUtils";
 
 export const PatientDetailsCell = ({
@@ -121,7 +121,7 @@ export const PatientDetailsCell = ({
             <>
               <div className="treatments-notification">
                 <div className="warning_icon">
-                  <WarningIcon /> </div>
+                  <WarningAlt20 className={"warning-icon-20"} /> </div>
                 <div className="treatments-notification-span">
                  { newTreatments > 0 && <div>&bull; { newTreatments + " New treatment(s): "}
                   <>

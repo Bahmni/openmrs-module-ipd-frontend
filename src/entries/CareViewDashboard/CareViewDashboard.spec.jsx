@@ -34,9 +34,14 @@ jest.mock("../../features/CareViewSummary/utils/CareViewSummary", () => {
     getSlidesPerView: () => mockGetSliderPerView(),
     getSlotsForPatients: () => mockGetSlotsForPatients(),
     getTasksForPatients: () => mockGetTasksForPatients(),
+    getPreviousShiftDetails: ()=> mockGetPreviousShiftDetails()
+  };
+});
+jest.mock("../../features//DisplayControls/DrugChart/utils/DrugChartUtils", () => {
+  return {
     setCurrentShiftTimes: ()=> mockSetCurrentShiftTimes(),
-    currentShiftHoursArray: ()=> mockCurrentShiftHoursArray(),
-    getPreviousShiftDetails: ()=>mockGetPreviousShiftDetails()
+    getPreviousShiftDetails: ()=> mockGetPreviousShiftDetails(),
+    currentShiftHoursArray: ()=> mockCurrentShiftHoursArray()
   };
 });
 
