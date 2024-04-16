@@ -349,7 +349,6 @@ const UpdateNursingTasks = (props) => {
             uuid: key,
             status: "COMPLETED",
             executionEndTime: utcTimeEpoch,
-            comment: tasks[key].notes,
           });
         }
         if (tasks[key].skipped) {
@@ -506,18 +505,21 @@ const UpdateNursingTasks = (props) => {
                       }`}
                     >
                       {medicationTask.drugName}
-                      <FormattedMessage id={"AT"} defaultMessage={" at "} />
-                      {enable24HourTime
-                        ? formatTime(
-                            medicationTasks[0].startTime,
-                            timeFormatFor24Hr,
-                            timeFormatFor24Hr
-                          )
-                        : formatTime(
-                            medicationTasks[0].startTime,
-                            timeFormatFor24Hr,
-                            timeFormatFor12Hr
-                          )}
+                      {!isNonMedication ? 
+                      (<><FormattedMessage id={"AT"} defaultMessage={" at "} />
+                        {enable24HourTime
+                          ? formatTime(
+                              medicationTasks[0].startTime,
+                              timeFormatFor24Hr,
+                              timeFormatFor24Hr
+                            )
+                          : formatTime(
+                              medicationTasks[0].startTime,
+                              timeFormatFor24Hr,
+                              timeFormatFor12Hr
+                            )}
+                        </>
+                      ) : (<></>)}
                     </div>
                   )}
                   {!isNonMedication ? (
@@ -577,46 +579,49 @@ const UpdateNursingTasks = (props) => {
                           width={"150px"}
                         />
                       ))}
-                    <div
-                      className={`${
-                        Boolean(tasks[medicationTask.uuid]?.actualTime) &&
-                        "notes-text-area"
-                      }`}
-                      style={{ width: "100%" }}
-                    >
-                      <TextArea
-                        labelText={
-                          <Title
-                            text={"Notes"}
-                            isRequired={
-                              isNonMedication &&
-                              !tasks[medicationTask.uuid].skipped
-                                ? false
-                                : isPRNMedication
-                                ? false
-                                : tasks[medicationTask.uuid]
-                                    .isTimeOutOfWindow ||
-                                  tasks[medicationTask.uuid].skipped
-                            }
-                          />
-                        }
-                        onChange={(e) => {
-                          handleNotes(e, medicationTask.uuid);
-                        }}
-                        maxCount={250}
-                        rows={1}
-                        cols={50}
-                        light={true}
-                      />
-                      {showErrors && errors[medicationTask.uuid] && (
-                        <div className={"error"}>
-                          <FormattedMessage
-                            id={"NOTES_ERROR_MESSAGE"}
-                            defaultMessage={"Please enter notes"}
-                          />
-                        </div>
-                      )}
-                    </div>
+
+                    {!isNonMedication ||
+                    (isNonMedication && tasks[medicationTask.uuid].skipped) ? (
+                      <div
+                        className={`${
+                          Boolean(tasks[medicationTask.uuid]?.actualTime) &&
+                          "notes-text-area"
+                        }`}
+                        style={{ width: "100%" }}
+                      >
+                        <TextArea
+                          labelText={
+                            <Title
+                              text={"Notes"}
+                              isRequired={
+                                isPRNMedication
+                                  ? false
+                                  : tasks[medicationTask.uuid]
+                                      .isTimeOutOfWindow ||
+                                    tasks[medicationTask.uuid].skipped
+                              }
+                            />
+                          }
+                          onChange={(e) => {
+                            handleNotes(e, medicationTask.uuid);
+                          }}
+                          maxCount={250}
+                          rows={1}
+                          cols={50}
+                          light={true}
+                        />
+                        {showErrors && errors[medicationTask.uuid] && (
+                          <div className={"error"}>
+                            <FormattedMessage
+                              id={"NOTES_ERROR_MESSAGE"}
+                              defaultMessage={"Please enter notes"}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 )}
                 {!tasks[medicationTask.uuid]?.dosingInstructions?.asNeeded && (

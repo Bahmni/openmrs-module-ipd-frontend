@@ -292,7 +292,6 @@ export const ExtractNonMedicationTasks = (
   filterValue,
   isReadMode
 ) => {
-  const extractedData = [];
   const groupedData = [],
     completedExtractedData = [],
     pendingExtractedData = [],
@@ -322,9 +321,11 @@ export const ExtractNonMedicationTasks = (
       partOf,
       isDisabled: isReadMode
         ? true
-        : !!executionEndTime || status === "REJECTED",
-      administeredTime: executionEndTime,
-      administeredTimeInEpochSeconds: executionEndTime / 1000,
+        : status === "COMPLETED" || status === "REJECTED",
+      executionEndTime: executionEndTime / 1000,
+      administeredTime: status === "REJECTED" ? null : executionEndTime,
+      administeredTimeInEpochSeconds:
+        status === "REJECTED" ? null : executionEndTime / 1000,
       status,
       isANonMedicationTask: true,
       token,
@@ -349,10 +350,6 @@ export const ExtractNonMedicationTasks = (
       completedExtractedData.push(taskInfo);
     }
   });
-  extractedData.push(...pendingExtractedData);
-  extractedData.push(...skippedExtractedData);
-  extractedData.push(...completedExtractedData);
-  // grouping pending non-medication tasks together
   const nursingActivityTask = pendingExtractedData.filter(
     (data) => data.taskType?.display === "nursing_activity"
   );
