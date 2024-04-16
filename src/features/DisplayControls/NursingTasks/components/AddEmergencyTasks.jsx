@@ -170,6 +170,8 @@ const AddEmergencyTasks = (props) => {
         }
         setRoutes({ label: route, value: route });
       }
+    } else {
+      setSelectedDrug({});
     }
   };
 
@@ -322,6 +324,7 @@ const AddEmergencyTasks = (props) => {
       administrationDate &&
       !isInvalidTime &&
       !(
+        _.isEmpty(selectedDrug) ||
         _.isEmpty(doseUnits) ||
         _.isEmpty(routes) ||
         _.isEmpty(requestedProvider) ||
@@ -337,6 +340,7 @@ const AddEmergencyTasks = (props) => {
         dosage ||
         isDateChanged ||
         isTimeChanged ||
+        !_.isEmpty(selectedDrug) ||
         !_.isEmpty(doseUnits) ||
         !_.isEmpty(routes) ||
         !_.isEmpty(requestedProvider) ||
