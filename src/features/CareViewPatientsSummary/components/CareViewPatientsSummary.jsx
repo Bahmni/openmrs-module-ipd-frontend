@@ -25,7 +25,7 @@ export const CareViewPatientsSummary = ({
     const response = await getSlotsForPatients(
       patientUuids,
       navHourEpoch.startHourEpoch,
-      navHourEpoch.endHourEpoch
+      navHourEpoch.endHourEpoch - 60
     );
     setSlotDetails(response);
   };

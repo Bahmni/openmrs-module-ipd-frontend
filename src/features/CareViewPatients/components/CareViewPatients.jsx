@@ -16,6 +16,7 @@ import {
   getTimeInFuture,
   getTimeInPast,
   epochTo24HourFormat,
+  dateTimeToEpochInMilliSeconds,
 } from "../../../utils/DateTimeUtils";
 import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 import { items } from "../utils/constants";
@@ -54,10 +55,17 @@ export const CareViewPatients = () => {
     previous: false,
     next: false,
   });
-  const currentShiftArray =
-    ipdConfig.shiftDetails &&
-    currentShiftHoursArray(new Date(), ipdConfig.shiftDetails)
-      .currentShiftHoursArray;
+
+  let currentShiftArray, rangeArray, shiftIndex;
+  if (ipdConfig.shiftDetails) {
+    const shiftDetails = currentShiftHoursArray(
+      new Date(),
+      ipdConfig.shiftDetails
+    );
+    currentShiftArray = shiftDetails.currentShiftHoursArray;
+    rangeArray = shiftDetails.rangeArray;
+    shiftIndex = shiftDetails.shiftIndex;
+  }
 
   const getPatientsList = async () => {
     try {
@@ -183,10 +191,18 @@ export const CareViewPatients = () => {
           next: !enableNext,
           previous: false,
         });
-        newEndTime = getTimeInFuture(
-          navHourEpoch.endHourEpoch,
-          currentShiftArray.length - currentShiftArray.indexOf(startHour)
+        const newEndTimeMoment = moment(
+          rangeArray[shiftIndex].split("-")[1],
+          timeFormatFor24Hr
         );
+        const endTimeMoment = moment.unix(endTime);
+        newEndTimeMoment.set({
+          year: endTimeMoment.year(),
+          month: endTimeMoment.month(),
+          date: endTimeMoment.date(),
+        });
+
+        newEndTime = dateTimeToEpochInMilliSeconds(newEndTimeMoment) / 1000;
       } else {
         updateNavButtonsDisabled({
           next: false,
@@ -232,10 +248,19 @@ export const CareViewPatients = () => {
       const endTime = getTimeInFuture(currentEpoch, timeframeLimitInHours);
       const startHour = epochTo24HourFormat(startTime);
       const endHour = epochTo24HourFormat(endTime);
-      const endShiftTime = getTimeInFuture(
-        startTime,
-        currentShiftArray.length - currentShiftArray.indexOf(startHour)
+
+      const newEndTimeMoment = moment(
+        rangeArray[shiftIndex].split("-")[1],
+        timeFormatFor24Hr
       );
+      const endTimeMoment = moment.unix(endTime);
+      newEndTimeMoment.set({
+        year: endTimeMoment.year(),
+        month: endTimeMoment.month(),
+        date: endTimeMoment.date(),
+      });
+      const endShiftTime =
+        dateTimeToEpochInMilliSeconds(newEndTimeMoment) / 1000;
       let newEndTime;
       if (
         !currentShiftArray.includes(startHour) ||
