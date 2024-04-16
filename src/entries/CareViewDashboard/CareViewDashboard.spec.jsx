@@ -23,6 +23,9 @@ const mockGetSliderPerView = jest.fn();
 const mockFetchPatientsList = jest.fn();
 const mockGetSlotsForPatients = jest.fn();
 const mockGetTasksForPatients = jest.fn();
+const mockCurrentShiftHoursArray = jest.fn();
+const mockSetCurrentShiftTimes = jest.fn();
+const mockGetPreviousShiftDetails = jest.fn();
 
 jest.mock("../../features/CareViewSummary/utils/CareViewSummary", () => {
   return {
@@ -31,6 +34,14 @@ jest.mock("../../features/CareViewSummary/utils/CareViewSummary", () => {
     getSlidesPerView: () => mockGetSliderPerView(),
     getSlotsForPatients: () => mockGetSlotsForPatients(),
     getTasksForPatients: () => mockGetTasksForPatients(),
+    getPreviousShiftDetails: ()=> mockGetPreviousShiftDetails()
+  };
+});
+jest.mock("../../features//DisplayControls/DrugChart/utils/DrugChartUtils", () => {
+  return {
+    setCurrentShiftTimes: ()=> mockSetCurrentShiftTimes(),
+    getPreviousShiftDetails: ()=> mockGetPreviousShiftDetails(),
+    currentShiftHoursArray: ()=> mockCurrentShiftHoursArray()
   };
 });
 
@@ -92,6 +103,32 @@ describe("CareViewDashboard", () => {
         totalProviderPatients: 2,
       },
     });
+    mockCurrentShiftHoursArray.mockReturnValue({
+      currentShiftHoursArray: [
+        "06:00",
+        "07:00",
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+      ],
+      rangeArray: ["06:00-18:00", "18:00-06:00"],
+      shiftIndex: 0,
+    });
+    mockSetCurrentShiftTimes.mockReturnValue([
+       "1713234600000",
+       "1713274200000"]
+    );
+    mockGetPreviousShiftDetails.mockReturnValue({
+      endDateTime: "1713234600000",
+      previousShiftIndex: 1,
+      startDateTime: "1713187800000"})
   });
 
   it("should match the snapshot", async () => {
@@ -176,8 +213,7 @@ describe("CareViewDashboard", () => {
     await waitFor(() => {
       expect(getByLabelText("home-button")).toBeTruthy();
     });
-    screen.debug();
-
+    
     fireEvent.click(screen.getByText(/My patient/i));
 
     const myPatientsSummary = container.querySelector(

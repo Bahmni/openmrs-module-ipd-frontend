@@ -7,6 +7,7 @@ import { PatientDetailsCell } from "../components/PatientDetailsCell";
 import {
   mockParticipantData,
   mockPatientsList,
+  mockPreviousShiftPendingTask
 } from "./CareViewPatientsSummaryMock";
 
 const mockHandleRefreshPatientList = jest.fn();
@@ -55,6 +56,7 @@ describe("PatientDetailsCell", () => {
             startHourEpoch: 1672575400,
             endHourEpoch: 1710511200,
           }}
+          previousShiftPendingTasks={[]}
         />
       </CareViewContext.Provider>
     );
@@ -74,6 +76,7 @@ describe("PatientDetailsCell", () => {
             startHourEpoch: 1672575400,
             endHourEpoch: 1710511200,
           }}
+          previousShiftPendingTasks={mockPreviousShiftPendingTask}
         />
       </CareViewContext.Provider>
     );
@@ -85,6 +88,9 @@ describe("PatientDetailsCell", () => {
       ).toBeTruthy();
       expect(queryByText("A-6")).toBeTruthy();
       expect(queryByText("14")).toBeTruthy();
+      expect(queryByText("dummy test,")).toBeTruthy();
+      expect(queryByText("task 1,")).toBeTruthy();
+      expect(queryByText("task 2")).toBeTruthy();
     });
   });
 
@@ -101,6 +107,7 @@ describe("PatientDetailsCell", () => {
             startHourEpoch: 1710509100,
             endHourEpoch: 1710511200,
           }}
+          previousShiftPendingTasks={[]}
         />
       </CareViewContext.Provider>
     );
@@ -126,6 +133,7 @@ describe("PatientDetailsCell", () => {
             startHourEpoch: 1710509500,
             endHourEpoch: 1710609500,
           }}
+          previousShiftPendingTasks={[]}
         />
       </CareViewContext.Provider>
     );
@@ -151,6 +159,7 @@ describe("PatientDetailsCell", () => {
             startHourEpoch: 1710509100,
             endHourEpoch: 1710509100,
           }}
+          previousShiftPendingTasks={[]}
         />
       </CareViewContext.Provider>
     );
@@ -186,6 +195,7 @@ describe("PatientDetailsCell", () => {
             startHourEpoch: 1710509100,
             endHourEpoch: 1710511200,
           }}
+          previousShiftPendingTasks={[]}
         />
       </CareViewContext.Provider>
     );
@@ -222,6 +232,7 @@ describe("PatientDetailsCell", () => {
             startHourEpoch: 1710509100,
             endHourEpoch: 1710511200,
           }}
+          previousShiftPendingTasks={[]}
         />
       </CareViewContext.Provider>
     );
@@ -249,6 +260,7 @@ describe("PatientDetailsCell", () => {
             startHourEpoch: 1710509100,
             endHourEpoch: 1710509100,
           }}
+          previousShiftPendingTasks={[]}
         />
       </CareViewContext.Provider>
     );

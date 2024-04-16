@@ -1,10 +1,12 @@
 import axios from "axios";
+import moment from "moment";
 import {
   GET_SLOTS_FOR_PATIENTS_URL,
   LIST_OF_WARDS_URL,
   WARD_SUMMARY_URL,
   GET_TASKS_FOR_PATIENTS_URL,
 } from "../../../constants";
+import { getDateTime } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 
 const fetchWards = async () => {
   try {
@@ -107,4 +109,49 @@ export const getSlidesPerView = (isMobileView, isTabletView) => {
   } else if (isTabletView) {
     return Math.floor((window.outerWidth * 0.9) / 142);
   }
+};
+
+
+export const getPreviousShiftDetails = (
+  rangeArray,
+  shiftIndex,
+  startDate,
+  endDate
+) => {
+  const previousShiftIndex =
+    shiftIndex - 1 < 0 ? rangeArray.length - 1 : shiftIndex - 1;
+  const previousShiftRange = rangeArray[previousShiftIndex];
+  const [previousStartTime, previousEndTime] = previousShiftRange.split("-");
+  const previousStartTimeMoment = moment(
+    getDateTime(new Date(startDate), previousStartTime)
+  );
+  const previousEndTimeMoment = moment(
+    getDateTime(new Date(endDate), previousEndTime)
+  );
+
+  const currentShiftRange = rangeArray[shiftIndex];
+  const [currentStartTime, currentEndTime] = currentShiftRange.split("-");
+  const currentStartTimeMoment = moment(
+    getDateTime(new Date(startDate), currentStartTime)
+  );
+  const currentEndTimeMoment = moment(
+    getDateTime(new Date(endDate), currentEndTime)
+  );
+
+  let previousStartDate =
+    previousStartTimeMoment.diff(currentStartTimeMoment, "hours", true) > 0
+      ? previousStartTimeMoment.subtract(1, "days")
+      : previousStartTimeMoment;
+  let previousEndDate =
+    previousEndTimeMoment.diff(currentEndTimeMoment, "hours", true) > 0
+      ? previousEndTimeMoment.subtract(1, "days")
+      : previousEndTimeMoment;
+  
+
+      const previousShiftDetails =  {
+        startDateTime: +previousStartDate,
+        endDateTime: +previousEndDate,
+        previousShiftIndex,
+      };
+  return previousShiftDetails;
 };
