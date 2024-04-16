@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../styles/CareViewPatients.scss";
 import { Pagination, Loading } from "carbon-components-react";
 import PropTypes from "prop-types";
@@ -55,20 +55,17 @@ export const CareViewPatients = () => {
     previous: false,
     next: false,
   });
-  const { currentShiftArray, rangeArray, shiftIndex } = useMemo(() => {
-    return {
-      currentShiftArray:
-        ipdConfig.shiftDetails &&
-        currentShiftHoursArray(new Date(), ipdConfig.shiftDetails)
-          .currentShiftHoursArray,
-      rangeArray:
-        ipdConfig.shiftDetails &&
-        currentShiftHoursArray(new Date(), ipdConfig.shiftDetails).rangeArray,
-      shiftIndex:
-        ipdConfig.shiftDetails &&
-        currentShiftHoursArray(new Date(), ipdConfig.shiftDetails).shiftIndex,
-    };
-  }, [ipdConfig.shiftDetails]);
+
+  let currentShiftArray, rangeArray, shiftIndex;
+  if (ipdConfig.shiftDetails) {
+    const shiftDetails = currentShiftHoursArray(
+      new Date(),
+      ipdConfig.shiftDetails
+    );
+    currentShiftArray = shiftDetails.currentShiftHoursArray;
+    rangeArray = shiftDetails.rangeArray;
+    shiftIndex = shiftDetails.shiftIndex;
+  }
 
   const getPatientsList = async () => {
     try {
