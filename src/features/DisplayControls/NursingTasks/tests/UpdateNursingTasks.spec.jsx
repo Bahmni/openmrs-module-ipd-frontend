@@ -4,8 +4,9 @@ import UpdateNursingTasks from "../components/UpdateNursingTasks";
 import {
   mockMedicationTasks,
   mockPRNMedicationTasks,
-  mockNonMedicationTileData, 
+  mockNonMedicationTileData,
   mockGroupSlotsByOrderId,
+  mockUpdateResponse,
 } from "./NursingTasksUtilsMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import {
@@ -17,7 +18,15 @@ import MockDate from "mockdate";
 const mockSetShowSuccessNotification = jest.fn();
 const mockSetSuccessMessage = jest.fn();
 const mockUpdateEmergencyTasksSlider = jest.fn();
+const mockUpdateNonMedicationTask = jest.fn();
 
+jest.mock("../utils/NursingTasksUtils", () => {
+  const originalModule = jest.requireActual("../utils/NursingTasksUtils");
+  return {
+    ...originalModule,
+    updateNonMedicationTask: () => mockUpdateNonMedicationTask(),
+  };
+});
 describe("UpdateNursingTasksSlider", function () {
   afterEach(() => {
     MockDate.reset();
@@ -98,14 +107,13 @@ describe("UpdateNursingTasksSlider", function () {
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
-  
-    const timePicker = container.querySelectorAll(
-      ".bx--time-picker"
-    )[0];
+
+    const timePicker = container.querySelectorAll(".bx--time-picker")[0];
     expect(timePicker).toBeTruthy();
   });
 
   it("should save when toggle switch is and Time is entered for Non medication tasks", async () => {
+    mockUpdateNonMedicationTask.mockResolvedValue(mockUpdateResponse);
     const { container } = render(
       <IPDContext.Provider value={{ config: mockConfig }}>
         <UpdateNursingTasks
@@ -121,10 +129,8 @@ describe("UpdateNursingTasksSlider", function () {
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
-   
-    const timePicker = container.querySelectorAll(
-      ".bx--time-picker"
-    )[0];
+
+    const timePicker = container.querySelectorAll(".bx--time-picker")[0];
     expect(timePicker).toBeTruthy();
 
     const saveButton = screen.getAllByText("Save")[1];
