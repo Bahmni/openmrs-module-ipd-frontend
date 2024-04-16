@@ -264,7 +264,8 @@ export const disableTaskTilePastNextSlotTime = (
     const upcomingTaskTimeInEpoch = upcomingTask.startTimeInEpochSeconds;
     const currentTimeInEpoch = moment().unix();
     if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
-      currentTask.isDisabled = currentTask.taskType === "nursing_activity";
+      currentTask.isDisabled =
+        currentTask.taskType.display === "nursing_activity";
     }
   }
 };
