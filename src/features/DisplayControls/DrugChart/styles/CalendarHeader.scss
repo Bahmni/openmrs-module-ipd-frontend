@@ -9,7 +9,7 @@
 .hour-header {
   --additional-borders: 0;
   --border-widths: calc(
-    calc(2 + var(--additional-borders)) * var(--line-width)
+    calc(1 + var(--additional-borders)) * var(--line-width)
   );
   --width: calc(calc(2 * var(--half-hour-width)) + var(--border-widths));
   width: var(--width);
