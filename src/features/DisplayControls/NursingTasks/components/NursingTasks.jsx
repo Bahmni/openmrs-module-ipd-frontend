@@ -339,7 +339,7 @@ export default function NursingTasks(props) {
       (medicationNursingTask, index, medicationNursingTasks) => {
         return (
           <div key={index}>
-            {medicationNursingTask[0].isANonMedicationTask &&
+            {medicationNursingTask[0].isANonMedicationTask && medicationNursingTask[0].status == "REQUESTED" &&
               disableTaskTilePastNextSlotTime(medicationNursingTasks, index)}
             <div
               onClick={() => {
