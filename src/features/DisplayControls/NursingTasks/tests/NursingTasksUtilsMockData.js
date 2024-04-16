@@ -79,7 +79,7 @@ export const mockUpdateResponse = {
         ],
       },
       executionStartTime: 1713240000,
-      executionEndTime: null,
+      executionEndTime: 1713240000,
       comment: "sam",
     },
   ],
