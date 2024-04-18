@@ -299,7 +299,7 @@ export default function NursingTasks(props) {
           (isReadMode &&
             nursingTasks.length === 0 &&
             arrayOfNonMedicationTasks.length === 0) ||
-          nursingTasks[0].startDate > startDateTimeInSeconds,
+          nursingTasks[0]?.startDate > startDateTimeInSeconds,
         next:
           startDateTimeInSeconds >= nextShiftMaxHour ||
           endDateTimeInSeconds >= nextShiftMaxHour,
@@ -339,7 +339,8 @@ export default function NursingTasks(props) {
       (medicationNursingTask, index, medicationNursingTasks) => {
         return (
           <div key={index}>
-            {medicationNursingTask[0].isANonMedicationTask && medicationNursingTask[0].status == "REQUESTED" &&
+            {medicationNursingTask[0].isANonMedicationTask &&
+              medicationNursingTask[0].status == "REQUESTED" &&
               disableTaskTilePastNextSlotTime(medicationNursingTasks, index)}
             <div
               onClick={() => {
