@@ -44,12 +44,15 @@ export default function TaskTile(props) {
     serviceType,
     isANonMedicationTask,
     creator,
+    taskType,
   } = newMedicationNursingTask;
 
   const isRelevantTask = getRelevantTaskStatus(
     startTimeInEpochSeconds,
     nursingTasks
   );
+
+  const isSystemGeneratedTask = taskType?.display === "nursing_activity_system";
 
   const creatorName = (creator) => {
     var formattedName = creator.split(".").join(" ");
@@ -117,7 +120,7 @@ export default function TaskTile(props) {
             }}
           >
             <span>{dosage}</span>
-            {creator && (
+            {creator && !isSystemGeneratedTask && (
               <span style={{ textTransform: "capitalize" }}>
                 {creatorName(creator.display)}
               </span>
@@ -134,11 +137,15 @@ export default function TaskTile(props) {
               <div className="tile-content-subtext-time">
                 &nbsp;
                 {enable24HourTime
-                  ? getTime(administeredTimeInEpochSeconds, startTime,
+                  ? getTime(
+                      administeredTimeInEpochSeconds,
+                      startTime,
                       "hh:mm",
                       timeFormatFor24Hr
                     )
-                  : getTime(administeredTimeInEpochSeconds, startTime,
+                  : getTime(
+                      administeredTimeInEpochSeconds,
+                      startTime,
                       "hh:mm",
                       timeFormatFor12Hr
                     )}
