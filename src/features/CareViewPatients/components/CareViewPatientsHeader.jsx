@@ -28,7 +28,11 @@ export const CareViewPatientsHeader = (props) => {
     setFilterValue,
   } = props;
   const handleSearchOnChange = (e) => {
-    updateSearchValue(e.target.value);
+    const value = e.target.value;
+    if (value === "") {
+      handleClear();
+    }
+    updateSearchValue(value);
   };
 
   useEffect(() => {
