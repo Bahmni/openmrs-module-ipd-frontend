@@ -7,6 +7,7 @@ import {
   getUTCTimeEpoch,
   saveMedication,
 } from "../utils/DrugChartSliderUtils";
+import { timeFormatFor24Hr } from "../../../constants";
 import MockDate from "mockdate";
 import axios from "axios";
 
@@ -63,7 +64,7 @@ describe("DrugChartSliderUtils", () => {
     it("should return valid when schedules are not empty and in order", async () => {
       const schedules = ["08:00", "12:00", "16:00"];
 
-      const result = await validateSchedules(schedules);
+      const result = await validateSchedules(schedules, timeFormatFor24Hr);
 
       expect(result).toEqual({ isValid: true, warningType: "" });
     });
@@ -71,7 +72,7 @@ describe("DrugChartSliderUtils", () => {
     it('should return invalid with warningType "empty" when there is an empty schedule', async () => {
       const schedules = ["08:00", "", "16:00"];
 
-      const result = await validateSchedules(schedules);
+      const result = await validateSchedules(schedules, timeFormatFor24Hr);
 
       expect(result).toEqual({ isValid: false, warningType: "empty" });
     });
@@ -79,7 +80,7 @@ describe("DrugChartSliderUtils", () => {
     it('should return invalid with warningType "passed" when schedules are not in order', async () => {
       const schedules = ["08:00", "12:00", "10:00"];
 
-      const result = await validateSchedules(schedules);
+      const result = await validateSchedules(schedules, timeFormatFor24Hr);
 
       expect(result).toEqual({ isValid: false, warningType: "passed" });
     });
@@ -87,7 +88,7 @@ describe("DrugChartSliderUtils", () => {
     it("should handle an empty array and return valid", async () => {
       const schedules = [];
 
-      const result = await validateSchedules(schedules);
+      const result = await validateSchedules(schedules, timeFormatFor24Hr);
 
       expect(result).toEqual({ isValid: true, warningType: "" });
     });

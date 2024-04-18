@@ -57,6 +57,7 @@ const DrugChartSlider = (props) => {
     !hostData?.drugOrder?.uniformDosingType?.frequency ||
     !hostData?.drugOrder?.drugOrder?.duration;
   const enable24HourTimers = hostData?.enable24HourTimers || false;
+  const timeFormat = enable24HourTimers ? timeFormatFor24Hr : timeFormatFor12Hr;
   const isEdit = Boolean(hostData?.drugOrder?.drugOrderSchedule);
   const isAutoFill = Boolean(enableSchedule?.scheduleTiming) && !isEdit;
   const { setSliderContentModified } = useContext(SliderContext);
@@ -164,7 +165,10 @@ const DrugChartSlider = (props) => {
   };
 
   const handleScheduleWarnings = async () => {
-    const { isValid, warningType } = await validateSchedules(schedules);
+    const { isValid, warningType } = await validateSchedules(
+      schedules,
+      timeFormat
+    );
     setShowEmptyScheduleWarning(!isValid && warningType === "empty");
     setShowScheduleOrderWarning(!isValid && warningType === "passed");
     return { isValid, warningType };
@@ -181,7 +185,8 @@ const DrugChartSlider = (props) => {
     const { isValid, warningType } = await validateSchedules(
       firstDaySchedules.filter(
         (firstDaySchedule) => firstDaySchedule != "hh:mm"
-      )
+      ),
+      timeFormat
     );
     setShowEmptyFirstDayScheduleWarning(!isValid && warningType === "empty");
     setShowFirstDayScheduleOrderWarning(!isValid && warningType === "passed");
@@ -196,7 +201,10 @@ const DrugChartSlider = (props) => {
   };
 
   const handleFinalDayScheduleWarnings = async () => {
-    const { isValid, warningType } = await validateSchedules(finalDaySchedules);
+    const { isValid, warningType } = await validateSchedules(
+      finalDaySchedules,
+      timeFormat
+    );
     setShowEmptyFinalDayScheduleWarning(!isValid && warningType === "empty");
     setShowFinalDayScheduleOrderWarning(!isValid && warningType === "passed");
     return { isValid, warningType };
