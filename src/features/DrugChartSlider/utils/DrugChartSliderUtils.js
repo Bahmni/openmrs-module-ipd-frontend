@@ -35,22 +35,22 @@ export const isTimePassed = (
   return currentTime.isAfter(enteredTime);
 };
 
-const areSchedulesInOrder = (allSchedule) => {
+const areSchedulesInOrder = (allSchedule, timeFormat) => {
   return allSchedule.every((schedule, index) => {
     if (index === 0) return true;
-    const currentTime = moment(schedule, timeFormatFor24Hr);
-    const prevTime = moment(allSchedule[index - 1], timeFormatFor24Hr);
+    const currentTime = moment(schedule, timeFormat);
+    const prevTime = moment(allSchedule[index - 1], timeFormat);
     return currentTime.isAfter(prevTime);
   });
 };
 
-export const validateSchedules = async (schedules) => {
+export const validateSchedules = async (schedules, timeFormat) => {
   if (schedules?.length > 0) {
     if (schedules.some((schedule) => schedule === "")) {
       return { isValid: false, warningType: "empty" };
     }
 
-    if (areSchedulesInOrder(schedules)) {
+    if (areSchedulesInOrder(schedules, timeFormat)) {
       return { isValid: true, warningType: "" };
     } else {
       return { isValid: false, warningType: "passed" };
