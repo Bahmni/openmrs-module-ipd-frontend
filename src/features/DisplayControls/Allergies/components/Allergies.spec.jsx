@@ -7,6 +7,7 @@ import {
 import Allergies from "./Allergies";
 import "@testing-library/jest-dom/extend-expect";
 import { IPDContext } from "../../../../context/IPDContext";
+import { mockConfig } from "../../../../utils/CommonUtils";
 
 const mockData1 = { ...mockAllergiesIntolerenceResponse.data };
 const mockUseFetchAllergiesIntolerance = jest.fn();
@@ -31,6 +32,7 @@ describe("Allergies", () => {
       <IPDContext.Provider
         value={{
           visitSummary: mockVisitSummaryData,
+          config: mockConfig,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -45,6 +47,7 @@ describe("Allergies", () => {
       <IPDContext.Provider
         value={{
           visitSummary: mockVisitSummaryData,
+          config: mockConfig,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -55,6 +58,7 @@ describe("Allergies", () => {
       expect(screen.getByRole(/table/i)).toBeInTheDocument();
     });
     expect(screen.getByText("Beef")).toBeInTheDocument();
+    expect(screen.getAllByText("Bailly RURANGIRWA")).toBeTruthy();
     expect(screen.getByText(/test comment/i)).toBeInTheDocument();
   });
 
@@ -63,6 +67,7 @@ describe("Allergies", () => {
       <IPDContext.Provider
         value={{
           visitSummary: mockVisitSummaryData,
+          config: mockConfig,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -82,6 +87,7 @@ describe("Allergies", () => {
       <IPDContext.Provider
         value={{
           visitSummary: mockVisitSummaryData,
+          config: mockConfig,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -115,6 +121,7 @@ describe("Allergies", () => {
       <IPDContext.Provider
         value={{
           visitSummary: mockVisitSummaryData,
+          config: mockConfig,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -138,6 +145,7 @@ describe("Allergies", () => {
       <IPDContext.Provider
         value={{
           visitSummary: mockVisitSummaryData,
+          config: mockConfig,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -159,6 +167,7 @@ describe("Allergies", () => {
             ...mockVisitSummaryData,
             stopDateTime: 1698316200000,
           },
+          config: mockConfig,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />

@@ -13,12 +13,20 @@ import { useFetchAllergiesIntolerance } from "../hooks/useFetchAllergiesIntolera
 import PropTypes from "prop-types";
 import "../styles/Allergies.scss";
 import { FormattedMessage } from "react-intl";
-import { dateTimeToEpochInMilliSeconds } from "../../../../utils/DateTimeUtils";
+import {
+  dateTimeToEpochInMilliSeconds,
+  formatDate,
+} from "../../../../utils/DateTimeUtils";
 import { IPDContext } from "../../../../context/IPDContext";
+import {
+  displayPeriodTimingsFormat,
+  displayShiftTimings12HourFormat,
+} from "../../../../constants";
 
 const Allergies = (props) => {
   const { patientId } = props;
-  const { visitSummary } = useContext(IPDContext);
+  const { visitSummary, config } = useContext(IPDContext);
+  const { enable24HourTime = {} } = config;
 
   const { allergiesData, isLoading } = useFetchAllergiesIntolerance(patientId);
   const [rows, setRows] = useState([]);
@@ -43,6 +51,8 @@ const Allergies = (props) => {
           reaction: getAllergyReactions(allergy.resource.reaction),
           comments: getComments(allergy.resource.note),
           sortWeight: getSortingWait(getSeverity(allergy.resource.criticality)),
+          provider: allergy.resource.recorder.display,
+          dateTime: getDateTime(recordedDate),
         };
 
         if (
@@ -83,6 +93,13 @@ const Allergies = (props) => {
     return allergyReactions;
   };
 
+  const getDateTime = (dateTime) => {
+    const dateAndTime = enable24HourTime
+      ? formatDate(dateTime, displayPeriodTimingsFormat)
+      : formatDate(dateTime, displayShiftTimings12HourFormat);
+    return dateAndTime;
+  };
+
   const headers = [
     {
       key: "allergen",
@@ -99,6 +116,14 @@ const Allergies = (props) => {
     {
       key: "comments",
       header: "Comments",
+    },
+    {
+      key: "provider",
+      header: "Provider Name",
+    },
+    {
+      key: "dateTime",
+      header: "Date and Time",
     },
   ];
 
