@@ -89,5 +89,15 @@
   "CURRENT_SHIFT": "Current Shift",
   "NOT_CURRENT_PERIOD_MESSAGE": "You're not viewing the current period",
   "NO_IO_DATA_MESSAGE": "No intake output data is available for the patient in this period",
-  "SCHEDULE_TREATMENTS": "Schedule Treatments"
+  "SCHEDULE_TREATMENTS": "Schedule Treatments",
+  "DATE_TIME_HEADER": "Date and Time",
+  "PULSE_HEADER": "Pulse ({unit})",
+  "SPO2_HEADER": "SPO2 ({unit})",
+  "RESPIRATORY_RATE_HEADER": "R.rate ({unit})",
+  "TEMPERATURE_HEADER": "Temp ({unit})",
+  "BLOOD_PRESSURE_HEADER": "BP ({unit})",
+  "HEIGHT_HEADER": "Height ({unit})",
+  "WEIGHT_HEADER": "Weight ({unit})",
+  "BMI_HEADER": "BMI ({unit})",
+  "MUAC": "MUAC ({unit})"
 }

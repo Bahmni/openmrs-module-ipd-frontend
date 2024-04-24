@@ -36,19 +36,10 @@ const setDateAndTime = (latestDateAndTime, setVitalsDate, setVitalsTime) => {
   setVitalsTime(time);
 };
 
-export const getPatientVitals = async (patientUuid) => {
-  const conceptValues = [
-    "Arterial+Blood+Oxygen+Saturation+(Pulse+Oximeter)",
-    "Weight",
-    "BMI",
-    "Respiratory+Rate",
-    "Systolic+blood+pressure",
-    "Diastolic+blood+pressure",
-    "Temperature",
-    "Pulse",
-    "Height",
-  ];
-  const queryParams = conceptValues.map((concept) => `obsConcepts=${concept}`);
+export const getPatientVitals = async (patientUuid, conceptValues) => {
+  const queryParams = Object.values(conceptValues).map(
+    (concept) => `obsConcepts=${concept}`
+  );
   const conceptParams = queryParams.join("&");
   try {
     const response = await axios.get(
@@ -62,20 +53,10 @@ export const getPatientVitals = async (patientUuid) => {
     return error;
   }
 };
-export const getPatientVitalsHistory = async (patientUuid) => {
-  const conceptValues = [
-    "Arterial+Blood+Oxygen+Saturation+(Pulse+Oximeter)",
-    "Weight",
-    "BMI",
-    "Respiratory+Rate",
-    "Systolic+blood+pressure",
-    "Diastolic+blood+pressure",
-    "Temperature",
-    "Pulse",
-    "Height",
-    "Mid-upper+arm+circumference",
-  ];
-  const queryParams = conceptValues.map((concept) => `obsConcepts=${concept}`);
+export const getPatientVitalsHistory = async (patientUuid, conceptValues) => {
+  const queryParams = Object.values(conceptValues).map(
+    (concept) => `obsConcepts=${concept}`
+  );
   const conceptParams = queryParams.join("&");
   try {
     const response = await axios.get(
@@ -94,7 +75,8 @@ export const mapVitalsData = (
   VitalsList,
   vitalsHistoryList,
   setVitalsDate,
-  setVitalsTime
+  setVitalsTime,
+  conceptDetails
 ) => {
   let mappedVitals = {};
   let latestVisitDate = null;
@@ -108,51 +90,88 @@ export const mapVitalsData = (
       setDateAndTime(latestEntryDate, setVitalsDate, setVitalsTime);
       mappedVitals = {
         Temp: {
-          value: VitalsValues[latestVisitDate].Temperature?.value,
-          abnormal: VitalsValues[latestVisitDate].Temperature?.abnormal,
+          value:
+            VitalsValues[latestVisitDate][conceptDetails.temperature.name]
+              ?.value,
+          abnormal:
+            VitalsValues[latestVisitDate][conceptDetails.temperature.name]
+              ?.abnormal,
+          unit: conceptDetails.temperature.unit,
         },
         HeartRate: {
-          value: parseInt(VitalsValues[latestVisitDate].Pulse?.value, 10),
-          abnormal: VitalsValues[latestVisitDate].Pulse?.abnormal,
+          value: parseInt(
+            VitalsValues[latestVisitDate][conceptDetails.pulse.name]?.value,
+            10
+          ),
+          abnormal:
+            VitalsValues[latestVisitDate][conceptDetails.pulse.name]?.abnormal,
+          unit: conceptDetails.pulse.unit,
         },
         SystolicPressure: {
           value: parseInt(
-            VitalsValues[latestVisitDate]["Systolic Blood Pressure"]?.value,
+            VitalsValues[latestVisitDate][conceptDetails.systolicPressure.name]
+              ?.value,
             10
           ),
           abnormal:
-            VitalsValues[latestVisitDate]["Systolic Blood Pressure"]?.abnormal,
+            VitalsValues[latestVisitDate][conceptDetails.systolicPressure.name]
+              ?.abnormal,
+          unit: conceptDetails.systolicPressure.unit,
         },
         DiastolicPressure: {
           value: parseInt(
-            VitalsValues[latestVisitDate]["Diastolic Blood Pressure"]?.value,
+            VitalsValues[latestVisitDate][conceptDetails.diastolicPressure.name]
+              ?.value,
             10
           ),
           abnormal:
-            VitalsValues[latestVisitDate]["Diastolic Blood Pressure"]?.abnormal,
+            VitalsValues[latestVisitDate][conceptDetails.diastolicPressure.name]
+              ?.abnormal,
+          unit: conceptDetails.diastolicPressure.unit,
         },
         Height: {
-          value: parseInt(VitalsValues[latestVisitDate].HEIGHT?.value, 10),
-          abnormal: VitalsValues[latestVisitDate].HEIGHT?.abnormal,
+          value: parseInt(
+            VitalsValues[latestVisitDate][conceptDetails.height.name]?.value,
+            10
+          ),
+          abnormal:
+            VitalsValues[latestVisitDate][conceptDetails.height.name]?.abnormal,
+          unit: conceptDetails.height.unit,
         },
         Weight: {
-          value: parseInt(VitalsValues[latestVisitDate].WEIGHT?.value, 10),
-          abnormal: VitalsValues[latestVisitDate].WEIGHT?.abnormal,
+          value: parseInt(
+            VitalsValues[latestVisitDate][conceptDetails.weight.name]?.value,
+            10
+          ),
+          abnormal:
+            VitalsValues[latestVisitDate][conceptDetails.weight.name]?.abnormal,
+          unit: conceptDetails.weight.unit,
         },
         RespiratoryRate: {
           value: parseInt(
-            VitalsValues[latestVisitDate]["Respiratory Rate"]?.value,
+            VitalsValues[latestVisitDate][conceptDetails.respiratoryRate.name]
+              ?.value,
             10
           ),
-          abnormal: VitalsValues[latestVisitDate]["Respiratory Rate"]?.abnormal,
+          abnormal:
+            VitalsValues[latestVisitDate][conceptDetails.respiratoryRate.name]
+              ?.abnormal,
+          unit: conceptDetails.respiratoryRate.unit,
         },
         SpO2: {
-          value: parseInt(VitalsValues[latestVisitDate].SpO2?.value, 10),
-          abnormal: VitalsValues[latestVisitDate].SpO2?.abnormal,
+          value: parseInt(
+            VitalsValues[latestVisitDate][conceptDetails.spO2.name]?.value,
+            10
+          ),
+          abnormal:
+            VitalsValues[latestVisitDate][conceptDetails.spO2.name]?.abnormal,
+          unit: conceptDetails.spO2.unit,
         },
         BMI: {
-          value: VitalsValues[latestVisitDate].BMI?.value,
-          abnormal: VitalsValues[latestVisitDate].BMI?.abnormal,
+          value: VitalsValues[latestVisitDate][conceptDetails.bmi.name]?.value,
+          abnormal:
+            VitalsValues[latestVisitDate][conceptDetails.bmi.name]?.abnormal,
+          unit: conceptDetails.bmi.unit,
         },
       };
     }
@@ -160,7 +179,7 @@ export const mapVitalsData = (
   return mappedVitals;
 };
 
-export const mapVitalsHistory = (vitalsHistoryList) => {
+export const mapVitalsHistory = (vitalsHistoryList, conceptDetails) => {
   let vitalsHistory = [];
   const vitalsValue = vitalsHistoryList.tabularData;
   for (const date in vitalsValue) {
@@ -169,65 +188,67 @@ export const mapVitalsHistory = (vitalsHistoryList) => {
       id: date,
       date: formatDate(date, defaultDateTimeFormat),
       pulse: {
-        value: innerMappedVitals?.Pulse
-          ? innerMappedVitals?.Pulse?.value
+        value: innerMappedVitals[conceptDetails.pulse.name]
+          ? innerMappedVitals[conceptDetails.pulse.name]?.value
           : "--",
-        abnormal: innerMappedVitals?.Pulse
-          ? innerMappedVitals?.Pulse.abnormal
+        abnormal: innerMappedVitals[conceptDetails.pulse.name]
+          ? innerMappedVitals[conceptDetails.pulse.name].abnormal
           : false,
       },
       spO2: {
-        value: innerMappedVitals?.SpO2 ? innerMappedVitals?.SpO2?.value : "--",
-        abnormal: innerMappedVitals?.SpO2
-          ? innerMappedVitals?.SpO2.abnormal
+        value: innerMappedVitals[conceptDetails.spO2.name]
+          ? innerMappedVitals[conceptDetails.spO2.name]?.value
+          : "--",
+        abnormal: innerMappedVitals[conceptDetails.spO2.name]
+          ? innerMappedVitals[conceptDetails.spO2.name].abnormal
           : false,
       },
 
       temperature: {
-        value: innerMappedVitals?.Temperature
-          ? innerMappedVitals?.Temperature?.value
+        value: innerMappedVitals[conceptDetails.temperature.name]
+          ? innerMappedVitals[conceptDetails.temperature.name]?.value
           : "--",
-        abnormal: innerMappedVitals?.Temperature
-          ? innerMappedVitals?.Temperature.abnormal
+        abnormal: innerMappedVitals[conceptDetails.temperature.name]
+          ? innerMappedVitals[conceptDetails.temperature.name].abnormal
           : false,
       },
       respiratoryRate: {
-        value: innerMappedVitals?.["Respiratory Rate"]
-          ? innerMappedVitals?.["Respiratory Rate"].value
+        value: innerMappedVitals[conceptDetails.respiratoryRate.name]
+          ? innerMappedVitals[conceptDetails.respiratoryRate.name].value
           : "--",
-        abnormal: innerMappedVitals?.["Respiratory Rate"]
-          ? innerMappedVitals?.["Respiratory Rate"].abnormal
+        abnormal: innerMappedVitals[conceptDetails.respiratoryRate.name]
+          ? innerMappedVitals[conceptDetails.respiratoryRate.name].abnormal
           : false,
       },
       bp: {
         value:
-          (innerMappedVitals?.["Systolic Blood Pressure"]
+          (innerMappedVitals[conceptDetails.systolicPressure.name]
             ? parseInt(
-                innerMappedVitals?.["Systolic Blood Pressure"]?.value,
+                innerMappedVitals[conceptDetails.systolicPressure.name]?.value,
                 10
               )
             : "-") +
           "/" +
-          (innerMappedVitals?.["Diastolic Blood Pressure"]
+          (innerMappedVitals[conceptDetails.diastolicPressure.name]
             ? parseInt(
-                innerMappedVitals?.["Diastolic Blood Pressure"]?.value,
+                innerMappedVitals[conceptDetails.diastolicPressure.name]?.value,
                 10
               )
             : "-"),
         abnormal:
-          innerMappedVitals?.["Systolic Blood Pressure"]?.abnormal ||
-          innerMappedVitals?.["Diastolic Blood Pressure"]?.abnormal
+          innerMappedVitals[conceptDetails.systolicPressure.name]?.abnormal ||
+          innerMappedVitals[conceptDetails.diastolicPressure.name]?.abnormal
             ? true
             : false,
       },
     };
     if (
-      innerMappedVitals?.Pulse ||
-      innerMappedVitals?.SpO2 ||
-      innerMappedVitals?.Temperature ||
-      innerMappedVitals?.["Respiratory Rate"] ||
-      innerMappedVitals?.["Systolic Blood Pressure"] ||
-      innerMappedVitals?.["Diastolic Blood Pressure"]
+      innerMappedVitals[conceptDetails.pulse.name] ||
+      innerMappedVitals[conceptDetails.spO2.name] ||
+      innerMappedVitals[conceptDetails.temperature.name] ||
+      innerMappedVitals[conceptDetails.respiratoryRate.name] ||
+      innerMappedVitals[conceptDetails.systolicPressure.name] ||
+      innerMappedVitals[conceptDetails.diastolicPressure.name]
     ) {
       vitalsHistory.push(pairedVital);
     }
@@ -235,7 +256,7 @@ export const mapVitalsHistory = (vitalsHistoryList) => {
   return vitalsHistory;
 };
 
-export const mapBiometricsHistory = (vitalsHistoryList) => {
+export const mapBiometricsHistory = (vitalsHistoryList, conceptDetails) => {
   let biometricsHistory = [];
   const biometricsValue = vitalsHistoryList.tabularData;
   for (const date in biometricsValue) {
@@ -244,43 +265,43 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
       id: date,
       date: formatDate(date, defaultDateTimeFormat),
       height: {
-        value: innerMappedbiometrics?.HEIGHT
-          ? innerMappedbiometrics?.HEIGHT?.value
+        value: innerMappedbiometrics[conceptDetails.height.name]
+          ? innerMappedbiometrics[conceptDetails.height.name]?.value
           : "--",
-        abnormal: innerMappedbiometrics?.Height
-          ? innerMappedbiometrics?.HEIGHT.abnormal
+        abnormal: innerMappedbiometrics[conceptDetails.height.name]
+          ? innerMappedbiometrics[conceptDetails.height.name].abnormal
           : false,
       },
       weight: {
-        value: innerMappedbiometrics?.WEIGHT
-          ? innerMappedbiometrics?.WEIGHT?.value
+        value: innerMappedbiometrics[conceptDetails.weight.name]
+          ? innerMappedbiometrics[conceptDetails.weight.name]?.value
           : "--",
-        abnormal: innerMappedbiometrics?.WEIGHT
-          ? innerMappedbiometrics?.WEIGHT.abnormal
+        abnormal: innerMappedbiometrics[conceptDetails.weight.name]
+          ? innerMappedbiometrics[conceptDetails.weight.name].abnormal
           : false,
       },
       bmi: {
-        value: innerMappedbiometrics?.BMI
-          ? innerMappedbiometrics?.BMI?.value
+        value: innerMappedbiometrics[conceptDetails.bmi.name]
+          ? innerMappedbiometrics[conceptDetails.bmi.name]?.value
           : "--",
-        abnormal: innerMappedbiometrics?.BMI
-          ? innerMappedbiometrics?.BMI.abnormal
+        abnormal: innerMappedbiometrics[conceptDetails.bmi.name]
+          ? innerMappedbiometrics[conceptDetails.bmi.name].abnormal
           : false,
       },
       muac: {
-        value: innerMappedbiometrics?.MUAC
-          ? innerMappedbiometrics?.MUAC?.value
+        value: innerMappedbiometrics[conceptDetails.muac.name]
+          ? innerMappedbiometrics[conceptDetails.muac.name]?.value
           : "--",
-        abnormal: innerMappedbiometrics?.MUAC
-          ? innerMappedbiometrics?.MUAC.abnormal
+        abnormal: innerMappedbiometrics[conceptDetails.muac.name]
+          ? innerMappedbiometrics[conceptDetails.muac.name].abnormal
           : false,
       },
     };
     if (
-      innerMappedbiometrics?.BMI ||
-      innerMappedbiometrics?.HEIGHT ||
-      innerMappedbiometrics?.WEIGHT ||
-      innerMappedbiometrics?.MUAC
+      innerMappedbiometrics[conceptDetails.bmi.name] ||
+      innerMappedbiometrics[conceptDetails.height.name] ||
+      innerMappedbiometrics[conceptDetails.weight.name] ||
+      innerMappedbiometrics[conceptDetails.muac.name]
     ) {
       biometricsHistory.push(pairedBiometrics);
     }
@@ -288,73 +309,137 @@ export const mapBiometricsHistory = (vitalsHistoryList) => {
   return biometricsHistory;
 };
 
-export const vitalsHistoryHeaders = [
+export const getVitalsHistoryHeaders = (conceptDetails) => [
   {
     id: "1",
-    header: "Date and Time",
+    header: (
+      <FormattedMessage
+        id={"DATE_TIME_HEADER"}
+        defaultMessage={`Date and Time`}
+      />
+    ),
     key: "date",
     isSortable: false,
   },
   {
     id: "2",
-    header: "Pulse (beats/min)",
+    header: (
+      <FormattedMessage
+        id={"PULSE_HEADER"}
+        defaultMessage={`Pulse ({unit})`}
+        values={{ unit: conceptDetails.pulse.unit }}
+      />
+    ),
     key: "pulse",
     isSortable: false,
   },
   {
     id: "3",
-    header: "SPO2 (%)",
+    header: (
+      <FormattedMessage
+        id={"SPO2_HEADER"}
+        defaultMessage={`SPO2 ({unit})`}
+        values={{ unit: conceptDetails.spO2.unit }}
+      />
+    ),
     key: "spO2",
     isSortable: false,
   },
   {
     id: "4",
-    header: "R.rate (breaths/min)",
+    header: (
+      <FormattedMessage
+        id={"VRESPIRATORY_RATE_HEADER"}
+        defaultMessage={`R.rate ({unit})`}
+        values={{ unit: conceptDetails.respiratoryRate.unit }}
+      />
+    ),
     key: "respiratoryRate",
     isSortable: false,
   },
   {
     id: "5",
-    header: "Temp (DEG C)",
+    header: (
+      <FormattedMessage
+        id={"TEMPERATURE_HEADER"}
+        defaultMessage={`Temp ({unit})`}
+        values={{ unit: conceptDetails.temperature.unit }}
+      />
+    ),
     key: "temperature",
     isSortable: false,
   },
   {
     id: "6",
-    header: "BP (mmHg)",
+    header: (
+      <FormattedMessage
+        id={"BLOOD_PRESSURE_HEADER"}
+        defaultMessage={`BP ({unit})`}
+        values={{ unit: conceptDetails.systolicPressure.unit }}
+      />
+    ),
     key: "bp",
     isSortable: false,
   },
 ];
 
-export const biometricsHistoryHeaders = [
+export const getBiometricsHistoryHeaders = (conceptDetails) => [
   {
     id: "1",
-    header: "Date and Time",
+    header: (
+      <FormattedMessage
+        id={"DATE_TIME_HEADER"}
+        defaultMessage={`Date and Time`}
+      />
+    ),
     key: "date",
     isSortable: false,
   },
   {
     id: "2",
-    header: "Height (cm)",
+    header: (
+      <FormattedMessage
+        id={"HEIGHT_HEADER"}
+        defaultMessage={`Height ({unit})`}
+        values={{ unit: conceptDetails.height.unit }}
+      />
+    ),
     key: "height",
     isSortable: false,
   },
   {
     id: "3",
-    header: "Weight (kg)",
+    header: (
+      <FormattedMessage
+        id={"WEIGHT_HEADER"}
+        defaultMessage={`Weight ({unit})`}
+        values={{ unit: conceptDetails.weight.unit }}
+      />
+    ),
     key: "weight",
     isSortable: false,
   },
   {
     id: "4",
-    header: "BMI (kg/m2)",
+    header: (
+      <FormattedMessage
+        id={"BMI_HEADER"}
+        defaultMessage={`BMI ({unit})`}
+        values={{ unit: conceptDetails.bmi.unit }}
+      />
+    ),
     key: "bmi",
     isSortable: false,
   },
   {
     id: "5",
-    header: "MUAC (cm)",
+    header: (
+      <FormattedMessage
+        id={"MUAC_HEADER"}
+        defaultMessage={`MUAC ({unit})`}
+        values={{ unit: conceptDetails.muac.unit }}
+      />
+    ),
     key: "muac",
     isSortable: false,
   },

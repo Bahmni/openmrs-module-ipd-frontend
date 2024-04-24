@@ -202,6 +202,31 @@ export const mockConfig = {
     1: { shiftStartTime: "08:00", shiftEndTime: "19:00" },
     2: { shiftStartTime: "19:00", shiftEndTime: "08:00" },
   },
+  vitalsConfig: {
+    latestVitalsConceptValues: {
+      spO2: "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
+      weight: "Weight",
+      bmi: "BMI",
+      respiratoryRate: "Respiratory Rate",
+      systolicPressure: "Systolic blood pressure",
+      diastolicPressure: "Diastolic blood pressure",
+      temperature: "Temperature",
+      pulse: "Pulse",
+      height: "Height",
+    },
+    vitalsHistoryConceptValues: {
+      spO2: "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
+      weight: "Weight",
+      bmi: "BMI",
+      respiratoryRate: "Respiratory Rate",
+      systolicPressure: "Systolic blood pressure",
+      diastolicPressure: "Diastolic blood pressure",
+      temperature: "Temperature",
+      pulse: "Pulse",
+      height: "Height",
+      muac: "Mid-upper arm circumference",
+    },
+  },
 };
 
 export const mockConfigFor12HourFormat = {
