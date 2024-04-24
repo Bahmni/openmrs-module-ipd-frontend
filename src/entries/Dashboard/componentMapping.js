@@ -23,6 +23,13 @@ export const componentMapping = {
     import("../../features/DisplayControls/DrugChart/components/DrugChartView")
   ),
   [componentKeys.INTAKE_OUTPUT]: lazy(() =>
-    import("../../features/DisplayControls/IntakeOutput/components/IntakeOutput")
+    import(
+      "../../features/DisplayControls/IntakeOutput/components/IntakeOutput"
+    )
+  ),
+  [componentKeys.COMMON_FORMS_DISPLAY_CONTROL]: lazy(() =>
+    import(
+      "../../features/DisplayControls/GenericFormsDisplayControl/components/GenericFormsDisplayControl"
+    )
   ),
 };

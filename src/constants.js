@@ -27,7 +27,7 @@ export const EMERGENCY_MEDICATIONS_BASE_URL =
 export const BOOKMARK_PATIENT_BASE_URL =
   RESTWS_V1 + "/ipd/careteam/participants";
 export const PATIENT_URL = RESTWS_V1 + "/patient";
-export const PATIENT_IMAGE_URL = RESTWS_V1 + "/patientImage?"
+export const PATIENT_IMAGE_URL = RESTWS_V1 + "/patientImage?";
 
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
 export const ALL_DRUG_ORDERS_URL = (visitUuid) =>
@@ -47,7 +47,10 @@ export const GET_ALL_PROVIDERS_URL =
 export const SEARCH_DRUG_URL =
   RESTWS_V1 +
   "/drug?q={queryString}&s=ordered&v=custom:(uuid,strength,name,dosageForm)";
-
+export const FETCH_ALL_FORM_DETAILS_URL =
+  RESTWS_V1 + "/bahmniie/form/allForms?v=custom:(version,name,uuid)";
+export const FETCH_FORM_DETAILS_URL =
+  RESTWS_V1 + "/form/{formUuid}?v=custom:(resources:(value))";
 export const VISIT_SUMMARY_URL = BAHMNI_CORE + "/visit/summary";
 export const CONFIG_BAHMNIENCOUNTER_URL =
   BAHMNI_CORE + "/config/bahmniencounter";
@@ -86,7 +89,7 @@ export const GET_SEARCH_PATIENT_LIST_URL =
   RESTWS_V1 + "/ipd/wards/{wardId}/patients/search";
 export const GET_SLOTS_FOR_PATIENTS_URL =
   RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
-export const INTAKE_OUTPUT_DATA_BASE_URL = BAHMNI_CORE + "/observations?";
+export const BAHMNI_CORE_OBSERVATIONS_BASE_URL = BAHMNI_CORE + "/observations?";
 export const NON_MEDICATION_BASE_URL = RESTWS_V1 + "/tasks";
 
 export const GET_TASKS_FOR_PATIENTS_URL = RESTWS_V1 + "/tasks";
@@ -109,6 +112,7 @@ export const componentKeys = {
   NURSING_TASKS: "NT",
   DRUG_CHART: "DC",
   INTAKE_OUTPUT: "IO",
+  COMMON_FORMS_DISPLAY_CONTROL: "CFDC",
 };
 
 export const performerFunction = "Performer";

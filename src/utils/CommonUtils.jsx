@@ -1,9 +1,10 @@
 import axios from "axios";
 import {
-  SEARCH_DRUG_URL,
-  SEARCH_CONCEPT_URL,
   CONFIG_BAHMNIENCOUNTER_URL,
   DASHBORAD_CONFIG_URL,
+  FETCH_ALL_FORM_DETAILS_URL,
+  SEARCH_CONCEPT_URL,
+  SEARCH_DRUG_URL,
 } from "../constants";
 export const getPatientDashboardUrl = (patientUuid) =>
   `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard?currentTab=DASHBOARD_TAB_GENERAL_KEY`;
@@ -138,6 +139,23 @@ export const getDashboardConfig = async () => {
   } catch (error) {
     return error;
   }
+};
+
+export const getAllFormsInfo = async () => {
+  try {
+    return await axios.get(FETCH_ALL_FORM_DETAILS_URL, {
+      withCredentials: true,
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getFetchFormTranslationsUrl = (formName, formUuid) => {
+  return (
+    "/openmrs/ws/rest/v1" +
+    `/bahmniie/form/translate?formName=${formName}&formUuid=${formUuid}&formVersion=1&locale=en`
+  );
 };
 
 export const mockConfig = {

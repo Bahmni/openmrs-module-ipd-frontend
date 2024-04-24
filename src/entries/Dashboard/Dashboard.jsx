@@ -16,6 +16,7 @@ import "./Dashboard.scss";
 import PropTypes from "prop-types";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 import {
+  getAllFormsInfo,
   getAppLandingPageUrl,
   getDashboardConfig,
   getPatientDashboardUrl,
@@ -58,6 +59,7 @@ export default function Dashboard(props) {
   const [isConfigLoaded, setIsConfigLoaded] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isShowPatientDetailsOpen, setPatientDetailsOpen] = useState(false);
+  const [allFormsSummary, setAllFormsSummary] = useState([]);
 
   const noConfigDataMessage = (
     <FormattedMessage
@@ -79,8 +81,16 @@ export default function Dashboard(props) {
     setSections(updatedSections);
   };
 
+  const fetchAllForms = async () => {
+    const allFormsInfo = await getAllFormsInfo();
+    if (allFormsInfo.status === 200) {
+      setAllFormsSummary(allFormsInfo.data);
+    }
+  };
+
   useEffect(() => {
     fetchConfig();
+    fetchAllForms();
     document.addEventListener("click", handleClickOutside);
     window.addEventListener("resize", updateWindowWidth);
     return () => {
@@ -164,6 +174,7 @@ export default function Dashboard(props) {
               config: dashboardConfig,
               isReadMode,
               visitSummary,
+              allFormsSummary,
             }}
           >
             <main className="ipd-page">
@@ -246,6 +257,7 @@ export default function Dashboard(props) {
                                   <DisplayControl
                                     key={el.refreshKey}
                                     patientId={patient?.uuid}
+                                    config={el.config}
                                   />
                                 </RefreshDisplayControl.Provider>
                               </I18nProvider>
