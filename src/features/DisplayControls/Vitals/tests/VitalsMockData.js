@@ -15,8 +15,8 @@ export const mockVitalsData = {
     },
     {
       name: "BMI",
-      fullName: "BMI Data",
-      units: null,
+      fullName: "BMI",
+      units: "Kg/m2",
       hiNormal: null,
       lowNormal: null,
       attributes: {},
@@ -64,7 +64,15 @@ export const mockVitalsData = {
     {
       name: "Respiratory Rate",
       fullName: "Respiratory Rate",
-      units: null,
+      units: "breaths/min",
+      hiNormal: null,
+      lowNormal: null,
+      attributes: {},
+    },
+    {
+      name: "HEIGHT",
+      fullName: "HEIGHT",
+      units: "Cm",
       hiNormal: null,
       lowNormal: null,
       attributes: {},
@@ -129,8 +137,8 @@ export const mockVitalsHistoryData = {
     },
     {
       name: "BMI",
-      fullName: "BMI Data",
-      units: null,
+      fullName: "BMI",
+      units: "Kg/m2",
       hiNormal: null,
       lowNormal: null,
       attributes: {},
@@ -178,7 +186,7 @@ export const mockVitalsHistoryData = {
     {
       name: "Respiratory Rate",
       fullName: "Respiratory Rate",
-      units: null,
+      units: "breaths/min",
       hiNormal: null,
       lowNormal: null,
       attributes: {},
@@ -186,6 +194,14 @@ export const mockVitalsHistoryData = {
     {
       name: "MUAC",
       fullName: "Mid-upper arm circumference",
+      units: "Cm",
+      hiNormal: null,
+      lowNormal: null,
+      attributes: {},
+    },
+    {
+      name: "HEIGHT",
+      fullName: "HEIGHT",
       units: "Cm",
       hiNormal: null,
       lowNormal: null,

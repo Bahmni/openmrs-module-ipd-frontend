@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Column, Row, Tile, SkeletonText, Link } from "carbon-components-react";
 import {
   getPatientVitals,
@@ -6,8 +6,8 @@ import {
   mapVitalsData,
   mapVitalsHistory,
   mapBiometricsHistory,
-  vitalsHistoryHeaders,
-  biometricsHistoryHeaders,
+  getVitalsHistoryHeaders,
+  getBiometricsHistoryHeaders,
 } from "../utils/VitalsUtils";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -16,7 +16,8 @@ import { FormattedMessage } from "react-intl";
 import VitalsHistory from "./VitalsHistory";
 import BiometricsHistory from "./BiometricsHistory";
 import { vitalsHeaders } from "../utils/VitalsUtils";
-import { ChevronDown20,ChevronUp20 } from "@carbon/icons-react";
+import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
+import { IPDContext } from "../../../../context/IPDContext";
 
 const Vitals = (props) => {
   const { patientId } = props;
@@ -24,10 +25,16 @@ const Vitals = (props) => {
   const [vitals, setVitals] = useState({});
   const [vitalsHistory, setVitalsHistory] = useState([]);
   const [biometricsHistory, setBiometricsHistory] = useState([]);
-  const [vitalUnits, setVitalUnits] = useState({});
   const [vitalsDate, setVitalsDate] = useState(null);
   const [vitalsTime, setVitalsTime] = useState(null);
   const [isLoading, updateIsLoading] = useState(true);
+
+  const [vitalsHistoryHeaders, setVitalsHistoryHeaders] = useState([]);
+  const [biometricsHistoryHeaders, setBiometricsHistoryHeaders] = useState([]);
+
+  const {
+    config: { vitalsConfig },
+  } = useContext(IPDContext);
 
   const NoVitalsMessage = (
     <FormattedMessage
@@ -44,29 +51,58 @@ const Vitals = (props) => {
   );
 
   const handleShowMore = () => setShowMore(!showMore);
-  const handleVitalUnits = (units) => {
-    let updatedUnits = {};
 
-    units.forEach((unit) => {
-      updatedUnits[unit.name] = unit.units;
-    });
+  const getConceptDetails = (conceptConfig, conceptDetails) => {
+    let concepts = {};
 
-    setVitalUnits((oldUnits) => {
-      return {
-        ...oldUnits,
-        ...updatedUnits,
-      };
+    Object.keys(conceptConfig).forEach((conceptName) => {
+      const obj = conceptDetails.find(
+        (field) =>
+          field.fullName.toLowerCase() ===
+          conceptConfig[conceptName].toLowerCase()
+      );
+      concepts[conceptName] = { name: obj?.name, unit: obj?.units };
     });
+    return concepts;
   };
 
   useEffect(() => {
     const getVitals = async () => {
-      const VitalsList = await getPatientVitals(patientId);
-      const vitalsHistoryList = await getPatientVitalsHistory(patientId);
-      handleVitalUnits(VitalsList.conceptDetails);
-      setVitals(mapVitalsData(VitalsList, vitalsHistoryList,setVitalsDate, setVitalsTime));
-      setVitalsHistory(mapVitalsHistory(vitalsHistoryList));
-      setBiometricsHistory(mapBiometricsHistory(vitalsHistoryList));
+      const VitalsList = await getPatientVitals(
+        patientId,
+        vitalsConfig.latestVitalsConceptValues
+      );
+      const vitalsHistoryList = await getPatientVitalsHistory(
+        patientId,
+        vitalsConfig.vitalsHistoryConceptValues
+      );
+      const conceptDetails = getConceptDetails(
+        vitalsConfig.latestVitalsConceptValues,
+        vitalsHistoryList.conceptDetails
+      );
+      setVitals(
+        mapVitalsData(
+          VitalsList,
+          vitalsHistoryList,
+          setVitalsDate,
+          setVitalsTime,
+          conceptDetails
+        )
+      );
+      const vitalsHistoryDetails = getConceptDetails(
+        vitalsConfig.vitalsHistoryConceptValues,
+        vitalsHistoryList.conceptDetails
+      );
+      setVitalsHistoryHeaders(getVitalsHistoryHeaders(vitalsHistoryDetails));
+      setBiometricsHistoryHeaders(
+        getBiometricsHistoryHeaders(vitalsHistoryDetails)
+      );
+      setVitalsHistory(
+        mapVitalsHistory(vitalsHistoryList, vitalsHistoryDetails)
+      );
+      setBiometricsHistory(
+        mapBiometricsHistory(vitalsHistoryList, vitalsHistoryDetails)
+      );
       updateIsLoading(false);
     };
 
@@ -82,20 +118,26 @@ const Vitals = (props) => {
       ) : (
         <Tile className="vital-table">
           <div className="vital-date-time">
-            {vitalsDate ? vitalsDate + " ": "-"}
-           {showMore ? (<Link
-              kind="tertiary"
-              className="show-more"
-              onClick={handleShowMore}
-            >
-              {vitalsHistoryMessage}<ChevronUp20/>
-            </Link>) : (<Link
-              kind="tertiary"
-              className="show-more"
-              onClick={handleShowMore}
-            >
-              {vitalsHistoryMessage}<ChevronDown20/>
-            </Link>)}
+            {vitalsDate ? vitalsDate + " " : "-"}
+            {showMore ? (
+              <Link
+                kind="tertiary"
+                className="show-more"
+                onClick={handleShowMore}
+              >
+                {vitalsHistoryMessage}
+                <ChevronUp20 />
+              </Link>
+            ) : (
+              <Link
+                kind="tertiary"
+                className="show-more"
+                onClick={handleShowMore}
+              >
+                {vitalsHistoryMessage}
+                <ChevronDown20 />
+              </Link>
+            )}
           </div>
           <Row>
             <Column>
@@ -108,7 +150,7 @@ const Vitals = (props) => {
                 <span className="vital-values">
                   {vitals.HeartRate?.value ? vitals.HeartRate?.value : "-"}{" "}
                   <span className="vital-units">
-                    {vitals.HeartRate?.value ? vitalUnits.Pulse : " "}
+                    {vitals.HeartRate?.value ? vitals.HeartRate?.unit : " "}
                   </span>{" "}
                 </span>
               </Tile>
@@ -123,7 +165,7 @@ const Vitals = (props) => {
                 <span className="vital-values">
                   {vitals.SpO2?.value ? vitals.SpO2?.value : "-"}{" "}
                   <span className="vital-units">
-                    {vitals.SpO2?.value ? vitalUnits.SpO2 : " "}
+                    {vitals.SpO2?.value ? vitals.SpO2?.unit : " "}
                   </span>{" "}
                 </span>
               </Tile>
@@ -145,7 +187,7 @@ const Vitals = (props) => {
                     : "-"}{" "}
                   <span className="vital-units">
                     {vitals.RespiratoryRate?.value
-                      ? vitalUnits["Respiratory Rate"]
+                      ? vitals.RespiratoryRate?.unit
                       : " "}
                   </span>{" "}
                 </span>
@@ -163,7 +205,7 @@ const Vitals = (props) => {
                 <span className="vital-values">
                   {vitals.Temp?.value ? vitals.Temp?.value : "-"}{" "}
                   <span className="vital-units">
-                    {vitals.Temp?.value ? vitalUnits.Temperature : " "}
+                    {vitals.Temp?.value ? vitals.Temp?.unit : " "}
                   </span>{" "}
                 </span>
               </Tile>
@@ -189,7 +231,7 @@ const Vitals = (props) => {
                     : "-"}{" "}
                   <span className="vital-units">
                     {vitals.SystolicPressure?.value
-                      ? vitalUnits["Diastolic Blood Pressure"]
+                      ? vitals.SystolicPressure?.unit
                       : " "}
                   </span>{" "}
                 </span>
@@ -205,7 +247,7 @@ const Vitals = (props) => {
                 <span className="vital-values">
                   {vitals.Height?.value ? vitals.Height?.value : "-"}{" "}
                   <span className="vital-units">
-                    {vitals.Height?.value ? vitalUnits.HEIGHT : " "}
+                    {vitals.Height?.value ? vitals.Height?.unit : " "}
                   </span>{" "}
                 </span>
               </Tile>
@@ -220,7 +262,7 @@ const Vitals = (props) => {
                 <span className="vital-values">
                   {vitals.Weight?.value ? vitals.Weight?.value : "-"}{" "}
                   <span className="vital-units">
-                    {vitals.Weight?.value ? vitalUnits.WEIGHT : " "}
+                    {vitals.Weight?.value ? vitals.Weight?.unit : " "}
                   </span>{" "}
                 </span>
               </Tile>
@@ -235,7 +277,7 @@ const Vitals = (props) => {
                 <span className="vital-values">
                   {vitals.BMI?.value ? vitals.BMI?.value : "-"}{" "}
                   <span className="vital-units">
-                    {vitals.BMI?.value ? vitalUnits.BMI : " "}
+                    {vitals.BMI?.value ? vitals.BMI?.unit : " "}
                   </span>{" "}
                 </span>
               </Tile>

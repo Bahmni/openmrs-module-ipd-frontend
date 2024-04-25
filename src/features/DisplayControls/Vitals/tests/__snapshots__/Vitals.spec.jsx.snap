@@ -101,7 +101,9 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
              
             <span
               class="vital-units"
-            />
+            >
+              breaths/min
+            </span>
              
           </span>
         </div>
@@ -174,7 +176,9 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
              
             <span
               class="vital-units"
-            />
+            >
+              Cm
+            </span>
              
           </span>
         </div>
@@ -222,7 +226,9 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
              
             <span
               class="vital-units"
-            />
+            >
+              Kg/m2
+            </span>
              
           </span>
         </div>
@@ -290,7 +296,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                   <div
                     class="bx--table-header-label"
                   >
-                    Temp (DEG C)
+                    Temp (C)
                   </div>
                 </th>
                 <th
@@ -596,7 +602,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                   <div
                     class="bx--table-header-label"
                   >
-                    Height (cm)
+                    Height (Cm)
                   </div>
                 </th>
                 <th
@@ -605,7 +611,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                   <div
                     class="bx--table-header-label"
                   >
-                    Weight (kg)
+                    Weight (Kg)
                   </div>
                 </th>
                 <th
@@ -614,7 +620,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                   <div
                     class="bx--table-header-label"
                   >
-                    BMI (kg/m2)
+                    BMI (Kg/m2)
                   </div>
                 </th>
                 <th
@@ -623,7 +629,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                   <div
                     class="bx--table-header-label"
                   >
-                    MUAC (cm)
+                    MUAC (Cm)
                   </div>
                 </th>
               </tr>
@@ -984,7 +990,9 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
              
             <span
               class="vital-units"
-            />
+            >
+              breaths/min
+            </span>
              
           </span>
         </div>
@@ -1057,7 +1065,9 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
              
             <span
               class="vital-units"
-            />
+            >
+              Cm
+            </span>
              
           </span>
         </div>
@@ -1105,7 +1115,9 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
              
             <span
               class="vital-units"
-            />
+            >
+              Kg/m2
+            </span>
              
           </span>
         </div>

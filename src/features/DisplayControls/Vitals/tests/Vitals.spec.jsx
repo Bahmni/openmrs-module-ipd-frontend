@@ -6,6 +6,7 @@ import {
   act,
 } from "@testing-library/react";
 import React from "react";
+import { IPDContext } from "../../../../context/IPDContext";
 import Vitals from "../components/Vitals";
 import {
   getPatientVitals,
@@ -16,6 +17,7 @@ import {
   mockVitalsData,
   mockVitalsHistoryData,
 } from "./VitalsMockData";
+import { mockConfig } from "../../../../utils/CommonUtils";
 
 jest.mock("../utils/VitalsUtils", () => {
   const originalModule = jest.requireActual("../utils/VitalsUtils");
@@ -34,7 +36,11 @@ describe("Vitals", () => {
   it("displays vital and biometrics history after data is fetched", async () => {
     getPatientVitals.mockResolvedValueOnce(mockVitalsData);
     getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
-    const { container } = render(<Vitals patientId="123" />);
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <Vitals patientId="123" />
+      </IPDContext.Provider>
+    );
 
     await waitFor(() => {
       expect(screen.getByText(/Vitals History/i)).toBeTruthy();
@@ -53,7 +59,11 @@ describe("Vitals", () => {
   it("should display vital details after data is fetched", async () => {
     getPatientVitals.mockResolvedValueOnce(mockVitalsData);
     getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
-    const { container } = render(<Vitals patientId="123" />);
+    const { container } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <Vitals patientId="123" />
+      </IPDContext.Provider>
+    );
     await waitFor(() => {
       expect(screen.getByText(/Temp/i)).toBeTruthy();
       expect(container).toMatchSnapshot();
@@ -63,7 +73,11 @@ describe("Vitals", () => {
   it("should display text when vitals is not present", async () => {
     getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
     getPatientVitals.mockResolvedValueOnce(mockNoVitalsData);
-    render(<Vitals patientId="123" />);
+    render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <Vitals patientId="123" />
+      </IPDContext.Provider>
+    );
     await waitFor(() =>
       expect(
         screen.getByText("No Vitals available for this patient")
@@ -73,18 +87,33 @@ describe("Vitals", () => {
 
   it("renders without crashing", () => {
     getPatientVitals.mockResolvedValueOnce(mockVitalsData);
-    render(<Vitals patientId="123" />);
+    render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <Vitals patientId="123" />
+      </IPDContext.Provider>
+    );
   });
 
   it("calls getPatientVitals on mount", () => {
     getPatientVitals.mockResolvedValueOnce(mockVitalsData);
-    render(<Vitals patientId="123" />);
-    expect(getPatientVitals).toHaveBeenCalledWith("123");
+    render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <Vitals patientId="123" />
+      </IPDContext.Provider>
+    );
+    expect(getPatientVitals).toHaveBeenCalledWith(
+      "123",
+      mockConfig.vitalsConfig.latestVitalsConceptValues
+    );
   });
 
   it("displays loading skeleton while fetching data", () => {
     getPatientVitals.mockResolvedValueOnce(mockVitalsData);
-    render(<Vitals patientId="123" />);
+    render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <Vitals patientId="123" />
+      </IPDContext.Provider>
+    );
     expect(screen.getByTestId("header-loading")).toBeTruthy();
   });
 });
