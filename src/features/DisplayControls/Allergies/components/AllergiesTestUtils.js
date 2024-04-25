@@ -8,6 +8,11 @@ export const mockAllergiesIntolerenceResponse = {
           resourceType: "AllergyIntolerance",
           id: "216e656d-f738-42ce-acbe-802f2bf658b6",
           recordedDate: 1698316800000,
+          recorder: {
+            reference: "Practitioner/c1c21e11-3f10-11e4-adec-0800271c1b75",
+            type: "Practitioner",
+            display: "Bailly RURANGIRWA",
+          },
           type: "allergy",
           category: ["food"],
           criticality: "high",
@@ -61,6 +66,11 @@ export const mockAllergiesIntolerenceResponse = {
         resource: {
           resourceType: "AllergyIntolerance",
           recordedDate: 1698316000000,
+          recorder: {
+            reference: "Practitioner/c1c21e11-3f10-11e4-adec-0800271c1b75",
+            type: "Practitioner",
+            display: "Bailly RURANGIRWA",
+          },
           id: "400ccf4c-6290-4f62-9aff-eff1d9575b43",
           type: "allergy",
           category: ["food"],
@@ -112,6 +122,11 @@ export const mockAllergiesIntolerenceResponse = {
         resource: {
           resourceType: "AllergyIntolerance",
           recordedDate: 1698316000000,
+          recorder: {
+            reference: "Practitioner/c1c21e11-3f10-11e4-adec-0800271c1b75",
+            type: "Practitioner",
+            display: "Bailly RURANGIRWA",
+          },
           id: "8e8753f2-d8be-443f-b7ef-8bceb218c01d",
           type: "allergy",
           category: ["environment"],
@@ -159,6 +174,11 @@ export const mockAllergiesIntolerenceResponse = {
           resourceType: "AllergyIntolerance",
           id: "e1a00d00-f929-4817-af59-fffd7b509e77",
           recordedDate: 1698316000000,
+          recorder: {
+            reference: "Practitioner/c1c21e11-3f10-11e4-adec-0800271c1b75",
+            type: "Practitioner",
+            display: "Bailly RURANGIRWA",
+          },
           type: "allergy",
           category: ["food"],
           criticality: "low",

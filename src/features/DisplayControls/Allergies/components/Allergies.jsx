@@ -13,13 +13,15 @@ import { useFetchAllergiesIntolerance } from "../hooks/useFetchAllergiesIntolera
 import PropTypes from "prop-types";
 import "../styles/Allergies.scss";
 import { FormattedMessage } from "react-intl";
-import { dateTimeToEpochInMilliSeconds } from "../../../../utils/DateTimeUtils";
+import {
+  dateTimeToEpochInMilliSeconds,
+  formatDate,
+} from "../../../../utils/DateTimeUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 
 const Allergies = (props) => {
   const { patientId } = props;
   const { visitSummary } = useContext(IPDContext);
-
   const { allergiesData, isLoading } = useFetchAllergiesIntolerance(patientId);
   const [rows, setRows] = useState([]);
   const NoAllergenMessage = (
@@ -43,6 +45,8 @@ const Allergies = (props) => {
           reaction: getAllergyReactions(allergy.resource.reaction),
           comments: getComments(allergy.resource.note),
           sortWeight: getSortingWait(getSeverity(allergy.resource.criticality)),
+          provider: allergy.resource.recorder.display,
+          date: formatDate(recordedDate)
         };
 
         if (
@@ -99,6 +103,14 @@ const Allergies = (props) => {
     {
       key: "comments",
       header: "Comments",
+    },
+    {
+      key: "provider",
+      header: "Provider Name",
+    },
+    {
+      key: "date",
+      header: "Date",
     },
   ];
 
