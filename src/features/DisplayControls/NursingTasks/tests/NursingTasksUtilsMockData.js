@@ -713,6 +713,7 @@ export const mockExtractedMedicationNursingTasksData = [
       dosage: "25mg",
       doseType: undefined,
       startTimeInEpochSeconds: 1690906550,
+      endTimeInEpochSeconds: NaN,
       startTime: "16:15",
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
       dosingInstructions: { asNeeded: false, frequency: "Once a day" },
@@ -727,6 +728,7 @@ export const mockExtractedMedicationNursingTasksData = [
       dosage: "25mg",
       doseType: undefined,
       startTimeInEpochSeconds: 1690906550,
+      endTimeInEpochSeconds: NaN,
       startTime: "16:15",
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
       dosingInstructions: { asNeeded: false, frequency: "Once a day" },
@@ -743,6 +745,7 @@ export const mockExtractedMedicationNursingTasksData = [
       dosage: "25mg",
       doseType: undefined,
       startTimeInEpochSeconds: 1690907550,
+      endTimeInEpochSeconds: NaN,
       startTime: "16:32",
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
       dosingInstructions: { asNeeded: false, frequency: "Once a day" },
@@ -765,6 +768,7 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       duration: "3 Day(s)",
       startTime: "14:30",
       startTimeInEpochSeconds: 1702650600,
+      endTimeInEpochSeconds: NaN,
       uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
       dosingInstructions: {
         asNeeded: false,
@@ -786,6 +790,7 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       duration: "3 Day(s)",
       startTime: "14:30",
       startTimeInEpochSeconds: 1702650600,
+      endTimeInEpochSeconds: NaN,
       uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
       dosingInstructions: {
         asNeeded: false,
@@ -808,6 +813,7 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
       startTime: "14:30",
       stopTime: 1234567890,
       startTimeInEpochSeconds: 1702650600,
+      endTimeInEpochSeconds: 1234567000,
       uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
       dosingInstructions: {
         asNeeded: false,
@@ -828,6 +834,7 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
       startTime: "14:30",
       stopTime: 1234567890,
       startTimeInEpochSeconds: 1702650600,
+      endTimeInEpochSeconds: 1234567000,
       uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
       dosingInstructions: {
         asNeeded: false,
@@ -849,6 +856,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       doseType: undefined,
       uuid: "4a09cf75-234b-4cc7-9be3-5bfd40c39ac0",
       startTimeInEpochSeconds: 1709128800,
+      endTimeInEpochSeconds: NaN,
       dosingInstructions: {
         asNeeded: false,
         frequency: "Every 2 hours",
@@ -869,6 +877,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       doseType: "Drop",
       uuid: "f2bdf7dd-4890-4b54-a490-1ba572a708ab",
       startTimeInEpochSeconds: 1709130600,
+      endTimeInEpochSeconds: NaN,
       dosingInstructions: {
         asNeeded: false,
         frequency: "Every 2 hours",
@@ -889,6 +898,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       doseType: undefined,
       uuid: "11d09d57-7b96-41b3-b9fb-697ac8bda3a9",
       startTimeInEpochSeconds: 1709136000,
+      endTimeInEpochSeconds: NaN,
       dosingInstructions: {
         asNeeded: false,
         frequency: "Every 2 hours",
@@ -912,6 +922,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       doseType: undefined,
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
       startTimeInEpochSeconds: 1690917550,
+      endTimeInEpochSeconds: NaN,
       startTime: "19:19",
       dosingInstructions: {
         asNeeded: false,
@@ -931,6 +942,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       doseType: undefined,
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
       startTimeInEpochSeconds: 1690937550,
+      endTimeInEpochSeconds: NaN,
       startTime: "00:52",
       dosingInstructions: {
         asNeeded: false,
@@ -950,6 +962,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       doseType: undefined,
       uuid: "738aa77d-03fc-438f-a87a-ae8a8867c421",
       startTimeInEpochSeconds: 1690997550,
+      endTimeInEpochSeconds: NaN,
       startTime: "17:32",
       dosingInstructions: {
         asNeeded: false,
@@ -969,6 +982,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       doseType: undefined,
       uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
       startTimeInEpochSeconds: 1702650600,
+      endTimeInEpochSeconds: NaN,
       startTime: "14:30",
       administeredTimeInEpochSeconds: 1702650700,
       administeredTime: "14:31",
@@ -990,6 +1004,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       doseType: undefined,
       uuid: "0991b63f-3c9a-4964-9978-dff5766b7005",
       startTimeInEpochSeconds: 1702650700,
+      endTimeInEpochSeconds: NaN,
       startTime: "14:31",
       administeredTimeInEpochSeconds: 1702670800,
       administeredTime: "20:06",
