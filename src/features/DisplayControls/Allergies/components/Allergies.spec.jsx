@@ -31,8 +31,7 @@ describe("Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visitSummary: mockVisitSummaryData,
-          config: mockConfig,
+          visitSummary: mockVisitSummaryData
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -47,7 +46,6 @@ describe("Allergies", () => {
       <IPDContext.Provider
         value={{
           visitSummary: mockVisitSummaryData,
-          config: mockConfig,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -67,7 +65,6 @@ describe("Allergies", () => {
       <IPDContext.Provider
         value={{
           visitSummary: mockVisitSummaryData,
-          config: mockConfig,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -87,7 +84,6 @@ describe("Allergies", () => {
       <IPDContext.Provider
         value={{
           visitSummary: mockVisitSummaryData,
-          config: mockConfig,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -120,8 +116,7 @@ describe("Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visitSummary: mockVisitSummaryData,
-          config: mockConfig,
+          visitSummary: mockVisitSummaryData
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -144,8 +139,7 @@ describe("Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visitSummary: mockVisitSummaryData,
-          config: mockConfig,
+          visitSummary: mockVisitSummaryData
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -166,8 +160,7 @@ describe("Allergies", () => {
           visitSummary: {
             ...mockVisitSummaryData,
             stopDateTime: 1698316200000,
-          },
-          config: mockConfig,
+          }
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />

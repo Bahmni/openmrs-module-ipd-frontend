@@ -18,16 +18,10 @@ import {
   formatDate,
 } from "../../../../utils/DateTimeUtils";
 import { IPDContext } from "../../../../context/IPDContext";
-import {
-  displayPeriodTimingsFormat,
-  displayShiftTimings12HourFormat,
-} from "../../../../constants";
 
 const Allergies = (props) => {
   const { patientId } = props;
-  const { visitSummary, config } = useContext(IPDContext);
-  const { enable24HourTime = {} } = config;
-
+  const { visitSummary } = useContext(IPDContext);
   const { allergiesData, isLoading } = useFetchAllergiesIntolerance(patientId);
   const [rows, setRows] = useState([]);
   const NoAllergenMessage = (
@@ -52,7 +46,7 @@ const Allergies = (props) => {
           comments: getComments(allergy.resource.note),
           sortWeight: getSortingWait(getSeverity(allergy.resource.criticality)),
           provider: allergy.resource.recorder.display,
-          dateTime: getDateTime(recordedDate),
+          date: formatDate(recordedDate)
         };
 
         if (
@@ -93,13 +87,6 @@ const Allergies = (props) => {
     return allergyReactions;
   };
 
-  const getDateTime = (dateTime) => {
-    const dateAndTime = enable24HourTime
-      ? formatDate(dateTime, displayPeriodTimingsFormat)
-      : formatDate(dateTime, displayShiftTimings12HourFormat);
-    return dateAndTime;
-  };
-
   const headers = [
     {
       key: "allergen",
@@ -122,8 +109,8 @@ const Allergies = (props) => {
       header: "Provider Name",
     },
     {
-      key: "dateTime",
-      header: "Date and Time",
+      key: "date",
+      header: "Date",
     },
   ];
 
