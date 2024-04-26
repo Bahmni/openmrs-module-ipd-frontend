@@ -46,9 +46,9 @@ export const CareViewSummary = (props) => {
     refreshSummary,
   } = useContext(CareViewContext);
 
-  const localSelectedWard = JSON.parse(
-    localStorage.getItem("selected_ward")
-  )?.label;
+  let existingSelectedWards = JSON.parse(
+    localStorage.getItem("selected_wards")
+  );
 
   const getWardList = async () => {
     callbacks.setIsLoading(true);
@@ -60,10 +60,10 @@ export const CareViewSummary = (props) => {
       };
     });
     setOptions(wardOptions);
-    if (localSelectedWard) {
-      setSelectedWard(
-        wardOptions.find((ward) => ward.label === localSelectedWard)
-      );
+    if (existingSelectedWards) {
+      const ward = existingSelectedWards[provider.uuid];
+      if (ward) setSelectedWard(ward);
+      else setSelectedWard(wardOptions[0]);
     } else {
       setSelectedWard(wardOptions[0]);
     }
@@ -84,7 +84,22 @@ export const CareViewSummary = (props) => {
   }, []);
   useEffect(() => {
     if (!_.isEmpty(selectedWard)) {
-      localStorage.setItem("selected_ward", JSON.stringify(selectedWard));
+      const newSelectedWard = {
+        [provider.uuid]: selectedWard,
+      };
+
+      if (!existingSelectedWards) {
+        existingSelectedWards = newSelectedWard;
+      } else {
+        existingSelectedWards = {
+          ...existingSelectedWards,
+          ...newSelectedWard,
+        };
+      }
+      localStorage.setItem(
+        "selected_wards",
+        JSON.stringify(existingSelectedWards)
+      );
       getWardSummary();
     }
   }, [selectedWard, refreshSummary]);

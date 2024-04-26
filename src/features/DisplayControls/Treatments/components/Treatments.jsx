@@ -208,7 +208,10 @@ const Treatments = (props) => {
       return {
         link: (
           <Link
-            disabled={isAddToDrugChartDisabled}
+            disabled={
+              isAddToDrugChartDisabled ||
+              moment().valueOf() <= drugOrder.effectiveStartDate
+            }
             onClick={() =>
               handleEditAndAddToDrugChartClick(
                 drugOrder.uuid,
