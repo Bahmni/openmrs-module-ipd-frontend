@@ -23,11 +23,7 @@ import { Button, Dropdown, Loading } from "carbon-components-react";
 import AddEmergencyTasks from "./AddEmergencyTasks";
 import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
-import {
-  asNeededPlaceholderConceptName,
-  componentKeys,
-  timeFormatFor12Hr,
-} from "../../../../constants";
+import { componentKeys, timeFormatFor12Hr } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
 import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
@@ -251,34 +247,32 @@ export default function NursingTasks(props) {
         filterValue,
         isReadMode
       );
-      const extractedData = ExtractMedicationNursingTasksData(
-        nursingTasks,
-        filterValue,
-        isReadMode
-      );
+      let extractedData;
       if (
         !isCurrentShift(shiftDetails, startDateTimeChange, endDateTimeChange)
       ) {
-        const filteredData = extractedData
-          .map((extract) =>
-            extract.filter(
-              (data) => data.serviceType != asNeededPlaceholderConceptName
-            )
-          )
-          .filter((innerArray) => innerArray.length > 0);
+        const excludePRN = true;
+        extractedData = ExtractMedicationNursingTasksData(
+          nursingTasks,
+          filterValue,
+          isReadMode,
+          excludePRN
+        );
         setMedicationNursingTasks(
           extractedNonMedicationTasks.length > 0
-            ? [...filteredData, ...extractedNonMedicationTasks]
-            : filteredData
+            ? [...extractedData, ...extractedNonMedicationTasks]
+            : extractedData
         );
       } else {
+        extractedData = ExtractMedicationNursingTasksData(
+          nursingTasks,
+          filterValue,
+          isReadMode
+        );
         const filteredData = extractedData
           .map((extract) =>
             extract.filter((data) => {
-              return (
-                data.serviceType != asNeededPlaceholderConceptName ||
-                data.endTimeInEpochSeconds > endDateTimeChange
-              );
+              return data.endTimeInEpochSeconds > endDateTimeChange;
             })
           )
           .filter((innerArray) => innerArray.length > 0);
@@ -316,6 +310,7 @@ export default function NursingTasks(props) {
   };
 
   useEffect(() => {
+    let extractedMedicationData;
     if (
       isCurrentShift(
         shiftDetails,
@@ -323,22 +318,34 @@ export default function NursingTasks(props) {
         startEndDates.endDate
       )
     ) {
-      const sortedNursingTasks = [
-        ...ExtractMedicationNursingTasksData(
-          nursingTasks,
-          filterValue,
-          isReadMode
-        ),
-        ...ExtractNonMedicationTasks(
-          nonMedicationTasks,
-          filterValue,
-          isReadMode
-        ),
-      ];
-      groupTasksByOrderId(sortedNursingTasks);
-      sortNursingTasks(sortedNursingTasks);
-      setMedicationNursingTasks(sortedNursingTasks);
+      const extractedData = ExtractMedicationNursingTasksData(
+        nursingTasks,
+        filterValue,
+        isReadMode
+      );
+      extractedMedicationData = extractedData
+        .map((extract) =>
+          extract.filter((data) => {
+            return data.endTimeInEpochSeconds > startEndDates.endDate;
+          })
+        )
+        .filter((innerArray) => innerArray.length > 0);
+    } else {
+      const excludePRN = true;
+      extractedMedicationData = ExtractMedicationNursingTasksData(
+        nursingTasks,
+        filterValue,
+        isReadMode,
+        excludePRN
+      );
     }
+    const sortedNursingTasks = [
+      ...extractedMedicationData,
+      ...ExtractNonMedicationTasks(nonMedicationTasks, filterValue, isReadMode),
+    ];
+    groupTasksByOrderId(sortedNursingTasks);
+    sortNursingTasks(sortedNursingTasks);
+    setMedicationNursingTasks(sortedNursingTasks);
   }, [filterValue, nursingTasks, nonMedicationTasks]);
 
   const showTaskTiles = () => {
