@@ -210,8 +210,7 @@ const Treatments = (props) => {
           <Link
             disabled={
               isAddToDrugChartDisabled ||
-              (drugOrder.dosingInstructions?.asNeeded &&
-                moment().valueOf() <= drugOrder.effectiveStartDate)
+              moment().valueOf() <= drugOrder.effectiveStartDate
             }
             onClick={() =>
               handleEditAndAddToDrugChartClick(
