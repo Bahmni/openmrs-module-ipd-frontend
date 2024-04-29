@@ -4,7 +4,10 @@ import {
 } from "../../CareViewSummary/utils/CareViewSummary";
 import React, { useContext } from "react";
 import Clock from "../../../icons/clock.svg";
-import { epochTo12HourTimeFormat, epochTo24HourTimeFormat } from "../../../utils/DateTimeUtils";
+import {
+  epochTo12HourTimeFormat,
+  epochTo24HourTimeFormat,
+} from "../../../utils/DateTimeUtils";
 import { getAdministrationStatus } from "../../../utils/CommonUtils";
 import SVGIcon from "../../SVGIcon/SVGIcon";
 import { CareViewContext } from "../../../context/CareViewContext";
@@ -20,7 +23,7 @@ export const SlotDetailsCell = ({
 }) => {
   const columns = [];
   const { ipdConfig } = useContext(CareViewContext);
-  const { enable24HourTime={} } = ipdConfig;
+  const { enable24HourTime = {} } = ipdConfig;
 
   const patientSlotDetail = slotDetails?.find(
     (slotDetail) => slotDetail.patientUuid === uuid
@@ -90,11 +93,16 @@ export const SlotDetailsCell = ({
                 {taskItem.status === "COMPLETED" && (
                   <SVGIcon iconType={"Administered"} />
                 )}
+                {taskItem.status === "REJECTED" && (
+                  <SVGIcon iconType={"Not-Administered"} />
+                )}
               </div>
               <Clock className="clock-icon" />
             </div>
             <span>
-              {enable24HourTime ? epochTo24HourTimeFormat(taskItem.requestedStartTime / 1000) : epochTo12HourTimeFormat(taskItem.requestedStartTime / 1000)}
+              {enable24HourTime
+                ? epochTo24HourTimeFormat(taskItem.requestedStartTime / 1000)
+                : epochTo12HourTimeFormat(taskItem.requestedStartTime / 1000)}
             </span>
             <div className="drug-details-wrapper">
               <span>{taskItem.name}</span>
