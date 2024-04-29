@@ -43,7 +43,10 @@ export const iconType = (task, nursingTasks) => {
   }
   if (stopTime) return "Stopped";
   if (status === "Not Done" || status === "missed") return "Not-Administered";
-  if (administeredTimeInEpochSeconds || (status === "COMPLETED" && taskType.display)) {
+  if (
+    administeredTimeInEpochSeconds ||
+    (status === "COMPLETED" && taskType.display)
+  ) {
     const administeredLateWindowInSeconds =
       startTimeInEpochSeconds +
       nursingTasks.timeInMinutesFromStartTimeToShowAdministeredTaskAsLate * 60;
@@ -56,18 +59,29 @@ export const iconType = (task, nursingTasks) => {
   return isLateTask(startTimeInEpochSeconds, nursingTasks) ? "Late" : "Pending";
 };
 
-export const getTime = (administeredTimeInEpochSeconds, startTime, inputFormat, outputFormat) => {
-  if (administeredTimeInEpochSeconds) {
+export const getTime = (
+  administeredTimeInEpochMilliSeconds,
+  startTime,
+  inputFormat,
+  outputFormat
+) => {
+  if (administeredTimeInEpochMilliSeconds) {
     const administeredTime = new Date(
-      administeredTimeInEpochSeconds * 1000
+      administeredTimeInEpochMilliSeconds
     ).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
       hourCycle: "h23",
     });
-    return formatTime(startTime, inputFormat,  outputFormat) + " - " + formatTime(administeredTime, inputFormat,  outputFormat) + " (actual)";
+
+    return (
+      formatTime(startTime, inputFormat, outputFormat) +
+      " - " +
+      formatTime(administeredTime, inputFormat, outputFormat) +
+      " (actual)"
+    );
   }
-  return formatTime(startTime, inputFormat,  outputFormat);
+  return formatTime(startTime, inputFormat, outputFormat);
 };
 
 export const getMedicationDetails = (medication) => {

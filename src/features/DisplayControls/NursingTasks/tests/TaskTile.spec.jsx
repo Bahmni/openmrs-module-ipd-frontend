@@ -89,7 +89,7 @@ describe("TaskTile", () => {
         <TaskTile medicationNursingTask={mockCompletedPRNTaskTileData} />
       </IPDContext.Provider>
     );
-    const administeredIcon = getByTestId("Administered");
+    const administeredIcon = getByTestId("Administered-Late");
     expect(administeredIcon).toBeTruthy();
     expect(getByText("Rx-PRN")).toBeTruthy();
     expect(getByText("16:38 - 07:10 (actual)")).toBeTruthy();
@@ -101,7 +101,7 @@ describe("TaskTile", () => {
         <TaskTile medicationNursingTask={mockCompletedPRNTaskTileData} />
       </IPDContext.Provider>
     );
-    const administeredIcon = getByTestId("Administered");
+    const administeredIcon = getByTestId("Administered-Late");
     expect(administeredIcon).toBeTruthy();
     expect(getByText("Rx-PRN")).toBeTruthy();
     expect(getByText("04:38 PM - 07:10 AM (actual)")).toBeTruthy();
