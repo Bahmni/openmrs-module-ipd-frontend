@@ -41,7 +41,8 @@ export const GetUTCEpochForDate = (viewDate) => moment.utc(viewDate).unix();
 export const ExtractMedicationNursingTasksData = (
   medicationNursingTasksData,
   filterValue,
-  isReadMode
+  isReadMode,
+  excludePRN = false
 ) => {
   const extractedData = [],
     pendingExtractedData = [],
@@ -110,6 +111,11 @@ export const ExtractMedicationNursingTasksData = (
           minute: "2-digit",
           hourCycle: "h23",
         }),
+        endTimeInEpochSeconds:
+          order?.dateStopped != null
+            ? Math.floor(new Date(order?.dateStopped).getTime() / 1000) * 1000
+            : Math.floor(new Date(order?.autoExpireDate).getTime() / 1000) *
+              1000,
         orderId: order?.uuid,
         isDisabled: isReadMode
           ? true
@@ -121,7 +127,7 @@ export const ExtractMedicationNursingTasksData = (
       };
 
       if (filterValue.id === "prn" && slotInfo.dosingInstructions.asNeeded) {
-        prnExtractedData.push(slotInfo);
+        !excludePRN && prnExtractedData.push(slotInfo);
       }
 
       if (
@@ -158,7 +164,11 @@ export const ExtractMedicationNursingTasksData = (
         slot.status === "SCHEDULED" &&
         !slot.medicationAdministration
       ) {
-        pendingExtractedData.push(slotInfo);
+        if (slotInfo.dosingInstructions.asNeeded) {
+          !excludePRN && pendingExtractedData.push(slotInfo);
+        } else {
+          pendingExtractedData.push(slotInfo);
+        }
       } else if (
         (filterValue.id === "missed" || filterValue.id === "allTasks") &&
         slot.status === "MISSED"
@@ -209,7 +219,7 @@ export const ExtractMedicationNursingTasksData = (
     groupedData.push(...completedExtractedData.map((item) => [item]));
     groupedData.push(...stoppedExtractedData.map((item) => [item]));
     groupedData.push(...skippedExtractedData.map((item) => [item]));
-    groupedData.push(...prnExtractedData.map((item) => [item]));
+    !excludePRN && groupedData.push(...prnExtractedData.map((item) => [item]));
     groupedData.push(...missedExtractedData.map((item) => [item]));
   }
   return groupedData;
