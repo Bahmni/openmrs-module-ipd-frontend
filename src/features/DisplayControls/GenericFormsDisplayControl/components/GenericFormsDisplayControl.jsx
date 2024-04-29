@@ -4,31 +4,52 @@ import { IPDContext } from "../../../../context/IPDContext";
 import {
   fetchAllConceptsForForm,
   fetchFormTranslations,
-  fetchObservationsForConcepts,
 } from "../utils/GenericFormsDisplayControlUtils";
-import _ from "lodash";
 import "../styles/GenericFormDisplayControl.scss";
-import { Time20 } from "@carbon/icons-react";
 import moment from "moment";
+import {
+  Link,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "carbon-components-react";
+import { ViewFormModal } from "./ViewFormModal";
 
 const GenericFormsDisplayControl = (props) => {
-  const { config } = props;
-  const { concepts, formName } = config;
+  const {
+    config: { formName: formName },
+  } = props;
   const ipdContext = useContext(IPDContext);
-  const [observations, setObservations] = useState([]);
-  const [groupedObsData, setGroupedObsData] = useState([]);
   const [formTemplate, setFormTemplate] = useState([]);
   const [formTranslations, setFormTranslations] = useState({});
-  const {
-    visitSummary: { uuid: visitUuid },
-    allFormsSummary = [],
-  } = ipdContext;
-  const fetchObs = async () => {
-    const response = await fetchObservationsForConcepts(concepts, visitUuid);
-    setObservations(response);
-  };
+  const [formEntries, setFormEntries] = useState([]);
+  const [openViewFormModal, setOpenViewFormModal] = useState({});
+  const headers = [
+    {
+      key: "Date",
+      header: "Date",
+    },
+    {
+      key: "Time",
+      header: "Time",
+    },
+    {
+      key: "Provider",
+      header: "Provider",
+    },
+    {
+      key: "",
+      header: "",
+    },
+  ];
+  const { allFormsSummary = [], allFormsFilledInCurrentVisit = [] } =
+    ipdContext;
   const fetchFormConcepts = async (formUuid) => {
     const response = await fetchAllConceptsForForm(formUuid);
+    console.log("response 1 ", response);
     if (response?.resources && response?.resources[0]?.value) {
       return JSON.parse(response?.resources[0]?.value);
     }
@@ -53,12 +74,13 @@ const GenericFormsDisplayControl = (props) => {
     });
     return form;
   };
+
   useEffect(() => {
-    fetchObs();
     const formUuid = allFormsSummary.find(
       (form) => form.name === formName
     )?.uuid;
     fetchFormConcepts(formUuid).then((response) => {
+      console.log("response", response);
       const finalResponse = restructureFormConcepts(response.controls);
       setFormTemplate(finalResponse);
     });
@@ -66,106 +88,83 @@ const GenericFormsDisplayControl = (props) => {
       setFormTranslations(response.concepts);
     });
   }, []);
+
   useEffect(() => {
-    const groupedSortedObsData = groupObsData(observations);
-    const extractedObsData = groupSimilarObs(groupedSortedObsData);
-    setGroupedObsData(extractedObsData);
-  }, [observations]);
-  const groupObsData = (observations) => {
-    const groupedData = {};
-    observations.forEach((observation) => {
-      if (groupedData[observation.encounterDateTime]) {
-        groupedData[observation.encounterDateTime].push(observation);
-      } else {
-        groupedData[observation.encounterDateTime] = [observation];
-      }
-    });
-    return groupedData;
+    getEntriesForSelectedForm();
+  }, [allFormsFilledInCurrentVisit]);
+  const setModalValue = (uuid, value) => {
+    setOpenViewFormModal({ ...openViewFormModal, [uuid]: value });
   };
 
-  const groupSimilarObs = (groupedObs) => {
-    const extractedObs = {};
-    let provider = "";
-    Object.keys(groupedObs).forEach((key) => {
-      const obs = groupedObs[key];
-      provider = obs[0]?.creatorName;
-      extractedObs[key] = _.groupBy(obs, "concept.name");
-    });
-    const keyValueArray = Object.entries(extractedObs);
-    keyValueArray.sort((a, b) => b[0] - a[0]);
-    return keyValueArray.map(([key, value]) => ({ [key]: value, provider }));
-  };
-  const renderMembers = (form, level, obs) => {
-    const heading = (
-      <span style={{ display: "inline-block", width: "35%" }}>
-        {Array(8 * level)
-          .fill("\u00A0")
-          .join("")}
-        <span className={`${form.hasGroupMembers && "bold-text"} `}>
-          {formTranslations[form.translationKey] &&
-            formTranslations[form.translationKey][0]}
-        </span>
-      </span>
+  const getEntriesForSelectedForm = () => {
+    const forms = allFormsFilledInCurrentVisit.filter(
+      (form) => form.formName === formName
     );
-    return (
-      <>
-        {!form.hasGroupMembers && obs[form.conceptName] && (
-          <div style={{ padding: "16px 0", borderBottom: "1px solid grey" }}>
-            {heading}
-            {obs[form.conceptName]
-              .map((value) => {
-                return value.valueAsString;
-              })
-              .join(", ")}
-          </div>
-        )}
-        {form.hasGroupMembers && (
-          <div style={{ padding: "16px 0", borderBottom: "1px solid grey" }}>
-            {heading}
-          </div>
-        )}
-        {form.hasGroupMembers &&
-          form.members.map((member, index) => {
-            return (
-              <span key={index}>{renderMembers(member, level + 1, obs)}</span>
-            );
-          })}
-      </>
-    );
+    forms.sort((a, b) => b.encounterDateTime - a.encounterDateTime);
+    setFormEntries(forms);
   };
+  console.log(
+    "form",
+    formTemplate,
+    formTranslations,
+    allFormsFilledInCurrentVisit,
+    formEntries
+  );
   return (
-    <div style={{ margin: "10px" }}>
-      {groupedObsData.map((group, index) => {
-        const [date, obs] = Object.entries(group)[0];
-        return (
-          <>
-            <div
-              style={{ padding: "16px 0", borderBottom: "1px solid grey" }}
-              key={index}
+    <Table useZebraStyles className={"form-table-display-control"}>
+      <TableHead>
+        <TableRow>
+          {headers.map((header, index) => (
+            <TableHeader
+              key={index + header.key}
+              className={`${
+                header.key === "Provider" && "provider-column-width"
+              }`}
             >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  fontWeight: "600",
-                }}
-              >
-                {moment(+date).format("DD-MM-YYYY")} | <Time20 />
-                {moment(+date).format("HH:mm")} | {group.provider}
-              </div>
-            </div>
-            <div>
-              {formTemplate.map((form, index) => {
-                return <div key={index}>{renderMembers(form, 0, obs)}</div>;
-              })}
-            </div>
-            <br />
-            <br />
-          </>
-        );
-      })}
-    </div>
+              {header.header}
+            </TableHeader>
+          ))}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {formEntries.map((formEntry, index) => {
+          const { encounterDateTime, providers } = formEntry;
+          const provider = providers[0].providerName;
+          return (
+            <TableRow key={index}>
+              <TableCell>
+                {moment(+encounterDateTime).format("DD-MM-YYYY")}
+              </TableCell>
+              <TableCell>
+                {moment(+encounterDateTime).format("HH:mm")}
+              </TableCell>
+              <TableCell>{provider}</TableCell>
+              <TableCell>
+                <Link
+                  onClick={() => {
+                    setModalValue(formEntry.encounterUuid, true);
+                  }}
+                >
+                  View
+                </Link>
+              </TableCell>
+              {openViewFormModal[formEntry.encounterUuid] && (
+                <ViewFormModal
+                  encounterUuid={formEntry.encounterUuid}
+                  callbacks={{ setModalValue }}
+                  form={{ formTemplate, formTranslations }}
+                  metadata={{
+                    formName,
+                    encounterDateTime: formEntry.encounterDateTime,
+                    provider,
+                  }}
+                />
+              )}
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 };
 

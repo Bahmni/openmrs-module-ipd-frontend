@@ -3,6 +3,7 @@ import {
   CONFIG_BAHMNIENCOUNTER_URL,
   DASHBORAD_CONFIG_URL,
   FETCH_ALL_FORM_DETAILS_URL,
+  FORM_BASE_URL,
   SEARCH_CONCEPT_URL,
   SEARCH_DRUG_URL,
 } from "../constants";
@@ -146,6 +147,23 @@ export const getAllFormsInfo = async () => {
     return await axios.get(FETCH_ALL_FORM_DETAILS_URL, {
       withCredentials: true,
     });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const fetchFormData = async (patientUuid, visitUuid) => {
+  try {
+    return await axios.get(
+      FORM_BASE_URL.replace("{patientUuid}", patientUuid),
+      {
+        withCredentials: true,
+        params: {
+          visitUuid,
+          formType: "v2",
+        },
+      }
+    );
   } catch (error) {
     return error;
   }

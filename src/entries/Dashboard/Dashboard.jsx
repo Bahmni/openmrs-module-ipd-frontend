@@ -16,6 +16,7 @@ import "./Dashboard.scss";
 import PropTypes from "prop-types";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 import {
+  fetchFormData,
   getAllFormsInfo,
   getAppLandingPageUrl,
   getDashboardConfig,
@@ -60,6 +61,8 @@ export default function Dashboard(props) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isShowPatientDetailsOpen, setPatientDetailsOpen] = useState(false);
   const [allFormsSummary, setAllFormsSummary] = useState([]);
+  const [allFormsFilledInCurrentVisit, setAllFormsFilledInCurrentVisit] =
+    useState([]);
 
   const noConfigDataMessage = (
     <FormattedMessage
@@ -87,10 +90,17 @@ export default function Dashboard(props) {
       setAllFormsSummary(allFormsInfo.data);
     }
   };
+  const fetchAllFormsFilledInCurrentVisit = async () => {
+    const response = await fetchFormData(patient?.uuid, visitUuid);
+    if (response.status === 200) {
+      setAllFormsFilledInCurrentVisit(response.data);
+    }
+  };
 
   useEffect(() => {
     fetchConfig();
     fetchAllForms();
+    fetchAllFormsFilledInCurrentVisit();
     document.addEventListener("click", handleClickOutside);
     window.addEventListener("resize", updateWindowWidth);
     return () => {
@@ -175,6 +185,7 @@ export default function Dashboard(props) {
               isReadMode,
               visitSummary,
               allFormsSummary,
+              allFormsFilledInCurrentVisit,
             }}
           >
             <main className="ipd-page">

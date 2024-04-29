@@ -51,6 +51,9 @@ export const FETCH_ALL_FORM_DETAILS_URL =
   RESTWS_V1 + "/bahmniie/form/allForms?v=custom:(version,name,uuid)";
 export const FETCH_FORM_DETAILS_URL =
   RESTWS_V1 + "/form/{formUuid}?v=custom:(resources:(value))";
+export const FORM_BASE_URL = BAHMNI_CORE + "/patient/{patientUuid}/forms";
+export const FETCH_ALL_OBSERVATIONS_IN_ENCOUNTER_URL =
+  BAHMNI_CORE + "/bahmniencounter/{encounterUuid}?includeAll=false";
 export const VISIT_SUMMARY_URL = BAHMNI_CORE + "/visit/summary";
 export const CONFIG_BAHMNIENCOUNTER_URL =
   BAHMNI_CORE + "/config/bahmniencounter";
