@@ -121,6 +121,12 @@ describe("SlotDetailsCell", () => {
         creator: "Nurse One",
         status: "COMPLETED",
       },
+      {
+        startTime: "16:30",
+        name: "Non Medication Task 3",
+        creator: "Nurse One",
+        status: "REJECTED",
+      },
     ];
     await waitFor(() => {
       const slotDetails = container.querySelectorAll(".slot-details");
