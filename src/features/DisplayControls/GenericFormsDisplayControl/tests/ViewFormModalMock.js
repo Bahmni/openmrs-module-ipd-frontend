@@ -22,12 +22,14 @@ export const mockObservations = {
       concept: {
         name: "Image",
       },
+      formFieldPath: "Test Form.1/1-0",
       valueAsString: "Image Value",
     },
     {
       concept: {
         name: "Patient Video",
       },
+      formFieldPath: "Test Form.1/1-0",
       valueAsString: "Patient Video Value",
     },
   ],

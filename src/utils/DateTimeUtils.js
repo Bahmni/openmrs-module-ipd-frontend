@@ -2,6 +2,8 @@ import moment from "moment";
 import {
   dateFormat,
   defaultDateFormat,
+  defaultDateTimeFormat12Hrs,
+  defaultDateTimeFormat24Hrs,
   timeFormatFor12Hr,
   timeFormatFor24Hr,
 } from "../constants";
@@ -118,4 +120,26 @@ export const getFormattedDateTime = (
     return time.format(timeFormatFor24Hr);
   }
   return time.format(timeFormatFor12Hr);
+};
+
+export const getFormattedDateTimeFromEpochTime = (
+  milliseconds,
+  enable24hrsFormat = true
+) => {
+  const time = moment(milliseconds);
+  if (enable24hrsFormat) {
+    return time.format(timeFormatFor24Hr);
+  }
+  return time.format(timeFormatFor12Hr);
+};
+
+export const getDateTimeFromEpochTime = (
+  milliseconds,
+  enable24hrsFormat = true
+) => {
+  const time = moment(milliseconds);
+  if (enable24hrsFormat) {
+    return time.format(defaultDateTimeFormat24Hrs);
+  }
+  return time.format(defaultDateTimeFormat12Hrs);
 };

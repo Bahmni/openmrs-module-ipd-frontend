@@ -8,18 +8,21 @@ import {
   flattenObservations,
 } from "../utils/ViewFormUtils";
 import "../styles/ViewFormModal.scss";
-import moment from "moment/moment";
+import { getDateTimeFromEpochTime } from "../../../../utils/DateTimeUtils";
 
 export const ViewFormModal = (props) => {
   const { encounterUuid, callbacks, form, metadata } = props;
   const { formTemplate, formTranslations } = form;
-  const { formName, encounterDateTime, provider } = metadata;
+  const { formName, encounterDateTime, provider, enable24HourTime } = metadata;
   const [observations, setObservations] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setIsLoading(true);
     fetchAllObservations(encounterUuid).then((response) => {
-      const flattenedObs = flattenObservations(response.observations);
+      const filteredResponse = response.observations.filter((ob) =>
+        ob.formFieldPath.includes(formName)
+      );
+      const flattenedObs = flattenObservations(filteredResponse);
       const groupedObs = _.groupBy(flattenedObs, "concept.name");
       setObservations(groupedObs);
       setIsLoading(false);
@@ -55,6 +58,12 @@ export const ViewFormModal = (props) => {
               )}
               {obs[form.conceptName]
                 .map((value) => {
+                  if (value.type === "Datetime") {
+                    return getDateTimeFromEpochTime(
+                      value.valueAsString,
+                      enable24HourTime
+                    );
+                  }
                   return value.valueAsString;
                 })
                 .join(", ")}
@@ -85,7 +94,8 @@ export const ViewFormModal = (props) => {
     >
       <div className={"view-form-container"}>
         <div className={"view-form-header"}>
-          {formName} | {moment(+encounterDateTime).format("DD-MM-YYYY HH:mm")} |{" "}
+          {formName} |{" "}
+          {getDateTimeFromEpochTime(encounterDateTime, enable24HourTime)} |{" "}
           {provider}
         </div>
         {isLoading ? (

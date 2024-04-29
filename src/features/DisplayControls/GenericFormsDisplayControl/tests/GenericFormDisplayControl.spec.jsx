@@ -1,6 +1,7 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import GenericFormsDisplayControl from "../components/GenericFormsDisplayControl";
+import { IntlProvider } from "react-intl";
 import { IPDContext } from "../../../../context/IPDContext";
 import {
   allFormsFilledInVisitMock,
@@ -33,9 +34,12 @@ describe("Generic Form Display Control", () => {
         value={{
           allFormsSummary: allFormsSummaryMock,
           allFormsFilledInCurrentVisit: allFormsFilledInVisitMock,
+          config: { enable24HourTime: true },
         }}
       >
-        <GenericFormsDisplayControl config={config} />
+        <IntlProvider locale={"en"}>
+          <GenericFormsDisplayControl config={config} />
+        </IntlProvider>
       </IPDContext.Provider>
     );
     await waitFor(() => {
