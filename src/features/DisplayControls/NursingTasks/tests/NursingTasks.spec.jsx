@@ -41,7 +41,7 @@ jest.mock("../../DrugChart/utils/DrugChartUtils", () => {
   );
   return {
     ...originalModule,
-    currentShiftHoursArray: () => mockCurrentShiftHoursArray()
+    currentShiftHoursArray: () => mockCurrentShiftHoursArray(),
   };
 });
 
@@ -71,7 +71,7 @@ describe("NursingTasks", () => {
       ],
       rangeArray: ["06:00-18:00", "18:00-06:00"],
       shiftIndex: 0,
-    })
+    });
   });
 
   afterEach(() => {
@@ -237,7 +237,7 @@ describe("NursingTasks", () => {
   });
 
   it("should show Correct Nursing Tasks when clicked on previous button", async () => {
-    MockDate.set("2024-01-05");
+    MockDate.set("2023-08-11");
     mockFetchhNonMedicationTasks.mockResolvedValue([]);
     mockFetchMedicationNursingTasks
       .mockReturnValueOnce(mockNursingTasksResponse)
@@ -264,7 +264,7 @@ describe("NursingTasks", () => {
     ).toBeTruthy();
   });
   it("should show Correct Nursing Tasks when clicked on next button", async () => {
-    MockDate.set("2024-01-05");
+    MockDate.set("2023-08-11");
     mockFetchhNonMedicationTasks.mockResolvedValue([]);
     mockFetchMedicationNursingTasks
       .mockReturnValueOnce(mockNursingTasksResponse)
@@ -292,7 +292,7 @@ describe("NursingTasks", () => {
     ).toBeTruthy();
   });
   it("should show current shift when clicked on current shift button", async () => {
-    MockDate.set("2024-01-05");
+    MockDate.set("2023-08-11");
     mockFetchhNonMedicationTasks.mockResolvedValue([]);
     mockFetchMedicationNursingTasks
       .mockReturnValueOnce(mockNursingTasksResponse)
@@ -512,8 +512,8 @@ describe("NursingTasks - half hour shifts", () => {
       ],
       rangeArray: ["06:30-18:00", "18:00-06:30"],
       shiftIndex: 0,
-    })
-  })
+    });
+  });
 
   afterEach(() => {
     jest.resetAllMocks();
