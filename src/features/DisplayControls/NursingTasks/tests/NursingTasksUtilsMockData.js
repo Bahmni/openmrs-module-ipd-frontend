@@ -1167,7 +1167,7 @@ export const mockCompletedTaskTileData = [
     startTime: "16:00",
     orderId: "5a893957-b535-431c-a2be-3e37406f941a",
     isDisabled: true,
-    administeredTimeInEpochSeconds: 1703575408,
+    administeredTimeInEpochSeconds: 1703575408000,
     administeredTime: "04:36",
   },
 ];
@@ -1197,7 +1197,7 @@ export const mockCompletedPRNTaskTileData = [
     uuid: "72af0cfa-be74-42a8-b650-45f6978314dd",
     startTimeInEpochSeconds: 1703601000,
     startTime: "16:38",
-    administeredTimeInEpochSeconds: 1787901000,
+    administeredTimeInEpochSeconds: 1787901000000,
     orderId: "703ce1a1-8839-44ab-a349-8a6ca758f6b8",
     isDisabled: false,
     dosingInstructions: {

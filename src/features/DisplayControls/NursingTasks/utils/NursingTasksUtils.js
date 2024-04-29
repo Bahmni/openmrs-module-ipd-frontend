@@ -332,10 +332,10 @@ export const ExtractNonMedicationTasks = (
       isDisabled: isReadMode
         ? true
         : status === "COMPLETED" || status === "REJECTED",
-      executionEndTime: executionEndTime / 1000,
+      executionEndTime: executionEndTime,
       administeredTime: status === "REJECTED" ? null : executionEndTime,
       administeredTimeInEpochSeconds:
-        status === "REJECTED" ? null : executionEndTime / 1000,
+        status === "REJECTED" ? null : executionEndTime,
       status,
       isANonMedicationTask: true,
       token,
