@@ -1,6 +1,6 @@
 export const allFormsSummaryMock = [
   {
-    name: "Test Form ",
+    name: "Test Form",
     uuid: "4d128f45-3ce0-45e6-9824-999a745526be",
     version: "1",
     published: true,

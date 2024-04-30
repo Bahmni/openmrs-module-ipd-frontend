@@ -35,6 +35,8 @@ describe("Generic Form Display Control", () => {
           allFormsSummary: allFormsSummaryMock,
           allFormsFilledInCurrentVisit: allFormsFilledInVisitMock,
           config: { enable24HourTime: true },
+          isAllFormSummaryLoading: false,
+          isAllFormsFilledInCurrentVisitLoading: false,
         }}
       >
         <IntlProvider locale={"en"}>
