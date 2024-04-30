@@ -1,10 +1,14 @@
+import React from "react";
 import axios from "axios";
 import {
-  SEARCH_DRUG_URL,
-  SEARCH_CONCEPT_URL,
   CONFIG_BAHMNIENCOUNTER_URL,
   DASHBORAD_CONFIG_URL,
+  FETCH_ALL_FORM_DETAILS_URL,
+  FORM_BASE_URL,
+  SEARCH_CONCEPT_URL,
+  SEARCH_DRUG_URL,
 } from "../constants";
+import { FormattedMessage } from "react-intl";
 export const getPatientDashboardUrl = (patientUuid) =>
   `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard?currentTab=DASHBOARD_TAB_GENERAL_KEY`;
 
@@ -138,6 +142,50 @@ export const getDashboardConfig = async () => {
   } catch (error) {
     return error;
   }
+};
+
+export const getAllFormsInfo = async () => {
+  try {
+    return await axios.get(FETCH_ALL_FORM_DETAILS_URL, {
+      withCredentials: true,
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const fetchFormData = async (patientUuid, visitUuid) => {
+  try {
+    return await axios.get(
+      FORM_BASE_URL.replace("{patientUuid}", patientUuid),
+      {
+        withCredentials: true,
+        params: {
+          visitUuid,
+          formType: "v2",
+        },
+      }
+    );
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getFetchFormTranslationsUrl = (formName, formUuid) => {
+  return (
+    "/openmrs/ws/rest/v1" +
+    `/bahmniie/form/translate?formName=${formName}&formUuid=${formUuid}&formVersion=1&locale=en`
+  );
+};
+
+export const getNoDataCapturedMessage = (formName) => {
+  const msg = (
+    <FormattedMessage
+      id={"NO_DATA_CAPTURED_FOR_FORM"}
+      defaultMessage={`No ${formName} recorded for this patient in this visit`}
+    />
+  );
+  return msg.replace("{formName}", formName);
 };
 
 export const mockConfig = {
