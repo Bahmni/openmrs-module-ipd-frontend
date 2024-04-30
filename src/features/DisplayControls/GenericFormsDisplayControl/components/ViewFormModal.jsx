@@ -32,6 +32,8 @@ export const ViewFormModal = (props) => {
   const renderMembers = (form, level, obs) => {
     const heading = (
       <span className={"observation-name"}>
+        {/* The below code is used to add the required number of spaces in the 
+          UI to indicate the hierarchy in various sections */}
         {Array(8 * level)
           .fill("\u00A0")
           .join("")}

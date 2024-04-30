@@ -27,7 +27,7 @@ export const componentMapping = {
       "../../features/DisplayControls/IntakeOutput/components/IntakeOutput"
     )
   ),
-  [componentKeys.COMMON_FORMS_DISPLAY_CONTROL]: lazy(() =>
+  [componentKeys.NUTRITION_ADVICE_FORM]: lazy(() =>
     import(
       "../../features/DisplayControls/GenericFormsDisplayControl/components/GenericFormsDisplayControl"
     )

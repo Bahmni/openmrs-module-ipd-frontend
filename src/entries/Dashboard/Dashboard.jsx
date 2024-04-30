@@ -63,7 +63,11 @@ export default function Dashboard(props) {
   const [allFormsSummary, setAllFormsSummary] = useState([]);
   const [allFormsFilledInCurrentVisit, setAllFormsFilledInCurrentVisit] =
     useState([]);
-
+  const [isAllFormSummaryLoading, setIsAllFormSummaryLoading] = useState(false);
+  const [
+    isAllFormsFilledInCurrentVisitLoading,
+    setIsAllFormsFilledInCurrentVisitLoading,
+  ] = useState(false);
   const noConfigDataMessage = (
     <FormattedMessage
       id="NO_CONFIG_MESSAGE"
@@ -88,16 +92,20 @@ export default function Dashboard(props) {
     const allFormsInfo = await getAllFormsInfo();
     if (allFormsInfo.status === 200) {
       setAllFormsSummary(allFormsInfo.data);
+      setIsAllFormSummaryLoading(false);
     }
   };
   const fetchAllFormsFilledInCurrentVisit = async () => {
     const response = await fetchFormData(patient?.uuid, visitUuid);
     if (response.status === 200) {
       setAllFormsFilledInCurrentVisit(response.data);
+      setIsAllFormsFilledInCurrentVisitLoading(false);
     }
   };
 
   useEffect(() => {
+    setIsAllFormSummaryLoading(true);
+    setIsAllFormsFilledInCurrentVisitLoading(true);
     fetchConfig();
     fetchAllForms();
     fetchAllFormsFilledInCurrentVisit();
@@ -186,6 +194,8 @@ export default function Dashboard(props) {
               visitSummary,
               allFormsSummary,
               allFormsFilledInCurrentVisit,
+              isAllFormSummaryLoading,
+              isAllFormsFilledInCurrentVisitLoading,
             }}
           >
             <main className="ipd-page">

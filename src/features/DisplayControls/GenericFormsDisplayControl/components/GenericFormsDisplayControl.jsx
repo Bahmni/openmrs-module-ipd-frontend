@@ -4,9 +4,11 @@ import { IPDContext } from "../../../../context/IPDContext";
 import {
   fetchAllConceptsForForm,
   fetchFormTranslations,
+  formDisplayControlHeaders,
 } from "../utils/GenericFormsDisplayControlUtils";
 import "../styles/GenericFormDisplayControl.scss";
 import {
+  DataTableSkeleton,
   Link,
   Table,
   TableBody,
@@ -32,28 +34,13 @@ const GenericFormsDisplayControl = (props) => {
   const [formTranslations, setFormTranslations] = useState({});
   const [formEntries, setFormEntries] = useState([]);
   const [openViewFormModal, setOpenViewFormModal] = useState({});
-  const headers = [
-    {
-      key: "Date",
-      header: "Date",
-    },
-    {
-      key: "Time",
-      header: "Time",
-    },
-    {
-      key: "Provider",
-      header: "Provider",
-    },
-    {
-      key: "",
-      header: "",
-    },
-  ];
+  const [isLoading, setIsLoading] = useState(false);
   const {
     allFormsSummary = [],
     allFormsFilledInCurrentVisit = [],
     config,
+    isAllFormSummaryLoading,
+    isAllFormsFilledInCurrentVisitLoading,
   } = ipdContext;
   const { enable24HourTime = {} } = config;
   const fetchFormConcepts = async (formUuid) => {
@@ -63,52 +50,61 @@ const GenericFormsDisplayControl = (props) => {
     }
   };
   const restructureFormConcepts = (formConcepts) => {
-    const form = [];
-    formConcepts.map((formConcept) => {
+    const form = formConcepts.map((formConcept) => {
       if (formConcept.type === "obsControl") {
-        form.push({
+        return {
           conceptName: formConcept.concept.name,
           translationKey: formConcept.label.translationKey,
           hasGroupMembers: false,
-        });
+        };
       } else if (formConcept.type === "obsGroupControl") {
-        form.push({
+        return {
           conceptName: formConcept.concept.name,
           translationKey: formConcept.label.translationKey,
           hasGroupMembers: true,
           members: restructureFormConcepts(formConcept.controls),
-        });
+        };
+      } else if (formConcept.type === "section") {
+        return {
+          conceptName: formConcept.label.value,
+          translationKey: formConcept.label.translationKey,
+          hasGroupMembers: true,
+          members: restructureFormConcepts(formConcept.controls),
+        };
       }
     });
     return form;
   };
 
   useEffect(() => {
-    const formUuid = allFormsSummary.find(
-      (form) => form.name === formName
-    )?.uuid;
-    fetchFormConcepts(formUuid).then((response) => {
-      const finalResponse = restructureFormConcepts(response.controls);
-      setFormTemplate(finalResponse);
-    });
-    fetchFormTranslations(formName, formUuid).then((response) => {
-      setFormTranslations(response.concepts);
-    });
-  }, []);
+    setIsLoading(true);
+    if (allFormsSummary.length > 0) {
+      const formUuid = allFormsSummary.find(
+        (form) => form.name === formName
+      )?.uuid;
+      if (formUuid) {
+        fetchFormConcepts(formUuid).then((response) => {
+          const finalResponse = restructureFormConcepts(response.controls);
+          setFormTemplate(finalResponse);
+        });
+        fetchFormTranslations(formName, formUuid).then((response) => {
+          setFormTranslations({ ...response.concepts, ...response.labels });
+          setIsLoading(false);
+        });
+      }
+    }
+  }, [allFormsSummary]);
 
   useEffect(() => {
-    getEntriesForSelectedForm();
-  }, [allFormsFilledInCurrentVisit]);
-  const setModalValue = (uuid, value) => {
-    setOpenViewFormModal({ ...openViewFormModal, [uuid]: value });
-  };
-
-  const getEntriesForSelectedForm = () => {
     const forms = allFormsFilledInCurrentVisit.filter(
       (form) => form.formName === formName
     );
     forms.sort((a, b) => b.encounterDateTime - a.encounterDateTime);
     setFormEntries(forms);
+  }, [allFormsFilledInCurrentVisit]);
+
+  const setModalValue = (uuid, value) => {
+    setOpenViewFormModal({ ...openViewFormModal, [uuid]: value });
   };
 
   const getNoFormDataMessage = () => {
@@ -123,11 +119,15 @@ const GenericFormsDisplayControl = (props) => {
 
   return (
     <div className={"form-table-display-control"}>
-      {formEntries && formEntries.length > 0 ? (
+      {isAllFormSummaryLoading ||
+      isAllFormsFilledInCurrentVisitLoading ||
+      isLoading ? (
+        <DataTableSkeleton rowCount={3} columnCount={4} />
+      ) : formEntries && formEntries.length > 0 ? (
         <Table useZebraStyles>
           <TableHead>
             <TableRow>
-              {headers.map((header, index) => (
+              {formDisplayControlHeaders.map((header, index) => (
                 <TableHeader
                   key={index + header.key}
                   className={`${

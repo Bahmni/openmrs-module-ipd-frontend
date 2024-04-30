@@ -115,7 +115,7 @@ export const componentKeys = {
   NURSING_TASKS: "NT",
   DRUG_CHART: "DC",
   INTAKE_OUTPUT: "IO",
-  COMMON_FORMS_DISPLAY_CONTROL: "CFDC",
+  NUTRITION_ADVICE_FORM: "NAF",
 };
 
 export const performerFunction = "Performer";

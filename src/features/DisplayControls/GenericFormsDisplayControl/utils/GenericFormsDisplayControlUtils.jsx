@@ -29,3 +29,22 @@ export const fetchFormTranslations = async (formName, formUuid) => {
     console.error(e);
   }
 };
+
+export const formDisplayControlHeaders = [
+  {
+    key: "Date",
+    header: "Date",
+  },
+  {
+    key: "Time",
+    header: "Time",
+  },
+  {
+    key: "Provider",
+    header: "Provider",
+  },
+  {
+    key: "",
+    header: "",
+  },
+];

@@ -31,8 +31,11 @@
     align-items: center;
   }
 
-  .bx--tooltip__trigger svg {
-    fill: #0f62fe;
+  .bx--tooltip__trigger {
+    margin-left: 0;
+    svg {
+      fill: #0f62fe;
+    }
   }
 
   .view-form-container {
@@ -54,4 +57,7 @@
       min-width: 50%;
     }
   }
+}
+.bx--tooltip__content {
+  color: #fff;
 }
