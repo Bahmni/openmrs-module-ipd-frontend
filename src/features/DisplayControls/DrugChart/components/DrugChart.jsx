@@ -11,7 +11,7 @@ import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
 import { throttle } from "lodash";
 
 export default function DrugChart(props) {
-  const { drugChartData, currentShiftArray, selectedDate } = props;
+  const { drugChartData, currentShiftArray, selectedDate, shiftIndex } = props;
   const leftPane = useRef(null);
   const rightPane = useRef(null);
   const [isPrevDisabled, setIsPrevDisabled] = useState(true);
@@ -131,6 +131,7 @@ export default function DrugChart(props) {
             calendarData={drugChartData}
             currentShiftArray={currentShiftArray}
             selectedDate={selectedDate}
+            shiftIndex={shiftIndex}
           />
         </div>
       </div>
@@ -151,4 +152,5 @@ DrugChart.propTypes = {
   drugChartData: PropTypes.array.isRequired,
   currentShiftArray: PropTypes.array,
   selectedDate: PropTypes.instanceOf(Date),
+  shiftIndex: PropTypes.number,
 };

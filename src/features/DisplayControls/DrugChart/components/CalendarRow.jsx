@@ -5,16 +5,14 @@ import { areDatesSame, formatDate } from "../../../../utils/DateTimeUtils.js";
 import { IPDContext } from "../../../../context/IPDContext";
 import { timeFormatFor12Hr, timeFormatFor24Hr } from "../../../../constants";
 import moment from "moment";
-import { currentShiftHoursArray } from "../utils/DrugChartUtils";
 
 export default function CalendarRow(props) {
   const { config } = useContext(IPDContext);
   const { enable24HourTime = {}, shiftDetails: shiftConfig = {} } = config;
-  const { rowData, currentShiftArray, selectedDate } = props;
+  const { rowData, currentShiftArray, selectedDate, shiftIndex } = props;
   const { slots } = rowData;
   const transformedData = {};
   const currentShiftMinute = currentShiftArray[0].split(":")[1];
-  const { shiftIndex } = currentShiftHoursArray(new Date(), shiftConfig);
   const shiftArray = Object.values(shiftConfig);
   const shiftEndTime = shiftArray[shiftIndex].shiftEndTime;
   const endTime = moment(shiftEndTime, "HH:mm");
@@ -90,7 +88,8 @@ export default function CalendarRow(props) {
               doHighlightCell={isCurrentHour}
               highlightedCell={highlightedCell}
               isBlank={
-                index === currentShiftArray.length - 1 && !isWholeHourEndTime
+                index === currentShiftArray.length - 1 &&
+                !!(isWholeHourEndTime ^ isWholeHourStartTime)
               }
               isWholeHourStartTime={isWholeHourStartTime}
             />
@@ -102,7 +101,8 @@ export default function CalendarRow(props) {
             doHighlightCell={isCurrentHour}
             highlightedCell={highlightedCell}
             isBlank={
-              index === currentShiftArray.length - 1 && !isWholeHourEndTime
+              index === currentShiftArray.length - 1 &&
+              !!(isWholeHourEndTime ^ isWholeHourStartTime)
             }
             isWholeHourStartTime={isWholeHourStartTime}
           />
@@ -116,4 +116,5 @@ CalendarRow.propTypes = {
   rowData: PropTypes.object.isRequired,
   currentShiftArray: PropTypes.array,
   selectedDate: PropTypes.instanceOf(Date),
+  shiftIndex: PropTypes.number,
 };

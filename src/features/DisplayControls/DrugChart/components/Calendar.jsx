@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import CalendarRow from "./CalendarRow.jsx";
 import "../styles/Calendar.scss";
 export default function Calendar(props) {
-  const { calendarData, currentShiftArray, selectedDate } = props;
+  const { calendarData, currentShiftArray, selectedDate, shiftIndex } = props;
   return (
     <table className="drug-chart-calendar">
       <tbody>
@@ -14,6 +14,7 @@ export default function Calendar(props) {
                 rowData={rowData}
                 currentShiftArray={currentShiftArray}
                 selectedDate={selectedDate}
+                shiftIndex={shiftIndex}
               />
             </tr>
           );
@@ -27,4 +28,5 @@ Calendar.propTypes = {
   calendarData: PropTypes.array.isRequired,
   currentShiftArray: PropTypes.array,
   selectedDate: PropTypes.instanceOf(Date),
+  shiftIndex: PropTypes.number,
 };
