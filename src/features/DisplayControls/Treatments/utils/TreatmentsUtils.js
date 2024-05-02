@@ -185,11 +185,7 @@ export const getDrugName = (drugOrderObject) => {
           drugOrder.dateStopped && "strike-through"
         }`}
       >
-        {drugNonCoded !== null ? (
-          <span>{drugNonCoded}</span>
-        ) : (
-          <span>{drugOrder.drug.name}</span>
-        )}
+      <span>{drugNonCoded !== null ? drugNonCoded : drugOrder.drug.name}</span>
         {isNotesIconDiv && (
           <NotesIcon className="notes-icon" data-testid="notes-icon" />
         )}
