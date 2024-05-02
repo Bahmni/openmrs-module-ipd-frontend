@@ -81,7 +81,6 @@ export const SlotDetailsCell = ({
     columnData.sort((a, b) => a.startTime - b.startTime);
 
     return columnData.map((slotItem) => {
-      console.log("Slot item", slotItem);
       if (slotItem.isNonMedication) {
         const taskItem = slotItem;
         return (
@@ -127,7 +126,11 @@ export const SlotDetailsCell = ({
             </div>
             <span>{epochTo24HourTimeFormat(slotItem.startTime)}</span>
             <div className="drug-details-wrapper">
-              {drugNonCoded != null ? <span>{drugNonCoded}</span> : <span>{slotItem?.order?.drug?.display}</span>}
+              {drugNonCoded != null ? (
+                <span>{drugNonCoded}</span>
+              ) : (
+                <span>{slotItem?.order?.drug?.display}</span>
+              )}
               <div className="drug-details" data-testid="drug-details">
                 {dose && <span className="drug-detail">{dose}</span>}
                 {doseUnits && (

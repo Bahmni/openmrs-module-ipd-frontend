@@ -170,7 +170,6 @@ export const setDosingInstructions = (drugOrder) => {
 
 export const getDrugName = (drugOrderObject) => {
   const drugOrder = drugOrderObject.drugOrder;
-  console.log("Derug order", drugOrder);
   const drugNonCoded = drugOrder.drugNonCoded || null;
   const isNotesIconDiv =
     drugOrder.drug &&
@@ -186,7 +185,11 @@ export const getDrugName = (drugOrderObject) => {
           drugOrder.dateStopped && "strike-through"
         }`}
       >
-       {drugNonCoded != null ? <span>{drugNonCoded}</span> : <span>{drugOrder.drug.name}</span>}
+        {drugNonCoded != null ? (
+          <span>{drugNonCoded}</span>
+        ) : (
+          <span>{drugOrder.drug.name}</span>
+        )}
         {isNotesIconDiv && (
           <NotesIcon className="notes-icon" data-testid="notes-icon" />
         )}
@@ -197,7 +200,9 @@ export const getDrugName = (drugOrderObject) => {
     </div>
   );
 
-  return drugOrder.drug || drugNonCoded!=null ? drugNameValue : drugOrder.freeTextAnswer;
+  return drugOrder.drug || drugNonCoded != null
+    ? drugNameValue
+    : drugOrder.freeTextAnswer;
 };
 
 export const stopDrugOrders = async (payload) => {
