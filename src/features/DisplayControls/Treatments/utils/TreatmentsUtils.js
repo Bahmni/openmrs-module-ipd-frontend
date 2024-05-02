@@ -185,7 +185,7 @@ export const getDrugName = (drugOrderObject) => {
           drugOrder.dateStopped && "strike-through"
         }`}
       >
-        {drugNonCoded != null ? (
+        {drugNonCoded !== null ? (
           <span>{drugNonCoded}</span>
         ) : (
           <span>{drugOrder.drug.name}</span>
@@ -200,7 +200,7 @@ export const getDrugName = (drugOrderObject) => {
     </div>
   );
 
-  return drugOrder.drug || drugNonCoded != null
+  return drugOrder.drug || drugNonCoded !== null
     ? drugNameValue
     : drugOrder.freeTextAnswer;
 };

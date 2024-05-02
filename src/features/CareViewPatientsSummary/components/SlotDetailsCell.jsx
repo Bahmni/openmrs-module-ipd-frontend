@@ -126,7 +126,7 @@ export const SlotDetailsCell = ({
             </div>
             <span>{epochTo24HourTimeFormat(slotItem.startTime)}</span>
             <div className="drug-details-wrapper">
-              {drugNonCoded != null ? (
+              {drugNonCoded !== null ? (
                 <span>{drugNonCoded}</span>
               ) : (
                 <span>{slotItem?.order?.drug?.display}</span>
