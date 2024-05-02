@@ -2,7 +2,6 @@ export const mockScheduleDrugOrder = {
   uuid: "e2b966e0-1d5f-11e0-b929-000c29ad1d07",
   dateActivated: "2010-12-22T00:00:00.000+0530",
   drugOrder: {
-    drugNonCoded: null,
     drug: {
       uuid: "e2b83a8c-1d5f-11e0-b929-000c29ad1d07",
       name: "Aspirin",
@@ -24,7 +23,6 @@ export const mockScheduleDrugOrderAsNeeded = {
   drugOrder: {
     uuid: "e2b966e0-1d5f-11e0-b929-000c29ad1d07",
     dateActivated: "2010-12-22T00:00:00.000+0530",
-    drugNonCoded: null,
     drug: {
       uuid: "e2b83a8c-1d5f-11e0-b929-000c29ad1d07",
       name: "Aspirin",
@@ -54,7 +52,6 @@ export const mockScheduleDrugOrderForEdit = {
       uuid: "e2b83a8c-1d5f-11e0-b929-000c29ad1d07",
       name: "Aspirin",
     },
-    drugNonCoded: null,
     duration: 10,
     durationUnit: "Days",
     instructions: "",
@@ -78,7 +75,6 @@ export const mockScheduleDrugOrderForEdit = {
 export const mockStartTimeDrugOrder = {
   uuid: "e2b966e0-1d5f-11e0-b929-000c29ad1d07",
   dateActivated: "2010-12-22T00:00:00.000+0530",
-  drugNonCoded: null,
   drug: {
     uuid: "e2b83a8c-1d5f-11e0-b929-000c29ad1d07",
     name: "Aspirin",
@@ -218,7 +214,6 @@ export const mockContinuousMedicationDrugOrder = {
   uuid: "e2b966e0-1d5f-11e0-b929-000c29ad1d07",
   dateActivated: "2010-12-22T00:00:00.000+0530",
   drugOrder: {
-    drugNonCoded: null,
     drug: {
       uuid: "e2b83a8c-1d5f-11e0-b929-000c29ad1d07",
       name: "Isoflurane",

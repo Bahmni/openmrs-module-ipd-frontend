@@ -28,7 +28,9 @@ exports[`SlotDetailsCell should render slotDetailsCell 1`] = `
       <div
         class="drug-details-wrapper"
       >
-        <span />
+        <span>
+          Amoxicillin/Clavulanic Acid 1000 mg Tablet
+        </span>
         <div
           class="drug-details"
           data-testid="drug-details"
