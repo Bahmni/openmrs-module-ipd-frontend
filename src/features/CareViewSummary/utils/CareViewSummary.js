@@ -80,7 +80,9 @@ export const getTasksForPatients = async (patientUuids, startTime, endTime) => {
   const patientUuidParams = patientUuids
     .map((uuid) => `patientUuids=${uuid}`)
     .join("&");
-  const TASK_URL = `${GET_TASKS_FOR_PATIENTS_URL}?${patientUuidParams}&startTime=${startTime}&endTime=${endTime}`;
+  const TASK_URL = `${GET_TASKS_FOR_PATIENTS_URL}?${patientUuidParams}&startTime=${startTime}&endTime=${
+    endTime - 60 * 1000
+  }`;
   const response = await axios.get(TASK_URL);
   if (response.status === 200) {
     return response.data;
@@ -110,7 +112,6 @@ export const getSlidesPerView = (isMobileView, isTabletView) => {
     return Math.floor((window.outerWidth * 0.9) / 142);
   }
 };
-
 
 export const getPreviousShiftDetails = (
   rangeArray,
@@ -146,12 +147,11 @@ export const getPreviousShiftDetails = (
     previousEndTimeMoment.diff(currentEndTimeMoment, "hours", true) > 0
       ? previousEndTimeMoment.subtract(1, "days")
       : previousEndTimeMoment;
-  
 
-      const previousShiftDetails =  {
-        startDateTime: +previousStartDate,
-        endDateTime: +previousEndDate,
-        previousShiftIndex,
-      };
+  const previousShiftDetails = {
+    startDateTime: +previousStartDate,
+    endDateTime: +previousEndDate,
+    previousShiftIndex,
+  };
   return previousShiftDetails;
 };
