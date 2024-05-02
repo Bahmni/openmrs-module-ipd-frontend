@@ -1,7 +1,4 @@
 .time-cell {
-  --day-border: 1px solid #c6c6c6;
-  box-sizing: content-box;
-  border-left: var(--day-border);
   display: flex;
   height: var(--time-cell-height);
   align-items: stretch;
@@ -10,7 +7,7 @@
   }
 
   &:first-child {
-    border-left: 2px solid #c6c6c6;
+    border-left: var(--day-border-2);
   }
 
   &:last-child {
@@ -28,7 +25,7 @@
     padding: 25px 0;
     text-align: center;
     &:last-child {
-      border-left: 1px dashed #c6c6c6;
+      border-left: var(--half-day-border);
     }
   }
   svg {
@@ -43,7 +40,27 @@
     }
   }
 
-  .highligtedCell {
+  .highlightedCell {
     background-color: #e3f1fa;
   }
+
+  .blank {
+    background-color: white;
+  }
+}
+
+.time-cell-for-whole-hour {
+  --day-border: 1px solid #c6c6c6;
+  --day-border-2: 2px solid #c6c6c6;
+  --half-day-border: 1px dashed #c6c6c6;
+  border-left: var(--day-border);
+  @extend .time-cell;
+}
+
+.time-cell-for-half-hour {
+  --day-border: 1px dashed #c6c6c6;
+  --day-border-2: 1px dashed #c6c6c6;
+  --half-day-border: 1px solid #c6c6c6;
+  border-left: var(--day-border);
+  @extend .time-cell;
 }

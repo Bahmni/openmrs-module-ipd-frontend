@@ -5,14 +5,21 @@ import { areDatesSame, formatDate } from "../../../../utils/DateTimeUtils.js";
 import { IPDContext } from "../../../../context/IPDContext";
 import { timeFormatFor12Hr, timeFormatFor24Hr } from "../../../../constants";
 import moment from "moment";
+import { currentShiftHoursArray } from "../utils/DrugChartUtils";
 
 export default function CalendarRow(props) {
   const { config } = useContext(IPDContext);
-  const { enable24HourTime = {} } = config;
+  const { enable24HourTime = {}, shiftDetails: shiftConfig = {} } = config;
   const { rowData, currentShiftArray, selectedDate } = props;
   const { slots } = rowData;
   const transformedData = {};
   const currentShiftMinute = currentShiftArray[0].split(":")[1];
+  const { shiftIndex } = currentShiftHoursArray(new Date(), shiftConfig);
+  const shiftArray = Object.values(shiftConfig);
+  const shiftEndTime = shiftArray[shiftIndex].shiftEndTime;
+  const endTime = moment(shiftEndTime, "HH:mm");
+  const isWholeHourEndTime = endTime.minutes() === 0;
+  const isWholeHourStartTime = Number(currentShiftMinute) === 0;
   slots.forEach((slot) => {
     let time;
     const { medicationAdministration, administrationSummary } = slot;
@@ -82,6 +89,10 @@ export default function CalendarRow(props) {
               key={time}
               doHighlightCell={isCurrentHour}
               highlightedCell={highlightedCell}
+              isBlank={
+                index === currentShiftArray.length - 1 && !isWholeHourEndTime
+              }
+              isWholeHourStartTime={isWholeHourStartTime}
             />
           );
         }
@@ -90,6 +101,10 @@ export default function CalendarRow(props) {
             key={time}
             doHighlightCell={isCurrentHour}
             highlightedCell={highlightedCell}
+            isBlank={
+              index === currentShiftArray.length - 1 && !isWholeHourEndTime
+            }
+            isWholeHourStartTime={isWholeHourStartTime}
           />
         );
       })}

@@ -15,6 +15,8 @@ export default function TimeCell(props) {
     endTime = "",
     doHighlightCell,
     highlightedCell,
+    isBlank,
+    isWholeHourStartTime,
   } = props;
   const left = [],
     right = [];
@@ -46,11 +48,17 @@ export default function TimeCell(props) {
   );
 
   return (
-    <div className="time-cell">
+    <div
+      className={
+        isWholeHourStartTime
+          ? "time-cell-for-whole-hour"
+          : "time-cell-for-half-hour"
+      }
+    >
       <div
         data-testid="left-icon"
         className={
-          doHighlightCell && highlightedCell === "left" ? "highligtedCell" : ""
+          doHighlightCell && highlightedCell === "left" ? "highlightedCell" : ""
         }
       >
         {left.map((slot) => {
@@ -72,7 +80,11 @@ export default function TimeCell(props) {
       <div
         data-testid="right-icon"
         className={
-          doHighlightCell && highlightedCell === "right" ? "highligtedCell" : ""
+          doHighlightCell && highlightedCell === "right"
+            ? "highlightedCell"
+            : isBlank
+            ? "blank"
+            : ""
         }
       >
         {right.map((slot) => {
@@ -101,4 +113,6 @@ TimeCell.propTypes = {
   highlightedCell: PropTypes.string,
   startTime: PropTypes.object,
   endTime: PropTypes.object,
+  isBlank: PropTypes.bool,
+  isWholeHourStartTime: PropTypes.bool,
 };
