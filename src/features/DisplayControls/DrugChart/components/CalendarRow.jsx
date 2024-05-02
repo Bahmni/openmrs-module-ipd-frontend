@@ -16,7 +16,8 @@ export default function CalendarRow(props) {
   const shiftArray = Object.values(shiftConfig);
   const shiftEndTime = shiftArray[shiftIndex].shiftEndTime;
   const endTime = moment(shiftEndTime, "HH:mm");
-  const isWholeHourEndTime = endTime.minutes() === 0;
+  const startTime = moment(currentShiftArray[0], "HH:mm");
+  const hasMinutes = endTime.minutes() - startTime.minutes() !== 0;
   const isWholeHourStartTime = Number(currentShiftMinute) === 0;
   slots.forEach((slot) => {
     let time;
@@ -87,10 +88,7 @@ export default function CalendarRow(props) {
               key={time}
               doHighlightCell={isCurrentHour}
               highlightedCell={highlightedCell}
-              isBlank={
-                index === currentShiftArray.length - 1 &&
-                !!(isWholeHourEndTime ^ isWholeHourStartTime)
-              }
+              isBlank={index === currentShiftArray.length - 1 && hasMinutes}
               isWholeHourStartTime={isWholeHourStartTime}
             />
           );
@@ -100,10 +98,7 @@ export default function CalendarRow(props) {
             key={time}
             doHighlightCell={isCurrentHour}
             highlightedCell={highlightedCell}
-            isBlank={
-              index === currentShiftArray.length - 1 &&
-              !!(isWholeHourEndTime ^ isWholeHourStartTime)
-            }
+            isBlank={index === currentShiftArray.length - 1 && hasMinutes}
             isWholeHourStartTime={isWholeHourStartTime}
           />
         );

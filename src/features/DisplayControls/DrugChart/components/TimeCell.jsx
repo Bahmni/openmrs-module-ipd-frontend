@@ -77,32 +77,34 @@ export default function TimeCell(props) {
           );
         })}
       </div>
-      <div
-        data-testid="right-icon"
-        className={
-          doHighlightCell && highlightedCell === "right"
-            ? "highlightedCell"
-            : isBlank
-            ? "blank"
-            : ""
-        }
-      >
-        {right.map((slot) => {
-          const { status, administrationInfo, notes, minutes } = slot;
-          return (
-            <div key={minutes}>
-              <SVGIcon iconType={status} info={administrationInfo} />
-              {ifMedicationNotesPresent(notes, status) && (
-                <span data-testid="right-notes">
-                  <Tooltip autoOrientation={true} renderIcon={() => icon}>
-                    {notes}
-                  </Tooltip>
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      {!isBlank ? (
+        <div
+          data-testid="right-icon"
+          className={
+            doHighlightCell && highlightedCell === "right"
+              ? "highlightedCell"
+              : ""
+          }
+        >
+          {right.map((slot) => {
+            const { status, administrationInfo, notes, minutes } = slot;
+            return (
+              <div key={minutes}>
+                <SVGIcon iconType={status} info={administrationInfo} />
+                {ifMedicationNotesPresent(notes, status) && (
+                  <span data-testid="right-notes">
+                    <Tooltip autoOrientation={true} renderIcon={() => icon}>
+                      {notes}
+                    </Tooltip>
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="blank"></div>
+      )}
     </div>
   );
 }
