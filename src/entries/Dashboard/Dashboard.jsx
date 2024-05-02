@@ -16,6 +16,8 @@ import "./Dashboard.scss";
 import PropTypes from "prop-types";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 import {
+  fetchFormData,
+  getAllFormsInfo,
   getAppLandingPageUrl,
   getDashboardConfig,
   getPatientDashboardUrl,
@@ -58,7 +60,14 @@ export default function Dashboard(props) {
   const [isConfigLoaded, setIsConfigLoaded] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isShowPatientDetailsOpen, setPatientDetailsOpen] = useState(false);
-
+  const [allFormsSummary, setAllFormsSummary] = useState([]);
+  const [allFormsFilledInCurrentVisit, setAllFormsFilledInCurrentVisit] =
+    useState([]);
+  const [isAllFormSummaryLoading, setIsAllFormSummaryLoading] = useState(false);
+  const [
+    isAllFormsFilledInCurrentVisitLoading,
+    setIsAllFormsFilledInCurrentVisitLoading,
+  ] = useState(false);
   const noConfigDataMessage = (
     <FormattedMessage
       id="NO_CONFIG_MESSAGE"
@@ -79,8 +88,27 @@ export default function Dashboard(props) {
     setSections(updatedSections);
   };
 
+  const fetchAllForms = async () => {
+    const allFormsInfo = await getAllFormsInfo();
+    if (allFormsInfo.status === 200) {
+      setAllFormsSummary(allFormsInfo.data);
+      setIsAllFormSummaryLoading(false);
+    }
+  };
+  const fetchAllFormsFilledInCurrentVisit = async () => {
+    const response = await fetchFormData(patient?.uuid, visitUuid);
+    if (response.status === 200) {
+      setAllFormsFilledInCurrentVisit(response.data);
+      setIsAllFormsFilledInCurrentVisitLoading(false);
+    }
+  };
+
   useEffect(() => {
+    setIsAllFormSummaryLoading(true);
+    setIsAllFormsFilledInCurrentVisitLoading(true);
     fetchConfig();
+    fetchAllForms();
+    fetchAllFormsFilledInCurrentVisit();
     document.addEventListener("click", handleClickOutside);
     window.addEventListener("resize", updateWindowWidth);
     return () => {
@@ -164,6 +192,10 @@ export default function Dashboard(props) {
               config: dashboardConfig,
               isReadMode,
               visitSummary,
+              allFormsSummary,
+              allFormsFilledInCurrentVisit,
+              isAllFormSummaryLoading,
+              isAllFormsFilledInCurrentVisitLoading,
             }}
           >
             <main className="ipd-page">
@@ -246,6 +278,7 @@ export default function Dashboard(props) {
                                   <DisplayControl
                                     key={el.refreshKey}
                                     patientId={patient?.uuid}
+                                    config={el.config}
                                   />
                                 </RefreshDisplayControl.Provider>
                               </I18nProvider>
