@@ -18,7 +18,7 @@ export const DrugDetails = ({ hostData }) => {
         id="drug-name"
         className="drug-name"
         type="text"
-        value={hostData?.drugOrder?.drugOrder?.drug?.name}
+        value={hostData?.drugOrder?.drugOrder?.drugNonCoded ? hostData?.drugOrder?.drugOrder?.drugNonCoded : hostData?.drugOrder?.drugOrder?.drug?.name }
         labelText="Drug Name"
         disabled
       />

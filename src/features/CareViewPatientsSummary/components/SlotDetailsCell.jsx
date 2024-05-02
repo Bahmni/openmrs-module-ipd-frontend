@@ -81,6 +81,7 @@ export const SlotDetailsCell = ({
     columnData.sort((a, b) => a.startTime - b.startTime);
 
     return columnData.map((slotItem) => {
+      console.log("Slot item", slotItem);
       if (slotItem.isNonMedication) {
         const taskItem = slotItem;
         return (
@@ -117,7 +118,7 @@ export const SlotDetailsCell = ({
           </div>
         );
       } else {
-        const { dose, doseUnits, route } = slotItem.order;
+        const { dose, doseUnits, route, drugNonCoded } = slotItem.order;
         return (
           <div className="slot-details" key={`${slotItem.uuid}`}>
             <div className="logo">
@@ -126,7 +127,7 @@ export const SlotDetailsCell = ({
             </div>
             <span>{epochTo24HourTimeFormat(slotItem.startTime)}</span>
             <div className="drug-details-wrapper">
-              <span>{slotItem.order.drug.display}</span>
+              {drugNonCoded != null ? <span>{drugNonCoded}</span> : <span>{slotItem?.order?.drug?.display}</span>}
               <div className="drug-details" data-testid="drug-details">
                 {dose && <span className="drug-detail">{dose}</span>}
                 {doseUnits && (
