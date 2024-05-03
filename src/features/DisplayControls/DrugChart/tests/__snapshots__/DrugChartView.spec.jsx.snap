@@ -258,7 +258,19 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                 class="hour-header"
                 data-testid="hour"
               >
+                06:30
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
                 07:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                07:30
               </div>
               <div
                 class="hour-header"
@@ -270,7 +282,19 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                 class="hour-header"
                 data-testid="hour"
               >
+                08:30
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
                 09:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                09:30
               </div>
               <div
                 class="hour-header"
@@ -282,7 +306,19 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                 class="hour-header"
                 data-testid="hour"
               >
+                10:30
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
                 11:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                11:30
               </div>
               <div
                 class="hour-header"
@@ -294,7 +330,19 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                 class="hour-header"
                 data-testid="hour"
               >
+                12:30
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
                 13:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                13:30
               </div>
               <div
                 class="hour-header"
@@ -306,7 +354,19 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                 class="hour-header"
                 data-testid="hour"
               >
+                14:30
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
                 15:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                15:30
               </div>
               <div
                 class="hour-header"
@@ -318,7 +378,19 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                 class="hour-header"
                 data-testid="hour"
               >
+                16:30
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
                 17:00
+              </div>
+              <div
+                class="hour-header"
+                data-testid="hour"
+              >
+                17:30
               </div>
             </div>
           </div>
@@ -331,7 +403,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                   style="display: flex;"
                 >
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""
@@ -343,7 +415,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                     />
                   </div>
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""
@@ -355,7 +427,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                     />
                   </div>
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""
@@ -367,7 +439,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                     />
                   </div>
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""
@@ -379,7 +451,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                     />
                   </div>
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""
@@ -391,7 +463,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                     />
                   </div>
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""
@@ -403,7 +475,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                     />
                   </div>
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""
@@ -415,7 +487,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                     />
                   </div>
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""
@@ -427,7 +499,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                     />
                   </div>
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""
@@ -439,7 +511,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                     />
                   </div>
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""
@@ -451,7 +523,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                     />
                   </div>
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""
@@ -463,7 +535,7 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                     />
                   </div>
                   <div
-                    class="time-cell"
+                    class="time-cell-for-whole-hour"
                   >
                     <div
                       class=""

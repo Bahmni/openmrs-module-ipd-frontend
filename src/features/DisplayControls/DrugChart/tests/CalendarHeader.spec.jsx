@@ -60,7 +60,7 @@ describe("CalendarHeader", () => {
       </IPDContext.Provider>
     );
     const hours = getAllByTestId("hour");
-    expect(hours.length).toBe(
+    expect(hours.length / 2).toBe(
       currentShiftHoursArray(new Date(), shiftDetails).currentShiftHoursArray
         .length
     );
@@ -93,7 +93,7 @@ describe("CalendarHeader", () => {
       </IPDContext.Provider>
     );
     const hours = getAllByTestId("hour");
-    expect(hours.length).toBe(
+    expect(hours.length / 2).toBe(
       currentShiftHoursArray(new Date(), shiftDetails).currentShiftHoursArray
         .length
     );

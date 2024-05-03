@@ -110,6 +110,12 @@ export const isTimeInFuture = (time1, time2) => {
   return time1_24hr > time2_24hr;
 };
 
+export const add30Minutes = (timeStr) => {
+  const originalTime = moment(timeStr, "HH:mm");
+  const incrementedTime = originalTime.clone().add(30, "minutes");
+  return [originalTime.format("HH:mm"), incrementedTime.format("HH:mm")];
+};
+
 export const getFormattedDateTime = (
   hours,
   minutes,

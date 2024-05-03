@@ -15,6 +15,8 @@ export default function TimeCell(props) {
     endTime = "",
     doHighlightCell,
     highlightedCell,
+    isBlank,
+    isWholeHourStartTime,
   } = props;
   const left = [],
     right = [];
@@ -46,11 +48,17 @@ export default function TimeCell(props) {
   );
 
   return (
-    <div className="time-cell">
+    <div
+      className={
+        isWholeHourStartTime
+          ? "time-cell-for-whole-hour"
+          : "time-cell-for-half-hour"
+      }
+    >
       <div
         data-testid="left-icon"
         className={
-          doHighlightCell && highlightedCell === "left" ? "highligtedCell" : ""
+          doHighlightCell && highlightedCell === "left" ? "highlightedCell" : ""
         }
       >
         {left.map((slot) => {
@@ -69,28 +77,34 @@ export default function TimeCell(props) {
           );
         })}
       </div>
-      <div
-        data-testid="right-icon"
-        className={
-          doHighlightCell && highlightedCell === "right" ? "highligtedCell" : ""
-        }
-      >
-        {right.map((slot) => {
-          const { status, administrationInfo, notes, minutes } = slot;
-          return (
-            <div key={minutes}>
-              <SVGIcon iconType={status} info={administrationInfo} />
-              {ifMedicationNotesPresent(notes, status) && (
-                <span data-testid="right-notes">
-                  <Tooltip autoOrientation={true} renderIcon={() => icon}>
-                    {notes}
-                  </Tooltip>
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      {!isBlank ? (
+        <div
+          data-testid="right-icon"
+          className={
+            doHighlightCell && highlightedCell === "right"
+              ? "highlightedCell"
+              : ""
+          }
+        >
+          {right.map((slot) => {
+            const { status, administrationInfo, notes, minutes } = slot;
+            return (
+              <div key={minutes}>
+                <SVGIcon iconType={status} info={administrationInfo} />
+                {ifMedicationNotesPresent(notes, status) && (
+                  <span data-testid="right-notes">
+                    <Tooltip autoOrientation={true} renderIcon={() => icon}>
+                      {notes}
+                    </Tooltip>
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="blank"></div>
+      )}
     </div>
   );
 }
@@ -101,4 +115,6 @@ TimeCell.propTypes = {
   highlightedCell: PropTypes.string,
   startTime: PropTypes.object,
   endTime: PropTypes.object,
+  isBlank: PropTypes.bool,
+  isWholeHourStartTime: PropTypes.bool,
 };

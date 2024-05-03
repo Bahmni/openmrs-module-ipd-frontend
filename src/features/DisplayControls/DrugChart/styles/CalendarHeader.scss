@@ -11,7 +11,7 @@
   --border-widths: calc(
     calc(1 + var(--additional-borders)) * var(--line-width)
   );
-  --width: calc(calc(2 * var(--half-hour-width)) + var(--border-widths));
+  --width: calc(var(--half-hour-width) + var(--border-widths));
   width: var(--width);
   height: 63px;
   color: var(--gray-gray-80, #393939);
@@ -23,6 +23,14 @@
   display: grid;
   align-items: end;
   box-sizing: border-box;
+
+  &:first-child {
+    --additional-borders: 1;
+  }
+
+  &:nth-child(2n) {
+    --width: calc(var(--half-hour-width));
+  }
 
   &:last-child {
     --additional-borders: 1;

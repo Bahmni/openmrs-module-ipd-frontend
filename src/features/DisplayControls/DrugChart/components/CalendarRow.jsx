@@ -8,11 +8,17 @@ import moment from "moment";
 
 export default function CalendarRow(props) {
   const { config } = useContext(IPDContext);
-  const { enable24HourTime = {} } = config;
-  const { rowData, currentShiftArray, selectedDate } = props;
+  const { enable24HourTime = {}, shiftDetails: shiftConfig = {} } = config;
+  const { rowData, currentShiftArray, selectedDate, shiftIndex } = props;
   const { slots } = rowData;
   const transformedData = {};
   const currentShiftMinute = currentShiftArray[0].split(":")[1];
+  const shiftArray = Object.values(shiftConfig);
+  const shiftEndTime = shiftArray[shiftIndex].shiftEndTime;
+  const endTime = moment(shiftEndTime, "HH:mm");
+  const startTime = moment(currentShiftArray[0], "HH:mm");
+  const hasMinutes = endTime.minutes() - startTime.minutes() !== 0;
+  const isWholeHourStartTime = Number(currentShiftMinute) === 0;
   slots.forEach((slot) => {
     let time;
     const { medicationAdministration, administrationSummary } = slot;
@@ -82,6 +88,8 @@ export default function CalendarRow(props) {
               key={time}
               doHighlightCell={isCurrentHour}
               highlightedCell={highlightedCell}
+              isBlank={index === currentShiftArray.length - 1 && hasMinutes}
+              isWholeHourStartTime={isWholeHourStartTime}
             />
           );
         }
@@ -90,6 +98,8 @@ export default function CalendarRow(props) {
             key={time}
             doHighlightCell={isCurrentHour}
             highlightedCell={highlightedCell}
+            isBlank={index === currentShiftArray.length - 1 && hasMinutes}
+            isWholeHourStartTime={isWholeHourStartTime}
           />
         );
       })}
@@ -101,4 +111,5 @@ CalendarRow.propTypes = {
   rowData: PropTypes.object.isRequired,
   currentShiftArray: PropTypes.array,
   selectedDate: PropTypes.instanceOf(Date),
+  shiftIndex: PropTypes.number,
 };

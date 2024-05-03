@@ -128,9 +128,9 @@ describe("TimeCell", () => {
       />
     );
 
-    expect(component.getByTestId("left-icon")).toHaveClass("highligtedCell");
+    expect(component.getByTestId("left-icon")).toHaveClass("highlightedCell");
     expect(component.getByTestId("right-icon")).not.toHaveClass(
-      "highligtedCell"
+      "highlightedCell"
     );
   });
 
@@ -148,9 +148,9 @@ describe("TimeCell", () => {
     );
 
     expect(component.getByTestId("left-icon")).not.toHaveClass(
-      "highligtedCell"
+      "highlightedCell"
     );
-    expect(component.getByTestId("right-icon")).toHaveClass("highligtedCell");
+    expect(component.getByTestId("right-icon")).toHaveClass("highlightedCell");
   });
 
   it("should not highlight if highligted flag cell is false", () => {
@@ -167,10 +167,10 @@ describe("TimeCell", () => {
     );
 
     expect(component.getByTestId("left-icon")).not.toHaveClass(
-      "highligtedCell"
+      "highlightedCell"
     );
     expect(component.getByTestId("right-icon")).not.toHaveClass(
-      "highligtedCell"
+      "highlightedCell"
     );
   });
 });
