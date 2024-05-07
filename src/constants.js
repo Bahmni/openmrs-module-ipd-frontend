@@ -116,6 +116,7 @@ export const componentKeys = {
   DRUG_CHART: "DC",
   INTAKE_OUTPUT: "IO",
   NUTRITION_ADVICE_FORM: "NAF",
+  PATIENT_FEEDING_RECORD: "PFR",
 };
 
 export const performerFunction = "Performer";

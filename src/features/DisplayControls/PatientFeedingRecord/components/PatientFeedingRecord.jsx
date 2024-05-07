@@ -1,11 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import moment from "moment";
-
-import { Button, Loading } from "carbon-components-react";
-
+import { Button, DataTableSkeleton } from "carbon-components-react";
 import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
-import IntakeOutputTable from "./IntakeOutputTable";
 import { IPDContext } from "../../../../context/IPDContext";
 import {
   displayPeriodTimingsFormat,
@@ -14,29 +11,33 @@ import {
 import WarningIcon from "../../../../icons/warning.svg";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import {
-  getSortedObsData,
-  transformObsData,
-  intakeOutputHeaders,
   currentPeriodRange,
   NotCurrentPeriodMessage,
-  NoDataForSelectedPeriod,
   isCurrentPeriod,
+  getSortedObsData,
   filterDataForRange,
-  fetchFormData,
-} from "../utils/IntakeOutputUtils.js";
+  fetchFormData
+} from "../../intakeOutput/utils/IntakeOutputUtils.js";
+import {
+  patientFeedingRecordHeaders,
+  transformObsData,
+  NoDataForSelectedPeriod,
+} from "../utils/PatientFeedingRecordUtils.js";
+import PatientFeedingRecordTable from "./PatientFeedingRecordTable";
+import "../styles/PatientFeedingRecord.scss";
 
 const IntakeOutput = () => {
   const { config, isReadMode, visitSummary, patient } = useContext(IPDContext);
-  const { intakeOutputConfig = {} } = config;
-  const [consolidatedIOData, setConsolidatedIOData] = useState({});
+  const { patientFeedingRecordConfig = {} } = config;
+  const [consolidatedPFRData, setConsolidatedPFRData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [notCurrentPeriod, setNotCurrentPeriod] = useState(false);
-  const [intakeOutputData, setIntakeOutputData] = useState([]);
+  const [patientFeedingRecordData, setPatientFeedingRecordData] = useState([]);
   const { enable24HourTime = {} } = config;
   const {
     periodDetails: periodConfig = {},
     dashboardConfig: dashboardConfig = {},
-  } = intakeOutputConfig;
+  } = patientFeedingRecordConfig;
   const currentPeriod = currentPeriodRange(
     isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
     periodConfig
@@ -53,14 +54,14 @@ const IntakeOutput = () => {
   });
   const visitStartDateTime = visitSummary.startDateTime;
 
-  const callFetchIntakeAndOutputData = async () => {
+  const callFetchPatientFeedingRecordData = async () => {
     try {
       const response = await fetchFormData(
         patient.uuid,
         dashboardConfig.conceptNames,
         dashboardConfig.numberOfVisits
       );
-      setIntakeOutputData(response);
+      setPatientFeedingRecordData(response);
     } catch (e) {
       return e;
     } finally {
@@ -162,20 +163,22 @@ const IntakeOutput = () => {
     isCurrentPeriod(startEndDates, periodConfig)
       ? setNotCurrentPeriod(false)
       : setNotCurrentPeriod(true);
+
     const filteredData = filterDataForRange(
-      intakeOutputData,
-      intakeOutputConfig.timeConceptNames,
+      patientFeedingRecordData,
+      patientFeedingRecordConfig.timeConceptNames,
       startEndDates,
       visitSummary.startDateTime
     );
+
     const sortedObsData = getSortedObsData(
       filteredData,
-      intakeOutputConfig.timeConceptNames
+      patientFeedingRecordConfig.timeConceptNames
     );
 
     setPeriodButtonsDisabled({
       previous:
-        (isReadMode && intakeOutputData.length === 0) ||
+        (isReadMode && patientFeedingRecordData.length === 0) ||
         moment(visitStartDateTime).isBetween(
           startEndDates.startDate,
           startEndDates.endDate,
@@ -184,16 +187,18 @@ const IntakeOutput = () => {
         ),
       next: moment(visitSummary.stopDateTime).isBefore(startEndDates.endDate),
     });
-    setConsolidatedIOData(transformObsData(sortedObsData, intakeOutputConfig));
+    setConsolidatedPFRData(
+      transformObsData(sortedObsData, patientFeedingRecordConfig)
+    );
     setIsLoading(false);
-  }, [startEndDates, intakeOutputData, visitStartDateTime]);
+  }, [startEndDates, patientFeedingRecordData, visitStartDateTime]);
 
   useEffect(() => {
     updatedStartEndDates({
       startDate: currentPeriod.startDateTime,
       endDate: currentPeriod.endDateTime,
     });
-    callFetchIntakeAndOutputData();
+    callFetchPatientFeedingRecordData();
   }, []);
   return (
     <div className="intake-output-content-container display-container">
@@ -240,18 +245,18 @@ const IntakeOutput = () => {
       </div>
       <div>
         {isLoading ? (
-          <div className="loading-parent" data-testid="loading-icon">
-            <Loading withOverlay={false} />
-          </div>
-        ) : consolidatedIOData.transformedData &&
-          consolidatedIOData.transformedData.length === 0 ? (
-          <div className="no-io-data">{NoDataForSelectedPeriod}</div>
+          <DataTableSkeleton
+            data-testid="datatable-skeleton"
+            headers={patientFeedingRecordHeaders}
+            aria-label="sample table"
+          />
+        ) : consolidatedPFRData && consolidatedPFRData.length === 0 ? (
+          <div className="no-pfr-data">{NoDataForSelectedPeriod}</div>
         ) : (
-          <IntakeOutputTable
-            rows={consolidatedIOData.transformedData || []}
-            headers={intakeOutputHeaders}
-            totalIntakeGroup={consolidatedIOData.totalIntakeMap || {}}
-            totalOutputGroup={consolidatedIOData.totalOutputMap || {}}
+          <PatientFeedingRecordTable
+            rows={consolidatedPFRData || []}
+            headers={patientFeedingRecordHeaders}
+            useZebraStyles={true}
           />
         )}
       </div>

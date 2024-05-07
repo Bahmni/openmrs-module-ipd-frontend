@@ -32,4 +32,9 @@ export const componentMapping = {
       "../../features/DisplayControls/GenericFormsDisplayControl/components/GenericFormsDisplayControl"
     )
   ),
+  [componentKeys.PATIENT_FEEDING_RECORD]: lazy(() =>
+    import(
+      "../../features/DisplayControls/PatientFeedingRecord/components/PatientFeedingRecord"
+    )
+  ),
 };
