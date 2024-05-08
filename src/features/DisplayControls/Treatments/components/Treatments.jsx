@@ -195,9 +195,6 @@ const Treatments = (props) => {
     setShowStopDrugSuccessNotification(true);
   };
 
-  const isPreviousVisitItem = (itemStartDateTime) =>
-    visitSummary.startDateTime > itemStartDateTime;
-
   const getActions = (
     showEditDrugChartLink,
     showStopDrugChartLink,
@@ -212,13 +209,20 @@ const Treatments = (props) => {
               isAddToDrugChartDisabled ||
               moment().valueOf() <= drugOrder.effectiveStartDate
             }
-            onClick={() =>
-              handleEditAndAddToDrugChartClick(
-                drugOrder.uuid,
-                showEditDrugChartLink,
-                drugOrderSchedule?.notes
-              )
-            }
+            onClick={() => {
+              if (
+                !(
+                  isAddToDrugChartDisabled ||
+                  moment().valueOf() <= drugOrder.effectiveStartDate
+                )
+              ) {
+                handleEditAndAddToDrugChartClick(
+                  drugOrder.uuid,
+                  showEditDrugChartLink,
+                  drugOrderSchedule?.notes
+                );
+              }
+            }}
           >
             {!drugOrder.dosingInstructions?.asNeeded
               ? AddToDrugChart
@@ -292,7 +296,6 @@ const Treatments = (props) => {
 
           const drugOrder = drugOrderObject.drugOrder;
           const actionsObjectValue =
-            !isPreviousVisitItem(drugOrder.dateActivated) &&
             !drugOrder.dateStopped &&
             getActions(
               showEditDrugChartLink,
