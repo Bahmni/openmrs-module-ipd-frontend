@@ -23,7 +23,11 @@ import { Button, Dropdown, Loading } from "carbon-components-react";
 import AddEmergencyTasks from "./AddEmergencyTasks";
 import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
-import { componentKeys, timeFormatFor12Hr } from "../../../../constants";
+import {
+  asNeededPlaceholderConceptName,
+  componentKeys,
+  timeFormatFor12Hr,
+} from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
 import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
@@ -272,7 +276,10 @@ export default function NursingTasks(props) {
         const filteredData = extractedData
           .map((extract) =>
             extract.filter((data) => {
-              return data.endTimeInEpochSeconds > endDateTimeChange;
+              return !(
+                data.serviceType == asNeededPlaceholderConceptName &&
+                data.endTimeInEpochSeconds <= startEndDates.endDate
+              );
             })
           )
           .filter((innerArray) => innerArray.length > 0);
@@ -326,7 +333,10 @@ export default function NursingTasks(props) {
       extractedMedicationData = extractedData
         .map((extract) =>
           extract.filter((data) => {
-            return data.endTimeInEpochSeconds > startEndDates.endDate;
+            return !(
+              data.serviceType == asNeededPlaceholderConceptName &&
+              data.endTimeInEpochSeconds <= startEndDates.endDate
+            );
           })
         )
         .filter((innerArray) => innerArray.length > 0);
