@@ -21,7 +21,7 @@ export const fetchMedications = async (
   try {
     return await axios.get(FETCH_MEDICATIONS_URL);
   } catch (error) {
-    console.error(error);
+    return {error};
   }
 };
 

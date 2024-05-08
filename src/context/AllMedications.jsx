@@ -22,8 +22,7 @@ export const AllMedicationsContextProvider = (props) => {
       }));
     } catch (error) {
       setMedications((prevState) => ({
-        ...prevState,
-        isLoading: false,
+        isLoading: true,
         error,
       }));
     }
