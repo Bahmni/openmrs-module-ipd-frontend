@@ -17,7 +17,7 @@ import {
   getSortedObsData,
   filterDataForRange,
   fetchFormData,
-} from "../../intakeOutput/utils/IntakeOutputUtils";
+} from "../../IntakeOutput/utils/IntakeOutputUtils";
 import {
   patientFeedingRecordHeaders,
   transformObsData,
