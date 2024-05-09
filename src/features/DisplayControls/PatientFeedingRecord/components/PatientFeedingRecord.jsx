@@ -16,7 +16,7 @@ import {
   isCurrentPeriod,
   getSortedObsData,
   filterDataForRange,
-  fetchFormData
+  fetchFormData,
 } from "../../intakeOutput/utils/IntakeOutputUtils.js";
 import {
   patientFeedingRecordHeaders,
@@ -26,7 +26,7 @@ import {
 import PatientFeedingRecordTable from "./PatientFeedingRecordTable";
 import "../styles/PatientFeedingRecord.scss";
 
-const IntakeOutput = () => {
+const PatientFeedingRecord = () => {
   const { config, isReadMode, visitSummary, patient } = useContext(IPDContext);
   const { patientFeedingRecordConfig = {} } = config;
   const [consolidatedPFRData, setConsolidatedPFRData] = useState({});
@@ -201,9 +201,9 @@ const IntakeOutput = () => {
     callFetchPatientFeedingRecordData();
   }, []);
   return (
-    <div className="intake-output-content-container display-container">
-      <div className={"intake-output-navigation"}>
-        <div className="intake-output-period-header">
+    <div className="patient-feeding-record-container display-container">
+      <div className={"patient-feeding-record-navigation"}>
+        <div className="patient-feeding-record-period-header">
           <Button
             kind="tertiary"
             isExpressive
@@ -264,6 +264,6 @@ const IntakeOutput = () => {
   );
 };
 
-IntakeOutput.propTypes = {};
+PatientFeedingRecord.propTypes = {};
 
-export default IntakeOutput;
+export default PatientFeedingRecord;

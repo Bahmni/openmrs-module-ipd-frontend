@@ -275,6 +275,21 @@ export const mockConfig = {
       muac: "Mid-upper arm circumference",
     },
   },
+  patientFeedingRecordConfig: {
+    shiftValueConcept: "Shift",
+    routeValueConcept: "Patient Feeding Route",
+    feedTypeConcept: "Feed Type",
+    amountValueConcept: "Patient Feeding Amount",
+    timeConceptNames: ["Date and Time"],
+    periodDetails: {
+      startTime: "08:00",
+      durationInHours: "24",
+    },
+    dashboardConfig: {
+      numberOfVisits: 10,
+      conceptNames: ["Patient Feeding"],
+    },
+  },
 };
 
 export const mockConfigFor12HourFormat = {
