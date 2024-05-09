@@ -514,14 +514,14 @@ const DrugChartSlider = (props) => {
     if (performSave) {
       updateIsSaveDisabled(true);
       const medication = createDrugChartPayload();
-        let response;
-        if (isEdit) {
-            response = await updateMedication(medication);
-            await handleAuditEvent("EDIT_SCHEDULED_MEDICATION_TASK");
-        } else {
-            response = await saveMedication(medication);
-            await handleAuditEvent("CREATE_SCHEDULED_MEDICATION_TASK");
-        }
+      let response;
+      if (isEdit) {
+        response = await updateMedication(medication);
+        handleAuditEvent("EDIT_SCHEDULED_MEDICATION_TASK");
+      } else {
+        response = await saveMedication(medication);
+        handleAuditEvent("CREATE_SCHEDULED_MEDICATION_TASK");
+      }
       if (response.status === 200) {
         updateIsSaveDisabled(false);
         hostApi.onModalSave?.();
