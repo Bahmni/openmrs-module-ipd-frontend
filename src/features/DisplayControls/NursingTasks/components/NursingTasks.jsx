@@ -27,6 +27,7 @@ import {
   ForbiddenErrorMessage,
   GenericErrorMessage,
   componentKeys,
+  errorCodes,
   timeFormatFor12Hr,
 } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
@@ -246,7 +247,7 @@ export default function NursingTasks(props) {
       visit
     );
     if (nursingTasks?.error) {
-      if (nursingTasks.error.response.status === 403) {
+      if (nursingTasks.error.response.status === errorCodes.FORBIDDEN) {
         setErrorMessage(ForbiddenErrorMessage);
         setIsLoading(false);
       } else {
@@ -569,7 +570,7 @@ export default function NursingTasks(props) {
         </div>
       ) : medicationNursingTasks && medicationNursingTasks.length === 0 ? (
         <div className="no-nursing-tasks">
-          {errorMessage !== "" ? errorMessage : getNoTaskMessage()}
+          {errorMessage ? errorMessage : getNoTaskMessage()}
         </div>
       ) : (
         <div>

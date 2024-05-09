@@ -28,6 +28,7 @@ import {
   ForbiddenErrorMessage,
   GenericErrorMessage,
   displayShiftTimingsFormat,
+  errorCodes,
   timeFormatFor12Hr,
 } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
@@ -91,7 +92,7 @@ export default function DrugChartWrapper(props) {
         visit
       );
       if (response?.error) {
-        if (response.error.response.status === 403) {
+        if (response.error.response.status === errorCodes.FORBIDDEN) {
           setErrorMessage(ForbiddenErrorMessage);
         } else {
           setErrorMessage(GenericErrorMessage);
@@ -316,7 +317,7 @@ export default function DrugChartWrapper(props) {
         </div>
       ) : transformedData && transformedData.length === 0 ? (
         <div className="no-nursing-tasks">
-          {errorMessage !== "" ? errorMessage : NoMedicationTaskMessage}
+          {errorMessage ? errorMessage : NoMedicationTaskMessage}
         </div>
       ) : (
         <DrugChart

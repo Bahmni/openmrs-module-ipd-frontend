@@ -144,3 +144,7 @@ export const WARD_SUMMARY_HEADER = {
 export const ForbiddenErrorMessage = "User doesn't have required privilege(s)";
 
 export const GenericErrorMessage = "Technical error";
+
+export const errorCodes = {
+  FORBIDDEN: 403,
+};

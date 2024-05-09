@@ -25,7 +25,13 @@ import {
   getSlotsForAnOrderAndServiceType,
 } from "../utils/TreatmentsUtils";
 import { getCookies } from "../../../../utils/CommonUtils";
-import { ForbiddenErrorMessage, GenericErrorMessage, defaultDateTimeFormat, serviceType } from "../../../../constants";
+import {
+  ForbiddenErrorMessage,
+  GenericErrorMessage,
+  defaultDateTimeFormat,
+  errorCodes,
+  serviceType,
+} from "../../../../constants";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
 import { SliderContext } from "../../../../context/SliderContext";
@@ -411,19 +417,19 @@ const Treatments = (props) => {
         );
         setTreatments(allTreatments);
         getTreatmentConfigs();
-      }
-      else if(allMedications.error.response.status === 403){
+      } else if (
+        allMedications.error.response.status === errorCodes.FORBIDDEN
+      ) {
         setIsLoading(false);
-        setErrorMessage(ForbiddenErrorMessage)
-      }
-      else{
+        setErrorMessage(ForbiddenErrorMessage);
+      } else {
         setIsLoading(false);
-        setErrorMessage(GenericErrorMessage)
+        setErrorMessage(GenericErrorMessage);
       }
     };
 
     setMedicationsData();
-  }, [allMedications.data]);
+  }, [allMedications.data, allMedications.error]);
 
   return (
     <>
@@ -550,7 +556,9 @@ const Treatments = (props) => {
       {isLoading ? (
         <DataTableSkeleton />
       ) : treatments && treatments.length === 0 ? (
-        <div className="no-treatments">{errorMessage !== "" ? errorMessage:NoTreatmentsMessage}</div>
+        <div className="no-treatments">
+          {errorMessage ? errorMessage : NoTreatmentsMessage}
+        </div>
       ) : (
         <ExpandableDataTable
           rows={treatments}
