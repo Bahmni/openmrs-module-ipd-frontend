@@ -11,6 +11,7 @@ import {
   mockScheduleDrugOrderForEdit,
   mockScheduleDrugOrderAsNeeded,
   mockContinuousMedicationDrugOrder,
+  mockUpdateMedicationData,
 } from "../utils/DrugChartSliderTestUtils";
 import "@testing-library/jest-dom";
 import mockAdapter from "axios-mock-adapter";
@@ -29,6 +30,19 @@ const mockSliderContext = {
   setSliderContentModified: jest.fn(),
 };
 
+const mockHandleAuditEvent = jest.fn();
+const mockUpdateMedication = jest.fn();
+const mockSaveMedication = jest.fn();
+
+jest.mock('../utils/DrugChartSliderUtils',()=>{
+    const originalModule = jest.requireActual("../utils/DrugChartSliderUtils");
+    return {
+        ...originalModule,
+        updateMedication : (medication) => mockUpdateMedication(medication),
+        saveMedication : (medication) => mockSaveMedication(medication),
+    }
+});
+
 describe("DrugChartSlider", () => {
   beforeEach(() => {
     mockAxios = new mockAdapter(axios);
@@ -36,6 +50,14 @@ describe("DrugChartSlider", () => {
     mockAxios.onGet(DRUG_ORDERS_CONFIG_URL).reply(200, {
       results: drugOrderFrequencies,
     });
+    mockUpdateMedication.mockResolvedValue({
+      status: 200,
+      data: mockUpdateMedicationData,
+    })
+    mockSaveMedication.mockResolvedValue({
+      status: 200,
+      data: mockUpdateMedicationData,
+    })
   });
 
   afterEach(() => {
@@ -402,7 +424,7 @@ describe("DrugChartSlider", () => {
     MockDate.set("2010-12-22T07:08:00.000");
     const { getByText, queryByText } = render(
       <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent: mockHandleAuditEvent }}>
           <DrugChartSlider
             hostData={{
               enable24HourTimers: true,
@@ -418,6 +440,9 @@ describe("DrugChartSlider", () => {
 
     await waitFor(() => {
       expect(getByText("Add to Drug Chart")).toBeInTheDocument();
+        const saveButton = screen.getByRole("button", { name: "Save" });
+        fireEvent.click(saveButton);
+        expect(mockHandleAuditEvent).toHaveBeenCalledWith('CREATE_SCHEDULED_MEDICATION_TASK');
     });
     expect(queryByText("Schedule(s)")).toBeNull();
     expect(queryByText("Start Time")).toBeNull();
@@ -428,7 +453,7 @@ describe("DrugChartSlider", () => {
     MockDate.set("2010-12-22T07:08:00.000");
     const { container, getByText } = render(
       <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
+        <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent: mockHandleAuditEvent }}>
           <DrugChartSlider
             hostData={{
               enable24HourTimers: true,
@@ -446,6 +471,9 @@ describe("DrugChartSlider", () => {
       expect(
         getByText("Schedule time (start date, 24 hrs format)")
       ).toBeTruthy();
+        const saveButton = screen.getByRole("button", { name: "Save" });
+        fireEvent.click(saveButton);
+      expect(mockHandleAuditEvent).toHaveBeenCalledWith('EDIT_SCHEDULED_MEDICATION_TASK');
     });
     expect(container).toMatchSnapshot();
     MockDate.reset();

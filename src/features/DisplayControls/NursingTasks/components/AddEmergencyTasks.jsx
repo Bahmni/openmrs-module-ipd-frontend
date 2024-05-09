@@ -60,7 +60,7 @@ const AddEmergencyTasks = (props) => {
   const [routeOptions, setRouteOptions] = useState([]);
   const [providerOptions, setProviderOptions] = useState([]);
   const [activeTab, setActiveTab] = useState("Medication");
-  const { config = {} } = useContext(IPDContext);
+  const { config = {}, handleAuditEvent } = useContext(IPDContext);
   const { enable24HourTime = {} } = config;
 
   const [selectedDrug, setSelectedDrug] = useState({});
@@ -278,6 +278,7 @@ const AddEmergencyTasks = (props) => {
     setSuccessMessage("EMERGENCY_TASK_SAVE_MESSAGE");
     setOpenConfirmationModal(false);
     updateEmergencyTasksSlider(false);
+    handleAuditEvent("CREATE_EMERGENCY_MEDICATION_TASK");
   };
 
   const saveNonMedicationAdhocTasks = () => {

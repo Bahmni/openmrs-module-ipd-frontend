@@ -37,7 +37,7 @@ import { ScheduleSection } from "./ScheduleSection";
 
 const DrugChartSlider = (props) => {
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
-  const { config } = useContext(IPDContext);
+  const { config, handleAuditEvent } = useContext(IPDContext);
   const { drugChartSlider = {} } = config;
   const timeWindowToDisableSlots =
     drugChartSlider.timeInMinutesToDisableSlotPostScheduledTime;
@@ -514,9 +514,14 @@ const DrugChartSlider = (props) => {
     if (performSave) {
       updateIsSaveDisabled(true);
       const medication = createDrugChartPayload();
-      const response = isEdit
-        ? await updateMedication(medication)
-        : await saveMedication(medication);
+      let response;
+      if (isEdit) {
+        response = await updateMedication(medication);
+        handleAuditEvent("EDIT_SCHEDULED_MEDICATION_TASK");
+      } else {
+        response = await saveMedication(medication);
+        handleAuditEvent("CREATE_SCHEDULED_MEDICATION_TASK");
+      }
       if (response.status === 200) {
         updateIsSaveDisabled(false);
         hostApi.onModalSave?.();

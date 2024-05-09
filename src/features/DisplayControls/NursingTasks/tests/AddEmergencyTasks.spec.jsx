@@ -20,6 +20,7 @@ const mockUpdateEmergencyTasksSlider = jest.fn();
 const mockSetShowSuccessNotification = jest.fn();
 const mockSetSuccessMessage = jest.fn();
 const mockSaveEmergencyMedication = jest.fn();
+const mockHandleAuditEvent = jest.fn();
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
 jest.mock("../utils/EmergencyTasksUtils", () => {
@@ -84,7 +85,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should render the component with loading state", () => {
     const { getAllByText, container } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -97,7 +98,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should render the component", async () => {
     const { queryByText, getByText, container } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -116,7 +117,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should allow Drug search", async () => {
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -128,7 +129,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should set the dose units based on dosage form", async () => {
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -145,7 +146,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should set the route based on dosage form", async () => {
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -163,7 +164,7 @@ describe("AddEmergencyTasks", () => {
   it("should enable save when all fields are added", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -223,7 +224,7 @@ describe("AddEmergencyTasks", () => {
   it("should call save by confirming popup when emergency task is saved", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}
@@ -296,7 +297,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should render confirmation modal on click of cancel button when changes are made", async () => {
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}
@@ -331,7 +332,7 @@ describe("AddEmergencyTasks", () => {
   it("should save button be disabled when fields are not filled", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText, getAllByText, getByRole } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}
@@ -341,7 +342,7 @@ describe("AddEmergencyTasks", () => {
         />
       </IPDContext.Provider>
     );
-  
+
     await waitFor(() => {
       expect (getAllByText("Add Nursing Task")).toBeTruthy();
       })
@@ -361,7 +362,7 @@ describe("AddEmergencyTasks", () => {
   it("should enable save when all fields are added for Non medication tasks", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText, getAllByText, getByRole } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
+      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}
@@ -371,7 +372,7 @@ describe("AddEmergencyTasks", () => {
         />
       </IPDContext.Provider>
     );
-  
+
     await waitFor(() => {
       expect (getAllByText("Add Nursing Task")).toBeTruthy();
       })
@@ -395,14 +396,15 @@ describe("AddEmergencyTasks", () => {
     const tasksInput = container.querySelector("textarea");
     fireEvent.change(tasksInput, { target: { value: "Test Task" } });
     expect(tasksInput.value).toEqual("Test Task");
-    
+
     saveButton.click();
-    
+
     await waitFor(() => {
       expect(mockSetShowSuccessNotification).toHaveBeenCalledTimes(1);
       expect(mockSetSuccessMessage).toHaveBeenCalledTimes(1);
       expect(mockUpdateEmergencyTasksSlider).toHaveBeenCalledTimes(1);
       expect(mockSaveEmergencyMedication).toHaveBeenCalledTimes(1);
+      expect(mockHandleAuditEvent).toHaveBeenCalledWith('CREATE_EMERGENCY_MEDICATION_TASK');
     })
 
   });

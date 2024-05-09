@@ -232,3 +232,12 @@ export const mockContinuousMedicationDrugOrder = {
     doseUnits: "ml",
   },
 };
+
+export const mockUpdateMedicationData = {
+  id: 8,
+  patientUuid: "3e8fe091-9abd-4681-b3e3-067968e37986",
+  comments: null,
+  startDate: 1713107994,
+  endDate: null,
+  order: null
+};

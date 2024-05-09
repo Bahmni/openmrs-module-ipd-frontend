@@ -51,7 +51,7 @@ const Treatments = (props) => {
     visitSummary,
     provider,
   } = useContext(SliderContext);
-  const { config } = useContext(IPDContext);
+  const { config, handleAuditEvent } = useContext(IPDContext);
   const { enable24HourTime = {} } = config;
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
@@ -193,6 +193,7 @@ const Treatments = (props) => {
   const saveStopDrugOrder = () => {
     setShowStopDrugChartModal(false);
     setShowStopDrugSuccessNotification(true);
+    handleAuditEvent("STOP_SCHEDULED_MEDICATION_TASK");
   };
 
   const getActions = (
