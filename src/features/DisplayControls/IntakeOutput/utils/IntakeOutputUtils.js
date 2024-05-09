@@ -251,7 +251,7 @@ export const isCurrentPeriod = (startEndDates, periodConfig = {}) => {
   );
 };
 
-export const fetchIntakeOutputData = async (
+export const fetchFormData = async (
   patientUuid,
   conceptNames,
   numberOfVisits
