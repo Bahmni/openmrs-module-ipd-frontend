@@ -4,15 +4,14 @@
 }
 
 .intake-output-datatable tbody .intput-output-table-data td:nth-child(odd),
-.intake-output-datatable thead .intput-output-table-header th:nth-child(odd)
-{
-  border-right: 1px solid #8D8D8D !important;
+.intake-output-datatable thead .intput-output-table-header th:nth-child(odd) {
+  border-right: 1px solid #8d8d8d !important;
 }
 
 .intake-output-datatable tbody .custom-row td {
-  border-top: 1px solid #8D8D8D !important;
-  border-right: 1px solid #8D8D8D !important;
-  border-bottom: 1px solid #8D8D8D !important;
+  border-top: 1px solid #8d8d8d !important;
+  border-right: 1px solid #8d8d8d !important;
+  border-bottom: 1px solid #8d8d8d !important;
 }
 
 .intake-output-datatable tbody .custom-row td:last-child {
@@ -47,12 +46,12 @@
   grid-row: 2;
 }
 
-.intake-output-content-container {
+.container {
   display: flex;
   flex-direction: column;
   position: relative;
 
-  .intake-output-period-header {
+  .period-header {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -95,7 +94,7 @@
     }
   }
 
-  .intake-output-navigation {
+  .navigation {
     display: flex;
     align-items: center;
     justify-content: space-between;

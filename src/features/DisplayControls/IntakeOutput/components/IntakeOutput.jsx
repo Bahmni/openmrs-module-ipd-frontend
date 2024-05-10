@@ -196,9 +196,9 @@ const IntakeOutput = () => {
     callFetchIntakeAndOutputData();
   }, []);
   return (
-    <div className="intake-output-content-container display-container">
-      <div className={"intake-output-navigation"}>
-        <div className="intake-output-period-header">
+    <div className="container display-container">
+      <div className={"navigation"}>
+        <div className="period-header">
           <Button
             kind="tertiary"
             isExpressive
