@@ -25,7 +25,10 @@ import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";
 import { IPDContext } from "../../../../context/IPDContext";
 import {
+  ForbiddenErrorMessage,
+  GenericErrorMessage,
   displayShiftTimingsFormat,
+  errorCodes,
   timeFormatFor12Hr,
 } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
@@ -53,6 +56,7 @@ export default function DrugChartWrapper(props) {
     startDate: isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
     endDate: isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
   });
+  const [errorMessage, setErrorMessage] = useState("");
   const allMedications = useContext(AllMedicationsContext);
   const shiftDetails = currentShiftHoursArray(
     isReadMode ? new Date(visitSummary.stopDateTime) : new Date(),
@@ -87,15 +91,23 @@ export default function DrugChartWrapper(props) {
         endDateTimeInSeconds,
         visit
       );
-      setDrugChartData(response.data);
-      setIsShiftButtonsDisabled({
-        previous:
-          (isReadMode && response.data.length === 0) ||
-          response.data[0].startDate > startDateTimeInSeconds,
-        next:
-          startDateTimeInSeconds >= nextShiftMaxHour ||
-          endDateTimeInSeconds >= nextShiftMaxHour,
-      });
+      if (response?.error) {
+        if (response.error.response.status === errorCodes.FORBIDDEN) {
+          setErrorMessage(ForbiddenErrorMessage);
+        } else {
+          setErrorMessage(GenericErrorMessage);
+        }
+      } else {
+        setDrugChartData(response.data);
+        setIsShiftButtonsDisabled({
+          previous:
+            (isReadMode && response.data.length === 0) ||
+            response.data[0].startDate > startDateTimeInSeconds,
+          next:
+            startDateTimeInSeconds >= nextShiftMaxHour ||
+            endDateTimeInSeconds >= nextShiftMaxHour,
+        });
+      }
     } catch (e) {
       return e;
     } finally {
@@ -304,7 +316,9 @@ export default function DrugChartWrapper(props) {
           <Loading withOverlay={false} />
         </div>
       ) : transformedData && transformedData.length === 0 ? (
-        <div className="no-nursing-tasks">{NoMedicationTaskMessage}</div>
+        <div className="no-nursing-tasks">
+          {errorMessage ? errorMessage : NoMedicationTaskMessage}
+        </div>
       ) : (
         <DrugChart
           drugChartData={transformedData}

@@ -25,7 +25,13 @@ import {
   getSlotsForAnOrderAndServiceType,
 } from "../utils/TreatmentsUtils";
 import { getCookies } from "../../../../utils/CommonUtils";
-import { defaultDateTimeFormat, serviceType } from "../../../../constants";
+import {
+  ForbiddenErrorMessage,
+  GenericErrorMessage,
+  defaultDateTimeFormat,
+  errorCodes,
+  serviceType,
+} from "../../../../constants";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
 import { SliderContext } from "../../../../context/SliderContext";
@@ -70,6 +76,7 @@ const Treatments = (props) => {
   const [stopDrugOrder, setStopDrugOrder] = useState({});
   const [showStopDrugSuccessNotification, setShowStopDrugSuccessNotification] =
     useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const updateTreatmentsSlider = (value) => {
     updateSliderOpen((prev) => {
       return {
@@ -414,11 +421,19 @@ const Treatments = (props) => {
         );
         setTreatments(allTreatments);
         getTreatmentConfigs();
+      } else if (
+        allMedications.error.response.status === errorCodes.FORBIDDEN
+      ) {
+        setIsLoading(false);
+        setErrorMessage(ForbiddenErrorMessage);
+      } else {
+        setIsLoading(false);
+        setErrorMessage(GenericErrorMessage);
       }
     };
 
     setMedicationsData();
-  }, [allMedications.data]);
+  }, [allMedications.data, allMedications.error]);
 
   return (
     <>
@@ -545,7 +560,9 @@ const Treatments = (props) => {
       {isLoading ? (
         <DataTableSkeleton />
       ) : treatments && treatments.length === 0 ? (
-        <div className="no-treatments">{NoTreatmentsMessage}</div>
+        <div className="no-treatments">
+          {errorMessage ? errorMessage : NoTreatmentsMessage}
+        </div>
       ) : (
         <ExpandableDataTable
           rows={treatments}

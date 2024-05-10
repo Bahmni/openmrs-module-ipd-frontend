@@ -1,4 +1,5 @@
 // Pick up output.publicPath from webpack.config.js. Maps to the proxy setting when using the micro-frontend capability
+
 /* global __webpack_public_path__:writable */
 export const BASE_URL =
   typeof __webpack_public_path__ !== "undefined"
@@ -139,4 +140,12 @@ export const IPD_PAGE_TITLE = "IPD";
 export const WARD_SUMMARY_HEADER = {
   TOTAL_PATIENTS: "TOTAL_PATIENTS",
   MY_PATIENTS: "MY_PATIENTS",
+};
+
+export const ForbiddenErrorMessage = "User doesn't have required privilege(s)";
+
+export const GenericErrorMessage = "Technical error";
+
+export const errorCodes = {
+  FORBIDDEN: 403,
 };
