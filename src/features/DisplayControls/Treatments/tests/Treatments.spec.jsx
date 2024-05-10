@@ -7,6 +7,8 @@ import { AllMedicationsContext } from "../../../../context/AllMedications";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
 
+const mockHandleAuditEvent = jest.fn();
+
 jest.mock("../utils/TreatmentsUtils", () => {
   const originalModule = jest.requireActual("../utils/TreatmentsUtils");
   return {
@@ -537,11 +539,12 @@ describe("Treatments", () => {
     stopDrugOrders.mockImplementation(() => {
       return Promise.resolve({
         uuid: "TestUuid",
+        status: 200,
       });
     });
 
     const { getAllByText, container } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false, handleAuditEvent: mockHandleAuditEvent }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -561,6 +564,7 @@ describe("Treatments", () => {
       expect(getEncounterType).toHaveBeenCalledWith("Consultation");
       expect(stopDrugOrders).toHaveBeenCalled();
     });
+    expect(mockHandleAuditEvent).toHaveBeenCalledWith('STOP_SCHEDULED_MEDICATION_TASK')
   });
 
   it("should update the drug status after the stop drug api call is success", async () => {

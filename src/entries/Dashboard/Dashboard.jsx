@@ -161,6 +161,11 @@ export default function Dashboard(props) {
     }
   };
 
+  const handleAuditEvent = ( eventType ) => {
+    var messageParams = {visitUuid: hostData.visitSummary.uuid, visitType: hostData.visitSummary.visitType};
+    hostApi.handleAuditEvent(patient.uuid, eventType, messageParams, "MODULE_LABEL_CLINICAL_KEY");
+  };
+
   const updateWindowWidth = () => {
     setWindowWidth(window.innerWidth);
   };
@@ -191,6 +196,7 @@ export default function Dashboard(props) {
               provider,
               config: dashboardConfig,
               isReadMode,
+              handleAuditEvent,
               visitSummary,
               allFormsSummary,
               allFormsFilledInCurrentVisit,

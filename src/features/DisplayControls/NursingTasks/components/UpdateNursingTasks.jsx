@@ -84,16 +84,17 @@ const UpdateNursingTasks = (props) => {
     setOpenConfirmationModal(false);
   };
 
-  const { config } = useContext(IPDContext);
+  const { config, handleAuditEvent } = useContext(IPDContext);
   const { nursingTasks = {}, enable24HourTime = {} } = config;
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
-  const saveAdministeredTasks = () => {
+  const saveAdministeredTasks = (task) => {
     setShowSuccessNotification(true);
     setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
     updateIsPRNMedication(false);
+    task.status === 'not-done' ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK") : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
   };
 
   const saveAdministeredNonMedicationTasks = () => {
@@ -108,7 +109,7 @@ const UpdateNursingTasks = (props) => {
     const response = isPRNMedication
       ? await saveEmergencyMedication(administeredTasks[0])
       : await saveAdministeredMedication(administeredTasks);
-    response.status === 200 ? saveAdministeredTasks() : null;
+    response.status === 200 ? saveAdministeredTasks(administeredTasks[0]) : null;
   };
 
   const createAdministeredTasksPayload = () => {
@@ -505,7 +506,7 @@ const UpdateNursingTasks = (props) => {
                       }`}
                     >
                       {medicationTask.drugName}
-                      {!isNonMedication ? 
+                      {!isNonMedication ?
                       (<><FormattedMessage id={"AT"} defaultMessage={" at "} />
                         {enable24HourTime
                           ? formatTime(

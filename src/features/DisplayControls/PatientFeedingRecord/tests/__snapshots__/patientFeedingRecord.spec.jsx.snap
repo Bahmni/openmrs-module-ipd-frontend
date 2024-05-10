@@ -1,0 +1,256 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PatientFeedingRecord should render PatientFeedingRecord 1`] = `
+<div>
+  <div
+    class="patient-feeding-record-container display-container"
+  >
+    <div
+      class="patient-feeding-record-navigation"
+    >
+      <div
+        class="patient-feeding-record-period-header"
+      >
+        <button
+          class="margin-right-10 bx--btn bx--btn--tertiary bx--btn--expressive"
+          data-testid="current-period"
+          tabindex="0"
+          type="button"
+        >
+          Current Period
+        </button>
+        <button
+          class="margin-right-6 bx--btn bx--btn--tertiary bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+          data-testid="previous-shift"
+          tabindex="0"
+          type="button"
+        >
+          <div
+            class="bx--assistive-text"
+          />
+          <svg
+            aria-hidden="true"
+            class="bx--btn__icon"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 8L10 3 10.7 3.7 6.4 8 10.7 12.3 10 13z"
+            />
+          </svg>
+        </button>
+        <button
+          class="margin-right-10 bx--btn bx--btn--tertiary bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+          data-testid="next-shift"
+          tabindex="0"
+          type="button"
+        >
+          <div
+            class="bx--assistive-text"
+          />
+          <svg
+            aria-hidden="true"
+            class="bx--btn__icon"
+            fill="currentColor"
+            focusable="false"
+            height="16"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+            />
+          </svg>
+        </button>
+        <div
+          class="period-timing"
+        >
+          <div
+            class="period-time"
+          >
+            09 May 2024
+             
+            <span
+              class="mr-5"
+            >
+              |
+            </span>
+             
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+              />
+              <path
+                d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
+              />
+            </svg>
+             
+            08:00
+             
+            <span
+              class="to-text"
+            >
+              to
+            </span>
+             
+            10 May 2024
+             
+            <span
+              class="mr-5"
+            >
+              |
+            </span>
+             
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+              />
+              <path
+                d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
+              />
+            </svg>
+             
+            08:00
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div
+        class="no-pfr-data"
+      >
+        No patient feeding record data is available for the patient in this period
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PatientFeedingRecordTable should render PatientFeedingRecordTable 1`] = `
+<div>
+  <div
+    class="bx--data-table-content"
+  >
+    <table
+      class="bx--data-table bx--data-table--normal bx--data-table--zebra bx--data-table--no-border"
+    >
+      <thead>
+        <tr>
+          <th
+            scope="col"
+          >
+            <div
+              class="bx--table-header-label"
+            >
+              Date and Time
+            </div>
+          </th>
+          <th
+            scope="col"
+          >
+            <div
+              class="bx--table-header-label"
+            >
+              Shift
+            </div>
+          </th>
+          <th
+            scope="col"
+          >
+            <div
+              class="bx--table-header-label"
+            >
+              Route
+            </div>
+          </th>
+          <th
+            scope="col"
+          >
+            <div
+              class="bx--table-header-label"
+            >
+              Feed Type
+            </div>
+          </th>
+          <th
+            scope="col"
+          >
+            <div
+              class="bx--table-header-label"
+            >
+              Amount
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        aria-live="polite"
+      >
+        <tr
+          data-testid="table-body-row"
+        >
+          <td>
+            2021-09-01T00:00:00.000Z
+          </td>
+          <td>
+            Morning
+          </td>
+          <td>
+            Oral
+          </td>
+          <td>
+            Milk
+          </td>
+          <td>
+            100 ml
+          </td>
+        </tr>
+        <tr
+          data-testid="table-body-row"
+        >
+          <td>
+            2021-09-01T00:00:00.000Z
+          </td>
+          <td>
+            Morning
+          </td>
+          <td>
+            Oral
+          </td>
+          <td>
+            Milk
+          </td>
+          <td>
+            100 ml
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;
