@@ -201,9 +201,9 @@ const PatientFeedingRecord = () => {
     callFetchPatientFeedingRecordData();
   }, []);
   return (
-    <div className="patient-feeding-record-container display-container">
-      <div className={"patient-feeding-record-navigation"}>
-        <div className="patient-feeding-record-period-header">
+    <div className="container display-container">
+      <div className={"navigation"}>
+        <div className="period-header">
           <Button
             kind="tertiary"
             isExpressive
