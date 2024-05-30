@@ -94,7 +94,9 @@ const UpdateNursingTasks = (props) => {
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
     updateIsPRNMedication(false);
-    task.status === 'not-done' ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK") : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
+    task.status === "not-done"
+      ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK")
+      : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
   };
 
   const saveAdministeredNonMedicationTasks = () => {
@@ -109,7 +111,9 @@ const UpdateNursingTasks = (props) => {
     const response = isPRNMedication
       ? await saveEmergencyMedication(administeredTasks[0])
       : await saveAdministeredMedication(administeredTasks);
-    response.status === 200 ? saveAdministeredTasks(administeredTasks[0]) : null;
+    response.status === 200
+      ? saveAdministeredTasks(administeredTasks[0])
+      : null;
   };
 
   const createAdministeredTasksPayload = () => {
@@ -168,7 +172,7 @@ const UpdateNursingTasks = (props) => {
       updateIsPRNMedication(medicationTask?.dosingInstructions?.asNeeded);
       updateIsNonMedication(medicationTask?.taskType?.display);
       updateIsSystemGeneratedNonMedication(
-        medicationTask?.taskType?.display == "nursing_activity_system"
+        medicationTask?.taskType?.display == "Automated Nursing Tasks"
       );
       updateTasks((prev) => {
         return {
@@ -506,21 +510,24 @@ const UpdateNursingTasks = (props) => {
                       }`}
                     >
                       {medicationTask.drugName}
-                      {!isNonMedication ?
-                      (<><FormattedMessage id={"AT"} defaultMessage={" at "} />
-                        {enable24HourTime
-                          ? formatTime(
-                              medicationTasks[0].startTime,
-                              timeFormatFor24Hr,
-                              timeFormatFor24Hr
-                            )
-                          : formatTime(
-                              medicationTasks[0].startTime,
-                              timeFormatFor24Hr,
-                              timeFormatFor12Hr
-                            )}
+                      {!isNonMedication ? (
+                        <>
+                          <FormattedMessage id={"AT"} defaultMessage={" at "} />
+                          {enable24HourTime
+                            ? formatTime(
+                                medicationTasks[0].startTime,
+                                timeFormatFor24Hr,
+                                timeFormatFor24Hr
+                              )
+                            : formatTime(
+                                medicationTasks[0].startTime,
+                                timeFormatFor24Hr,
+                                timeFormatFor12Hr
+                              )}
                         </>
-                      ) : (<></>)}
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   )}
                   {!isNonMedication ? (

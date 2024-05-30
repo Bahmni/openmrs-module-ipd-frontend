@@ -58,7 +58,7 @@ export const mockUpdateResponse = {
       partOf: null,
       taskType: {
         uuid: "a5ea9d94-f662-11ee-8850-0242ac120006",
-        display: "nursing_activity",
+        display: "Manual Nursing Tasks",
         links: [
           {
             rel: "self",
@@ -1230,7 +1230,7 @@ export const mockNonMedicationTileData = [
     startTime: "16:38",
     isDisabled: false,
     partOf: null,
-    taskType: { display: "nursing_activity" },
+    taskType: { display: "Manual Nursing Tasks" },
     creator: {
       uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
       display: "bailly.rurangirwa",

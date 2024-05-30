@@ -39,7 +39,7 @@ export const mockNonMedicationData = [
         partOf: null,
         taskType: {
           uuid: "91e3eeba-e840-11ee-b597-0242ac120005",
-          display: "nursing_activity",
+          display: "Manual Nursing Tasks",
         },
         creator: {
           uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
@@ -57,7 +57,7 @@ export const mockNonMedicationData = [
         partOf: null,
         taskType: {
           uuid: "91e3eeba-e840-11ee-b597-0242ac120005",
-          display: "nursing_activity",
+          display: "Manual Nursing Tasks",
         },
         creator: {
           uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
@@ -75,7 +75,7 @@ export const mockNonMedicationData = [
         partOf: null,
         taskType: {
           uuid: "91e3eeba-e840-11ee-b597-0242ac120005",
-          display: "nursing_activity",
+          display: "Manual Nursing Tasks",
         },
         creator: {
           uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",

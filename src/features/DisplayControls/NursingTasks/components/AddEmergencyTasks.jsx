@@ -258,7 +258,7 @@ const AddEmergencyTasks = (props) => {
       patientUuid: patientId,
       encounterUuid: encounterUuid.encounterUuid,
       intent: "ORDER",
-      taskType: "nursing_activity",
+      taskType: "Manual Nursing Tasks",
       status: "REQUESTED",
     };
     return nonMedicationPayload;

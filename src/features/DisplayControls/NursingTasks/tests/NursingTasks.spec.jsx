@@ -463,7 +463,7 @@ describe("NursingTasks", () => {
         requestedStartTime: 1939452389000,
         requestedEndTime: 1939452389000,
         partOf: null,
-        taskType: { display: "nursing_activity" },
+        taskType: { display: "Manual Nursing Tasks" },
         creator: {
           uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
           display: "bailly.rurangirwa",

@@ -52,7 +52,7 @@ export default function TaskTile(props) {
     nursingTasks
   );
 
-  const isSystemGeneratedTask = taskType?.display === "nursing_activity_system";
+  const isSystemGeneratedTask = taskType?.display === "Automated Nursing Tasks";
 
   const creatorName = (creator) => {
     var formattedName = creator.split(".").join(" ");
