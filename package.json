@@ -64,7 +64,7 @@
   "scripts": {
     "preinstall": "git config core.hooksPath .git-hooks",
     "start-storybook": "start-storybook -p 6006",
-    "test": " TZ=UTC jest",
+    "test": " TZ=UTC jest --coverage",
     "test:ci": "yarn test --ci",
     "bump:patch": "yarn version --no-git-tag-version --patch",
     "bump:minor": "yarn version --no-git-tag-version --minor",

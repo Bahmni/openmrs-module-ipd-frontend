@@ -1,4 +1,5 @@
 name: 🏗️ Build and Publish
+
 on:
   push:
     branches:
@@ -13,12 +14,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  Trivy:
+  trivy-scan:
     name: 🕵️‍♂️ Trivy Scan
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 🕵️‍♂️ Trivy Scan
         run: |
           wget -q https://raw.githubusercontent.com/Bahmni/bahmni-infra-utils/main/trivy_scan.sh && chmod +x trivy_scan.sh
@@ -28,18 +29,24 @@ jobs:
   build-publish-docker:
     name: 🏗️ Build & Publish Docker Image
     runs-on: ubuntu-latest
-    needs: Trivy
+    needs: trivy-scan
     steps:
       - uses: actions/checkout@v2
+      - name: Set env.ARTIFACT_VERSION
+        run: |
+          wget -q https://raw.githubusercontent.com/Bahmni/bahmni-infra-utils/main/setArtifactVersion.sh && chmod +x setArtifactVersion.sh
+          ./setArtifactVersion.sh
+          rm setArtifactVersion.sh
+      - uses: actions/checkout@v4
       - name: 📥 Use Node.js 14.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: 14.x
       - name: 📥 Install dependencies
         run: yarn install
       - name: 🏗️ Build
         run: yarn build
-      - name: Test
+      - name: 🔍 Test
         run: yarn test:ci
       - name: 🖥️ Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -50,16 +57,23 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-      - name: 🐳 Docker Build and push
-        uses: docker/build-push-action@v3
+      - name: 🐳 Docker Build and Push
+        uses: docker/build-push-action@v4
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           file: package/docker/Dockerfile
           push: true
           tags: |
-            bahmni/microfrontend-ipd:1.0.0-${{ github.run_number }}
+            bahmni/microfrontend-ipd:${{ env.ARTIFACT_VERSION }}
             bahmni/microfrontend-ipd:latest
+
+  push-translations:
+    name: Push Translations to Transifex
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
       - name: Push Translations to Transifex
         run: |
           curl -o transifex.sh https://raw.githubusercontent.com/Bahmni/bahmni-infra-utils/main/transifex.sh
@@ -72,16 +86,19 @@ jobs:
   trigger-workflow:
     name: 🔁 Trigger workflow to deploy to Docker env
     needs:
+      - trivy-scan
       - build-publish-docker
-      - Trivy
+      - push-translations
     runs-on: ubuntu-latest
     env:
+      ORG_NAME: Bahmni
+      REPOSITORY_NAME: bahmni-docker
       EVENT_TYPE: bahmni-ipd-microfrontend-event
     steps:
       - name: 🔧 Create repository_dispatch
         run: |
-          trigger_result=$(curl -s -o trigger_response.txt -w "%{http_code}" -X POST -H "Accept: application/vnd.github.v3+json" -H 'authorization: Bearer ${{ secrets.IPD_PAT }}' https://api.github.com/repos/${{ secrets.IPD_ORG_NAME }}/${{ secrets.IPD_REPOSITORY_NAME }}/dispatches -d '{"event_type":"'"${EVENT_TYPE}"'"}')
-          if [ $trigger_result == 204 ];then
+          trigger_result=$(curl -s -o trigger_response.txt -w "%{http_code}" -X POST -H "Accept: application/vnd.github.v3+json" -H 'authorization: Bearer ${{ secrets.BAHMNI_PAT }}' https://api.github.com/repos/${ORG_NAME}/${REPOSITORY_NAME}/dispatches -d '{"event_type":"'"${EVENT_TYPE}"'"}')
+          if [ $trigger_result == 204 ]; then
             echo "✅ Trigger to $ORG_NAME/$REPOSITORY_NAME Success"
           else
             echo "❌ Trigger to $ORG_NAME/$REPOSITORY_NAME Failed"
