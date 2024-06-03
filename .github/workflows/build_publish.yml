@@ -58,8 +58,8 @@ jobs:
           file: package/docker/Dockerfile
           push: true
           tags: |
-            bahmni/microfrontend-ipd:ipd-${{ github.run_number }}
-            bahmni/microfrontend-ipd:ipd
+            bahmni/microfrontend-ipd:1.0.0-${{ github.run_number }}
+            bahmni/microfrontend-ipd:latest
       - name: Push Translations to Transifex
         run: |
           curl -o transifex.sh https://raw.githubusercontent.com/Bahmni/bahmni-infra-utils/main/transifex.sh
