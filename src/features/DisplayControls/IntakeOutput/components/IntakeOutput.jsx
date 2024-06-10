@@ -196,7 +196,7 @@ const IntakeOutput = () => {
     callFetchIntakeAndOutputData();
   }, []);
   return (
-    <div className="container display-container">
+    <div className="form-dc-container display-container">
       <div className={"navigation"}>
         <div className="period-header">
           <Button
