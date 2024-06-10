@@ -66,6 +66,7 @@ describe("PatientFeedingRecordTable", () => {
 
 describe("PatientFeedingRecord", () => {
   it("should render PatientFeedingRecord", () => {
+    MockDate.set("2021-09-01T00:00:00.000Z");
     const { container } = render(
       <IPDContext.Provider
         value={{ config: mockConfig, visitSummary: mockVisitSummaryData }}

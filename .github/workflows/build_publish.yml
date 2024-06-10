@@ -2,7 +2,7 @@ name: 🏗️ Build and Publish
 on:
   push:
     branches:
-      - main
+      - Bahmni-IPD-master
     paths-ignore:
       - "**.md"
   workflow_run:
