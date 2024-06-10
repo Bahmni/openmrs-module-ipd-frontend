@@ -5,3 +5,4 @@ CVE-2023-26115
 CVE-2021-3803 #Reported version 1.0.2 is not there in the dependencies
 CVE-2023-42282 #Installed version 2.0.0 https://avd.aquasec.com/nvd/cve-2023-42282
 CVE-2024-29180
+CVE-2024-29415 # node-ip: Incomplete fix - https://avd.aquasec.com/nvd/cve-2024-29415
