@@ -3,7 +3,7 @@
 exports[`PatientFeedingRecord should render PatientFeedingRecord 1`] = `
 <div>
   <div
-    class="container display-container"
+    class="form-dc-container display-container"
   >
     <div
       class="navigation"
