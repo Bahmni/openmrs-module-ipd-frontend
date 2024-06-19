@@ -55,6 +55,7 @@ export const CareViewPatients = () => {
     previous: false,
     next: false,
   });
+  const sortBy = careViewConfig.sortBy;
 
   let currentShiftArray, rangeArray, shiftIndex;
   if (ipdConfig.shiftDetails) {
@@ -73,9 +74,10 @@ export const CareViewPatients = () => {
       const response = await fetchPatientsList(
         selectedWard.value,
         (currentPage - 1) * limit,
-        limit,
         headerSelected,
-        provider.uuid
+        provider.uuid,
+        sortBy,
+        limit
       );
       if (response.status === 200) {
         const { admittedPatients, totalPatients } = response.data;
@@ -100,6 +102,7 @@ export const CareViewPatients = () => {
         searchKeys,
         searchValue,
         (offset - 1) * limit,
+        sortBy,
         limit
       );
       if (response.status === 200) {

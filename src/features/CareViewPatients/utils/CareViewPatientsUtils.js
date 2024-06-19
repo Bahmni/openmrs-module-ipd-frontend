@@ -10,19 +10,20 @@ import {
 export const fetchPatientsList = async (
   wardId,
   offset,
-  limit = 3,
   headerSelected,
-  providerUuid
+  providerUuid,
+  sortBy,
+  limit = 3
 ) => {
   if (headerSelected === WARD_SUMMARY_HEADER.TOTAL_PATIENTS) {
     return await axios.get(GET_PATIENT_LIST_URL.replace("{wardId}", wardId), {
-      params: { offset, limit },
+      params: { offset, sortBy, limit },
     });
   } else if (headerSelected === WARD_SUMMARY_HEADER.MY_PATIENTS) {
     return await axios.get(
       GET_MY_PATIENT_LIST_URL.replace("{wardId}", wardId),
       {
-        params: { offset, limit, providerUuid },
+        params: { offset, providerUuid, sortBy, limit },
       }
     );
   }
@@ -33,6 +34,7 @@ export const fetchPatientsListBySearch = async (
   searchKeys,
   searchValue,
   offset,
+  sortBy,
   limit = 3
 ) => {
   try {
@@ -44,6 +46,7 @@ export const fetchPatientsListBySearch = async (
           limit,
           searchKeys,
           searchValue,
+          sortBy,
         },
         paramsSerializer: {
           indexes: null,
