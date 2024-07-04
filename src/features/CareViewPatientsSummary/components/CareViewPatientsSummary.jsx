@@ -73,7 +73,7 @@ export const CareViewPatientsSummary = ({
     const patientUuid = patientData.patientUuid;
     const patientTasks = [];
     patientData.tasks.forEach(task => {
-      if (task.taskType.display === "nursing_activity_system" && task.status === "REQUESTED") {
+      if (task.taskType?.display === "nursing_activity_system" && task.status === "REQUESTED") {
         
           patientTasks.push({
               taskName: task.name,
