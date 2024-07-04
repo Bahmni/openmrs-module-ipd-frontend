@@ -18,7 +18,7 @@ export const fetchMedicationNursingTasks = async (
     const response = await axios.get(FETCH_MEDICATIONS_URL);
     return response.data;
   } catch (error) {
-    return { error };
+    return {error};
   }
 };
 
@@ -65,7 +65,7 @@ export const ExtractMedicationNursingTasksData = (
           : "";
       let drugName, drugRoute, duration, dosage, doseType, dosingInstructions;
       if (order) {
-        drugName = order.drugNonCoded ? order.drugNonCoded : order.drug.display;
+        drugName = order.drugNonCoded ? order.drugNonCoded :order.drug.display;
         drugRoute = order.route?.display;
         if (order.duration) {
           duration = order.duration + " " + order.durationUnits.display;
@@ -274,7 +274,7 @@ export const disableTaskTilePastNextSlotTime = (
     const currentTimeInEpoch = moment().unix();
     if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
       currentTask.isDisabled =
-        currentTask.taskType?.display === "nursing_activity";
+        currentTask.taskType.display === "nursing_activity";
     }
   }
 };
