@@ -45,7 +45,7 @@ export const iconType = (task, nursingTasks) => {
   if (status === "Not Done" || status === "missed") return "Not-Administered";
   if (
     administeredTimeInEpochSeconds ||
-    (status === "COMPLETED" && taskType.display)
+    (status === "COMPLETED" && taskType?.display)
   ) {
     const administeredLateWindowInSeconds =
       startTimeInEpochSeconds +

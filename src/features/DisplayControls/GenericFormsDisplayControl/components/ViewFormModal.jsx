@@ -20,7 +20,7 @@ export const ViewFormModal = (props) => {
     setIsLoading(true);
     fetchAllObservations(encounterUuid).then((response) => {
       const filteredResponse = response.observations.filter((ob) =>
-        ob.formFieldPath.includes(formName)
+        ob.formFieldPath?.includes(formName)
       );
       const flattenedObs = flattenObservations(filteredResponse);
       const groupedObs = _.groupBy(flattenedObs, "concept.name");
