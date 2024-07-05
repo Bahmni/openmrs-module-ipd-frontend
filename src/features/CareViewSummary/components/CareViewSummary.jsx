@@ -70,14 +70,19 @@ export const CareViewSummary = (props) => {
     callbacks.setIsLoading(false);
   };
   const getWardSummary = async () => {
-    callbacks.setIsLoading(true);
-    const response = await fetchWardSummary(selectedWard.value, provider.uuid);
-    if (response.status === 200) {
-      setWardSummary(response.data);
-    } else {
-      setWardSummary({});
+    if (!_.isEmpty(selectedWard)) {
+      callbacks.setIsLoading(true);
+      const response = await fetchWardSummary(
+        selectedWard.value,
+        provider.uuid
+      );
+      if (response.status === 200) {
+        setWardSummary(response.data);
+      } else {
+        setWardSummary({});
+      }
+      callbacks.setIsLoading(false);
     }
-    callbacks.setIsLoading(false);
   };
   useEffect(() => {
     getWardList();

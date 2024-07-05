@@ -17,7 +17,7 @@ folder and then exposed using the `exposes: {...}` key in the ModuleFederationPl
 The following command loads the `src/entries/Dashboard.jsx` in a sandboxed view for local development. This view is fed with dummy data which
 can be modified in `src/index.js`
 
-```
+```bash
 yarn dev:sandbox
 ```
 
@@ -25,7 +25,7 @@ yarn dev:sandbox
 
 Running the following builds and watches the `dist/federation/` folder which can be served by an apache container for access by `bahmni`.
 
-```
+```bash
 yarn dev:integrated
 ```
 
