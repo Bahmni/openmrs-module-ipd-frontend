@@ -8,14 +8,6 @@ import {
 } from "../../../constants";
 import { getDateTime } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 
-const fetchWards = async () => {
-  try {
-    return await axios.get(LIST_OF_WARDS_URL);
-  } catch (e) {
-    return e;
-  }
-};
-
 const fetchSlots = async (url) => {
   try {
     return await axios.get(url);
@@ -49,15 +41,6 @@ export const getTaskColumnData = (tasks, startTime, endTime) => {
   return columnData;
 };
 
-export const fetchWardSummary = async (wardId, providerUuid) => {
-  try {
-    return await axios.get(WARD_SUMMARY_URL.replace("{wardId}", wardId), {
-      params: { providerUuid },
-    });
-  } catch (e) {
-    return e;
-  }
-};
 export const getSlotsForPatients = async (
   patientUuids,
   startTime,
@@ -90,14 +73,51 @@ export const getTasksForPatients = async (patientUuids, startTime, endTime) => {
   return {};
 };
 
-export const getWardDetails = async () => {
-  const response = await fetchWards();
-  if (response.status === 200) {
-    return response.data.results;
+export const getWardOptions = async () => {
+  try {
+    const response = await axios.get(LIST_OF_WARDS_URL);
+    if (response.status === 200) {
+      const wardList = response.data.results;
+      const wardOptions = wardList.map((ward) => ({
+        label: ward.ward.display,
+        value: ward.ward.uuid,
+      }));
+      return wardOptions;
+    }
+    return [];
+  } catch (error) {
+    return [];
   }
-  return [];
 };
 
+export const getSelectedWard = (
+  existingSelectedWards = {},
+  providerUuid,
+  wardOptions
+) => {
+  const ward = existingSelectedWards[providerUuid];
+  return ward ? ward : wardOptions[0];
+};
+
+export const getWardSummary = async (selectedWardId, providerUuid) => {
+  if (selectedWardId === null || selectedWardId === undefined) {
+    return {};
+  }
+  try {
+    const response = await axios.get(
+      WARD_SUMMARY_URL.replace("{wardId}", selectedWardId),
+      {
+        params: { providerUuid },
+      }
+    );
+    if (response.status === 200) {
+      return response.data;
+    }
+    return {};
+  } catch (error) {
+    return {};
+  }
+};
 /**
 NOTE: The below function calculates the number of slides to show based on screen resolution.
  For mobile View We are expecting to show 2 tiles at a time.

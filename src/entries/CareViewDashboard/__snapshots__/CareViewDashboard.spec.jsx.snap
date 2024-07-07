@@ -133,38 +133,17 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   aria-expanded="false"
                   aria-haspopup="listbox"
                   autocomplete="off"
-                  class="bx--text-input"
+                  class="bx--text-input bx--text-input--empty"
                   id="default"
                   placeholder="Select a Ward"
                   role="combobox"
                   style="width: 200px;"
                   tabindex="0"
-                  title="General Ward"
+                  title=""
                   type="text"
-                  value="General Ward"
+                  value=""
                 />
-                <button
-                  aria-label="Clear selected item"
-                  class="bx--list-box__selection"
-                  tabindex="0"
-                  title="Clear selected item"
-                  type="button"
-                >
-                  <svg
-                    aria-hidden="true"
-                    fill="currentColor"
-                    focusable="false"
-                    height="16"
-                    preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 32 32"
-                    width="16"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
-                    />
-                  </svg>
-                </button>
+                
                 <button
                   aria-haspopup="true"
                   aria-label="Open"
@@ -211,7 +190,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           <span
             class="value-text"
           >
-            5
+            0
           </span>
         </div>
         <div
@@ -225,7 +204,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           <span
             class="value-text"
           >
-            2
+            0
           </span>
         </div>
         <a
@@ -490,31 +469,775 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
             </div>
           </div>
           <div
-            class="no-search-results"
+            class="care-view-table-wrapper"
           >
-            <svg
-              aria-hidden="true"
-              class="warning-icon-20"
-              fill="currentColor"
-              focusable="false"
-              height="20"
-              preserveAspectRatio="xMidYMid meet"
-              viewBox="0 0 32 32"
-              width="20"
-              xmlns="http://www.w3.org/2000/svg"
+            <table
+              class="care-view-patient-table"
             >
-              <path
-                d="M16 23a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 23zM15 12H17V21H15z"
-              />
-              <path
-                d="M29,30H3a1,1,0,0,1-.8872-1.4614l13-25a1,1,0,0,1,1.7744,0l13,25A1,1,0,0,1,29,30ZM4.6507,28H27.3493l.002-.0033L16.002,6.1714h-.004L4.6487,27.9967Z"
-              />
-            </svg>
-            <span
-              class="no-search-results-span"
+              <tbody>
+                <tr
+                  class="patient-row-container"
+                >
+                  <td
+                    class="patient-details-container"
+                    data-testid="patient-details-header"
+                  />
+                  <td
+                    class="slot-details-header"
+                    data-testid="slot-details-header-0"
+                  >
+                    <div
+                      class="time"
+                      data-testid="time-frame-0"
+                    >
+                      12:00
+                    </div>
+                  </td>
+                  <td
+                    class="slot-details-header"
+                    data-testid="slot-details-header-1"
+                  >
+                    <div
+                      class="time"
+                      data-testid="time-frame-1"
+                    >
+                      13:00
+                    </div>
+                  </td>
+                </tr>
+                <tr
+                  class="patient-row-container"
+                >
+                  <td
+                    class="patient-details-container"
+                  >
+                    <div
+                      class="care-view-patient-details"
+                    >
+                      <div
+                        class="admission-details"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 32 32"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+                          />
+                          <path
+                            d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                          />
+                        </svg>
+                        |
+                        <span>
+                          ICU1
+                        </span>
+                        |
+                        <a
+                          class="bx--link"
+                          data-testid="identifier-ipd-dashboard"
+                          href="/bahmni/clinical/#/default/patient/491f609a-4fa5-4aeb-87b7-73f11b692c0f/dashboard/visit/ipd/626b822d-741e-4a86-95ff-626eea753c4c?source=careViewDashboard"
+                        >
+                          <span>
+                            PT55746
+                          </span>
+                        </a>
+                      </div>
+                      <div>
+                        Patient
+                        :
+                         
+                        <span>
+                          Patient One
+                        </span>
+                         (
+                        <span>
+                          M
+                        </span>
+                        )
+                        <span
+                          class="separator"
+                        >
+                          |
+                        </span>
+                        <span>
+                          11
+                        </span>
+                        yrs
+                      </div>
+                    </div>
+                    <div
+                      data-testid="bookmark-add-icon"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        focusable="false"
+                        height="20"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 32 32"
+                        width="20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,16V26.7515l-7.0962-3.5894L16,22.7051l-.9009.456L8,26.748V4H18V2H8A2,2,0,0,0,6,4V30l10-5.0537L26,30V16Z"
+                        />
+                        <path
+                          d="M26 6L26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
+                        />
+                      </svg>
+                    </div>
+                  </td>
+                  <td
+                    class="slot-details-container"
+                  />
+                  <td
+                    class="slot-details-container"
+                  />
+                </tr>
+                <tr
+                  class="patient-row-container"
+                >
+                  <td
+                    class="patient-details-container"
+                  >
+                    <div
+                      class="care-view-patient-details"
+                    >
+                      <div
+                        class="admission-details"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 32 32"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+                          />
+                          <path
+                            d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                          />
+                        </svg>
+                        |
+                        <span>
+                          G-3
+                        </span>
+                        |
+                        <a
+                          class="bx--link"
+                          data-testid="identifier-ipd-dashboard"
+                          href="/bahmni/clinical/#/default/patient/0a40959a-68ac-47d0-a24e-e1298a078590/dashboard/visit/ipd/ee7bd2b6-8a1b-47fe-b4c0-ad71a7af6f55?source=careViewDashboard"
+                        >
+                          <span>
+                            PT51187
+                          </span>
+                        </a>
+                      </div>
+                      <div>
+                        Patient
+                        :
+                         
+                        <span>
+                          AnnonFN-Oeflptynqs AnnonMN-Pwphqkztxg AnnonLN-Mqucxlndej
+                        </span>
+                         (
+                        <span>
+                          M
+                        </span>
+                        )
+                        <span
+                          class="separator"
+                        >
+                          |
+                        </span>
+                        <span>
+                          4
+                        </span>
+                        yrs
+                      </div>
+                    </div>
+                    <div
+                      data-testid="bookmark-add-icon"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        focusable="false"
+                        height="20"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 32 32"
+                        width="20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,16V26.7515l-7.0962-3.5894L16,22.7051l-.9009.456L8,26.748V4H18V2H8A2,2,0,0,0,6,4V30l10-5.0537L26,30V16Z"
+                        />
+                        <path
+                          d="M26 6L26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
+                        />
+                      </svg>
+                    </div>
+                  </td>
+                  <td
+                    class="slot-details-container"
+                  />
+                  <td
+                    class="slot-details-container"
+                  />
+                </tr>
+                <tr
+                  class="patient-row-container"
+                >
+                  <td
+                    class="patient-details-container"
+                  >
+                    <div
+                      class="care-view-patient-details"
+                    >
+                      <div
+                        class="admission-details"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 32 32"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+                          />
+                          <path
+                            d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                          />
+                        </svg>
+                        |
+                        <span>
+                          A-6
+                        </span>
+                        |
+                        <a
+                          class="bx--link"
+                          data-testid="identifier-ipd-dashboard"
+                          href="/bahmni/clinical/#/default/patient/17fd50c7-8f9e-48da-b9ed-88c1bd358798/dashboard/visit/ipd/626b822d-741e-4a86-95ff-626eea753c4c?source=careViewDashboard"
+                        >
+                          <span>
+                            PT51140
+                          </span>
+                        </a>
+                      </div>
+                      <div>
+                        Patient
+                        :
+                         
+                        <span>
+                          AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu
+                        </span>
+                         (
+                        <span>
+                          M
+                        </span>
+                        )
+                        <span
+                          class="separator"
+                        >
+                          |
+                        </span>
+                        <span>
+                          14
+                        </span>
+                        yrs
+                      </div>
+                    </div>
+                    <div
+                      data-testid="bookmark-add-icon"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        focusable="false"
+                        height="20"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 32 32"
+                        width="20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,16V26.7515l-7.0962-3.5894L16,22.7051l-.9009.456L8,26.748V4H18V2H8A2,2,0,0,0,6,4V30l10-5.0537L26,30V16Z"
+                        />
+                        <path
+                          d="M26 6L26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
+                        />
+                      </svg>
+                    </div>
+                  </td>
+                  <td
+                    class="slot-details-container"
+                  />
+                  <td
+                    class="slot-details-container"
+                  />
+                </tr>
+                <tr
+                  class="patient-row-container"
+                >
+                  <td
+                    class="patient-details-container"
+                  >
+                    <div
+                      class="care-view-patient-details"
+                    >
+                      <div
+                        class="admission-details"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 32 32"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+                          />
+                          <path
+                            d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                          />
+                        </svg>
+                        |
+                        <span>
+                          C-1
+                        </span>
+                        |
+                        <a
+                          class="bx--link"
+                          data-testid="identifier-ipd-dashboard"
+                          href="/bahmni/clinical/#/default/patient/7278eb93-8c1d-4ef4-bcbf-4c6ee91365f7/dashboard/visit/ipd/626b822d-741e-4a86-95ff-636eea753c2c?source=careViewDashboard"
+                        >
+                          <span>
+                            PT49722
+                          </span>
+                        </a>
+                      </div>
+                      <div>
+                        Patient
+                        :
+                         
+                        <span>
+                          AnnonFN-Eifbqbgbnm AnnonMN-Vrystpswee AnnonLN-Idseppecxk
+                        </span>
+                         (
+                        <span>
+                          M
+                        </span>
+                        )
+                        <span
+                          class="separator"
+                        >
+                          |
+                        </span>
+                        <span>
+                          10
+                        </span>
+                        yrs
+                        <div
+                          class="treatments-notification"
+                        >
+                          <div
+                            class="warning_icon"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="warning-icon-20"
+                              fill="currentColor"
+                              focusable="false"
+                              height="20"
+                              preserveAspectRatio="xMidYMid meet"
+                              viewBox="0 0 32 32"
+                              width="20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M16 23a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 23zM15 12H17V21H15z"
+                              />
+                              <path
+                                d="M29,30H3a1,1,0,0,1-.8872-1.4614l13-25a1,1,0,0,1,1.7744,0l13,25A1,1,0,0,1,29,30ZM4.6507,28H27.3493l.002-.0033L16.002,6.1714h-.004L4.6487,27.9967Z"
+                              />
+                            </svg>
+                             
+                          </div>
+                          <div
+                            class="treatments-notification-span"
+                          >
+                            <div>
+                              • 
+                              1 New treatment(s): 
+                              <a
+                                class="bx--link"
+                                data-testid="treatments-ipd-dashboard"
+                                href="/bahmni/clinical/#/default/patient/7278eb93-8c1d-4ef4-bcbf-4c6ee91365f7/dashboard/visit/ipd/626b822d-741e-4a86-95ff-636eea753c2c?source=careViewDashboard"
+                              >
+                                Schedule Treatments
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      data-testid="bookmark-add-icon"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        focusable="false"
+                        height="20"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 32 32"
+                        width="20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,16V26.7515l-7.0962-3.5894L16,22.7051l-.9009.456L8,26.748V4H18V2H8A2,2,0,0,0,6,4V30l10-5.0537L26,30V16Z"
+                        />
+                        <path
+                          d="M26 6L26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
+                        />
+                      </svg>
+                    </div>
+                  </td>
+                  <td
+                    class="slot-details-container"
+                  />
+                  <td
+                    class="slot-details-container"
+                  />
+                </tr>
+                <tr
+                  class="patient-row-container"
+                >
+                  <td
+                    class="patient-details-container"
+                  >
+                    <div
+                      class="care-view-patient-details"
+                    >
+                      <div
+                        class="admission-details"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 32 32"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
+                          />
+                          <path
+                            d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                          />
+                        </svg>
+                        |
+                        <span>
+                          ICU1
+                        </span>
+                        |
+                        <a
+                          class="bx--link"
+                          data-testid="identifier-ipd-dashboard"
+                          href="/bahmni/clinical/#/default/patient/3ab51ec0-4650-4400-9aaa-75f30ece0208/dashboard/visit/ipd/627b822d-741e-4a96-45ff-626eea753c4c?source=careViewDashboard"
+                        >
+                          <span>
+                            ET55749
+                          </span>
+                        </a>
+                      </div>
+                      <div>
+                        Patient
+                        :
+                         
+                        <span>
+                          user three
+                        </span>
+                         (
+                        <span>
+                          F
+                        </span>
+                        )
+                        <span
+                          class="separator"
+                        >
+                          |
+                        </span>
+                        <span>
+                          30
+                        </span>
+                        yrs
+                      </div>
+                    </div>
+                    <div
+                      data-testid="bookmark-add-icon"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        focusable="false"
+                        height="20"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 32 32"
+                        width="20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,16V26.7515l-7.0962-3.5894L16,22.7051l-.9009.456L8,26.748V4H18V2H8A2,2,0,0,0,6,4V30l10-5.0537L26,30V16Z"
+                        />
+                        <path
+                          d="M26 6L26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
+                        />
+                      </svg>
+                    </div>
+                  </td>
+                  <td
+                    class="slot-details-container"
+                  />
+                  <td
+                    class="slot-details-container"
+                  />
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            class="patient-pagination"
+          >
+            <div
+              class="bx--pagination"
             >
-              No Patient found
-            </span>
+              <div
+                class="bx--pagination__left"
+              >
+                <label
+                  class="bx--pagination__text"
+                  for="bx-pagination-select-1"
+                  id="bx-pagination-select-1-count-label"
+                >
+                  Patients per page
+                </label>
+                <div
+                  class="bx--form-item"
+                >
+                  <div
+                    class="bx--select bx--select--inline bx--select__item-count"
+                  >
+                    <div
+                      class="bx--select-input--inline__wrapper"
+                    >
+                      <div
+                        class="bx--select-input__wrapper"
+                      >
+                        <select
+                          class="bx--select-input"
+                          id="bx-pagination-select-1"
+                        >
+                          <option
+                            class="bx--select-option"
+                            value="10"
+                          >
+                            10
+                          </option>
+                          <option
+                            class="bx--select-option"
+                            value="20"
+                          >
+                            20
+                          </option>
+                          <option
+                            class="bx--select-option"
+                            value="30"
+                          >
+                            30
+                          </option>
+                          <option
+                            class="bx--select-option"
+                            value="40"
+                          >
+                            40
+                          </option>
+                          <option
+                            class="bx--select-option"
+                            value="50"
+                          >
+                            50
+                          </option>
+                        </select>
+                        <svg
+                          aria-hidden="true"
+                          class="bx--select__arrow"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  class="bx--pagination__text bx--pagination__items-count"
+                >
+                  1–5 of 5 items
+                </span>
+              </div>
+              <div
+                class="bx--pagination__right"
+              >
+                <div
+                  class="bx--form-item"
+                >
+                  <div
+                    class="bx--select bx--select--inline bx--select__page-number"
+                  >
+                    <label
+                      class="bx--label bx--visually-hidden"
+                      for="bx-pagination-select-1-right"
+                    >
+                      Page number, of 1 pages
+                    </label>
+                    <div
+                      class="bx--select-input--inline__wrapper"
+                    >
+                      <div
+                        class="bx--select-input__wrapper"
+                      >
+                        <select
+                          class="bx--select-input"
+                          id="bx-pagination-select-1-right"
+                        >
+                          <option
+                            class="bx--select-option"
+                            value="1"
+                          >
+                            1
+                          </option>
+                        </select>
+                        <svg
+                          aria-hidden="true"
+                          class="bx--select__arrow"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  class="bx--pagination__text"
+                >
+                  of 1 page
+                </span>
+                <div
+                  class="bx--pagination__control-buttons"
+                >
+                  <button
+                    class="bx--pagination__button bx--pagination__button--backward bx--pagination__button--no-index bx--btn bx--btn--ghost bx--btn--disabled bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
+                    disabled=""
+                    tabindex="0"
+                    type="button"
+                  >
+                    <div
+                      class="bx--assistive-text"
+                    >
+                      Previous page
+                    </div>
+                    <svg
+                      aria-hidden="true"
+                      aria-label="Previous page"
+                      class="bx--btn__icon"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M20 24L10 16 20 8z"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    class="bx--pagination__button bx--pagination__button--forward bx--pagination__button--no-index bx--btn bx--btn--ghost bx--btn--disabled bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-end"
+                    disabled=""
+                    tabindex="0"
+                    type="button"
+                  >
+                    <div
+                      class="bx--assistive-text"
+                    >
+                      Next page
+                    </div>
+                    <svg
+                      aria-hidden="true"
+                      aria-label="Next page"
+                      class="bx--btn__icon"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 8L22 16 12 24z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
