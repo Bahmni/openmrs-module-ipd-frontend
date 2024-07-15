@@ -7,7 +7,6 @@ import { items } from "../utils/constants";
 import {
   fetchMedicationNursingTasks,
   ExtractMedicationNursingTasksData,
-  disableTaskTilePastNextSlotTime,
   ExtractNonMedicationTasks,
   sortNursingTasks,
   fetchNonMedicationTasks,
@@ -373,12 +372,9 @@ export default function NursingTasks(props) {
 
   const showTaskTiles = () => {
     return medicationNursingTasks.map(
-      (medicationNursingTask, index, medicationNursingTasks) => {
+      (medicationNursingTask, index) => {
         return (
           <div key={index}>
-            {medicationNursingTask[0].isANonMedicationTask &&
-              medicationNursingTask[0].status == "REQUESTED" &&
-              disableTaskTilePastNextSlotTime(medicationNursingTasks, index)}
             <div
               onClick={() => {
                 const isStoppedSlot = medicationNursingTask[0]?.stopTime;
