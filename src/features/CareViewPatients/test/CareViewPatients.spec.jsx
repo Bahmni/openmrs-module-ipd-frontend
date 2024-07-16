@@ -45,9 +45,9 @@ jest.mock("../../CareViewSummary/utils/CareViewSummary", () => {
   return {
     getSlotsForPatients: () => mockGetSlotsForPatients(),
     getTasksForPatients: () => mockGetTasksForPatients(),
-    setCurrentShiftTimes: ()=> mockSetCurrentShiftTimes(),
-    currentShiftHoursArray: ()=> mockCurrentShiftHoursArray(),
-    getPreviousShiftDetails: ()=>mockGetPreviousShiftDetails(),
+    setCurrentShiftTimes: () => mockSetCurrentShiftTimes(),
+    currentShiftHoursArray: () => mockCurrentShiftHoursArray(),
+    getPreviousShiftDetails: () => mockGetPreviousShiftDetails(),
   };
 });
 
@@ -62,10 +62,7 @@ jest.mock("../utils/CareViewPatientsUtils", () => {
 
 describe("CareViewPatients", () => {
   beforeEach(() => {
-    mockFetchPatientsList.mockResolvedValue({
-      status: 200,
-      data: mockPatientsList,
-    });
+    mockFetchPatientsList.mockResolvedValue(mockPatientsList);
     mockGetSlotsForPatients.mockReturnValue([]);
     mockGetTasksForPatients.mockReturnValue([]);
     mockCurrentShiftHoursArray.mockReturnValue({
@@ -87,13 +84,14 @@ describe("CareViewPatients", () => {
       shiftIndex: 0,
     });
     mockSetCurrentShiftTimes.mockReturnValue([
-       "1713234600000",
-       "1713274200000"]
-    )
+      "1713234600000",
+      "1713274200000",
+    ]);
     mockGetPreviousShiftDetails.mockReturnValue({
       endDateTime: "1713234600000",
       previousShiftIndex: 1,
-      startDateTime: "1713187800000"})
+      startDateTime: "1713187800000",
+    });
   });
   afterEach(() => {
     jest.resetAllMocks();
@@ -165,10 +163,7 @@ describe("CareViewPatients", () => {
   });
 
   it("should show inital ward patient info on click of clear search input button", async () => {
-    mockFetchPatientsList.mockResolvedValue({
-      status: 200,
-      data: mockPatientsList,
-    });
+    mockFetchPatientsList.mockResolvedValue(mockPatientsList);
     const { container, getByRole, getByText } = render(
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />

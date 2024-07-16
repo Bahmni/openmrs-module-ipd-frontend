@@ -5,8 +5,9 @@ import { mockWardList } from "./CareViewSummaryMock";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { WARD_SUMMARY_HEADER } from "../../../constants";
 
-const mockGetWardDetails = jest.fn();
-const mockFetchWardSummary = jest.fn();
+const mockGetSelectedWard = jest.fn();
+const mockGetWardOptions = jest.fn();
+const mockGetWardSummary = jest.fn();
 const mockGetSliderPerView = jest.fn();
 const mockContext = {
   selectedWard: { label: "ward", uuid: "uuid" },
@@ -33,16 +34,17 @@ jest.mock("swiper/css/pagination", () => jest.fn());
 
 jest.mock("../utils/CareViewSummary", () => {
   return {
-    getWardDetails: () => mockGetWardDetails(),
-    fetchWardSummary: () => mockFetchWardSummary(),
+    getSelectedWard: () => mockGetSelectedWard(),
+    getWardOptions: () => mockGetWardOptions(),
+    getWardSummary: () => mockGetWardSummary(),
     getSlidesPerView: () => mockGetSliderPerView(),
   };
 });
 
 describe("CareViewSummary", function () {
   it("should render Dropdown and summary tiles", () => {
-    mockGetWardDetails.mockReturnValue(mockWardList);
-    mockFetchWardSummary.mockReturnValue({
+    mockGetWardOptions.mockReturnValue(mockWardList);
+    mockGetWardSummary.mockReturnValue({
       totalPatients: 27,
     });
     const { container } = render(
@@ -56,8 +58,8 @@ describe("CareViewSummary", function () {
   });
 
   it("should display the total patient count", () => {
-    mockGetWardDetails.mockReturnValue(mockWardList);
-    mockFetchWardSummary.mockReturnValue({
+    mockGetWardOptions.mockReturnValue(mockWardList);
+    mockGetWardSummary.mockReturnValue({
       totalPatients: 27,
     });
     const { getByText } = render(
@@ -69,7 +71,7 @@ describe("CareViewSummary", function () {
   });
 
   it("should display the my patient count", () => {
-    mockGetWardDetails.mockReturnValue(mockWardList);
+    mockGetWardOptions.mockReturnValue(mockWardList);
     const { getByText } = render(
       <CareViewContext.Provider value={mockContext}>
         <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
@@ -79,8 +81,8 @@ describe("CareViewSummary", function () {
   });
 
   it("should select total patients tile by default", async () => {
-    mockGetWardDetails.mockReturnValue(mockWardList);
-    mockFetchWardSummary.mockReturnValue({
+    mockGetWardOptions.mockReturnValue(mockWardList);
+    mockGetWardSummary.mockReturnValue({
       totalPatients: 27,
     });
     const { container } = render(
@@ -100,8 +102,8 @@ describe("CareViewSummary", function () {
   });
 
   it("should set my patients when the my patients tile is clicked", async () => {
-    mockGetWardDetails.mockReturnValue(mockWardList);
-    mockFetchWardSummary.mockReturnValue({
+    mockGetWardOptions.mockReturnValue(mockWardList);
+    mockGetWardSummary.mockReturnValue({
       totalPatients: 27,
     });
     const { container } = render(

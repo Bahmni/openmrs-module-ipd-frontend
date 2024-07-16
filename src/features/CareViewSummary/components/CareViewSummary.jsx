@@ -5,9 +5,10 @@ import { Dropdown } from "bahmni-carbon-ui";
 import propTypes from "prop-types";
 import _ from "lodash";
 import {
-  fetchWardSummary,
+  getSelectedWard,
   getSlidesPerView,
-  getWardDetails,
+  getWardOptions,
+  getWardSummary,
 } from "../utils/CareViewSummary";
 import { FormattedMessage } from "react-intl";
 import { CareViewContext } from "../../../context/CareViewContext";
@@ -20,21 +21,14 @@ import {
   TABLET_BREAKPOINT,
   WARD_SUMMARY_HEADER,
 } from "../../../constants";
-export const CareViewSummary = (props) => {
-  const { callbacks, onHome } = props;
+
+export const CareViewSummary = ({ callbacks, onHome }) => {
+  const { setIsLoading } = callbacks;
   const [options, setOptions] = useState([]);
   const [screenSize, setScreenSize] = useState(window.outerWidth);
   const [isTabletView, setIsTabletView] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
-  const setWindowWidth = () => {
-    setScreenSize(window.outerWidth);
-  };
-  useEffect(() => {
-    window.addEventListener("resize", setWindowWidth);
-    return () => {
-      window.removeEventListener("resize", setWindowWidth);
-    };
-  }, []);
+
   const {
     selectedWard,
     setSelectedWard,
@@ -46,42 +40,45 @@ export const CareViewSummary = (props) => {
     refreshSummary,
   } = useContext(CareViewContext);
 
-  let existingSelectedWards = JSON.parse(
-    localStorage.getItem("selected_wards")
-  );
+  let existingSelectedWards =
+    JSON.parse(localStorage.getItem("selected_wards")) || {};
 
-  const getWardList = async () => {
-    callbacks.setIsLoading(true);
-    const wardList = await getWardDetails();
-    const wardOptions = wardList?.map((ward) => {
-      return {
-        label: ward?.ward?.display,
-        value: ward?.ward?.uuid,
-      };
-    });
+  const updateWardDetails = async () => {
+    setIsLoading(true);
+    const wardOptions = await getWardOptions();
     setOptions(wardOptions);
-    if (existingSelectedWards) {
-      const ward = existingSelectedWards[provider.uuid];
-      if (ward) setSelectedWard(ward);
-      else setSelectedWard(wardOptions[0]);
-    } else {
-      setSelectedWard(wardOptions[0]);
+    const uuid = provider.uuid;
+    const selectedWard = getSelectedWard(
+      existingSelectedWards,
+      uuid,
+      wardOptions
+    );
+    setSelectedWard(selectedWard);
+    if (selectedWard) {
+      const wardSummaryResponse = await getWardSummary(
+        selectedWard.value,
+        uuid
+      );
+      setWardSummary(wardSummaryResponse);
     }
-    callbacks.setIsLoading(false);
+    setIsLoading(false);
   };
-  const getWardSummary = async () => {
-    callbacks.setIsLoading(true);
-    const response = await fetchWardSummary(selectedWard.value, provider.uuid);
-    if (response.status === 200) {
-      setWardSummary(response.data);
-    } else {
-      setWardSummary({});
-    }
-    callbacks.setIsLoading(false);
+
+  const handleResize = () => {
+    setScreenSize(window.outerWidth);
   };
+
   useEffect(() => {
-    getWardList();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
+
+  useEffect(() => {
+    updateWardDetails();
+  }, []);
+
   useEffect(() => {
     if (!_.isEmpty(selectedWard)) {
       const newSelectedWard = {
@@ -100,18 +97,17 @@ export const CareViewSummary = (props) => {
         "selected_wards",
         JSON.stringify(existingSelectedWards)
       );
-      getWardSummary();
+      updateWardDetails();
     }
   }, [selectedWard, refreshSummary]);
+
   useEffect(() => {
-    setIsTabletView(false);
-    setIsMobileView(false);
-    if (screenSize <= MOBILE_BREAKPOINT) {
-      setIsMobileView(true);
-    } else if (screenSize <= TABLET_BREAKPOINT) {
-      setIsTabletView(true);
-    }
+    setIsTabletView(
+      screenSize <= TABLET_BREAKPOINT && screenSize > MOBILE_BREAKPOINT
+    );
+    setIsMobileView(screenSize <= MOBILE_BREAKPOINT);
   }, [screenSize]);
+
   const totalPatientsTile = (
     <Tile
       className={`summary-tile ${

@@ -17,11 +17,6 @@ import "./ExpandableDataTable.scss";
 const ExpandableDataTable = (props) => {
   const { rows, headers, additionalData, component, useZebraStyles } = props;
 
-  const renderExpandableRowComponent = (row, additionalData) => {
-    const filteredData = additionalData.filter((data) => row.id === data.id);
-    return filteredData.map((data) => component(data));
-  };
-
   return (
     <DataTable
       rows={rows}
@@ -58,33 +53,37 @@ const ExpandableDataTable = (props) => {
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              return additionalData.map((data) => {
-                if (data.id == row.id)
-                  return (
-                    <React.Fragment key={row.id}>
-                      <TableExpandRow
-                        {...getRowProps({ row })}
-                        data-testid="expandable-row"
-                        className={data?.isNotScheduled && "green-row"}
-                      >
-                        {row.cells.map((cell) => (
-                          <TableCell
-                            key={cell.id}
-                            className={data?.isNotScheduled && "green-cell"}
-                          >
-                            {cell.value}
-                          </TableCell>
-                        ))}
-                      </TableExpandRow>
-                      <TableExpandedRow
-                        colSpan={headers.length + 1}
-                        className="expandable-row-content"
-                      >
-                        {renderExpandableRowComponent(row, additionalData)}
-                      </TableExpandedRow>
-                    </React.Fragment>
-                  );
-              });
+              const matchedData = additionalData.find(
+                (data) => data.id === row.id
+              );
+              if (matchedData) {
+                return (
+                  <React.Fragment key={row.id}>
+                    <TableExpandRow
+                      {...getRowProps({ row })}
+                      data-testid="expandable-row"
+                      className={matchedData?.isNotScheduled && "green-row"}
+                    >
+                      {row.cells.map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className={
+                            matchedData?.isNotScheduled && "green-cell"
+                          }
+                        >
+                          {cell.value}
+                        </TableCell>
+                      ))}
+                    </TableExpandRow>
+                    <TableExpandedRow
+                      colSpan={headers.length + 1}
+                      className="expandable-row-content"
+                    >
+                      {component(matchedData)}
+                    </TableExpandedRow>
+                  </React.Fragment>
+                );
+              }
             })}
           </TableBody>
         </Table>
