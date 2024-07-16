@@ -16,6 +16,7 @@ import {
   timeFormatFor12Hr,
   timeFormatFor24Hr,
 } from "../../../../constants";
+import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
@@ -51,8 +52,6 @@ export default function TaskTile(props) {
     startTimeInEpochSeconds,
     nursingTasks
   );
-
-  const isSystemGeneratedTask = taskType?.display === "nursing_activity_system";
 
   const creatorName = (creator) => {
     var formattedName = creator.split(".").join(" ");
@@ -120,7 +119,7 @@ export default function TaskTile(props) {
             }}
           >
             <span>{dosage}</span>
-            {creator && !isSystemGeneratedTask && (
+            {creator && !isSystemGeneratedTask(newMedicationNursingTask) && (
               <span style={{ textTransform: "capitalize" }}>
                 {creatorName(creator.display)}
               </span>

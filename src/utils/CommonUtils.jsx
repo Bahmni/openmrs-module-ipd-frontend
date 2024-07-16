@@ -7,6 +7,7 @@ import {
   FORM_BASE_URL,
   SEARCH_CONCEPT_URL,
   SEARCH_DRUG_URL,
+  DAEMON_USER,
 } from "../constants";
 import { FormattedMessage } from "react-intl";
 export const getPatientDashboardUrl = (patientUuid) =>
@@ -355,3 +356,7 @@ export const mockConfigFor12HourFormat = {
     2: { shiftStartTime: "19:00", shiftEndTime: "08:00" },
   },
 };
+
+export const isSystemGeneratedTask =(task)=>{
+  return task?.creator?.uuid === DAEMON_USER.uuid || task?.creator?.name === DAEMON_USER.name; 
+}

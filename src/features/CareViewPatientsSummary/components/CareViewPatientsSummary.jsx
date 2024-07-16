@@ -11,6 +11,7 @@ import { SlotDetailsCell } from "./SlotDetailsCell";
 import { Header } from "./Header";
 import { getPreviousShiftDetails } from "../../CareViewSummary/utils/CareViewSummary";
 import { currentShiftHoursArray, setCurrentShiftTimes } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
+import { isSystemGeneratedTask } from "../../../utils/CommonUtils";
 
 export const CareViewPatientsSummary = ({
   patientsSummary,
@@ -73,7 +74,7 @@ export const CareViewPatientsSummary = ({
     const patientUuid = patientData.patientUuid;
     const patientTasks = [];
     patientData.tasks.forEach(task => {
-      if (task.taskType?.display === "nursing_activity_system" && task.status === "REQUESTED") {
+      if (isSystemGeneratedTask(task) && task.status === "REQUESTED") {
         
           patientTasks.push({
               taskName: task.name,
