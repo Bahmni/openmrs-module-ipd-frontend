@@ -167,7 +167,7 @@ const UpdateNursingTasks = (props) => {
   useEffect(() => {
     medicationTasks.map((medicationTask) => {
       updateIsPRNMedication(medicationTask?.dosingInstructions?.asNeeded);
-      updateIsNonMedication(medicationTask?.taskType?.display);
+      updateIsNonMedication(medicationTask?.isANonMedicationTask);
       updateIsSystemGeneratedNonMedication(
         isSystemGeneratedTask(medicationTask)
       );
