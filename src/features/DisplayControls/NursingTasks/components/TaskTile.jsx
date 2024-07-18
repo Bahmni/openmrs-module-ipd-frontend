@@ -7,7 +7,7 @@ import {
   getRelevantTaskStatus,
   iconType,
 } from "../utils/TaskTileUtils";
-import { TooltipDefinition } from "carbon-components-react";
+import { TooltipDefinition, Tag } from "carbon-components-react";
 import "../styles/TaskTile.scss";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -111,46 +111,58 @@ export default function TaskTile(props) {
               <DisplayTags drugOrder={dosingInstructions} />
             </div>
           )}
-          <div
-            className="tile-content-subtext"
-            style={{
-              color: isRelevantTask ? "#393939" : "#525252",
-              paddingLeft: "25px",
-            }}
-          >
-            <span>{dosage}</span>
-            {creator && !isSystemGeneratedTask(newMedicationNursingTask) && (
-              <span style={{ textTransform: "capitalize" }}>
-                {creatorName(creator.display)}
-              </span>
-            )}
-            {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
-            {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
-          </div>
-          {!(
-            dosingInstructions?.asNeeded &&
-            serviceType === asNeededPlaceholderConceptName
-          ) && (
-            <div className="tile-content-subtext">
-              <Clock />
-              <div className="tile-content-subtext-time">
-                &nbsp;
-                {enable24HourTime
-                  ? getTime(
-                      administeredTimeInEpochSeconds,
-                      startTime,
-                      "hh:mm",
-                      timeFormatFor24Hr
-                    )
-                  : getTime(
-                      administeredTimeInEpochSeconds,
-                      startTime,
-                      "hh:mm",
-                      timeFormatFor12Hr
-                    )}
+          <div className="tile-subcontent">
+            <div>
+              <div
+                className="tile-content-subtext"
+                style={{
+                  color: isRelevantTask ? "#393939" : "#525252",
+                  paddingLeft: "25px",
+                }}
+              >
+                <span>{dosage}</span>
+                {creator &&
+                  !isSystemGeneratedTask(newMedicationNursingTask) && (
+                    <span style={{ textTransform: "capitalize" }}>
+                      {creatorName(creator.display)}
+                    </span>
+                  )}
+                {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
+                {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
               </div>
+              {!(
+                dosingInstructions?.asNeeded &&
+                serviceType === asNeededPlaceholderConceptName
+              ) && (
+                <div className="tile-content-subtext">
+                  <Clock />
+                  <div className="tile-content-subtext-time">
+                    &nbsp;
+                    {enable24HourTime
+                      ? getTime(
+                          administeredTimeInEpochSeconds,
+                          startTime,
+                          "hh:mm",
+                          timeFormatFor24Hr
+                        )
+                      : getTime(
+                          administeredTimeInEpochSeconds,
+                          startTime,
+                          "hh:mm",
+                          timeFormatFor12Hr
+                        )}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
+            <div>
+              {taskType && !isSystemGeneratedTask(newMedicationNursingTask) && (
+                <Tag type="blue">
+                  <span>{taskType.display}</span>
+                </Tag>
+              )}
+            </div>
+          </div>
           {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
         </div>
       </div>

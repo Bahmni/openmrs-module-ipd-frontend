@@ -60,20 +60,27 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
           </div>
         </div>
         <div
-          class="tile-content-subtext"
-          style="color: rgb(82, 82, 82); padding-left: 25px;"
+          class="tile-subcontent"
         >
-          <span />
-        </div>
-        <div
-          class="tile-content-subtext"
-        >
-          <test-file-stub />
-          <div
-            class="tile-content-subtext-time"
-          >
-             Invalid date
+          <div>
+            <div
+              class="tile-content-subtext"
+              style="color: rgb(82, 82, 82); padding-left: 25px;"
+            >
+              <span />
+            </div>
+            <div
+              class="tile-content-subtext"
+            >
+              <test-file-stub />
+              <div
+                class="tile-content-subtext-time"
+              >
+                 Invalid date
+              </div>
+            </div>
           </div>
+          <div />
         </div>
         <div
           class="more-info"
@@ -153,25 +160,32 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
           </div>
         </div>
         <div
-          class="tile-content-subtext"
-          style="color: rgb(82, 82, 82); padding-left: 25px;"
+          class="tile-subcontent"
         >
-          <span>
-            1ml
-          </span>
-          <span>
-             - Oral
-          </span>
-        </div>
-        <div
-          class="tile-content-subtext"
-        >
-          <test-file-stub />
-          <div
-            class="tile-content-subtext-time"
-          >
-             16:00 - 07:23 (actual)
+          <div>
+            <div
+              class="tile-content-subtext"
+              style="color: rgb(82, 82, 82); padding-left: 25px;"
+            >
+              <span>
+                1ml
+              </span>
+              <span>
+                 - Oral
+              </span>
+            </div>
+            <div
+              class="tile-content-subtext"
+            >
+              <test-file-stub />
+              <div
+                class="tile-content-subtext-time"
+              >
+                 16:00 - 07:23 (actual)
+              </div>
+            </div>
           </div>
+          <div />
         </div>
       </div>
     </div>
