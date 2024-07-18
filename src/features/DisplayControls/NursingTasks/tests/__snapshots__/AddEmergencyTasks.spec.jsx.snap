@@ -339,7 +339,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                       class="bx--label"
                       dir="auto"
                       for="Dosage Dropdown"
-                      id="downshift-3-label"
+                      id="downshift-4-label"
                     >
                       <div
                         class="titleText"
@@ -400,7 +400,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                       <div
                         aria-label="Choose an item"
                         class="bx--list-box__menu"
-                        id="downshift-3-menu"
+                        id="downshift-4-menu"
                         role="listbox"
                       />
                     </div>
@@ -417,7 +417,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                     class="bx--label"
                     dir="auto"
                     for="Route-Dropdown"
-                    id="downshift-4-label"
+                    id="downshift-5-label"
                   >
                     <div
                       class="titleText"
@@ -483,7 +483,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                     <div
                       aria-label="Choose an item"
                       class="bx--list-box__menu"
-                      id="downshift-4-menu"
+                      id="downshift-5-menu"
                       role="listbox"
                     />
                   </div>
@@ -609,7 +609,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                   class="bx--label"
                   dir="auto"
                   for="Provider-info"
-                  id="downshift-5-label"
+                  id="downshift-6-label"
                 >
                   <div
                     class="titleText"
@@ -675,7 +675,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                   <div
                     aria-label="Choose an item"
                     class="bx--list-box__menu"
-                    id="downshift-5-menu"
+                    id="downshift-6-menu"
                     role="listbox"
                   />
                 </div>
@@ -759,6 +759,88 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                   placeholder="Enter a title for the task "
                   rows="1"
                 />
+              </div>
+            </div>
+            <div
+              data-testid="select"
+            >
+              <div
+                class="bx--list-box__wrapper"
+              >
+                <label
+                  class="bx--label"
+                  dir="auto"
+                  for="non-medication-task-type-dropdown"
+                  id="downshift-7-label"
+                >
+                  <div
+                    class="titleText"
+                  >
+                    <span>
+                      Task Type 
+                    </span>
+                    <span
+                      class="required"
+                    >
+                      *
+                    </span>
+                  </div>
+                </label>
+                <div
+                  class="bx--combo-box bx--list-box"
+                >
+                  <div
+                    class="bx--list-box__field"
+                  >
+                    <input
+                      aria-autocomplete="list"
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      autocomplete="off"
+                      class="bx--text-input bx--text-input--empty"
+                      id="non-medication-task-type-dropdown"
+                      placeholder="Select Task Type"
+                      role="combobox"
+                      style="width: 100%;"
+                      tabindex="0"
+                      title=""
+                      type="text"
+                      value=""
+                    />
+                    
+                    <button
+                      aria-haspopup="true"
+                      aria-label="Open"
+                      class="bx--list-box__menu-icon"
+                      data-toggle="true"
+                      role="button"
+                      tabindex="-1"
+                      title="Open"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        focusable="false"
+                        height="16"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div
+                    aria-label="Choose an item"
+                    class="bx--list-box__menu"
+                    id="downshift-7-menu"
+                    role="listbox"
+                  />
+                </div>
               </div>
             </div>
             <div
@@ -1301,6 +1383,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                           role="combobox"
                           style="width: 170px;"
                           tabindex="0"
+                          title=""
                           type="text"
                           value=""
                         />
@@ -1383,6 +1466,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                         role="combobox"
                         style="width: 100%;"
                         tabindex="0"
+                        title=""
                         type="text"
                         value=""
                       />
@@ -1574,6 +1658,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                       role="combobox"
                       style="width: 100%;"
                       tabindex="0"
+                      title=""
                       type="text"
                       value=""
                     />
@@ -1696,6 +1781,88 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                   placeholder="Enter a title for the task "
                   rows="1"
                 />
+              </div>
+            </div>
+            <div
+              data-testid="select"
+            >
+              <div
+                class="bx--list-box__wrapper"
+              >
+                <label
+                  class="bx--label"
+                  dir="auto"
+                  for="non-medication-task-type-dropdown"
+                  id="downshift-3-label"
+                >
+                  <div
+                    class="titleText"
+                  >
+                    <span>
+                      Task Type 
+                    </span>
+                    <span
+                      class="required"
+                    >
+                      *
+                    </span>
+                  </div>
+                </label>
+                <div
+                  class="bx--combo-box bx--list-box"
+                >
+                  <div
+                    class="bx--list-box__field"
+                  >
+                    <input
+                      aria-autocomplete="list"
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      autocomplete="off"
+                      class="bx--text-input bx--text-input--empty"
+                      id="non-medication-task-type-dropdown"
+                      placeholder="Select Task Type"
+                      role="combobox"
+                      style="width: 100%;"
+                      tabindex="0"
+                      title=""
+                      type="text"
+                      value=""
+                    />
+                    
+                    <button
+                      aria-haspopup="true"
+                      aria-label="Open"
+                      class="bx--list-box__menu-icon"
+                      data-toggle="true"
+                      role="button"
+                      tabindex="-1"
+                      title="Open"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        focusable="false"
+                        height="16"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div
+                    aria-label="Choose an item"
+                    class="bx--list-box__menu"
+                    id="downshift-3-menu"
+                    role="listbox"
+                  />
+                </div>
               </div>
             </div>
             <div

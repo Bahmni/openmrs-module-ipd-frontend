@@ -53,15 +53,18 @@ const AddEmergencyTasks = (props) => {
     setShowSuccessNotification,
     setSuccessMessage,
   } = props;
-  const [isSaveDisabled, updateIsSaveDisabled] = useState(true);
+
+  const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [dosageConfig, setDosageConfig] = useState({});
   const [unitOptions, setUnitOptions] = useState([]);
   const [routeOptions, setRouteOptions] = useState([]);
   const [providerOptions, setProviderOptions] = useState([]);
   const [activeTab, setActiveTab] = useState("Medication");
+  const [nonMedicationTaskTypeOptions, setNonMedicationTaskTypeOptions] =
+    useState({});
   const { config = {}, handleAuditEvent } = useContext(IPDContext);
-  const { enable24HourTime = {} } = config;
+  const { enable24HourTime = {}, nonMedicationTaskTypes = [] } = config;
 
   const [selectedDrug, setSelectedDrug] = useState({});
   const [doseUnits, setDoseUnits] = useState({});
@@ -84,6 +87,7 @@ const AddEmergencyTasks = (props) => {
   const [dosage, setDosage] = useState(undefined);
   const [notes, setNotes] = useState("");
   const [task, setTask] = useState("");
+  const [nonMedicationTaskType, setNonMedicationTaskType] = useState();
   const [emergencyTask, setEmergencyTask] = useState({});
   const [popupMedicationData, setPopupMedicationData] = useState({});
   const [showWarningNotification, setShowWarningNotification] = useState(false);
@@ -111,6 +115,20 @@ const AddEmergencyTasks = (props) => {
       defaultMessage={"Past time is not allowed"}
     />
   );
+
+  const getNonMedicationTaskTypeOptions = async () => {
+    setNonMedicationTaskTypeOptions(
+      nonMedicationTaskTypes
+        .map((nonMedicationTaskTypeOption) => {
+          return {
+            label: nonMedicationTaskTypeOption,
+            value: nonMedicationTaskTypeOption,
+          };
+        })
+        .sort((a, b) => a.label.localeCompare(b.label))
+    );
+  };
+
   const fetchDrugOrderConfig = async () => {
     setIsLoading(true);
     const drugOrderConfigResponse = await getDrugOrdersConfig();
@@ -258,17 +276,17 @@ const AddEmergencyTasks = (props) => {
       patientUuid: patientId,
       encounterUuid: encounterUuid.encounterUuid,
       intent: "ORDER",
-      taskType: "nursing_activity",
+      taskType: nonMedicationTaskType,
       status: "REQUESTED",
     };
     return nonMedicationPayload;
   };
 
   const handlePrimaryButtonClick = async () => {
-    updateIsSaveDisabled(true);
+    setIsSaveDisabled(true);
     const response = await saveEmergencyMedication(emergencyTask);
     if (response.status === 200) {
-      updateIsSaveDisabled(false);
+      setIsSaveDisabled(false);
       saveAdhocTasks();
     }
   };
@@ -295,7 +313,7 @@ const AddEmergencyTasks = (props) => {
       const nonMedicationTaskPayload = await createNonMedicationTaskPayload();
       const response = await saveNonMedicationTask(nonMedicationTaskPayload);
       if (response.status === 200) {
-        updateIsSaveDisabled(false);
+        setIsSaveDisabled(false);
         saveNonMedicationAdhocTasks();
       }
     }
@@ -305,13 +323,23 @@ const AddEmergencyTasks = (props) => {
     fetchDrugOrderConfig();
     fetchDrugFormDefaults();
     fetchAllProviders();
+    getNonMedicationTaskTypeOptions();
   }, []);
 
   const handleNonMedicationSaveButton = () => {
-    if (task && scheduleTime && !(_.isEmpty(task) || _.isEmpty(scheduleTime))) {
-      updateIsSaveDisabled(false);
+    if (
+      task &&
+      nonMedicationTaskType &&
+      scheduleTime &&
+      !(
+        _.isEmpty(task) ||
+        _.isEmpty(nonMedicationTaskType) ||
+        _.isEmpty(scheduleTime)
+      )
+    ) {
+      setIsSaveDisabled(false);
     } else {
-      updateIsSaveDisabled(true);
+      setIsSaveDisabled(true);
       setAtleastOneFieldFilled(false);
       if (task) {
         setAtleastOneFieldFilled(true);
@@ -333,9 +361,9 @@ const AddEmergencyTasks = (props) => {
         _.isEmpty(notes)
       )
     ) {
-      updateIsSaveDisabled(false);
+      setIsSaveDisabled(false);
     } else {
-      updateIsSaveDisabled(true);
+      setIsSaveDisabled(true);
       setAtleastOneFieldFilled(false);
       if (
         dosage ||
@@ -368,7 +396,7 @@ const AddEmergencyTasks = (props) => {
 
   useEffect(() => {
     handleNonMedicationSaveButton();
-  }, [task, scheduleTime]);
+  }, [task, scheduleTime, nonMedicationTaskType]);
 
   useEffect(() => {
     customValidation(administrationTime);
@@ -416,6 +444,7 @@ const AddEmergencyTasks = (props) => {
   const actionForInvalidTime = (invalid) => {
     setIsInvalidTime(invalid);
     setInvalidText(invalidTimeText24Hour);
+    setIsSaveDisabled(true);
   };
 
   return (
@@ -586,6 +615,17 @@ const AddEmergencyTasks = (props) => {
                   placeholder={"Enter a title for the task "}
                   maxCount={10}
                   rows={1}
+                />
+                <Dropdown
+                  id={"non-medication-task-type-dropdown"}
+                  onChange={(selectedItem) => {
+                    setNonMedicationTaskType(selectedItem?.value);
+                  }}
+                  placeholder={"Select Task Type"}
+                  titleText={"Task Type"}
+                  isRequired={true}
+                  options={nonMedicationTaskTypeOptions}
+                  width={"100%"}
                 />
                 <div className="time-info">
                   {enable24HourTime ? (
