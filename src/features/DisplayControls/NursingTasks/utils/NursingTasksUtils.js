@@ -5,6 +5,7 @@ import {
   asNeededPlaceholderConceptName,
   NON_MEDICATION_BASE_URL,
 } from "../../../../constants";
+import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
 import moment from "moment";
 
 export const fetchMedicationNursingTasks = async (
@@ -18,7 +19,7 @@ export const fetchMedicationNursingTasks = async (
     const response = await axios.get(FETCH_MEDICATIONS_URL);
     return response.data;
   } catch (error) {
-    return {error};
+    return { error };
   }
 };
 
@@ -65,7 +66,7 @@ export const ExtractMedicationNursingTasksData = (
           : "";
       let drugName, drugRoute, duration, dosage, doseType, dosingInstructions;
       if (order) {
-        drugName = order.drugNonCoded ? order.drugNonCoded :order.drug.display;
+        drugName = order.drugNonCoded ? order.drugNonCoded : order.drug.display;
         drugRoute = order.route?.display;
         if (order.duration) {
           duration = order.duration + " " + order.durationUnits.display;
@@ -263,22 +264,6 @@ export const isTimeWithinAdministeredWindow = (
   return enteredTimeInEpochSeconds <= timeWithinWindowInEpochSeconds;
 };
 
-export const disableTaskTilePastNextSlotTime = (
-  medicationNursingTasks,
-  index
-) => {
-  if (index < medicationNursingTasks.length - 1) {
-    const currentTask = medicationNursingTasks[index][0];
-    const upcomingTask = medicationNursingTasks[index + 1][0];
-    const upcomingTaskTimeInEpoch = upcomingTask.startTimeInEpochSeconds;
-    const currentTimeInEpoch = moment().unix();
-    if (upcomingTaskTimeInEpoch <= currentTimeInEpoch) {
-      currentTask.isDisabled =
-        currentTask.taskType?.display === "nursing_activity";
-    }
-  }
-};
-
 export const getTimeInSeconds = (days) => days * 86400;
 
 export const sortNursingTasks = (medicationNursingTasks) => {
@@ -360,11 +345,13 @@ export const ExtractNonMedicationTasks = (
       completedExtractedData.push(taskInfo);
     }
   });
+
   const nursingActivityTask = pendingExtractedData.filter(
-    (data) => data.taskType?.display === "nursing_activity"
+    (data) => !isSystemGeneratedTask(data)
   );
-  const systemGeneratedTasks = pendingExtractedData.filter(
-    (data) => data.taskType?.display !== "nursing_activity"
+
+  const systemGeneratedTasks = pendingExtractedData.filter((data) =>
+    isSystemGeneratedTask(data)
   );
   const extractedNursingActivityTask = groupTasks(
     nursingActivityTask,
