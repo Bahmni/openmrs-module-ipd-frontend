@@ -276,7 +276,7 @@ const AddEmergencyTasks = (props) => {
       patientUuid: patientId,
       encounterUuid: encounterUuid.encounterUuid,
       intent: "ORDER",
-      taskType: nonMedicationTaskType,
+      taskType: nonMedicationTaskType ? nonMedicationTaskType : null,
       status: "REQUESTED",
     };
     return nonMedicationPayload;
@@ -329,11 +329,9 @@ const AddEmergencyTasks = (props) => {
   const handleNonMedicationSaveButton = () => {
     if (
       task &&
-      nonMedicationTaskType &&
       scheduleTime &&
       !(
         _.isEmpty(task) ||
-        _.isEmpty(nonMedicationTaskType) ||
         _.isEmpty(scheduleTime)
       )
     ) {
@@ -616,17 +614,20 @@ const AddEmergencyTasks = (props) => {
                   maxCount={10}
                   rows={1}
                 />
-                <Dropdown
-                  id={"non-medication-task-type-dropdown"}
-                  onChange={(selectedItem) => {
-                    setNonMedicationTaskType(selectedItem?.value);
-                  }}
-                  placeholder={"Select Task Type"}
-                  titleText={"Task Type"}
-                  isRequired={true}
-                  options={nonMedicationTaskTypeOptions}
-                  width={"100%"}
-                />
+                { 
+                  (nonMedicationTaskTypeOptions && nonMedicationTaskTypeOptions.length > 0) && 
+                  <Dropdown
+                    id={"non-medication-task-type-dropdown"}
+                    onChange={(selectedItem) => {
+                      setNonMedicationTaskType(selectedItem?.value);
+                    }}
+                    placeholder={"Select Task Type"}
+                    titleText={"Task Type"}
+                    isRequired={false}
+                    options={nonMedicationTaskTypeOptions}
+                    width={"100%"}
+                  />
+                }
                 <div className="time-info">
                   {enable24HourTime ? (
                     <TimePicker24Hour
