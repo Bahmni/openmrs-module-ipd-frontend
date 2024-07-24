@@ -90,6 +90,7 @@ export default function TaskTile(props) {
         }`}
       >
         <div className="tile-content">
+        <div className="tile-subcontent">
           <div className={`tile-title ${stopTime && "red-text"}`}>
             <div>
               <div
@@ -106,12 +107,19 @@ export default function TaskTile(props) {
               </TooltipDefinition>
             </div>
           </div>
+          <div>
+              {taskType && !isSystemGeneratedTask(newMedicationNursingTask) && (
+                <Tag type="blue">
+                  <span>{taskType.display}</span>
+                </Tag>
+              )}
+          </div>
+        </div>
           {!isANonMedicationTask && (
             <div className="tile-name-cell">
               <DisplayTags drugOrder={dosingInstructions} />
             </div>
           )}
-          <div className="tile-subcontent">
             <div>
               <div
                 className="tile-content-subtext"
@@ -155,17 +163,9 @@ export default function TaskTile(props) {
                 </div>
               )}
             </div>
-            <div>
-              {taskType && !isSystemGeneratedTask(newMedicationNursingTask) && (
-                <Tag type="blue">
-                  <span>{taskType.display}</span>
-                </Tag>
-              )}
-            </div>
           </div>
           {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
         </div>
-      </div>
       {isGroupedTask && (
         <div
           className={`${
