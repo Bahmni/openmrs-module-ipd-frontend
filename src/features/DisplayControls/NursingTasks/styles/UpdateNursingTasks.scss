@@ -15,7 +15,6 @@
     font-weight: 500;
     line-height: 1.5;
     gap: 6px;
-    max-width: 90%;
     .name {
       text-align: left;
       display: -webkit-box;
@@ -65,4 +64,11 @@
 }
 .bx--overflow-menu-options {
   z-index: 10000;
+}
+
+.tile-subcontent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.6rem;
 }

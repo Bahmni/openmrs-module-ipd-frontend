@@ -491,15 +491,19 @@ const UpdateNursingTasks = (props) => {
                     }
                   />
                 )}
-                <div className={"medication-name"}>
-                  {!isNonMedication ? (
-                    <div
+                <div className="tile-subcontent">
+                  <div>
+                {!isNonMedication ? (
+                    <div className="medication-name">
+                      <div
                       className={`name ${
                         tasks[medicationTask.uuid]?.skipped && "red-text"
                       }`}
                     >
                       {medicationTask.drugName}
                     </div>
+                    <DisplayTags drugOrder={medicationTask.dosingInstructions}/>
+                  </div>
                   ) : (
                     <div
                       className={`name ${
@@ -521,18 +525,12 @@ const UpdateNursingTasks = (props) => {
                               timeFormatFor12Hr
                             )}
                         </>
-                      ) : (<></>)}
+                      
+                      )
+                      : (<></>)}
                     </div>
                   )}
-                  {!isNonMedication ? (
-                    <DisplayTags
-                      drugOrder={medicationTask.dosingInstructions}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </div>
-                {tasks[medicationTask.uuid]?.route ? (
+                  {tasks[medicationTask.uuid]?.route ? (
                   <div className="medication-details">
                     <span>{medicationTask.dosage}</span>
                     {medicationTask.doseType && (
@@ -543,6 +541,11 @@ const UpdateNursingTasks = (props) => {
                 ) : (
                   <></>
                 )}
+                  </div>
+                  <div>
+                    {!isSystemGeneratedNonMedication && (medicationTask?.creator?.display)}
+                  </div>
+                </div>
                 {(tasks[medicationTask.uuid]?.actualTime ||
                   tasks[medicationTask.uuid]?.skipped) && (
                   <div style={{ display: "flex" }}>

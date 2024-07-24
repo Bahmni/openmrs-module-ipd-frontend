@@ -109,13 +109,18 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </label>
           </div>
           <div
-            class="medication-name"
+            class="tile-subcontent"
           >
             <div
               class="name undefined"
             >
               Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
             </div>
+            <div />
+          </div>
+          <div
+            class="medication-name"
+          >
             <div
               class="bx--tag bx--tag--sm bx--tag--blue"
               id="tag-79"
@@ -232,13 +237,18 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </label>
           </div>
           <div
-            class="medication-name"
+            class="tile-subcontent"
           >
             <div
               class="name undefined"
             >
               Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
             </div>
+            <div />
+          </div>
+          <div
+            class="medication-name"
+          >
             <div
               class="bx--tag bx--tag--sm bx--tag--blue"
               id="tag-80"
@@ -533,13 +543,18 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             </label>
           </div>
           <div
-            class="medication-name"
+            class="tile-subcontent"
           >
             <div
               class="name undefined"
             >
               Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
             </div>
+            <div />
+          </div>
+          <div
+            class="medication-name"
+          >
             <div
               class="bx--tag bx--tag--sm bx--tag--blue"
               id="tag-3"
@@ -656,13 +671,18 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             </label>
           </div>
           <div
-            class="medication-name"
+            class="tile-subcontent"
           >
             <div
               class="name undefined"
             >
               Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
             </div>
+            <div />
+          </div>
+          <div
+            class="medication-name"
+          >
             <div
               class="bx--tag bx--tag--sm bx--tag--blue"
               id="tag-4"
