@@ -12,6 +12,7 @@ import { getAdministrationStatus } from "../../../utils/CommonUtils";
 import SVGIcon from "../../SVGIcon/SVGIcon";
 import { CareViewContext } from "../../../context/CareViewContext";
 import propTypes from "prop-types";
+import { isSystemGeneratedTask } from "../../../utils/CommonUtils";
 
 export const SlotDetailsCell = ({
   uuid,
@@ -84,7 +85,11 @@ export const SlotDetailsCell = ({
       if (slotItem.isNonMedication) {
         const taskItem = slotItem;
         return (
-          <div className="slot-details" key={`${taskItem.uuid}`}>
+          <div
+            className="slot-details"
+            key={`${taskItem.uuid}`}
+            style={{ borderColor: "#0f62fe", background: "#e1f3fe" }}
+          >
             <div className="logo">
               <div className="status-icon" data-testid={taskItem.status}>
                 {taskItem.status === "REQUESTED" && (
@@ -106,27 +111,37 @@ export const SlotDetailsCell = ({
             </span>
             <div className="drug-details-wrapper">
               <span>{taskItem.name}</span>
-              <div className="drug-details" data-testid="drug-details">
-                {taskItem.creator && (
+              {taskItem.creator && !isSystemGeneratedTask(taskItem) && (
+                <div className="drug-details" data-testid="drug-details">
                   <span className="drug-detail">
                     {taskItem.creator.display}
                   </span>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         );
       } else {
         const { dose, doseUnits, route, drugNonCoded } = slotItem.order;
         return (
-          <div className="slot-details" key={`${slotItem.uuid}`}>
+          <div
+            className="slot-details"
+            key={`${slotItem.uuid}`}
+            style={{ borderColor: "#92c4c3", background: "#edf8e6" }}
+          >
             <div className="logo">
               {renderStatusIcon(slotItem)}
               <Clock className="clock-icon" />
             </div>
-            <span>{epochTo24HourTimeFormat(slotItem.startTime)}</span>
+            <span>
+              {enable24HourTime
+                ? epochTo24HourTimeFormat(slotItem.startTime / 1000)
+                : epochTo12HourTimeFormat(slotItem.startTime / 1000)}
+            </span>
             <div className="drug-details-wrapper">
-                <span>{drugNonCoded ? drugNonCoded : slotItem?.order?.drug?.display}</span>
+              <span>
+                {drugNonCoded ? drugNonCoded : slotItem?.order?.drug?.display}
+              </span>
               <div className="drug-details" data-testid="drug-details">
                 {dose && <span className="drug-detail">{dose}</span>}
                 {doseUnits && (
