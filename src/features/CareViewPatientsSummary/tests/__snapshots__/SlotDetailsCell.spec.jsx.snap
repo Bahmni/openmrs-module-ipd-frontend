@@ -7,6 +7,7 @@ exports[`SlotDetailsCell should render slotDetailsCell 1`] = `
   >
     <div
       class="slot-details"
+      style="border-color: #92c4c3; background: rgb(237, 248, 230);"
     >
       <div
         class="logo"
@@ -23,7 +24,7 @@ exports[`SlotDetailsCell should render slotDetailsCell 1`] = `
         />
       </div>
       <span>
-        12:16
+        08:36
       </span>
       <div
         class="drug-details-wrapper"
