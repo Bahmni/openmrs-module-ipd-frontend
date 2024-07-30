@@ -46,8 +46,9 @@ const UpdateNursingTasks = (props) => {
     updateNursingTasksSlider,
     patientId,
     providerId,
-    setShowSuccessNotification,
-    setSuccessMessage,
+    setShowNotification,
+    setNotificationMessage,
+    setNotificationStatus,
   } = props;
   const [tasks, updateTasks] = useState({});
   const [errors, updateErrors] = useState({});
@@ -89,18 +90,19 @@ const UpdateNursingTasks = (props) => {
   const { nursingTasks = {}, enable24HourTime = {} } = config;
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
-  const saveAdministeredTasks = (task) => {
-    setShowSuccessNotification(true);
-    setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
+  const saveAdministeredMedicationTasks = (status, messageId) => {
+    setShowNotification(true);
+    setNotificationStatus(status);
+    setNotificationMessage(messageId);
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
     updateIsPRNMedication(false);
-    task.status === 'not-done' ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK") : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
   };
 
-  const saveAdministeredNonMedicationTasks = () => {
-    setShowSuccessNotification(true);
-    setSuccessMessage("NON_MEDICATION_TASK_UPDATE_MESSAGE");
+  const saveAdministeredNonMedicationTasks = (status, messageId) => {
+    setShowNotification(true);
+    setNotificationStatus(status);
+    setNotificationMessage(messageId);
     updateNursingTasksSlider(false);
     updateIsPRNMedication(false);
   };
@@ -110,7 +112,12 @@ const UpdateNursingTasks = (props) => {
     const response = isPRNMedication
       ? await saveEmergencyMedication(administeredTasks[0])
       : await saveAdministeredMedication(administeredTasks);
-    response.status === 200 ? saveAdministeredTasks(administeredTasks[0]) : null;
+    if(response.status === 200) {
+      saveAdministeredMedicationTasks("success", "NURSING_TASKS_SAVE_MESSAGE");
+      task.status === 'not-done' ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK") : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
+    } else {
+      saveAdministeredMedicationTasks("error", "NURSING_TASKS_SAVE_MESSAGE_FAILED");
+    }
   };
 
   const createAdministeredTasksPayload = () => {
@@ -369,7 +376,11 @@ const UpdateNursingTasks = (props) => {
       });
       updateIsSaveDisabled(saveDisabled || isInvalidTime);
       const response = await updateNonMedicationTask(nonMedicationPayload);
-      response.status === 200 ? saveAdministeredNonMedicationTasks() : null;
+      if (response.status === 200) {
+        saveAdministeredNonMedicationTasks("success", "NON_MEDICATION_TASK_UPDATE_MESSAGE");
+      } else {
+        saveAdministeredNonMedicationTasks("error", "NON_MEDICATION_TASK_UPDATE_MESSAGE_FAILED");
+      }
     }
   };
 
@@ -736,7 +747,8 @@ UpdateNursingTasks.propTypes = {
   updateNursingTasksSlider: PropTypes.func.isRequired,
   patientId: PropTypes.string.isRequired,
   providerId: PropTypes.string.isRequired,
-  setShowSuccessNotification: PropTypes.func.isRequired,
-  setSuccessMessage: PropTypes.func.isRequired,
+  setShowNotification: PropTypes.func.isRequired,
+  setNotificationMessage: PropTypes.func.isRequired,
+  setNotificationStatus: PropTypes.func.isRequired,
 };
 export default UpdateNursingTasks;

@@ -50,8 +50,9 @@ const AddEmergencyTasks = (props) => {
     patientId,
     providerId,
     updateEmergencyTasksSlider,
-    setShowSuccessNotification,
-    setSuccessMessage,
+    setShowNotification,
+    setNotificationMessage,
+    setNotificationStatus,
   } = props;
 
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
@@ -287,21 +288,26 @@ const AddEmergencyTasks = (props) => {
     const response = await saveEmergencyMedication(emergencyTask);
     if (response.status === 200) {
       setIsSaveDisabled(false);
-      saveAdhocTasks();
+      saveAdhocTasks("success", "EMERGENCY_TASK_SAVE_MESSAGE");
+      handleAuditEvent("CREATE_EMERGENCY_MEDICATION_TASK");
+    } else {
+      setIsSaveDisabled(false);
+      saveAdhocTasks("error", "EMERGENCY_TASK_SAVE_MESSAGE_FAILED");
     }
   };
 
-  const saveAdhocTasks = () => {
-    setShowSuccessNotification(true);
-    setSuccessMessage("EMERGENCY_TASK_SAVE_MESSAGE");
+  const saveAdhocTasks = (status, messageId) => {
+    setShowNotification(true);
+    setNotificationStatus(status);
+    setNotificationMessage(messageId);
     setOpenConfirmationModal(false);
     updateEmergencyTasksSlider(false);
-    handleAuditEvent("CREATE_EMERGENCY_MEDICATION_TASK");
   };
 
-  const saveNonMedicationAdhocTasks = () => {
-    setShowSuccessNotification(true);
-    setSuccessMessage("NON_MEDICATION_TASK_SAVE_MESSAGE");
+  const updateNonMedicationTasksNotification = (status, messageId) => {
+    setShowNotification(true);
+    setNotificationStatus(status);
+    setNotificationMessage(messageId);
     updateEmergencyTasksSlider(false);
   };
 
@@ -314,7 +320,10 @@ const AddEmergencyTasks = (props) => {
       const response = await saveNonMedicationTask(nonMedicationTaskPayload);
       if (response.status === 200) {
         setIsSaveDisabled(false);
-        saveNonMedicationAdhocTasks();
+        updateNonMedicationTasksNotification("success", "NON_MEDICATION_TASK_SAVE_MESSAGE");
+      } else {
+        setIsSaveDisabled(false);
+        updateNonMedicationTasksNotification("error", "NON_MEDICATION_TASK_SAVE_MESSAGE_FAILED");
       }
     }
   };
@@ -732,7 +741,8 @@ AddEmergencyTasks.propTypes = {
   patientId: PropTypes.string.isRequired,
   providerId: PropTypes.string.isRequired,
   updateEmergencyTasksSlider: PropTypes.func.isRequired,
-  setShowSuccessNotification: PropTypes.func.isRequired,
-  setSuccessMessage: PropTypes.func.isRequired,
+  setShowNotification: PropTypes.func.isRequired,
+  setNotificationMessage: PropTypes.func.isRequired,
+  setNotificationStatus: PropTypes.func.isRequired,
 };
 export default AddEmergencyTasks;

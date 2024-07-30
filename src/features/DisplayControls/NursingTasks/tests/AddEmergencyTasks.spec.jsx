@@ -17,8 +17,9 @@ const mockFetchMedicationConfig = jest.fn();
 const mockGetProviders = jest.fn();
 const mockSearchDrug = jest.fn();
 const mockUpdateEmergencyTasksSlider = jest.fn();
-const mockSetShowSuccessNotification = jest.fn();
-const mockSetSuccessMessage = jest.fn();
+const mockSetShowNotification = jest.fn();
+const mockSetNotificationMessage = jest.fn();
+const mockSetNotificationStatus = jest.fn();
 const mockSaveEmergencyMedication = jest.fn();
 const mockHandleAuditEvent = jest.fn();
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
@@ -229,8 +230,9 @@ describe("AddEmergencyTasks", () => {
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}
           updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
-          setShowSuccessNotification={mockSetShowSuccessNotification}
-          setSuccessMessage={mockSetSuccessMessage}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -288,8 +290,9 @@ describe("AddEmergencyTasks", () => {
     popupSave.click();
 
     await waitFor(() => {
-      expect(mockSetShowSuccessNotification).toHaveBeenCalledTimes(1);
-      expect(mockSetSuccessMessage).toHaveBeenCalledTimes(1);
+      expect(mockSetShowNotification).toHaveBeenCalledTimes(1);
+      expect(mockSetNotificationMessage).toHaveBeenCalledTimes(1);
+      expect(mockSetNotificationStatus).toHaveBeenCalledTimes(1);
       expect(mockUpdateEmergencyTasksSlider).toHaveBeenCalledTimes(1);
       expect(mockSaveEmergencyMedication).toHaveBeenCalledTimes(1);
     });
@@ -302,8 +305,9 @@ describe("AddEmergencyTasks", () => {
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}
           updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
-          setShowSuccessNotification={mockSetShowSuccessNotification}
-          setSuccessMessage={mockSetSuccessMessage}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -337,8 +341,9 @@ describe("AddEmergencyTasks", () => {
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}
           updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
-          setShowSuccessNotification={mockSetShowSuccessNotification}
-          setSuccessMessage={mockSetSuccessMessage}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -367,8 +372,9 @@ describe("AddEmergencyTasks", () => {
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}
           updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
-          setShowSuccessNotification={mockSetShowSuccessNotification}
-          setSuccessMessage={mockSetSuccessMessage}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -400,8 +406,9 @@ describe("AddEmergencyTasks", () => {
     saveButton.click();
 
     await waitFor(() => {
-      expect(mockSetShowSuccessNotification).toHaveBeenCalledTimes(1);
-      expect(mockSetSuccessMessage).toHaveBeenCalledTimes(1);
+      expect(mockSetShowNotification).toHaveBeenCalledTimes(1);
+      expect(mockSetNotificationMessage).toHaveBeenCalledTimes(1);
+      expect(mockSetNotificationStatus).toHaveBeenCalledTimes(1);
       expect(mockUpdateEmergencyTasksSlider).toHaveBeenCalledTimes(1);
       expect(mockSaveEmergencyMedication).toHaveBeenCalledTimes(1);
       expect(mockHandleAuditEvent).toHaveBeenCalledWith('CREATE_EMERGENCY_MEDICATION_TASK');

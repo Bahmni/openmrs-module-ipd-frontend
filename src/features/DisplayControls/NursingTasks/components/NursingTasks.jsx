@@ -56,8 +56,9 @@ export default function NursingTasks(props) {
   const [filterValue, setFilterValue] = useState(
     isReadMode ? items[1] : items[2]
   );
-  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationStatus, setNotificationStatus] = useState("");
   const [notCurrentShift, setNotCurrentShift] = useState(false);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const { shiftDetails: shiftConfig = {}, enable24HourTime = {} } = config;
@@ -552,8 +553,9 @@ export default function NursingTasks(props) {
           updateNursingTasksSlider={updateNursingTasksSlider}
           patientId={patientId}
           providerId={provider.uuid}
-          setShowSuccessNotification={setShowSuccessNotification}
-          setSuccessMessage={setSuccessMessage}
+          setShowNotification={setShowNotification}
+          setNotificationMessage={setNotificationMessage}
+          setNotificationStatus={setNotificationStatus}
           disabled={isReadMode}
         />
       )}
@@ -562,8 +564,9 @@ export default function NursingTasks(props) {
           patientId={patientId}
           providerId={provider.uuid}
           updateEmergencyTasksSlider={updateEmergencyTasksSlider}
-          setShowSuccessNotification={setShowSuccessNotification}
-          setSuccessMessage={setSuccessMessage}
+          setShowNotification={setShowNotification}
+          setNotificationMessage={setNotificationMessage}
+          setNotificationStatus={setNotificationStatus}
           disabled={isReadMode}
         />
       )}
@@ -581,15 +584,15 @@ export default function NursingTasks(props) {
           <AdministrationLegend />
         </div>
       )}
-      {showSuccessNotification && (
+      {showNotification && (
         <Notification
           hostData={{
-            notificationKind: "success",
-            messageId: successMessage,
+            notificationKind: notificationStatus,
+            messageId: notificationMessage,
           }}
           hostApi={{
             onClose: () => {
-              setShowSuccessNotification(false);
+              setShowNotification(false);
               refreshDisplayControl([
                 componentKeys.TREATMENTS,
                 componentKeys.NURSING_TASKS,

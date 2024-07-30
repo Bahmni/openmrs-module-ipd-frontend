@@ -15,8 +15,9 @@ import {
 } from "../../../../utils/CommonUtils";
 import MockDate from "mockdate";
 
-const mockSetShowSuccessNotification = jest.fn();
-const mockSetSuccessMessage = jest.fn();
+const mockSetShowNotification = jest.fn();
+const mockSetNotificationMessage = jest.fn();
+const mockSetNotificationStatus = jest.fn();
 const mockUpdateEmergencyTasksSlider = jest.fn();
 const mockUpdateNonMedicationTask = jest.fn();
 
@@ -41,7 +42,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -57,7 +60,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -77,7 +82,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -101,7 +108,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -122,8 +131,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={mockUpdateEmergencyTasksSlider}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={mockSetShowSuccessNotification}
-          setSuccessMessage={mockSetSuccessMessage}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -137,8 +147,9 @@ describe("UpdateNursingTasksSlider", function () {
     fireEvent.click(saveButton);
 
     await waitFor(() => {
-      expect(mockSetShowSuccessNotification).toHaveBeenCalledTimes(1);
-      expect(mockSetSuccessMessage).toHaveBeenCalledTimes(1);
+      expect(mockSetShowNotification).toHaveBeenCalledTimes(1);
+      expect(mockSetNotificationMessage).toHaveBeenCalledTimes(1);
+      expect(mockSetNotificationStatus).toHaveBeenCalledTimes(1);
       expect(mockUpdateEmergencyTasksSlider).toHaveBeenCalledTimes(1);
     });
   });
@@ -153,7 +164,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -178,7 +191,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -202,7 +217,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -232,7 +249,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -262,7 +281,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -281,7 +302,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -315,7 +338,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -349,7 +374,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -380,7 +407,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -411,7 +440,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -427,7 +458,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -446,7 +479,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -467,7 +502,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -491,7 +528,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -507,7 +546,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
@@ -527,7 +568,9 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
-          setShowSuccessNotification={jest.fn}
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
     );
