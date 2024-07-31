@@ -13,6 +13,7 @@ import SVGIcon from "../../SVGIcon/SVGIcon";
 import { CareViewContext } from "../../../context/CareViewContext";
 import propTypes from "prop-types";
 import { isSystemGeneratedTask } from "../../../utils/CommonUtils";
+import { FormattedMessage } from "react-intl";
 
 export const SlotDetailsCell = ({
   uuid,
@@ -111,13 +112,19 @@ export const SlotDetailsCell = ({
             </span>
             <div className="drug-details-wrapper">
               <span>{taskItem.name}</span>
-              {taskItem.creator && !isSystemGeneratedTask(taskItem) && (
-                <div className="drug-details" data-testid="drug-details">
-                  <span className="drug-detail">
-                    {taskItem.creator.display}
-                  </span>
-                </div>
-              )}
+              {taskItem.creator &&
+                taskItem.creator.display &&
+                !isSystemGeneratedTask(taskItem) && (
+                  <div className="drug-details" data-testid="drug-details">
+                    <div style={{ fontStyle: "italic" }}>
+                      <FormattedMessage
+                        id={"CREATED_BY"}
+                        defaultMessage={`Created by {provider}`}
+                        values={{ provider: taskItem.creator.display }}
+                      />
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
         );

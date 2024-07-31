@@ -100,5 +100,6 @@
   "HEIGHT_HEADER": "Height ({unit})",
   "WEIGHT_HEADER": "Weight ({unit})",
   "BMI_HEADER": "BMI ({unit})",
-  "MUAC": "MUAC ({unit})"
+  "MUAC": "MUAC ({unit})",
+  "CREATED_BY": "Created by {provider}"
 }

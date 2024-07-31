@@ -4,7 +4,7 @@ import {
   mockNonMedicationData,
 } from "../../CareViewSummary/tests/CareViewSummaryMock";
 import React from "react";
-import { render, waitFor, within } from "@testing-library/react";
+import { act, render, waitFor, within } from "@testing-library/react";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { mockConfig } from "../../../utils/CommonUtils";
 import "@testing-library/jest-dom/extend-expect";
@@ -112,28 +112,36 @@ describe("SlotDetailsCell", () => {
       {
         startTime: "16:30",
         name: "Non Medication Task 1",
-        creator: "superman",
+        creator: {
+          display: "superman",
+        },
         status: "REQUESTED",
       },
       {
         startTime: "16:30",
         name: "Non Medication Task 2",
-        creator: "Nurse One",
+        creator: {
+          display: "Nurse One",
+        },
         status: "COMPLETED",
       },
       {
         startTime: "16:30",
         name: "Non Medication Task 3",
-        creator: "Nurse One",
+        creator: {
+          display: "Nurse One",
+        },
         status: "REJECTED",
       },
     ];
-    await waitFor(() => {
-      const slotDetails = container.querySelectorAll(".slot-details");
+    const slotDetails = container.querySelectorAll(".slot-details");
+    act(() => {
       slotDetails.forEach((slot, idx) => {
         expect(within(slot).getByText(tasksData[idx].startTime)).toBeTruthy();
+        expect(
+          within(slot).getByText("Created by " + tasksData[idx].creator.display)
+        ).toBeTruthy();
         expect(within(slot).getByText(tasksData[idx].name)).toBeTruthy();
-        expect(within(slot).getByText(tasksData[idx].creator)).toBeTruthy();
         expect(within(slot).getByTestId(tasksData[idx].status)).toBeTruthy();
       });
     });
