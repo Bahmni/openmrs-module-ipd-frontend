@@ -35,8 +35,6 @@ export const ALL_DRUG_ORDERS_URL = (visitUuid) =>
   RESTWS_V1 + `/ipdVisit/${visitUuid}/medication?includes=emergencyMedications`;
 export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
-export const CLINICAL_CONFIG_URL =
-  hostUrl + "/bahmni_config/openmrs/apps/clinical/app.json";
 export const DASHBORAD_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/ipdDashboard/app.json";
 export const PATIENT_PROFILE = RESTWS_V1 + "/patientprofile";
@@ -150,6 +148,6 @@ export const errorCodes = {
   FORBIDDEN: 403,
 };
 export const DAEMON_USER = {
-  "name": "daemon",
-  "uuid": "A4F30A1B-5EB9-11DF-A648-37A07F9C90FB"
-}
+  name: "daemon",
+  uuid: "A4F30A1B-5EB9-11DF-A648-37A07F9C90FB",
+};

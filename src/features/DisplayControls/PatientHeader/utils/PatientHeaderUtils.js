@@ -1,7 +1,13 @@
 import axios from "axios";
-import { PATIENT_URL ,CLINICAL_CONFIG_URL,PATIENT_PROFILE, ADDRESS_HEIRARCHY, BED_INFORMATION_URL, PATIENT_IMAGE_URL} from "../../../../constants";
+import {
+  DASHBORAD_CONFIG_URL,
+  PATIENT_PROFILE,
+  ADDRESS_HEIRARCHY,
+  BED_INFORMATION_URL,
+  PATIENT_IMAGE_URL,
+} from "../../../../constants";
 
-export const fetchPatientProfile= async (patientUuid) => {
+export const fetchPatientProfile = async (patientUuid) => {
   const url = `${PATIENT_PROFILE}/${patientUuid}?v=full`;
   try {
     const response = await axios.get(url, {
@@ -22,8 +28,7 @@ export const fetchPatientProfilePicture = async (patientUuid) => {
     });
     if (response.status !== 200) throw new Error(response.statusText);
     return response.request.responseURL;
-  }
-  catch (error) {
+  } catch (error) {
     return error;
   }
 };
@@ -39,17 +44,17 @@ export const getBedInformation = async (patientUuid, visitUuid) => {
   } catch (error) {
     return error;
   }
-}
+};
 
 export const getConfigsForPatientContactDetails = async () => {
   try {
-    const response = await axios.get(CLINICAL_CONFIG_URL, {
+    const response = await axios.get(DASHBORAD_CONFIG_URL, {
       withCredentials: true,
     });
 
     if (response.status !== 200) throw new Error(response.statusText);
-    const contactConfig  = {
-      contactDetails: response.data.config.contactDetails
+    const contactConfig = {
+      contactDetails: response.data.config.contactDetails,
     };
     return contactConfig;
   } catch (error) {
@@ -69,34 +74,38 @@ export const getGender = (gender) => {
       return gender;
   }
 };
-export const mapContact = (attributes,contactTypes) => {
+export const mapContact = (attributes, contactTypes) => {
   let mappedContacts = [];
   contactTypes.map((contactType) => {
-   const contactValue = attributes?.find((attribute) => attribute.attributeType?.display === contactType )?.value;
-   const words = contactType.split(/(?=[A-Z])/);
-   const formattedName = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-   mappedContacts.push({
-    name : formattedName,
-    value : contactValue
-   });
-  });
-  return mappedContacts;
-}
-
-export const mapRelationships = (relationships) => {
-  let mappedRelation = [];
-  relationships.map(relationship => {
-    const relation = relationship?.personB?.display;
-    const relationtype = (relationship?.relationshipType?.display).split('/')[0].trim();
-    mappedRelation.push({
-      name : relation,
-      relationshipType : relationtype
+    const contactValue = attributes?.find(
+      (attribute) => attribute.attributeType?.display === contactType
+    )?.value;
+    const words = contactType.split(/(?=[A-Z])/);
+    const formattedName = words
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+    mappedContacts.push({
+      name: formattedName,
+      value: contactValue,
     });
   });
-  return mappedRelation;
-}
+  return mappedContacts;
+};
 
-export const fetchAddressMapping = async() => {
+export const mapRelationships = (relationships) => {
+  return relationships.map((relationship) => {
+    const relation = relationship?.personB?.display || "";
+    const relationshipTypeDisplay =
+      relationship?.relationshipType?.display || "";
+    const relationtype = relationshipTypeDisplay.split("/")[0].trim();
+    return {
+      name: relation,
+      relationshipType: relationtype,
+    };
+  });
+};
+
+export const fetchAddressMapping = async () => {
   const url = ADDRESS_HEIRARCHY;
   try {
     const response = await axios.get(url, {

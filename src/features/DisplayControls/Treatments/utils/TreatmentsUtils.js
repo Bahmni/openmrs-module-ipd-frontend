@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  CLINICAL_CONFIG_URL,
+  DASHBORAD_CONFIG_URL,
   BAHMNI_ENCOUNTER_URL,
   ENCOUNTER_TYPE_URL,
   MEDICATIONS_BASE_URL,
@@ -50,7 +50,7 @@ export const treatmentHeaders = [
 
 export const getConfigsForTreatments = async () => {
   try {
-    const response = await axios.get(CLINICAL_CONFIG_URL, {
+    const response = await axios.get(DASHBORAD_CONFIG_URL, {
       withCredentials: true,
     });
 
@@ -185,7 +185,9 @@ export const getDrugName = (drugOrderObject) => {
           drugOrder.dateStopped && "strike-through"
         }`}
       >
-      <span>{drugNonCoded !== null ? drugNonCoded : drugOrder.drug.name}</span>
+        <span>
+          {drugNonCoded !== null ? drugNonCoded : drugOrder.drug.name}
+        </span>
         {isNotesIconDiv && (
           <NotesIcon className="notes-icon" data-testid="notes-icon" />
         )}
