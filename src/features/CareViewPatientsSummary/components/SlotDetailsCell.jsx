@@ -112,7 +112,7 @@ export const SlotDetailsCell = ({
                 taskItem.creator.display &&
                 !isSystemGeneratedTask(taskItem) && (
                   <div className="drug-details" data-testid="drug-details">
-                    <div style={{ fontStyle: "italic" }}>
+                    <div className="creator-details">
                       <FormattedMessage
                         id={"CREATED_BY"}
                         defaultMessage={`Created by {provider}`}

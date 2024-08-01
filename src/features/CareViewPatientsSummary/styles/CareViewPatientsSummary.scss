@@ -87,7 +87,9 @@
           font-size: 12px;
           font-weight: 400;
           color: #393939;
-
+          .creator-details {
+            font-style: italic;
+          }
           .drug-detail {
             margin: 2px;
             white-space: break-spaces;
