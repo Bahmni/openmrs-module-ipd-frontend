@@ -6,8 +6,7 @@ exports[`SlotDetailsCell should render slotDetailsCell 1`] = `
     class="slot-details-container"
   >
     <div
-      class="slot-details"
-      style="border-color: #92c4c3; background: rgb(237, 248, 230);"
+      class="medication-task"
     >
       <div
         class="logo"

@@ -57,7 +57,8 @@
     padding-bottom: 10px;
     vertical-align: top;
 
-    .slot-details {
+    .medication-task,
+    .non-medication-task {
       display: flex;
       border: 2px solid;
       transition: opacity 0.3s ease;
@@ -93,6 +94,16 @@
           }
         }
       }
+    }
+
+    .medication-task {
+      border-color: #92c4c3;
+      background: #edf8e6;
+    }
+
+    .non-medication-task {
+      border-color: #0f62fe;
+      background: #e1f3fe;
     }
   }
 }

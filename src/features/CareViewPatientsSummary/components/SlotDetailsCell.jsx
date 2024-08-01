@@ -86,11 +86,7 @@ export const SlotDetailsCell = ({
       if (slotItem.isNonMedication) {
         const taskItem = slotItem;
         return (
-          <div
-            className="slot-details"
-            key={`${taskItem.uuid}`}
-            style={{ borderColor: "#0f62fe", background: "#e1f3fe" }}
-          >
+          <div className="non-medication-task" key={`${taskItem.uuid}`}>
             <div className="logo">
               <div className="status-icon" data-testid={taskItem.status}>
                 {taskItem.status === "REQUESTED" && (
@@ -131,11 +127,7 @@ export const SlotDetailsCell = ({
       } else {
         const { dose, doseUnits, route, drugNonCoded } = slotItem.order;
         return (
-          <div
-            className="slot-details"
-            key={`${slotItem.uuid}`}
-            style={{ borderColor: "#92c4c3", background: "#edf8e6" }}
-          >
+          <div className="medication-task" key={`${slotItem.uuid}`}>
             <div className="logo">
               {renderStatusIcon(slotItem)}
               <Clock className="clock-icon" />
