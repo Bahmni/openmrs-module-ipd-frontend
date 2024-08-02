@@ -20,7 +20,6 @@ import {
   getEncounterType,
   modifyEmergencyTreatmentData,
   mapAdditionalDataForEmergencyTreatments,
-  isDrugOrderStoppedWithoutAdministration,
   getStopReason,
   getSlotsForAnOrderAndServiceType,
 } from "../utils/TreatmentsUtils";
@@ -276,10 +275,6 @@ const Treatments = (props) => {
     const prescribedTreatments = await Promise.all(
       drugOrders
         .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
-        .filter(
-          (drugOrderObject) =>
-            !isDrugOrderStoppedWithoutAdministration(drugOrderObject)
-        )
         .map(async (drugOrderObject) => {
           let showEditDrugChartLink;
           let showStopDrugChartLink;
