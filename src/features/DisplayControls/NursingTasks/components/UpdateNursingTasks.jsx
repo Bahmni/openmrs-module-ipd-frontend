@@ -549,8 +549,19 @@ const UpdateNursingTasks = (props) => {
                   </div>
                 ) : (
                   <div className="task-details">
-                    {!isSystemGeneratedNonMedication &&
-                      medicationTask?.creator?.display}
+                    {medicationTask.creator &&
+                      medicationTask.creator.display &&
+                      !isSystemGeneratedNonMedication && (
+                        <div className="task-creator">
+                          <FormattedMessage
+                            id={"CREATED_BY"}
+                            defaultMessage={`Created by {provider}`}
+                            values={{
+                              provider: medicationTask?.creator?.display,
+                            }}
+                          />
+                        </div>
+                      )}
                   </div>
                 )}
                 {(tasks[medicationTask.uuid]?.actualTime ||
