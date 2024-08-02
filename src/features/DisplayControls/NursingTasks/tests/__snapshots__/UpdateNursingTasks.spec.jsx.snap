@@ -109,42 +109,35 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </label>
           </div>
           <div
-            class="tile-subcontent"
+            class="medication-name"
           >
-            <div>
-              <div
-                class="medication-name"
-              >
-                <div
-                  class="name undefined"
-                >
-                  Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
-                </div>
-                <div
-                  class="bx--tag bx--tag--sm bx--tag--blue"
-                  id="tag-79"
-                >
-                  
-                  <span
-                    title="Rx"
-                  >
-                    Rx
-                  </span>
-                </div>
-              </div>
-              <div
-                class="medication-details"
-              >
-                <span>
-                  30mg
-                </span>
-                <span>
-                   - 
-                  Topical
-                </span>
-              </div>
+            <div
+              class="name undefined"
+            >
+              Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
             </div>
-            <div />
+            <div
+              class="bx--tag bx--tag--sm bx--tag--blue"
+              id="tag-79"
+            >
+              
+              <span
+                title="Rx"
+              >
+                Rx
+              </span>
+            </div>
+          </div>
+          <div
+            class="task-details"
+          >
+            <span>
+              30mg
+            </span>
+            <span>
+               - 
+              Topical
+            </span>
           </div>
           <button
             aria-expanded="false"
@@ -239,42 +232,35 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </label>
           </div>
           <div
-            class="tile-subcontent"
+            class="medication-name"
           >
-            <div>
-              <div
-                class="medication-name"
-              >
-                <div
-                  class="name undefined"
-                >
-                  Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
-                </div>
-                <div
-                  class="bx--tag bx--tag--sm bx--tag--blue"
-                  id="tag-80"
-                >
-                  
-                  <span
-                    title="Rx"
-                  >
-                    Rx
-                  </span>
-                </div>
-              </div>
-              <div
-                class="medication-details"
-              >
-                <span>
-                  25mg
-                </span>
-                <span>
-                   - 
-                  Intravenous
-                </span>
-              </div>
+            <div
+              class="name undefined"
+            >
+              Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
             </div>
-            <div />
+            <div
+              class="bx--tag bx--tag--sm bx--tag--blue"
+              id="tag-80"
+            >
+              
+              <span
+                title="Rx"
+              >
+                Rx
+              </span>
+            </div>
+          </div>
+          <div
+            class="task-details"
+          >
+            <span>
+              25mg
+            </span>
+            <span>
+               - 
+              Intravenous
+            </span>
           </div>
           <button
             aria-expanded="false"
@@ -547,42 +533,35 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             </label>
           </div>
           <div
-            class="tile-subcontent"
+            class="medication-name"
           >
-            <div>
-              <div
-                class="medication-name"
-              >
-                <div
-                  class="name undefined"
-                >
-                  Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
-                </div>
-                <div
-                  class="bx--tag bx--tag--sm bx--tag--blue"
-                  id="tag-3"
-                >
-                  
-                  <span
-                    title="Rx"
-                  >
-                    Rx
-                  </span>
-                </div>
-              </div>
-              <div
-                class="medication-details"
-              >
-                <span>
-                  30mg
-                </span>
-                <span>
-                   - 
-                  Topical
-                </span>
-              </div>
+            <div
+              class="name undefined"
+            >
+              Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
             </div>
-            <div />
+            <div
+              class="bx--tag bx--tag--sm bx--tag--blue"
+              id="tag-3"
+            >
+              
+              <span
+                title="Rx"
+              >
+                Rx
+              </span>
+            </div>
+          </div>
+          <div
+            class="task-details"
+          >
+            <span>
+              30mg
+            </span>
+            <span>
+               - 
+              Topical
+            </span>
           </div>
           <button
             aria-expanded="false"
@@ -677,42 +656,35 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             </label>
           </div>
           <div
-            class="tile-subcontent"
+            class="medication-name"
           >
-            <div>
-              <div
-                class="medication-name"
-              >
-                <div
-                  class="name undefined"
-                >
-                  Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
-                </div>
-                <div
-                  class="bx--tag bx--tag--sm bx--tag--blue"
-                  id="tag-4"
-                >
-                  
-                  <span
-                    title="Rx"
-                  >
-                    Rx
-                  </span>
-                </div>
-              </div>
-              <div
-                class="medication-details"
-              >
-                <span>
-                  25mg
-                </span>
-                <span>
-                   - 
-                  Intravenous
-                </span>
-              </div>
+            <div
+              class="name undefined"
+            >
+              Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
             </div>
-            <div />
+            <div
+              class="bx--tag bx--tag--sm bx--tag--blue"
+              id="tag-4"
+            >
+              
+              <span
+                title="Rx"
+              >
+                Rx
+              </span>
+            </div>
+          </div>
+          <div
+            class="task-details"
+          >
+            <span>
+              25mg
+            </span>
+            <span>
+               - 
+              Intravenous
+            </span>
           </div>
           <button
             aria-expanded="false"

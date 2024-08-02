@@ -95,7 +95,9 @@ const UpdateNursingTasks = (props) => {
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
     updateIsPRNMedication(false);
-    task.status === 'not-done' ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK") : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
+    task.status === "not-done"
+      ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK")
+      : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
   };
 
   const saveAdministeredNonMedicationTasks = () => {
@@ -110,7 +112,9 @@ const UpdateNursingTasks = (props) => {
     const response = isPRNMedication
       ? await saveEmergencyMedication(administeredTasks[0])
       : await saveAdministeredMedication(administeredTasks);
-    response.status === 200 ? saveAdministeredTasks(administeredTasks[0]) : null;
+    response.status === 200
+      ? saveAdministeredTasks(administeredTasks[0])
+      : null;
   };
 
   const createAdministeredTasksPayload = () => {
@@ -491,19 +495,15 @@ const UpdateNursingTasks = (props) => {
                     }
                   />
                 )}
-                <div className="tile-subcontent">
-                  <div>
-                {!isNonMedication ? (
-                    <div className="medication-name">
-                      <div
+                <div className={"medication-name"}>
+                  {!isNonMedication ? (
+                    <div
                       className={`name ${
                         tasks[medicationTask.uuid]?.skipped && "red-text"
                       }`}
                     >
                       {medicationTask.drugName}
                     </div>
-                    <DisplayTags drugOrder={medicationTask.dosingInstructions}/>
-                  </div>
                   ) : (
                     <div
                       className={`name ${
@@ -511,27 +511,36 @@ const UpdateNursingTasks = (props) => {
                       }`}
                     >
                       {medicationTask.drugName}
-                      {!isNonMedication ?
-                      (<><FormattedMessage id={"AT"} defaultMessage={" at "} />
-                        {enable24HourTime
-                          ? formatTime(
-                              medicationTasks[0].startTime,
-                              timeFormatFor24Hr,
-                              timeFormatFor24Hr
-                            )
-                          : formatTime(
-                              medicationTasks[0].startTime,
-                              timeFormatFor24Hr,
-                              timeFormatFor12Hr
-                            )}
+                      {!isNonMedication ? (
+                        <>
+                          <FormattedMessage id={"AT"} defaultMessage={" at "} />
+                          {enable24HourTime
+                            ? formatTime(
+                                medicationTasks[0].startTime,
+                                timeFormatFor24Hr,
+                                timeFormatFor24Hr
+                              )
+                            : formatTime(
+                                medicationTasks[0].startTime,
+                                timeFormatFor24Hr,
+                                timeFormatFor12Hr
+                              )}
                         </>
-                      
-                      )
-                      : (<></>)}
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   )}
-                  {tasks[medicationTask.uuid]?.route ? (
-                  <div className="medication-details">
+                  {!isNonMedication ? (
+                    <DisplayTags
+                      drugOrder={medicationTask.dosingInstructions}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
+                {tasks[medicationTask.uuid]?.route ? (
+                  <div className="task-details">
                     <span>{medicationTask.dosage}</span>
                     {medicationTask.doseType && (
                       <span>&nbsp;-&nbsp;{medicationTask.doseType}</span>
@@ -539,13 +548,11 @@ const UpdateNursingTasks = (props) => {
                     <span>&nbsp;-&nbsp;{medicationTask.drugRoute}</span>
                   </div>
                 ) : (
-                  <></>
+                  <div className="task-details">
+                    {!isSystemGeneratedNonMedication &&
+                      medicationTask?.creator?.display}
+                  </div>
                 )}
-                  </div>
-                  <div>
-                    {!isSystemGeneratedNonMedication && (medicationTask?.creator?.display)}
-                  </div>
-                </div>
                 {(tasks[medicationTask.uuid]?.actualTime ||
                   tasks[medicationTask.uuid]?.skipped) && (
                   <div style={{ display: "flex" }}>
