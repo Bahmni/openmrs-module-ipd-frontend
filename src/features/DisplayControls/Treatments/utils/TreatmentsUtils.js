@@ -133,10 +133,6 @@ export const NoTreatmentsMessage = (
   />
 );
 
-export const isIPDDrugOrder = (drugOrderObject) => {
-  return drugOrderObject.drugOrder.careSetting === "INPATIENT";
-};
-
 export const isDrugOrderStoppedWithoutAdministration = (drugOrderObject) => {
   return (
     drugOrderObject.drugOrder.dateStopped &&

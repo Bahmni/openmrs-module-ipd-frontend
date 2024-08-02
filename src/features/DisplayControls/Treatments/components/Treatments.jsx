@@ -13,7 +13,6 @@ import {
   EditDrugChart,
   StopDrugChart,
   NoTreatmentsMessage,
-  isIPDDrugOrder,
   setDosingInstructions,
   getDrugName,
   stopDrugOrders,
@@ -24,7 +23,7 @@ import {
   getStopReason,
   getSlotsForAnOrderAndServiceType,
 } from "../utils/TreatmentsUtils";
-import { getCookies } from "../../../../utils/CommonUtils";
+import { isIPDrugOrder, getCookies } from "../../../../utils/CommonUtils";
 import {
   ForbiddenErrorMessage,
   GenericErrorMessage,
@@ -58,7 +57,10 @@ const Treatments = (props) => {
     provider,
   } = useContext(SliderContext);
   const { config, handleAuditEvent } = useContext(IPDContext);
-  const { enable24HourTime = {} } = config;
+  const {
+    enable24HourTime = {},
+    allMedicinesInPrescriptionAvailableForIPD = true,
+  } = config;
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -273,9 +275,13 @@ const Treatments = (props) => {
   };
 
   const modifyPrescribedTreatmentData = async (drugOrders) => {
+    if (!allMedicinesInPrescriptionAvailableForIPD) {
+      drugOrders = drugOrders.filter((drugOrderObject) =>
+        isIPDrugOrder(drugOrderObject.drugOrder)
+      );
+    }
     const prescribedTreatments = await Promise.all(
       drugOrders
-        .filter((drugOrderObject) => isIPDDrugOrder(drugOrderObject))
         .filter(
           (drugOrderObject) =>
             !isDrugOrderStoppedWithoutAdministration(drugOrderObject)

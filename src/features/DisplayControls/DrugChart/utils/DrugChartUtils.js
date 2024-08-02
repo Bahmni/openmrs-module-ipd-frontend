@@ -21,7 +21,7 @@ export const fetchMedications = async (
   try {
     return await axios.get(FETCH_MEDICATIONS_URL);
   } catch (error) {
-    return {error};
+    return { error };
   }
 };
 
@@ -29,10 +29,7 @@ export const transformDrugOrders = (orders) => {
   const { ipdDrugOrders, emergencyMedications } = orders;
   const medicationData = {};
   ipdDrugOrders.forEach((order) => {
-    if (
-      order.drugOrder?.careSetting === "INPATIENT" &&
-      order.drugOrderSchedule
-    ) {
+    if (order.drugOrderSchedule) {
       const {
         dosingInstructions,
         drug,

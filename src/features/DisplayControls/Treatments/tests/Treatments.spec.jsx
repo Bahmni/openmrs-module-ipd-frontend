@@ -105,7 +105,84 @@ describe("Treatments", () => {
     });
   });
 
-  it("should not show OPD treatments", async () => {
+  it("should show opd and ipd treatments", async () => {
+    const treatments = [
+      {
+        drugOrder: {
+          uuid: "1",
+          effectiveStartDate: 1704785404,
+          dateStopped: null,
+          dateActivated: 1704785404,
+          scheduledDate: 1704785404,
+          drug: {
+            name: "Drug 1",
+          },
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            route: "Oral",
+            frequency: "Once a day",
+            administrationInstructions:
+              '{"instructions":"As directed","additionalInstructions":"all good"}',
+          },
+          duration: 7,
+          durationUnits: "Day(s)",
+          careSetting: "OUTPATIENT",
+        },
+        provider: {
+          name: "Dr. John Doe",
+        },
+      },
+      {
+        drugOrder: {
+          uuid: "2",
+          effectiveStartDate: 1704785404,
+          dateStopped: null,
+          dateActivated: 1704785404,
+          scheduledDate: 1704785404,
+          drug: {
+            name: "Drug 2",
+          },
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            route: "Oral",
+            frequency: "Once a day",
+            administrationInstructions:
+              '{"instructions":"As directed","additionalInstructions":"all good"}',
+          },
+          duration: 7,
+          durationUnits: "Day(s)",
+          careSetting: "INPATIENT",
+        },
+        provider: {
+          name: "Dr. John Doe",
+        },
+      },
+    ];
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
+        emergencyMedications: [],
+        ipdDrugOrders: treatments,
+      },
+    };
+    const { getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
+    );
+    await waitFor(() => {
+      expect(getByText("Drug 1")).toBeTruthy();
+      expect(getByText("Drug 2")).toBeTruthy();
+    });
+  });
+
+  it("should not show OPD treatments only when allMedicinesInPrescriptionAvailableForIPD config is false", async () => {
     const treatments = [
       {
         drugOrder: {
@@ -140,7 +217,15 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+      <IPDContext.Provider
+        value={{
+          config: {
+            ...mockConfig,
+            allMedicinesInPrescriptionAvailableForIPD: false,
+          },
+          isReadMode: false,
+        }}
+      >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -544,7 +629,13 @@ describe("Treatments", () => {
     });
 
     const { getAllByText, container } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false, handleAuditEvent: mockHandleAuditEvent }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          handleAuditEvent: mockHandleAuditEvent,
+        }}
+      >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -564,7 +655,9 @@ describe("Treatments", () => {
       expect(getEncounterType).toHaveBeenCalledWith("Consultation");
       expect(stopDrugOrders).toHaveBeenCalled();
     });
-    expect(mockHandleAuditEvent).toHaveBeenCalledWith('STOP_SCHEDULED_MEDICATION_TASK')
+    expect(mockHandleAuditEvent).toHaveBeenCalledWith(
+      "STOP_SCHEDULED_MEDICATION_TASK"
+    );
   });
 
   it("should update the drug status after the stop drug api call is success", async () => {

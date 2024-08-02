@@ -357,6 +357,13 @@ export const mockConfigFor12HourFormat = {
   },
 };
 
-export const isSystemGeneratedTask =(task)=>{
-  return task?.creator?.uuid === DAEMON_USER.uuid || task?.creator?.name === DAEMON_USER.name; 
-}
+export const isSystemGeneratedTask = (task) => {
+  return (
+    task?.creator?.uuid === DAEMON_USER.uuid ||
+    task?.creator?.name === DAEMON_USER.name
+  );
+};
+
+export const isIPDrugOrder = (drugOrder) => {
+  return drugOrder.careSetting === "INPATIENT";
+};
