@@ -15,7 +15,6 @@
     font-weight: 500;
     line-height: 1.5;
     gap: 6px;
-    max-width: 90%;
     .name {
       text-align: left;
       display: -webkit-box;
@@ -27,8 +26,11 @@
   .red-text {
     color: #ff0000;
   }
-  .medication-details {
+  .task-details {
     font-size: 12px;
+    .task-creator {
+      font-style: italic;
+    }
   }
   .nursing-task-section {
     background-color: #f4f4f4;

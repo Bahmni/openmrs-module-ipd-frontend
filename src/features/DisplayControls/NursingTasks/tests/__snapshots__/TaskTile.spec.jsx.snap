@@ -13,41 +13,41 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
         class="tile-content"
       >
         <div
-          class="tile-title undefined"
+          class="tile-title"
         >
-          <div>
-            <div
-              class="nursing-task-icon-container"
-              data-testid="Pending"
-            >
-              <div>
-                <test-file-stub />
-              </div>
-            </div>
-            <span
-              class="bx--tooltip--definition bx--tooltip--a11y cursor-pointer"
-            >
-              <button
-                aria-describedby="definition-tooltip-2"
-                class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
-                type="button"
+          <div
+            class="tile-title undefined"
+          >
+            <div>
+              <div
+                class="nursing-task-icon-container"
+                data-testid="Pending"
               >
-                <div
-                  class="drug-title"
-                  style="color: rgb(82, 82, 82); font-weight: 400;"
-                />
-              </button>
+                <div>
+                  <test-file-stub />
+                </div>
+              </div>
               <span
-                class="bx--assistive-text"
-                id="definition-tooltip-2"
-                role="tooltip"
-              />
-            </span>
+                class="bx--tooltip--definition bx--tooltip--a11y cursor-pointer"
+              >
+                <button
+                  aria-describedby="definition-tooltip-2"
+                  class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                  type="button"
+                >
+                  <div
+                    class="drug-title"
+                    style="color: rgb(82, 82, 82); font-weight: 400;"
+                  />
+                </button>
+                <span
+                  class="bx--assistive-text"
+                  id="definition-tooltip-2"
+                  role="tooltip"
+                />
+              </span>
+            </div>
           </div>
-        </div>
-        <div
-          class="tile-name-cell"
-        >
           <div
             class="bx--tag bx--tag--sm bx--tag--blue"
             id="tag-2"
@@ -59,18 +59,18 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
             </span>
           </div>
         </div>
-        <div
-          class="tile-subcontent"
-        >
-          <div>
+        <div>
+          <div
+            class="tile-content-subtext"
+            style="color: rgb(82, 82, 82);"
+          >
+            <span />
+          </div>
+          <div
+            class="tile-content-footer"
+          >
             <div
-              class="tile-content-subtext"
-              style="color: rgb(82, 82, 82); padding-left: 25px;"
-            >
-              <span />
-            </div>
-            <div
-              class="tile-content-subtext"
+              class="tile-date-time"
             >
               <test-file-stub />
               <div
@@ -78,14 +78,12 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
               >
                  Invalid date
               </div>
+               
+            </div>
+            <div>
+              (1 more)
             </div>
           </div>
-          <div />
-        </div>
-        <div
-          class="more-info"
-        >
-          (1 more)
         </div>
       </div>
     </div>
@@ -109,45 +107,45 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
         class="tile-content"
       >
         <div
-          class="tile-title undefined"
+          class="tile-title"
         >
-          <div>
-            <div
-              class="nursing-task-icon-container"
-              data-testid="Administered"
-            >
-              <div>
-                <test-file-stub />
-              </div>
-            </div>
-            <span
-              class="bx--tooltip--definition bx--tooltip--a11y cursor-not-allowed"
-            >
-              <button
-                aria-describedby="definition-tooltip-1"
-                class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
-                type="button"
+          <div
+            class="tile-title undefined"
+          >
+            <div>
+              <div
+                class="nursing-task-icon-container"
+                data-testid="Administered"
               >
-                <div
-                  class="drug-title"
-                  style="color: rgb(82, 82, 82); font-weight: 400;"
+                <div>
+                  <test-file-stub />
+                </div>
+              </div>
+              <span
+                class="bx--tooltip--definition bx--tooltip--a11y cursor-not-allowed"
+              >
+                <button
+                  aria-describedby="definition-tooltip-1"
+                  class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                  type="button"
+                >
+                  <div
+                    class="drug-title"
+                    style="color: rgb(82, 82, 82); font-weight: 400;"
+                  >
+                    Halothane/Fluothane 250 mL Inhalation Anesthetic Liquid
+                  </div>
+                </button>
+                <span
+                  class="bx--assistive-text"
+                  id="definition-tooltip-1"
+                  role="tooltip"
                 >
                   Halothane/Fluothane 250 mL Inhalation Anesthetic Liquid
-                </div>
-              </button>
-              <span
-                class="bx--assistive-text"
-                id="definition-tooltip-1"
-                role="tooltip"
-              >
-                Halothane/Fluothane 250 mL Inhalation Anesthetic Liquid
+                </span>
               </span>
-            </span>
+            </div>
           </div>
-        </div>
-        <div
-          class="tile-name-cell"
-        >
           <div
             class="bx--tag bx--tag--sm bx--tag--blue"
             id="tag-1"
@@ -159,23 +157,23 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
             </span>
           </div>
         </div>
-        <div
-          class="tile-subcontent"
-        >
-          <div>
+        <div>
+          <div
+            class="tile-content-subtext"
+            style="color: rgb(82, 82, 82);"
+          >
+            <span>
+              1ml
+            </span>
+            <span>
+               - Oral
+            </span>
+          </div>
+          <div
+            class="tile-content-footer"
+          >
             <div
-              class="tile-content-subtext"
-              style="color: rgb(82, 82, 82); padding-left: 25px;"
-            >
-              <span>
-                1ml
-              </span>
-              <span>
-                 - Oral
-              </span>
-            </div>
-            <div
-              class="tile-content-subtext"
+              class="tile-date-time"
             >
               <test-file-stub />
               <div
@@ -183,9 +181,9 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
               >
                  16:00 - 07:23 (actual)
               </div>
+               
             </div>
           </div>
-          <div />
         </div>
       </div>
     </div>

@@ -53,11 +53,20 @@
 
   .slot-details-container {
     width: 550px;
-    padding: 20px 0;
+    padding-top: 20px;
+    padding-bottom: 10px;
     vertical-align: top;
 
-    .slot-details {
+    .medication-task,
+    .non-medication-task {
       display: flex;
+      border: 2px solid;
+      transition: opacity 0.3s ease;
+      display: flex;
+      padding: 15px 5px;
+      margin: 10px;
+      margin-top: 0px;
+      justify-content: start;
 
       .logo {
         display: flex;
@@ -70,18 +79,33 @@
       .drug-details-wrapper {
         display: flex;
         flex-direction: column;
-        padding: 0 0 20px 20px;
+        padding-left: 20px;
 
         .drug-details {
           display: flex;
           margin-top: 5px;
-
+          font-size: 12px;
+          font-weight: 400;
+          color: #393939;
+          .creator-details {
+            font-style: italic;
+          }
           .drug-detail {
             margin: 2px;
             white-space: break-spaces;
           }
         }
       }
+    }
+
+    .medication-task {
+      border-color: #92c4c3;
+      background: #edf8e6;
+    }
+
+    .non-medication-task {
+      border-color: #0f62fe;
+      background: #e1f3fe;
     }
   }
 }

@@ -90,51 +90,55 @@ export default function TaskTile(props) {
         }`}
       >
         <div className="tile-content">
-          <div className={`tile-title ${stopTime && "red-text"}`}>
-            <div>
-              <div
-                className="nursing-task-icon-container"
-                data-testid={statusIcon}
-              >
-                <SVGIcon iconType={statusIcon} />
+          <div className="tile-title">
+            <div className={`tile-title ${stopTime && "red-text"}`}>
+              <div>
+                <div
+                  className="nursing-task-icon-container"
+                  data-testid={statusIcon}
+                >
+                  <SVGIcon iconType={statusIcon} />
+                </div>
+                <TooltipDefinition
+                  tooltipText={drugName}
+                  className={
+                    isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                  }
+                >
+                  {drugNameText}
+                </TooltipDefinition>
               </div>
-              <TooltipDefinition
-                tooltipText={drugName}
-                className={isDisabled ? "cursor-not-allowed" : "cursor-pointer"}
-              >
-                {drugNameText}
-              </TooltipDefinition>
             </div>
-          </div>
-          {!isANonMedicationTask && (
-            <div className="tile-name-cell">
+            {!isANonMedicationTask && (
               <DisplayTags drugOrder={dosingInstructions} />
+            ) ? (
+              <DisplayTags drugOrder={dosingInstructions} />
+            ) : (
+              taskType &&
+              !isSystemGeneratedTask(newMedicationNursingTask) && (
+                <Tag type="blue">
+                  <span>{taskType.display}</span>
+                </Tag>
+              )
+            )}
+          </div>
+          <div>
+            <div
+              className="tile-content-subtext"
+              style={{
+                color: isRelevantTask ? "#393939" : "#525252",
+              }}
+            >
+              <span>{dosage}</span>
+              {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
+              {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
             </div>
-          )}
-          <div className="tile-subcontent">
-            <div>
-              <div
-                className="tile-content-subtext"
-                style={{
-                  color: isRelevantTask ? "#393939" : "#525252",
-                  paddingLeft: "25px",
-                }}
-              >
-                <span>{dosage}</span>
-                {creator &&
-                  !isSystemGeneratedTask(newMedicationNursingTask) && (
-                    <span style={{ textTransform: "capitalize" }}>
-                      {creatorName(creator.display)}
-                    </span>
-                  )}
-                {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
-                {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
-              </div>
-              {!(
-                dosingInstructions?.asNeeded &&
-                serviceType === asNeededPlaceholderConceptName
-              ) && (
-                <div className="tile-content-subtext">
+            {!(
+              dosingInstructions?.asNeeded &&
+              serviceType === asNeededPlaceholderConceptName
+            ) && (
+              <div className="tile-content-footer">
+                <div className="tile-date-time">
                   <Clock />
                   <div className="tile-content-subtext-time">
                     &nbsp;
@@ -152,18 +156,18 @@ export default function TaskTile(props) {
                           timeFormatFor12Hr
                         )}
                   </div>
+                  &nbsp;
+                  {creator &&
+                    !isSystemGeneratedTask(newMedicationNursingTask) && (
+                      <span style={{ textTransform: "capitalize" }}>
+                        {creatorName(creator.display)}
+                      </span>
+                    )}
                 </div>
-              )}
-            </div>
-            <div>
-              {taskType && !isSystemGeneratedTask(newMedicationNursingTask) && (
-                <Tag type="blue">
-                  <span>{taskType.display}</span>
-                </Tag>
-              )}
-            </div>
+                {isGroupedTask && <div>({taskCount} more)</div>}
+              </div>
+            )}
           </div>
-          {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
         </div>
       </div>
       {isGroupedTask && (

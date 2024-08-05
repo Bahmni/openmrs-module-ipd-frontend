@@ -67,7 +67,7 @@
 }
 
 .tile-content {
-  padding: 10px;
+  padding: 10px 10px 0px 10px;
 }
 
 .red-text {
@@ -114,14 +114,29 @@
 }
 
 .tile-content-subtext {
-  margin-top: 4px;
   font-size: 12px;
   font-weight: 400;
   color: #393939;
   letter-spacing: 0.12px;
+  padding: 2px 25px 2px;
+}
+
+.tile-content-footer {
+  width: 475px;
+  position: absolute;
+  font-size: 12px;
+  font-weight: 400;
+  font-style: italic;
+  color: #393939;
+  letter-spacing: 0.12px;
   align-items: center;
   display: flex;
+  bottom: 10px;
   padding-left: 2px;
+  justify-content: space-between;
+  .tile-date-time {
+    display: flex;
+  }
 }
 
 .tile-content-subtext-time {
@@ -130,17 +145,6 @@
 
 .nursing-task-icon-container {
   margin-top: 3px;
-}
-
-.more-info {
-  margin-top: 4px;
-  font-size: 12px;
-  font-weight: 400;
-  color: #393939;
-  letter-spacing: 0.12px;
-  position: absolute;
-  bottom: 4px;
-  right: 8px;
 }
 
 .bx--tooltip__trigger.bx--tooltip__trigger--definition {
@@ -170,7 +174,7 @@
   width: 90%;
 }
 
-.tile-subcontent {
+.tile-title {
   display: flex;
   justify-content: space-between;
   align-items: center;

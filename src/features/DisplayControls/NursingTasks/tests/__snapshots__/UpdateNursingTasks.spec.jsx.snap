@@ -129,7 +129,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </div>
           </div>
           <div
-            class="medication-details"
+            class="task-details"
           >
             <span>
               30mg
@@ -252,7 +252,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </div>
           </div>
           <div
-            class="medication-details"
+            class="task-details"
           >
             <span>
               25mg
@@ -553,7 +553,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             </div>
           </div>
           <div
-            class="medication-details"
+            class="task-details"
           >
             <span>
               30mg
@@ -676,7 +676,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             </div>
           </div>
           <div
-            class="medication-details"
+            class="task-details"
           >
             <span>
               25mg

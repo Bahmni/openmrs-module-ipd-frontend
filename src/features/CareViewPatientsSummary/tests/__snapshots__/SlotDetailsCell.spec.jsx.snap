@@ -6,7 +6,7 @@ exports[`SlotDetailsCell should render slotDetailsCell 1`] = `
     class="slot-details-container"
   >
     <div
-      class="slot-details"
+      class="medication-task"
     >
       <div
         class="logo"
@@ -23,7 +23,7 @@ exports[`SlotDetailsCell should render slotDetailsCell 1`] = `
         />
       </div>
       <span>
-        12:16
+        08:36
       </span>
       <div
         class="drug-details-wrapper"

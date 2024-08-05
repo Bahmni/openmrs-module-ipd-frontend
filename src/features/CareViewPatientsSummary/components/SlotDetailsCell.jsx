@@ -12,6 +12,8 @@ import { getAdministrationStatus } from "../../../utils/CommonUtils";
 import SVGIcon from "../../SVGIcon/SVGIcon";
 import { CareViewContext } from "../../../context/CareViewContext";
 import propTypes from "prop-types";
+import { isSystemGeneratedTask } from "../../../utils/CommonUtils";
+import { FormattedMessage } from "react-intl";
 
 export const SlotDetailsCell = ({
   uuid,
@@ -84,7 +86,7 @@ export const SlotDetailsCell = ({
       if (slotItem.isNonMedication) {
         const taskItem = slotItem;
         return (
-          <div className="slot-details" key={`${taskItem.uuid}`}>
+          <div className="non-medication-task" key={`${taskItem.uuid}`}>
             <div className="logo">
               <div className="status-icon" data-testid={taskItem.status}>
                 {taskItem.status === "REQUESTED" && (
@@ -106,27 +108,39 @@ export const SlotDetailsCell = ({
             </span>
             <div className="drug-details-wrapper">
               <span>{taskItem.name}</span>
-              <div className="drug-details" data-testid="drug-details">
-                {taskItem.creator && (
-                  <span className="drug-detail">
-                    {taskItem.creator.display}
-                  </span>
+              {taskItem.creator &&
+                taskItem.creator.display &&
+                !isSystemGeneratedTask(taskItem) && (
+                  <div className="drug-details" data-testid="drug-details">
+                    <div className="creator-details">
+                      <FormattedMessage
+                        id={"CREATED_BY"}
+                        defaultMessage={`Created by {provider}`}
+                        values={{ provider: taskItem.creator.display }}
+                      />
+                    </div>
+                  </div>
                 )}
-              </div>
             </div>
           </div>
         );
       } else {
         const { dose, doseUnits, route, drugNonCoded } = slotItem.order;
         return (
-          <div className="slot-details" key={`${slotItem.uuid}`}>
+          <div className="medication-task" key={`${slotItem.uuid}`}>
             <div className="logo">
               {renderStatusIcon(slotItem)}
               <Clock className="clock-icon" />
             </div>
-            <span>{epochTo24HourTimeFormat(slotItem.startTime)}</span>
+            <span>
+              {enable24HourTime
+                ? epochTo24HourTimeFormat(slotItem.startTime / 1000)
+                : epochTo12HourTimeFormat(slotItem.startTime / 1000)}
+            </span>
             <div className="drug-details-wrapper">
-                <span>{drugNonCoded ? drugNonCoded : slotItem?.order?.drug?.display}</span>
+              <span>
+                {drugNonCoded ? drugNonCoded : slotItem?.order?.drug?.display}
+              </span>
               <div className="drug-details" data-testid="drug-details">
                 {dose && <span className="drug-detail">{dose}</span>}
                 {doseUnits && (
