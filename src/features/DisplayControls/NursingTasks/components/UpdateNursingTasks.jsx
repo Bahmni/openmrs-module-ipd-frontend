@@ -113,8 +113,8 @@ const UpdateNursingTasks = (props) => {
       ? await saveEmergencyMedication(administeredTasks[0])
       : await saveAdministeredMedication(administeredTasks);
     if(response.status === 200) {
-      saveAdministeredMedicationTasks("success", "NURSING_TASKS_SAVE_MESSAGE");
       task.status === 'not-done' ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK") : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
+      saveAdministeredMedicationTasks("success", "NURSING_TASKS_SAVE_MESSAGE");      
     } else {
       saveAdministeredMedicationTasks("error", "NURSING_TASKS_SAVE_MESSAGE_FAILED");
     }
@@ -377,6 +377,14 @@ const UpdateNursingTasks = (props) => {
       updateIsSaveDisabled(saveDisabled || isInvalidTime);
       const response = await updateNonMedicationTask(nonMedicationPayload);
       if (response.status === 200) {
+        Object.keys(tasks).forEach((key) => {
+          if (tasks[key].isSelected) {
+            handleAuditEvent("NON_MEDICATION_TASK_COMPLETED");
+          }
+          if (tasks[key].skipped) {
+            handleAuditEvent("SKIP_SCHEDULED_NON_MEDICATION_TASK");
+          }
+        });
         saveAdministeredNonMedicationTasks("success", "NON_MEDICATION_TASK_UPDATE_MESSAGE");
       } else {
         saveAdministeredNonMedicationTasks("error", "NON_MEDICATION_TASK_UPDATE_MESSAGE_FAILED");

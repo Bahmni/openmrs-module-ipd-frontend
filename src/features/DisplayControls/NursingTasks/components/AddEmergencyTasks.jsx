@@ -289,7 +289,6 @@ const AddEmergencyTasks = (props) => {
     if (response.status === 200) {
       setIsSaveDisabled(false);
       saveAdhocTasks("success", "EMERGENCY_TASK_SAVE_MESSAGE");
-      handleAuditEvent("CREATE_EMERGENCY_MEDICATION_TASK");
     } else {
       setIsSaveDisabled(false);
       saveAdhocTasks("error", "EMERGENCY_TASK_SAVE_MESSAGE_FAILED");
@@ -297,6 +296,7 @@ const AddEmergencyTasks = (props) => {
   };
 
   const saveAdhocTasks = (status, messageId) => {
+    handleAuditEvent("CREATE_EMERGENCY_MEDICATION_TASK");
     setShowNotification(true);
     setNotificationStatus(status);
     setNotificationMessage(messageId);
@@ -305,6 +305,7 @@ const AddEmergencyTasks = (props) => {
   };
 
   const updateNonMedicationTasksNotification = (status, messageId) => {
+    handleAuditEvent("CREATE_NON_MEDICATION_TASK");
     setShowNotification(true);
     setNotificationStatus(status);
     setNotificationMessage(messageId);
@@ -320,10 +321,16 @@ const AddEmergencyTasks = (props) => {
       const response = await saveNonMedicationTask(nonMedicationTaskPayload);
       if (response.status === 200) {
         setIsSaveDisabled(false);
-        updateNonMedicationTasksNotification("success", "NON_MEDICATION_TASK_SAVE_MESSAGE");
+        updateNonMedicationTasksNotification(
+          "success",
+          "NON_MEDICATION_TASK_SAVE_MESSAGE"
+        );
       } else {
         setIsSaveDisabled(false);
-        updateNonMedicationTasksNotification("error", "NON_MEDICATION_TASK_SAVE_MESSAGE_FAILED");
+        updateNonMedicationTasksNotification(
+          "error",
+          "NON_MEDICATION_TASK_SAVE_MESSAGE_FAILED"
+        );
       }
     }
   };
@@ -336,14 +343,7 @@ const AddEmergencyTasks = (props) => {
   }, []);
 
   const handleNonMedicationSaveButton = () => {
-    if (
-      task &&
-      scheduleTime &&
-      !(
-        _.isEmpty(task) ||
-        _.isEmpty(scheduleTime)
-      )
-    ) {
+    if (task && scheduleTime && !(_.isEmpty(task) || _.isEmpty(scheduleTime))) {
       setIsSaveDisabled(false);
     } else {
       setIsSaveDisabled(true);
@@ -623,20 +623,20 @@ const AddEmergencyTasks = (props) => {
                   maxCount={10}
                   rows={1}
                 />
-                { 
-                  (nonMedicationTaskTypeOptions && nonMedicationTaskTypeOptions.length > 0) && 
-                  <Dropdown
-                    id={"non-medication-task-type-dropdown"}
-                    onChange={(selectedItem) => {
-                      setNonMedicationTaskType(selectedItem?.value);
-                    }}
-                    placeholder={"Select Task Type"}
-                    titleText={"Task Type"}
-                    isRequired={false}
-                    options={nonMedicationTaskTypeOptions}
-                    width={"100%"}
-                  />
-                }
+                {nonMedicationTaskTypeOptions &&
+                  nonMedicationTaskTypeOptions.length > 0 && (
+                    <Dropdown
+                      id={"non-medication-task-type-dropdown"}
+                      onChange={(selectedItem) => {
+                        setNonMedicationTaskType(selectedItem?.value);
+                      }}
+                      placeholder={"Select Task Type"}
+                      titleText={"Task Type"}
+                      isRequired={false}
+                      options={nonMedicationTaskTypeOptions}
+                      width={"100%"}
+                    />
+                  )}
                 <div className="time-info">
                   {enable24HourTime ? (
                     <TimePicker24Hour
