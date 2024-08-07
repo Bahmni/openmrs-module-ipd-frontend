@@ -288,6 +288,7 @@ const AddEmergencyTasks = (props) => {
     const response = await saveEmergencyMedication(emergencyTask);
     if (response.status === 200) {
       setIsSaveDisabled(false);
+      handleAuditEvent("CREATE_EMERGENCY_MEDICATION_TASK");
       saveAdhocTasks("success", "EMERGENCY_TASK_SAVE_MESSAGE");
     } else {
       setIsSaveDisabled(false);
@@ -296,7 +297,6 @@ const AddEmergencyTasks = (props) => {
   };
 
   const saveAdhocTasks = (status, messageId) => {
-    handleAuditEvent("CREATE_EMERGENCY_MEDICATION_TASK");
     setShowNotification(true);
     setNotificationStatus(status);
     setNotificationMessage(messageId);
@@ -305,7 +305,6 @@ const AddEmergencyTasks = (props) => {
   };
 
   const updateNonMedicationTasksNotification = (status, messageId) => {
-    handleAuditEvent("CREATE_NON_MEDICATION_TASK");
     setShowNotification(true);
     setNotificationStatus(status);
     setNotificationMessage(messageId);
@@ -321,6 +320,7 @@ const AddEmergencyTasks = (props) => {
       const response = await saveNonMedicationTask(nonMedicationTaskPayload);
       if (response.status === 200) {
         setIsSaveDisabled(false);
+        handleAuditEvent("CREATE_NON_MEDICATION_TASK");
         updateNonMedicationTasksNotification(
           "success",
           "NON_MEDICATION_TASK_SAVE_MESSAGE"
