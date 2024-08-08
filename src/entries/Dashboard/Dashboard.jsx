@@ -41,6 +41,7 @@ export default function Dashboard(props) {
     isReadMode = false,
     visitSummary,
     source,
+    currentUser
   } = hostData;
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
@@ -202,6 +203,7 @@ export default function Dashboard(props) {
               allFormsFilledInCurrentVisit,
               isAllFormSummaryLoading,
               isAllFormsFilledInCurrentVisitLoading,
+              currentUser,
             }}
           >
             <main className="ipd-page">
