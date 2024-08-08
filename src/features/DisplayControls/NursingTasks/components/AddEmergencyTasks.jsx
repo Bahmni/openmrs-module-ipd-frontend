@@ -26,6 +26,7 @@ import {
 import _ from "lodash";
 import {
   performerFunction,
+  PRIVILEGE_CONSTANTS,
   requesterFunction,
   timeFormatFor12Hr,
   timeFormatFor24Hr,
@@ -43,7 +44,7 @@ import {
 } from "../../../../utils/DateTimeUtils";
 import AdministeredMedicationList from "./AdministeredMedicationList";
 import { IPDContext } from "../../../../context/IPDContext";
-import { getCookies } from "../../../../utils/CommonUtils";
+import { getCookies, isUserPrivileged } from "../../../../utils/CommonUtils";
 
 const AddEmergencyTasks = (props) => {
   const {
@@ -64,7 +65,7 @@ const AddEmergencyTasks = (props) => {
   const [activeTab, setActiveTab] = useState("Medication");
   const [nonMedicationTaskTypeOptions, setNonMedicationTaskTypeOptions] =
     useState({});
-  const { config = {}, handleAuditEvent } = useContext(IPDContext);
+  const { config = {}, handleAuditEvent, currentUser } = useContext(IPDContext);
   const { enable24HourTime = {}, nonMedicationTaskTypes = [] } = config;
 
   const [selectedDrug, setSelectedDrug] = useState({});
@@ -467,211 +468,218 @@ const AddEmergencyTasks = (props) => {
       >
         <div className={"emergency-task-slider"}>
           <Tabs>
-            <Tab
-              id="Medication"
-              onClick={() => {
-                setActiveTab("Medication");
-                handleMedicationSaveButton();
-              }}
-              label={
-                <FormattedMessage
-                  id={"MEDICATION"}
-                  defaultMessage={"Medication"}
-                />
-              }
-            >
-              {isLoading && (
-                <div>
-                  <Loading />
-                </div>
-              )}
-              <div className={"emergency-task-slider-content"}>
-                <SearchDrug onChange={drugSearchHandler} />
-                <div className="inline-field">
-                  <div className="dosage-section-container">
-                    <NumberInputCarbon
-                      id={"Dropdown"}
-                      onChange={setDosage}
-                      style={{ width: "50%" }}
-                      value={dosage}
-                      label={"Dose"}
-                      isRequired={true}
-                      min={0}
-                    />
+            {isUserPrivileged(
+              currentUser,
+              PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS
+            ) && (
+              <Tab
+                id="Medication"
+                onClick={() => {
+                  setActiveTab("Medication");
+                  handleMedicationSaveButton();
+                }}
+                label={
+                  <FormattedMessage
+                    id={"MEDICATION"}
+                    defaultMessage={"Medication"}
+                  />
+                }
+              >
+                {isLoading && (
+                  <div>
+                    <Loading />
+                  </div>
+                )}
+                <div className={"emergency-task-slider-content"}>
+                  <SearchDrug onChange={drugSearchHandler} />
+                  <div className="inline-field">
+                    <div className="dosage-section-container">
+                      <NumberInputCarbon
+                        id={"Dropdown"}
+                        onChange={setDosage}
+                        style={{ width: "50%" }}
+                        value={dosage}
+                        label={"Dose"}
+                        isRequired={true}
+                        min={0}
+                      />
+                      <Dropdown
+                        id={"Dosage Dropdown"}
+                        onChange={(e) => {
+                          setDoseUnits(e);
+                        }}
+                        placeholder={"Select Unit"}
+                        titleText={""}
+                        width={window.innerWidth > 480 ? "170px" : "100%"}
+                        style={{ paddingLeft: "10px", marginRight: 0 }}
+                        options={unitOptions}
+                        selectedValue={doseUnits}
+                      />
+                    </div>
                     <Dropdown
-                      id={"Dosage Dropdown"}
+                      id={"Route-Dropdown"}
                       onChange={(e) => {
-                        setDoseUnits(e);
+                        setRoutes(e);
                       }}
-                      placeholder={"Select Unit"}
-                      titleText={""}
-                      width={window.innerWidth > 480 ? "170px" : "100%"}
-                      style={{ paddingLeft: "10px", marginRight: 0 }}
-                      options={unitOptions}
-                      selectedValue={doseUnits}
+                      placeholder={"Select Route"}
+                      titleText={"Route"}
+                      isRequired={true}
+                      options={routeOptions}
+                      width={"100%"}
+                      selectedValue={routes}
                     />
                   </div>
+                  <div
+                    className={"administration-info"}
+                    style={{ display: "flex", gap: "10px" }}
+                  >
+                    <DatePickerCarbon
+                      id={"Administration-Date"}
+                      onChange={(e) => {
+                        setAdministrationDate(new Date(e[0]));
+                        setIsDateChanged(true);
+                      }}
+                      title={"Administration Date"}
+                      isRequired={true}
+                      value={administrationDate}
+                      dateFormat={"d M Y"}
+                      placeholder={"DD MMM YYYY"}
+                      maxDate={new Date()}
+                    />
+                    {enable24HourTime ? (
+                      <TimePicker24Hour
+                        defaultTime={administrationTime}
+                        onChange={(e) => {
+                          e != "" && setAdministrationTime(e);
+                          setIsTimeChanged(true);
+                        }}
+                        labelText={`Administration Time (${timeText24})`}
+                        width={"250px"}
+                        isRequired={true}
+                        customValidation={customValidation}
+                        actionForInvalidTime={actionForInvalidTime}
+                        invalid={isInvalidTime}
+                        invalidText={invalidText}
+                      />
+                    ) : (
+                      <TimePicker
+                        defaultTime={administrationTime}
+                        onChange={(e) => {
+                          e != "" && setAdministrationTime(e);
+                          setIsTimeChanged(true);
+                        }}
+                        labelText={`Administration Time (${timeText12})`}
+                        width={"155px"}
+                        isRequired={true}
+                        customValidation={customValidation}
+                        actionForInvalidTime={actionForInvalidTime}
+                        invalid={isInvalidTime}
+                        invalidText={invalidText}
+                      />
+                    )}
+                  </div>
                   <Dropdown
-                    id={"Route-Dropdown"}
-                    onChange={(e) => {
-                      setRoutes(e);
+                    id={"Provider-info"}
+                    onChange={(selectedItem) => {
+                      setRequestedProvider(selectedItem?.value);
                     }}
-                    placeholder={"Select Route"}
-                    titleText={"Route"}
+                    placeholder={"Select Provider"}
+                    titleText={"Acknowledgement Requested From"}
                     isRequired={true}
-                    options={routeOptions}
+                    options={providerOptions}
                     width={"100%"}
-                    selectedValue={routes}
                   />
-                </div>
-                <div
-                  className={"administration-info"}
-                  style={{ display: "flex", gap: "10px" }}
-                >
-                  <DatePickerCarbon
-                    id={"Administration-Date"}
+                  <TextArea
+                    labelText={<Title text={"Notes"} isRequired={true} />}
                     onChange={(e) => {
-                      setAdministrationDate(new Date(e[0]));
-                      setIsDateChanged(true);
+                      setNotes(e.target.value);
                     }}
-                    title={"Administration Date"}
-                    isRequired={true}
-                    value={administrationDate}
-                    dateFormat={"d M Y"}
-                    placeholder={"DD MMM YYYY"}
-                    maxDate={new Date()}
+                    placeholder={"Enter a maximum of 250 characters"}
+                    maxCount={250}
+                    rows={4}
                   />
-                  {enable24HourTime ? (
-                    <TimePicker24Hour
-                      defaultTime={administrationTime}
-                      onChange={(e) => {
-                        e != "" && setAdministrationTime(e);
-                        setIsTimeChanged(true);
-                      }}
-                      labelText={`Administration Time (${timeText24})`}
-                      width={"250px"}
-                      isRequired={true}
-                      customValidation={customValidation}
-                      actionForInvalidTime={actionForInvalidTime}
-                      invalid={isInvalidTime}
-                      invalidText={invalidText}
-                    />
-                  ) : (
-                    <TimePicker
-                      defaultTime={administrationTime}
-                      onChange={(e) => {
-                        e != "" && setAdministrationTime(e);
-                        setIsTimeChanged(true);
-                      }}
-                      labelText={`Administration Time (${timeText12})`}
-                      width={"155px"}
-                      isRequired={true}
-                      customValidation={customValidation}
-                      actionForInvalidTime={actionForInvalidTime}
-                      invalid={isInvalidTime}
-                      invalidText={invalidText}
-                    />
-                  )}
                 </div>
-                <Dropdown
-                  id={"Provider-info"}
-                  onChange={(selectedItem) => {
-                    setRequestedProvider(selectedItem?.value);
-                  }}
-                  placeholder={"Select Provider"}
-                  titleText={"Acknowledgement Requested From"}
-                  isRequired={true}
-                  options={providerOptions}
-                  width={"100%"}
-                />
-                <TextArea
-                  labelText={<Title text={"Notes"} isRequired={true} />}
-                  onChange={(e) => {
-                    setNotes(e.target.value);
-                  }}
-                  placeholder={"Enter a maximum of 250 characters"}
-                  maxCount={250}
-                  rows={4}
-                />
-              </div>
-            </Tab>
-            <Tab
-              id="Non - Medication"
-              onClick={() => {
-                setActiveTab("Non-Medication");
-                handleNonMedicationSaveButton();
-              }}
-              label={
-                <FormattedMessage
-                  id={"NON_MEDICATION"}
-                  defaultMessage={"Non - Medication"}
-                />
-              }
-            >
-              {isLoading && (
-                <div>
-                  <Loading />
+              </Tab>
+            )}
+            {isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.ADD_TASKS) && (
+              <Tab
+                id="Non - Medication"
+                onClick={() => {
+                  setActiveTab("Non-Medication");
+                  handleNonMedicationSaveButton();
+                }}
+                label={
+                  <FormattedMessage
+                    id={"NON_MEDICATION"}
+                    defaultMessage={"Non - Medication"}
+                  />
+                }
+              >
+                {isLoading && (
+                  <div>
+                    <Loading />
+                  </div>
+                )}
+                <div className="emergency-task-slider-content">
+                  <TextArea
+                    labelText={<Title text={"Task Name"} isRequired={true} />}
+                    onChange={(e) => {
+                      setTask(e.target.value);
+                    }}
+                    placeholder={"Enter a title for the task "}
+                    maxCount={10}
+                    rows={1}
+                  />
+                  {nonMedicationTaskTypeOptions &&
+                    nonMedicationTaskTypeOptions.length > 0 && (
+                      <Dropdown
+                        id={"non-medication-task-type-dropdown"}
+                        onChange={(selectedItem) => {
+                          setNonMedicationTaskType(selectedItem?.value);
+                        }}
+                        placeholder={"Select Task Type"}
+                        titleText={"Task Type"}
+                        isRequired={false}
+                        options={nonMedicationTaskTypeOptions}
+                        width={"100%"}
+                      />
+                    )}
+                  <div className="time-info">
+                    {enable24HourTime ? (
+                      <TimePicker24Hour
+                        defaultTime={scheduleTime}
+                        onChange={(e) => {
+                          e != "" && setScheduleTime(e);
+                          setIsTimeChanged(true);
+                        }}
+                        labelText={`Schedule Time (${timeText24})`}
+                        width={"250px"}
+                        isRequired={true}
+                        customValidation={customNonMedicationTaskValidation}
+                        actionForInvalidTime={actionForInvalidTime}
+                        invalid={isInvalidTime}
+                        invalidText={invalidText}
+                      />
+                    ) : (
+                      <TimePicker
+                        defaultTime={scheduleTime}
+                        onChange={(e) => {
+                          e != "" && setScheduleTime(e);
+                          setIsTimeChanged(true);
+                        }}
+                        labelText={`Schedule Time (${timeText12})`}
+                        width={"155px"}
+                        isRequired={true}
+                        customValidation={customNonMedicationTaskValidation}
+                        actionForInvalidTime={actionForInvalidTime}
+                        invalid={isInvalidTime}
+                        invalidText={invalidText}
+                      />
+                    )}
+                  </div>
                 </div>
-              )}
-              <div className="emergency-task-slider-content">
-                <TextArea
-                  labelText={<Title text={"Task Name"} isRequired={true} />}
-                  onChange={(e) => {
-                    setTask(e.target.value);
-                  }}
-                  placeholder={"Enter a title for the task "}
-                  maxCount={10}
-                  rows={1}
-                />
-                {nonMedicationTaskTypeOptions &&
-                  nonMedicationTaskTypeOptions.length > 0 && (
-                    <Dropdown
-                      id={"non-medication-task-type-dropdown"}
-                      onChange={(selectedItem) => {
-                        setNonMedicationTaskType(selectedItem?.value);
-                      }}
-                      placeholder={"Select Task Type"}
-                      titleText={"Task Type"}
-                      isRequired={false}
-                      options={nonMedicationTaskTypeOptions}
-                      width={"100%"}
-                    />
-                  )}
-                <div className="time-info">
-                  {enable24HourTime ? (
-                    <TimePicker24Hour
-                      defaultTime={scheduleTime}
-                      onChange={(e) => {
-                        e != "" && setScheduleTime(e);
-                        setIsTimeChanged(true);
-                      }}
-                      labelText={`Schedule Time (${timeText24})`}
-                      width={"250px"}
-                      isRequired={true}
-                      customValidation={customNonMedicationTaskValidation}
-                      actionForInvalidTime={actionForInvalidTime}
-                      invalid={isInvalidTime}
-                      invalidText={invalidText}
-                    />
-                  ) : (
-                    <TimePicker
-                      defaultTime={scheduleTime}
-                      onChange={(e) => {
-                        e != "" && setScheduleTime(e);
-                        setIsTimeChanged(true);
-                      }}
-                      labelText={`Schedule Time (${timeText12})`}
-                      width={"155px"}
-                      isRequired={true}
-                      customValidation={customNonMedicationTaskValidation}
-                      actionForInvalidTime={actionForInvalidTime}
-                      invalid={isInvalidTime}
-                      invalidText={invalidText}
-                    />
-                  )}
-                </div>
-              </div>
-            </Tab>
+              </Tab>
+            )}
           </Tabs>
         </div>
         <Modal

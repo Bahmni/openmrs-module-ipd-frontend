@@ -29,6 +29,7 @@ import {
   errorCodes,
   asNeededPlaceholderConceptName,
   timeFormatFor12Hr,
+  PRIVILEGE_CONSTANTS,
 } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -44,9 +45,11 @@ import {
 } from "../../DrugChart/utils/DrugChartUtils";
 import { displayShiftTimingsFormat } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
+import { isUserPrivileged } from "../../../../utils/CommonUtils";
 export default function NursingTasks(props) {
   const { patientId } = props;
-  const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
+  const { config, isReadMode, visitSummary, visit, currentUser } =
+    useContext(IPDContext);
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
   const [nursingTasks, setNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -530,6 +533,7 @@ export default function NursingTasks(props) {
                 : setFilterValue(items[2]);
             }}
           />
+          {(isUserPrivileged(currentUser,PRIVILEGE_CONSTANTS.ADD_TASKS) || isUserPrivileged(currentUser,PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS)) && (
           <Button
             kind={"tertiary"}
             isExpressive
@@ -544,6 +548,7 @@ export default function NursingTasks(props) {
           >
             <FormattedMessage id={"ADD_TASK"} defaultMessage={"Add Task"} />
           </Button>
+          )}
         </div>
       </div>
       {isSliderOpen.nursingTasks && (

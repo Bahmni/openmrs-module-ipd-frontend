@@ -9,6 +9,14 @@ export const mockUserWithAllRequiredPrivileges = {
       name: "Edit Medication Tasks",
       retired: false,
     },
+    {
+      name: "Add Tasks",
+      retired: false,
+    },
+    {
+      name: "Edit adhoc medication tasks",
+      retired: false,
+    },
   ],
 };
 

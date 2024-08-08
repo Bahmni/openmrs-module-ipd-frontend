@@ -11,6 +11,7 @@ import {
 import MockDate from "mockdate";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
+import { mockUserWithAllRequiredPrivileges } from "../../../../utils/mockUserData";
 
 const mockGetDrugOrdersConfig = jest.fn();
 const mockFetchMedicationConfig = jest.fn();
@@ -86,7 +87,13 @@ describe("AddEmergencyTasks", () => {
 
   it("should render the component with loading state", () => {
     const { getAllByText, container } = render(
-      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          handleAuditEvent: mockHandleAuditEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -99,7 +106,13 @@ describe("AddEmergencyTasks", () => {
 
   it("should render the component", async () => {
     const { queryByText, getByText, container } = render(
-      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          handleAuditEvent: mockHandleAuditEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -118,7 +131,13 @@ describe("AddEmergencyTasks", () => {
 
   it("should allow Drug search", async () => {
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          handleAuditEvent: mockHandleAuditEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -130,7 +149,13 @@ describe("AddEmergencyTasks", () => {
 
   it("should set the dose units based on dosage form", async () => {
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          handleAuditEvent: mockHandleAuditEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -147,7 +172,13 @@ describe("AddEmergencyTasks", () => {
 
   it("should set the route based on dosage form", async () => {
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          handleAuditEvent: mockHandleAuditEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -165,7 +196,13 @@ describe("AddEmergencyTasks", () => {
   it("should enable save when all fields are added", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          handleAuditEvent: mockHandleAuditEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           updateEmergencyTasksSlider={jest.fn}
@@ -225,7 +262,13 @@ describe("AddEmergencyTasks", () => {
   it("should call save by confirming popup when emergency task is saved", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          handleAuditEvent: mockHandleAuditEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}
@@ -300,7 +343,13 @@ describe("AddEmergencyTasks", () => {
 
   it("should render confirmation modal on click of cancel button when changes are made", async () => {
     const { container, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          handleAuditEvent: mockHandleAuditEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}
@@ -336,7 +385,13 @@ describe("AddEmergencyTasks", () => {
   it("should save button be disabled when fields are not filled", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText, getAllByText, getByRole } = render(
-      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          handleAuditEvent: mockHandleAuditEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}
@@ -367,7 +422,13 @@ describe("AddEmergencyTasks", () => {
   it("should enable save when all fields are added for Non medication tasks", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText, getAllByText, getByRole } = render(
-      <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent : mockHandleAuditEvent  }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          handleAuditEvent: mockHandleAuditEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <AddEmergencyTasks
           patientId={"__patient_uuid__"}
           providerId={"__provider_uuid__"}

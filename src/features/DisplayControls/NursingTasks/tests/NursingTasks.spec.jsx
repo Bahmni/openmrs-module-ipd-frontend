@@ -13,6 +13,10 @@ import {
   mockConfig,
   mockConfigFor12HourFormat,
 } from "../../../../utils/CommonUtils";
+import {
+  mockUserWithAllRequiredPrivileges,
+  mockUserWithoutAnyPrivilege,
+} from "../../../../utils/mockUserData";
 
 const mockFetchMedicationNursingTasks = jest.fn();
 const mockGetTimeInSeconds = jest.fn();
@@ -380,6 +384,7 @@ describe("NursingTasks", () => {
             config: mockConfig,
             isReadMode: true,
             visitSummary: { stopDateTime: new Date() },
+            currentUser: mockUserWithAllRequiredPrivileges,
           }}
         >
           <NursingTasks patientId="patientid" />
@@ -393,6 +398,31 @@ describe("NursingTasks", () => {
     expect(currentShiftButton.className).toContain("bx--btn--disabled");
     expect(AddTaskButton.className).toContain("bx--btn--disabled");
   });
+
+  it("should not render Add Task button when privilege is not present", async () => {
+    MockDate.set("2024-01-05");
+    mockFetchhNonMedicationTasks.mockResolvedValue([]);
+    mockFetchMedicationNursingTasks
+      .mockReturnValueOnce(mockNursingTasksResponse)
+      .mockReturnValueOnce(mockShiftResponse)
+      .mockReturnValue(mockNursingTasksResponse);
+    const { queryByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            isReadMode: true,
+            visitSummary: { stopDateTime: new Date() },
+            currentUser: mockUserWithoutAnyPrivilege,
+          }}
+        >
+          <NursingTasks patientId="patientid" />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    );
+    expect(queryByText("Add Task")).toBeFalsy();
+  });
+
   it("should show next button disabled for ipd inactive visit", async () => {
     MockDate.set("2024-01-05");
     mockFetchhNonMedicationTasks.mockResolvedValue([]);
