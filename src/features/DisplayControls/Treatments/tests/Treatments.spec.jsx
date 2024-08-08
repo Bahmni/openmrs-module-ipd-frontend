@@ -6,6 +6,10 @@ import { SliderContext } from "../../../../context/SliderContext";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
+import {
+  mockUserWithAllRequiredPrivileges,
+  mockUserWithoutAnyPrivilege,
+} from "../../../../utils/mockUserData";
 
 const mockHandleAuditEvent = jest.fn();
 
@@ -277,7 +281,13 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -291,6 +301,66 @@ describe("Treatments", () => {
       expect(getByText("1 mg - Oral - Once a day - for 7 Day(s)")).toBeTruthy();
       expect(getByText("Dr. John Doe")).toBeTruthy();
       expect(getByText("Add to Drug Chart")).toBeTruthy();
+    });
+  });
+
+  it("should not render an AddToDrugChart link for treatments when privilege is not present", async () => {
+    const treatments = [
+      {
+        drugOrder: {
+          uuid: "1",
+          effectiveStartDate: 1704785404,
+          dateStopped: null,
+          dateActivated: 1704785404,
+          scheduledDate: 1704785404,
+          drug: {
+            name: "Drug 1",
+          },
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            route: "Oral",
+            frequency: "Once a day",
+            administrationInstructions:
+              '{"instructions":"As directed","additionalInstructions":"all good"}',
+          },
+          duration: 7,
+          durationUnits: "Day(s)",
+          careSetting: "INPATIENT",
+        },
+        provider: {
+          name: "Dr. John Doe",
+        },
+      },
+    ];
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
+        emergencyMedications: [],
+        ipdDrugOrders: treatments,
+      },
+    };
+    const { getByText, queryByText } = render(
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithoutAnyPrivilege,
+        }}
+      >
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
+    );
+    await waitFor(() => {
+      expect(getByText("20 Jan 1970")).toBeTruthy();
+      expect(getByText("Drug 1")).toBeTruthy();
+      expect(getByText("1 mg - Oral - Once a day - for 7 Day(s)")).toBeTruthy();
+      expect(getByText("Dr. John Doe")).toBeTruthy();
+      expect(queryByText("Add to Drug Chart")).toBeFalsy();
     });
   });
 
@@ -331,7 +401,13 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -385,7 +461,13 @@ describe("Treatments", () => {
       },
     };
     const { getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -499,7 +581,13 @@ describe("Treatments", () => {
     };
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
-        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            isReadMode: false,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
           </AllMedicationsContext.Provider>
@@ -513,6 +601,69 @@ describe("Treatments", () => {
     });
   });
 
+  it("should not render edit drug chart link when privilege is not present", async () => {
+    const treatments = [
+      {
+        drugOrder: {
+          uuid: "1",
+          effectiveStartDate: 1704785404,
+          dateStopped: null,
+          dateActivated: 1704785404,
+          scheduledDate: 1704785404,
+          drug: {
+            name: "Drug 1",
+          },
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            route: "Oral",
+            frequency: "Once a day",
+            administrationInstructions:
+              '{"instructions":"As directed","additionalInstructions":"all good"}',
+          },
+          duration: 7,
+          durationUnits: "Day(s)",
+          careSetting: "INPATIENT",
+        },
+        drugOrderSchedule: {
+          firstDaySlotsStartTime: [1704798900],
+          dayWiseSlotsStartTime: [1704853800, 1704885000],
+          remainingDaySlotsStartTime: [1704940200],
+          slotStartTime: null,
+          medicationAdministrationStarted: false,
+        },
+        provider: {
+          name: "Dr. John Doe",
+        },
+      },
+    ];
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
+        emergencyMedications: [],
+        ipdDrugOrders: treatments,
+      },
+    };
+    const { queryByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            isReadMode: false,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    );
+    await waitFor(() => {
+      expect(queryByText("Edit Drug Chart")).toBeFalsy();
+    });
+  });
+
   it("should display stop drug link after one dose of drug is administered", async () => {
     const treatments = [stopDrugOrder];
     const updatedAllMedications = {
@@ -523,7 +674,13 @@ describe("Treatments", () => {
       },
     };
     const { getByText, queryByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -538,6 +695,36 @@ describe("Treatments", () => {
     });
   });
 
+  it("should not render stop drug link when prvilege is not present", async () => {
+    const treatments = [stopDrugOrder];
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
+        emergencyMedications: [],
+        ipdDrugOrders: treatments,
+      },
+    };
+    const { queryByText } = render(
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithoutAnyPrivilege,
+        }}
+      >
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("Stop drug")).toBeFalsy();
+    });
+  });
+
   it("should show the stop drug modal on click of stop drug link", async () => {
     const treatments = [stopDrugOrder];
     const updatedAllMedications = {
@@ -549,7 +736,13 @@ describe("Treatments", () => {
     };
 
     const { getByText, getAllByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -582,7 +775,13 @@ describe("Treatments", () => {
     };
 
     const { getAllByText, container } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -634,6 +833,7 @@ describe("Treatments", () => {
           config: mockConfig,
           isReadMode: false,
           handleAuditEvent: mockHandleAuditEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <SliderContext.Provider value={mockProviderValue}>
@@ -732,7 +932,13 @@ describe("Treatments", () => {
     };
 
     const { getAllByText, queryByText, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -790,7 +996,13 @@ describe("Treatments", () => {
       },
     };
     const { getByRole } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: true }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: true,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -903,7 +1115,13 @@ it("should render an Edit Drug Chart link disabled for IPD treatments read mode"
     },
   };
   const { getByText } = render(
-    <IPDContext.Provider value={{ config: mockConfig, isReadMode: true }}>
+    <IPDContext.Provider
+      value={{
+        config: mockConfig,
+        isReadMode: true,
+        currentUser: mockUserWithAllRequiredPrivileges,
+      }}
+    >
       <SliderContext.Provider value={mockProviderValue}>
         <AllMedicationsContext.Provider value={updatedAllMedications}>
           <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />

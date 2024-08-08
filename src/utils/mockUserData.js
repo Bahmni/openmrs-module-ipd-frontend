@@ -1,17 +1,18 @@
 export const mockUserWithAllRequiredPrivileges = {
+  username: "mockUserWithAllRequiredPrivileges",
+  privileges: [
+    {
+      name: "app:adt",
+      retired: false,
+    },
+    {
+      name: "Edit Medication Tasks",
+      retired: false,
+    },
+  ],
+};
 
-    "username": "mockUserWithAllRequiredPrivileges",
-    "privileges": [
-        {
-            "name": "app:adt",
-            "retired": false
-        }
-    ]
-}
-
-export const mockUserWithoutADTPrivilege = {
-
-    "username": "mockUserWithoutADTPrivilege",
-    "privileges": [
-    ]
-}
+export const mockUserWithoutAnyPrivilege = {
+  username: "mockUserWithoutADTPrivilege",
+  privileges: [],
+};

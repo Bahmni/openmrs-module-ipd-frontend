@@ -23,10 +23,15 @@ import {
   getStopReason,
   getSlotsForAnOrderAndServiceType,
 } from "../utils/TreatmentsUtils";
-import { isIPDrugOrder, getCookies } from "../../../../utils/CommonUtils";
+import {
+  isIPDrugOrder,
+  getCookies,
+  isUserPrivileged,
+} from "../../../../utils/CommonUtils";
 import {
   ForbiddenErrorMessage,
   GenericErrorMessage,
+  PRIVILEGE_CONSTANTS,
   defaultDateTimeFormat,
   errorCodes,
   serviceType,
@@ -56,7 +61,7 @@ const Treatments = (props) => {
     visitSummary,
     provider,
   } = useContext(SliderContext);
-  const { config, handleAuditEvent } = useContext(IPDContext);
+  const { config, handleAuditEvent, currentUser } = useContext(IPDContext);
   const {
     enable24HourTime = {},
     allMedicinesInPrescriptionAvailableForIPD = true,
@@ -211,6 +216,11 @@ const Treatments = (props) => {
     drugOrder,
     drugOrderSchedule
   ) => {
+    if (
+      !isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.EDIT_MEDICATON_TASKS)
+    ) {
+      return {};
+    }
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
       return {
         link: (

@@ -154,4 +154,5 @@ export const DAEMON_USER = {
 
 export const PRIVILEGE_CONSTANTS = {
   ADT: "app:adt",
-}
+  EDIT_MEDICATON_TASKS: "Edit Medication Tasks",
+};
