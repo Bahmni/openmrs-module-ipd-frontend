@@ -27,10 +27,12 @@ import PatientDetails from "./PatientDetails";
 import PatientMovementModal from "./PatientMovementModal";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import { IPDContext } from "../../../../context/IPDContext";
+import { isUserPrivileged } from "../../../../utils/CommonUtils";
+import { PRIVILEGE_CONSTANTS } from "../../../../constants";
 
 export const PatientHeader = (props) => {
   const { patientId, openVisitSummary, setPatientDetailsOpen } = props;
-  const { isReadMode, visitSummary } = useContext(IPDContext);
+  const { isReadMode, visitSummary, currentUser } = useContext(IPDContext);
   const [showPatientDetails, togglePatientDetails] = useState(false);
   const [patientDetails, updatePatientDetails] = useState({});
   const [isLoading, updateIsLoading] = useState(true);
@@ -146,6 +148,7 @@ export const PatientHeader = (props) => {
                         {visitSummaryMessage}
                       </Link>
                     </div>
+                    {isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.ADT) && (
                     <OverflowMenu
                       data-testid="overflow-menu"
                       flipped={true}
@@ -160,6 +163,7 @@ export const PatientHeader = (props) => {
                         disabled={isReadMode}
                       />
                     </OverflowMenu>
+                    )}
                   </Row>
                   <Row>
                     {showPatientDetails ? (

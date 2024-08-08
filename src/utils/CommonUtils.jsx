@@ -367,3 +367,7 @@ export const isSystemGeneratedTask = (task) => {
 export const isIPDrugOrder = (drugOrder) => {
   return drugOrder.careSetting === "INPATIENT";
 };
+
+export const isUserPrivileged = (user, privilege) => {
+  return user?.privileges?.some((userPrivilege) => userPrivilege.name === privilege);
+}

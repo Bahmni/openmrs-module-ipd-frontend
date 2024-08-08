@@ -151,3 +151,7 @@ export const DAEMON_USER = {
   name: "daemon",
   uuid: "A4F30A1B-5EB9-11DF-A648-37A07F9C90FB",
 };
+
+export const PRIVILEGE_CONSTANTS = {
+  ADT: "app:adt",
+}

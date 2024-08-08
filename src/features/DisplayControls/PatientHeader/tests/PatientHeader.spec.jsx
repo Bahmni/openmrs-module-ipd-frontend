@@ -8,6 +8,7 @@ import {
   bedInformation,
 } from "./PatientHeaderMockData";
 import { IPDContext } from "../../../../context/IPDContext";
+import { mockUserWithAllRequiredPrivileges, mockUserWithoutADTPrivilege } from "../../../../utils/mockUserData";
 const mockFetchPatientProfile = jest.fn();
 const mockContactDetailsConfig = jest.fn();
 const mockFetchAddressMapping = jest.fn();
@@ -85,7 +86,11 @@ describe("PatientHeader", () => {
   it("should display all details of the patient", async () => {
     const { container } = render(
       <IPDContext.Provider
-        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+        value={{
+          isReadMode: false,
+          visitSummary: { uuid: "123" },
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
       >
         <PatientHeader patientId="123" setPatientDetailsOpen={jest.fn} />
       </IPDContext.Provider>
@@ -103,7 +108,11 @@ describe("PatientHeader", () => {
   it("should display patient movement item on click of overflow menu icon", async () => {
     const { container } = render(
       <IPDContext.Provider
-        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+        value={{
+          isReadMode: false,
+          visitSummary: { uuid: "123" },
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
       >
         <PatientHeader patientId="123" />
       </IPDContext.Provider>
@@ -114,10 +123,30 @@ describe("PatientHeader", () => {
     expect(container).toMatchSnapshot();
   });
 
+  it("should not display patient movement when adt privilege is not assigned to patient", async () => {
+    const { container } = render(
+      <IPDContext.Provider
+        value={{
+          isReadMode: false,
+          visitSummary: { uuid: "123" },
+          currentUser: mockUserWithoutADTPrivilege,
+        }}
+      >
+        <PatientHeader patientId="123" />
+      </IPDContext.Provider>
+    );
+    await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
+    expect(screen.queryByTestId("overflow-menu")).toBeFalsy();
+  });
+
   it("should display patient movement overflow menu item as disabled", async () => {
     const { container } = render(
       <IPDContext.Provider
-        value={{ isReadMode: true, visitSummary: { uuid: "123" } }}
+        value={{
+          isReadMode: true,
+          visitSummary: { uuid: "123" },
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
       >
         <PatientHeader patientId="123" />
       </IPDContext.Provider>
