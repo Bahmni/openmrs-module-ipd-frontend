@@ -157,4 +157,6 @@ export const PRIVILEGE_CONSTANTS = {
   EDIT_MEDICATON_TASKS: "Edit Medication Tasks",
   EDIT_ADHOC_MEDICATION_TASKS: "Edit adhoc medication tasks",
   ADD_TASKS: "Add Tasks",
+  EDIT_TASKS: "Edit Tasks",
+  EDIT_MEDICATION_ADMINISTRATION: "Edit Medication Administration",
 };

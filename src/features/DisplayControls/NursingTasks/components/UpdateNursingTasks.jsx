@@ -29,6 +29,7 @@ import {
   timeText24,
   timeFormatFor12Hr,
   timeFormatFor24Hr,
+  PRIVILEGE_CONSTANTS,
 } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -37,7 +38,7 @@ import {
   formatTime,
   isTimeInFuture,
 } from "../../../../utils/DateTimeUtils";
-import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
+import { isSystemGeneratedTask, isUserPrivileged } from "../../../../utils/CommonUtils";
 
 const UpdateNursingTasks = (props) => {
   const {
@@ -86,7 +87,7 @@ const UpdateNursingTasks = (props) => {
     setOpenConfirmationModal(false);
   };
 
-  const { config, handleAuditEvent } = useContext(IPDContext);
+  const { config, handleAuditEvent, currentUser } = useContext(IPDContext);
   const { nursingTasks = {}, enable24HourTime = {} } = config;
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
@@ -461,6 +462,22 @@ const UpdateNursingTasks = (props) => {
     setInvalidText(invalidTimeText);
   };
 
+  const verifyPrivileges = (medicationNursingTask) => {
+    if (medicationNursingTask.isANonMedicationTask) {
+      return isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.EDIT_TASKS);
+    }
+    if (isPRNMedication) {
+      return isUserPrivileged(
+        currentUser,
+        PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS
+      );
+    }
+    return isUserPrivileged(
+      currentUser,
+      PRIVILEGE_CONSTANTS.EDIT_MEDICATION_ADMINISTRATION
+    );
+  };
+
   return (
     <>
       <SideBarPanel
@@ -500,13 +517,15 @@ const UpdateNursingTasks = (props) => {
                     labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
                     onToggle={handleToggle}
                     disabled={
-                      !tasks[medicationTask.uuid]?.isRelevantTask ||
-                      (!medicationTask.isANonMedicationTask &&
-                        medicationTask.serviceType !== "AsNeededPlaceholder" &&
-                        disableDoneTogglePostNextTaskTime(
-                          medicationTask,
-                          groupSlotsByOrderId
-                        ))
+                      !verifyPrivileges(medicationTask) ||
+                      (!tasks[medicationTask.uuid]?.isRelevantTask ||
+                        (!medicationTask.isANonMedicationTask &&
+                          medicationTask.serviceType !==
+                            "AsNeededPlaceholder" &&
+                          disableDoneTogglePostNextTaskTime(
+                            medicationTask,
+                            groupSlotsByOrderId
+                          )))
                     }
                   />
                 )}
@@ -662,7 +681,7 @@ const UpdateNursingTasks = (props) => {
                     )}
                   </div>
                 )}
-                {!tasks[medicationTask.uuid]?.dosingInstructions?.asNeeded && (
+                {verifyPrivileges(medicationTask) && !tasks[medicationTask.uuid]?.dosingInstructions?.asNeeded && (
                   <OverflowMenu
                     flipped={true}
                     disabled={tasks[medicationTask.uuid]?.isSelected}

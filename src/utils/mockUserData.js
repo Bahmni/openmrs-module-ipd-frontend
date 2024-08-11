@@ -1,20 +1,30 @@
+import { PRIVILEGE_CONSTANTS } from "../constants";
+
 export const mockUserWithAllRequiredPrivileges = {
   username: "mockUserWithAllRequiredPrivileges",
   privileges: [
     {
-      name: "app:adt",
+      name: PRIVILEGE_CONSTANTS.ADT,
       retired: false,
     },
     {
-      name: "Edit Medication Tasks",
+      name: PRIVILEGE_CONSTANTS.EDIT_MEDICATON_TASKS,
       retired: false,
     },
     {
-      name: "Add Tasks",
+      name: PRIVILEGE_CONSTANTS.ADD_TASKS,
       retired: false,
     },
     {
-      name: "Edit adhoc medication tasks",
+      name: PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS,
+      retired: false,
+    },
+    {
+      name: PRIVILEGE_CONSTANTS.EDIT_TASKS,
+      retired: false,
+    },
+    {
+      name: PRIVILEGE_CONSTANTS.EDIT_MEDICATION_ADMINISTRATION,
       retired: false,
     },
   ],

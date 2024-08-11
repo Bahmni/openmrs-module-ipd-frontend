@@ -14,6 +14,7 @@ import {
   mockConfigFor12HourFormat,
 } from "../../../../utils/CommonUtils";
 import MockDate from "mockdate";
+import {mockUserWithAllRequiredPrivileges, mockUserWithoutAnyPrivilege} from '../../../../utils/mockUserData';
 
 const mockSetShowNotification = jest.fn();
 const mockSetNotificationMessage = jest.fn();
@@ -40,6 +41,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -63,6 +65,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -90,6 +93,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -121,6 +125,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -149,6 +154,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -187,6 +193,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -219,6 +226,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfigFor12HourFormat,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -250,6 +258,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -287,6 +296,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfigFor12HourFormat,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -324,6 +334,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -350,6 +361,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -391,6 +403,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfigFor12HourFormat,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -432,6 +445,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -470,6 +484,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfigFor12HourFormat,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -508,6 +523,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -531,6 +547,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -557,6 +574,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -585,6 +603,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -616,6 +635,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -639,6 +659,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -666,6 +687,7 @@ describe("UpdateNursingTasksSlider", function () {
         value={{
           config: mockConfig,
           handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
         <UpdateNursingTasks
@@ -696,4 +718,31 @@ describe("UpdateNursingTasksSlider", function () {
 
     expect(screen.getByText("Please confirm your PRN task")).toBeTruthy();
   });
+
+  it.only("should show toggle disabled when privileges are not preset", function () {
+    const { queryAllByTestId, container } = render(
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          handleAuditEvent: mockHandleAuditLogEvent,
+          currentUser: mockUserWithoutAnyPrivilege,
+        }}
+      >
+        <UpdateNursingTasks
+          medicationTasks={mockMedicationTasks}
+          groupSlotsByOrderId={mockGroupSlotsByOrderId}
+          updateNursingTasksSlider={jest.fn}
+          patientId="test_patient_uuid"
+          providerId="test_provider_uuid"
+          setShowNotification={mockSetShowNotification}
+          setNotificationMessage={mockSetNotificationMessage}
+          setNotificationStatus={mockSetNotificationStatus}
+        />
+      </IPDContext.Provider>
+    );
+    const toggleButton = queryAllByTestId("done-toggle")[0];
+    expect(toggleButton.disabled).toBeTruthy();
+    expect(container.querySelectorAll(".bx--overflow-menu")).toHaveLength(0);
+  });
+
 });
