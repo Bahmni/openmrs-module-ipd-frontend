@@ -112,11 +112,21 @@ const UpdateNursingTasks = (props) => {
     const response = isPRNMedication
       ? await saveEmergencyMedication(administeredTasks[0])
       : await saveAdministeredMedication(administeredTasks);
-    if(response.status === 200) {
-      task.status === 'not-done' ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK") : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
-      saveAdministeredMedicationTasks("success", "NURSING_TASKS_SAVE_MESSAGE");      
+    if (response.status === 200) {
+      Object.keys(tasks).forEach((key) => {
+        if (tasks[key].status === "not-done") {
+          handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK");
+        }
+        if (tasks[key].status === "completed") {
+          handleAuditEvent("ADMINISTER_MEDICATION_TASK");
+        }
+      });
+      saveAdministeredMedicationTasks("success", "NURSING_TASKS_SAVE_MESSAGE");
     } else {
-      saveAdministeredMedicationTasks("error", "NURSING_TASKS_SAVE_MESSAGE_FAILED");
+      saveAdministeredMedicationTasks(
+        "error",
+        "NURSING_TASKS_SAVE_MESSAGE_FAILED"
+      );
     }
   };
 
@@ -385,9 +395,15 @@ const UpdateNursingTasks = (props) => {
             handleAuditEvent("SKIP_SCHEDULED_NON_MEDICATION_TASK");
           }
         });
-        saveAdministeredNonMedicationTasks("success", "NON_MEDICATION_TASK_UPDATE_MESSAGE");
+        saveAdministeredNonMedicationTasks(
+          "success",
+          "NON_MEDICATION_TASK_UPDATE_MESSAGE"
+        );
       } else {
-        saveAdministeredNonMedicationTasks("error", "NON_MEDICATION_TASK_UPDATE_MESSAGE_FAILED");
+        saveAdministeredNonMedicationTasks(
+          "error",
+          "NON_MEDICATION_TASK_UPDATE_MESSAGE_FAILED"
+        );
       }
     }
   };

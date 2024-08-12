@@ -54,7 +54,7 @@ export const saveEmergencyMedication = async (emergencyMedication) => {
       emergencyMedication
     );
   } catch (error) {
-    return error;
+    return error.response;
   }
 };
 
@@ -62,10 +62,9 @@ export const saveNonMedicationTask = async (nonMedicationTask) => {
   try {
     return await axios.post(NON_MEDICATION_BASE_URL, nonMedicationTask);
   } catch (error) {
-    return error;
+    return error.response;
   }
 };
-
 
 export const getEncounterType = async (encounterType) => {
   try {

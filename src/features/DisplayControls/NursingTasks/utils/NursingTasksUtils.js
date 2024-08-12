@@ -233,7 +233,7 @@ export const saveAdministeredMedication = async (administeredMedication) => {
       administeredMedication
     );
   } catch (error) {
-    console.error(error);
+    return error.response;
   }
 };
 
@@ -241,7 +241,7 @@ export const updateNonMedicationTask = async (updateNonMedicationPayload) => {
   try {
     return await axios.put(NON_MEDICATION_BASE_URL, updateNonMedicationPayload);
   } catch (error) {
-    return error;
+    return error.response;
   }
 };
 

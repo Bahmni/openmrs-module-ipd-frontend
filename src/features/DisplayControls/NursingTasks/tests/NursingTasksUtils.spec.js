@@ -17,9 +17,7 @@ import {
   mockNursingTasksResponseForStopped,
   mockExtractedMedicationNursingTasksDataForStopped,
   mockExtractedMedicationNursingTasksDataForMissed,
-  mockMedicationNursingTasks,
 } from "./NursingTasksUtilsMockData";
-import MockDate from "mockdate";
 
 jest.mock("axios");
 
@@ -193,7 +191,10 @@ describe("NursingTasksUtils", () => {
 
       const response = await saveAdministeredMedication(administeredMedication);
 
-      expect(response).toBeUndefined();
+      expect(response).toEqual({
+        status: 500,
+        data: { error: "Internal Server Error" },
+      });
     });
   });
 });
