@@ -217,7 +217,7 @@ const Treatments = (props) => {
     drugOrderSchedule
   ) => {
     if (
-      !isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.EDIT_MEDICATON_TASKS)
+      !isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.EDIT_MEDICATION_TASKS)
     ) {
       return {};
     }

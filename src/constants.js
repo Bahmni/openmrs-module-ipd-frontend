@@ -154,7 +154,7 @@ export const DAEMON_USER = {
 
 export const PRIVILEGE_CONSTANTS = {
   ADT: "Assign Beds",
-  EDIT_MEDICATON_TASKS: "Edit Medication Tasks",
+  EDIT_MEDICATION_TASKS: "Edit Medication Tasks",
   EDIT_ADHOC_MEDICATION_TASKS: "Edit adhoc medication tasks",
   ADD_TASKS: "Add Tasks",
   EDIT_TASKS: "Edit Tasks",

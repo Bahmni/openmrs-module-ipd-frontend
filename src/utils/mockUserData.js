@@ -8,7 +8,7 @@ export const mockUserWithAllRequiredPrivileges = {
       retired: false,
     },
     {
-      name: PRIVILEGE_CONSTANTS.EDIT_MEDICATON_TASKS,
+      name: PRIVILEGE_CONSTANTS.EDIT_MEDICATION_TASKS,
       retired: false,
     },
     {
