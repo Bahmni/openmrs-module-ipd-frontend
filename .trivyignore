@@ -7,4 +7,5 @@ CVE-2023-42282 #Installed version 2.0.0 https://avd.aquasec.com/nvd/cve-2023-422
 CVE-2024-29180
 CVE-2024-29415 # node-ip: Incomplete fix - https://avd.aquasec.com/nvd/cve
 CVE-2024-4068 #braces - https://avd.aquasec.com/nvd/cve-2024-4068
-CVE-2024-37890 #ws - https://avd.aquasec.com/nvd/cve-2024-37890  
+CVE-2024-37890 #ws - https://avd.aquasec.com/nvd/cve-2024-37890
+CVE-2024-39338 #axios - https://avd.aquasec.com/nvd/cve-2024-39338
