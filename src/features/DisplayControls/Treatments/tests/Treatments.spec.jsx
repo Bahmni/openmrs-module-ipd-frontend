@@ -6,6 +6,7 @@ import { SliderContext } from "../../../../context/SliderContext";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 
 const mockHandleAuditEvent = jest.fn();
 
@@ -303,7 +304,9 @@ describe("Treatments", () => {
       <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
-            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            <RefreshDisplayControl.Provider value={[]}>
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </RefreshDisplayControl.Provider>
           </AllMedicationsContext.Provider>
         </SliderContext.Provider>
       </IPDContext.Provider>
@@ -441,7 +444,9 @@ describe("Treatments", () => {
       <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
-            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            <RefreshDisplayControl.Provider value={[]}>
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </RefreshDisplayControl.Provider>
           </AllMedicationsContext.Provider>
         </SliderContext.Provider>
       </IPDContext.Provider>
@@ -544,7 +549,13 @@ describe("Treatments", () => {
     });
 
     const { getAllByText, container } = render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false, handleAuditEvent: mockHandleAuditEvent }}>
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          handleAuditEvent: mockHandleAuditEvent,
+        }}
+      >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -564,7 +575,9 @@ describe("Treatments", () => {
       expect(getEncounterType).toHaveBeenCalledWith("Consultation");
       expect(stopDrugOrders).toHaveBeenCalled();
     });
-    expect(mockHandleAuditEvent).toHaveBeenCalledWith('STOP_SCHEDULED_MEDICATION_TASK')
+    expect(mockHandleAuditEvent).toHaveBeenCalledWith(
+      "STOP_SCHEDULED_MEDICATION_TASK"
+    );
   });
 
   it("should update the drug status after the stop drug api call is success", async () => {

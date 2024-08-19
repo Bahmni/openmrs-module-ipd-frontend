@@ -150,8 +150,9 @@ export const setDosingInstructions = (drugOrder) => {
     drugOrder.dosingInstructions.dose +
     " " +
     drugOrder.dosingInstructions.doseUnits +
-    " - " +
-    drugOrder.dosingInstructions.route;
+    (drugOrder.dosingInstructions.route !== null
+      ? " - " + drugOrder.dosingInstructions.route
+      : "");
 
   if (drugOrder.dosingInstructions.frequency) {
     dosingInstructions += " - " + drugOrder.dosingInstructions.frequency;
@@ -185,7 +186,9 @@ export const getDrugName = (drugOrderObject) => {
           drugOrder.dateStopped && "strike-through"
         }`}
       >
-      <span>{drugNonCoded !== null ? drugNonCoded : drugOrder.drug.name}</span>
+        <span>
+          {drugNonCoded !== null ? drugNonCoded : drugOrder.drug.name}
+        </span>
         {isNotesIconDiv && (
           <NotesIcon className="notes-icon" data-testid="notes-icon" />
         )}
