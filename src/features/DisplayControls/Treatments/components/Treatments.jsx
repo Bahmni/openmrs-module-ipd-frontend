@@ -58,7 +58,8 @@ const Treatments = (props) => {
     provider,
   } = useContext(SliderContext);
   const { config, handleAuditEvent } = useContext(IPDContext);
-  const { enable24HourTime = {} } = config;
+  const { enable24HourTime = {}, addDispensedMedicationToDrugChart = false } =
+    config;
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -207,20 +208,29 @@ const Treatments = (props) => {
     showEditDrugChartLink,
     showStopDrugChartLink,
     drugOrder,
-    drugOrderSchedule
+    drugOrderSchedule,
+    drugOrderAttributes
   ) => {
+    const isOrderDispensed =
+      drugOrderAttributes != null &&
+      drugOrderAttributes.some(
+        (attribute) =>
+          attribute.name === "Dispensed" && attribute.value === "true"
+      );
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
       return {
         link: (
           <Link
             disabled={
               isAddToDrugChartDisabled ||
+              (isOrderDispensed && addDispensedMedicationToDrugChart) ||
               moment().valueOf() <= drugOrder.effectiveStartDate
             }
             onClick={() => {
               if (
                 !(
                   isAddToDrugChartDisabled ||
+                  (isOrderDispensed && addDispensedMedicationToDrugChart) ||
                   moment().valueOf() <= drugOrder.effectiveStartDate
                 )
               ) {
@@ -309,7 +319,8 @@ const Treatments = (props) => {
               showEditDrugChartLink,
               showStopDrugChartLink,
               drugOrder,
-              drugOrderObject.drugOrderSchedule
+              drugOrderObject.drugOrderSchedule,
+              drugOrderObject.drugOrderAttributes
             );
           const getStatus = () => {
             if (drugOrder.dateStopped) {
