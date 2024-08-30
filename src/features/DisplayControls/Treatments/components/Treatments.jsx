@@ -223,14 +223,14 @@ const Treatments = (props) => {
           <Link
             disabled={
               isAddToDrugChartDisabled ||
-              (isOrderDispensed && addDispensedMedicationToDrugChart) ||
-              moment().valueOf() <= drugOrder.effectiveStartDate
+              moment().valueOf() <= drugOrder.effectiveStartDate ||
+              (!isOrderDispensed && addDispensedMedicationToDrugChart)
             }
             onClick={() => {
               if (
                 !(
                   isAddToDrugChartDisabled ||
-                  (isOrderDispensed && addDispensedMedicationToDrugChart) ||
+                  (!isOrderDispensed && addDispensedMedicationToDrugChart) ||
                   moment().valueOf() <= drugOrder.effectiveStartDate
                 )
               ) {
