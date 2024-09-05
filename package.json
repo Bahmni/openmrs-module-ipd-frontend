@@ -1,6 +1,6 @@
 {
   "name": "openmrs-module-ipd-frontend",
-  "version": "0.0.8",
+  "version": "1.0.0",
   "description": "React frontend for IPD module",
   "main": "dist/index.js",
   "author": "bahmni@thoughtworks.com",
