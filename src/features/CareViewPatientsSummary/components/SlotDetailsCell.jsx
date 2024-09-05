@@ -134,8 +134,8 @@ export const SlotDetailsCell = ({
             </div>
             <span>
               {enable24HourTime
-                ? epochTo24HourTimeFormat(slotItem.startTime / 1000)
-                : epochTo12HourTimeFormat(slotItem.startTime / 1000)}
+                ? epochTo24HourTimeFormat(slotItem.startTime)
+                : epochTo12HourTimeFormat(slotItem.startTime)}
             </span>
             <div className="drug-details-wrapper">
               <span>

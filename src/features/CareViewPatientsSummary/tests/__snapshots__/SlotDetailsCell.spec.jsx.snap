@@ -23,7 +23,7 @@ exports[`SlotDetailsCell should render slotDetailsCell 1`] = `
         />
       </div>
       <span>
-        08:36
+        12:16
       </span>
       <div
         class="drug-details-wrapper"
