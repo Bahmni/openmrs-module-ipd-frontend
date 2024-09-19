@@ -349,7 +349,7 @@ export const getVitalsHistoryHeaders = (conceptDetails) => [
     id: "4",
     header: (
       <FormattedMessage
-        id={"VRESPIRATORY_RATE_HEADER"}
+        id={"RESPIRATORY_RATE_HEADER"}
         defaultMessage={`R.rate ({unit})`}
         values={{ unit: conceptDetails.respiratoryRate.unit }}
       />
