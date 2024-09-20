@@ -1,3 +1,4 @@
+import React from "react";
 import axios from "axios";
 import { FETCH_FORM_DETAILS_URL } from "../../../../constants";
 import { getFetchFormTranslationsUrl } from "../../../../utils/CommonUtils";

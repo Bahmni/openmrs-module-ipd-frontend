@@ -9,7 +9,6 @@ import {
   mockFormConcepts,
   mockFormTranslations,
 } from "./GenericFormDisplayControlMock";
-import { FormattedMessage } from 'react-intl';
 
 jest.mock("../utils/GenericFormsDisplayControlUtils", () => {
   const originalModule = jest.requireActual(
