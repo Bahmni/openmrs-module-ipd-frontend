@@ -17,32 +17,62 @@ import { formatDate } from "../../../../utils/DateTimeUtils";
 
 export const treatmentHeaders = [
   {
-    header: "Start Date",
+    header: (
+      <FormattedMessage
+        id={"TREATMENTS_DATE_COLUMN_HEADER"}
+        defaultMessage={`Start Date`}
+      />
+    ),
     key: "startDate",
     isSortable: true,
   },
   {
-    header: "Drug Name",
+    header: (
+      <FormattedMessage
+        id={"TREATMENTS_DRUG_COLUMN_HEADER"}
+        defaultMessage={`Drug Name`}
+      />
+    ),
     key: "drugName",
     isSortable: false,
   },
   {
-    header: "Dosage Details",
+    header: (
+      <FormattedMessage
+        id={"TREATMENTS_DOSAGE_COLUMN_HEADER"}
+        defaultMessage={`Dosage Details`}
+      />
+    ),
     key: "dosageDetails",
     isSortable: false,
   },
   {
-    header: "Status",
+    header: (
+      <FormattedMessage
+        id={"STATUS_COLUMN_HEADER"}
+        defaultMessage={`Status`}
+      />
+    ),
     key: "status",
     isSortable: false,
   },
   {
-    header: "Provider Name",
+    header: (
+      <FormattedMessage
+        id={"PROVIDER_COLUMN_HEADER"}
+        defaultMessage={`Provider Name`}
+      />
+    ),
     key: "providerName",
     isSortable: true,
   },
   {
-    header: "Actions",
+    header: (
+      <FormattedMessage
+        id={"ACTIONS_COLUMN_HEADER"}
+        defaultMessage={`Actions`}
+      />
+    ),
     key: "actions",
     isSortable: false,
   },

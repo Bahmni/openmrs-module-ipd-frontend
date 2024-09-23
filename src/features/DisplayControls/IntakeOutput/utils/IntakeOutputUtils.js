@@ -176,27 +176,57 @@ export const getQuantity = (quantity, quantityUnits) => {
 
 export const intakeOutputHeaders = [
   {
-    header: "Date and Time",
+    header: (
+      <FormattedMessage
+        id={"DATE_TIME_HEADER"}
+        defaultMessage={`Date and Time`}
+      />
+    ),
     key: "dateTime",
   },
   {
-    header: "Intake Route",
+    header: (
+      <FormattedMessage
+        id={"INTAKE_ROUTE_COLUMN_HEADER"}
+        defaultMessage={`Intake Route`}
+      />
+    ),
     key: "intakeRoute",
   },
   {
-    header: "Quantity",
+    header: (
+      <FormattedMessage
+        id={"QUANTITY_COLUMN_HEADER"}
+        defaultMessage={`Quantity`}
+      />
+    ),
     key: "intakeQuantity",
   },
   {
-    header: "Output Route",
+    header: (
+      <FormattedMessage
+        id={"OUTPUT_ROUTE_COLUMN_HEADER"}
+        defaultMessage={`Output Route`}
+      />
+    ),
     key: "outputRoute",
   },
   {
-    header: "Quantity",
+    header: (
+      <FormattedMessage
+        id={"QUANTITY_COLUMN_HEADER"}
+        defaultMessage={`Quantity`}
+      />
+    ),
     key: "outputQuantity",
   },
   {
-    header: "Balance",
+    header: (
+      <FormattedMessage
+        id={"BALANCE_COLUMN_HEADER"}
+        defaultMessage={`Balance`}
+      />
+    ),
     key: "balance",
   },
 ];

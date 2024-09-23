@@ -8,23 +8,48 @@ import { FormattedMessage } from "react-intl";
 export const patientFeedingRecordHeaders = [
   {
     key: "dateAndTime",
-    header: "Date and Time",
+    header: (
+      <FormattedMessage
+        id={"DATE_TIME_HEADER"}
+        defaultMessage={`Date and Time`}
+      />
+    ),
   },
   {
     key: "shift",
-    header: "Shift",
+    header: (
+      <FormattedMessage
+        id={"SHIFT_COLUMN_HEADER"}
+        defaultMessage={`Shift`}
+      />
+    ),
   },
   {
     key: "route",
-    header: "Route",
+    header: (
+      <FormattedMessage
+        id={"ROUTE_COLUMN_HEADER"}
+        defaultMessage={`Route`}
+      />
+    ),
   },
   {
     key: "feedType",
-    header: "Feed Type",
+    header: (
+      <FormattedMessage
+        id={"FEED_TYPE_COLUMN_HEADER"}
+        defaultMessage={`Feed Type`}
+      />
+    ),
   },
   {
     key: "amount",
-    header: "Amount",
+    header: (
+      <FormattedMessage
+        id={"AMOUNT_COLUMN_HEADER"}
+        defaultMessage={`Amount`}
+      />
+    ),
   },
 ];
 
