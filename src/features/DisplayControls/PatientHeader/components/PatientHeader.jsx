@@ -47,15 +47,20 @@ export const PatientHeader = (props) => {
     <FormattedMessage id="HIDE_PATIENT_DETAILS" defaultMessage="Hide Details" />
   );
   const patientDetailsHeaders = {
-    address: <FormattedMessage id={"Address"} defaultMessage={"Address"} />,
+    address: (
+      <FormattedMessage id={"ADDRESS_HEADER"} defaultMessage={"Address"} />
+    ),
     contactDetails: (
       <FormattedMessage
-        id={"Contact Details"}
+        id={"CONTACT_DETAILS_HEADER"}
         defaultMessage={"Contact Details"}
       />
     ),
     relationships: (
-      <FormattedMessage id={"Relationships"} defaultMessage={"Relationships"} />
+      <FormattedMessage
+        id={"RELATIONSHIPS_HEADER"}
+        defaultMessage={"Relationships"}
+      />
     ),
   };
   const visitSummaryMessage = (
@@ -135,7 +140,11 @@ export const PatientHeader = (props) => {
           <>
             <Grid>
               <Row className="patient-image-and-details">
-                <img className={"patient-image"} src={profilePicture} alt="patient-image"/>
+                <img
+                  className={"patient-image"}
+                  src={profilePicture}
+                  alt="patient-image"
+                />
                 <Column>
                   <Row className="header-title-row">
                     <div className="patient-name-and-navigations">
