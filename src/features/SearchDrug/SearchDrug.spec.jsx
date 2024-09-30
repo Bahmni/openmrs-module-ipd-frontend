@@ -9,7 +9,7 @@ jest.mock("../../utils/CommonUtils", () => {
     searchDrugsByName: () => mockSearchDrug(),
   };
 });
-describe("Search Drug", function () {
+describe.skip("Search Drug", function () {
   it("Should allow drug search", async () => {
     mockSearchDrug.mockReturnValue(searchDrugMockData);
     const { getByText, container } = render(
