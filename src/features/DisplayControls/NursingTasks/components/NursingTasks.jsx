@@ -45,6 +45,7 @@ import {
 } from "../../DrugChart/utils/DrugChartUtils";
 import { displayShiftTimingsFormat } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
+import { IntlProvider } from "react-intl";
 export default function NursingTasks(props) {
   const { patientId } = props;
   const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
@@ -562,14 +563,16 @@ export default function NursingTasks(props) {
         />
       )}
       {isSliderOpen.emergencyTasks && (
-        <AddEmergencyTasks
-          patientId={patientId}
-          providerId={provider.uuid}
-          updateEmergencyTasksSlider={updateEmergencyTasksSlider}
-          setShowSuccessNotification={setShowSuccessNotification}
-          setSuccessMessage={setSuccessMessage}
-          disabled={isReadMode}
-        />
+        <IntlProvider>
+          <AddEmergencyTasks
+            patientId={patientId}
+            providerId={provider.uuid}
+            updateEmergencyTasksSlider={updateEmergencyTasksSlider}
+            setShowSuccessNotification={setShowSuccessNotification}
+            setSuccessMessage={setSuccessMessage}
+            disabled={isReadMode}
+          />
+        </IntlProvider>
       )}
       {isLoading ? (
         <div className="loading-parent" data-testid="loading-icon">

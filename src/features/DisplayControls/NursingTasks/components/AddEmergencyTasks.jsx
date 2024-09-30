@@ -44,6 +44,7 @@ import {
 import AdministeredMedicationList from "./AdministeredMedicationList";
 import { IPDContext } from "../../../../context/IPDContext";
 import { getCookies } from "../../../../utils/CommonUtils";
+import { useIntl } from "react-intl";
 
 const AddEmergencyTasks = (props) => {
   const {
@@ -111,6 +112,23 @@ const AddEmergencyTasks = (props) => {
       defaultMessage={"Past time is not allowed"}
     />
   );
+  const intl = useIntl();
+  const DOSE_LABEL = intl.formatMessage({ id: "DOSE_LABEL", defaultMessage: "Dose" });
+  const SELECT_DOSE_UNIT_PLACEHOLDER = intl.formatMessage({ id: "SELECT_DOSE_UNIT_PLACEHOLDER", defaultMessage: "Select Unit" });
+  const SELECT_ROUTE_PLACEHOLDER = intl.formatMessage({ id: "SELECT_ROUTE_PLACEHOLDER", defaultMessage: "Select Route" });
+  const ROUTE_LABEL = intl.formatMessage({ id: "ROUTE_LABEL", defaultMessage: "Route" });
+  const ADMINSTRATION_DATE_LABEL = intl.formatMessage({ id: "ADMINSTRATION_DATE_LABEL", defaultMessage: "Administration Date" });
+  const SELECT_PROVIDER_PLACEHOLDER = intl.formatMessage({ id: "SELECT_PROVIDER_PLACEHOLDER", defaultMessage: "Select Provider" });
+  const ACKNOWLEDGEMENT_PROVIDER_LABEL = intl.formatMessage({ id: "ACKNOWLEDGEMENT_PROVIDER_LABEL", defaultMessage: "Acknowledgement Requested From" });
+  const ADMINSTRATION_TIME_LABEL_24 = `${intl.formatMessage({ id: "ADMINSTRATION_TIME_LABEL", defaultMessage: "Administration Time" })} (${timeText24})`;
+  const ADMINSTRATION_TIME_LABEL_12 = `${intl.formatMessage({ id: "ADMINSTRATION_TIME_LABEL", defaultMessage: "Administration Time" })} (${timeText12})`;
+  const NOTES_LABEL = intl.formatMessage({ id: "NOTES_LABEL", defaultMessage: "Notes" });
+  const NOTES_PLACEHOLDER = intl.formatMessage({ id: "NOTES_PLACEHOLDER", defaultMessage: "Enter a maximum of 250 characters" });
+  const TASK_NAME_LABEL = intl.formatMessage({ id: "TASK_NAME_LABEL", defaultMessage: "Task Name" });
+  const TASK_NAME_PLACEHOLDER = intl.formatMessage({ id: "TASK_NAME_PLACEHOLDER", defaultMessage: "Enter a title for the task " });
+  const SCHEDULE_TIME_LABEL_24 = `${intl.formatMessage({ id: "SCHEDULE_TIME_LABEL", defaultMessage: "Schedule Time" })} (${timeText24})`;
+  const SCHEDULE_TIME_LABEL_12 = `${intl.formatMessage({ id: "SCHEDULE_TIME_LABEL", defaultMessage: "Schedule Time" })} (${timeText12})`;
+                 
   const fetchDrugOrderConfig = async () => {
     setIsLoading(true);
     const drugOrderConfigResponse = await getDrugOrdersConfig();
@@ -459,7 +477,7 @@ const AddEmergencyTasks = (props) => {
                       onChange={setDosage}
                       style={{ width: "50%" }}
                       value={dosage}
-                      label={"Dose"}
+                      label={DOSE_LABEL}
                       isRequired={true}
                       min={0}
                     />
@@ -468,7 +486,7 @@ const AddEmergencyTasks = (props) => {
                       onChange={(e) => {
                         setDoseUnits(e);
                       }}
-                      placeholder={"Select Unit"}
+                      placeholder={SELECT_DOSE_UNIT_PLACEHOLDER}
                       titleText={""}
                       width={window.innerWidth > 480 ? "170px" : "100%"}
                       style={{ paddingLeft: "10px", marginRight: 0 }}
@@ -481,8 +499,8 @@ const AddEmergencyTasks = (props) => {
                     onChange={(e) => {
                       setRoutes(e);
                     }}
-                    placeholder={"Select Route"}
-                    titleText={"Route"}
+                    placeholder={SELECT_ROUTE_PLACEHOLDER}
+                    titleText={ROUTE_LABEL}
                     isRequired={true}
                     options={routeOptions}
                     width={"100%"}
@@ -499,7 +517,7 @@ const AddEmergencyTasks = (props) => {
                       setAdministrationDate(new Date(e[0]));
                       setIsDateChanged(true);
                     }}
-                    title={"Administration Date"}
+                    title={ADMINSTRATION_DATE_LABEL}
                     isRequired={true}
                     value={administrationDate}
                     dateFormat={"d M Y"}
@@ -513,7 +531,7 @@ const AddEmergencyTasks = (props) => {
                         e != "" && setAdministrationTime(e);
                         setIsTimeChanged(true);
                       }}
-                      labelText={`Administration Time (${timeText24})`}
+                      labelText={ADMINSTRATION_TIME_LABEL_24}
                       width={"250px"}
                       isRequired={true}
                       customValidation={customValidation}
@@ -528,7 +546,7 @@ const AddEmergencyTasks = (props) => {
                         e != "" && setAdministrationTime(e);
                         setIsTimeChanged(true);
                       }}
-                      labelText={`Administration Time (${timeText12})`}
+                      labelText={ADMINSTRATION_TIME_LABEL_12}
                       width={"155px"}
                       isRequired={true}
                       customValidation={customValidation}
@@ -543,18 +561,18 @@ const AddEmergencyTasks = (props) => {
                   onChange={(selectedItem) => {
                     setRequestedProvider(selectedItem?.value);
                   }}
-                  placeholder={"Select Provider"}
-                  titleText={"Acknowledgement Requested From"}
+                  placeholder={SELECT_PROVIDER_PLACEHOLDER}
+                  titleText={ACKNOWLEDGEMENT_PROVIDER_LABEL}
                   isRequired={true}
                   options={providerOptions}
                   width={"100%"}
                 />
                 <TextArea
-                  labelText={<Title text={"Notes"} isRequired={true} />}
+                  labelText={<Title text={NOTES_LABEL} isRequired={true} />}
                   onChange={(e) => {
                     setNotes(e.target.value);
                   }}
-                  placeholder={"Enter a maximum of 250 characters"}
+                  placeholder={NOTES_PLACEHOLDER}
                   maxCount={250}
                   rows={4}
                 />
@@ -580,11 +598,11 @@ const AddEmergencyTasks = (props) => {
               )}
               <div className="emergency-task-slider-content">
                 <TextArea
-                  labelText={<Title text={"Task Name"} isRequired={true} />}
+                  labelText={<Title text={TASK_NAME_LABEL} isRequired={true} />}
                   onChange={(e) => {
                     setTask(e.target.value);
                   }}
-                  placeholder={"Enter a title for the task "}
+                  placeholder={TASK_NAME_PLACEHOLDER}
                   maxCount={10}
                   rows={1}
                 />
@@ -596,7 +614,7 @@ const AddEmergencyTasks = (props) => {
                         e != "" && setScheduleTime(e);
                         setIsTimeChanged(true);
                       }}
-                      labelText={`Schedule Time (${timeText24})`}
+                      labelText={SCHEDULE_TIME_LABEL_24}
                       width={"250px"}
                       isRequired={true}
                       customValidation={customNonMedicationTaskValidation}
@@ -611,7 +629,7 @@ const AddEmergencyTasks = (props) => {
                         e != "" && setScheduleTime(e);
                         setIsTimeChanged(true);
                       }}
-                      labelText={`Schedule Time (${timeText12})`}
+                      labelText={SCHEDULE_TIME_LABEL_12}
                       width={"155px"}
                       isRequired={true}
                       customValidation={customNonMedicationTaskValidation}

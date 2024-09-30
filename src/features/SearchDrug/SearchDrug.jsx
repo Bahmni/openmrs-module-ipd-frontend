@@ -3,10 +3,14 @@ import PropTypes from "prop-types";
 import { ComboBox } from "carbon-components-react";
 import { searchDrugsByName } from "../../utils/CommonUtils";
 import { Title } from "bahmni-carbon-ui";
+import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
+
 
 const SearchDrug = (props) => {
   const { onChange } = props;
   const [items, setItems] = useState([]);
+  const intl = useIntl();
 
   const onChangeHandler = async (searchStr) => {
     if (searchStr.length > 1) {
@@ -16,7 +20,7 @@ const SearchDrug = (props) => {
         if (drugs.length === 0) {
           setItems([
             {
-              label: "No Drugs Found",
+              label: <FormattedMessage id={"NO_DRUGS_FOUND_MESSAGE"} defaultMessage={"No Drugs Found"} />,
               disabled: true,
             },
           ]);
@@ -41,13 +45,16 @@ const SearchDrug = (props) => {
       <ComboBox
         id={"SearchDrug"}
         items={items}
-        placeholder={"Type to Search Drug"}
+        placeholder={intl.formatMessage({ id: "SELECT_DRUG_PLACEHOLDER", defaultMessage: "Type to Search Drug" })}
         onChange={(e) => {
           onChange(e.selectedItem);
         }}
         size={"xl"}
         titleText={
-          <Title text={"Drug Name (Emergency / Ad hoc)"} isRequired={true} />
+          <Title
+            text={intl.formatMessage({ id: "DRUG_NAME_LABEL", defaultMessage: "Drug Name (Emergency / Ad hoc)" })}
+            isRequired={true}
+          />
         }
         onInputChange={onChangeHandler}
       />
