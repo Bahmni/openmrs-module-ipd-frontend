@@ -8,6 +8,7 @@ import {
   bedInformation,
 } from "./PatientHeaderMockData";
 import { IPDContext } from "../../../../context/IPDContext";
+import { IntlProvider } from "react-intl";
 const mockFetchPatientProfile = jest.fn();
 const mockContactDetailsConfig = jest.fn();
 const mockFetchAddressMapping = jest.fn();
@@ -87,7 +88,9 @@ describe("PatientHeader", () => {
       <IPDContext.Provider
         value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
       >
-        <PatientHeader patientId="123" setPatientDetailsOpen={jest.fn} />
+        <IntlProvider>
+          <PatientHeader patientId="123" setPatientDetailsOpen={jest.fn} />
+        </IntlProvider>
       </IPDContext.Provider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
