@@ -141,6 +141,7 @@ export const WARD_SUMMARY_HEADER = {
   TOTAL_PATIENTS: "TOTAL_PATIENTS",
   MY_PATIENTS: "MY_PATIENTS",
 };
+export const nonMedicationTaskKey = "NON_MEDICATION_TASK";
 
 export const ForbiddenErrorMessage = "User doesn't have required privilege(s)";
 

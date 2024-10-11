@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import "../styles/UpdateNursingTasks.scss";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
@@ -29,6 +29,7 @@ import {
   timeText24,
   timeFormatFor12Hr,
   timeFormatFor24Hr,
+  nonMedicationTaskKey,
 } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -37,6 +38,10 @@ import {
   formatTime,
   isTimeInFuture,
 } from "../../../../utils/DateTimeUtils";
+import {
+  getLocalizedLabel,
+  getTranslationKey,
+} from "../../../../utils/CommonUtils";
 
 const UpdateNursingTasks = (props) => {
   const {
@@ -65,6 +70,7 @@ const UpdateNursingTasks = (props) => {
   const [showWarningNotification, setShowWarningNotification] = useState(false);
   const [isInvalidTime, setIsInvalidTime] = useState(false);
   const [invalidText, setInvalidText] = useState();
+  const intl = useIntl();
 
   const invalidTimeText = (
     <FormattedMessage
@@ -94,7 +100,9 @@ const UpdateNursingTasks = (props) => {
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
     updateIsPRNMedication(false);
-    task.status === 'not-done' ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK") : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
+    task.status === "not-done"
+      ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK")
+      : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
   };
 
   const saveAdministeredNonMedicationTasks = () => {
@@ -109,7 +117,9 @@ const UpdateNursingTasks = (props) => {
     const response = isPRNMedication
       ? await saveEmergencyMedication(administeredTasks[0])
       : await saveAdministeredMedication(administeredTasks);
-    response.status === 200 ? saveAdministeredTasks(administeredTasks[0]) : null;
+    response.status === 200
+      ? saveAdministeredTasks(administeredTasks[0])
+      : null;
   };
 
   const createAdministeredTasksPayload = () => {
@@ -505,22 +515,32 @@ const UpdateNursingTasks = (props) => {
                         tasks[medicationTask.uuid]?.skipped && "red-text"
                       }`}
                     >
-                      {medicationTask.drugName}
-                      {!isNonMedication ?
-                      (<><FormattedMessage id={"AT"} defaultMessage={" at "} />
-                        {enable24HourTime
-                          ? formatTime(
-                              medicationTasks[0].startTime,
-                              timeFormatFor24Hr,
-                              timeFormatFor24Hr
-                            )
-                          : formatTime(
-                              medicationTasks[0].startTime,
-                              timeFormatFor24Hr,
-                              timeFormatFor12Hr
-                            )}
+                      {getLocalizedLabel(
+                        intl,
+                        getTranslationKey(
+                          medicationTask.drugName,
+                          nonMedicationTaskKey
+                        ),
+                        medicationTask.drugName
+                      )}
+                      {!isNonMedication ? (
+                        <>
+                          <FormattedMessage id={"AT"} defaultMessage={" at "} />
+                          {enable24HourTime
+                            ? formatTime(
+                                medicationTasks[0].startTime,
+                                timeFormatFor24Hr,
+                                timeFormatFor24Hr
+                              )
+                            : formatTime(
+                                medicationTasks[0].startTime,
+                                timeFormatFor24Hr,
+                                timeFormatFor12Hr
+                              )}
                         </>
-                      ) : (<></>)}
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   )}
                   {!isNonMedication ? (
@@ -634,7 +654,17 @@ const UpdateNursingTasks = (props) => {
                     {tasks[medicationTask.uuid]?.skipped ? (
                       <OverflowMenuItem
                         itemText={
-                          !isNonMedication ? "Un-Skip Drug" : "Un-Skip Task"
+                          !isNonMedication
+                            ? getLocalizedLabel(
+                                intl,
+                                getTranslationKey("Un-Skip Drug"),
+                                "Un-Skip Drug"
+                              )
+                            : getLocalizedLabel(
+                                intl,
+                                getTranslationKey("Un-Skip Task"),
+                                "Un-Skip Task"
+                              )
                         }
                         onClick={() => {
                           handleSkipDrug(medicationTask, false);
@@ -642,7 +672,19 @@ const UpdateNursingTasks = (props) => {
                       />
                     ) : (
                       <OverflowMenuItem
-                        itemText={!isNonMedication ? "Skip Drug" : "Skip Task"}
+                        itemText={
+                          !isNonMedication
+                            ? getLocalizedLabel(
+                              intl,
+                                getTranslationKey("Skip Drug"),
+                                "Skip Drug"
+                              )
+                            : getLocalizedLabel(
+                              intl,
+                                getTranslationKey("Skip Task"),
+                                "Skip Task"
+                              )
+                        }
                         onClick={() => {
                           handleSkipDrug(medicationTask, true);
                         }}

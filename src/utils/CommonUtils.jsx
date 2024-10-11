@@ -180,7 +180,7 @@ export const getFetchFormTranslationsUrl = (formName, formUuid) => {
 
 export const getTranslationKey = (attribute, moduleName) => {
   if (typeof attribute !== "undefined") {
-    let keyPrefix = moduleName ? moduleName : " ";
+    let keyPrefix = moduleName ? moduleName : "IPD";
 
     let keyName = attribute
       .toUpperCase()
@@ -190,13 +190,16 @@ export const getTranslationKey = (attribute, moduleName) => {
       .replace(/ /g, "_");
 
     let translationKey = `${keyPrefix}_${keyName}`;
-    let translation = translationKey;
-
-    if (translation !== translationKey) {
-      attribute = translation;
-    }
+    return translationKey;
   }
-  return attribute;
+};
+
+export const getLocalizedLabel = (intl, id, defaultLabel) => {
+  return intl.messages[id] ? (
+    <FormattedMessage id={id} defaultMessage={defaultLabel} />
+  ) : (
+    defaultLabel
+  );
 };
 
 export const getNoDataCapturedMessage = (formName) => {

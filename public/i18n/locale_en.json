@@ -188,5 +188,20 @@
   "TREATMENTS_WARNING_TEXT": "You will lose the details entered. Do you want to continue?",
   "SAVE": "Save",
   "CANCEL": "Cancel",
-  "TASK_TILE_MORE": "more"
+  "TASK_TILE_MORE": "more",
+  "NON_MEDICATION_TASK_COMPLETE_NURSING_INITIAL_ASSESSMENT_FORM": "Complete Nursing Initial Assessment Form",
+  "NON_MEDICATION_TASK_COMPLETE_NURSING_PHYSICAL_ASSESSMENT_FORM": "Complete Nursing Physical Assessment Form",
+  "NON_MEDICATION_TASK_CHECK_WARD_INSTRUCTIONS": "Check Ward Instructions",
+  "NON_MEDICATION_TASK_COMPLETE_FALL_RISK_ASSESSMENT_FORM": "Complete Fall Risk Assessment Form",
+  "NON_MEDICATION_TASK_COMPLETE_MULTIDISCIPLINARY_PATIENT__FAMILY_EDUCATION_RECORD_FORM": "Complete Multi-disciplinary Patient & Family Education Record form",
+  "NON_MEDICATION_TASK_CAPTURE_PATIENT_WEIGHT_ADMISSION": "Capture patient weight upon admission",
+  "NON_MEDICATION_TASK_COMPLETE_NURSING_CARE_PLAN": "Complete Nursing Care Plan",
+  "NON_MEDICATION_TASK_CAPTURE_VITAL_SIGNS": "Capture Vital Signs",
+  "NON_MEDICATION_TASK_COMPLETE_PATIENT_FEEDING_CHARTS": "Complete Patient Feeding Charts",
+  "NON_MEDICATION_TASK_CHECK_PROTOCOL_STEPS": "Check Protocol Steps",
+  "NON_MEDICATION_TASK_CAPTURE_PATIENT_WEIGHT_UPON_ADMISSION": "Capture patient weight upon admission",
+  "IPD_UNSKIP_TASK": "Unskip Task",
+  "IPD_SKIP_TASK": "Skip Task",
+  "IPD_UNSKIP_DRUG": "Unskip Drug",
+  "IPD_SKIP_DRUG": "Skip Drug"
 }

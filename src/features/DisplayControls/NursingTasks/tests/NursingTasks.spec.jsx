@@ -13,6 +13,7 @@ import {
   mockConfig,
   mockConfigFor12HourFormat,
 } from "../../../../utils/CommonUtils";
+import { IntlProvider } from "react-intl";
 
 const mockFetchMedicationNursingTasks = jest.fn();
 const mockGetTimeInSeconds = jest.fn();
@@ -52,7 +53,7 @@ const mockProviderValue = {
   updateSliderOpen: jest.fn(),
 };
 
-describe.skip("NursingTasks", () => {
+describe("NursingTasks", () => {
   beforeEach(() => {
     mockCurrentShiftHoursArray.mockReturnValue({
       currentShiftHoursArray: [
@@ -81,9 +82,11 @@ describe.skip("NursingTasks", () => {
   it("should show loading state", async () => {
     const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
 
@@ -102,9 +105,11 @@ describe.skip("NursingTasks", () => {
 
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -125,9 +130,11 @@ describe.skip("NursingTasks", () => {
     ]);
     const { getByText, container } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
 
@@ -152,9 +159,11 @@ describe.skip("NursingTasks", () => {
     ]);
     const { getByText, container } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
 
@@ -178,9 +187,11 @@ describe.skip("NursingTasks", () => {
     );
     const { getAllByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -200,9 +211,11 @@ describe.skip("NursingTasks", () => {
     );
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -221,11 +234,13 @@ describe.skip("NursingTasks", () => {
     );
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider
           value={{ config: mockConfigFor12HourFormat, isReadMode: false }}
         >
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -244,9 +259,11 @@ describe.skip("NursingTasks", () => {
       .mockReturnValue(mockShiftResponse);
     const { getAllByText, getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -272,9 +289,11 @@ describe.skip("NursingTasks", () => {
     mockGetTimeInSeconds.mockReturnValue(259200);
     const { getAllByText, getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -300,9 +319,11 @@ describe.skip("NursingTasks", () => {
       .mockReturnValue(mockNursingTasksResponse);
     const { getAllByText, getByTestId, queryByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -337,9 +358,11 @@ describe.skip("NursingTasks", () => {
     mockFetchMedicationNursingTasks.mockReturnValueOnce(mockShiftResponse);
     const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -356,9 +379,11 @@ describe.skip("NursingTasks", () => {
     mockGetTimeInSeconds.mockReturnValue(0);
     const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -375,6 +400,7 @@ describe.skip("NursingTasks", () => {
       .mockReturnValue(mockNursingTasksResponse);
     const { getByTestId, getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
             config: mockConfig,
@@ -384,6 +410,7 @@ describe.skip("NursingTasks", () => {
         >
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
 
@@ -402,6 +429,7 @@ describe.skip("NursingTasks", () => {
       .mockReturnValue(mockNursingTasksResponse);
     const { getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
             config: mockConfig,
@@ -411,6 +439,7 @@ describe.skip("NursingTasks", () => {
         >
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     expect(getByTestId("next-shift").disabled).toEqual(true);
@@ -424,9 +453,11 @@ describe.skip("NursingTasks", () => {
     mockGetTimeInSeconds.mockReturnValue(259200);
     const { getByText, getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     getByTestId("next-shift").click();
@@ -443,9 +474,11 @@ describe.skip("NursingTasks", () => {
     mockGetTimeInSeconds.mockReturnValue(259200);
     const { getByText, getByTestId } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     getByTestId("previous-shift").click();
@@ -477,9 +510,11 @@ describe.skip("NursingTasks", () => {
     );
     const { getAllByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -527,9 +562,11 @@ describe("NursingTasks - half hour shifts", () => {
     );
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
@@ -548,11 +585,13 @@ describe("NursingTasks - half hour shifts", () => {
     );
     const { getByText } = render(
       <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
         <IPDContext.Provider
           value={{ config: mockConfigFor12HourFormat, isReadMode: false }}
         >
           <NursingTasks patientId="patientid" />
         </IPDContext.Provider>
+        </IntlProvider>
       </SliderContext.Provider>
     );
     await waitFor(() => {
