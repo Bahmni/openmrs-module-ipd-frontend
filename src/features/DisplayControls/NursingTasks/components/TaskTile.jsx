@@ -16,6 +16,7 @@ import {
   timeFormatFor12Hr,
   timeFormatFor24Hr,
 } from "../../../../constants";
+import { FormattedMessage } from "react-intl";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
@@ -46,6 +47,8 @@ export default function TaskTile(props) {
     creator,
     taskType,
   } = newMedicationNursingTask;
+
+  const more = <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more" />;
 
   const isRelevantTask = getRelevantTaskStatus(
     startTimeInEpochSeconds,
@@ -152,7 +155,11 @@ export default function TaskTile(props) {
               </div>
             </div>
           )}
-          {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
+          {isGroupedTask && (
+            <div className="more-info">
+              ({taskCount} {more})
+            </div>
+          )}
         </div>
       </div>
       {isGroupedTask && (

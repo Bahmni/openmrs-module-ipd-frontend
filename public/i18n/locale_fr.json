@@ -187,5 +187,6 @@
   "SCHEDULE_TIME_LABEL": "Heure programmée",
   "TREATMENTS_WARNING_TEXT": "Vous perdrez les informations saisies. Voulez-vous continuer ?",
   "SAVE": "Sauvegarder",
-  "CANCEL": "Annuler"
+  "CANCEL": "Annuler",
+  "TASK_TILE_MORE": "plus"
 }

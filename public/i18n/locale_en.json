@@ -187,5 +187,6 @@
   "SCHEDULE_TIME_LABEL": "Schedule Time",
   "TREATMENTS_WARNING_TEXT": "You will lose the details entered. Do you want to continue?",
   "SAVE": "Save",
-  "CANCEL": "Cancel"
+  "CANCEL": "Cancel",
+  "TASK_TILE_MORE": "more"
 }

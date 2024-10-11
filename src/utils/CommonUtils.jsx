@@ -178,6 +178,27 @@ export const getFetchFormTranslationsUrl = (formName, formUuid) => {
   );
 };
 
+export const getTranslationKey = (attribute, moduleName) => {
+  if (typeof attribute !== "undefined") {
+    let keyPrefix = moduleName ? moduleName : " ";
+
+    let keyName = attribute
+      .toUpperCase()
+      .replace(/\s\s+/g, " ")
+      .replace(/[^a-zA-Z0-9 _]/g, "")
+      .trim()
+      .replace(/ /g, "_");
+
+    let translationKey = `${keyPrefix}_${keyName}`;
+    let translation = translationKey;
+
+    if (translation !== translationKey) {
+      attribute = translation;
+    }
+  }
+  return attribute;
+};
+
 export const getNoDataCapturedMessage = (formName) => {
   const msg = (
     <FormattedMessage
