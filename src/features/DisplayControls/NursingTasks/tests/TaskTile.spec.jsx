@@ -15,6 +15,7 @@ import {
   mockConfigFor12HourFormat,
 } from "../../../../utils/CommonUtils";
 import { IPDContext } from "../../../../context/IPDContext";
+import { IntlProvider } from "react-intl";
 
 describe("TaskTile", () => {
   beforeEach(() => {
@@ -26,18 +27,22 @@ describe("TaskTile", () => {
   });
   it("should match the snapshot for non grouped task", () => {
     const { asFragment } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider value={{ config: mockConfig }}>
         <TaskTile medicationNursingTask={mockCompletedTaskTileData} />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("should match the snapshot for grouped task", async () => {
     const { asFragment, getByText } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider value={{ config: mockConfig }}>
         <TaskTile medicationNursingTask={mockTaskTileDataForGroupedTask} />
       </IPDContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -48,9 +53,11 @@ describe("TaskTile", () => {
 
   it("should disable tile when task is completed", () => {
     const { container, getByTestId } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider value={{ config: mockConfig }}>
         <TaskTile medicationNursingTask={mockCompletedTaskTileData} />
       </IPDContext.Provider>
+      </IntlProvider>
     );
 
     const completedTile = container.querySelector(".disabled-tile");
@@ -62,9 +69,11 @@ describe("TaskTile", () => {
 
   it("should render pending icon when task is not administered", () => {
     const { getByTestId } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider value={{ config: mockConfig }}>
         <TaskTile medicationNursingTask={mockPendingTaskTileData} />
       </IPDContext.Provider>
+      </IntlProvider>
     );
 
     const pendingIcon = getByTestId("Pending");
@@ -74,9 +83,11 @@ describe("TaskTile", () => {
 
   it("should render placeholder Rx- PRN task with pending icon", () => {
     const { getByTestId, getByText } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider value={{ config: mockConfig }}>
         <TaskTile medicationNursingTask={mockPendingPRNTaskTileData} />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const pendingIcon = getByTestId("Pending");
     expect(pendingIcon).toBeTruthy();
@@ -85,9 +96,11 @@ describe("TaskTile", () => {
 
   it("should render administered PRN task with time and Rx-PRN tag", () => {
     const { getByTestId, getByText } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider value={{ config: mockConfig }}>
         <TaskTile medicationNursingTask={mockCompletedPRNTaskTileData} />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const administeredIcon = getByTestId("Administered-Late");
     expect(administeredIcon).toBeTruthy();
@@ -97,9 +110,11 @@ describe("TaskTile", () => {
 
   it("should render administered PRN task with time and Rx-PRN tag when time in 12 hour format", () => {
     const { getByTestId, getByText } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
         <TaskTile medicationNursingTask={mockCompletedPRNTaskTileData} />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const administeredIcon = getByTestId("Administered-Late");
     expect(administeredIcon).toBeTruthy();
@@ -109,9 +124,11 @@ describe("TaskTile", () => {
 
   it("should dislay provider name in the non-medication task tile", () => {
     const { getByText } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
         <TaskTile medicationNursingTask={mockNonMedicationTileData} />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     expect(getByText("bailly rurangirwa")).toBeTruthy();
   });

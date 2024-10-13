@@ -178,6 +178,30 @@ export const getFetchFormTranslationsUrl = (formName, formUuid) => {
   );
 };
 
+export const getTranslationKey = (attribute, moduleName) => {
+  if (typeof attribute !== "undefined") {
+    let keyPrefix = moduleName ? moduleName : "IPD";
+
+    let keyName = attribute
+      .toUpperCase()
+      .replace(/\s\s+/g, " ")
+      .replace(/[^a-zA-Z0-9 _]/g, "")
+      .trim()
+      .replace(/ /g, "_");
+
+    let translationKey = `${keyPrefix}_${keyName}`;
+    return translationKey;
+  }
+};
+
+export const getLocalizedLabel = (intl, id, defaultLabel) => {
+  return intl.messages[id] ? (
+    <FormattedMessage id={id} defaultMessage={defaultLabel} />
+  ) : (
+    defaultLabel
+  );
+};
+
 export const getNoDataCapturedMessage = (formName) => {
   const msg = (
     <FormattedMessage

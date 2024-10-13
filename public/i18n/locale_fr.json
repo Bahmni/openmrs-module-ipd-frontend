@@ -187,5 +187,21 @@
   "SCHEDULE_TIME_LABEL": "Heure programmée",
   "TREATMENTS_WARNING_TEXT": "Vous perdrez les informations saisies. Voulez-vous continuer ?",
   "SAVE": "Sauvegarder",
-  "CANCEL": "Annuler"
+  "CANCEL": "Annuler",
+  "TASK_TILE_MORE": "plus",
+  "NON_MEDICATION_TASK_COMPLETE_NURSING_INITIAL_ASSESSMENT_FORM": "Remplir le formulaire d'évaluation initiale des soins infirmiers",
+  "NON_MEDICATION_TASK_COMPLETE_NURSING_PHYSICAL_ASSESSMENT_FORM": "Remplir le formulaire d'évaluation physique des soins infirmiers",
+  "NON_MEDICATION_TASK_CHECK_WARD_INSTRUCTIONS": "Vérifier les instructions du service",
+  "NON_MEDICATION_TASK_COMPLETE_FALL_RISK_ASSESSMENT_FORM": "Remplir le formulaire d'évaluation du risque de chute",
+  "NON_MEDICATION_TASK_COMPLETE_MULTIDISCIPLINARY_PATIENT__FAMILY_EDUCATION_RECORD_FORM": "Remplir le formulaire de dossier éducatif multidisciplinaire du patient et de la famille",
+  "NON_MEDICATION_TASK_CAPTURE_PATIENT_WEIGHT_ADMISSION": "Saisir le poids du patient à l'admission",
+  "NON_MEDICATION_TASK_COMPLETE_NURSING_CARE_PLAN": "Terminé Plan de soins infirmiers",
+  "NON_MEDICATION_TASK_CAPTURE_VITAL_SIGNS": "Capturer les signes vitaux",
+  "NON_MEDICATION_TASK_COMPLETE_PATIENT_FEEDING_CHARTS": "Compléter les tableaux d'alimentation des patients",
+  "NON_MEDICATION_TASK_CHECK_PROTOCOL_STEPS": "Vérifier les étapes du protocole",
+  "NON_MEDICATION_TASK_CAPTURE_PATIENT_WEIGHT_UPON_ADMISSION": "Capturer le poids du patient à l'admission",
+  "IPD_UNSKIP_TASK": "Annuler l'ignorement de la tâche",
+  "IPD_SKIP_TASK": "Ignorer la tâche",
+  "IPD_UNSKIP_DRUG": "Annuler l'ignorement du médicament",
+  "IPD_SKIP_DRUG": "Ignorer le médicament"
 }

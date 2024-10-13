@@ -187,8 +187,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
               class="details-value"
             >
               Country
-               
-              :
+               :
                
               Ethiopia
             </span>
@@ -196,8 +195,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
               class="details-value"
             >
               Region
-               
-              :
+               :
                
               Region test
             </span>
@@ -205,8 +203,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
               class="details-value"
             >
               Zone
-               
-              :
+               :
                
               zone test
             </span>
@@ -214,8 +211,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
               class="details-value"
             >
               Woreda
-               
-              :
+               :
                
               W
             </span>
@@ -223,8 +219,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
               class="details-value"
             >
               Kebele
-               
-              :
+               :
                
               Kebele
             </span>
@@ -232,8 +227,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
               class="details-value"
             >
               Address
-               
-              :
+               :
                
               13-899
             </span>

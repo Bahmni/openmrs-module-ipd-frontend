@@ -134,13 +134,17 @@ describe("PatientHeader", () => {
 
   it("should display bed and ward information in patient header", async () => {
     render(
-      <IPDContext.Provider
-        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
-      >
-        <PatientHeader patientId="123" />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+        >
+          <PatientHeader patientId="123" />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
-    await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
+    await waitFor(() => {
+      expect(screen.getByText("John Doe")).toBeTruthy();
+    });
     expect(screen.getByText("General Ward -ICU ICU1")).toBeTruthy();
   });
 });

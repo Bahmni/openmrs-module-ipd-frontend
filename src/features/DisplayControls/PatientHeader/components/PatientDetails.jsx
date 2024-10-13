@@ -3,7 +3,8 @@ import { Tile, Row, Column } from "carbon-components-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useIntl, FormattedMessage } from "react-intl";
+import { getLocalizedLabel } from "../../../../utils/CommonUtils";
+import { useIntl } from "react-intl";
 
 const PatientDetails = ({
   patientDetails,
@@ -11,20 +12,14 @@ const PatientDetails = ({
   contacts,
   relationships,
 }) => {
-  const intl = useIntl();
   const [locationComponent, setLocationComponents] = useState([]);
+  const intl = useIntl();
   const locationMapping = () => {
     for (const key in patientDetails.locations) {
       if (Object.prototype.hasOwnProperty.call(patientDetails.locations, key)) {
-        console.log(" Patient Detials : ", patientDetails.locations[key], key);
         let value = (
           <span className="details-value">
-            {intl.messages[key] ? (
-              <FormattedMessage id={key} defaultMessage={key} />
-            ) : (
-              key
-            )}{" "}
-            :{" "}
+            {getLocalizedLabel(intl, key, key)} :{" "}
             {patientDetails.locations[key] != null
               ? patientDetails.locations[key]
               : " "}
@@ -40,14 +35,6 @@ const PatientDetails = ({
   useEffect(() => {
     locationMapping();
   }, []);
-
-  const getLocalizedLabel = (id, defaultLabel) => {
-    return intl.messages[id] ? (
-      <FormattedMessage id={id} defaultMessage={defaultLabel} />
-    ) : (
-      defaultLabel
-    );
-  };
 
   return (
     <Tile className="patient-details">
@@ -70,7 +57,7 @@ const PatientDetails = ({
             {contacts.map((contact) => {
               return (
                 <span key={contact.id} className="details-value">
-                  {getLocalizedLabel(contact.name, contact.name)} :{" "}
+                  {getLocalizedLabel(intl, contact.name, contact.name)} :{" "}
                   {contact.value}
                 </span>
               );
@@ -86,6 +73,7 @@ const PatientDetails = ({
               return (
                 <span key={relationship.id} className="details-value">
                   {getLocalizedLabel(
+                    intl,
                     relationship.relationshipType,
                     relationship.relationshipType
                   )}{" "}

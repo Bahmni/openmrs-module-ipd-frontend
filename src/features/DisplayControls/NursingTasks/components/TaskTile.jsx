@@ -15,7 +15,13 @@ import {
   asNeededPlaceholderConceptName,
   timeFormatFor12Hr,
   timeFormatFor24Hr,
+  nonMedicationTaskKey,
 } from "../../../../constants";
+import { FormattedMessage, useIntl } from "react-intl";
+import {
+  getLocalizedLabel,
+  getTranslationKey,
+} from "../../../../utils/CommonUtils";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
@@ -46,6 +52,9 @@ export default function TaskTile(props) {
     creator,
     taskType,
   } = newMedicationNursingTask;
+  const intl = useIntl();
+
+  const more = <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more" />;
 
   const isRelevantTask = getRelevantTaskStatus(
     startTimeInEpochSeconds,
@@ -67,7 +76,13 @@ export default function TaskTile(props) {
         fontWeight: !isANonMedicationTask && isRelevantTask ? 500 : 400,
       }}
     >
-      {drugName}
+      {isSystemGeneratedTask
+        ? getLocalizedLabel(
+          intl,
+            getTranslationKey(drugName, nonMedicationTaskKey),
+            drugName
+          )
+        : drugName}
     </div>
   );
   const statusIcon = iconType(newMedicationNursingTask, nursingTasks);
@@ -99,12 +114,33 @@ export default function TaskTile(props) {
               >
                 <SVGIcon iconType={statusIcon} />
               </div>
-              <TooltipDefinition
-                tooltipText={drugName}
-                className={isDisabled ? "cursor-not-allowed" : "cursor-pointer"}
-              >
-                {drugNameText}
-              </TooltipDefinition>
+              {isANonMedicationTask ? (
+                <TooltipDefinition
+                  tooltipText={
+                    isSystemGeneratedTask
+                      ? getLocalizedLabel(
+                        intl,
+                          getTranslationKey(drugName, nonMedicationTaskKey),
+                          drugName
+                        )
+                      : drugName
+                  }
+                  className={
+                    isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                  }
+                >
+                  {drugNameText}
+                </TooltipDefinition>
+              ) : (
+                <TooltipDefinition
+                  tooltipText={drugName}
+                  className={
+                    isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                  }
+                >
+                  {drugNameText}
+                </TooltipDefinition>
+              )}
             </div>
           </div>
           {!isANonMedicationTask && (
@@ -152,7 +188,11 @@ export default function TaskTile(props) {
               </div>
             </div>
           )}
-          {isGroupedTask && <div className="more-info">({taskCount} more)</div>}
+          {isGroupedTask && (
+            <div className="more-info">
+              ({taskCount} {more})
+            </div>
+          )}
         </div>
       </div>
       {isGroupedTask && (

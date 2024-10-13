@@ -159,5 +159,16 @@
   "SCHEDULE_TIME_LABEL": "Schedule Time",
   "TREATMENTS_WARNING_TEXT": "You will lose the details entered. Do you want to continue?",
   "SAVE": "Save",
-  "CANCEL": "Cancel"
+  "CANCEL": "Cancel",
+  "TASK_TILE_MORE": "mais",
+  "NON_MEDICATION_TASK_COMPLETE_NURSING_INITIAL_ASSESSMENT_FORM": "Formulário de Avaliação Inicial de Enfermagem Completo",
+  "NON_MEDICATION_TASK_COMPLETE_NURSING_PHYSICAL_ASSESSMENT_FORM": "Formulário de Avaliação Física de Enfermagem Completo",
+  "NON_MEDICATION_TASK_CHECK_WARD_INSTRUCTIONS": "Verificar Instruções da Enfermaria",
+  "NON_MEDICATION_TASK_COMPLETE_FALL_RISK_ASSESSMENT_FORM": "Formulário de Avaliação de Risco de Queda Completo",
+  "NON_MEDICATION_TASK_COMPLETE_MULTIDISCIPLINARY_PATIENT__FAMILY_EDUCATION_RECORD_FORM": "Formulário de Registro de Educação Multidisciplinar de Pacientes e Família Completo",
+  "NON_MEDICATION_TASK_CAPTURE_PATIENT_WEIGHT_ADMISSION": "Capturar peso do paciente na admissão",
+  "NON_MEDICATION_TASK_COMPLETE_NURSING_CARE_PLAN": "Plano de Cuidados de Enfermagem Completo",
+  "NON_MEDICATION_TASK_CAPTURE_VITAL_SIGNS": "Capturar Sinais Vitais",
+  "NON_MEDICATION_TASK_COMPLETE_PATIENT_FEEDING_CHARTS": "Gráficos Completos de Alimentação do Paciente",
+  "NON_MEDICATION_TASK_CHECK_PROTOCOL_STEPS": "Verificar Etapas do Protocolo"
 }
