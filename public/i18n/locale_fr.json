@@ -203,5 +203,16 @@
   "IPD_UNSKIP_TASK": "Annuler l'ignorement de la tâche",
   "IPD_SKIP_TASK": "Ignorer la tâche",
   "IPD_UNSKIP_DRUG": "Annuler l'ignorement du médicament",
-  "IPD_SKIP_DRUG": "Ignorer le médicament"
+  "IPD_SKIP_DRUG": "Ignorer le médicament",
+  "PAGINATION_PREVIOUS_PAGE": "Page précédente",
+  "PAGINATION_NEXT_PAGE": "Page suivante",
+  "PAGINATION_ITEMS_PER_PAGE": "Articles par page :",
+  "AWAITING_ACKNOWLEDGEMENT": "Non reconnu",
+  "CONFIRMED_ACKNOWLEDGEMENT": "Reconnu",
+  "PRIMARY": "PRIMAIRE",
+  "PRESUMED": "PRÉSUMÉ",
+  "SECONDARY": "SECONDAIRE",
+  "CONFIRMED": "CONFIRMÉ",
+  "Active": "Actif",
+  "Inactive": "Inactif"
 }

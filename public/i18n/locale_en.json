@@ -203,5 +203,16 @@
   "IPD_UNSKIP_TASK": "Unskip Task",
   "IPD_SKIP_TASK": "Skip Task",
   "IPD_UNSKIP_DRUG": "Unskip Drug",
-  "IPD_SKIP_DRUG": "Skip Drug"
+  "IPD_SKIP_DRUG": "Skip Drug",
+  "PAGINATION_PREVIOUS_PAGE": "Previous page",
+  "PAGINATION_NEXT_PAGE": "Next page",
+  "PAGINATION_ITEMS_PER_PAGE": "Items per page:",
+  "AWAITING_ACKNOWLEDGEMENT": "Not acknowledged",
+  "CONFIRMED_ACKNOWLEDGEMENT": "Acknowledged",
+  "PRIMARY": "PRIMARY",
+  "PRESUMED": "PRESUMED",
+  "SECONDARY": "SECONDARY",
+  "CONFIRMED": "CONFIRMED",
+  "Active": "Active",
+  "Inactive": "Inactive"
 }
