@@ -203,5 +203,8 @@
   "IPD_UNSKIP_TASK": "Unskip Task",
   "IPD_SKIP_TASK": "Skip Task",
   "IPD_UNSKIP_DRUG": "Unskip Drug",
-  "IPD_SKIP_DRUG": "Skip Drug"
+  "IPD_SKIP_DRUG": "Skip Drug",
+  "PATIENT_MOVEMENT_MODAL": "Patient Movement",
+  "CHOOSE_AN_OPTION": "Choose an option",
+  "ENTER_ADT_NOTES": "Enter ADT Notes"
 }

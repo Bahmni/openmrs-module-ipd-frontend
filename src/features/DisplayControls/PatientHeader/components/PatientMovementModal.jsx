@@ -26,6 +26,7 @@ import {
 } from "carbon-components-react";
 import "../styles/PatientHeader.scss";
 import PropTypes from "prop-types";
+import { useIntl } from "react-intl";
 
 const PatientMovementModal = (props) => {
   const { updatePatientMovementModal } = props;
@@ -39,6 +40,7 @@ const PatientMovementModal = (props) => {
   const [showAdtNotes, setShowAdtNotes] = useState(false);
   const [saveEnable, setSaveEnable] = useState(false);
   const [vistEncounterTypes, setVisitEncounterTypes] = useState({});
+  const intl = useIntl();
   const fetchDropDownValues = async () => {
     setIsLoading(true);
     const getDropDown = await searchConceptsByFSN(
@@ -225,9 +227,18 @@ const PatientMovementModal = (props) => {
       {!isLoading && (
         <Modal
           open
-          modalHeading="Patient Movement"
-          primaryButtonText="Save"
-          secondaryButtonText="Cancel"
+          modalHeading={intl.formatMessage({
+            id: "PATIENT_MOVEMENT_MODAL",
+            defaultMessage: "Patient Movement",
+          })}
+          primaryButtonText={intl.formatMessage({
+            id: "SAVE",
+            defaultMessage: "Save",
+          })}
+          secondaryButtonText={intl.formatMessage({
+            id: "CANCEL",
+            defaultMessage: "Cancel",
+          })}
           aria-label="Modal content"
           onRequestClose={() => updatePatientMovementModal(false)}
           onSecondarySubmit={() => updatePatientMovementModal(false)}
@@ -239,7 +250,10 @@ const PatientMovementModal = (props) => {
           ) : (
             <Dropdown
               id="patient-movement-dropdown"
-              label="Choose an option"
+              label={intl.formatMessage({
+                id: "CHOOSE_AN_OPTION",
+                defaultMessage: "Choose an option",
+              })}
               onChange={(e) => handleSelectOnChange(e.selectedItem)}
               isRequired={true}
               width={"100%"}
@@ -253,7 +267,10 @@ const PatientMovementModal = (props) => {
             <TextArea
               data-modal-primary-focus
               id="ipd-adt-notes"
-              placeholder={"Enter ADT Notes"}
+              placeholder={intl.formatMessage({
+                id: "ENTER_ADT_NOTES",
+                defaultMessage: "Enter ADT Notes",
+              })}
               style={{
                 marginBottom: "1rem",
               }}

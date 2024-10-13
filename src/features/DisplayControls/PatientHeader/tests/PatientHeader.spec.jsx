@@ -39,43 +39,51 @@ describe("PatientHeader", () => {
 
   it("should render without crashing", () => {
     render(
-      <IPDContext.Provider
-        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
-      >
-        <PatientHeader patientId="123" />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+        >
+          <PatientHeader patientId="123" />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
   });
 
   it("should call fetchPatientInfo on mount", () => {
     render(
-      <IPDContext.Provider
-        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
-      >
-        <PatientHeader patientId="123" />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+        >
+          <PatientHeader patientId="123" />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     expect(mockFetchPatientProfile).toHaveBeenCalledWith("123");
   });
 
   it("should display loading skeleton while fetching data", () => {
     render(
-      <IPDContext.Provider
-        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
-      >
-        <PatientHeader patientId="123" />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+        >
+          <PatientHeader patientId="123" />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     expect(screen.getByTestId("header-loading")).toBeTruthy();
   });
 
   it("should display patient details after data is fetched", async () => {
     render(
-      <IPDContext.Provider
-        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
-      >
-        <PatientHeader patientId="123" />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+        >
+          <PatientHeader patientId="123" />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
     expect(screen.getByText(/30 Years/i)).toBeTruthy();
@@ -85,13 +93,15 @@ describe("PatientHeader", () => {
 
   it("should display all details of the patient", async () => {
     const { container } = render(
-      <IPDContext.Provider
-        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
-      >
-        <IntlProvider>
-          <PatientHeader patientId="123" setPatientDetailsOpen={jest.fn} />
-        </IntlProvider>
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+        >
+          <IntlProvider>
+            <PatientHeader patientId="123" setPatientDetailsOpen={jest.fn} />
+          </IntlProvider>
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
     const showDetailsButton = screen.getByText("Show Details");
@@ -105,11 +115,13 @@ describe("PatientHeader", () => {
 
   it("should display patient movement item on click of overflow menu icon", async () => {
     const { container } = render(
-      <IPDContext.Provider
-        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
-      >
-        <PatientHeader patientId="123" />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+        >
+          <PatientHeader patientId="123" />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
     screen.getByTestId("overflow-menu").click();
@@ -119,11 +131,13 @@ describe("PatientHeader", () => {
 
   it("should display patient movement overflow menu item as disabled", async () => {
     const { container } = render(
-      <IPDContext.Provider
-        value={{ isReadMode: true, visitSummary: { uuid: "123" } }}
-      >
-        <PatientHeader patientId="123" />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{ isReadMode: true, visitSummary: { uuid: "123" } }}
+        >
+          <PatientHeader patientId="123" />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
     screen.getByTestId("overflow-menu").click();

@@ -188,5 +188,8 @@
   "TREATMENTS_WARNING_TEXT": "You will lose the details entered. Do you want to continue?",
   "SAVE": "Save",
   "CANCEL": "Cancel",
-  "TASK_TILE_MORE": "más"
+  "TASK_TILE_MORE": "más",
+  "PATIENT_MOVEMENT_MODAL": "Patient Movement",
+  "CHOOSE_AN_OPTION": "Choose an option",
+  "ENTER_ADT_NOTES": "Enter ADT Notes"
 }

@@ -170,5 +170,8 @@
   "NON_MEDICATION_TASK_COMPLETE_NURSING_CARE_PLAN": "Plano de Cuidados de Enfermagem Completo",
   "NON_MEDICATION_TASK_CAPTURE_VITAL_SIGNS": "Capturar Sinais Vitais",
   "NON_MEDICATION_TASK_COMPLETE_PATIENT_FEEDING_CHARTS": "Gráficos Completos de Alimentação do Paciente",
-  "NON_MEDICATION_TASK_CHECK_PROTOCOL_STEPS": "Verificar Etapas do Protocolo"
+  "NON_MEDICATION_TASK_CHECK_PROTOCOL_STEPS": "Verificar Etapas do Protocolo",
+  "PATIENT_MOVEMENT_MODAL": "Patient Movement",
+  "CHOOSE_AN_OPTION": "Choose an option",
+  "ENTER_ADT_NOTES": "Enter ADT Notes"
 }

@@ -203,5 +203,8 @@
   "IPD_UNSKIP_TASK": "Annuler l'ignorement de la tâche",
   "IPD_SKIP_TASK": "Ignorer la tâche",
   "IPD_UNSKIP_DRUG": "Annuler l'ignorement du médicament",
-  "IPD_SKIP_DRUG": "Ignorer le médicament"
+  "IPD_SKIP_DRUG": "Ignorer le médicament",
+  "PATIENT_MOVEMENT_MODAL": "Mouvement du patient",
+  "CHOOSE_AN_OPTION": "Choisissez une option",
+  "ENTER_ADT_NOTES": "Entrez les notes ADT"
 }

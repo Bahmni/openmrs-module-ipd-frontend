@@ -20,7 +20,7 @@ import {
   SkeletonText,
   Tile,
 } from "carbon-components-react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import "../styles/PatientHeader.scss";
 import { ChevronDown20, ChevronUp20, HospitalBed16 } from "@carbon/icons-react";
 import PatientDetails from "./PatientDetails";
@@ -40,6 +40,7 @@ export const PatientHeader = (props) => {
   const [bedInformation, setBedInformation] = useState();
   const [profilePicture, setProfilePicture] = useState();
   const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
+  const intl = useIntl();
   const showDetails = (
     <FormattedMessage id="SHOW_PATIENT_DETAILS" defaultMessage="Show Details" />
   );
@@ -164,7 +165,10 @@ export const PatientHeader = (props) => {
                       <OverflowMenuItem
                         data-testid="overflow-menu-item1"
                         title="item-patient-movement"
-                        itemText="Patient Movement"
+                        itemText={intl.formatMessage({
+                          id: "PATIENT_MOVEMENT_MODAL",
+                          defaultMessage: "Patient Movement",
+                        })}
                         onClick={() => updatePatientMovementModal(!isModalOpen)}
                         disabled={isReadMode}
                       />

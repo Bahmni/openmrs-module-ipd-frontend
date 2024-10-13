@@ -12,6 +12,7 @@ import {
 } from "./PatientMovementModalMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import { getADTDashboardUrl } from "../../../../utils/CommonUtils";
+import { IntlProvider } from "react-intl";
 
 const mockSearchConceptsByFSN = jest.fn();
 const mockFetchVisitSummary = jest.fn();
@@ -92,16 +93,18 @@ describe("PatientMovementModal", () => {
 
   it("should display patient movement modal", async () => {
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     await waitFor(() =>
       expect(screen.getByText("Patient Movement")).toBeTruthy()
@@ -110,16 +113,18 @@ describe("PatientMovementModal", () => {
 
   it("should display patient movement modal with a dropdown", async () => {
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -129,16 +134,18 @@ describe("PatientMovementModal", () => {
 
   it("should display patient movement modal with a text area", async () => {
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -149,16 +156,18 @@ describe("PatientMovementModal", () => {
   it("should close the patient modal when close icon is clicked", async () => {
     const closeMethod = jest.fn();
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal updatePatientMovementModal={closeMethod} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal updatePatientMovementModal={closeMethod} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -173,16 +182,18 @@ describe("PatientMovementModal", () => {
   it("should close the patient modal when cancel button is clicked", async () => {
     const cancelMethod = jest.fn();
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal updatePatientMovementModal={cancelMethod} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal updatePatientMovementModal={cancelMethod} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -196,16 +207,18 @@ describe("PatientMovementModal", () => {
 
   it("should display patient movement modal with a admit dropdown", async () => {
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -223,16 +236,18 @@ describe("PatientMovementModal", () => {
       },
     });
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     await waitFor(() => {
       expect(screen.getByText("Patient Movement")).toBeTruthy();
@@ -269,16 +284,18 @@ describe("PatientMovementModal", () => {
       visitSummaryToDischargeOrTransferMockData
     );
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -296,18 +313,20 @@ describe("PatientMovementModal", () => {
     );
     const dischargeMethodCall = jest.fn();
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal
-          updatePatientMovementModal={dischargeMethodCall}
-        />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal
+            updatePatientMovementModal={dischargeMethodCall}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     await waitFor(() => {
       expect(screen.getByText("Patient Movement")).toBeTruthy();
@@ -343,16 +362,20 @@ describe("PatientMovementModal", () => {
     });
     const transferMethodCall = jest.fn();
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal updatePatientMovementModal={transferMethodCall} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal
+            updatePatientMovementModal={transferMethodCall}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     await waitFor(() => {
       expect(screen.getByText("Patient Movement")).toBeTruthy();
@@ -385,16 +408,18 @@ describe("PatientMovementModal", () => {
       visitSummaryToUndoDischargeMockData
     );
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -415,16 +440,18 @@ describe("PatientMovementModal", () => {
       },
     });
     render(
-      <IPDContext.Provider
-        value={{
-          patient: patientMock,
-          visit: visitMock,
-          location: locationMock,
-          provider: providerMock,
-        }}
-      >
-        <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            patient: patientMock,
+            visit: visitMock,
+            location: locationMock,
+            provider: providerMock,
+          }}
+        >
+          <PatientMovementModal updatePatientMovementModal={() => jest.fn()} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     await waitFor(() => {
       expect(screen.getByText("Patient Movement")).toBeTruthy();
