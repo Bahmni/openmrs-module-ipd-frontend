@@ -290,7 +290,6 @@ export const fetchFormData = async (
     .map((concept) => `concept=${concept.replace(" ", "+")}`)
     .join("&");
   const INTAKE_OUTPUT_URL = `${BAHMNI_CORE_OBSERVATIONS_BASE_URL}${conceptParams}&numberOfVisits=${numberOfVisits}&patientUuid=${patientUuid}&locale=en`;
-  console.log("INTAKE_OUTPUT_URL ---- ", INTAKE_OUTPUT_URL);
   try {
     const response = await axios.get(INTAKE_OUTPUT_URL, {
       withCredentials: true,
