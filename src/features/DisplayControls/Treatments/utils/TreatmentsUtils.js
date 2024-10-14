@@ -48,10 +48,7 @@ export const treatmentHeaders = [
   },
   {
     header: (
-      <FormattedMessage
-        id={"STATUS_COLUMN_HEADER"}
-        defaultMessage={`Status`}
-      />
+      <FormattedMessage id={"STATUS_COLUMN_HEADER"} defaultMessage={`Status`} />
     ),
     key: "status",
     isSortable: false,
@@ -308,13 +305,16 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
             {approver?.function === requesterFunction && (
               <div className="red-text">
                 <FormattedMessage
-                  id="AWAITING"
+                  id="AWAITING_ACKNOWLEDGEMENT"
                   defaultMessage="Not acknowledged"
                 />
               </div>
             )}
             {approver?.function === verifierFunction && (
-              <FormattedMessage id="CONFIRMED" defaultMessage="Acknowledged" />
+              <FormattedMessage
+                id="CONFIRMED_ACKNOWLEDGEMENT"
+                defaultMessage="Acknowledged"
+              />
             )}
           </span>
         ),

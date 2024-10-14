@@ -10,16 +10,19 @@ import {
   Pagination,
 } from "carbon-components-react";
 import PropTypes from "prop-types";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { abnormalHeader } from "../utils/VitalsUtils";
 
 const BiometricsHistory = ({ biometricsHistory, biometricsHistoryHeaders }) => {
   const [biometricsHistoryPage, setBiometricsHistoryPage] = useState(1);
-  const [biometricsHistoryPageSize, setBiometricsHistoryPageSize] =
-    useState(5);
+  const [biometricsHistoryPageSize, setBiometricsHistoryPageSize] = useState(5);
   const biometricsTitle = (
-    <FormattedMessage id={"NUTRITIONAL_VALUES"} defaultMessage={"Nutritional Values"} />
+    <FormattedMessage
+      id={"NUTRITIONAL_VALUES"}
+      defaultMessage={"Nutritional Values"}
+    />
   );
+  const intl = useIntl();
 
   const changeBiometricsPaginationState = (pageInfo) => {
     if (biometricsHistoryPage != pageInfo.page) {
@@ -43,7 +46,7 @@ const BiometricsHistory = ({ biometricsHistory, biometricsHistoryHeaders }) => {
             {...getTableProps()}
             useZebraStyles
             data-testid="biometrics-datatable"
-            className = "history-data-table"
+            className="history-data-table"
           >
             <TableHead>
               <TableRow>
@@ -64,10 +67,21 @@ const BiometricsHistory = ({ biometricsHistory, biometricsHistoryHeaders }) => {
               {rows.map((row) => (
                 <TableRow key={row.id} {...getRowProps({ row })}>
                   {row.cells.map((cell) => {
-                    if ( abnormalHeader.includes(cell.info.header))
-                     return <TableCell className={ cell.value.abnormal ? "history-abnormal-tile" : "history-tile"} key={cell.id}>{cell.value.value}</TableCell>
+                    if (abnormalHeader.includes(cell.info.header))
+                      return (
+                        <TableCell
+                          className={
+                            cell.value.abnormal
+                              ? "history-abnormal-tile"
+                              : "history-tile"
+                          }
+                          key={cell.id}
+                        >
+                          {cell.value.value}
+                        </TableCell>
+                      );
                     else
-                    return <TableCell key={cell.id}>{cell.value}</TableCell>
+                      return <TableCell key={cell.id}>{cell.value}</TableCell>;
                   })}
                 </TableRow>
               ))}
@@ -77,9 +91,18 @@ const BiometricsHistory = ({ biometricsHistory, biometricsHistoryHeaders }) => {
       </DataTable>
       <Pagination
         className="biometrics-history-pagination"
-        backwardText="Previous page"
-        forwardText="Next page"
-        itemsPerPageText="Items per page:"
+        backwardText={intl.formatMessage({
+          id: "PAGINATION_PREVIOUS_PAGE",
+          defaultMessage: "Previous page",
+        })}
+        forwardText={intl.formatMessage({
+          id: "PAGINATION_NEXT_PAGE",
+          defaultMessage: "Next page",
+        })}
+        itemsPerPageText={intl.formatMessage({
+          id: "PAGINATION_ITEMS_PER_PAGE",
+          defaultMessage: "Items per page:",
+        })}
         onChange={changeBiometricsPaginationState}
         page={biometricsHistoryPage}
         pageSize={biometricsHistoryPageSize}

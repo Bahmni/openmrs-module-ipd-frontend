@@ -170,5 +170,16 @@
   "NON_MEDICATION_TASK_COMPLETE_NURSING_CARE_PLAN": "Plano de Cuidados de Enfermagem Completo",
   "NON_MEDICATION_TASK_CAPTURE_VITAL_SIGNS": "Capturar Sinais Vitais",
   "NON_MEDICATION_TASK_COMPLETE_PATIENT_FEEDING_CHARTS": "Gráficos Completos de Alimentação do Paciente",
-  "NON_MEDICATION_TASK_CHECK_PROTOCOL_STEPS": "Verificar Etapas do Protocolo"
+  "NON_MEDICATION_TASK_CHECK_PROTOCOL_STEPS": "Verificar Etapas do Protocolo",
+  "PAGINATION_PREVIOUS_PAGE": "Previous page",
+  "PAGINATION_NEXT_PAGE": "Next page",
+  "PAGINATION_ITEMS_PER_PAGE": "Items per page:",
+  "AWAITING_ACKNOWLEDGEMENT": "Not acknowledged",
+  "CONFIRMED_ACKNOWLEDGEMENT": "Acknowledged",
+  "PRIMARY": "PRIMARY",
+  "PRESUMED": "PRESUMED",
+  "SECONDARY": "SECONDARY",
+  "CONFIRMED": "CONFIRMED",
+  "Active": "Active",
+  "Inactive": "Inactive"
 }

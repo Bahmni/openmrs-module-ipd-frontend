@@ -188,5 +188,16 @@
   "TREATMENTS_WARNING_TEXT": "You will lose the details entered. Do you want to continue?",
   "SAVE": "Save",
   "CANCEL": "Cancel",
-  "TASK_TILE_MORE": "más"
+  "TASK_TILE_MORE": "más",
+  "PAGINATION_PREVIOUS_PAGE": "Previous page",
+  "PAGINATION_NEXT_PAGE": "Next page",
+  "PAGINATION_ITEMS_PER_PAGE": "Items per page:",
+  "AWAITING_ACKNOWLEDGEMENT": "Not acknowledged",
+  "CONFIRMED_ACKNOWLEDGEMENT": "Acknowledged",
+  "PRIMARY": "PRIMARY",
+  "PRESUMED": "PRESUMED",
+  "SECONDARY": "SECONDARY",
+  "CONFIRMED": "CONFIRMED",
+  "Active": "Active",
+  "Inactive": "Inactive"
 }
