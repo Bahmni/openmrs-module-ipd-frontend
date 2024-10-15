@@ -214,5 +214,9 @@
   "SECONDARY": "SECONDARY",
   "CONFIRMED": "CONFIRMED",
   "Active": "Active",
-  "Inactive": "Inactive"
+  "Inactive": "Inactive",
+  "PATIENT_MOVEMENT_MODAL": "Patient Movement",
+  "CHOOSE_AN_OPTION": "Choose an option",
+  "ENTER_ADT_NOTES": "Enter ADT Notes",
+  "IPD_WARD_SEARCH_PLACEHOLDER_TEXT": "Type a minimum of 3 characters to search patient by name, bed number or patient ID"
 }
