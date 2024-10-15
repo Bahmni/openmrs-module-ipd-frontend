@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import "../styles/CareViewPatientsHeader.scss";
 import {
-  IPD_WARD_SEARCH_PLACEHOLDER_TEXT,
   displayShiftTimings12HourFormat,
   displayShiftTimingsFormat,
 } from "../../../constants";
@@ -11,6 +10,7 @@ import { Dropdown, Search, Button } from "carbon-components-react";
 import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
 import { formatDate } from "../../../utils/DateTimeUtils";
 import { items } from "../utils/constants";
+import { useIntl } from "react-intl";
 
 export const CareViewPatientsHeader = (props) => {
   const {
@@ -27,6 +27,7 @@ export const CareViewPatientsHeader = (props) => {
     filterValue,
     setFilterValue,
   } = props;
+  const intl = useIntl();
   const handleSearchOnChange = (e) => {
     const value = e.target.value;
     if (value === "") {
@@ -124,7 +125,11 @@ export const CareViewPatientsHeader = (props) => {
       </div>
       <div className="search-and-tasklist">
         <Search
-          placeholder={IPD_WARD_SEARCH_PLACEHOLDER_TEXT}
+          placeholder={intl.formatMessage({
+            id: "IPD_WARD_SEARCH_PLACEHOLDER_TEXT",
+            defaultMessage:
+              "Type a minimum of 3 characters to search patient by name, bed number or patient ID",
+          })}
           size="lg"
           id="ipd-ward-search"
           onChange={handleSearchOnChange}
