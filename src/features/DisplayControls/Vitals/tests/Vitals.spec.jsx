@@ -30,6 +30,17 @@ jest.mock("../utils/VitalsUtils", () => {
 });
 
 describe("Vitals", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    
+    // You can mock methods if needed
+    jest.spyOn(Storage.prototype, 'setItem');
+    jest.spyOn(Storage.prototype, 'getItem');
+    jest.spyOn(Storage.prototype, 'removeItem');
+    localStorage.setItem("NG_TRANSLATE_LANG_KEY", "en");
+
+  });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -80,9 +91,9 @@ describe("Vitals", () => {
     getPatientVitals.mockResolvedValueOnce(mockNoVitalsData);
     render(
       <IntlProvider locale="en">
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <Vitals patientId="123" />
-      </IPDContext.Provider>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <Vitals patientId="123" />
+        </IPDContext.Provider>
       </IntlProvider>
     );
     await waitFor(() =>
@@ -114,7 +125,7 @@ describe("Vitals", () => {
     );
     expect(getPatientVitals).toHaveBeenCalledWith(
       "123",
-      mockConfig.vitalsConfig.latestVitalsConceptValues
+      mockConfig.vitalsConfig.latestVitalsConceptValues["en"]
     );
   });
 

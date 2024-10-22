@@ -28,6 +28,7 @@ const Vitals = (props) => {
   const [vitalsDate, setVitalsDate] = useState(null);
   const [vitalsTime, setVitalsTime] = useState(null);
   const [isLoading, updateIsLoading] = useState(true);
+  const locale  = localStorage.getItem("NG_TRANSLATE_LANG_KEY");
 
   const [vitalsHistoryHeaders, setVitalsHistoryHeaders] = useState([]);
   const [biometricsHistoryHeaders, setBiometricsHistoryHeaders] = useState([]);
@@ -70,14 +71,14 @@ const Vitals = (props) => {
     const getVitals = async () => {
       const VitalsList = await getPatientVitals(
         patientId,
-        vitalsConfig.latestVitalsConceptValues
+        vitalsConfig.latestVitalsConceptValues[locale]
       );
       const vitalsHistoryList = await getPatientVitalsHistory(
         patientId,
-        vitalsConfig.vitalsHistoryConceptValues
+        vitalsConfig.vitalsHistoryConceptValues[locale]
       );
       const conceptDetails = getConceptDetails(
-        vitalsConfig.latestVitalsConceptValues,
+        vitalsConfig.latestVitalsConceptValues[locale],
         vitalsHistoryList.conceptDetails
       );
       setVitals(
@@ -90,7 +91,7 @@ const Vitals = (props) => {
         )
       );
       const vitalsHistoryDetails = getConceptDetails(
-        vitalsConfig.vitalsHistoryConceptValues,
+        vitalsConfig.vitalsHistoryConceptValues[locale],
         vitalsHistoryList.conceptDetails
       );
       setVitalsHistoryHeaders(getVitalsHistoryHeaders(vitalsHistoryDetails));

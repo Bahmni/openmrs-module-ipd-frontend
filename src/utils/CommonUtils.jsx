@@ -276,28 +276,55 @@ export const mockConfig = {
   },
   vitalsConfig: {
     latestVitalsConceptValues: {
-      spO2: "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
-      weight: "Weight",
-      bmi: "BMI",
-      respiratoryRate: "Respiratory Rate",
-      systolicPressure: "Systolic blood pressure",
-      diastolicPressure: "Diastolic blood pressure",
-      temperature: "Temperature",
-      pulse: "Pulse",
-      height: "Height",
+      fr: {
+        spO2: "Saturation d'oxygène dans le sang",
+        weight: "POIDS",
+        bmi: "BMI",
+        respiratoryRate: "Fréquence respiratoire",
+        systolicPressure: "Tension artérielle systolique",
+        diastolicPressure: "Pression artérielle diastolique",
+        temperature: "Température",
+        pulse: "Impulsion",
+        height: "HAUTEUR"
+      },
+      en: {
+        spO2: "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
+        weight: "Weight",
+        bmi: "BMI",
+        respiratoryRate: "Respiratory Rate",
+        systolicPressure: "Systolic blood pressure",
+        diastolicPressure: "Diastolic blood pressure",
+        temperature: "Temperature",
+        pulse: "Pulse",
+        height: "Height"
+      }
     },
     vitalsHistoryConceptValues: {
-      spO2: "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
-      weight: "Weight",
-      bmi: "BMI",
-      respiratoryRate: "Respiratory Rate",
-      systolicPressure: "Systolic blood pressure",
-      diastolicPressure: "Diastolic blood pressure",
-      temperature: "Temperature",
-      pulse: "Pulse",
-      height: "Height",
-      muac: "Mid-upper arm circumference",
-    },
+      fr: {
+        spO2: "Saturation d'oxygène dans le sang",
+        weight: "POIDS",
+        bmi: "BMI",
+        respiratoryRate: "Fréquence respiratoire",
+        systolicPressure: "Tension artérielle systolique",
+        diastolicPressure: "Pression artérielle diastolique",
+        temperature: "Température",
+        pulse: "Impulsion",
+        height: "HAUTEUR",
+        muac: "Circonférence du milieu du bras"
+      },
+      en: {
+        spO2: "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
+        weight: "Weight",
+        bmi: "BMI",
+        respiratoryRate: "Respiratory Rate",
+        systolicPressure: "Systolic blood pressure",
+        diastolicPressure: "Diastolic blood pressure",
+        temperature: "Temperature",
+        pulse: "Pulse",
+        height: "Height",
+        muac: "Mid-upper arm circumference"
+      }
+    }
   },
   patientFeedingRecordConfig: {
     shiftValueConcept: "Shift",
