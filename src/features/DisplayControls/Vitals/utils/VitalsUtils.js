@@ -36,10 +36,30 @@ const setDateAndTime = (latestDateAndTime, setVitalsDate, setVitalsTime) => {
   setVitalsTime(time);
 };
 
-export const getPatientVitals = async (patientUuid, conceptValues) => {
-  const queryParams = Object.values(conceptValues).map(
-    (concept) => `obsConcepts=${concept}`
-  );
+export const getConceptDetails = (conceptConfig, conceptDetails, intl) => {
+  let concepts = {};
+
+  Object.keys(conceptConfig).forEach((conceptName) => {
+    const conceptByLocale = intl.formatMessage({
+      id: conceptConfig[conceptName],
+      defaultMessage: conceptConfig[conceptName],
+    });
+    const obj = conceptDetails.find(
+      (field) => field.fullName.toLowerCase() === conceptByLocale.toLowerCase()
+    );
+    concepts[conceptName] = { name: obj?.name, unit: obj?.units };
+  });
+  return concepts;
+};
+
+export const getPatientVitals = async (patientUuid, conceptValues, intl) => {
+  const queryParams = Object.values(conceptValues).map((concept) => {
+    const conceptByLocale = intl.formatMessage({
+      id: concept,
+      defaultMessage: concept,
+    });
+    return `obsConcepts=${conceptByLocale}`;
+  });
   const conceptParams = queryParams.join("&");
   try {
     const response = await axios.get(
@@ -53,10 +73,18 @@ export const getPatientVitals = async (patientUuid, conceptValues) => {
     return error;
   }
 };
-export const getPatientVitalsHistory = async (patientUuid, conceptValues) => {
-  const queryParams = Object.values(conceptValues).map(
-    (concept) => `obsConcepts=${concept}`
-  );
+export const getPatientVitalsHistory = async (
+  patientUuid,
+  conceptValues,
+  intl
+) => {
+  const queryParams = Object.values(conceptValues).map((concept) => {
+    const conceptByLocale = intl.formatMessage({
+      id: concept,
+      defaultMessage: concept,
+    });
+    return `obsConcepts=${conceptByLocale}`;
+  });
   const conceptParams = queryParams.join("&");
   try {
     const response = await axios.get(

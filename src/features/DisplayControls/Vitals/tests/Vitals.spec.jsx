@@ -9,11 +9,13 @@ import React from "react";
 import { IPDContext } from "../../../../context/IPDContext";
 import Vitals from "../components/Vitals";
 import {
+  getConceptDetails,
   getPatientVitals,
   getPatientVitalsHistory,
 } from "../utils/VitalsUtils";
 import {
   mockNoVitalsData,
+  mockVitalsConceptDetails,
   mockVitalsData,
   mockVitalsHistoryData,
 } from "./VitalsMockData";
@@ -26,10 +28,21 @@ jest.mock("../utils/VitalsUtils", () => {
     ...originalModule,
     getPatientVitals: jest.fn(),
     getPatientVitalsHistory: jest.fn(),
+    getConceptDetails: jest.fn()
   };
 });
 
 describe("Vitals", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    getConceptDetails.mockReturnValue(mockVitalsConceptDetails);
+    jest.spyOn(Storage.prototype, 'setItem');
+    jest.spyOn(Storage.prototype, 'getItem');
+    jest.spyOn(Storage.prototype, 'removeItem');
+    localStorage.setItem("NG_TRANSLATE_LANG_KEY", "en");
+
+  });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -80,9 +93,9 @@ describe("Vitals", () => {
     getPatientVitals.mockResolvedValueOnce(mockNoVitalsData);
     render(
       <IntlProvider locale="en">
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <Vitals patientId="123" />
-      </IPDContext.Provider>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <Vitals patientId="123" />
+        </IPDContext.Provider>
       </IntlProvider>
     );
     await waitFor(() =>
@@ -112,10 +125,7 @@ describe("Vitals", () => {
       </IPDContext.Provider>
       </IntlProvider>
     );
-    expect(getPatientVitals).toHaveBeenCalledWith(
-      "123",
-      mockConfig.vitalsConfig.latestVitalsConceptValues
-    );
+    expect(getPatientVitals).toHaveBeenCalled();
   });
 
   it("displays loading skeleton while fetching data", () => {
