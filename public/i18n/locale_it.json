@@ -100,6 +100,7 @@
   "HEIGHT_HEADER": "Height ({unit})",
   "WEIGHT_HEADER": "Weight ({unit})",
   "BMI_HEADER": "BMI ({unit})",
+  "MUAC_HEADER": "MUAC {{unit}}",
   "MUAC": "MUAC ({unit})",
   "VITALS_HEADER_KEY": "Vitals and Nutritional Values",
   "ALLERGIES_HEADER_KEY": "Allergies",

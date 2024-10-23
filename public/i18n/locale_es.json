@@ -127,6 +127,7 @@
   "BLOOD_PRESSURE_HEADER": "BP ({unit})",
   "HEIGHT_HEADER": "Height ({unit})",
   "WEIGHT_HEADER": "Weight ({unit})",
+  "MUAC_HEADER": "MUAC {{unit}}",
   "BMI_HEADER": "BMI ({unit})",
   "MUAC": "MUAC ({unit})",
   "VITALS_HEADER_KEY": "Vitals and Nutritional Values",
