@@ -276,55 +276,28 @@ export const mockConfig = {
   },
   vitalsConfig: {
     latestVitalsConceptValues: {
-      fr: {
-        spO2: "Saturation d'oxygène dans le sang",
-        weight: "POIDS",
-        bmi: "BMI",
-        respiratoryRate: "Fréquence respiratoire",
-        systolicPressure: "Tension artérielle systolique",
-        diastolicPressure: "Pression artérielle diastolique",
-        temperature: "Température",
-        pulse: "Impulsion",
-        height: "HAUTEUR"
-      },
-      en: {
-        spO2: "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
-        weight: "Weight",
-        bmi: "BMI",
-        respiratoryRate: "Respiratory Rate",
-        systolicPressure: "Systolic blood pressure",
-        diastolicPressure: "Diastolic blood pressure",
-        temperature: "Temperature",
-        pulse: "Pulse",
-        height: "Height"
-      }
+      spO2: "VITALS_HEADER_SPO2_KEY",
+      weight: "VITALS_WEIGHT_KEY",
+      bmi: "VITALS_BMI_KEY",
+      respiratoryRate: "VITALS_RESPIRATORY_RATE_KEY",
+      systolicPressure: "VITALS_SYSTOLIC_PRESSURE_KEY",
+      diastolicPressure: "VITALS_DIASTOLIC_PRESSURE_KEY",
+      temperature: "VITALS_TEMPERATURE_KEY",
+      pulse: "VITALS_PULSE_KEY",
+      height: "VITALS_HEIGHT_KEY",
     },
     vitalsHistoryConceptValues: {
-      fr: {
-        spO2: "Saturation d'oxygène dans le sang",
-        weight: "POIDS",
-        bmi: "BMI",
-        respiratoryRate: "Fréquence respiratoire",
-        systolicPressure: "Tension artérielle systolique",
-        diastolicPressure: "Pression artérielle diastolique",
-        temperature: "Température",
-        pulse: "Impulsion",
-        height: "HAUTEUR",
-        muac: "Circonférence du milieu du bras"
-      },
-      en: {
-        spO2: "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
-        weight: "Weight",
-        bmi: "BMI",
-        respiratoryRate: "Respiratory Rate",
-        systolicPressure: "Systolic blood pressure",
-        diastolicPressure: "Diastolic blood pressure",
-        temperature: "Temperature",
-        pulse: "Pulse",
-        height: "Height",
-        muac: "Mid-upper arm circumference"
-      }
-    }
+      spO2: "VITALS_HEADER_SPO2_KEY",
+      weight: "VITALS_WEIGHT_KEY",
+      bmi: "VITALS_BMI_KEY",
+      respiratoryRate: "VITALS_RESPIRATORY_RATE_KEY",
+      systolicPressure: "VITALS_SYSTOLIC_PRESSURE_KEY",
+      diastolicPressure: "VITALS_DIASTOLIC_PRESSURE_KEY",
+      temperature: "VITALS_TEMPERATURE_KEY",
+      pulse: "VITALS_PULSE_KEY",
+      height: "VITALS_HEIGHT_KEY",
+      muac: "VITALS_MUAC_KEY",
+    },
   },
   patientFeedingRecordConfig: {
     shiftValueConcept: "Shift",

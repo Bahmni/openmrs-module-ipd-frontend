@@ -200,5 +200,16 @@
   "SECONDARY": "SECONDARY",
   "CONFIRMED": "CONFIRMED",
   "Active": "Active",
-  "Inactive": "Inactive"
+  "Inactive": "Inactive",
+
+  "VITALS_HEADER_SPO2_KEY": "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
+  "VITALS_WEIGHT_KEY": "WEIGHT",
+  "VITALS_BMI_KEY": "BMI",
+  "VITALS_RESPIRATORY_RATE_KEY": "Respiratory Rate",
+  "VITALS_SYSTOLIC_PRESSURE_KEY": "Systolic blood pressure",
+  "VITALS_DIASTOLIC_PRESSURE_KEY": "Diastolic blood pressure",
+  "VITALS_TEMPERATURE_KEY": "Temperature",
+  "VITALS_PULSE_KEY": "Pulse",
+  "VITALS_HEIGHT_KEY": "HEIGHT",
+  "VITALS_MUAC_KEY": "Mid-upper arm circumference"
 }

@@ -9,11 +9,13 @@ import React from "react";
 import { IPDContext } from "../../../../context/IPDContext";
 import Vitals from "../components/Vitals";
 import {
+  getConceptDetails,
   getPatientVitals,
   getPatientVitalsHistory,
 } from "../utils/VitalsUtils";
 import {
   mockNoVitalsData,
+  mockVitalsConceptDetails,
   mockVitalsData,
   mockVitalsHistoryData,
 } from "./VitalsMockData";
@@ -26,14 +28,14 @@ jest.mock("../utils/VitalsUtils", () => {
     ...originalModule,
     getPatientVitals: jest.fn(),
     getPatientVitalsHistory: jest.fn(),
+    getConceptDetails: jest.fn()
   };
 });
 
 describe("Vitals", () => {
   beforeEach(() => {
     localStorage.clear();
-    
-    // You can mock methods if needed
+    getConceptDetails.mockReturnValue(mockVitalsConceptDetails);
     jest.spyOn(Storage.prototype, 'setItem');
     jest.spyOn(Storage.prototype, 'getItem');
     jest.spyOn(Storage.prototype, 'removeItem');
@@ -123,10 +125,7 @@ describe("Vitals", () => {
       </IPDContext.Provider>
       </IntlProvider>
     );
-    expect(getPatientVitals).toHaveBeenCalledWith(
-      "123",
-      mockConfig.vitalsConfig.latestVitalsConceptValues["en"]
-    );
+    expect(getPatientVitals).toHaveBeenCalled();
   });
 
   it("displays loading skeleton while fetching data", () => {

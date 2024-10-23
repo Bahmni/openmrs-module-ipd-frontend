@@ -219,5 +219,16 @@
   "CHOOSE_AN_OPTION": "Choisissez une option",
   "ENTER_ADT_NOTES": "Entrez les notes ADT",
   "IPD_WARD_SEARCH_PLACEHOLDER_TEXT": "Saisissez au moins 3 caractères pour rechercher un patient par nom, numéro de lit ou identifiant de patient",
-  "MUAC_HEADER": "MUAC {{unit}}"
+  "MUAC_HEADER": "MUAC {{unit}}",
+
+  "VITALS_HEADER_SPO2_KEY": "Saturation d'oxygène dans le sang",
+  "VITALS_WEIGHT_KEY": "POIDS",
+  "VITALS_BMI_KEY": "BMI",
+  "VITALS_RESPIRATORY_RATE_KEY": "Fréquence respiratoire",
+  "VITALS_SYSTOLIC_PRESSURE_KEY": "Tension artérielle systolique",
+  "VITALS_DIASTOLIC_PRESSURE_KEY": "Pression artérielle diastolique",
+  "VITALS_TEMPERATURE_KEY": "Température",
+  "VITALS_PULSE_KEY": "Impulsion",
+  "VITALS_HEIGHT_KEY": "HAUTEUR",
+  "VITALS_MUAC_KEY": "Circonférence du milieu du bras"
 }
