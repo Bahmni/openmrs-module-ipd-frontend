@@ -68,7 +68,7 @@ const Vitals = (props) => {
       );
       const conceptDetails = getConceptDetails(
         vitalsConfig.latestVitalsConceptValues,
-        vitalsHistoryList.conceptDetails,
+        VitalsList.conceptDetails,
         intl
       );
       setVitals(

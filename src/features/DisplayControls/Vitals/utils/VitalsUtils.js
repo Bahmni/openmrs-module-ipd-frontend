@@ -44,21 +44,44 @@ export const getConceptDetails = (conceptConfig, conceptDetails, intl) => {
       id: conceptConfig[conceptName],
       defaultMessage: conceptConfig[conceptName],
     });
-    const obj = conceptDetails.find(
-      (field) => field.fullName.toLowerCase() === conceptByLocale.toLowerCase()
-    );
-    concepts[conceptName] = { name: obj?.name, unit: obj?.units };
+    let obj;
+
+    if (Array.isArray(conceptByLocale)) {
+      obj = conceptDetails.filter((field) => {
+        return conceptByLocale.some((concept) => {
+          return field.fullName.toLowerCase() === concept.toLowerCase();
+        });
+      });
+
+      concepts[conceptName] = obj.map((matchedField) => ({
+        name: matchedField.name,
+        unit: matchedField.units,
+      }));
+    } else {
+      obj = conceptDetails.find(
+        (field) => field.fullName.toLowerCase() === conceptByLocale.toLowerCase()
+      );
+      concepts[conceptName] = { name: obj?.name, unit: obj?.units };
+    }
   });
   return concepts;
 };
 
 export const getPatientVitals = async (patientUuid, conceptValues, intl) => {
-  const queryParams = Object.values(conceptValues).map((concept) => {
-    const conceptByLocale = intl.formatMessage({
+  const queryParams = Object.values(conceptValues).flatMap((concept) => {
+    let conceptByLocale = intl.formatMessage({
       id: concept,
       defaultMessage: concept,
     });
-    return `obsConcepts=${conceptByLocale}`;
+    return Array.isArray(concept)
+      ? concept.map((value) => {
+        conceptByLocale = intl.formatMessage({
+          id: value,
+          defaultMessage: value,
+        });
+        return `obsConcepts=${conceptByLocale}`;
+      })
+      : `obsConcepts=${conceptByLocale}`;
   });
   const conceptParams = queryParams.join("&");
   try {
@@ -73,17 +96,26 @@ export const getPatientVitals = async (patientUuid, conceptValues, intl) => {
     return error;
   }
 };
+
 export const getPatientVitalsHistory = async (
   patientUuid,
   conceptValues,
   intl
 ) => {
-  const queryParams = Object.values(conceptValues).map((concept) => {
-    const conceptByLocale = intl.formatMessage({
+  const queryParams = Object.values(conceptValues).flatMap((concept) => {
+    let conceptByLocale = intl.formatMessage({
       id: concept,
       defaultMessage: concept,
     });
-    return `obsConcepts=${conceptByLocale}`;
+    return Array.isArray(concept)
+      ? concept.map((value) => {
+        conceptByLocale = intl.formatMessage({
+          id: value,
+          defaultMessage: value,
+        });
+        return `obsConcepts=${conceptByLocale}`;
+      })
+      : `obsConcepts=${conceptByLocale}`;
   });
   const conceptParams = queryParams.join("&");
   try {
@@ -97,6 +129,27 @@ export const getPatientVitalsHistory = async (
   } catch (error) {
     return error;
   }
+};
+
+const getConceptValuesFromArray = (vitalsValues, concepts, isNumeric = true) => {
+  for (let concept of concepts) {
+    if (vitalsValues[concept.name]) {
+      const value = vitalsValues[concept.name]?.value;
+      const abnormal = vitalsValues[concept.name]?.abnormal;
+      const parsedValue = isNumeric ? parseInt(value, 10) : value;
+      
+      return {
+        value: isNumeric && isNaN(parsedValue) ? value : parsedValue,
+        abnormal: abnormal,
+        unit: concept.unit,
+      };
+    }
+  }
+  return {
+    value: "--",
+    abnormal: false,
+    unit: null,
+  };
 };
 
 export const mapVitalsData = (
@@ -157,24 +210,28 @@ export const mapVitalsData = (
               ?.abnormal,
           unit: conceptDetails.diastolicPressure.unit,
         },
-        Height: {
-          value: parseInt(
-            VitalsValues[latestVisitDate][conceptDetails.height.name]?.value,
-            10
-          ),
-          abnormal:
-            VitalsValues[latestVisitDate][conceptDetails.height.name]?.abnormal,
-          unit: conceptDetails.height.unit,
-        },
-        Weight: {
-          value: parseInt(
-            VitalsValues[latestVisitDate][conceptDetails.weight.name]?.value,
-            10
-          ),
-          abnormal:
-            VitalsValues[latestVisitDate][conceptDetails.weight.name]?.abnormal,
-          unit: conceptDetails.weight.unit,
-        },
+        Height: Array.isArray(conceptDetails.height)
+          ? getConceptValuesFromArray(VitalsValues[latestVisitDate], conceptDetails.height)
+          : {
+            value: parseInt(
+              VitalsValues[latestVisitDate][conceptDetails.height.name]?.value,
+              10
+            ),
+            abnormal:
+              VitalsValues[latestVisitDate][conceptDetails.height.name]?.abnormal,
+            unit: conceptDetails.height.unit,
+          },
+        Weight: Array.isArray(conceptDetails.weight)
+          ? getConceptValuesFromArray(VitalsValues[latestVisitDate], conceptDetails.weight)
+          : {
+            value: parseInt(
+              VitalsValues[latestVisitDate][conceptDetails.weight.name]?.value,
+              10
+            ),
+            abnormal:
+              VitalsValues[latestVisitDate][conceptDetails.weight.name]?.abnormal,
+            unit: conceptDetails.weight.unit,
+          },
         RespiratoryRate: {
           value: parseInt(
             VitalsValues[latestVisitDate][conceptDetails.respiratoryRate.name]
@@ -195,12 +252,15 @@ export const mapVitalsData = (
             VitalsValues[latestVisitDate][conceptDetails.spO2.name]?.abnormal,
           unit: conceptDetails.spO2.unit,
         },
-        BMI: {
-          value: VitalsValues[latestVisitDate][conceptDetails.bmi.name]?.value,
-          abnormal:
-            VitalsValues[latestVisitDate][conceptDetails.bmi.name]?.abnormal,
-          unit: conceptDetails.bmi.unit,
-        },
+        BMI: Array.isArray(conceptDetails.bmi)
+          ? getConceptValuesFromArray(VitalsValues[latestVisitDate], conceptDetails.bmi, false)
+          : {
+              value: VitalsValues[latestVisitDate][conceptDetails.bmi.name]
+                ?.value,
+              abnormal:
+                VitalsValues[latestVisitDate][conceptDetails.bmi.name]?.abnormal,
+              unit: conceptDetails.bmi.unit,
+          },
       };
     }
   }
@@ -292,44 +352,52 @@ export const mapBiometricsHistory = (vitalsHistoryList, conceptDetails) => {
     const pairedBiometrics = {
       id: date,
       date: formatDate(date, defaultDateTimeFormat),
-      height: {
-        value: innerMappedbiometrics[conceptDetails.height.name]
-          ? innerMappedbiometrics[conceptDetails.height.name]?.value
-          : "--",
-        abnormal: innerMappedbiometrics[conceptDetails.height.name]
-          ? innerMappedbiometrics[conceptDetails.height.name].abnormal
-          : false,
-      },
-      weight: {
-        value: innerMappedbiometrics[conceptDetails.weight.name]
-          ? innerMappedbiometrics[conceptDetails.weight.name]?.value
-          : "--",
-        abnormal: innerMappedbiometrics[conceptDetails.weight.name]
-          ? innerMappedbiometrics[conceptDetails.weight.name].abnormal
-          : false,
-      },
-      bmi: {
-        value: innerMappedbiometrics[conceptDetails.bmi.name]
-          ? innerMappedbiometrics[conceptDetails.bmi.name]?.value
-          : "--",
-        abnormal: innerMappedbiometrics[conceptDetails.bmi.name]
-          ? innerMappedbiometrics[conceptDetails.bmi.name].abnormal
-          : false,
-      },
-      muac: {
-        value: innerMappedbiometrics[conceptDetails.muac.name]
-          ? innerMappedbiometrics[conceptDetails.muac.name]?.value
-          : "--",
-        abnormal: innerMappedbiometrics[conceptDetails.muac.name]
-          ? innerMappedbiometrics[conceptDetails.muac.name].abnormal
-          : false,
-      },
+      height: Array.isArray(conceptDetails.height)
+        ? getConceptValuesFromArray(innerMappedbiometrics, conceptDetails.height)
+        : {
+          value: innerMappedbiometrics[conceptDetails.height.name]
+            ? innerMappedbiometrics[conceptDetails.height.name]?.value
+            : "--",
+          abnormal: innerMappedbiometrics[conceptDetails.height.name]
+            ? innerMappedbiometrics[conceptDetails.height.name].abnormal
+            : false,
+        },
+      weight: Array.isArray(conceptDetails.weight)
+        ? getConceptValuesFromArray(innerMappedbiometrics, conceptDetails.weight)
+        : {
+          value: innerMappedbiometrics[conceptDetails.weight.name]
+            ? innerMappedbiometrics[conceptDetails.weight.name]?.value
+            : "--",
+          abnormal: innerMappedbiometrics[conceptDetails.weight.name]
+            ? innerMappedbiometrics[conceptDetails.weight.name].abnormal
+            : false,
+        },
+      bmi: Array.isArray(conceptDetails.bmi)
+        ? getConceptValuesFromArray(innerMappedbiometrics, conceptDetails.bmi, false)
+        : {
+          value: innerMappedbiometrics[conceptDetails.bmi.name]
+            ? innerMappedbiometrics[conceptDetails.bmi.name]?.value
+            : "--",
+          abnormal: innerMappedbiometrics[conceptDetails.bmi.name]
+            ? innerMappedbiometrics[conceptDetails.bmi.name].abnormal
+            : false,
+        },
+      muac: Array.isArray(conceptDetails.muac)
+        ? getConceptValuesFromArray(innerMappedbiometrics, conceptDetails.muac)
+        : {
+          value: innerMappedbiometrics[conceptDetails.muac.name]
+            ? innerMappedbiometrics[conceptDetails.muac.name]?.value
+            : "--",
+          abnormal: innerMappedbiometrics[conceptDetails.muac.name]
+            ? innerMappedbiometrics[conceptDetails.muac.name].abnormal
+            : false,
+        },
     };
     if (
-      innerMappedbiometrics[conceptDetails.bmi.name] ||
-      innerMappedbiometrics[conceptDetails.height.name] ||
-      innerMappedbiometrics[conceptDetails.weight.name] ||
-      innerMappedbiometrics[conceptDetails.muac.name]
+      pairedBiometrics.bmi.value !== "--" ||
+      pairedBiometrics.height.value !== "--" ||
+      pairedBiometrics.weight.value !== "--" ||
+      pairedBiometrics.muac.value !== "--"
     ) {
       biometricsHistory.push(pairedBiometrics);
     }
@@ -411,6 +479,14 @@ export const getVitalsHistoryHeaders = (conceptDetails) => [
   },
 ];
 
+const getUnitFromArray = (concept) => {
+  if (Array.isArray(concept)) {
+    const found = concept.find((field) => field.unit !== undefined);
+    return found ? found.unit : undefined;
+  } 
+  return concept.unit;
+};
+
 export const getBiometricsHistoryHeaders = (conceptDetails) => [
   {
     id: "1",
@@ -429,7 +505,7 @@ export const getBiometricsHistoryHeaders = (conceptDetails) => [
       <FormattedMessage
         id={"HEIGHT_HEADER"}
         defaultMessage={`Height ({unit})`}
-        values={{ unit: conceptDetails.height.unit }}
+        values={{ unit: getUnitFromArray(conceptDetails.height) }}
       />
     ),
     key: "height",
@@ -441,7 +517,7 @@ export const getBiometricsHistoryHeaders = (conceptDetails) => [
       <FormattedMessage
         id={"WEIGHT_HEADER"}
         defaultMessage={`Weight ({unit})`}
-        values={{ unit: conceptDetails.weight.unit }}
+        values={{ unit: getUnitFromArray(conceptDetails.weight) }}
       />
     ),
     key: "weight",
@@ -453,7 +529,7 @@ export const getBiometricsHistoryHeaders = (conceptDetails) => [
       <FormattedMessage
         id={"BMI_HEADER"}
         defaultMessage={`BMI ({unit})`}
-        values={{ unit: conceptDetails.bmi.unit }}
+        values={{ unit: getUnitFromArray(conceptDetails.bmi) }}
       />
     ),
     key: "bmi",
@@ -465,7 +541,7 @@ export const getBiometricsHistoryHeaders = (conceptDetails) => [
       <FormattedMessage
         id={"MUAC_HEADER"}
         defaultMessage={`MUAC ({unit})`}
-        values={{ unit: conceptDetails.muac.unit }}
+        values={{ unit: getUnitFromArray(conceptDetails.muac) }}
       />
     ),
     key: "muac",
