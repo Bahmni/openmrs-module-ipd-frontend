@@ -48,7 +48,7 @@ export const getConceptDetails = (conceptConfig, conceptDetails, intl) => {
             id: concept,
             defaultMessage: concept,
           });
-          return field.fullName.toLowerCase() === conceptByLocale.toLowerCase();
+          return field.fullName?.toLowerCase() === conceptByLocale?.toLowerCase();
         });
       });
 
@@ -62,7 +62,7 @@ export const getConceptDetails = (conceptConfig, conceptDetails, intl) => {
         defaultMessage: conceptConfig[conceptName],
       });
       obj = conceptDetails.find(
-        (field) => field.fullName.toLowerCase() === conceptByLocale.toLowerCase()
+        (field) => field.fullName?.toLowerCase() === conceptByLocale?.toLowerCase()
       );
       concepts[conceptName] = { name: obj?.name, unit: obj?.units };
     }
@@ -72,19 +72,22 @@ export const getConceptDetails = (conceptConfig, conceptDetails, intl) => {
 
 export const getPatientVitals = async (patientUuid, conceptValues, intl) => {
   const queryParams = Object.values(conceptValues).flatMap((concept) => {
-    let conceptByLocale = intl.formatMessage({
-      id: concept,
-      defaultMessage: concept,
-    });
-    return Array.isArray(concept)
-      ? concept.map((value) => {
-        conceptByLocale = intl.formatMessage({
+    console.log("vitals concept -- ", concept);
+    if (Array.isArray(concept)) {
+      concept.map((value) => {
+        let conceptByLocale = intl.formatMessage({
           id: value,
           defaultMessage: value,
         });
         return `obsConcepts=${conceptByLocale}`;
-      })
-      : `obsConcepts=${conceptByLocale}`;
+      });
+    } else {
+      let conceptByLocale = intl.formatMessage({
+        id: concept,
+        defaultMessage: concept,
+      });
+      return `obsConcepts=${conceptByLocale}`;
+    }
   });
   const conceptParams = queryParams.join("&");
   try {
@@ -106,19 +109,22 @@ export const getPatientVitalsHistory = async (
   intl
 ) => {
   const queryParams = Object.values(conceptValues).flatMap((concept) => {
-    let conceptByLocale = intl.formatMessage({
-      id: concept,
-      defaultMessage: concept,
-    });
-    return Array.isArray(concept)
-      ? concept.map((value) => {
-        conceptByLocale = intl.formatMessage({
+    console.log("vitals history concept -- ", concept);
+    if (Array.isArray(concept)) {
+      concept.map((value) => {
+        let conceptByLocale = intl.formatMessage({
           id: value,
           defaultMessage: value,
         });
         return `obsConcepts=${conceptByLocale}`;
-      })
-      : `obsConcepts=${conceptByLocale}`;
+      });
+    } else {
+      let conceptByLocale = intl.formatMessage({
+        id: concept,
+        defaultMessage: concept,
+      });
+      return `obsConcepts=${conceptByLocale}`;
+    }
   });
   const conceptParams = queryParams.join("&");
   try {
