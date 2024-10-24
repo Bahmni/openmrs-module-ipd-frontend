@@ -40,16 +40,15 @@ export const getConceptDetails = (conceptConfig, conceptDetails, intl) => {
   let concepts = {};
 
   Object.keys(conceptConfig).forEach((conceptName) => {
-    const conceptByLocale = intl.formatMessage({
-      id: conceptConfig[conceptName],
-      defaultMessage: conceptConfig[conceptName],
-    });
     let obj;
-
-    if (Array.isArray(conceptByLocale)) {
+    if (Array.isArray(conceptConfig[conceptName])) {
       obj = conceptDetails.filter((field) => {
-        return conceptByLocale.some((concept) => {
-          return field.fullName.toLowerCase() === concept.toLowerCase();
+        return conceptConfig[conceptName].some((concept) => {
+          let conceptByLocale = intl.formatMessage({
+            id: concept,
+            defaultMessage: concept,
+          });
+          return field.fullName.toLowerCase() === conceptByLocale.toLowerCase();
         });
       });
 
@@ -58,6 +57,10 @@ export const getConceptDetails = (conceptConfig, conceptDetails, intl) => {
         unit: matchedField.units,
       }));
     } else {
+      const conceptByLocale = intl.formatMessage({
+        id: conceptConfig[conceptName],
+        defaultMessage: conceptConfig[conceptName],
+      });
       obj = conceptDetails.find(
         (field) => field.fullName.toLowerCase() === conceptByLocale.toLowerCase()
       );
