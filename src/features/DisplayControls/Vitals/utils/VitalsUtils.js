@@ -213,28 +213,24 @@ export const mapVitalsData = (
               ?.abnormal,
           unit: conceptDetails.diastolicPressure.unit,
         },
-        Height: Array.isArray(conceptDetails.height)
-          ? getConceptValuesFromArray(VitalsValues[latestVisitDate], conceptDetails.height)
-          : {
-            value: parseInt(
-              VitalsValues[latestVisitDate][conceptDetails.height.name]?.value,
-              10
-            ),
-            abnormal:
-              VitalsValues[latestVisitDate][conceptDetails.height.name]?.abnormal,
-            unit: conceptDetails.height.unit,
-          },
-        Weight: Array.isArray(conceptDetails.weight)
-          ? getConceptValuesFromArray(VitalsValues[latestVisitDate], conceptDetails.weight)
-          : {
-            value: parseInt(
-              VitalsValues[latestVisitDate][conceptDetails.weight.name]?.value,
-              10
-            ),
-            abnormal:
-              VitalsValues[latestVisitDate][conceptDetails.weight.name]?.abnormal,
-            unit: conceptDetails.weight.unit,
-          },
+        Height: {
+          value: parseInt(
+            VitalsValues[latestVisitDate][conceptDetails.height.name]?.value,
+            10
+          ),
+          abnormal:
+            VitalsValues[latestVisitDate][conceptDetails.height.name]?.abnormal,
+          unit: conceptDetails.height.unit,
+        },
+        Weight: {
+          value: parseInt(
+            VitalsValues[latestVisitDate][conceptDetails.weight.name]?.value,
+            10
+          ),
+          abnormal:
+            VitalsValues[latestVisitDate][conceptDetails.weight.name]?.abnormal,
+          unit: conceptDetails.weight.unit,
+        },
         RespiratoryRate: {
           value: parseInt(
             VitalsValues[latestVisitDate][conceptDetails.respiratoryRate.name]
@@ -355,26 +351,22 @@ export const mapBiometricsHistory = (vitalsHistoryList, conceptDetails) => {
     const pairedBiometrics = {
       id: date,
       date: formatDate(date, defaultDateTimeFormat),
-      height: Array.isArray(conceptDetails.height)
-        ? getConceptValuesFromArray(innerMappedbiometrics, conceptDetails.height)
-        : {
-          value: innerMappedbiometrics[conceptDetails.height.name]
-            ? innerMappedbiometrics[conceptDetails.height.name]?.value
-            : "--",
-          abnormal: innerMappedbiometrics[conceptDetails.height.name]
-            ? innerMappedbiometrics[conceptDetails.height.name].abnormal
-            : false,
-        },
-      weight: Array.isArray(conceptDetails.weight)
-        ? getConceptValuesFromArray(innerMappedbiometrics, conceptDetails.weight)
-        : {
-          value: innerMappedbiometrics[conceptDetails.weight.name]
-            ? innerMappedbiometrics[conceptDetails.weight.name]?.value
-            : "--",
-          abnormal: innerMappedbiometrics[conceptDetails.weight.name]
-            ? innerMappedbiometrics[conceptDetails.weight.name].abnormal
-            : false,
-        },
+      height: {
+        value: innerMappedbiometrics[conceptDetails.height.name]
+          ? innerMappedbiometrics[conceptDetails.height.name]?.value
+          : "--",
+        abnormal: innerMappedbiometrics[conceptDetails.height.name]
+          ? innerMappedbiometrics[conceptDetails.height.name].abnormal
+          : false,
+      },
+      weight: {
+        value: innerMappedbiometrics[conceptDetails.weight.name]
+          ? innerMappedbiometrics[conceptDetails.weight.name]?.value
+          : "--",
+        abnormal: innerMappedbiometrics[conceptDetails.weight.name]
+          ? innerMappedbiometrics[conceptDetails.weight.name].abnormal
+          : false,
+      },
       bmi: Array.isArray(conceptDetails.bmi)
         ? getConceptValuesFromArray(innerMappedbiometrics, conceptDetails.bmi, false)
         : {
@@ -385,16 +377,14 @@ export const mapBiometricsHistory = (vitalsHistoryList, conceptDetails) => {
             ? innerMappedbiometrics[conceptDetails.bmi.name].abnormal
             : false,
         },
-      muac: Array.isArray(conceptDetails.muac)
-        ? getConceptValuesFromArray(innerMappedbiometrics, conceptDetails.muac)
-        : {
-          value: innerMappedbiometrics[conceptDetails.muac.name]
-            ? innerMappedbiometrics[conceptDetails.muac.name]?.value
-            : "--",
-          abnormal: innerMappedbiometrics[conceptDetails.muac.name]
-            ? innerMappedbiometrics[conceptDetails.muac.name].abnormal
-            : false,
-        },
+      muac: {
+        value: innerMappedbiometrics[conceptDetails.muac.name]
+          ? innerMappedbiometrics[conceptDetails.muac.name]?.value
+          : "--",
+        abnormal: innerMappedbiometrics[conceptDetails.muac.name]
+          ? innerMappedbiometrics[conceptDetails.muac.name].abnormal
+          : false,
+      },
     };
     if (
       pairedBiometrics.bmi.value !== "--" ||
@@ -508,7 +498,7 @@ export const getBiometricsHistoryHeaders = (conceptDetails) => [
       <FormattedMessage
         id={"HEIGHT_HEADER"}
         defaultMessage={`Height ({unit})`}
-        values={{ unit: getUnitFromArray(conceptDetails.height) }}
+        values={{ unit: conceptDetails.height.unit }}
       />
     ),
     key: "height",
@@ -520,7 +510,7 @@ export const getBiometricsHistoryHeaders = (conceptDetails) => [
       <FormattedMessage
         id={"WEIGHT_HEADER"}
         defaultMessage={`Weight ({unit})`}
-        values={{ unit: getUnitFromArray(conceptDetails.weight) }}
+        values={{ unit: conceptDetails.weight.unit }}
       />
     ),
     key: "weight",
@@ -544,7 +534,7 @@ export const getBiometricsHistoryHeaders = (conceptDetails) => [
       <FormattedMessage
         id={"MUAC_HEADER"}
         defaultMessage={`MUAC ({unit})`}
-        values={{ unit: getUnitFromArray(conceptDetails.muac) }}
+        values={{ unit: conceptDetails.muac.unit }}
       />
     ),
     key: "muac",
