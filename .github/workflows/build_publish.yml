@@ -2,7 +2,7 @@ name: 🏗️ Build and Publish
 on:
   push:
     branches:
-      - Bahmni-IPD-master
+      - Bahmni-IPD-Without-Locale
     paths-ignore:
       - "**.md"
   workflow_run:
@@ -58,8 +58,8 @@ jobs:
           file: package/docker/Dockerfile
           push: true
           tags: |
-            bahmni/microfrontend-ipd:ipd-${{ github.run_number }}
-            bahmni/microfrontend-ipd:ipd
+            bahmni/microfrontend-ipd:ipd-without-locale-${{ github.run_number }}
+            bahmni/microfrontend-ipd:ipd-without-locale
       - name: Push Translations to Transifex
         run: |
           curl -o transifex.sh https://raw.githubusercontent.com/Bahmni/bahmni-infra-utils/main/transifex.sh

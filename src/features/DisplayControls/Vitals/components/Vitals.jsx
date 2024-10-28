@@ -56,12 +56,24 @@ const Vitals = (props) => {
     let concepts = {};
 
     Object.keys(conceptConfig).forEach((conceptName) => {
-      const obj = conceptDetails.find(
-        (field) =>
-          field.fullName.toLowerCase() ===
-          conceptConfig[conceptName].toLowerCase()
-      );
-      concepts[conceptName] = { name: obj?.name, unit: obj?.units };
+      if (Array.isArray(conceptConfig[conceptName])) {
+        const obj = conceptDetails.filter((field) => {
+          return conceptConfig[conceptName].some((concept) => {
+            return field.fullName.toLowerCase() === concept?.toLowerCase();
+          });
+        });
+        concepts[conceptName] = obj.map((matchedField) => ({
+          name: matchedField.name,
+          unit: matchedField.units,
+        }));
+      } else {
+        const obj = conceptDetails.find(
+          (field) =>
+            field.fullName.toLowerCase() ===
+            conceptConfig[conceptName].toLowerCase()
+        );
+        concepts[conceptName] = { name: obj?.name, unit: obj?.units };
+      }
     });
     return concepts;
   };
@@ -78,7 +90,7 @@ const Vitals = (props) => {
       );
       const conceptDetails = getConceptDetails(
         vitalsConfig.latestVitalsConceptValues,
-        vitalsHistoryList.conceptDetails
+        VitalsList.conceptDetails
       );
       setVitals(
         mapVitalsData(
