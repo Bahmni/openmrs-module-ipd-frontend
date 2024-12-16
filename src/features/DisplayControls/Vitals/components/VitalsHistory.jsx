@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState} from "react";
 import {
   DataTable,
   Table,
@@ -14,6 +14,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { abnormalHeader } from "../utils/VitalsUtils";
 
 const VitalsHistory = ({ vitalsHistory, vitalsHistoryHeaders }) => {
+  const [rows, setRows] = useState([]);
   const [vitalsHistoryPage, setVitalsHistoryPage] = useState(1);
   const [vitalsHistoryPageSize, setVitalsHistoryPageSize] = useState(5);
   const vitalsTitle = (
@@ -22,19 +23,25 @@ const VitalsHistory = ({ vitalsHistory, vitalsHistoryHeaders }) => {
   const intl = useIntl();
 
   const changeVitalsPaginationState = (pageInfo) => {
-    if (vitalsHistoryPage != pageInfo.page) {
+    if (vitalsHistoryPage !== pageInfo.page) {
       setVitalsHistoryPage(pageInfo.page);
     }
-    if (vitalsHistoryPageSize != pageInfo.pageSize) {
+    if (vitalsHistoryPageSize !== pageInfo.pageSize) {
       setVitalsHistoryPageSize(pageInfo.pageSize);
     }
   };
+  useEffect(() => {
+    const start = (vitalsHistoryPage - 1) * vitalsHistoryPageSize;
+    const end = start + vitalsHistoryPageSize;
+    const data = vitalsHistory.slice(start, end);
+    setRows(data);
+  }, [vitalsHistoryPage, vitalsHistoryPageSize]);
 
   return (
     <>
       <div className="vitals-history-title">{vitalsTitle}</div>
       <DataTable
-        rows={vitalsHistory}
+        rows={rows}
         headers={vitalsHistoryHeaders}
         useZebraStyles={true}
       >
