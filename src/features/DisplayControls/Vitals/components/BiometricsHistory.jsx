@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DataTable,
   Table,
@@ -14,6 +14,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { abnormalHeader } from "../utils/VitalsUtils";
 
 const BiometricsHistory = ({ biometricsHistory, biometricsHistoryHeaders }) => {
+  const [rows, setRows] = useState([]);
   const [biometricsHistoryPage, setBiometricsHistoryPage] = useState(1);
   const [biometricsHistoryPageSize, setBiometricsHistoryPageSize] = useState(5);
   const biometricsTitle = (
@@ -25,19 +26,26 @@ const BiometricsHistory = ({ biometricsHistory, biometricsHistoryHeaders }) => {
   const intl = useIntl();
 
   const changeBiometricsPaginationState = (pageInfo) => {
-    if (biometricsHistoryPage != pageInfo.page) {
+    if (biometricsHistoryPage !== pageInfo.page) {
       setBiometricsHistoryPage(pageInfo.page);
     }
-    if (biometricsHistoryPageSize != pageInfo.pageSize) {
+    if (biometricsHistoryPageSize !== pageInfo.pageSize) {
       setBiometricsHistoryPageSize(pageInfo.pageSize);
     }
   };
+
+  useEffect(() => {
+    const start = (biometricsHistoryPage - 1) * biometricsHistoryPageSize;
+    const end = start + biometricsHistoryPageSize;
+    const data = biometricsHistory.slice(start, end);
+    setRows(data);
+  }, [biometricsHistoryPage, biometricsHistoryPageSize]);
 
   return (
     <>
       <div className="biometrics-history-title">{biometricsTitle}</div>
       <DataTable
-        rows={biometricsHistory}
+        rows={rows}
         headers={biometricsHistoryHeaders}
         useZebraStyles={true}
       >
