@@ -11,7 +11,10 @@ import { FormattedMessage } from "react-intl";
 import propTypes from "prop-types";
 import PropTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
-import { getCurrentShiftTimes } from "../../../utils/DateTimeUtils";
+import {
+  getCurrentShiftTimes,
+  getDetailedAge,
+} from "../../../utils/DateTimeUtils";
 import { getIPDPatientDashboardUrl } from "../../../utils/CommonUtils";
 
 export const PatientDetailsCell = ({
@@ -21,7 +24,7 @@ export const PatientDetailsCell = ({
   navHourEpoch,
   newTreatments,
   visitDetails,
-  previousShiftPendingTasks
+  previousShiftPendingTasks,
 }) => {
   const { person, uuid } = patientDetails;
   const {
@@ -115,44 +118,49 @@ export const PatientDetailsCell = ({
           <FormattedMessage id={"PATIENT"} defaultMessage={"Patient"} />:{" "}
           <span>{person.display}</span>&nbsp;(
           <span>{person.gender}</span>)<span className={"separator"}>|</span>
-          <span>{person.age}</span>
-          <FormattedMessage id={"AGE_YEARS_LABEL"} defaultMessage={"yrs"} />
+          <span>{getDetailedAge(person.birthdate)}</span>
           {(newTreatments > 0 || previousShiftPendingTasks.length > 0) && (
             <>
               <div className="treatments-notification">
                 <div className="warning_icon">
-                  <WarningAlt20 className={"warning-icon-20"} /> </div>
+                  <WarningAlt20 className={"warning-icon-20"} />{" "}
+                </div>
                 <div className="treatments-notification-span">
-                 { newTreatments > 0 && <div>&bull; { newTreatments + " New treatment(s): "}
-                  <>
-                    <Link
-                      href={getIPDPatientDashboardUrl(
-                        patientDetails.uuid,
-                        visitDetails?.uuid,
-                        "careViewDashboard"
-                      )}
-                      data-testid="treatments-ipd-dashboard"
-                    >
-                      <FormattedMessage
-                        id={"SCHEDULE_TREATMENTS"}
-                        defaultMessage={"Schedule Treatments"}
-                      />
-                    </Link>
-                  </>
-                  </div>}
-                  { previousShiftPendingTasks.length > 0 &&
-                  <div> &bull;{" Previous Pending: "} {
-                    previousShiftPendingTasks.map((task, index) => (
-                      <span key={task.taskId}>
-                        {index === previousShiftPendingTasks.length - 1 ? (
-                          <span>{task.taskName}</span>
-                        ) : (
-                          <span>{task.taskName + ", "}</span>
-                        )}
-                      </span>
-                    ))
-                  }</div>
-                  }
+                  {newTreatments > 0 && (
+                    <div>
+                      &bull; {newTreatments + " New treatment(s): "}
+                      <>
+                        <Link
+                          href={getIPDPatientDashboardUrl(
+                            patientDetails.uuid,
+                            visitDetails?.uuid,
+                            "careViewDashboard"
+                          )}
+                          data-testid="treatments-ipd-dashboard"
+                        >
+                          <FormattedMessage
+                            id={"SCHEDULE_TREATMENTS"}
+                            defaultMessage={"Schedule Treatments"}
+                          />
+                        </Link>
+                      </>
+                    </div>
+                  )}
+                  {previousShiftPendingTasks.length > 0 && (
+                    <div>
+                      {" "}
+                      &bull;{" Previous Pending: "}{" "}
+                      {previousShiftPendingTasks.map((task, index) => (
+                        <span key={task.taskId}>
+                          {index === previousShiftPendingTasks.length - 1 ? (
+                            <span>{task.taskName}</span>
+                          ) : (
+                            <span>{task.taskName + ", "}</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </>
@@ -195,4 +203,5 @@ PatientDetailsCell.propTypes = {
   navHourEpoch: propTypes.object.isRequired,
   visitDetails: propTypes.object.isRequired,
   newTreatments: propTypes.number.isRequired,
+  previousShiftPendingTasks: propTypes.array.isRequired,
 };

@@ -149,3 +149,48 @@ export const getDateTimeFromEpochTime = (
   }
   return time.format(defaultDateTimeFormat12Hrs);
 };
+
+export const setDateAndTime = (latestDateAndTime) => {
+  const date = formatDate(latestDateAndTime);
+  const time = formatDate(latestDateAndTime, timeFormatFor12Hr);
+  return { date, time };
+};
+
+export const getDetailedAge = (birthDate, currentDate = new Date()) => {
+  if (!birthDate) return "";
+  const birth = moment.utc(birthDate);
+  const now = moment.utc(currentDate).subtract(1, "days");
+
+  if (!birth.isValid() || !now.isValid() || birth.isAfter(now)) {
+    console.warn(
+      "getDetailedAge received invalid or future birthDate:",
+      birthDate
+    );
+    return "";
+  }
+
+  const years = now.diff(birth, "years");
+  birth.add(years, "years");
+
+  const months = now.diff(birth, "months");
+  birth.add(months, "months");
+
+  const days = now.diff(birth, "days");
+
+  const parts = [];
+  if (years > 0) {
+    parts.push(`${years} ${years === 1 ? "Year" : "Years"}`);
+  }
+  if (months > 0) {
+    parts.push(`${months} ${months === 1 ? "Month" : "Months"}`);
+  }
+  if (days > 0) {
+    parts.push(`${days} ${days === 1 ? "Day" : "Days"}`);
+  }
+
+  if (parts.length === 0) {
+    return "0 Days";
+  }
+
+  return parts.join(", ");
+};
