@@ -11,10 +11,7 @@ import { FormattedMessage } from "react-intl";
 import propTypes from "prop-types";
 import PropTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
-import {
-  getCurrentShiftTimes,
-  getDetailedAge,
-} from "../../../utils/DateTimeUtils";
+import { getCurrentShiftTimes, getDetailedAge } from "../../../utils/DateTimeUtils";
 import { getIPDPatientDashboardUrl } from "../../../utils/CommonUtils";
 
 export const PatientDetailsCell = ({
@@ -24,7 +21,7 @@ export const PatientDetailsCell = ({
   navHourEpoch,
   newTreatments,
   visitDetails,
-  previousShiftPendingTasks,
+  previousShiftPendingTasks
 }) => {
   const { person, uuid } = patientDetails;
   const {
@@ -123,8 +120,7 @@ export const PatientDetailsCell = ({
             <>
               <div className="treatments-notification">
                 <div className="warning_icon">
-                  <WarningAlt20 className={"warning-icon-20"} />{" "}
-                </div>
+                  <WarningAlt20 className={"warning-icon-20"} />{" "} </div>
                 <div className="treatments-notification-span">
                   {newTreatments > 0 && (
                     <div>
