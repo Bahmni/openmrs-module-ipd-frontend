@@ -26,14 +26,12 @@ jest.mock("../utils/PatientHeaderUtils", () => {
 });
 jest.mock("../../../../utils/DateTimeUtils", () => ({
   getDetailedAge: (birthDate) => {
-    // Return the expected detailed age string for the test patient
     if (birthDate === "1991-01-01") {
       return "34 Years, 4 Months, 18 Days";
     }
     return "";
   },
   formatDate: (date, format) => {
-    // Return a formatted date string for the test patient
     if (date === "1991-01-01") {
       return "01 Jan 1991";
     }
@@ -114,7 +112,6 @@ describe("PatientHeader", () => {
     fireEvent.click(showDetailsButton);
 
     await waitFor(() => {
-      // Find all address detail spans and check for country/ethiopia
       const addressSpans = container.querySelectorAll('.details-value');
       const found = Array.from(addressSpans).some(span =>
         /country/i.test(span.textContent) && /ethiopia/i.test(span.textContent)
