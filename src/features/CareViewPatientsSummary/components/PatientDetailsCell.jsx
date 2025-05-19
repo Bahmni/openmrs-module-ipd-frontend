@@ -122,41 +122,36 @@ export const PatientDetailsCell = ({
                 <div className="warning_icon">
                   <WarningAlt20 className={"warning-icon-20"} />{" "} </div>
                 <div className="treatments-notification-span">
-                  {newTreatments > 0 && (
-                    <div>
-                      &bull; {newTreatments + " New treatment(s): "}
-                      <>
-                        <Link
-                          href={getIPDPatientDashboardUrl(
-                            patientDetails.uuid,
-                            visitDetails?.uuid,
-                            "careViewDashboard"
-                          )}
-                          data-testid="treatments-ipd-dashboard"
-                        >
-                          <FormattedMessage
-                            id={"SCHEDULE_TREATMENTS"}
-                            defaultMessage={"Schedule Treatments"}
-                          />
-                        </Link>
-                      </>
-                    </div>
-                  )}
-                  {previousShiftPendingTasks.length > 0 && (
-                    <div>
-                      {" "}
-                      &bull;{" Previous Pending: "}{" "}
-                      {previousShiftPendingTasks.map((task, index) => (
-                        <span key={task.taskId}>
-                          {index === previousShiftPendingTasks.length - 1 ? (
-                            <span>{task.taskName}</span>
-                          ) : (
-                            <span>{task.taskName + ", "}</span>
-                          )}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                 { newTreatments > 0 && <div>&bull; { newTreatments + " New treatment(s): "}
+                  <>
+                    <Link
+                      href={getIPDPatientDashboardUrl(
+                        patientDetails.uuid,
+                        visitDetails?.uuid,
+                        "careViewDashboard"
+                      )}
+                      data-testid="treatments-ipd-dashboard"
+                    >
+                      <FormattedMessage
+                        id={"SCHEDULE_TREATMENTS"}
+                        defaultMessage={"Schedule Treatments"}
+                      />
+                    </Link>
+                  </>
+                  </div>}
+                  { previousShiftPendingTasks.length > 0 &&
+                  <div> &bull;{" Previous Pending: "} {
+                    previousShiftPendingTasks.map((task, index) => (
+                      <span key={task.taskId}>
+                        {index === previousShiftPendingTasks.length - 1 ? (
+                          <span>{task.taskName}</span>
+                        ) : (
+                          <span>{task.taskName + ", "}</span>
+                        )}
+                      </span>
+                    ))
+                  }</div>
+                  }
                 </div>
               </div>
             </>
