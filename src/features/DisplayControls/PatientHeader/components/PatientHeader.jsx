@@ -87,7 +87,7 @@ export const PatientHeader = (props) => {
     locationMap.map((location) => {
       locations = {
         ...locations,
-        [location.header]:
+        [location.name]:
           patientInfo.person.preferredAddress &&
           patientInfo.person.preferredAddress[location.addressField],
       };

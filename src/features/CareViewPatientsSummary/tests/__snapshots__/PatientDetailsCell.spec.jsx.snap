@@ -64,9 +64,8 @@ exports[`PatientDetailsCell should not show nurse name if the current time cross
               |
             </span>
             <span>
-              14
+              15 Years, 11 Months, 6 Days
             </span>
-            yrs
             <div
               class="treatments-notification"
             >
@@ -195,9 +194,8 @@ exports[`PatientDetailsCell should not show nurse name if the current time cross
             |
           </span>
           <span>
-            14
+            15 Years, 11 Months, 6 Days
           </span>
-          yrs
           <div
             class="treatments-notification"
           >
@@ -380,9 +378,8 @@ exports[`PatientDetailsCell should render patientDetailsCell component 1`] = `
           |
         </span>
         <span>
-          14
+          15 Years, 11 Months, 6 Days
         </span>
-        yrs
         <div
           class="treatments-notification"
         >
@@ -516,9 +513,8 @@ exports[`PatientDetailsCell should show nurse name only if a nurse bookmarks a p
               |
             </span>
             <span>
-              14
+              15 Years, 11 Months, 6 Days
             </span>
-            yrs
             <div
               class="treatments-notification"
             >
@@ -652,9 +648,8 @@ exports[`PatientDetailsCell should show nurse name only if a nurse bookmarks a p
             |
           </span>
           <span>
-            14
+            15 Years, 11 Months, 6 Days
           </span>
-          yrs
           <div
             class="treatments-notification"
           >

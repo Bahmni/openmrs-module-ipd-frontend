@@ -143,7 +143,8 @@ describe("CareViewPatientsSummary", function () {
         queryByText("AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu")
       ).toBeTruthy();
       expect(queryByText("A-6")).toBeTruthy();
-      expect(queryByText("14")).toBeTruthy();
+      // Updated: Expect detailed age format for patient born 2009-06-13, mocked date is 2023-01-01
+      expect(queryByText("13 Years, 6 Months, 18 Days")).toBeTruthy();
     });
   });
 

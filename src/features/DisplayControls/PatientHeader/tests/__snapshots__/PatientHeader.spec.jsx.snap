@@ -116,9 +116,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                 <h3
                   class="patient-info"
                 >
-                  30
-                   
-                  Years
+                  34 Years, 4 Months, 18 Days
                 </h3>
                 <h3
                   class="patient-info"
@@ -437,9 +435,7 @@ exports[`PatientHeader should display patient movement item on click of overflow
                 <h3
                   class="patient-info"
                 >
-                  30
-                   
-                  Years
+                  34 Years, 4 Months, 18 Days
                 </h3>
                 <h3
                   class="patient-info"
@@ -607,9 +603,7 @@ exports[`PatientHeader should display patient movement overflow menu item as dis
                 <h3
                   class="patient-info"
                 >
-                  30
-                   
-                  Years
+                  34 Years, 4 Months, 18 Days
                 </h3>
                 <h3
                   class="patient-info"

@@ -24,6 +24,22 @@ jest.mock("../utils/PatientHeaderUtils", () => {
     getBedInformation: () => mockBedInformation("123", "123"),
   };
 });
+jest.mock("../../../../utils/DateTimeUtils", () => ({
+  getDetailedAge: (birthDate) => {
+    // Return the expected detailed age string for the test patient
+    if (birthDate === "1991-01-01") {
+      return "34 Years, 4 Months, 18 Days";
+    }
+    return "";
+  },
+  formatDate: (date, format) => {
+    // Return a formatted date string for the test patient
+    if (date === "1991-01-01") {
+      return "01 Jan 1991";
+    }
+    return date;
+  },
+}));
 
 describe("PatientHeader", () => {
   beforeEach(() => {
@@ -78,7 +94,7 @@ describe("PatientHeader", () => {
       </IPDContext.Provider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
-    expect(screen.getByText(/30 Years/i)).toBeTruthy();
+    expect(screen.getByText(/34 Years, 4 Months, 18 Days/i)).toBeTruthy();
     expect(screen.getByText("01 Jan 1991")).toBeTruthy();
     expect(screen.getByText(/12345/i)).toBeTruthy();
   });
@@ -98,7 +114,12 @@ describe("PatientHeader", () => {
     fireEvent.click(showDetailsButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/Country : Ethiopia/i)).toBeTruthy();
+      // Find all address detail spans and check for country/ethiopia
+      const addressSpans = container.querySelectorAll('.details-value');
+      const found = Array.from(addressSpans).some(span =>
+        /country/i.test(span.textContent) && /ethiopia/i.test(span.textContent)
+      );
+      expect(found).toBe(true);
       expect(container).toMatchSnapshot();
     });
   });

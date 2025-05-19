@@ -101,9 +101,8 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                   |
                 </span>
                 <span>
-                  14
+                  13 Years, 6 Months, 18 Days
                 </span>
-                yrs
               </div>
             </div>
             <div
@@ -197,9 +196,8 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                   |
                 </span>
                 <span>
-                  10
+                  9 Years, 5 Months, 10 Days
                 </span>
-                yrs
                 <div
                   class="treatments-notification"
                 >
@@ -335,9 +333,8 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                   |
                 </span>
                 <span>
-                  30
+                  28 Years, 10 Months, 12 Days
                 </span>
-                yrs
               </div>
             </div>
             <div

@@ -31,6 +31,13 @@ jest.mock("../../CareViewPatients/utils/CareViewPatientsUtils", () => ({
 
 jest.mock("../../../utils/DateTimeUtils", () => ({
   getCurrentShiftTimes: () => mockGetCurrentShiftTimes(),
+  getDetailedAge: (birthDate) => {
+    // Return the expected detailed age string for the test patient
+    if (birthDate === "2009-06-13T00:00:00.000+0530") {
+      return "15 Years, 11 Months, 6 Days";
+    }
+    return "";
+  },
 }));
 
 describe("PatientDetailsCell", () => {
@@ -87,7 +94,8 @@ describe("PatientDetailsCell", () => {
         queryByText("AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu")
       ).toBeTruthy();
       expect(queryByText("A-6")).toBeTruthy();
-      expect(queryByText("14")).toBeTruthy();
+      // Update: Expect detailed age format for patient born 2009-06-13, today is 2025-05-19
+      expect(queryByText(/15 Years, 11 Months, 6 Days/)).toBeTruthy();
       expect(queryByText("dummy test,")).toBeTruthy();
       expect(queryByText("task 1,")).toBeTruthy();
       expect(queryByText("task 2")).toBeTruthy();
