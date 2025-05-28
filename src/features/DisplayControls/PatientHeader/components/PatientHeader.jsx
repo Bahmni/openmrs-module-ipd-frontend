@@ -25,7 +25,7 @@ import "../styles/PatientHeader.scss";
 import { ChevronDown20, ChevronUp20, HospitalBed16 } from "@carbon/icons-react";
 import PatientDetails from "./PatientDetails";
 import PatientMovementModal from "./PatientMovementModal";
-import { formatDate, getDetailedAge } from "../../../../utils/DateTimeUtils";
+import { formatDate, getAgeInYearsMonthsDays } from "../../../../utils/DateTimeUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 
 export const PatientHeader = (props) => {
@@ -78,7 +78,7 @@ export const PatientHeader = (props) => {
       familyName: patientInfo?.person?.preferredName.familyName,
       middleName: patientInfo?.person?.preferredName?.middleName,
       age: patientInfo?.person?.age,
-      ageDetailed: getDetailedAge(patientInfo?.person?.birthdate),
+      ageDetailed: getAgeInYearsMonthsDays(patientInfo?.person?.birthdate),
       birthDate: formatDate(patientInfo?.person?.birthdate),
       attributes: patientInfo?.person?.attributes,
       gender: getGender(patientInfo?.person?.gender),

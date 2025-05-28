@@ -11,7 +11,7 @@ import { FormattedMessage } from "react-intl";
 import propTypes from "prop-types";
 import PropTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
-import { getCurrentShiftTimes, getDetailedAge } from "../../../utils/DateTimeUtils";
+import { getCurrentShiftTimes, getAgeInYearsMonthsDays } from "../../../utils/DateTimeUtils";
 import { getIPDPatientDashboardUrl } from "../../../utils/CommonUtils";
 
 export const PatientDetailsCell = ({
@@ -115,7 +115,7 @@ export const PatientDetailsCell = ({
           <FormattedMessage id={"PATIENT"} defaultMessage={"Patient"} />:{" "}
           <span>{person.display}</span>&nbsp;(
           <span>{person.gender}</span>)<span className={"separator"}>|</span>
-          <span>{getDetailedAge(person.birthdate)}</span>
+          <span>{getAgeInYearsMonthsDays(person.birthdate)}</span>
           {(newTreatments > 0 || previousShiftPendingTasks.length > 0) && (
             <>
               <div className="treatments-notification">

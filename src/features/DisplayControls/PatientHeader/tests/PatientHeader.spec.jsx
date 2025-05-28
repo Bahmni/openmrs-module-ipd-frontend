@@ -25,13 +25,13 @@ jest.mock("../utils/PatientHeaderUtils", () => {
   };
 });
 jest.mock("../../../../utils/DateTimeUtils", () => ({
-  getDetailedAge: (birthDate) => {
+  getAgeInYearsMonthsDays: (birthDate) => {
     if (birthDate === "1991-01-01") {
       return "34 Years, 4 Months, 18 Days";
     }
     return "";
   },
-  formatDate: (date, format) => {
+  formatDate: (date) => {
     if (date === "1991-01-01") {
       return "01 Jan 1991";
     }
@@ -59,6 +59,7 @@ describe("PatientHeader", () => {
         <PatientHeader patientId="123" />
       </IPDContext.Provider>
     );
+    expect(screen.getByTestId("header-loading")).toBeTruthy();
   });
 
   it("should call fetchPatientInfo on mount", () => {

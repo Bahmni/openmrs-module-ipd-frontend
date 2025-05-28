@@ -31,7 +31,7 @@ jest.mock("../../CareViewPatients/utils/CareViewPatientsUtils", () => ({
 
 jest.mock("../../../utils/DateTimeUtils", () => ({
   getCurrentShiftTimes: () => mockGetCurrentShiftTimes(),
-  getDetailedAge: (birthDate) => {
+  getAgeInYearsMonthsDays: (birthDate) => {
     if (birthDate === "2009-06-13T00:00:00.000+0530") {
       return "15 Years, 11 Months, 6 Days";
     }

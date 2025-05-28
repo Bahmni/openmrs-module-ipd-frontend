@@ -156,14 +156,14 @@ export const setDateAndTime = (latestDateAndTime) => {
   return { date, time };
 };
 
-export const getDetailedAge = (birthDate, currentDate = new Date()) => {
+export const getAgeInYearsMonthsDays = (birthDate, currentDate = new Date()) => {
   if (!birthDate) return "";
   const birth = moment.utc(birthDate);
   const now = moment.utc(currentDate).subtract(1, "days");
 
   if (!birth.isValid() || !now.isValid() || birth.isAfter(now)) {
     console.warn(
-      "getDetailedAge received invalid or future birthDate:",
+      "getAgeInYearsMonthsDays received invalid or future birthDate:",
       birthDate
     );
     return "";
