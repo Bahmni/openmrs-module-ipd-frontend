@@ -91,6 +91,7 @@ exports[`PatientDetailsCell should not show nurse name if the current time cross
                   />
                 </svg>
                  
+                 
               </div>
               <div
                 class="treatments-notification-span"
@@ -220,6 +221,7 @@ exports[`PatientDetailsCell should not show nurse name if the current time cross
                   d="M29,30H3a1,1,0,0,1-.8872-1.4614l13-25a1,1,0,0,1,1.7744,0l13,25A1,1,0,0,1,29,30ZM4.6507,28H27.3493l.002-.0033L16.002,6.1714h-.004L4.6487,27.9967Z"
                 />
               </svg>
+               
                
             </div>
             <div
@@ -405,6 +407,7 @@ exports[`PatientDetailsCell should render patientDetailsCell component 1`] = `
               />
             </svg>
              
+             
           </div>
           <div
             class="treatments-notification-span"
@@ -540,6 +543,7 @@ exports[`PatientDetailsCell should show nurse name only if a nurse bookmarks a p
                   />
                 </svg>
                  
+                 
               </div>
               <div
                 class="treatments-notification-span"
@@ -674,6 +678,7 @@ exports[`PatientDetailsCell should show nurse name only if a nurse bookmarks a p
                   d="M29,30H3a1,1,0,0,1-.8872-1.4614l13-25a1,1,0,0,1,1.7744,0l13,25A1,1,0,0,1,29,30ZM4.6507,28H27.3493l.002-.0033L16.002,6.1714h-.004L4.6487,27.9967Z"
                 />
               </svg>
+               
                
             </div>
             <div

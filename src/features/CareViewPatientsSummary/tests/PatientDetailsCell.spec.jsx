@@ -1,5 +1,6 @@
 import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
+import { IntlProvider } from "react-intl";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { mockConfig } from "../../../utils/CommonUtils";
 import "@testing-library/jest-dom/extend-expect";
@@ -51,40 +52,44 @@ describe("PatientDetailsCell", () => {
 
   it("should render patientDetailsCell component", () => {
     const { container } = render(
-      <CareViewContext.Provider value={mockContext}>
-        <PatientDetailsCell
-          patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
-          bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
-          careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
-          newTreatments={1}
-          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
-          navHourEpoch={{
-            startHourEpoch: 1672575400,
-            endHourEpoch: 1710511200,
-          }}
-          previousShiftPendingTasks={[]}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={1}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
     expect(container).toMatchSnapshot();
   });
 
   it("renders patient details correctly", async () => {
     const { queryByText } = render(
-      <CareViewContext.Provider value={mockContext}>
-        <PatientDetailsCell
-          patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
-          bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
-          careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
-          newTreatments={1}
-          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
-          navHourEpoch={{
-            startHourEpoch: 1672575400,
-            endHourEpoch: 1710511200,
-          }}
-          previousShiftPendingTasks={mockPreviousShiftPendingTask}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={1}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={mockPreviousShiftPendingTask}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -102,20 +107,22 @@ describe("PatientDetailsCell", () => {
 
   it("should show nurse name only if a nurse bookmarks a patient within the current shift", async () => {
     const container = render(
-      <CareViewContext.Provider value={mockContext}>
-        <PatientDetailsCell
-          patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
-          bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
-          careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
-          newTreatments={1}
-          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
-          navHourEpoch={{
-            startHourEpoch: 1710509100,
-            endHourEpoch: 1710511200,
-          }}
-          previousShiftPendingTasks={[]}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={1}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1710509100,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -128,20 +135,22 @@ describe("PatientDetailsCell", () => {
 
   it("should not show nurse name if the current time crossed the shift endTime", async () => {
     const container = render(
-      <CareViewContext.Provider value={mockContext}>
-        <PatientDetailsCell
-          patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
-          bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
-          careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
-          newTreatments={1}
-          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
-          navHourEpoch={{
-            startHourEpoch: 1710509500,
-            endHourEpoch: 1710609500,
-          }}
-          previousShiftPendingTasks={[]}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={1}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1710509500,
+              endHourEpoch: 1710609500,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -154,20 +163,22 @@ describe("PatientDetailsCell", () => {
 
   it("should call bookmark api with correct payload on click of bookmark add icon", async () => {
     const container = render(
-      <CareViewContext.Provider value={mockContext}>
-        <PatientDetailsCell
-          patientDetails={mockPatientsList.admittedPatients[1].patientDetails}
-          bedDetails={mockPatientsList.admittedPatients[1].bedDetails}
-          careTeamDetails={mockPatientsList.admittedPatients[1].careTeam}
-          newTreatments={1}
-          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
-          navHourEpoch={{
-            startHourEpoch: 1710509100,
-            endHourEpoch: 1710509100,
-          }}
-          previousShiftPendingTasks={[]}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[1].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[1].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[1].careTeam}
+            newTreatments={1}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1710509100,
+              endHourEpoch: 1710509100,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     fireEvent.click(container.queryByTestId("bookmark-add-icon"));
@@ -190,20 +201,22 @@ describe("PatientDetailsCell", () => {
 
   it("should call bookmark api with un bookmark payload on click of bookmark filled icon", async () => {
     const container = render(
-      <CareViewContext.Provider value={mockContext}>
-        <PatientDetailsCell
-          patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
-          bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
-          careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
-          newTreatments={1}
-          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
-          navHourEpoch={{
-            startHourEpoch: 1710509100,
-            endHourEpoch: 1710511200,
-          }}
-          previousShiftPendingTasks={[]}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={1}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1710509100,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     fireEvent.click(container.queryByTestId("bookmark-filled-icon"));
@@ -227,20 +240,22 @@ describe("PatientDetailsCell", () => {
 
   it("should disable bookmark filled icon when the patient is already bookmarked by another nurse", async () => {
     const container = render(
-      <CareViewContext.Provider value={mockContext}>
-        <PatientDetailsCell
-          patientDetails={mockPatientsList.admittedPatients[2].patientDetails}
-          bedDetails={mockPatientsList.admittedPatients[2].bedDetails}
-          careTeamDetails={mockPatientsList.admittedPatients[2].careTeam}
-          newTreatments={1}
-          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
-          navHourEpoch={{
-            startHourEpoch: 1710509100,
-            endHourEpoch: 1710511200,
-          }}
-          previousShiftPendingTasks={[]}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[2].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[2].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[2].careTeam}
+            newTreatments={1}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1710509100,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     fireEvent.click(container.queryByTestId("bookmark-filled-icon"));
@@ -255,20 +270,22 @@ describe("PatientDetailsCell", () => {
 
   it("should call handleRefreshSummary api when bookmark filled and un filled icon is clicked", async () => {
     const container = render(
-      <CareViewContext.Provider value={mockContext}>
-        <PatientDetailsCell
-          patientDetails={mockPatientsList.admittedPatients[1].patientDetails}
-          bedDetails={mockPatientsList.admittedPatients[1].bedDetails}
-          careTeamDetails={mockPatientsList.admittedPatients[1].careTeam}
-          newTreatments={1}
-          visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
-          navHourEpoch={{
-            startHourEpoch: 1710509100,
-            endHourEpoch: 1710509100,
-          }}
-          previousShiftPendingTasks={[]}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[1].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[1].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[1].careTeam}
+            newTreatments={1}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1710509100,
+              endHourEpoch: 1710509100,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     fireEvent.click(container.queryByTestId("bookmark-add-icon"));
