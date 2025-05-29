@@ -230,5 +230,8 @@
   "VITALS_TEMPERATURE_KEY": "Température",
   "VITALS_PULSE_KEY": "Impulsion",
   "VITALS_HEIGHT_KEY": "HAUTEUR",
-  "VITALS_MUAC_KEY": "Circonférence du milieu du bras"
+  "VITALS_MUAC_KEY": "Circonférence du milieu du bras",
+  "CLINICAL_YEARS_TRANSLATION_KEY": "ans",
+  "CLINICAL_MONTHS_TRANSLATION_KEY": "mois",
+  "CLINICAL_DAYS_TRANSLATION_KEY": "jours"
 }

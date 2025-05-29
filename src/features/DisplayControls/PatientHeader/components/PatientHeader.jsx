@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useIntl } from "react-intl";
 import {
   fetchAddressMapping,
   fetchPatientProfile,
@@ -29,6 +30,7 @@ import { formatDate, getAgeInYearsMonthsDays } from "../../../../utils/DateTimeU
 import { IPDContext } from "../../../../context/IPDContext";
 
 export const PatientHeader = (props) => {
+  const intl = useIntl();
   const { patientId, openVisitSummary, setPatientDetailsOpen } = props;
   const { isReadMode, visitSummary } = useContext(IPDContext);
   const [showPatientDetails, togglePatientDetails] = useState(false);
@@ -78,7 +80,7 @@ export const PatientHeader = (props) => {
       familyName: patientInfo?.person?.preferredName.familyName,
       middleName: patientInfo?.person?.preferredName?.middleName,
       age: patientInfo?.person?.age,
-      ageDetailed: getAgeInYearsMonthsDays(patientInfo?.person?.birthdate),
+      ageDetailed: getAgeInYearsMonthsDays(patientInfo?.person?.birthdate, new Date(), intl),
       birthDate: formatDate(patientInfo?.person?.birthdate),
       attributes: patientInfo?.person?.attributes,
       gender: getGender(patientInfo?.person?.gender),

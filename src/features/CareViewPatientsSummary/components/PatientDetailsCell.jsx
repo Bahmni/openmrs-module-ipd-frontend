@@ -7,7 +7,7 @@ import {
   WarningAlt20,
 } from "@carbon/icons-react";
 import { Link } from "carbon-components-react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import propTypes from "prop-types";
 import PropTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
@@ -38,6 +38,7 @@ export const PatientDetailsCell = ({
     : nurse?.display;
   const nurseName = nurse && formattedNurseName;
   const isBookmarked = Object.keys(bookmark).length !== 0;
+  const intl = useIntl();
 
   const getBookmarkStatus = (careTeamDetailsData) => {
     const nearestHourEpochInMilliseconds = navHourEpoch.startHourEpoch * 1000;
@@ -115,7 +116,7 @@ export const PatientDetailsCell = ({
           <FormattedMessage id={"PATIENT"} defaultMessage={"Patient"} />:{" "}
           <span>{person.display}</span>&nbsp;(
           <span>{person.gender}</span>)<span className={"separator"}>|</span>
-          <span>{getAgeInYearsMonthsDays(person.birthdate)}</span>
+          <span>{getAgeInYearsMonthsDays(person.birthdate, new Date(), intl)}</span>
           {(newTreatments > 0 || previousShiftPendingTasks.length > 0) && (
             <>
               <div className="treatments-notification">

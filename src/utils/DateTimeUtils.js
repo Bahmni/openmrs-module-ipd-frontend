@@ -156,10 +156,16 @@ export const setDateAndTime = (latestDateAndTime) => {
   return { date, time };
 };
 
-export const getAgeInYearsMonthsDays = (birthDate, currentDate = new Date()) => {
-  if (!birthDate) return "";
+export const getAgeInYearsMonthsDays = (
+  birthDate,
+  currentDate = new Date(),
+  intl
+) => {
+  if (!birthDate || !intl) {
+    return "";
+  }
   const birth = moment.utc(birthDate);
-  const now = moment.utc(currentDate).subtract(1, "days");
+  const now = moment.utc(currentDate).startOf('day');
 
   if (!birth.isValid() || !now.isValid() || birth.isAfter(now)) {
     console.warn(
@@ -170,26 +176,29 @@ export const getAgeInYearsMonthsDays = (birthDate, currentDate = new Date()) => 
   }
 
   const years = now.diff(birth, "years");
-  birth.add(years, "years");
-
-  const months = now.diff(birth, "months");
-  birth.add(months, "months");
-
-  const days = now.diff(birth, "days");
+  const birthAfterYears = moment(birth).add(years, "years");
+  const months = now.diff(birthAfterYears, "months");
+  const birthAfterMonths = moment(birthAfterYears).add(months, "months");
+  const days = now.diff(birthAfterMonths, "days");
 
   const parts = [];
   if (years > 0) {
-    parts.push(`${years} ${years === 1 ? "Year" : "Years"}`);
+    const yearId = "CLINICAL_YEARS_TRANSLATION_KEY";
+    const yearDefault = "Years";
+    const formattedYear = intl.formatMessage({ id: yearId, defaultMessage: yearDefault });
+    parts.push(`${years} ${formattedYear}`);
   }
   if (months > 0) {
-    parts.push(`${months} ${months === 1 ? "Month" : "Months"}`);
+    const monthId = "CLINICAL_MONTHS_TRANSLATION_KEY";
+    const monthDefault = "Months";
+    const formattedMonth = intl.formatMessage({ id: monthId, defaultMessage: monthDefault });
+    parts.push(`${months} ${formattedMonth}`);
   }
-  if (days > 0) {
-    parts.push(`${days} ${days === 1 ? "Day" : "Days"}`);
-  }
-
-  if (parts.length === 0) {
-    return "0 Days";
+  if (days > 0 || (years === 0 && months === 0)) {
+    const dayId = "CLINICAL_DAYS_TRANSLATION_KEY";
+    const dayDefault = "Days";
+    const formattedDay = intl.formatMessage({ id: dayId, defaultMessage: dayDefault });
+    parts.push(`${days} ${formattedDay}`);
   }
 
   return parts.join(", ");
