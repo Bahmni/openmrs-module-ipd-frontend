@@ -80,7 +80,7 @@ export const PatientHeader = (props) => {
       familyName: patientInfo?.person?.preferredName.familyName,
       middleName: patientInfo?.person?.preferredName?.middleName,
       age: patientInfo?.person?.age,
-      ageDetailed: getAgeInYearsMonthsDays(patientInfo?.person?.birthdate, new Date(), intl),
+      ageInDetail: getAgeInYearsMonthsDays(patientInfo?.person?.birthdate, new Date(), intl),
       birthDate: formatDate(patientInfo?.person?.birthdate),
       attributes: patientInfo?.person?.attributes,
       gender: getGender(patientInfo?.person?.gender),
@@ -204,7 +204,7 @@ export const PatientHeader = (props) => {
                           {patientDetails?.gender}
                         </h3>
                         <h3 className="patient-info">
-                          {patientDetails?.ageDetailed}
+                          {patientDetails?.ageInDetail}
                         </h3>
                         <h3 className="patient-info">
                           {patientDetails?.birthDate}
