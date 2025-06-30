@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useIntl } from "react-intl";
 import {
   fetchAddressMapping,
   fetchPatientProfile,
@@ -25,10 +26,11 @@ import "../styles/PatientHeader.scss";
 import { ChevronDown20, ChevronUp20, HospitalBed16 } from "@carbon/icons-react";
 import PatientDetails from "./PatientDetails";
 import PatientMovementModal from "./PatientMovementModal";
-import { formatDate } from "../../../../utils/DateTimeUtils";
+import { formatDate, getAgeInYearsMonthsDays } from "../../../../utils/DateTimeUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 
 export const PatientHeader = (props) => {
+  const intl = useIntl();
   const { patientId, openVisitSummary, setPatientDetailsOpen } = props;
   const { isReadMode, visitSummary } = useContext(IPDContext);
   const [showPatientDetails, togglePatientDetails] = useState(false);
@@ -39,7 +41,6 @@ export const PatientHeader = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bedInformation, setBedInformation] = useState();
   const [profilePicture, setProfilePicture] = useState();
-  const years = <FormattedMessage id="YEARS" defaultMessage="Years" />;
   const showDetails = (
     <FormattedMessage id="SHOW_PATIENT_DETAILS" defaultMessage="Show Details" />
   );
@@ -79,6 +80,7 @@ export const PatientHeader = (props) => {
       familyName: patientInfo?.person?.preferredName.familyName,
       middleName: patientInfo?.person?.preferredName?.middleName,
       age: patientInfo?.person?.age,
+      ageInDetail: getAgeInYearsMonthsDays(patientInfo?.person?.birthdate, new Date(), intl),
       birthDate: formatDate(patientInfo?.person?.birthdate),
       attributes: patientInfo?.person?.attributes,
       gender: getGender(patientInfo?.person?.gender),
@@ -202,7 +204,7 @@ export const PatientHeader = (props) => {
                           {patientDetails?.gender}
                         </h3>
                         <h3 className="patient-info">
-                          {patientDetails?.age} {years}
+                          {patientDetails?.ageInDetail}
                         </h3>
                         <h3 className="patient-info">
                           {patientDetails?.birthDate}

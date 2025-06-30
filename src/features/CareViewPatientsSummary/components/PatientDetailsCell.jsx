@@ -7,11 +7,11 @@ import {
   WarningAlt20,
 } from "@carbon/icons-react";
 import { Link } from "carbon-components-react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import propTypes from "prop-types";
 import PropTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
-import { getCurrentShiftTimes } from "../../../utils/DateTimeUtils";
+import { getCurrentShiftTimes, getAgeInYearsMonthsDays } from "../../../utils/DateTimeUtils";
 import { getIPDPatientDashboardUrl } from "../../../utils/CommonUtils";
 
 export const PatientDetailsCell = ({
@@ -38,6 +38,7 @@ export const PatientDetailsCell = ({
     : nurse?.display;
   const nurseName = nurse && formattedNurseName;
   const isBookmarked = Object.keys(bookmark).length !== 0;
+  const intl = useIntl();
 
   const getBookmarkStatus = (careTeamDetailsData) => {
     const nearestHourEpochInMilliseconds = navHourEpoch.startHourEpoch * 1000;
@@ -115,13 +116,12 @@ export const PatientDetailsCell = ({
           <FormattedMessage id={"PATIENT"} defaultMessage={"Patient"} />:{" "}
           <span>{person.display}</span>&nbsp;(
           <span>{person.gender}</span>)<span className={"separator"}>|</span>
-          <span>{person.age}</span>
-          <FormattedMessage id={"AGE_YEARS_LABEL"} defaultMessage={"yrs"} />
+          <span>{getAgeInYearsMonthsDays(person.birthdate, new Date(), intl)}</span>
           {(newTreatments > 0 || previousShiftPendingTasks.length > 0) && (
             <>
               <div className="treatments-notification">
                 <div className="warning_icon">
-                  <WarningAlt20 className={"warning-icon-20"} /> </div>
+                  <WarningAlt20 className={"warning-icon-20"} />{" "} </div>
                 <div className="treatments-notification-span">
                  { newTreatments > 0 && <div>&bull; { newTreatments + " New treatment(s): "}
                   <>
@@ -195,4 +195,5 @@ PatientDetailsCell.propTypes = {
   navHourEpoch: propTypes.object.isRequired,
   visitDetails: propTypes.object.isRequired,
   newTreatments: propTypes.number.isRequired,
+  previousShiftPendingTasks: propTypes.array.isRequired,
 };

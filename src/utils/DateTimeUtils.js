@@ -149,3 +149,57 @@ export const getDateTimeFromEpochTime = (
   }
   return time.format(defaultDateTimeFormat12Hrs);
 };
+
+export const setDateAndTime = (latestDateAndTime) => {
+  const date = formatDate(latestDateAndTime);
+  const time = formatDate(latestDateAndTime, timeFormatFor12Hr);
+  return { date, time };
+};
+
+export const getAgeInYearsMonthsDays = (
+  birthDate,
+  currentDate = new Date(),
+  intl
+) => {
+  if (!birthDate || !intl) {
+    return "";
+  }
+  const birth = moment.utc(birthDate);
+  const now = moment.utc(currentDate).startOf('day');
+
+  if (!birth.isValid() || !now.isValid() || birth.isAfter(now)) {
+    console.warn(
+      "getAgeInYearsMonthsDays received invalid or future birthDate:",
+      birthDate
+    );
+    return "";
+  }
+
+  const years = now.diff(birth, "years");
+  const birthAfterYears = moment(birth).add(years, "years");
+  const months = now.diff(birthAfterYears, "months");
+  const birthAfterMonths = moment(birthAfterYears).add(months, "months");
+  const days = now.diff(birthAfterMonths, "days");
+
+  const parts = [];
+  if (years > 0) {
+    const yearId = "CLINICAL_YEARS_TRANSLATION_KEY";
+    const yearDefault = "Years";
+    const formattedYear = intl.formatMessage({ id: yearId, defaultMessage: yearDefault });
+    parts.push(`${years} ${formattedYear}`);
+  }
+  if (months > 0) {
+    const monthId = "CLINICAL_MONTHS_TRANSLATION_KEY";
+    const monthDefault = "Months";
+    const formattedMonth = intl.formatMessage({ id: monthId, defaultMessage: monthDefault });
+    parts.push(`${months} ${formattedMonth}`);
+  }
+  if (days > 0 || (years === 0 && months === 0)) {
+    const dayId = "CLINICAL_DAYS_TRANSLATION_KEY";
+    const dayDefault = "Days";
+    const formattedDay = intl.formatMessage({ id: dayId, defaultMessage: dayDefault });
+    parts.push(`${days} ${formattedDay}`);
+  }
+
+  return parts.join(", ");
+};
