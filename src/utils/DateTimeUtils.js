@@ -185,33 +185,19 @@ export const getAgeInYearsMonthsDays = (
   if (years > 0) {
     const yearId = "CLINICAL_YEARS_TRANSLATION_KEY";
     const yearDefault = "Years";
-    const formattedYear = intl.formatMessage({
-      id: yearId,
-      defaultMessage: yearDefault,
-    });
+    const formattedYear = intl.formatMessage({ id: yearId, defaultMessage: yearDefault });
     parts.push(`${years} ${formattedYear}`);
   }
   if (years > 0 || months > 0) {
     const monthId = "CLINICAL_MONTHS_TRANSLATION_KEY";
     const monthDefault = "Months";
-    const formattedMonth = intl.formatMessage({
-      id: monthId,
-      defaultMessage: monthDefault,
-    });
+    const formattedMonth = intl.formatMessage({ id: monthId, defaultMessage: monthDefault });
     parts.push(`${months} ${formattedMonth}`);
   }
-  if (
-    years > 0 ||
-    months > 0 ||
-    days > 0 ||
-    (years === 0 && months === 0 && days === 0)
-  ) {
+  if ( years > 0 || months > 0 || days > 0 || (years === 0 && months === 0 && days === 0)) {
     const dayId = "CLINICAL_DAYS_TRANSLATION_KEY";
     const dayDefault = "Days";
-    const formattedDay = intl.formatMessage({
-      id: dayId,
-      defaultMessage: dayDefault,
-    });
+    const formattedDay = intl.formatMessage({ id: dayId, defaultMessage: dayDefault });
     parts.push(`${days} ${formattedDay}`);
   }
 
