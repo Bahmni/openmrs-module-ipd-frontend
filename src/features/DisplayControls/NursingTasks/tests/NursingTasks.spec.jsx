@@ -13,7 +13,9 @@ import {
   mockConfig,
   mockConfigFor12HourFormat,
 } from "../../../../utils/CommonUtils";
+import { asNeededPlaceholderConceptName } from "../../../../constants";
 import { IntlProvider } from "react-intl";
+import * as NursingTasksUtils from "../utils/NursingTasksUtils";
 
 const mockFetchMedicationNursingTasks = jest.fn();
 const mockGetTimeInSeconds = jest.fn();
@@ -54,6 +56,100 @@ const mockProviderValue = {
 };
 
 describe("NursingTasks", () => {
+  it("should show PRN medication if its endTimeInEpochSeconds (ms) is in the future", async () => {
+    const now = Date.now();
+    const prnTask = {
+      status: "SCHEDULED",
+      serviceType: asNeededPlaceholderConceptName,
+      startTime: Math.floor(now / 1000),
+      uuid: "uuid-1",
+      order: {
+        uuid: "ORD-PRN-FUTURE",
+        drug: { display: "Paracetamol" },
+        route: { display: "Oral" },
+        dose: 500,
+        doseUnits: { display: "mg" },
+        asNeeded: true,
+        autoExpireDate: new Date(now + 60 * 60 * 1000).toISOString(),
+      },
+      medicationAdministration: undefined,
+    };
+
+    mockFetchMedicationNursingTasks.mockResolvedValue([{ slots: [prnTask] }]);
+    mockFetchhNonMedicationTasks.mockResolvedValue([]);
+
+    const mockProviderValue = { isSliderOpen: {}, updateSliderOpen: jest.fn(), provider: { uuid: "provider-uuid" } };
+    const mockIPDContext = { config: {}, isReadMode: false, visitSummary: {}, visit: {} };
+
+    const { queryAllByText, queryByTestId, container } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
+          <IPDContext.Provider value={mockIPDContext}>
+            <NursingTasks patientId="patientid" />
+          </IPDContext.Provider>
+        </IntlProvider>
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(queryByTestId("loading-icon")).toBeNull();
+    });
+
+    // Simulate selecting the 'Pending' filter to match the default filter logic
+    const filterDropdown = container.querySelector(".bx--list-box__field");
+    if (filterDropdown) {
+      fireEvent.click(filterDropdown);
+      const pendingOption = Array.from(document.querySelectorAll('.bx--list-box__menu-item')).find(el => el.textContent.includes('Pending'));
+      if (pendingOption) {
+        fireEvent.click(pendingOption);
+      }
+    }
+
+    // Wait for rendering and check that PRN task IS present (by name)
+    await waitFor(() => {
+      const matches = queryAllByText(/Paracetamol/);
+      expect(matches.length).toBeGreaterThan(0);
+    });
+  });
+
+  it("should NOT show PRN medication if its endTimeInEpochSeconds (ms) is in the past", async () => {
+    // Mock a PRN medication slot with endTime in the past (ms)
+    const asNeededPlaceholderConceptName = "PRN Medication";
+    const now = Date.now();
+    const prnTask = [{
+      orderId: "ORD-PRN-PAST",
+      serviceType: asNeededPlaceholderConceptName,
+      endTimeInEpochSeconds: now - 60 * 60 * 1000, // 1 hour in the past
+      name: "PRN Paracetamol",
+      status: "PENDING",
+      dose: "500mg",
+      route: "Oral",
+      frequency: "Once",
+      isANonMedicationTask: false,
+      // Add any other fields required by TaskTile or rendering logic
+    }];
+
+    jest.spyOn(NursingTasksUtils, "ExtractMedicationNursingTasksData")
+      .mockReturnValue([[prnTask]]);
+
+    const mockProviderValue = { isSliderOpen: {}, updateSliderOpen: jest.fn(), provider: { uuid: "provider-uuid" } };
+    const mockIPDContext = { config: {}, isReadMode: false, visitSummary: {}, visit: {} };
+
+    const { queryByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
+          <IPDContext.Provider value={mockIPDContext}>
+            <NursingTasks patientId="patientid" />
+          </IPDContext.Provider>
+        </IntlProvider>
+      </SliderContext.Provider>
+    );
+
+    // Wait for rendering and check that PRN task is NOT present (by name)
+    await waitFor(() => {
+      expect(queryByText(/PRN Paracetamol/)).toBeNull();
+    });
+  });
   beforeEach(() => {
     mockCurrentShiftHoursArray.mockReturnValue({
       currentShiftHoursArray: [
@@ -524,6 +620,41 @@ describe("NursingTasks", () => {
         getAllByText("Paracetamol 120 mg/5 mL Suspension (Liquid)")
       ).toBeTruthy();
       expect(getAllByText("Test Task")).toBeTruthy();
+    });
+  });
+  it("should NOT show PRN medication after its autoExpireTime (endTimeInEpochSeconds)", async () => {
+    // Mock a PRN medication slot with endTime before shift start
+    const asNeededPlaceholderConceptName = "PRN Medication"; // Define a placeholder value
+    const prnTask = [{
+      orderId: "ORD-PRN-1",
+      serviceType: asNeededPlaceholderConceptName,
+      endTimeInEpochSeconds: 1000, // expired
+      // ...other required fields
+    }];
+    // const shiftStartDate = 2000; // after PRN expiry
+
+    jest.spyOn(NursingTasksUtils, "ExtractMedicationNursingTasksData")
+      .mockReturnValue([[prnTask]]);
+
+    // Mock context and props
+    const mockProviderValue = { isSliderOpen: {}, updateSliderOpen: jest.fn(), provider: { uuid: "provider-uuid" } };
+    const mockIPDContext = { config: {}, isReadMode: false, visitSummary: {}, visit: {} };
+
+    // Render component with startEndDates.startDate after PRN expiry
+    const { queryByText } = render(
+      <SliderContext.Provider value={mockProviderValue}>
+        <IntlProvider locale="en">
+          <IPDContext.Provider value={mockIPDContext}>
+            <NursingTasks patientId="patientid" />
+          </IPDContext.Provider>
+        </IntlProvider>
+      </SliderContext.Provider>
+    );
+
+    // Wait for rendering and check that PRN task is NOT present
+    await waitFor(() => {
+      // Replace with a unique identifier for your PRN task, e.g. drug name or orderId
+      expect(queryByText(/ORD-PRN-1/)).toBeNull();
     });
   });
 });

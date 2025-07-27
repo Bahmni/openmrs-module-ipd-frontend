@@ -288,9 +288,18 @@ export default function NursingTasks(props) {
           const filteredData = extractedData
             .map((extract) =>
               extract.filter((data) => {
+                const now = Date.now();
+                if (data.serviceType === asNeededPlaceholderConceptName) {
+                  console.log('[PRN Filter Debug]', {
+                    orderId: data.orderId,
+                    endTimeInEpochSeconds: data.endTimeInEpochSeconds,
+                    now,
+                    filterResult: data.endTimeInEpochSeconds > now
+                  });
+                }
                 return !(
                   data.serviceType == asNeededPlaceholderConceptName &&
-                  data.endTimeInEpochSeconds <= startEndDates.endDate
+                  data.endTimeInEpochSeconds <= now
                 );
               })
             )
@@ -346,9 +355,18 @@ export default function NursingTasks(props) {
       extractedMedicationData = extractedData
         .map((extract) =>
           extract.filter((data) => {
+            const now = Date.now();
+            if (data.serviceType === asNeededPlaceholderConceptName) {
+              console.log('[PRN Filter Debug - useEffect]', {
+                orderId: data.orderId,
+                endTimeInEpochSeconds: data.endTimeInEpochSeconds,
+                now,
+                filterResult: data.endTimeInEpochSeconds > now
+              });
+            }
             return !(
               data.serviceType == asNeededPlaceholderConceptName &&
-              data.endTimeInEpochSeconds <= startEndDates.endDate
+              data.endTimeInEpochSeconds <= now
             );
           })
         )
