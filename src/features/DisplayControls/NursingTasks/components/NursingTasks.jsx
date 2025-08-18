@@ -288,9 +288,10 @@ export default function NursingTasks(props) {
           const filteredData = extractedData
             .map((extract) =>
               extract.filter((data) => {
+                const now = Date.now();
                 return !(
                   data.serviceType == asNeededPlaceholderConceptName &&
-                  data.endTimeInEpochSeconds <= startEndDates.endDate
+                  data.endTimeInEpochSeconds <= now
                 );
               })
             )
@@ -346,9 +347,10 @@ export default function NursingTasks(props) {
       extractedMedicationData = extractedData
         .map((extract) =>
           extract.filter((data) => {
+            const now = Date.now();
             return !(
               data.serviceType == asNeededPlaceholderConceptName &&
-              data.endTimeInEpochSeconds <= startEndDates.endDate
+              data.endTimeInEpochSeconds <= now
             );
           })
         )
