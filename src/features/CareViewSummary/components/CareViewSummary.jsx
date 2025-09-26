@@ -10,6 +10,7 @@ import {
   getWardDetails,
 } from "../utils/CareViewSummary";
 import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -45,6 +46,7 @@ export const CareViewSummary = (props) => {
     provider,
     refreshSummary,
   } = useContext(CareViewContext);
+  const intl = useIntl();
 
   let existingSelectedWards = JSON.parse(
     localStorage.getItem("selected_wards")
@@ -54,16 +56,26 @@ export const CareViewSummary = (props) => {
     callbacks.setIsLoading(true);
     const wardList = await getWardDetails();
     const wardOptions = wardList?.map((ward) => {
+      const rawLabel = ward?.ward?.display;
+      const uuid = ward?.ward?.uuid;
+      const translatedLabel = rawLabel ? intl.formatMessage({
+        id: rawLabel,
+        defaultMessage: rawLabel,
+      }) : rawLabel;
       return {
-        label: ward?.ward?.display,
-        value: ward?.ward?.uuid,
+        label: translatedLabel,
+        value: uuid,
       };
     });
     setOptions(wardOptions);
     if (existingSelectedWards) {
       const ward = existingSelectedWards[provider.uuid];
-      if (ward) setSelectedWard(ward);
-      else setSelectedWard(wardOptions[0]);
+      if (ward) {
+        const translatedSelectedWard = wardOptions?.find(
+          (option) => option.value == ward.value
+        );
+        setSelectedWard(translatedSelectedWard);
+      } else setSelectedWard(wardOptions[0]);
     } else {
       setSelectedWard(wardOptions[0]);
     }
@@ -161,7 +173,10 @@ export const CareViewSummary = (props) => {
         selectedValue={selectedWard}
         titleText={""}
         width={isMobileView ? "100%" : "200px"}
-        placeholder={"Select a Ward"}
+        placeholder={intl.formatMessage({
+          id: "SELECT_WARD_PLACEHOLDER_TEXT",
+          defaultMessage: "Select Ward",
+        })}
       />
       {!isTabletView && !isMobileView ? (
         <div className="summary-tiles">
