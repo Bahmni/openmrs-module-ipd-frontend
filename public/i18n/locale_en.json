@@ -233,5 +233,9 @@
   "VITALS_MUAC_KEY": "Mid-upper arm circumference",
   "CLINICAL_YEARS_TRANSLATION_KEY": "Years",
   "CLINICAL_MONTHS_TRANSLATION_KEY": "Months",
-  "CLINICAL_DAYS_TRANSLATION_KEY": "Days"
+  "CLINICAL_DAYS_TRANSLATION_KEY": "Days",
+  "SELECT_WARD_PLACEHOLDER_TEXT": "Select a Ward",
+  "ALLTASKS": "All Tasks",
+  "MEDICATIONTASKS": "Medication Tasks",
+  "NONMEDICATIONTASKS": "Non-Medication Tasks"
 }

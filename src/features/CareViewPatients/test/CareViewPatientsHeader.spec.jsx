@@ -163,7 +163,7 @@ describe("CareViewPatientsHeader", () => {
         handleNow={mockHandleNow}
         handleNext={mockHandleNext}
         handlePrevious={mockHandlePrevious}
-        filterValue={items[0]}
+        filterValue={items[0].id}
         setFilterValue={mockSetFilterValue}
       />
       </IntlProvider>
@@ -185,8 +185,8 @@ describe("CareViewPatientsHeader", () => {
         handleNow={mockHandleNow}
         handleNext={mockHandleNext}
         handlePrevious={mockHandlePrevious}
-        filterValue={items[0]}
-        setFilterValue={items}
+        filterValue={items[0].id}
+        setFilterValue={mockSetFilterValue}
       />
       </IntlProvider>
     );

@@ -4,6 +4,7 @@ import { CareViewSummary } from "../components/CareViewSummary";
 import { mockWardList } from "./CareViewSummaryMock";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { WARD_SUMMARY_HEADER } from "../../../constants";
+import { IntlProvider } from "react-intl";
 
 const mockGetWardDetails = jest.fn();
 const mockFetchWardSummary = jest.fn();
@@ -46,9 +47,11 @@ describe("CareViewSummary", function () {
       totalPatients: 27,
     });
     const { container } = render(
-      <CareViewContext.Provider value={mockContext}>
-        <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
     expect(container.querySelector(".bx--list-box__wrapper")).toBeTruthy();
     expect(container.querySelectorAll(".summary-tile")).toBeTruthy();
@@ -61,9 +64,11 @@ describe("CareViewSummary", function () {
       totalPatients: 27,
     });
     const { getByText } = render(
-      <CareViewContext.Provider value={mockContext}>
-        <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
     expect(getByText("27")).toBeTruthy();
   });
@@ -71,9 +76,11 @@ describe("CareViewSummary", function () {
   it("should display the my patient count", () => {
     mockGetWardDetails.mockReturnValue(mockWardList);
     const { getByText } = render(
-      <CareViewContext.Provider value={mockContext}>
-        <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
     expect(getByText("5")).toBeTruthy();
   });
@@ -84,9 +91,11 @@ describe("CareViewSummary", function () {
       totalPatients: 27,
     });
     const { container } = render(
-      <CareViewContext.Provider value={mockContext}>
-        <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     const activeTiles = container.querySelectorAll(".bx--tile.summary-tile");
@@ -105,9 +114,11 @@ describe("CareViewSummary", function () {
       totalPatients: 27,
     });
     const { container } = render(
-      <CareViewContext.Provider value={mockContext}>
-        <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
