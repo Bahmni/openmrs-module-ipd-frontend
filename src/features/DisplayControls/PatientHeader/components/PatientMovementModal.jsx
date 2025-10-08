@@ -26,8 +26,10 @@ import {
 } from "carbon-components-react";
 import "../styles/PatientHeader.scss";
 import PropTypes from "prop-types";
+import { useIntl } from "react-intl";
 
 const PatientMovementModal = (props) => {
+  const intl = useIntl();
   const { updatePatientMovementModal } = props;
   const { patient, visit, location, provider } = useContext(IPDContext);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,22 +59,55 @@ const PatientMovementModal = (props) => {
             if (
               visitSummaryData.admissionDetails === null &&
               visitSummaryData.dischargeDetails === null &&
-              item.name.name === "Admit Patient"
+              item.name.name === intl.formatMessage({ id: "ADMIT_PATIENT" })
             ) {
-              return { label: item.name.display, value: item.name.display };
+              const translatedDropdownItem = intl.formatMessage({
+                id: "ADMIT_PATIENT",
+                defaultMessage: "Admit Patient",
+              });
+              return {
+                label: translatedDropdownItem,
+                value: translatedDropdownItem,
+              };
             } else if (
               visitSummaryData.admissionDetails !== null &&
               visitSummaryData.dischargeDetails !== null &&
-              item.name.name === "Undo Discharge"
+              item.name.name === intl.formatMessage({ id: "UNDO_DISCHARGE" })
             ) {
-              return { label: item.name.display, value: item.name.display };
+              const translatedDropdownItem = intl.formatMessage({
+                id: "UNDO_DISCHARGE",
+                defaultMessage: "Undo Discharge",
+              });
+              return {
+                label: translatedDropdownItem,
+                value: translatedDropdownItem,
+              };
             } else if (
               visitSummaryData.admissionDetails !== null &&
               visitSummaryData.dischargeDetails === null &&
-              (item.name.name === "Discharge Patient" ||
-                item.name.name === "Transfer Patient")
+              item.name.name === intl.formatMessage({ id: "DISCHARGE_PATIENT" })
             ) {
-              return { label: item.name.display, value: item.name.display };
+              const translatedDropdownItem = intl.formatMessage({
+                id: "DISCHARGE_PATIENT",
+                defaultMessage: "Discharge Patient",
+              });
+              return {
+                label: translatedDropdownItem,
+                value: translatedDropdownItem,
+              };
+            } else if (
+              visitSummaryData.admissionDetails !== null &&
+              visitSummaryData.dischargeDetails === null &&
+              item.name.name === intl.formatMessage({ id: "TRANSFER_PATIENT" })
+            ) {
+              const translatedDropdownItem = intl.formatMessage({
+                id: "TRANSFER_PATIENT",
+                defaultMessage: "Transfer Patient",
+              });
+              return {
+                label: translatedDropdownItem,
+                value: translatedDropdownItem,
+              };
             }
           }
         });
@@ -144,7 +179,10 @@ const PatientMovementModal = (props) => {
   const handleOnSave = async () => {
     if (selectedDropDownItem) {
       setSaveEnable(false);
-      if (selectedDropDownItem.name === "Admit Patient") {
+      if (
+        selectedDropDownItem.name ===
+        intl.formatMessage({ id: "ADMIT_PATIENT" })
+      ) {
         const response = await updatePatientMovement(createPayload());
         if (response.status === 200) {
           window.location.href = getADTDashboardUrl(
@@ -153,12 +191,18 @@ const PatientMovementModal = (props) => {
             response.data.encounterUuid
           );
         }
-      } else if (selectedDropDownItem.name === "Discharge Patient") {
+      } else if (
+        selectedDropDownItem.name ===
+        intl.formatMessage({ id: "DISCHARGE_PATIENT" })
+      ) {
         const response = await dischargePatient(createPayload());
         if (response.status === 200) {
           updatePatientMovementModal(false);
         }
-      } else if (selectedDropDownItem.name === "Undo Discharge") {
+      } else if (
+        selectedDropDownItem.name ===
+        intl.formatMessage({ id: "UNDO_DISCHARGE" })
+      ) {
         const response = await undoDischargePatient(
           visitSummary.dischargeDetails.uuid,
           selectedDropDownItem.name
@@ -170,7 +214,10 @@ const PatientMovementModal = (props) => {
             visitSummary.dischargeDetails.uuid
           );
         }
-      } else if (selectedDropDownItem.name === "Transfer Patient") {
+      } else if (
+        selectedDropDownItem.name ===
+        intl.formatMessage({ id: "TRANSFER_PATIENT" })
+      ) {
         const response = await updatePatientMovement(createPayload());
         if (response.status === 200) {
           window.location.href = getADTDashboardUrl(
@@ -185,27 +232,42 @@ const PatientMovementModal = (props) => {
 
   const handleSelectOnChange = (e) => {
     var item = {};
-    if (e.label === "Admit Patient") {
+    if (e.label === intl.formatMessage({ id: "ADMIT_PATIENT" })) {
       item = {
-        name: "Admit Patient",
+        name: intl.formatMessage({
+          id: "ADMIT_PATIENT",
+          defaultMessage: "Admit Patient",
+        }),
         encounterType: vistEncounterTypes.encounterTypes.ADMISSION,
       };
       setShowAdtNotes(true);
       setSaveEnable(true);
-    } else if (e.label === "Undo Discharge") {
-      item = { name: "Undo Discharge", encounterType: null };
+    } else if (e.label === intl.formatMessage({ id: "UNDO_DISCHARGE" })) {
+      item = {
+        name: intl.formatMessage({
+          id: "ADMIT_PATIENT",
+          defaultMessage: "Admit Patient",
+        }),
+        encounterType: null,
+      };
       setShowAdtNotes(false);
       setSaveEnable(true);
-    } else if (e.label === "Discharge Patient") {
+    } else if (e.label === intl.formatMessage({ id: "DISCHARGE_PATIENT" })) {
       item = {
-        name: "Discharge Patient",
+        name: intl.formatMessage({
+          id: "DISCHARGE_PATIENT",
+          defaultMessage: "Discharge Patient",
+        }),
         encounterType: vistEncounterTypes.encounterTypes.DISCHARGE,
       };
       setShowAdtNotes(true);
       setSaveEnable(true);
-    } else if (e.label === "Transfer Patient") {
+    } else if (e.label === intl.formatMessage({ id: "TRANSFER_PATIENT" })) {
       item = {
-        name: "Transfer Patient",
+        name: intl.formatMessage({
+          id: "TRANSFER_PATIENT",
+          defaultMessage: "Transfer Patient",
+        }),
         encounterType: vistEncounterTypes.encounterTypes.TRANSFER,
       };
       setShowAdtNotes(false);
@@ -225,9 +287,18 @@ const PatientMovementModal = (props) => {
       {!isLoading && (
         <Modal
           open
-          modalHeading="Patient Movement"
-          primaryButtonText="Save"
-          secondaryButtonText="Cancel"
+          modalHeading={intl.formatMessage({
+            id: "PATIENT_MOVEMENT",
+            defaultMessage: "Patient Movement",
+          })}
+          primaryButtonText={intl.formatMessage({
+            id: "SAVE",
+            defaultMessage: "Save",
+          })}
+          secondaryButtonText={intl.formatMessage({
+            id: "CANCEL",
+            defaultMessage: "Cancel",
+          })}
           aria-label="Modal content"
           onRequestClose={() => updatePatientMovementModal(false)}
           onSecondarySubmit={() => updatePatientMovementModal(false)}
@@ -239,7 +310,10 @@ const PatientMovementModal = (props) => {
           ) : (
             <Dropdown
               id="patient-movement-dropdown"
-              label="Choose an option"
+              label={intl.formatMessage({
+                id: "CHOOSE_AN_OPTION",
+                defaultMessage: "Choose an option",
+              })}
               onChange={(e) => handleSelectOnChange(e.selectedItem)}
               isRequired={true}
               width={"100%"}
@@ -253,7 +327,10 @@ const PatientMovementModal = (props) => {
             <TextArea
               data-modal-primary-focus
               id="ipd-adt-notes"
-              placeholder={"Enter ADT Notes"}
+              placeholder={intl.formatMessage({
+                id: "ENTER_ADT_NOTES",
+                defaultMessage: "Enter ADT Notes",
+              })}
               style={{
                 marginBottom: "1rem",
               }}
