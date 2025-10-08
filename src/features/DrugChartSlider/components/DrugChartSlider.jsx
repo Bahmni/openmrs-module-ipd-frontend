@@ -615,7 +615,12 @@ const DrugChartSlider = (props) => {
               rows={3}
               value={drugChartNotes}
               onChange={(e) => handleNotes(e)}
-              labelText="Notes"
+              labelText={
+                    <FormattedMessage
+                      id="DRUG_CHART_MODAL_NOTES"
+                      defaultMessage="Notes"
+                    />
+                  }
             />
           </div>
         </div>
