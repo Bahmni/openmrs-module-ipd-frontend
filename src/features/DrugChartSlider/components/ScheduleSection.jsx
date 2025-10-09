@@ -225,7 +225,7 @@ export const ScheduleSection = ({
           <div className="schedule-section">
             <Title
               text={
-                intl.formatMessage({ id: "DRUG_CHART_MODAL_SCHEDULES", defaultMessage: "Schedule(s) (" }) +
+                intl.formatMessage({ id: "DRUG_CHART_MODAL_SCHEDULES", defaultMessage: "Schedule(s)" }) + " ("+
                 (enable24HourTimers ? timeText24 : timeText12) + ")"
               }
               isRequired={true}
