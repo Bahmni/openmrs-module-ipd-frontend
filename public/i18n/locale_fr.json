@@ -41,6 +41,7 @@
   "NO_NURSING_TASKS_MESSAGE_PENDING": "Aucune tâche en attente n'est disponible pour le patient",
   "NO_NURSING_TASKS_MESSAGE_STOPPED": "Aucune tâche arrêtée n'est disponible pour le patient",
   "NO_NURSING_TASKS_MESSAGE_MISSED": "Aucune tâche manquée n'est disponible pour le patient",
+  "NO_PRN_TASKS_MESSAGE_STOPPED": "Aucune tâche PRN n'est disponible pour le patient",
   "INVALID_TIME": "Veuillez entrer une heure valide",
   "DONE": "Fait",
   "AT": " à ",
