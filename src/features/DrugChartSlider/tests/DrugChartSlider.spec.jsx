@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { IntlProvider } from "react-intl";
 import DrugChartSlider from "../components/DrugChartSlider";
 import {
   mockStartTimeDrugOrder,
@@ -34,6 +35,28 @@ const mockHandleAuditEvent = jest.fn();
 const mockUpdateMedication = jest.fn();
 const mockSaveMedication = jest.fn();
 
+// Helper function to render components with all required providers
+const renderWithProviders = (component) => {
+  const messages = {
+    "DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING": "Please enter Schedule(s)",
+    "DRUG_CHART_MODAL_EMPTY_START_TIME_WARNING": "Please enter Start Time",
+  };
+  
+  return render(
+    <IntlProvider locale="en" messages={messages}>
+      <SliderContext.Provider value={mockSliderContext}>
+        <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent: mockHandleAuditEvent }}>
+          {component}
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    </IntlProvider>
+  );
+};
+
+jest.mock("../../i18n/I18nProvider", () => ({
+  I18nProvider: ({ children }) => <div>{children}</div>
+}));
+
 jest.mock('../utils/DrugChartSliderUtils',()=>{
     const originalModule = jest.requireActual("../utils/DrugChartSliderUtils");
     return {
@@ -65,19 +88,18 @@ describe("DrugChartSlider", () => {
   });
 
   it("Component renders successfully", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              drugOrder: mockStartTimeDrugOrder,
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        title="Add to Drug Chart"
+        hostData={{
+          drugOrder: mockStartTimeDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+        setDrugChartNotes={jest.fn()}
+        drugChartNotes=""
+      />
     );
     await waitFor(() => {
       expect(screen.getByText("Add to Drug Chart")).toBeTruthy();
@@ -85,19 +107,17 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show drug name field to be disabled", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              drugOrder: mockScheduleDrugOrder,
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          drugOrder: mockScheduleDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+        setDrugChartNotes={jest.fn()}
+        drugChartNotes=""
+      />
     );
     await waitFor(() => {
       const inputElement = screen.getByLabelText("Drug Name");
@@ -107,19 +127,18 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show dose field to be disabled", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              drugOrder: mockScheduleDrugOrder,
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        title="Add to Drug Chart"
+        hostData={{
+          drugOrder: mockScheduleDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+        setDrugChartNotes={jest.fn()}
+        drugChartNotes=""
+      />
     );
     await waitFor(() => {
       const inputElement = screen.getByLabelText("Dose");
@@ -129,19 +148,15 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show duration field to be disabled", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              drugOrder: mockScheduleDrugOrder,
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          drugOrder: mockScheduleDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+      />
     );
     await waitFor(() => {
       const inputElement = screen.getByLabelText("Duration");
@@ -151,19 +166,15 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show start date field to be disabled", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              drugOrder: mockScheduleDrugOrder,
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          drugOrder: mockScheduleDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+      />
     );
     await waitFor(() => {
       const inputElement = screen.getByLabelText("Start Date");
@@ -173,19 +184,15 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show notes field to be enabled", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              drugOrder: mockStartTimeDrugOrder,
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          drugOrder: mockStartTimeDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+      />
     );
     await waitFor(() => {
       const inputElement = screen.getByTestId("notes-section");
@@ -195,20 +202,16 @@ describe("DrugChartSlider", () => {
   });
 
   it("should enable schedule when frequency is present in scheduleFrequencies", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              enable24HourTimers: true,
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockScheduleDrugOrder,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockScheduleDrugOrder,
+        }}
+        hostApi={{}}
+      />
     );
     await waitFor(() => {
       const inputElement = screen.getByText("Schedule(s) (24 hrs format)");
@@ -217,20 +220,16 @@ describe("DrugChartSlider", () => {
   });
 
   it("should enable start time when frequency is present in scheduleFrequencies", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              enable24HourTimers: true,
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockStartTimeDrugOrder,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockStartTimeDrugOrder,
+        }}
+        hostApi={{}}
+      />
     );
     await waitFor(() => {
       const inputElement = screen.getByText("Start Time (24 hrs format)");
@@ -239,19 +238,15 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show Please select Schedule(s) when save is clicked without entering schedule", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockScheduleDrugOrder,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockScheduleDrugOrder,
+        }}
+        hostApi={{}}
+      />
     );
     await waitFor(() => {
       const saveButton = screen.getByRole("button", { name: "Save" });
@@ -261,19 +256,15 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show Please select Start Time when save is clicked without entering start time", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockStartTimeDrugOrder,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockStartTimeDrugOrder,
+        }}
+        hostApi={{}}
+      />
     );
     await waitFor(() => {
       const saveButton = screen.getByRole("button", { name: "Save" });
@@ -283,20 +274,16 @@ describe("DrugChartSlider", () => {
   });
 
   it("Should show invalid time format error message when wrong time is entered in the field", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              enable24HourTimers: true,
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockStartTimeDrugOrder,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockStartTimeDrugOrder,
+        }}
+        hostApi={{}}
+      />
     );
 
     await waitFor(() => {
@@ -313,20 +300,16 @@ describe("DrugChartSlider", () => {
 
   it("Should show pre-filled timing in the schedule fields if the schedule time is provided from config", async () => {
     MockDate.set("2010-12-22T00:00:00+00:00");
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              enable24HourTimers: true,
-              scheduleFrequencies: mockScheduleFrequenciesWithTimings,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockScheduleDrugOrder,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockScheduleDrugOrder,
+        }}
+        hostApi={{}}
+      />
     );
 
     await waitFor(() => {
@@ -340,20 +323,16 @@ describe("DrugChartSlider", () => {
 
   it("Should show timing in the schedule fields as hh:mm if the schedule time provided from config is passed", async () => {
     MockDate.set("2010-12-22T00:00:00.000+0530");
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              enable24HourTimers: true,
-              scheduleFrequencies: mockScheduleFrequenciesWithTimings,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockScheduleDrugOrder,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockScheduleDrugOrder,
+        }}
+        hostApi={{}}
+      />
     );
 
     await waitFor(() => {
@@ -368,20 +347,16 @@ describe("DrugChartSlider", () => {
 
   it("Should render Drug Chart Slider for schedules with start, subsequent and remainder slots", async () => {
     MockDate.set("2010-12-22T11:08:00.000");
-    const { container } = render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              enable24HourTimers: true,
-              scheduleFrequencies: mockScheduleFrequenciesWithTimings,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockScheduleDrugOrder,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    const { container } = renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockScheduleDrugOrder,
+        }}
+        hostApi={{}}
+      />
     );
 
     await waitFor(() => {
@@ -395,20 +370,16 @@ describe("DrugChartSlider", () => {
 
   it("Should render Drug Chart Slider for schedules with schedules fields", async () => {
     MockDate.set("2010-12-22T07:08:00.000");
-    const { container } = render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              enable24HourTimers: true,
-              scheduleFrequencies: mockScheduleFrequenciesWithTimings,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockScheduleDrugOrder,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    const { container } = renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockScheduleDrugOrder,
+        }}
+        hostApi={{}}
+      />
     );
 
     await waitFor(() => {
@@ -422,20 +393,16 @@ describe("DrugChartSlider", () => {
 
   it("Should render Drug Chart Slider for As Needed medications with not time fields", async () => {
     MockDate.set("2010-12-22T07:08:00.000");
-    const { getByText, queryByText } = render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent: mockHandleAuditEvent }}>
-          <DrugChartSlider
-            hostData={{
-              enable24HourTimers: true,
-              scheduleFrequencies: mockScheduleFrequenciesWithTimings,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockScheduleDrugOrderAsNeeded,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    const { getByText, queryByText } = renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockScheduleDrugOrderAsNeeded,
+        }}
+        hostApi={{}}
+      />
     );
 
     await waitFor(() => {
@@ -451,20 +418,16 @@ describe("DrugChartSlider", () => {
 
   it("should render with previous time on click of edit drug chart link", async () => {
     MockDate.set("2010-12-22T07:08:00.000");
-    const { container, getByText } = render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent: mockHandleAuditEvent }}>
-          <DrugChartSlider
-            hostData={{
-              enable24HourTimers: true,
-              scheduleFrequencies: mockScheduleFrequenciesWithTimings,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockScheduleDrugOrderForEdit,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    const { container, getByText } = renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockScheduleDrugOrderForEdit,
+        }}
+        hostApi={{}}
+      />
     );
 
     await waitFor(() => {
@@ -480,20 +443,16 @@ describe("DrugChartSlider", () => {
   });
 
   it("should enable start time when frequency and duration is not present for continuous medications", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              enable24HourTimers: true,
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockContinuousMedicationDrugOrder,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          enable24HourTimers: true,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockContinuousMedicationDrugOrder,
+        }}
+        hostApi={{}}
+      />
     );
     await waitFor(() => {
       const inputElement = screen.getByText("Start Time (24 hrs format)");
@@ -503,20 +462,16 @@ describe("DrugChartSlider", () => {
 
   it("should enable schedule fields for the configurable time window and show system time for 12-hr format", async () => {
     MockDate.set("2010-12-22T09:00:00.000");
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              enable24HourTimers: false,
-              scheduleFrequencies: mockScheduleFrequenciesWithTimings,
-              startTimeFrequencies: mockStartTimeFrequencies,
-              drugOrder: mockScheduleDrugOrder,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          enable24HourTimers: false,
+          scheduleFrequencies: mockScheduleFrequenciesWithTimings,
+          startTimeFrequencies: mockStartTimeFrequencies,
+          drugOrder: mockScheduleDrugOrder,
+        }}
+        hostApi={{}}
+      />
     );
 
     await waitFor(() => {
