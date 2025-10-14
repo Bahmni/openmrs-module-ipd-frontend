@@ -14,7 +14,7 @@ export const DrugInstructions = ({ hostData }) => {
           type="text"
           rows={1}
           value={hostData?.drugOrder?.instructions}
-          labelText={intl.formatMessage({ id: "DRUG_CHART_MODAL_SCHEDULE_INSTRUCTIONS", defaultMessage: "Instructions" })}
+          labelText={intl.formatMessage({ id: "DRUG_CHART_MODAL_SCHEDULE_INSTRUCTIONS", defaultMessage: "Instruction" })}
           disabled
         />
       </div>
