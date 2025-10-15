@@ -234,5 +234,14 @@
   "VITALS_MUAC_KEY": "Circonférence du milieu du bras",
   "CLINICAL_YEARS_TRANSLATION_KEY": "ans",
   "CLINICAL_MONTHS_TRANSLATION_KEY": "mois",
-  "CLINICAL_DAYS_TRANSLATION_KEY": "jours"
+  "CLINICAL_DAYS_TRANSLATION_KEY": "jours",
+  "DRUG_CHART_MODAL_DURATION":"Durée",
+  "DRUG_CHART_MODAL_FREQUENCY":"Fréquence",
+  "DRUG_CHART_MODAL_SCHEDULE_START_DATE":"Heure programmée (date de début, ",
+  "DRUG_CHART_MODAL_SCHEDULE_SUBSEQUENT":"Heure programmée (ultérieur, ",
+  "DRUG_CHART_MODAL_SCHEDULE_REMAINDER":"Heure programmée (reste, ",
+  "DRUG_CHART_MODAL_SCHEDULES":"Horaire(s)",
+  "DRUG_CHART_MODAL_SCHEDULE_INSTRUCTIONS":"Instructions",
+  "DRUG_CHART_MODAL_ADDITIONAL_INSTRUCTIONS" :"Instructions supplémentaires",
+  "DRUG_CHART_MODAL_NOTES":"Notes"
 }

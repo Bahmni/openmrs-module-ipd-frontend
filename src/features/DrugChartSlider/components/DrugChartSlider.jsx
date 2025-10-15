@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { TextArea } from "carbon-components-react";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage ,useIntl} from "react-intl";
 import { I18nProvider } from "../../i18n/I18nProvider";
 import SideBarPanel from "../../SideBarPanel/components/SideBarPanel";
 import "../styles/DrugChartSlider.scss";
@@ -36,6 +36,7 @@ import { StartTimeSection } from "./StartTimeSection";
 import { ScheduleSection } from "./ScheduleSection";
 
 const DrugChartSlider = (props) => {
+  const intl = useIntl();
   const { title, hostData, hostApi, setDrugChartNotes, drugChartNotes } = props;
   const { config, handleAuditEvent } = useContext(IPDContext);
   const { drugChartSlider = {} } = config;
@@ -615,7 +616,7 @@ const DrugChartSlider = (props) => {
               rows={3}
               value={drugChartNotes}
               onChange={(e) => handleNotes(e)}
-              labelText="Notes"
+              labelText={intl.formatMessage({ id: "DRUG_CHART_MODAL_NOTES", defaultMessage: "Notes" })}
             />
           </div>
         </div>
