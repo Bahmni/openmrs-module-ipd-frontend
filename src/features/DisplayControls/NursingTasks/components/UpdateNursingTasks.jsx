@@ -70,6 +70,7 @@ const UpdateNursingTasks = (props) => {
   const [showWarningNotification, setShowWarningNotification] = useState(false);
   const [isInvalidTime, setIsInvalidTime] = useState(false);
   const [invalidText, setInvalidText] = useState();
+  const [isSavingConfirmation, setIsSavingConfirmation] = useState(false);
   const intl = useIntl();
 
   const invalidTimeText = (
@@ -113,13 +114,16 @@ const UpdateNursingTasks = (props) => {
   };
 
   const handlePrimaryButtonClick = async () => {
+    setIsSavingConfirmation(true);
     const administeredTasks = createAdministeredTasksPayload();
     const response = isPRNMedication
       ? await saveEmergencyMedication(administeredTasks[0])
       : await saveAdministeredMedication(administeredTasks);
-    response.status === 200
-      ? saveAdministeredTasks(administeredTasks[0])
-      : null;
+    if (response.status === 200) {
+      saveAdministeredTasks(administeredTasks[0]);
+    } else {
+      setIsSavingConfirmation(false);
+    }
   };
 
   const createAdministeredTasksPayload = () => {
@@ -734,6 +738,7 @@ const UpdateNursingTasks = (props) => {
             />
           }
           onRequestSubmit={handlePrimaryButtonClick}
+          primaryButtonDisabled={isSavingConfirmation}
         >
           <hr />
           <AdministeredMedicationList
