@@ -168,7 +168,9 @@ export const mapVitalsData = (
   if (VitalsList.tabularData) {
     const VitalsValues = VitalsList.tabularData;
     latestVisitDate = getLatestDate(VitalsValues);
-    latestEntryDate = getLatestDate(vitalsHistoryList.tabularData);
+    latestEntryDate = vitalsHistoryList?.tabularData
+      ? getLatestDate(vitalsHistoryList.tabularData)
+      : null;
 
     if (latestVisitDate !== null) {
       setDateAndTime(latestEntryDate, setVitalsDate, setVitalsTime);

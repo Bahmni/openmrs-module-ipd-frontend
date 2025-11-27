@@ -606,6 +606,18 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
           <test-file-stub />
           Stopped
         </div>
+        <div>
+          <test-file-stub />
+          Note
+        </div>
+        <div>
+          <test-file-stub />
+          Amended Note
+        </div>
+        <div>
+          <test-file-stub />
+          Acknowledged Note
+        </div>
       </div>
     </div>
   </div>
