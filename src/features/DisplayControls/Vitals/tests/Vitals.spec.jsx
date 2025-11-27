@@ -28,7 +28,7 @@ jest.mock("../utils/VitalsUtils", () => {
     ...originalModule,
     getPatientVitals: jest.fn(),
     getPatientVitalsHistory: jest.fn(),
-    getConceptDetails: jest.fn()
+    getConceptDetails: jest.fn(),
   };
 });
 
@@ -36,11 +36,10 @@ describe("Vitals", () => {
   beforeEach(() => {
     localStorage.clear();
     getConceptDetails.mockReturnValue(mockVitalsConceptDetails);
-    jest.spyOn(Storage.prototype, 'setItem');
-    jest.spyOn(Storage.prototype, 'getItem');
-    jest.spyOn(Storage.prototype, 'removeItem');
+    jest.spyOn(Storage.prototype, "setItem");
+    jest.spyOn(Storage.prototype, "getItem");
+    jest.spyOn(Storage.prototype, "removeItem");
     localStorage.setItem("NG_TRANSLATE_LANG_KEY", "en");
-
   });
 
   afterEach(() => {
@@ -52,9 +51,9 @@ describe("Vitals", () => {
     getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
     const { container } = render(
       <IntlProvider locale="en">
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <Vitals patientId="123" />
-      </IPDContext.Provider>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <Vitals patientId="123" />
+        </IPDContext.Provider>
       </IntlProvider>
     );
 
@@ -77,9 +76,9 @@ describe("Vitals", () => {
     getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
     const { container } = render(
       <IntlProvider locale="en">
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <Vitals patientId="123" />
-      </IPDContext.Provider>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <Vitals patientId="123" />
+        </IPDContext.Provider>
       </IntlProvider>
     );
     await waitFor(() => {
@@ -107,22 +106,24 @@ describe("Vitals", () => {
 
   it("renders without crashing", () => {
     getPatientVitals.mockResolvedValueOnce(mockVitalsData);
+    getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
     render(
       <IntlProvider locale="en">
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <Vitals patientId="123" />
-      </IPDContext.Provider>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <Vitals patientId="123" />
+        </IPDContext.Provider>
       </IntlProvider>
     );
   });
 
   it("calls getPatientVitals on mount", () => {
     getPatientVitals.mockResolvedValueOnce(mockVitalsData);
+    getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
     render(
       <IntlProvider locale="en">
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <Vitals patientId="123" />
-      </IPDContext.Provider>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <Vitals patientId="123" />
+        </IPDContext.Provider>
       </IntlProvider>
     );
     expect(getPatientVitals).toHaveBeenCalled();
@@ -130,11 +131,12 @@ describe("Vitals", () => {
 
   it("displays loading skeleton while fetching data", () => {
     getPatientVitals.mockResolvedValueOnce(mockVitalsData);
+    getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
     render(
       <IntlProvider locale="en">
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <Vitals patientId="123" />
-      </IPDContext.Provider>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <Vitals patientId="123" />
+        </IPDContext.Provider>
       </IntlProvider>
     );
     expect(screen.getByTestId("header-loading")).toBeTruthy();

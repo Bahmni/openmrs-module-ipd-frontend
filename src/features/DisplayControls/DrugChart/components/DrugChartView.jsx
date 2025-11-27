@@ -24,6 +24,8 @@ import { FormattedMessage } from "react-intl";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";
 import { IPDContext } from "../../../../context/IPDContext";
+import { SliderContext } from "../../../../context/SliderContext";
+import { DrugChartSlotContext } from "../../../../context/DrugChartSlotContext";
 import {
   ForbiddenErrorMessage,
   GenericErrorMessage,
@@ -32,6 +34,10 @@ import {
   timeFormatFor12Hr,
 } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
+import DrugChartNoteAmendmentSlider from "./DrugChartNoteAmendmentSlider";
+import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
+import Notification from "../../../../components/Notification/Notification";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 
 const NoMedicationTaskMessage = (
   <FormattedMessage
@@ -43,6 +49,12 @@ const NoMedicationTaskMessage = (
 export default function DrugChartWrapper(props) {
   const { patientId } = props;
   const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
+  const {
+    isSliderOpen,
+    updateSliderOpen,
+    sliderContentModified,
+    setSliderContentModified,
+  } = useContext(SliderContext);
   const {
     shiftDetails: shiftConfig = {},
     drugChart = {},
@@ -80,6 +92,86 @@ export default function DrugChartWrapper(props) {
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
   const [notCurrentShift, setNotCurrentShift] = useState(false);
+  const [selectedSlotData, setSelectedSlotData] = useState(null);
+  const [showWarningNotification, setShowWarningNotification] = useState(false);
+  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const refreshDisplayControl = useContext(RefreshDisplayControl);
+
+  const updateAmendmentSlider = (value) => {
+    updateSliderOpen((prev) => {
+      return {
+        ...prev,
+        drugChartNoteAmendment: value,
+      };
+    });
+  };
+
+  const sliderCloseActions = {
+    onCancel: () => {
+      setShowWarningNotification(false);
+      updateAmendmentSlider(false);
+    },
+    onClose: () => {
+      setShowWarningNotification(false);
+    },
+  };
+
+  const amendmentSliderActions = {
+    onModalClose: () => {
+      sliderContentModified.drugChartNoteAmendment
+        ? setShowWarningNotification(true)
+        : updateAmendmentSlider(false);
+    },
+    onModalCancel: () => {
+      sliderContentModified.drugChartNoteAmendment
+        ? setShowWarningNotification(true)
+        : updateAmendmentSlider(false);
+    },
+    onModalSave: () => {
+      updateAmendmentSlider(false);
+      setSuccessMessage("NOTE_AMENDMENT_SAVED_SUCCESS");
+      setShowSuccessNotification(true);
+      callFetchMedications(startEndDates.startDate, startEndDates.endDate);
+    },
+  };
+
+  const handleSlotClick = (slot, rowData) => {
+    // Only allow clicking on administered/not-administered statuses
+    const clickableStatuses = ["Administered", "Administered-Late", "Not-Administered"];
+    if (!clickableStatuses.includes(slot.administrationSummary?.status)) {
+      return;
+    }
+
+    let dosageInfo;
+    if (slot?.medicationAdministration?.dose && slot?.medicationAdministration?.doseUnits?.display) {
+      dosageInfo = slot?.medicationAdministration?.dose + " " + slot?.medicationAdministration?.doseUnits?.display
+    }
+    dosageInfo = dosageInfo?.length == 0 ? 
+        slot?.medicationAdministration?.route?.display :
+        dosageInfo + " - " + slot?.medicationAdministration?.route?.display,
+
+    setSelectedSlotData({
+      slot,
+      drugName: rowData.name,
+      dosageInfo: dosageInfo,
+      scheduledTime: formatDate(slot.startTime * 1000, displayShiftTimingsFormat),
+      status: slot.administrationSummary?.status,
+      performerName: slot.administrationSummary?.performerName,
+      existingNotes: slot.administrationSummary?.notes,
+      notes: slot?.medicationAdministration?.amendedNotes?.length > 0 ?
+       slot.medicationAdministration.amendedNotes : 
+       slot.medicationAdministration?.notes,
+      medicationAdministrationNoteUUID: slot.medicationAdministration?.notes?.[0]?.uuid,
+    });
+
+    setSliderContentModified((prevState) => ({
+      ...prevState,
+      drugChartNoteAmendment: false,
+    }));
+
+    updateAmendmentSlider(true);
+  };
 
   const callFetchMedications = async (startDateTime, endDateTime) => {
     const startDateTimeInSeconds = startDateTime / 1000;
@@ -320,11 +412,56 @@ export default function DrugChartWrapper(props) {
           {errorMessage ? errorMessage : NoMedicationTaskMessage}
         </div>
       ) : (
-        <DrugChart
-          drugChartData={transformedData}
-          currentShiftArray={currentShiftArray}
-          selectedDate={startEndDates.startDate}
-          shiftIndex={shiftIndex}
+        <DrugChartSlotContext.Provider value={{ onSlotClick: handleSlotClick }}>
+          <DrugChart
+            drugChartData={transformedData}
+            currentShiftArray={currentShiftArray}
+            selectedDate={startEndDates.startDate}
+            shiftIndex={shiftIndex}
+          />
+        </DrugChartSlotContext.Provider>
+      )}
+      {isSliderOpen?.drugChartNoteAmendment && (
+        <DrugChartNoteAmendmentSlider
+          hostData={selectedSlotData}
+          hostApi={amendmentSliderActions}
+        />
+      )}
+      {showWarningNotification && (
+        <SideBarPanelClose
+          className="warning-notification"
+          open={true}
+          message={
+            <FormattedMessage
+              id="AMENDMENT_WARNING_TEXT"
+              defaultMessage="You will lose the details entered. Do you want to continue?"
+            />
+          }
+          label={""}
+          primaryButtonText={<FormattedMessage id="NO" defaultMessage="No" />}
+          secondaryButtonText={
+            <FormattedMessage id="YES" defaultMessage="Yes" />
+          }
+          onSubmit={sliderCloseActions.onClose}
+          onSecondarySubmit={sliderCloseActions.onCancel}
+          onClose={sliderCloseActions.onClose}
+        />
+      )}
+      {showSuccessNotification && (
+        <Notification
+          hostData={{
+            notificationKind: "success",
+            messageId: successMessage,
+          }}
+          hostApi={{
+            onClose: () => {
+              setShowSuccessNotification(false);
+              refreshDisplayControl([
+                componentKeys.NURSING_TASKS,
+                componentKeys.DRUG_CHART,
+              ]);
+            },
+          }}
         />
       )}
     </div>

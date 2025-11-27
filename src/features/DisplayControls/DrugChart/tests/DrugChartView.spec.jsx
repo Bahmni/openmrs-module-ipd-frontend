@@ -10,6 +10,7 @@ import {
 } from "./DrugChartViewMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
+import { SliderContext } from "../../../../context/SliderContext";
 import MockDate from "mockdate";
 import { mockConfig } from "../../../../utils/CommonUtils";
 import { after } from "lodash";
@@ -45,15 +46,24 @@ jest.mock("../../../../utils/DateTimeUtils", () => {
   };
 });
 
+const mockSliderContext = {
+  isSliderOpen: { drugChartNoteAmendment: false },
+  updateSliderOpen: jest.fn(),
+  sliderContentModified: {},
+  setSliderContentModified: jest.fn(),
+};
+
 const renderDrugChartView = (mockOrders) => {
   return render(
-    <AllMedicationsContext.Provider
-      value={{ data: mockOrders, getAllDrugOrders: jest.fn() }}
-    >
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <DrugChartView patientId="testid" visitId={"visit-id"} />
-      </IPDContext.Provider>
-    </AllMedicationsContext.Provider>
+    <SliderContext.Provider value={mockSliderContext}>
+      <AllMedicationsContext.Provider
+        value={{ data: mockOrders, getAllDrugOrders: jest.fn() }}
+      >
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <DrugChartView patientId="testid" visitId={"visit-id"} />
+        </IPDContext.Provider>
+      </AllMedicationsContext.Provider>
+    </SliderContext.Provider>
   );
 };
 describe("DrugChartWrapper", () => {
@@ -195,15 +205,17 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     render(
-      <IPDContext.Provider
-        value={{
-          config: mockConfig,
-          isReadMode: true,
-          visitSummary: { stopDateTime: new Date() },
-        }}
-      >
-        <DrugChartView patientId="test-id" />
-      </IPDContext.Provider>
+      <SliderContext.Provider value={mockSliderContext}>
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            isReadMode: true,
+            visitSummary: { stopDateTime: new Date() },
+          }}
+        >
+          <DrugChartView patientId="test-id" />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
     );
     const currentShiftButton = screen.getByTestId("currentShift");
     expect(currentShiftButton.className).toContain("bx--btn--disabled");
@@ -216,9 +228,11 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     const { getByTestId, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <DrugChartView patientId="test-id" />
-      </IPDContext.Provider>
+      <SliderContext.Provider value={mockSliderContext}>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <DrugChartView patientId="test-id" />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
     );
     getByTestId("nextButton").click();
     await waitFor(() => {
@@ -231,9 +245,11 @@ describe("DrugChartWrapper", () => {
       data: drugChartData,
     });
     const { getByTestId, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <DrugChartView patientId="test-id" />
-      </IPDContext.Provider>
+      <SliderContext.Provider value={mockSliderContext}>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <DrugChartView patientId="test-id" />
+        </IPDContext.Provider>
+      </SliderContext.Provider>
     );
     getByTestId("previousButton").click();
     await waitFor(() => {
@@ -247,11 +263,13 @@ describe("DrugChartWrapper", () => {
       data: drugChartDataForPRN,
     });
     render(
-      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
-        <AllMedicationsContext.Provider value={allMedicationData}>
-          <DrugChartView patientId="test-id" />
-        </AllMedicationsContext.Provider>
-      </IPDContext.Provider>
+      <SliderContext.Provider value={mockSliderContext}>
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+          <AllMedicationsContext.Provider value={allMedicationData}>
+            <DrugChartView patientId="test-id" />
+          </AllMedicationsContext.Provider>
+        </IPDContext.Provider>
+      </SliderContext.Provider>
     );
     await waitFor(() => {
       expect(screen.queryAllByText(/Zinc Oxide 20 mg Tablet/i)).toHaveLength(2);

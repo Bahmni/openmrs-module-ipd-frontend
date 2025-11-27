@@ -1,0 +1,35 @@
+.note-readonly-tile {
+  margin-bottom: 16px;
+  padding: 16px;
+  border-radius: 5px;
+
+  .sub-header-tile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    margin-top: 12px;
+    margin-bottom: 8px;
+    color: #525252;
+
+    .scheduled-time {
+      font-weight: 500;
+    }
+
+    .performer-name {
+      font-weight: 500;
+    }
+  }
+
+  .note-text {
+    margin: 12px 0 0 0;
+    line-height: 1.5;
+    color: #161616;
+    font-size: 0.875rem;
+
+    strong {
+      margin-right: 4px;
+      font-weight: 600;
+    }
+  }
+}
