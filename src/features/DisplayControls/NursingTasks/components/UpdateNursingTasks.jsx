@@ -42,7 +42,7 @@ import {
 import {
   getLocalizedLabel,
   getTranslationKey,
-  isSystemGeneratedTask, 
+  isSystemGeneratedTask,
   isUserPrivileged
 } from "../../../../utils/CommonUtils";
 
@@ -104,6 +104,9 @@ const UpdateNursingTasks = (props) => {
   const saveAdministeredTasks = (task) => {
     setShowSuccessNotification(true);
     setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
+    setOpenConfirmationModal(false);
+    updateNursingTasksSlider(false);
+    updateIsPRNMedication(false);
     task.status === "not-done"
       ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK")
       : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
