@@ -89,32 +89,84 @@ export default function TimeCell(props) {
     if (isAcknowledged) {
       return false;
     }
-
     // Only allow the note creator to amend
     return isNoteCreator(slot);
   };
 
-  const renderTooltipContent = (notes, slot) => {
+  const renderTooltipContent = (notes, slot, amendedNotes = null) => {
     const showAmendButton = canAmendNotes(slot);
+    const hasAmendedNotes = amendedNotes && amendedNotes.length > 0;
+    
+    const amendedText = hasAmendedNotes
+      ? amendedNotes
+          .filter(note => note?.amendedText)
+          .map(note => note.amendedText)
+          .join('\n\n')
+      : null;
 
+    const isAcknowledged =
+            slot?.originalSlot?.administrationSummary?.approvalStatus ===
+            "APPROVED";
+    
     return (
       <div className="tooltip-content">
-        <div className="tooltip-notes">{notes}</div>
-        {showAmendButton && (
-          <div className="tooltip-actions">
-            <Button
-              kind="primary"
-              size="sm"
-              onClick={() => onIconClick && onIconClick(slot)}
-            >
-              Amend Notes
-            </Button>
+        {notes && !isAcknowledged && (
+          <div className="tooltip-notes">
+            <div>{notes}</div>
+            {showAmendButton && (
+              <div className="tooltip-actions">
+                <Button
+                  kind="primary"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (slot.originalSlot) {
+                      slot.originalSlot.clickAction = 'amend';
+                    }
+                    onIconClick && onIconClick(slot);
+                  }}
+                >
+                  Amend Notes
+                </Button>
+              </div>
+            )}
           </div>
+        )}
+        {amendedText && !isAcknowledged && (
+          <div className="tooltip-notes">
+            <div>{amendedText}</div>
+            <div className="tooltip-actions">
+              <Button
+                kind="primary"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (slot.originalSlot) {
+                    slot.originalSlot.clickAction = 'acknowledge';
+                  }
+                  onIconClick && onIconClick(slot);
+                }}
+              >
+                Acknowledge Notes
+              </Button>
+            </div>
+          </div>
+        )}
+         {isAcknowledged && (
+           <div className="tooltip-actions">
+              <Button
+                kind="primary"
+                size="sm"
+                disabled
+              >
+                History
+              </Button>
+            </div>
         )}
       </div>
     );
   };
-
+  
   return (
     <div
       className={
@@ -136,6 +188,8 @@ export default function TimeCell(props) {
           const isAcknowledged =
             slot?.originalSlot?.administrationSummary?.approvalStatus ===
             "APPROVED";
+          const amendedNotesResponse = slot?.originalSlot?.medicationAdministration?.amendedNotes;
+
           return (
             <div key={minutes}>
               <SVGIcon iconType={status} info={administrationInfo} />
@@ -147,7 +201,7 @@ export default function TimeCell(props) {
                       getNoteIcon(hasAmendedNotes, isAcknowledged, slot)
                     }
                   >
-                    {renderTooltipContent(notes, slot)}
+                    {renderTooltipContent(notes, slot, amendedNotesResponse)}
                   </Tooltip>
                 </span>
               )}
@@ -172,6 +226,8 @@ export default function TimeCell(props) {
             const isAcknowledged =
               slot?.originalSlot?.administrationSummary?.approvalStatus ===
               "APPROVED";
+            const amendedNotesResponse = slot?.originalSlot?.medicationAdministration?.amendedNotes;
+
             return (
               <div key={minutes}>
                 <SVGIcon iconType={status} info={administrationInfo} />
@@ -183,7 +239,7 @@ export default function TimeCell(props) {
                         getNoteIcon(hasAmendedNotes, isAcknowledged, slot)
                       }
                     >
-                      {renderTooltipContent(notes, slot)}
+                    {renderTooltipContent(notes, slot, amendedNotesResponse)}
                     </Tooltip>
                   </span>
                 )}
