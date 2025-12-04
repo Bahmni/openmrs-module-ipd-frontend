@@ -15,7 +15,11 @@ export const NoteTile = ({
     <Tile className={`note-readonly-tile ${className}`}>
       {tagLabel && 
         <div>
-          <Tag type={tagType} size="sm">
+          <Tag 
+            type={tagType === "custom-orange-tag" ? "custom-orange-tag" : tagType} 
+            size="sm"
+            className={tagType === "custom-orange-tag" ? "custom-orange-tag" : ""}
+          >
             {tagLabel}
           </Tag>
         </div>
@@ -40,7 +44,7 @@ export const NoteTile = ({
 
 NoteTile.propTypes = {
   tagLabel: PropTypes.string,
-  tagType: PropTypes.oneOf(["red", "magenta", "purple", "blue", "cyan", "teal", "green", "gray", "cool-gray", "warm-gray", "high-contrast"]),
+  tagType: PropTypes.oneOf(["red", "magenta", "purple", "blue", "cyan", "teal", "green", "gray", "cool-gray", "warm-gray", "high-contrast","custom-orange-tag"]),
   scheduledTime: PropTypes.string,
   performerName: PropTypes.string,
   noteText: PropTypes.string,

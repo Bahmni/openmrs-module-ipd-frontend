@@ -117,7 +117,7 @@ const DrugChartNoteAcknowledgementSlider = (props) => {
               
               <NoteTile
                 tagLabel="Amended"
-                tagType="orange"
+                tagType="custom-orange-tag"
                 scheduledTime={hostData.scheduledTime}
                 performerName={hostData.performerName}
                 noteText={hostData.amendedNotes?.map(note => note.amendedText).join('\n\n')}
