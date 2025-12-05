@@ -26,6 +26,7 @@ const DrugChartNoteAcknowledgementSlider = (props) => {
     moment().format(enable24HourTime ? timeFormatFor24Hr : timeFormatFor12Hr)
   );
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
+  const [isAcknowledged, setIsAcknowledged] = useState(false);
 
   const updateSliderContentModified = (value) => {
     setSliderContentModified((prev) => {
@@ -51,8 +52,13 @@ const DrugChartNoteAcknowledgementSlider = (props) => {
     setAcknowledgementTime(time);
   };
 
+  const handleToggleChange = (checked) => {
+    updateSliderContentModified(true);
+    setIsAcknowledged(checked);
+  };
+
   const isFormValid = () => {
-    return acknowledgementNotes.trim() !== "";
+    return acknowledgementNotes.trim() !== "" && isAcknowledged;
   };
 
   const handleSave = async () => {
@@ -137,6 +143,8 @@ const DrugChartNoteAcknowledgementSlider = (props) => {
             size={"sm"}
             labelA="Acknowledge"
             labelB="Acknowledge"
+            toggled={isAcknowledged}
+            onToggle={handleToggleChange}
           />
       </div>
           <div style={{ marginBottom: "16px" }}>
