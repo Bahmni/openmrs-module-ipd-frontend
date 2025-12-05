@@ -136,6 +136,32 @@ export const saveMedicationAmendmentNote = async (amendmentData) => {
   }
 };
 
+export const saveMedicationAcknowledgementNote = async (acknowledgementData) => {
+  const {
+    noteUuid,
+    acknowledgementNotes,
+    acknowledgedByUuid,
+    acknowledgedDateTime
+  } = acknowledgementData;
+
+  const payload = {
+    approvalStatus: "APPROVED",
+    approvalNotes: acknowledgementNotes,
+    approvedByUuid: acknowledgedByUuid,
+    approvedDateTime: acknowledgedDateTime,
+  };
+
+  try {
+    return await axios.post(
+      `${MEDICATION_ADMINISTRATION_NOTE_URL}/${noteUuid}/acknowledge`,
+      payload
+    );
+  } catch (error) {
+    console.error("Error saving medication acknowledgement note:", error);
+    throw error;
+  }
+};
+
 export const resetDrugOrdersSlots = (drugOrders) => {
   Object.keys(drugOrders).forEach((order) => {
     drugOrders[order].slots = [];

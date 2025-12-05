@@ -1,0 +1,41 @@
+.medication-details-section {
+  background-color: #f4f4f4;
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+
+  h5 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #161616;
+  }
+
+  .medication-info {
+    .info-row {
+      display: flex;
+      margin-bottom: 8px;
+
+      .label {
+        font-weight: 600;
+        min-width: 150px;
+        color: #525252;
+        font-size: 14px;
+      }
+
+      .value {
+        color: #161616;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.amendment-form-section {
+  h5 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #161616;
+  }
+} 

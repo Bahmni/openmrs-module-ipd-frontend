@@ -35,6 +35,7 @@ import {
 } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
 import DrugChartNoteAmendmentSlider from "./DrugChartNoteAmendmentSlider";
+import DrugChartNoteAcknowledgementSlider from "./DrugChartNoteAcknowledgementSlider";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
@@ -136,6 +137,44 @@ export default function DrugChartWrapper(props) {
     },
   };
 
+  const updateAcknowledgementSlider = (value) => {
+    updateSliderOpen((prev) => {
+      return {
+        ...prev,
+        drugChartNoteAcknowledgement: value,
+      };
+    });
+  };
+
+  const acknowledgementSliderCloseActions = {
+    onCancel: () => {
+      setShowWarningNotification(false);
+      updateAcknowledgementSlider(false);
+    },
+    onClose: () => {
+      setShowWarningNotification(false);
+    },
+  };
+
+  const acknowledgementSliderActions = {
+    onModalClose: () => {
+      sliderContentModified.drugChartNoteAcknowledgement
+        ? setShowWarningNotification(true)
+        : updateAcknowledgementSlider(false);
+    },
+    onModalCancel: () => {
+      sliderContentModified.drugChartNoteAcknowledgement
+        ? setShowWarningNotification(true)
+        : updateAcknowledgementSlider(false);
+    },
+    onModalSave: () => {
+      updateAcknowledgementSlider(false);
+      setSuccessMessage("NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS");
+      setShowSuccessNotification(true);
+      callFetchMedications(startEndDates.startDate, startEndDates.endDate);
+    },
+  };
+
   const handleSlotClick = (slot, rowData) => {
     // Only allow clicking on administered/not-administered statuses
     const clickableStatuses = ["Administered", "Administered-Late", "Not-Administered"];
@@ -143,13 +182,35 @@ export default function DrugChartWrapper(props) {
       return;
     }
 
-    let dosageInfo;
-    if (slot?.medicationAdministration?.dose && slot?.medicationAdministration?.doseUnits?.display) {
-      dosageInfo = slot?.medicationAdministration?.dose + " " + slot?.medicationAdministration?.doseUnits?.display
+    let dosageInfo = "";
+    const dosingInstructions = rowData?.dosingInstructions;
+    
+    if (dosingInstructions) {
+      if (dosingInstructions.dosage) {
+        dosageInfo = dosingInstructions.dosage;
+        if (dosingInstructions.doseUnits) {
+          dosageInfo += " " + dosingInstructions.doseUnits;
+        }
+      }
+      
+      if (dosingInstructions.route) {
+        const routeDisplay = typeof dosingInstructions.route === 'string' 
+          ? dosingInstructions.route 
+          : dosingInstructions.route.display || dosingInstructions.route;
+        dosageInfo = dosageInfo.length > 0 
+          ? dosageInfo + " - " + routeDisplay
+          : routeDisplay;
+      }
+      
+      if (dosingInstructions.frequency?.display) {
+        dosageInfo = dosageInfo.length > 0 
+          ? dosageInfo + " - " + dosingInstructions.frequency.display
+          : dosingInstructions.frequency.display;
+      }
     }
-    dosageInfo = dosageInfo?.length == 0 ? 
-        slot?.medicationAdministration?.route?.display :
-        dosageInfo + " - " + slot?.medicationAdministration?.route?.display,
+
+    // Check the action type from slot metadata (could be in slot or originalSlot)
+    const action = slot.clickAction || slot.originalSlot?.clickAction;
 
     setSelectedSlotData({
       slot,
@@ -162,15 +223,48 @@ export default function DrugChartWrapper(props) {
       notes: slot?.medicationAdministration?.amendedNotes?.length > 0 ?
        slot.medicationAdministration.amendedNotes : 
        slot.medicationAdministration?.notes,
+      amendedNotes: slot?.medicationAdministration?.amendedNotes,
       medicationAdministrationNoteUUID: slot.medicationAdministration?.notes?.[0]?.uuid,
     });
 
-    setSliderContentModified((prevState) => ({
-      ...prevState,
-      drugChartNoteAmendment: false,
-    }));
-
-    updateAmendmentSlider(true);
+    // Determine which slider to open based on action
+    if (action === 'acknowledge') {
+      setSliderContentModified((prevState) => ({
+        ...prevState,
+        drugChartNoteAcknowledgement: false,
+      }));
+      updateAcknowledgementSlider(true);
+    } else if (action === 'amend') {
+      setSliderContentModified((prevState) => ({
+        ...prevState,
+        drugChartNoteAmendment: false,
+      }));
+      updateAmendmentSlider(true);
+    } else {
+      // Default behavior when no action specified
+      const hasAmendment = slot?.medicationAdministration?.amendedNotes?.length > 0 && 
+                           slot?.medicationAdministration?.amendedNotes.some(note => 
+                             note?.amendedText && note?.approvalStatus === "PENDING"
+                           );
+      
+      if (hasAmendment) {
+        setSliderContentModified((prevState) => ({
+          ...prevState,
+          drugChartNoteAcknowledgement: false,
+        }));
+        updateAcknowledgementSlider(true);
+      } else {
+        setSliderContentModified((prevState) => ({
+          ...prevState,
+          drugChartNoteAmendment: false,
+        }));
+        updateAmendmentSlider(true);
+      }
+    }
+    
+    // Clear the action after processing
+    if (slot.clickAction) delete slot.clickAction;
+    if (slot.originalSlot?.clickAction) delete slot.originalSlot.clickAction;
   };
 
   const callFetchMedications = async (startDateTime, endDateTime) => {
@@ -464,6 +558,50 @@ export default function DrugChartWrapper(props) {
           }}
         />
       )}
+
+      {isSliderOpen?.drugChartNoteAcknowledgement && (
+              <DrugChartNoteAcknowledgementSlider
+                hostData={selectedSlotData}
+                hostApi={acknowledgementSliderActions}
+              />
+            )}
+            {showWarningNotification && (
+              <SideBarPanelClose
+                className="warning-notification"
+                open={true}
+                message={
+                  <FormattedMessage
+                    id="ACKNOWLEDGEMENT_WARNING_TEXT"
+                    defaultMessage="You will lose the details entered. Do you want to continue?"
+                  />
+                }
+                label={""}
+                primaryButtonText={<FormattedMessage id="NO" defaultMessage="No" />}
+                secondaryButtonText={
+                  <FormattedMessage id="YES" defaultMessage="Yes" />
+                }
+                onSubmit={acknowledgementSliderCloseActions.onClose}
+                onSecondarySubmit={acknowledgementSliderCloseActions.onCancel}
+                onClose={acknowledgementSliderCloseActions.onClose}
+              />
+            )}
+            {showSuccessNotification && (
+              <Notification
+                hostData={{
+                  notificationKind: "success",
+                  messageId: successMessage,
+                }}
+                hostApi={{
+                  onClose: () => {
+                    setShowSuccessNotification(false);
+                    refreshDisplayControl([
+                      componentKeys.NURSING_TASKS,
+                      componentKeys.DRUG_CHART,
+                    ]);
+                  },
+                }}
+              />
+            )}
     </div>
   );
 }
