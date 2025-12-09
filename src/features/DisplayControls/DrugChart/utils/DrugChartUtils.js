@@ -3,6 +3,7 @@ import moment from "moment";
 import React from "react";
 import {
   MEDICATIONS_BASE_URL,
+  MEDICATION_ADMINISTRATION_NOTE_URL,
   performerFunction,
   asNeededPlaceholderConceptName,
   timeFormatFor24Hr,
@@ -21,7 +22,7 @@ export const fetchMedications = async (
   try {
     return await axios.get(FETCH_MEDICATIONS_URL);
   } catch (error) {
-    return {error};
+    return { error };
   }
 };
 
@@ -108,6 +109,31 @@ export const transformDrugOrders = (orders) => {
   return medicationData;
 };
 
+export const saveMedicationAmendmentNote = async (amendmentData) => {
+  const {
+    noteUuid,
+    amendedReason,
+    amendedText,
+    amendedByUuid,
+  } = amendmentData;
+
+  const payload = {
+    amendedReason: amendedReason,
+    amendedText: amendedText,
+    amendedByUuid: amendedByUuid,
+  };
+
+  try {
+    return await axios.post(
+      `${MEDICATION_ADMINISTRATION_NOTE_URL}/${noteUuid}`,
+      payload
+    );
+  } catch (error) {
+    console.error("Error saving medication amendment note:", error);
+    throw error;
+  }
+};
+
 export const resetDrugOrdersSlots = (drugOrders) => {
   Object.keys(drugOrders).forEach((order) => {
     drugOrders[order].slots = [];
@@ -141,10 +167,15 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
           slot
         );
         let performerName = "",
-          notes = "";
+          notes = "",
+          hasAmendedNotes = false,
+          approvalStatus = "";
         if (medicationAdministration) {
-          const { providers, notes: administeredNotes } =
-            medicationAdministration;
+          const {
+            providers,
+            notes: administeredNotes,
+            amendedNotes,
+          } = medicationAdministration;
           let performer = providers.find(
             (provider) => provider.function === performerFunction
           );
@@ -160,6 +191,12 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
                   (note) => note.author.uuid === performer.uuid
                 ).text
               : "";
+          if (amendedNotes && amendedNotes.length > 0) {
+            hasAmendedNotes = amendedNotes.some(
+              (note) => note.amendedText && note.amendedReason
+            );
+            approvalStatus = amendedNotes?.[0].approvalStatus;
+          }
         }
         orders[uuid].slots.push({
           ...slot,
@@ -167,6 +204,8 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
             performerName,
             notes: status === "MISSED" ? "Missed" : notes,
             status: administrationStatus,
+            hasAmendedNotes,
+            approvalStatus,
           },
         });
       }
