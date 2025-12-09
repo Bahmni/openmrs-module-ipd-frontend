@@ -1,9 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Tooltip } from "carbon-components-react";
+import { Tooltip, Button } from "carbon-components-react";
 import "../styles/TimeCell.scss";
 import SVGIcon from "./SVGIcon.jsx";
 import NoteIcon from "../../../../icons/note.svg";
+import AmendedIcon from "../../../../icons/acknowledge-pending.svg";
+import AcknowledgedIcon from "../../../../icons/acknowledged.svg";
 import { ifMedicationNotesPresent } from "../utils/DrugChartUtils";
 import { timeFormatFor24Hr } from "../../../../constants.js";
 import moment from "moment";
@@ -17,6 +19,8 @@ export default function TimeCell(props) {
     highlightedCell,
     isBlank,
     isWholeHourStartTime,
+    onIconClick,
+    currentProviderUuid,
   } = props;
   const left = [],
     right = [];
@@ -41,11 +45,72 @@ export default function TimeCell(props) {
     }
   });
 
-  const icon = (
-    <div className="note-icon-container">
-      <NoteIcon />
-    </div>
-  );
+  const isNoteCreator = (slot) => {
+    if (
+      !currentProviderUuid ||
+      !slot?.originalSlot?.medicationAdministration?.providers
+    ) {
+      return false;
+    }
+    const noteAuthor =
+      slot.originalSlot?.medicationAdministration?.providers.find(
+        (provider) => provider.function === "Performer"
+      );
+    return noteAuthor?.provider?.uuid === currentProviderUuid;
+  };
+
+  const getNoteIcon = (hasAmendedNotes, isAcknowledged, slot) => {
+    if (isAcknowledged) {
+      return (
+        <div className="note-icon-container">
+          <AcknowledgedIcon />
+        </div>
+      );
+    }
+    if (hasAmendedNotes && isNoteCreator(slot)) {
+      return (
+        <div className="note-icon-container">
+          <AmendedIcon />
+        </div>
+      );
+    }
+    return (
+      <div className="note-icon-container">
+        <NoteIcon />
+      </div>
+    );
+  };
+
+  const canAmendNotes = (slot) => {
+    const isAcknowledged =
+      slot?.originalSlot?.administrationSummary?.approvalStatus === "APPROVED";
+    if (isAcknowledged) {
+      return false;
+    }
+
+    return isNoteCreator(slot);
+  };
+
+  const renderTooltipContent = (notes, slot) => {
+    const showAmendButton = canAmendNotes(slot);
+
+    return (
+      <div className="tooltip-content">
+        <div className="tooltip-notes">{notes}</div>
+        {showAmendButton && (
+          <div className="tooltip-actions">
+            <Button
+              kind="ghost"
+              size="sm"
+              onClick={() => onIconClick && onIconClick(slot)}
+            >
+              Amend Note
+            </Button>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div
@@ -63,13 +128,23 @@ export default function TimeCell(props) {
       >
         {left.map((slot) => {
           const { status, administrationInfo, notes, minutes } = slot;
+          const hasAmendedNotes =
+            slot?.originalSlot?.administrationSummary?.hasAmendedNotes || false;
+          const isAcknowledged =
+            slot?.originalSlot?.administrationSummary?.approvalStatus ===
+            "APPROVED";
           return (
             <div key={minutes}>
               <SVGIcon iconType={status} info={administrationInfo} />
               {ifMedicationNotesPresent(notes, status) && (
                 <span data-testid="left-notes">
-                  <Tooltip autoOrientation={true} renderIcon={() => icon}>
-                    {notes}
+                  <Tooltip
+                    autoOrientation={true}
+                    renderIcon={() =>
+                      getNoteIcon(hasAmendedNotes, isAcknowledged, slot)
+                    }
+                  >
+                    {renderTooltipContent(notes, slot)}
                   </Tooltip>
                 </span>
               )}
@@ -88,13 +163,24 @@ export default function TimeCell(props) {
         >
           {right.map((slot) => {
             const { status, administrationInfo, notes, minutes } = slot;
+            const hasAmendedNotes =
+              slot?.originalSlot?.administrationSummary?.hasAmendedNotes ||
+              false;
+            const isAcknowledged =
+              slot?.originalSlot?.administrationSummary?.approvalStatus ===
+              "APPROVED";
             return (
               <div key={minutes}>
                 <SVGIcon iconType={status} info={administrationInfo} />
                 {ifMedicationNotesPresent(notes, status) && (
                   <span data-testid="right-notes">
-                    <Tooltip autoOrientation={true} renderIcon={() => icon}>
-                      {notes}
+                    <Tooltip
+                      autoOrientation={true}
+                      renderIcon={() =>
+                        getNoteIcon(hasAmendedNotes, isAcknowledged, slot)
+                      }
+                    >
+                      {renderTooltipContent(notes, slot)}
                     </Tooltip>
                   </span>
                 )}
@@ -117,4 +203,6 @@ TimeCell.propTypes = {
   endTime: PropTypes.object,
   isBlank: PropTypes.bool,
   isWholeHourStartTime: PropTypes.bool,
+  onIconClick: PropTypes.func,
+  currentProviderUuid: PropTypes.string,
 };
