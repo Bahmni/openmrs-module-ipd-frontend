@@ -64,3 +64,20 @@
   border-left: var(--day-border);
   @extend .time-cell;
 }
+
+.tooltip-content {
+  .tooltip-notes {
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .tooltip-actions {
+    display: flex;
+    justify-content: center;
+
+    .bx--btn {
+      text-align: center;
+      justify-content: center;
+    }
+  }
+}

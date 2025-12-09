@@ -105,5 +105,6 @@
   "WEIGHT_HEADER": "Weight ({unit})",
   "BMI_HEADER": "BMI ({unit})",
   "MUAC": "MUAC ({unit})",
-  "CREATED_BY": "Created by {provider}"
+  "CREATED_BY": "Created by {provider}",
+  "NOTE_AMENDMENT_SAVED_SUCCESS": "Amendment note saved successfully"
 }
