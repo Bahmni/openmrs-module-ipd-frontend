@@ -17,6 +17,19 @@ jest.mock("bahmni-carbon-ui", () => {
   };
 });
 
+jest.mock("carbon-components-react", () => {
+  const actual = jest.requireActual("carbon-components-react");
+  return {
+    ...actual,
+    Tooltip: ({ children, renderIcon }) => (
+      <div>
+        {renderIcon && renderIcon()}
+        {children}
+      </div>
+    ),
+  };
+});
+
 const slotInfoWithin30MinDuration = [
   {
     time: "10:20",
@@ -172,5 +185,85 @@ describe("TimeCell", () => {
     expect(component.getByTestId("right-icon")).not.toHaveClass(
       "highlightedCell"
     );
+  });
+
+  it("should render with config containing drugChartNoteAmendment", () => {
+    const slotWithAmendableNote = [
+      {
+        time: "10:40",
+        status: "Administered",
+        administrationInfo: "Superman[12.20]",
+        notes: "test notes",
+        originalSlot: {
+          medicationAdministration: {
+            providers: [
+              { function: "Performer", provider: { uuid: "provider-123" } },
+            ],
+          },
+          administrationSummary: {
+            status: "Administered",
+            approvalStatus: null,
+          },
+        },
+      },
+    ];
+
+    const config = {
+      drugChartNoteAmendment: {
+        isAmendFeatureEnabled: true,
+      },
+    };
+
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
+
+    const { container, getByText } = render(
+      <TimeCell
+        slotInfo={slotWithAmendableNote}
+        startTime={startTime}
+        endTime={endTime}
+        currentProviderUuid="provider-123"
+        config={config}
+      />
+    );
+
+    expect(container.querySelector("[data-testid='right-notes']")).toBeTruthy();
+    expect(getByText("Amend Note")).toBeInTheDocument();
+  });
+
+  it("should render without config - backward compatibility", () => {
+    const slotWithNote = [
+      {
+        time: "10:40",
+        status: "Administered",
+        administrationInfo: "Superman[12.20]",
+        notes: "test notes",
+        originalSlot: {
+          medicationAdministration: {
+            providers: [
+              { function: "Performer", provider: { uuid: "provider-123" } },
+            ],
+          },
+          administrationSummary: {
+            status: "Administered",
+          },
+        },
+      },
+    ];
+
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
+
+    const component = render(
+      <TimeCell
+        slotInfo={slotWithNote}
+        startTime={startTime}
+        endTime={endTime}
+        currentProviderUuid="provider-123"
+      />
+    );
+
+    expect(component.getByTestId("right-notes")).toBeTruthy();
+    expect(component.queryByText("Amend Note")).not.toBeInTheDocument();
   });
 });

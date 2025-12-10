@@ -76,13 +76,15 @@ describe("CalendarRow", () => {
       }
     );
     expect(mockTimeCell).toHaveBeenCalledTimes(8);
-    expect(mockTimeCell).toHaveBeenLastCalledWith({
-      doHighlightCell: false,
-      highlightedCell: "left",
-      isBlank: true,
-      isWholeHourStartTime: true,
-      currentProviderUuid: "provider-uuid-123",
-    });
+    expect(mockTimeCell).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        doHighlightCell: false,
+        highlightedCell: "left",
+        isBlank: true,
+        isWholeHourStartTime: true,
+        currentProviderUuid: "provider-uuid-123",
+      })
+    );
     MockDate.reset();
   });
 
@@ -103,13 +105,15 @@ describe("CalendarRow", () => {
       }
     );
     expect(mockTimeCell).toHaveBeenCalledTimes(8);
-    expect(mockTimeCell).toHaveBeenLastCalledWith({
-      doHighlightCell: false,
-      highlightedCell: "left",
-      isBlank: false,
-      isWholeHourStartTime: true,
-      currentProviderUuid: "provider-uuid-123",
-    });
+    expect(mockTimeCell).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        doHighlightCell: false,
+        highlightedCell: "left",
+        isBlank: false,
+        isWholeHourStartTime: true,
+        currentProviderUuid: "provider-uuid-123",
+      })
+    );
     MockDate.reset();
   });
 
@@ -130,13 +134,15 @@ describe("CalendarRow", () => {
       }
     );
     expect(mockTimeCell).toHaveBeenCalledTimes(8);
-    expect(mockTimeCell).toHaveBeenLastCalledWith({
-      doHighlightCell: false,
-      highlightedCell: "left",
-      isBlank: false,
-      isWholeHourStartTime: false,
-      currentProviderUuid: "provider-uuid-123",
-    });
+    expect(mockTimeCell).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        doHighlightCell: false,
+        highlightedCell: "left",
+        isBlank: false,
+        isWholeHourStartTime: false,
+        currentProviderUuid: "provider-uuid-123",
+      })
+    );
     MockDate.reset();
   });
 });
