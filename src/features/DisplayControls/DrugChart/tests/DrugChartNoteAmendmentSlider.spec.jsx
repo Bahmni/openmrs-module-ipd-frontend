@@ -61,10 +61,14 @@ const mockSliderContext = {
   setSliderContentModified: jest.fn(),
 };
 
+const mockProvider = {
+  uuid: "provider-uuid-456",
+};
+
 const renderComponent = (hostData = mockHostData, config = mockConfig) => {
   return render(
     <IntlProvider locale="en">
-      <IPDContext.Provider value={{ config, handleAuditEvent: jest.fn() }}>
+      <IPDContext.Provider value={{ config, provider: mockProvider, handleAuditEvent: jest.fn() }}>
         <SliderContext.Provider value={mockSliderContext}>
           <DrugChartNoteAmendmentSlider
             hostData={hostData}
