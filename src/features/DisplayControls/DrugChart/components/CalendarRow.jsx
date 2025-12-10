@@ -103,6 +103,7 @@ export default function CalendarRow(props) {
               isWholeHourStartTime={isWholeHourStartTime}
               onIconClick={handleIconClick}
               currentProviderUuid={provider?.uuid}
+              config={config}
             />
           );
         }
@@ -114,6 +115,7 @@ export default function CalendarRow(props) {
             isBlank={index === currentShiftArray.length - 1 && hasMinutes}
             isWholeHourStartTime={isWholeHourStartTime}
             currentProviderUuid={provider?.uuid}
+            config={config}
           />
         );
       })}

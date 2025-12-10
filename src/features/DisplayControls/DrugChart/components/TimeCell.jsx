@@ -21,6 +21,7 @@ export default function TimeCell(props) {
     isWholeHourStartTime,
     onIconClick,
     currentProviderUuid,
+    config = {},
   } = props;
   const left = [],
     right = [];
@@ -97,7 +98,7 @@ export default function TimeCell(props) {
     return (
       <div className="tooltip-content">
         <div className="tooltip-notes">{notes}</div>
-        {showAmendButton && (
+        {config?.drugChartNoteAmendment?.isAmendFeatureEnabled && showAmendButton && (
           <div className="tooltip-actions">
             <Button
               kind="ghost"
@@ -205,4 +206,5 @@ TimeCell.propTypes = {
   isWholeHourStartTime: PropTypes.bool,
   onIconClick: PropTypes.func,
   currentProviderUuid: PropTypes.string,
+  config: PropTypes.object,
 };
