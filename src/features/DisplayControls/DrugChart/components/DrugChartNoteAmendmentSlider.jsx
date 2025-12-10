@@ -12,7 +12,7 @@ import { NoteTile } from "./NoteTile";
 
 const DrugChartNoteAmendmentSlider = (props) => {
   const { hostData, hostApi } = props;
-  const { config } = useContext(IPDContext);
+  const { config, provider } = useContext(IPDContext);
   const { setSliderContentModified } = useContext(SliderContext);
 
   const { drugChartNoteAmendment = {} } = config;
@@ -61,7 +61,7 @@ const DrugChartNoteAmendmentSlider = (props) => {
       noteUuid: hostData?.medicationAdministrationNoteUUID,
       amendedReason: amendmentReason,
       amendedText: amendmentNotes,
-      amendedByUuid: hostData?.slot?.medicationAdministration?.providers?.[0]?.uuid,
+      amendedByUuid: provider?.uuid,
     };
 
     try {
