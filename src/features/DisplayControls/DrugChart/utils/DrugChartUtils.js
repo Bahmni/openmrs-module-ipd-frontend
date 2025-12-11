@@ -19,6 +19,10 @@ import {
   parseFlatAdminInstructions,
 } from "../../../../utils/FhirDosingUtils";
 
+const APPROVAL_STATUS = {
+  APPROVED: "APPROVED",
+};
+
 export const fetchMedications = async (
   patientUuid,
   startDateTime,
@@ -145,6 +149,30 @@ export const saveMedicationAmendmentNote = async (amendmentData) => {
     );
   } catch (error) {
     console.error("Error saving medication amendment note:", error);
+    throw error;
+  }
+};
+
+export const saveMedicationAcknowledgementNote = async (acknowledgementData) => {
+  const {
+    noteUuid,
+    acknowledgementNotes,
+    acknowledgedByUuid,
+  } = acknowledgementData;
+
+  const payload = {
+    approvalStatus: APPROVAL_STATUS.APPROVED,
+    approvalNotes: acknowledgementNotes,
+    approvedByUuid: acknowledgedByUuid,
+  };
+
+  try {
+    return await axios.post(
+      `${MEDICATION_ADMINISTRATION_NOTE_URL}/${noteUuid}/acknowledge`,
+      payload
+    );
+  } catch (error) {
+    console.error("Error saving medication acknowledgement note:", error);
     throw error;
   }
 };
