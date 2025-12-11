@@ -249,5 +249,6 @@
   "DISCHARGE_PATIENT": "Discharge Patient",
   "TRANSFER_PATIENT": "Transfer Patient",
   "UNDO_DISCHARGE": "Undo Discharge",
-  "NOTE_AMENDMENT_SAVED_SUCCESS": "Amendment note saved successfully"
+  "NOTE_AMENDMENT_SAVED_SUCCESS": "Amendment note saved successfully",
+  "NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS": "Acknowledgement is successful"
 }

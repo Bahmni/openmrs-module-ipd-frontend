@@ -92,21 +92,70 @@ export default function TimeCell(props) {
     return isNoteCreator(slot);
   };
 
-  const renderTooltipContent = (notes, slot) => {
+  const renderTooltipContent = (notes, slot, amendedNotes = null) => {
     const showAmendButton = canAmendNotes(slot);
+    const hasAmendedNotes = amendedNotes && amendedNotes.length > 0;
+    
+    const amendedText = hasAmendedNotes
+      ? amendedNotes
+          .filter(note => note?.amendedText)
+          .map(note => note.amendedText)
+          .join('\n\n')
+      : null;
 
+    const isAcknowledged =
+            slot?.originalSlot?.administrationSummary?.approvalStatus ===
+            "APPROVED";
+            
     return (
       <div className="tooltip-content">
-        <div className="tooltip-notes">{notes}</div>
-        {config?.drugChartNoteAmendment?.isAmendFeatureEnabled && showAmendButton && (
-          <div className="tooltip-actions">
-            <Button
-              kind="ghost"
-              size="sm"
-              onClick={() => onIconClick && onIconClick(slot)}
-            >
-              Amend Note
-            </Button>
+        {notes && !isAcknowledged && (
+          <div>
+            <div className="tooltip-notes">{notes}</div>
+            {config?.drugChartNoteAmendment?.isAmendFeatureEnabled && showAmendButton && (
+              <div className="tooltip-actions">
+                <Button
+                  kind="ghost"
+                  size="sm"
+                  className="no-focus-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (slot.originalSlot) {
+                      slot.originalSlot.clickAction = 'amend';
+                    }
+                     onIconClick && onIconClick(slot);
+                  }}
+                  onBlur={(e) => e.target.blur()}
+                >
+                  Amend Note
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+        {notes && amendedText && !isAcknowledged && (
+          <div style={{ marginTop: "12px" }}></div>
+        )}
+        {amendedText && !isAcknowledged && (
+          <div>
+            <div className="tooltip-notes">{amendedText}</div>
+            <div className="tooltip-actions">
+              <Button
+                kind="ghost"
+                size="sm"
+                className="no-focus-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (slot.originalSlot) {
+                    slot.originalSlot.clickAction = 'acknowledge';
+                  }
+                  onIconClick && onIconClick(slot);
+                }}
+                onBlur={(e) => e.target.blur()}
+              >
+                Acknowledge Note
+              </Button>
+            </div>
           </div>
         )}
       </div>
@@ -134,6 +183,8 @@ export default function TimeCell(props) {
           const isAcknowledged =
             slot?.originalSlot?.administrationSummary?.approvalStatus ===
             "APPROVED";
+          const amendedNotesResponse = slot?.originalSlot?.medicationAdministration?.amendedNotes;
+
           return (
             <div key={minutes}>
               <SVGIcon iconType={status} info={administrationInfo} />
@@ -145,7 +196,7 @@ export default function TimeCell(props) {
                       getNoteIcon(hasAmendedNotes, isAcknowledged, slot)
                     }
                   >
-                    {renderTooltipContent(notes, slot)}
+                    {renderTooltipContent(notes, slot, amendedNotesResponse)}
                   </Tooltip>
                 </span>
               )}
@@ -170,6 +221,8 @@ export default function TimeCell(props) {
             const isAcknowledged =
               slot?.originalSlot?.administrationSummary?.approvalStatus ===
               "APPROVED";
+            const amendedNotesResponse = slot?.originalSlot?.medicationAdministration?.amendedNotes;
+
             return (
               <div key={minutes}>
                 <SVGIcon iconType={status} info={administrationInfo} />
@@ -181,7 +234,7 @@ export default function TimeCell(props) {
                         getNoteIcon(hasAmendedNotes, isAcknowledged, slot)
                       }
                     >
-                      {renderTooltipContent(notes, slot)}
+                    {renderTooltipContent(notes, slot, amendedNotesResponse)}
                     </Tooltip>
                   </span>
                 )}
