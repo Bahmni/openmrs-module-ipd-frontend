@@ -48,12 +48,14 @@ export default function Dashboard(props) {
     nursingTasks: false,
     emergencyTasks: false,
     drugChartNoteAmendment: false,
+    drugChartNoteAcknowledgement: false,
   });
   const [isSliderOpen, updateSliderOpen] = useState({
     treatments: false,
     nursingTasks: false,
     emergencyTasks: false,
     drugChartNoteAmendment: false,
+    drugChartNoteAcknowledgement: false,
   });
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(false);

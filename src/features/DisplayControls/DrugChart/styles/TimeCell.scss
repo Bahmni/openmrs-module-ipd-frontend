@@ -82,3 +82,20 @@
     }
   }
 }
+
+.no-focus-button {
+  &:focus,
+  &:focus-visible,
+  &:active,
+  &:active:focus {
+    outline: 0 !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+  }
+  
+  &:focus::after,
+  &:focus-visible::after {
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+}

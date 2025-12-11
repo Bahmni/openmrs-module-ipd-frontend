@@ -47,9 +47,15 @@ jest.mock("../../../../utils/DateTimeUtils", () => {
 });
 
 const mockSliderContext = {
-  isSliderOpen: { drugChartNoteAmendment: false },
+  isSliderOpen: { 
+    drugChartNoteAmendment: false,
+    drugChartNoteAcknowledgement: false,
+  },
   updateSliderOpen: jest.fn(),
-  sliderContentModified: {},
+  sliderContentModified: {
+    drugChartNoteAmendment: false,
+    drugChartNoteAcknowledgement: false,
+  },
   setSliderContentModified: jest.fn(),
 };
 
