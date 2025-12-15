@@ -37,6 +37,7 @@ import {
 import WarningIcon from "../../../../icons/warning.svg";
 import DrugChartNoteAmendmentSlider from "./DrugChartNoteAmendmentSlider";
 import DrugChartNoteAcknowledgementSlider from "./DrugChartNoteAcknowledgementSlider";
+import NotesHistorySlider from "./NotesHistorySlider";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
@@ -109,6 +110,24 @@ export default function DrugChartWrapper(props) {
     });
   };
 
+  const updateAcknowledgementSlider = (value) => {
+    updateSliderOpen((prev) => {
+      return {
+        ...prev,
+        drugChartNoteAcknowledgement: value,
+      };
+    });
+  };
+
+  const updateHistoryViewer = (value) => {
+    updateSliderOpen((prev) => {
+      return {
+        ...prev,
+        drugChartNoteHistory: value,
+      };
+    });
+  };
+
   const sliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -138,15 +157,6 @@ export default function DrugChartWrapper(props) {
     },
   };
 
-  const updateAcknowledgementSlider = (value) => {
-    updateSliderOpen((prev) => {
-      return {
-        ...prev,
-        drugChartNoteAcknowledgement: value,
-      };
-    });
-  };
-
   const acknowledgementSliderCloseActions = {
     onCancel: () => {
       setShowWarningNotification(false);
@@ -173,6 +183,12 @@ export default function DrugChartWrapper(props) {
       setSuccessMessage("NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS");
       setShowSuccessNotification(true);
       callFetchMedications(startEndDates.startDate, startEndDates.endDate);
+    },
+  };
+
+  const notesHistorySliderActions = {
+    onModalClose: () => {
+      updateHistoryViewer(false);
     },
   };
 
@@ -237,6 +253,8 @@ export default function DrugChartWrapper(props) {
         drugChartNoteAmendment: false,
       }));
       updateAmendmentSlider(true);
+    } else if (action === 'viewHistory') {
+      updateHistoryViewer(true);
     } else {
       const hasAmendment = slot?.medicationAdministration?.amendedNotes?.length > 0 && 
                            slot?.medicationAdministration?.amendedNotes.some(note => 
@@ -595,6 +613,12 @@ export default function DrugChartWrapper(props) {
                     ]);
                   },
                 }}
+              />
+            )}
+            {isSliderOpen?.drugChartNoteHistory && (
+              <NotesHistorySlider
+                hostData={selectedSlotData}
+                hostApi={notesHistorySliderActions}
               />
             )}
     </div>
