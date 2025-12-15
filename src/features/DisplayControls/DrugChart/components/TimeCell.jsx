@@ -86,6 +86,7 @@ export default function TimeCell(props) {
   const canAmendNotes = (slot) => {
     const isAcknowledged =
       slot?.originalSlot?.administrationSummary?.approvalStatus === "APPROVED";
+    
     if (isAcknowledged) {
       return false;
     }
@@ -110,9 +111,16 @@ export default function TimeCell(props) {
             
     return (
       <div className="tooltip-content">
-        {notes && !isAcknowledged && (
+        {!isAcknowledged && (
           <div>
-            <div className="tooltip-notes">{notes}</div>
+            {(isNoteCreator(slot)||canAcknowledgeAmendment(privileges)) ? (
+               <div className="tooltip-notes">
+                {amendedText || notes}
+              </div>
+            ) : (
+              <div className="tooltip-notes">{notes}</div>
+            )}
+           
             {config?.drugChartNoteAmendment?.isAmendFeatureEnabled && showAmendButton && (
               <div className="tooltip-actions">
                 <Button
@@ -139,7 +147,7 @@ export default function TimeCell(props) {
         )}
         {amendedText && !isAcknowledged && canAcknowledgeAmendment(privileges) && (
           <div>
-            <div className="tooltip-notes">{amendedText}</div>
+            {!isNoteCreator(slot) && (
             <div className="tooltip-actions">
               <Button
                 kind="ghost"
@@ -157,8 +165,35 @@ export default function TimeCell(props) {
                 Acknowledge Note
               </Button>
             </div>
+            )}
           </div>
         )}
+        {isAcknowledged && (
+          <div>
+            <div className="tooltip-notes">
+              <div>Amend Note:</div>
+              <div style={{ marginTop: "8px" }}>{amendedText}</div>
+            </div>
+            <div className="tooltip-actions">
+              <Button
+                kind="ghost"
+                size="sm"
+                className="no-focus-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (slot.originalSlot) {
+                    slot.originalSlot.clickAction = 'viewHistory';
+                  }
+                  onIconClick && onIconClick(slot);
+                }}
+                onBlur={(e) => e.target.blur()}
+              >
+                History
+              </Button>
+            </div>
+          </div>
+        )
+        }
       </div>
     );
   };
