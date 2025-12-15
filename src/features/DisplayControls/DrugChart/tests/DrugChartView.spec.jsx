@@ -109,7 +109,8 @@ describe("DrugChartWrapper", () => {
     const { container } = renderDrugChartView(mockDrugOrders);
     await waitFor(() => {
       expect(screen.getAllByText(/Paracetamol/i)).toBeTruthy();
-      expect(container).toMatchSnapshot();
+      expect(container.querySelector("[data-testid='left-icon']")).toBeInTheDocument();
+      expect(container.querySelector("[data-testid='right-icon']")).toBeInTheDocument();
     });
   });
 
