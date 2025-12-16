@@ -1,0 +1,14 @@
+.note-legend {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  font-size: 12px;
+  flex-wrap: wrap;
+  border-left: 1px solid var(--omrs-color-border-light);
+  > * {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}

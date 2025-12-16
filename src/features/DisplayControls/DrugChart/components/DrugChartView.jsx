@@ -30,9 +30,10 @@ import {
   ForbiddenErrorMessage,
   GenericErrorMessage,
   displayShiftTimingsFormat,
+  displayShiftTimings12HourFormat,
   errorCodes,
   timeFormatFor12Hr,
-  componentKeys
+  componentKeys,
 } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
 import DrugChartNoteAmendmentSlider from "./DrugChartNoteAmendmentSlider";
@@ -96,7 +97,8 @@ export default function DrugChartWrapper(props) {
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
   const [notCurrentShift, setNotCurrentShift] = useState(false);
   const [selectedSlotData, setSelectedSlotData] = useState(null);
-  const [showWarningNotification, setShowWarningNotification] = useState(false);
+  const [showAmendmentWarning, setShowAmendmentWarning] = useState(false);
+  const [showAcknowledgementWarning, setShowAcknowledgementWarning] = useState(false);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const refreshDisplayControl = useContext(RefreshDisplayControl);
@@ -130,23 +132,23 @@ export default function DrugChartWrapper(props) {
 
   const sliderCloseActions = {
     onCancel: () => {
-      setShowWarningNotification(false);
+      setShowAmendmentWarning(false);
       updateAmendmentSlider(false);
     },
     onClose: () => {
-      setShowWarningNotification(false);
+      setShowAmendmentWarning(false);
     },
   };
 
   const amendmentSliderActions = {
     onModalClose: () => {
       sliderContentModified.drugChartNoteAmendment
-        ? setShowWarningNotification(true)
+        ? setShowAmendmentWarning(true)
         : updateAmendmentSlider(false);
     },
     onModalCancel: () => {
       sliderContentModified.drugChartNoteAmendment
-        ? setShowWarningNotification(true)
+        ? setShowAmendmentWarning(true)
         : updateAmendmentSlider(false);
     },
     onModalSave: () => {
@@ -159,23 +161,23 @@ export default function DrugChartWrapper(props) {
 
   const acknowledgementSliderCloseActions = {
     onCancel: () => {
-      setShowWarningNotification(false);
+      setShowAcknowledgementWarning(false);
       updateAcknowledgementSlider(false);
     },
     onClose: () => {
-      setShowWarningNotification(false);
+      setShowAcknowledgementWarning(false);
     },
   };
 
   const acknowledgementSliderActions = {
     onModalClose: () => {
       sliderContentModified.drugChartNoteAcknowledgement
-        ? setShowWarningNotification(true)
+        ? setShowAcknowledgementWarning(true)
         : updateAcknowledgementSlider(false);
     },
     onModalCancel: () => {
       sliderContentModified.drugChartNoteAcknowledgement
-        ? setShowWarningNotification(true)
+        ? setShowAcknowledgementWarning(true)
         : updateAcknowledgementSlider(false);
     },
     onModalSave: () => {
@@ -193,14 +195,18 @@ export default function DrugChartWrapper(props) {
   };
 
   const handleSlotClick = (slot, rowData) => {
-    const clickableStatuses = ["Administered", "Administered-Late", "Not-Administered"];
+    const clickableStatuses = [
+      "Administered",
+      "Administered-Late",
+      "Not-Administered",
+    ];
     if (!clickableStatuses.includes(slot.administrationSummary?.status)) {
       return;
     }
 
     let dosageInfo = "";
     const dosingInstructions = rowData?.dosingInstructions;
-    
+
     if (dosingInstructions) {
       if (dosingInstructions.dosage) {
         dosageInfo = dosingInstructions.dosage;
@@ -208,46 +214,59 @@ export default function DrugChartWrapper(props) {
           dosageInfo += " " + dosingInstructions.doseUnits;
         }
       }
-      
+
       if (dosingInstructions.route) {
-        const routeDisplay = typeof dosingInstructions.route === 'string' 
-          ? dosingInstructions.route 
-          : dosingInstructions.route.display || dosingInstructions.route;
-        dosageInfo = dosageInfo.length > 0 
-          ? dosageInfo + " - " + routeDisplay
-          : routeDisplay;
+        const routeDisplay =
+          typeof dosingInstructions.route === "string"
+            ? dosingInstructions.route
+            : dosingInstructions.route.display || dosingInstructions.route;
+        dosageInfo =
+          dosageInfo.length > 0
+            ? dosageInfo + " - " + routeDisplay
+            : routeDisplay;
       }
-      
+
       if (dosingInstructions.frequency?.display) {
-        dosageInfo = dosageInfo.length > 0 
-          ? dosageInfo + " - " + dosingInstructions.frequency.display
-          : dosingInstructions.frequency.display;
+        dosageInfo =
+          dosageInfo.length > 0
+            ? dosageInfo + " - " + dosingInstructions.frequency.display
+            : dosingInstructions.frequency.display;
       }
     }
     const action = slot.clickAction || slot.originalSlot?.clickAction;
+
+    const note = slot.medicationAdministration?.notes?.[0];
+    const amendNotes = slot.medicationAdministration?.amendedNotes;
+    const amendNote = amendNotes?.[0];
+    const dateFomat = enable24HourTime
+      ? displayShiftTimingsFormat
+      : displayShiftTimings12HourFormat;
 
     setSelectedSlotData({
       slot,
       drugName: rowData.name,
       dosageInfo: dosageInfo,
-      scheduledTime: formatDate(slot.startTime * 1000, displayShiftTimingsFormat),
+      scheduledTime: formatDate(slot.startTime * 1000, dateFomat),
+      amendedTime: formatDate(amendNote?.amendedTime, dateFomat),
+      approvedTime: formatDate(amendNote?.approvedDateTime, dateFomat),
       status: slot.administrationSummary?.status,
       performerName: slot.administrationSummary?.performerName,
       existingNotes: slot.administrationSummary?.notes,
-      notes: slot?.medicationAdministration?.amendedNotes?.length > 0 ?
-       slot.medicationAdministration.amendedNotes : 
-       slot.medicationAdministration?.notes,
-      amendedNotes: slot?.medicationAdministration?.amendedNotes,
-      medicationAdministrationNoteUUID: slot.medicationAdministration?.notes?.[0]?.uuid,
+      notes:
+        amendNotes?.length > 0
+          ? amendNotes
+          : slot.medicationAdministration?.notes,
+      amendedNotes: amendNotes,
+      medicationAdministrationNoteUUID: note?.uuid,
     });
 
-    if (action === 'acknowledge') {
+    if (action === "acknowledge") {
       setSliderContentModified((prevState) => ({
         ...prevState,
         drugChartNoteAcknowledgement: false,
       }));
       updateAcknowledgementSlider(true);
-    } else if (action === 'amend') {
+    } else if (action === "amend") {
       setSliderContentModified((prevState) => ({
         ...prevState,
         drugChartNoteAmendment: false,
@@ -256,11 +275,12 @@ export default function DrugChartWrapper(props) {
     } else if (action === 'viewHistory') {
       updateHistoryViewer(true);
     } else {
-      const hasAmendment = slot?.medicationAdministration?.amendedNotes?.length > 0 && 
-                           slot?.medicationAdministration?.amendedNotes.some(note => 
-                             note?.amendedText && note?.approvalStatus === "PENDING"
-                           );
-      
+      const hasAmendment =
+        slot?.medicationAdministration?.amendedNotes?.length > 0 &&
+        slot?.medicationAdministration?.amendedNotes.some(
+          (note) => note?.amendedText && note?.approvalStatus === "PENDING"
+        );
+
       if (hasAmendment) {
         setSliderContentModified((prevState) => ({
           ...prevState,
@@ -275,7 +295,7 @@ export default function DrugChartWrapper(props) {
         updateAmendmentSlider(true);
       }
     }
-    
+
     if (slot.clickAction) delete slot.clickAction;
     if (slot.originalSlot?.clickAction) delete slot.originalSlot.clickAction;
   };
@@ -534,7 +554,7 @@ export default function DrugChartWrapper(props) {
           hostApi={amendmentSliderActions}
         />
       )}
-      {showWarningNotification && (
+      {showAmendmentWarning && (
         <SideBarPanelClose
           className="warning-notification"
           open={true}
@@ -572,55 +592,55 @@ export default function DrugChartWrapper(props) {
         />
       )}
 
-       {isSliderOpen?.drugChartNoteAcknowledgement && (
-              <DrugChartNoteAcknowledgementSlider
-                hostData={selectedSlotData}
-                hostApi={acknowledgementSliderActions}
-              />
-            )}
-            {showWarningNotification && (
-              <SideBarPanelClose
-                className="warning-notification"
-                open={true}
-                message={
-                  <FormattedMessage
-                    id="ACKNOWLEDGEMENT_WARNING_TEXT"
-                    defaultMessage="You will lose the details entered. Do you want to continue?"
-                  />
-                }
-                label={""}
-                primaryButtonText={<FormattedMessage id="NO" defaultMessage="No" />}
-                secondaryButtonText={
-                  <FormattedMessage id="YES" defaultMessage="Yes" />
-                }
-                onSubmit={acknowledgementSliderCloseActions.onClose}
-                onSecondarySubmit={acknowledgementSliderCloseActions.onCancel}
-                onClose={acknowledgementSliderCloseActions.onClose}
-              />
-            )}
-            {showSuccessNotification && (
-              <Notification
-                hostData={{
-                  notificationKind: "success",
-                  messageId: successMessage,
-                }}
-                hostApi={{
-                  onClose: () => {
-                    setShowSuccessNotification(false);
-                    refreshDisplayControl([
-                      componentKeys.NURSING_TASKS,
-                      componentKeys.DRUG_CHART,
-                    ]);
-                  },
-                }}
-              />
-            )}
-            {isSliderOpen?.drugChartNoteHistory && (
-              <NotesHistorySlider
-                hostData={selectedSlotData}
-                hostApi={notesHistorySliderActions}
-              />
-            )}
+      {isSliderOpen?.drugChartNoteAcknowledgement && (
+        <DrugChartNoteAcknowledgementSlider
+          hostData={selectedSlotData}
+          hostApi={acknowledgementSliderActions}
+        />
+      )}
+      {showAcknowledgementWarning && (
+        <SideBarPanelClose
+          className="warning-notification"
+          open={true}
+          message={
+            <FormattedMessage
+              id="ACKNOWLEDGEMENT_WARNING_TEXT"
+              defaultMessage="You will lose the details entered. Do you want to continue?"
+            />
+          }
+          label={""}
+          primaryButtonText={<FormattedMessage id="NO" defaultMessage="No" />}
+          secondaryButtonText={
+            <FormattedMessage id="YES" defaultMessage="Yes" />
+          }
+          onSubmit={acknowledgementSliderCloseActions.onClose}
+          onSecondarySubmit={acknowledgementSliderCloseActions.onCancel}
+          onClose={acknowledgementSliderCloseActions.onClose}
+        />
+      )}
+      {showSuccessNotification && (
+        <Notification
+          hostData={{
+            notificationKind: "success",
+            messageId: successMessage,
+          }}
+          hostApi={{
+            onClose: () => {
+              setShowSuccessNotification(false);
+              refreshDisplayControl([
+                componentKeys.NURSING_TASKS,
+                componentKeys.DRUG_CHART,
+              ]);
+            },
+          }}
+        />
+      )}
+      {isSliderOpen?.drugChartNoteHistory && (
+        <NotesHistorySlider
+          hostData={selectedSlotData}
+          hostApi={notesHistorySliderActions}
+        />
+      )}
     </div>
   );
 }

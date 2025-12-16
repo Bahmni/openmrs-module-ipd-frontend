@@ -153,10 +153,10 @@ describe("DrugChartNoteAmendmentSlider", () => {
       const emptyConfig = {};
       renderComponent(mockHostData, emptyConfig);
       const select = screen.getByTestId("amendment-reason-select");
-      fireEvent.click(select);
 
-      expect(screen.getByText("Incorrect Time")).toBeInTheDocument();
-      expect(screen.getByText("Incorrect Dose")).toBeInTheDocument();
+      const options = select.querySelectorAll("option");
+      expect(options).toHaveLength(1);
+      expect(options[0]).toHaveTextContent("Select a reason");
     });
 
     it("should use custom reasons from config when provided", () => {

@@ -149,43 +149,52 @@ exports[`DrugChart should match snapshot 1`] = `
       </button>
     </div>
     <div
-      class="drug-chart-legend"
+      class="legends-wrapper"
     >
-      <div>
-        <test-file-stub />
-        Pending
+      <div
+        class="drug-chart-legend"
+      >
+        <div>
+          <test-file-stub />
+          Pending
+        </div>
+        <div>
+          <test-file-stub />
+          Late
+        </div>
+        <div>
+          <test-file-stub />
+          Completed
+        </div>
+        <div>
+          <test-file-stub />
+          Administered Late
+        </div>
+        <div>
+          <test-file-stub />
+          Not Administered
+        </div>
+        <div>
+          <test-file-stub />
+          Stopped
+        </div>
       </div>
-      <div>
-        <test-file-stub />
-        Late
-      </div>
-      <div>
-        <test-file-stub />
-        Completed
-      </div>
-      <div>
-        <test-file-stub />
-        Administered Late
-      </div>
-      <div>
-        <test-file-stub />
-        Not Administered
-      </div>
-      <div>
-        <test-file-stub />
-        Stopped
-      </div>
-      <div>
-        <test-file-stub />
-        Note
-      </div>
-      <div>
-        <test-file-stub />
-        Amended Note
-      </div>
-      <div>
-        <test-file-stub />
-        Acknowledged Note
+      |
+      <div
+        class="note-legend"
+      >
+        <div>
+          <test-file-stub />
+          Note
+        </div>
+        <div>
+          <test-file-stub />
+          Amended Note
+        </div>
+        <div>
+          <test-file-stub />
+          Acknowledged Note
+        </div>
       </div>
     </div>
   </div>
