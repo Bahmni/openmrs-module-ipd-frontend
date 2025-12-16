@@ -15,14 +15,13 @@ const DrugChartNoteAmendmentSlider = (props) => {
   const { config, provider } = useContext(IPDContext);
   const { setSliderContentModified } = useContext(SliderContext);
   const { drugChartNoteAmendment = {} } = config;
-  const amendmentReasons = drugChartNoteAmendment.amendmentReasons || [
-    "Incorrect Time",
-    "Incorrect Dose",
-    "Incorrect Unit",
-    "Other (Please mention the reason in notes)"
-  ];
-  const amendedText = hostData.amendedNotes?.map(note => note.amendedText).join('\n\n');
-  const amendedReason = hostData.amendedNotes?.map(note => note.amendedReason).join('\n\n');
+  const amendmentReasons = drugChartNoteAmendment.amendmentReasons || [];
+  const amendedText = hostData.amendedNotes
+    ?.map((note) => note.amendedText)
+    .join("\n\n");
+  const amendedReason = hostData.amendedNotes
+    ?.map((note) => note.amendedReason)
+    .join("\n\n");
 
   const [amendmentReason, setAmendmentReason] = useState("");
   const [amendmentNotes, setAmendmentNotes] = useState("");
@@ -95,23 +94,29 @@ const DrugChartNoteAmendmentSlider = (props) => {
           {/* Amendment Reason Dropdown */}
           <div style={{ marginBottom: "16px" }}>
             <div>
-              <div style={{ marginBottom: '8px', fontWeight: 600, color: '#161616' }}>
+              <div
+                style={{
+                  marginBottom: "8px",
+                  fontWeight: 600,
+                  color: "#161616",
+                }}
+              >
                 {hostData.drugName}
               </div>
-              <div style={{ marginBottom: '16px', color: '#525252' }}>
+              <div style={{ marginBottom: "16px", color: "#525252" }}>
                 {hostData.dosageInfo}
               </div>
-              
-              {amendedText && amendedReason && 
+
+              {amendedText && amendedReason && (
                 <NoteTile
                   tagLabel="Amended"
                   tagType="blue"
-                  scheduledTime={hostData.scheduledTime}
+                  scheduledTime={hostData.amendedTime}
                   performerName={hostData.performerName}
                   noteText={amendedText}
                   noteReason={amendedReason}
                 />
-              }
+              )}
 
               <NoteTile
                 tagLabel="Original"

@@ -171,7 +171,7 @@ export default function TimeCell(props) {
         {isAcknowledged && (
           <div>
             <div className="tooltip-notes">
-              <div>Amend Note:</div>
+              <div>Amended Note:</div>
               <div style={{ marginTop: "8px" }}>{amendedText}</div>
             </div>
             <div className="tooltip-actions">
