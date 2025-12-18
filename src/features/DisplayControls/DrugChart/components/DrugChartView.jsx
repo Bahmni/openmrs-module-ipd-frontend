@@ -34,14 +34,13 @@ import {
   errorCodes,
   timeFormatFor12Hr,
   componentKeys,
+  sliderTypes,
 } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
-import DrugChartNoteAmendmentSlider from "./DrugChartNoteAmendmentSlider";
-import DrugChartNoteAcknowledgementSlider from "./DrugChartNoteAcknowledgementSlider";
-import NotesHistorySlider from "./NotesHistorySlider";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
+import DrugChartSlider from "./DrugChartSlider";
 
 const NoMedicationTaskMessage = (
   <FormattedMessage
@@ -98,7 +97,8 @@ export default function DrugChartWrapper(props) {
   const [notCurrentShift, setNotCurrentShift] = useState(false);
   const [selectedSlotData, setSelectedSlotData] = useState(null);
   const [showAmendmentWarning, setShowAmendmentWarning] = useState(false);
-  const [showAcknowledgementWarning, setShowAcknowledgementWarning] = useState(false);
+  const [showAcknowledgementWarning, setShowAcknowledgementWarning] =
+    useState(false);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const refreshDisplayControl = useContext(RefreshDisplayControl);
@@ -272,7 +272,7 @@ export default function DrugChartWrapper(props) {
         drugChartNoteAmendment: false,
       }));
       updateAmendmentSlider(true);
-    } else if (action === 'viewHistory') {
+    } else if (action === "viewHistory") {
       updateHistoryViewer(true);
     } else {
       const hasAmendment =
@@ -549,9 +549,10 @@ export default function DrugChartWrapper(props) {
         </DrugChartSlotContext.Provider>
       )}
       {isSliderOpen?.drugChartNoteAmendment && (
-        <DrugChartNoteAmendmentSlider
+        <DrugChartSlider
           hostData={selectedSlotData}
           hostApi={amendmentSliderActions}
+          sliderType={sliderTypes.AMENDMENT}
         />
       )}
       {showAmendmentWarning && (
@@ -593,9 +594,10 @@ export default function DrugChartWrapper(props) {
       )}
 
       {isSliderOpen?.drugChartNoteAcknowledgement && (
-        <DrugChartNoteAcknowledgementSlider
+        <DrugChartSlider
           hostData={selectedSlotData}
           hostApi={acknowledgementSliderActions}
+          sliderType={sliderTypes.ACKNOWLEDGEMENT}
         />
       )}
       {showAcknowledgementWarning && (
@@ -636,9 +638,10 @@ export default function DrugChartWrapper(props) {
         />
       )}
       {isSliderOpen?.drugChartNoteHistory && (
-        <NotesHistorySlider
+        <DrugChartSlider
           hostData={selectedSlotData}
           hostApi={notesHistorySliderActions}
+          sliderType={sliderTypes.HISTORY}
         />
       )}
     </div>
