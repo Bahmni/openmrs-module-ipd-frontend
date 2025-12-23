@@ -42,8 +42,18 @@ export default function Dashboard(props) {
     visitSummary,
     source,
     currentUser,
-    privileges
+    privileges,
   } = hostData;
+
+  const urlParams = new URLSearchParams(
+    window.location.hash.split("?")[1] || ""
+  );
+  const openAcknowledge = urlParams.get("openAcknowledge") === "true";
+  const medicationAdministrationNoteUUID = urlParams.get("noteUuid");
+  const medicationAdministrationEpoch = urlParams.get(
+    "medicationAdministrationEpoch"
+  );
+
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
     nursingTasks: false,
@@ -167,9 +177,17 @@ export default function Dashboard(props) {
     }
   };
 
-  const handleAuditEvent = ( eventType ) => {
-    var messageParams = {visitUuid: hostData.visitSummary.uuid, visitType: hostData.visitSummary.visitType};
-    hostApi.handleAuditEvent(patient.uuid, eventType, messageParams, "MODULE_LABEL_CLINICAL_KEY");
+  const handleAuditEvent = (eventType) => {
+    var messageParams = {
+      visitUuid: hostData.visitSummary.uuid,
+      visitType: hostData.visitSummary.visitType,
+    };
+    hostApi.handleAuditEvent(
+      patient.uuid,
+      eventType,
+      messageParams,
+      "MODULE_LABEL_CLINICAL_KEY"
+    );
   };
 
   const updateWindowWidth = () => {
@@ -209,83 +227,101 @@ export default function Dashboard(props) {
               isAllFormSummaryLoading,
               isAllFormsFilledInCurrentVisitLoading,
               currentUser,
-              privileges
+              privileges,
+              scrollToSection,
+              deepLinkParams: {
+                openAcknowledge,
+                medicationAdministrationNoteUUID,
+                medicationAdministrationEpoch,
+              },
             }}
           >
-            <main className="ipd-page">
-              <Header
-                className="border-bottom-0 header-bg-color ipd-header"
-                aria-label="IBM Platform Name"
-              >
-                <div className={"header-nav"}>
-                  <HeaderMenuButton
-                    aria-label="Open menu"
-                    className="header-nav-toggle-btn"
-                    style={
-                      windowWidth < RESOLUTION_VALUE && checkSliderStatus()
-                        ? { display: "none" }
-                        : {}
-                    }
-                    onClick={onClickSideNavExpand}
-                    isActive={isSideNavExpanded}
-                  />
-                  <Link href={homePageUrl} renderIcon={Home24} />
-                  <Link
-                    href={getAppLandingPageUrl(source)}
-                    renderIcon={Application24}
-                  />
-                  <Link
-                    href={getPatientDashboardUrl(patient?.uuid)}
-                    renderIcon={UserActivity24}
-                  />
-                </div>
-                <SideNav
-                  id="Side-Nav"
-                  aria-label="Side navigation"
-                  className="navbar-border"
-                  expanded={isSideNavExpanded}
+            <I18nProvider>
+              <main className="ipd-page">
+                <Header
+                  className="border-bottom-0 header-bg-color ipd-header"
+                  aria-label="IBM Platform Name"
                 >
-                  <SideNavItems>
-                    {sections?.map((el) => {
-                      return (
-                        <SideNavLink
-                          className="cursor-pointer"
-                          isActive={el.componentKey === selectedTab}
-                          key={el.componentKey}
-                          onClick={() => scrollToSection(el.componentKey)}
-                        >
-                          {el.title}
-                        </SideNavLink>
-                      );
-                    })}
-                  </SideNavItems>
-                </SideNav>
-                <ProviderActions onLogOut={hostApi.onLogOut} />
-              </Header>
+                  <div className={"header-nav"}>
+                    <HeaderMenuButton
+                      aria-label="Open menu"
+                      className="header-nav-toggle-btn"
+                      style={
+                        windowWidth < RESOLUTION_VALUE && checkSliderStatus()
+                          ? { display: "none" }
+                          : {}
+                      }
+                      onClick={onClickSideNavExpand}
+                      isActive={isSideNavExpanded}
+                    />
+                    <Link href={homePageUrl} renderIcon={Home24} />
+                    <Link
+                      href={getAppLandingPageUrl(source)}
+                      renderIcon={Application24}
+                    />
+                    <Link
+                      href={getPatientDashboardUrl(patient?.uuid)}
+                      renderIcon={UserActivity24}
+                    />
+                  </div>
+                  <SideNav
+                    id="Side-Nav"
+                    aria-label="Side navigation"
+                    className="navbar-border"
+                    expanded={isSideNavExpanded}
+                  >
+                    <SideNavItems>
+                      {sections?.map((el) => {
+                        return (
+                          <SideNavLink
+                            className="cursor-pointer"
+                            isActive={el.componentKey === selectedTab}
+                            key={el.componentKey}
+                            onClick={() => scrollToSection(el.componentKey)}
+                          >
+                            <FormattedMessage
+                              id={el.translationKey}
+                              defaultMessage={el.title}
+                            />
+                          </SideNavLink>
+                        );
+                      })}
+                    </SideNavItems>
+                  </SideNav>
+                  <ProviderActions onLogOut={hostApi.onLogOut} />
+                </Header>
 
-              <section
-                className={checkSliderStatus() ? "main-with-slider" : "main"}
-              >
-                <div className={"patient-header-navigation"}>
-                  <PatientHeader
-                    patientId={patient?.uuid}
-                    openVisitSummary={handleVisitSummaryNavigation}
-                    setPatientDetailsOpen={setPatientDetailsOpen}
-                  />
-                </div>
-                <Accordion className={"accordion"}>
-                  <AllMedicationsContextProvider>
-                    {sections?.map((el) => {
-                      const DisplayControl = componentMapping[el.componentKey];
-                      return (
-                        <section
-                          key={el.componentKey}
-                          ref={(ref) => (refs.current[el.componentKey] = ref)}
-                          style={{ marginBottom: "40px" }}
-                        >
-                          <Suspense fallback={<p>Loading...</p>}>
-                            <AccordionItem open title={el.title}>
-                              <I18nProvider>
+                <section
+                  className={checkSliderStatus() ? "main-with-slider" : "main"}
+                >
+                  <div className={"patient-header-navigation"}>
+                    <PatientHeader
+                      patientId={patient?.uuid}
+                      openVisitSummary={handleVisitSummaryNavigation}
+                      setPatientDetailsOpen={setPatientDetailsOpen}
+                    />
+                  </div>
+                  <Accordion className={"accordion"}>
+                    <AllMedicationsContextProvider>
+                      {sections?.map((el) => {
+                        const DisplayControl =
+                          componentMapping[el.componentKey];
+                        return (
+                          <section
+                            key={el.componentKey}
+                            ref={(ref) => (refs.current[el.componentKey] = ref)}
+                            style={{ marginBottom: "40px" }}
+                          >
+                            <Suspense fallback={<p>Loading...</p>}>
+                              <AccordionItem
+                                open
+                                title={
+                                  <FormattedMessage
+                                    id={el.translationKey}
+                                    defaultMessage={el.title}
+                                  />
+                                }
+                              >
                                 <RefreshDisplayControl.Provider
                                   value={refreshDisplayControl}
                                 >
@@ -295,16 +331,16 @@ export default function Dashboard(props) {
                                     config={el.config}
                                   />
                                 </RefreshDisplayControl.Provider>
-                              </I18nProvider>
-                            </AccordionItem>
-                          </Suspense>
-                        </section>
-                      );
-                    })}
-                  </AllMedicationsContextProvider>
-                </Accordion>
-              </section>
-            </main>
+                              </AccordionItem>
+                            </Suspense>
+                          </section>
+                        );
+                      })}
+                    </AllMedicationsContextProvider>
+                  </Accordion>
+                </section>
+              </main>
+            </I18nProvider>
           </IPDContext.Provider>
         </SliderContext.Provider>
       )}

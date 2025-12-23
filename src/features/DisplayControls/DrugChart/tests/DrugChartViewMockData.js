@@ -1105,3 +1105,169 @@ export const allMedicationData = {
     ],
   },
 };
+
+export const mockDeepLinkParams = {
+  openAcknowledge: true,
+  medicationAdministrationNoteUUID: "test-note-uuid-123",
+  medicationAdministrationEpoch: 1704441600000, // Jan 5, 2024 06:00:00 in milliseconds
+};
+
+export const mockDrugOrdersForDeepLink = {
+  ipdDrugOrders: [
+    {
+      drugOrder: {
+        concept: {
+          uuid: "9881091b-1802-4c62-8b80-a8fcb170b59f",
+          name: "Paracetamol",
+          dataType: "N/A",
+          shortName: "Paracetamol",
+          units: null,
+          conceptClass: "Drug",
+          hiNormal: null,
+          lowNormal: null,
+          set: false,
+          mappings: [],
+        },
+        instructions: null,
+        uuid: "238292fc-52c0-4e94-bc2b-14f195d316ee",
+        orderType: "Drug Order",
+        orderGroup: null,
+        dateCreated: null,
+        dateChanged: null,
+        dateStopped: null,
+        orderNumber: "ORD-17197",
+        careSetting: "INPATIENT",
+        action: "NEW",
+        commentToFulfiller: null,
+        autoExpireDate: 1706960815000,
+        urgency: null,
+        previousOrderUuid: null,
+        drug: {
+          name: "Paracetamol 500 mg Tablet",
+          uuid: "4f5dc531-95a7-4d82-a902-8a5590cb727d",
+          form: "Tablet",
+          strength: null,
+        },
+        drugNonCoded: null,
+        dosingInstructionType:
+          "org.openmrs.module.bahmniemrapi.drugorder.dosinginstructions.FlexibleDosingInstructions",
+        dosingInstructions: {
+          dose: 1,
+          doseUnits: "Tablet(s)",
+          route: "Oral",
+          frequency: {
+            display: "Three times a day",
+          },
+          asNeeded: false,
+          administrationInstructions: '{"instructions":"As directed"}',
+          quantity: 9,
+          quantityUnits: "Tablet(s)",
+          numberOfRefills: null,
+        },
+        dateActivated: 1704441600000,
+        scheduledDate: 1704441600000,
+        effectiveStartDate: 1704441600000,
+        effectiveStopDate: 1706960815000,
+        orderReasonText: null,
+        duration: 3,
+        durationUnits: "Day(s)",
+        voided: false,
+        voidReason: null,
+        orderReasonConcept: null,
+        sortWeight: null,
+        conceptUuid: "9881091b-1802-4c62-8b80-a8fcb170b59f",
+      },
+      provider: {
+        uuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
+        name: "Super Man",
+        encounterRoleUuid: null,
+      },
+      drugOrderSchedule: {
+        firstDaySlotsStartTime: [1704441600],
+        dayWiseSlotsStartTime: [1704441600],
+        remainingDaySlotsStartTime: [],
+        slotStartTime: 1704441600,
+        medicationAdministrationStarted: false,
+        notes: null,
+      },
+    },
+  ],
+  emergencyMedications: [],
+};
+
+export const mockPrivilegesWithAcknowledgement = [
+  {
+    name: "app:adt:approveAmendNote",
+    display: "Approve Amend Note",
+  },
+];
+
+export const mockPrivilegesWithoutAcknowledgement = [
+  {
+    name: "Some Other Privilege",
+    display: "Some Other Privilege",
+  },
+];
+
+export const mockMedicationDataWithAmendedNotes = [
+  {
+    startDate: 1704441595,
+    endDate: 1704463205,
+    slots: [
+      {
+        startTime: 1704441600, // Jan 5, 2024 06:00:00 in seconds
+        status: "COMPLETED",
+        serviceType: "MedicationRequest",
+        order: {
+          uuid: "238292fc-52c0-4e94-bc2b-14f195d316ee",
+          orderNumber: "ORD-17197",
+          concept: {
+            uuid: "9881091b-1802-4c62-8b80-a8fcb170b59f",
+            display: "Paracetamol",
+          },
+        },
+        medicationAdministration: {
+          uuid: "med-admin-uuid-1",
+          patientUuid: "test-patient-id",
+          orderUuid: "238292fc-52c0-4e94-bc2b-14f195d316ee",
+          notes: [
+            {
+              uuid: "test-note-uuid-123",
+              text: "Original administration note",
+              author: {
+                uuid: "provider-uuid-1",
+                display: "Dr. Smith",
+              },
+              recordedTime: 1704441600000,
+            },
+          ],
+          amendedNotes: [
+            {
+              uuid: "amended-note-uuid-1",
+              amendedText: "Corrected dosage information",
+              amendedReason: "Documentation error",
+              approvalStatus: "PENDING",
+              amendedTime: 1704441700000,
+              amendedBy: {
+                uuid: "provider-uuid-1",
+                display: "Dr. Smith",
+              },
+            },
+          ],
+          providers: [
+            {
+              uuid: "6e1f3d86-f065-46ea-9923-0a7c686d2705",
+              function: "Performer",
+              provider: {
+                uuid: "provider-uuid-1",
+                display: "Provider Name - Dr. Smith",
+              },
+            },
+          ],
+          status: "Completed",
+          administeredDateTime: 1704441600000,
+        },
+      },
+    ],
+  },
+];

@@ -15,6 +15,8 @@ import {
   isCurrentShift,
   NotCurrentShiftMessage,
   setCurrentShiftTimes,
+  canAcknowledgeAmendment,
+  prepareSlotData,
 } from "../utils/DrugChartUtils";
 import {
   convertDaystoSeconds,
@@ -30,7 +32,6 @@ import {
   ForbiddenErrorMessage,
   GenericErrorMessage,
   displayShiftTimingsFormat,
-  displayShiftTimings12HourFormat,
   errorCodes,
   timeFormatFor12Hr,
   componentKeys,
@@ -49,9 +50,20 @@ const NoMedicationTaskMessage = (
   />
 );
 
+const SCROLL_TO_SECTION_DELAY_MS = 700;
+const DEEP_LINK_BUFFER_MILLISECONDS = 5;
+
 export default function DrugChartWrapper(props) {
   const { patientId } = props;
-  const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
+  const {
+    config,
+    isReadMode,
+    visitSummary,
+    visit,
+    deepLinkParams,
+    privileges,
+    scrollToSection,
+  } = useContext(IPDContext);
   const {
     isSliderOpen,
     updateSliderOpen,
@@ -101,6 +113,7 @@ export default function DrugChartWrapper(props) {
     useState(false);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPrivilegeWarning, setShowPrivilegeWarning] = useState(false);
   const refreshDisplayControl = useContext(RefreshDisplayControl);
 
   const updateAmendmentSlider = (value) => {
@@ -194,6 +207,12 @@ export default function DrugChartWrapper(props) {
     },
   };
 
+  const clearDeepLinkParams = () => {
+    const url = new URL(window.location.href);
+    const hash = url.hash.split("?")[0];
+    window.history.replaceState(null, "", url.origin + url.pathname + hash);
+  };
+
   const handleSlotClick = (slot, rowData) => {
     const clickableStatuses = [
       "Administered",
@@ -204,61 +223,8 @@ export default function DrugChartWrapper(props) {
       return;
     }
 
-    let dosageInfo = "";
-    const dosingInstructions = rowData?.dosingInstructions;
-
-    if (dosingInstructions) {
-      if (dosingInstructions.dosage) {
-        dosageInfo = dosingInstructions.dosage;
-        if (dosingInstructions.doseUnits) {
-          dosageInfo += " " + dosingInstructions.doseUnits;
-        }
-      }
-
-      if (dosingInstructions.route) {
-        const routeDisplay =
-          typeof dosingInstructions.route === "string"
-            ? dosingInstructions.route
-            : dosingInstructions.route.display || dosingInstructions.route;
-        dosageInfo =
-          dosageInfo.length > 0
-            ? dosageInfo + " - " + routeDisplay
-            : routeDisplay;
-      }
-
-      if (dosingInstructions.frequency?.display) {
-        dosageInfo =
-          dosageInfo.length > 0
-            ? dosageInfo + " - " + dosingInstructions.frequency.display
-            : dosingInstructions.frequency.display;
-      }
-    }
     const action = slot.clickAction || slot.originalSlot?.clickAction;
-
-    const note = slot.medicationAdministration?.notes?.[0];
-    const amendNotes = slot.medicationAdministration?.amendedNotes;
-    const amendNote = amendNotes?.[0];
-    const dateFomat = enable24HourTime
-      ? displayShiftTimingsFormat
-      : displayShiftTimings12HourFormat;
-
-    setSelectedSlotData({
-      slot,
-      drugName: rowData.name,
-      dosageInfo: dosageInfo,
-      scheduledTime: formatDate(slot.startTime * 1000, dateFomat),
-      amendedTime: formatDate(amendNote?.amendedTime, dateFomat),
-      approvedTime: formatDate(amendNote?.approvedDateTime, dateFomat),
-      status: slot.administrationSummary?.status,
-      performerName: slot.administrationSummary?.performerName,
-      existingNotes: slot.administrationSummary?.notes,
-      notes:
-        amendNotes?.length > 0
-          ? amendNotes
-          : slot.medicationAdministration?.notes,
-      amendedNotes: amendNotes,
-      medicationAdministrationNoteUUID: note?.uuid,
-    });
+    setSelectedSlotData(prepareSlotData(slot, rowData, enable24HourTime));
 
     if (action === "acknowledge") {
       setSliderContentModified((prevState) => ({
@@ -355,6 +321,107 @@ export default function DrugChartWrapper(props) {
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   }, []);
+
+  // Handle deep link to open acknowledgement slider
+  useEffect(() => {
+    const handleDeepLink = async () => {
+      if (
+        !deepLinkParams?.openAcknowledge ||
+        !deepLinkParams?.medicationAdministrationNoteUUID ||
+        !deepLinkParams?.medicationAdministrationEpoch
+      ) {
+        return;
+      }
+
+      const deepLinkKey =
+        deepLinkParams.medicationAdministrationNoteUUID +
+        "-" +
+        deepLinkParams.medicationAdministrationEpoch;
+      if (window.__processedDeepLink === deepLinkKey) {
+        return;
+      }
+
+      try {
+        const epochTime =
+          Number(deepLinkParams.medicationAdministrationEpoch) / 1000;
+        const response = await fetchMedications(
+          patientId,
+          epochTime - DEEP_LINK_BUFFER_MILLISECONDS,
+          epochTime + DEEP_LINK_BUFFER_MILLISECONDS,
+          visit
+        );
+
+        if (response?.error) {
+          if (response.error.response?.status === errorCodes.FORBIDDEN) {
+            setErrorMessage(ForbiddenErrorMessage);
+          } else {
+            setErrorMessage(GenericErrorMessage);
+          }
+          return;
+        }
+
+        const medicationData = response.data;
+        if (!medicationData || medicationData.length === 0) {
+          return;
+        }
+
+        const transformedMedications = mapDrugOrdersAndSlots(
+          medicationData,
+          drugOrders,
+          drugChart
+        );
+
+        let foundSlot = null;
+        let foundRowData = null;
+        for (const medication of transformedMedications) {
+          const slot = medication.slots?.find((s) =>
+            s.medicationAdministration?.notes?.some(
+              (note) =>
+                note.uuid === deepLinkParams.medicationAdministrationNoteUUID
+            )
+          );
+          if (slot) {
+            foundSlot = slot;
+            foundRowData = medication;
+            break;
+          }
+        }
+
+        if (!foundSlot || !foundRowData) {
+          return;
+        }
+
+        window.__processedDeepLink = deepLinkKey;
+        if (!canAcknowledgeAmendment(privileges)) {
+          setShowPrivilegeWarning(true);
+          clearDeepLinkParams();
+          return;
+        }
+
+        setSelectedSlotData(
+          prepareSlotData(foundSlot, foundRowData, enable24HourTime)
+        );
+
+        setSliderContentModified((prevState) => ({
+          ...prevState,
+          drugChartNoteAcknowledgement: false,
+        }));
+        updateAcknowledgementSlider(true);
+
+        if (scrollToSection) {
+          setTimeout(() => {
+            scrollToSection(componentKeys.DRUG_CHART);
+          }, SCROLL_TO_SECTION_DELAY_MS);
+        }
+
+        clearDeepLinkParams();
+      } catch (e) {
+        console.error("Error handling deep link:", e);
+      }
+    };
+
+    handleDeepLink();
+  }, [deepLinkParams, drugOrders]);
 
   const handlePrevious = () => {
     const { startDateTime, endDateTime, previousShiftIndex } =
@@ -642,6 +709,21 @@ export default function DrugChartWrapper(props) {
           hostData={selectedSlotData}
           hostApi={notesHistorySliderActions}
           sliderType={sliderTypes.HISTORY}
+        />
+      )}
+      {showPrivilegeWarning && (
+        <Notification
+          hostData={{
+            notificationKind: "warning",
+            messageId: "INSUFFICIENT_PRIVILEGE_TO_ACKNOWLEDGE",
+            defaultMessage:
+              "You do not have sufficient privileges to acknowledge medication notes",
+          }}
+          hostApi={{
+            onClose: () => {
+              setShowPrivilegeWarning(false);
+            },
+          }}
         />
       )}
     </div>
