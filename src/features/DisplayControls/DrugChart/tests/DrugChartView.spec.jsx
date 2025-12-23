@@ -7,13 +7,17 @@ import {
   mockEmptyDrugOrders,
   drugChartDataForPRN,
   allMedicationData,
+  mockDeepLinkParams,
+  mockPrivilegesWithAcknowledgement,
+  mockPrivilegesWithoutAcknowledgement,
+  mockMedicationDataWithAmendedNotes,
+  mockDrugOrdersForDeepLink,
 } from "./DrugChartViewMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import { SliderContext } from "../../../../context/SliderContext";
 import MockDate from "mockdate";
 import { mockConfig } from "../../../../utils/CommonUtils";
-import { after } from "lodash";
 
 const mockFetchMedications = jest.fn();
 const MockTooltipCarbon = jest.fn();
@@ -27,6 +31,12 @@ jest.mock("bahmni-carbon-ui", () => {
       return <div>TooltipCarbon</div>;
     },
   };
+});
+
+jest.mock("../../../../components/Notification/Notification", () => {
+  return jest.fn(({ message, kind }) => (
+    <div className={`notification ${kind}`}>{message}</div>
+  ));
 });
 
 jest.mock("../utils/DrugChartUtils", () => {
@@ -47,7 +57,7 @@ jest.mock("../../../../utils/DateTimeUtils", () => {
 });
 
 const mockSliderContext = {
-  isSliderOpen: { 
+  isSliderOpen: {
     drugChartNoteAmendment: false,
     drugChartNoteAcknowledgement: false,
   },
@@ -109,8 +119,12 @@ describe("DrugChartWrapper", () => {
     const { container } = renderDrugChartView(mockDrugOrders);
     await waitFor(() => {
       expect(screen.getAllByText(/Paracetamol/i)).toBeTruthy();
-      expect(container.querySelector("[data-testid='left-icon']")).toBeInTheDocument();
-      expect(container.querySelector("[data-testid='right-icon']")).toBeInTheDocument();
+      expect(
+        container.querySelector("[data-testid='left-icon']")
+      ).toBeInTheDocument();
+      expect(
+        container.querySelector("[data-testid='right-icon']")
+      ).toBeInTheDocument();
     });
   });
 
@@ -358,5 +372,402 @@ describe("DrugChartWrapper with half hour shift time start", () => {
       expect(screen.getByText(/06:30/)).toBeTruthy();
       expect(screen.getByText(/17:59/)).toBeTruthy();
     });
+  });
+});
+
+describe("DrugChartWrapper - handleDeepLink for acknowledgement flow", () => {
+  let mockSliderContext;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    delete window.__processedDeepLink;
+    mockGetTimeInSeconds.mockReturnValue(172800);
+
+    mockCurrentShiftHoursArray.mockReturnValue({
+      currentShiftHoursArray: [
+        "06:00",
+        "07:00",
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+      ],
+      rangeArray: ["06:00-18:00", "18:00-06:00"],
+      shiftIndex: 0,
+    });
+
+    mockSliderContext = {
+      isSliderOpen: {
+        drugChartNoteAmendment: false,
+        drugChartNoteAcknowledgement: false,
+      },
+      updateSliderOpen: jest.fn(),
+      sliderContentModified: {
+        drugChartNoteAmendment: false,
+        drugChartNoteAcknowledgement: false,
+      },
+      setSliderContentModified: jest.fn(),
+    };
+  });
+
+  afterEach(() => {
+    MockDate.reset();
+    delete window.__processedDeepLink;
+  });
+
+  it("should call handleDeepLink useEffect and process deep link params correctly", async () => {
+    MockDate.set("2024-01-05 10:00");
+    delete window.__processedDeepLink;
+
+    mockFetchMedications.mockResolvedValue({
+      data: mockMedicationDataWithAmendedNotes,
+    });
+
+    const scrollToSectionMock = jest.fn();
+
+    render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <AllMedicationsContext.Provider
+          value={{ data: mockDrugOrdersForDeepLink }}
+        >
+          <IPDContext.Provider
+            value={{
+              config: mockConfig,
+              deepLinkParams: mockDeepLinkParams,
+              privileges: mockPrivilegesWithAcknowledgement,
+              visit: {},
+              scrollToSection: scrollToSectionMock,
+            }}
+          >
+            <DrugChartView
+              patientId="test-patient-id"
+              visitId="test-visit-id"
+            />
+          </IPDContext.Provider>
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(mockFetchMedications).toHaveBeenCalled();
+    });
+
+    await waitFor(() => {
+      expect(scrollToSectionMock).toHaveBeenCalled();
+    });
+
+    expect(window.__processedDeepLink).toBeDefined();
+  });
+
+  it("should open acknowledge amend note slider when deep link is triggered with valid params", async () => {
+    MockDate.set("2024-01-05 10:00");
+    delete window.__processedDeepLink;
+
+    mockFetchMedications.mockResolvedValue({
+      data: mockMedicationDataWithAmendedNotes,
+    });
+
+    render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <AllMedicationsContext.Provider
+          value={{ data: mockDrugOrdersForDeepLink }}
+        >
+          <IPDContext.Provider
+            value={{
+              config: mockConfig,
+              deepLinkParams: mockDeepLinkParams,
+              privileges: mockPrivilegesWithAcknowledgement,
+              visit: {},
+              scrollToSection: jest.fn(),
+            }}
+          >
+            <DrugChartView
+              patientId="test-patient-id"
+              visitId="test-visit-id"
+            />
+          </IPDContext.Provider>
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(mockSliderContext.updateSliderOpen).toHaveBeenCalled();
+    });
+
+    await waitFor(() => {
+      expect(mockSliderContext.updateSliderOpen).toHaveBeenCalledWith(
+        expect.any(Function)
+      );
+    });
+
+    const updateCall = mockSliderContext.updateSliderOpen.mock.calls[0][0];
+    const result = updateCall({ drugChartNoteAcknowledgement: false });
+    expect(result.drugChartNoteAcknowledgement).toBe(true);
+  });
+
+  it("should NOT open acknowledgement slider when openAcknowledge is false", async () => {
+    MockDate.set("2024-01-05 10:00");
+
+    const invalidDeepLinkParams = {
+      openAcknowledge: false,
+      medicationAdministrationNoteUUID: "test-note-uuid-123",
+      medicationAdministrationEpoch: 1704441600000,
+    };
+
+    mockFetchMedications.mockResolvedValue({
+      data: mockMedicationDataWithAmendedNotes,
+    });
+
+    render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <AllMedicationsContext.Provider
+          value={{ data: mockDrugOrdersForDeepLink }}
+        >
+          <IPDContext.Provider
+            value={{
+              config: mockConfig,
+              deepLinkParams: invalidDeepLinkParams,
+              privileges: mockPrivilegesWithAcknowledgement,
+              visit: {},
+            }}
+          >
+            <DrugChartView
+              patientId="test-patient-id"
+              visitId="test-visit-id"
+            />
+          </IPDContext.Provider>
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("currentShift")).toBeInTheDocument();
+    });
+
+    expect(window.__processedDeepLink).toBeUndefined();
+  });
+
+  it("should NOT open acknowledgement slider when medicationAdministrationNoteUUID is missing", async () => {
+    MockDate.set("2024-01-05 10:00");
+
+    const invalidDeepLinkParams = {
+      openAcknowledge: true,
+      medicationAdministrationEpoch: 1704441600000,
+    };
+
+    mockFetchMedications.mockResolvedValue({
+      data: mockMedicationDataWithAmendedNotes,
+    });
+
+    render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <AllMedicationsContext.Provider
+          value={{ data: mockDrugOrdersForDeepLink }}
+        >
+          <IPDContext.Provider
+            value={{
+              config: mockConfig,
+              deepLinkParams: invalidDeepLinkParams,
+              privileges: mockPrivilegesWithAcknowledgement,
+              visit: {},
+            }}
+          >
+            <DrugChartView
+              patientId="test-patient-id"
+              visitId="test-visit-id"
+            />
+          </IPDContext.Provider>
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("currentShift")).toBeInTheDocument();
+    });
+
+    expect(window.__processedDeepLink).toBeUndefined();
+  });
+
+  it("should NOT open acknowledgement slider when medicationAdministrationEpoch is missing", async () => {
+    MockDate.set("2024-01-05 10:00");
+
+    const invalidDeepLinkParams = {
+      openAcknowledge: true,
+      medicationAdministrationNoteUUID: "test-note-uuid-123",
+    };
+
+    mockFetchMedications.mockResolvedValue({
+      data: mockMedicationDataWithAmendedNotes,
+    });
+
+    render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <AllMedicationsContext.Provider
+          value={{ data: mockDrugOrdersForDeepLink }}
+        >
+          <IPDContext.Provider
+            value={{
+              config: mockConfig,
+              deepLinkParams: invalidDeepLinkParams,
+              privileges: mockPrivilegesWithAcknowledgement,
+              visit: {},
+            }}
+          >
+            <DrugChartView
+              patientId="test-patient-id"
+              visitId="test-visit-id"
+            />
+          </IPDContext.Provider>
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("currentShift")).toBeInTheDocument();
+    });
+
+    expect(window.__processedDeepLink).toBeUndefined();
+  });
+
+  it("should not open acknowledgement slider due to lack of privileges", async () => {
+    MockDate.set("2024-01-05 10:00");
+    delete window.__processedDeepLink;
+
+    mockFetchMedications.mockResolvedValue({
+      data: mockMedicationDataWithAmendedNotes,
+    });
+
+    render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <AllMedicationsContext.Provider
+          value={{ data: mockDrugOrdersForDeepLink }}
+        >
+          <IPDContext.Provider
+            value={{
+              config: mockConfig,
+              deepLinkParams: mockDeepLinkParams,
+              privileges: mockPrivilegesWithoutAcknowledgement,
+              visit: {},
+            }}
+          >
+            <DrugChartView
+              patientId="test-patient-id"
+              visitId="test-visit-id"
+            />
+          </IPDContext.Provider>
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(mockFetchMedications).toHaveBeenCalled();
+    });
+
+    expect(mockSliderContext.updateSliderOpen).not.toHaveBeenCalledWith(
+      expect.any(Function)
+    );
+  });
+
+  it("should call clearDeepLinkParams when deep link is processed successfully", async () => {
+    MockDate.set("2024-01-05 10:00");
+    delete window.__processedDeepLink;
+
+    const replaceStateSpy = jest.spyOn(window.history, "replaceState");
+
+    mockFetchMedications.mockResolvedValue({
+      data: mockMedicationDataWithAmendedNotes,
+    });
+
+    render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <AllMedicationsContext.Provider
+          value={{ data: mockDrugOrdersForDeepLink }}
+        >
+          <IPDContext.Provider
+            value={{
+              config: mockConfig,
+              deepLinkParams: mockDeepLinkParams,
+              privileges: mockPrivilegesWithAcknowledgement,
+              visit: {},
+              scrollToSection: jest.fn(),
+            }}
+          >
+            <DrugChartView
+              patientId="test-patient-id"
+              visitId="test-visit-id"
+            />
+          </IPDContext.Provider>
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    );
+
+    // Verify acknowledgement slider was opened (deep link processed successfully)
+    await waitFor(() => {
+      expect(mockSliderContext.updateSliderOpen).toHaveBeenCalled();
+    });
+
+    // Verify URL params were cleared
+    await waitFor(() => {
+      expect(replaceStateSpy).toHaveBeenCalled();
+    });
+
+    // Verify deep link was marked as processed
+    expect(window.__processedDeepLink).toBeDefined();
+
+    replaceStateSpy.mockRestore();
+  });
+
+  it("should call clearDeepLinkParams when user lacks privileges", async () => {
+    MockDate.set("2024-01-05 10:00");
+    delete window.__processedDeepLink;
+
+    const replaceStateSpy = jest.spyOn(window.history, "replaceState");
+
+    mockFetchMedications.mockResolvedValue({
+      data: mockMedicationDataWithAmendedNotes,
+    });
+
+    render(
+      <SliderContext.Provider value={mockSliderContext}>
+        <AllMedicationsContext.Provider
+          value={{ data: mockDrugOrdersForDeepLink }}
+        >
+          <IPDContext.Provider
+            value={{
+              config: mockConfig,
+              deepLinkParams: mockDeepLinkParams,
+              privileges: mockPrivilegesWithoutAcknowledgement,
+              visit: {},
+            }}
+          >
+            <DrugChartView
+              patientId="test-patient-id"
+              visitId="test-visit-id"
+            />
+          </IPDContext.Provider>
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    );
+
+    // Wait for the medication fetch to complete
+    await waitFor(() => {
+      expect(mockFetchMedications).toHaveBeenCalled();
+    });
+
+    // Verify clearDeepLinkParams was called (URL params cleared)
+    await waitFor(
+      () => {
+        expect(replaceStateSpy).toHaveBeenCalled();
+      },
+      { timeout: 3000 }
+    );
+
+    replaceStateSpy.mockRestore();
   });
 });

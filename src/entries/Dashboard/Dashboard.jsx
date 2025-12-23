@@ -42,8 +42,18 @@ export default function Dashboard(props) {
     visitSummary,
     source,
     currentUser,
-    privileges
+    privileges,
   } = hostData;
+
+  const urlParams = new URLSearchParams(
+    window.location.hash.split("?")[1] || ""
+  );
+  const openAcknowledge = urlParams.get("openAcknowledge") === "true";
+  const medicationAdministrationNoteUUID = urlParams.get("noteUuid");
+  const medicationAdministrationEpoch = urlParams.get(
+    "medicationAdministrationEpoch"
+  );
+
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
     nursingTasks: false,
@@ -167,9 +177,17 @@ export default function Dashboard(props) {
     }
   };
 
-  const handleAuditEvent = ( eventType ) => {
-    var messageParams = {visitUuid: hostData.visitSummary.uuid, visitType: hostData.visitSummary.visitType};
-    hostApi.handleAuditEvent(patient.uuid, eventType, messageParams, "MODULE_LABEL_CLINICAL_KEY");
+  const handleAuditEvent = (eventType) => {
+    var messageParams = {
+      visitUuid: hostData.visitSummary.uuid,
+      visitType: hostData.visitSummary.visitType,
+    };
+    hostApi.handleAuditEvent(
+      patient.uuid,
+      eventType,
+      messageParams,
+      "MODULE_LABEL_CLINICAL_KEY"
+    );
   };
 
   const updateWindowWidth = () => {
@@ -209,7 +227,13 @@ export default function Dashboard(props) {
               isAllFormSummaryLoading,
               isAllFormsFilledInCurrentVisitLoading,
               currentUser,
-              privileges
+              privileges,
+              scrollToSection,
+              deepLinkParams: {
+                openAcknowledge,
+                medicationAdministrationNoteUUID,
+                medicationAdministrationEpoch,
+              },
             }}
           >
             <I18nProvider>
@@ -280,7 +304,8 @@ export default function Dashboard(props) {
                   <Accordion className={"accordion"}>
                     <AllMedicationsContextProvider>
                       {sections?.map((el) => {
-                        const DisplayControl = componentMapping[el.componentKey];
+                        const DisplayControl =
+                          componentMapping[el.componentKey];
                         return (
                           <section
                             key={el.componentKey}
@@ -288,12 +313,15 @@ export default function Dashboard(props) {
                             style={{ marginBottom: "40px" }}
                           >
                             <Suspense fallback={<p>Loading...</p>}>
-                              <AccordionItem open title={
-                                <FormattedMessage
-                                  id={el.translationKey}
-                                  defaultMessage={el.title}
-                                />
-                              }>
+                              <AccordionItem
+                                open
+                                title={
+                                  <FormattedMessage
+                                    id={el.translationKey}
+                                    defaultMessage={el.title}
+                                  />
+                                }
+                              >
                                 <RefreshDisplayControl.Provider
                                   value={refreshDisplayControl}
                                 >

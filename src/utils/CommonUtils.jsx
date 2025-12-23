@@ -23,6 +23,8 @@ export const getIPDPatientDashboardUrl = (
 export const getADTDashboardUrl = (patientUuid, visitUuid, encounterUuid) =>
   `/bahmni/adt/#/patient/${patientUuid}/visit/${visitUuid}/encounter/${encounterUuid}/bed`;
 
+export const getAdtHomeUrl = () => `/bahmni/adt/#/home`;
+
 export const searchDrugsByName = async (query) => {
   try {
     return await axios.get(SEARCH_DRUG_URL.replace("{queryString}", query));
@@ -39,6 +41,8 @@ export const getAppLandingPageUrl = (source) => {
   switch (source) {
     case "adt":
       return adtHomePageUrl;
+    case "adtHome":
+      return getAdtHomeUrl();
     case "clinical":
       return clinicalHomePageUrl;
     case "careViewDashboard":
@@ -393,5 +397,7 @@ export const isIPDrugOrder = (drugOrder) => {
 };
 
 export const isUserPrivileged = (user, privilege) => {
-  return user?.privileges?.some((userPrivilege) => userPrivilege.name === privilege);
-}
+  return user?.privileges?.some(
+    (userPrivilege) => userPrivilege.name === privilege
+  );
+};

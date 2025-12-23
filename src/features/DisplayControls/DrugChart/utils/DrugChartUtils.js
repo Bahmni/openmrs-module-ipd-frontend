@@ -8,7 +8,10 @@ import {
   asNeededPlaceholderConceptName,
   timeFormatFor24Hr,
   PRIVILEGE_CONSTANTS,
+  displayShiftTimingsFormat,
+  displayShiftTimings12HourFormat,
 } from "../../../../constants";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 import _ from "lodash";
 import { FormattedMessage } from "react-intl";
 import { getAdministrationStatus } from "../../../../utils/CommonUtils";
@@ -493,8 +496,65 @@ export const setCurrentShiftTimes = (
 export const canAcknowledgeAmendment = (privileges = []) => {
   if (!Array.isArray(privileges)) return false;
   return privileges.some(
-    (privilege) => PRIVILEGE_CONSTANTS.APPROVE_AMEND_NOTE === privilege.name
+    (privilege) => PRIVILEGE_CONSTANTS.ADT_APPROVE_AMEND_NOTE === privilege.name
   );
+};
+
+export const prepareSlotData = (slot, rowData, enable24HourTime) => {
+  let dosageInfo = "";
+  const dosingInstructions = rowData?.dosingInstructions;
+
+  if (dosingInstructions) {
+    if (dosingInstructions.dosage) {
+      dosageInfo = dosingInstructions.dosage;
+      if (dosingInstructions.doseUnits) {
+        dosageInfo += " " + dosingInstructions.doseUnits;
+      }
+    }
+
+    if (dosingInstructions.route) {
+      const routeDisplay =
+        typeof dosingInstructions.route === "string"
+          ? dosingInstructions.route
+          : dosingInstructions.route.display || dosingInstructions.route;
+      dosageInfo =
+        dosageInfo.length > 0
+          ? dosageInfo + " - " + routeDisplay
+          : routeDisplay;
+    }
+
+    if (dosingInstructions.frequency?.display) {
+      dosageInfo =
+        dosageInfo.length > 0
+          ? dosageInfo + " - " + dosingInstructions.frequency.display
+          : dosingInstructions.frequency.display;
+    }
+  }
+
+  const note = slot.medicationAdministration?.notes?.[0];
+  const amendNotes = slot.medicationAdministration?.amendedNotes;
+  const amendNote = amendNotes?.[0];
+  const dateFomat = enable24HourTime
+    ? displayShiftTimingsFormat
+    : displayShiftTimings12HourFormat;
+
+  return {
+    slot,
+    drugName: rowData.name,
+    dosageInfo: dosageInfo,
+    scheduledTime: formatDate(slot.startTime * 1000, dateFomat),
+    amendedTime: formatDate(amendNote?.amendedTime, dateFomat),
+    approvedTime: formatDate(amendNote?.approvedDateTime, dateFomat),
+    status: slot.administrationSummary?.status,
+    performerName: slot.administrationSummary?.performerName,
+    existingNotes: slot.administrationSummary?.notes,
+    notes:
+      amendNotes?.length > 0
+        ? amendNotes
+        : slot.medicationAdministration?.notes,
+    amendedNotes: amendNotes,
+    medicationAdministrationNoteUUID: note?.uuid,
+  };
 };
 
 export const extractNameFromDisplay = (display) => {

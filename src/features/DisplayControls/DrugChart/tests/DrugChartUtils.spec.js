@@ -140,15 +140,15 @@ describe("DrugChartUtils", () => {
     expect(getDateTime(date, time)).toEqual(updatedDateTime);
   });
   describe("canAcknowledgeAmendment", () => {
-    it("returns true when privileges include APPROVE_AMEND_NOTE", () => {
+    it("returns true when privileges include ADT_APPROVE_AMEND_NOTE", () => {
       const privileges = [
-        { name: "Approve Amend Note" },
+        { name: "app:adt:approveAmendNote" },
         { name: "OTHER_PRIVILEGE" },
       ];
       expect(canAcknowledgeAmendment(privileges)).toBe(true);
     });
 
-    it("returns false when privileges do not include APPROVE_AMEND_NOTE", () => {
+    it("returns false when privileges do not include ADT_APPROVE_AMEND_NOTE", () => {
       const privileges = [{ name: "OTHER_PRIVILEGE" }];
       expect(canAcknowledgeAmendment(privileges)).toBe(false);
     });
