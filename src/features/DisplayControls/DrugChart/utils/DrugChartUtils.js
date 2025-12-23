@@ -10,6 +10,7 @@ import {
   DOSE_UNITS,
   PRIVILEGE_CONSTANTS
 } from "../../../../constants";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 import _ from "lodash";
 import { FormattedMessage } from "react-intl";
 import { getAdministrationStatus } from "../../../../utils/CommonUtils";
@@ -589,6 +590,6 @@ export const prepareSlotData = (slot, rowData, enable24HourTime) => {
 export const canAcknowledgeAmendment = (privileges = []) => {
   if (!Array.isArray(privileges)) return false;
   return privileges.some(
-    (privilege) => PRIVILEGE_CONSTANTS.APPROVE_AMEND_NOTE === privilege.name
+    (privilege) => PRIVILEGE_CONSTANTS.ADT_APPROVE_AMEND_NOTE === privilege.name
   );
 };

@@ -123,5 +123,6 @@
   "VARIABLE_DOSAGE": "Variable Dosage",
   "VARIABLE_DOSE_STAGES_DAYS": "{stages} Stages - {days} Days",
   "NOTE_AMENDMENT_SAVED_SUCCESS": "Amendment note saved successfully",
-  "NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS": "Acknowledgement is successful"
+  "NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS": "Acknowledgement is successful",
+  "INSUFFICIENT_PRIVILEGE_TO_ACKNOWLEDGE": "Insufficient Acknowledge Privilege"
 }

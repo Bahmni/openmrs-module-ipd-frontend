@@ -164,7 +164,7 @@ export const PRIVILEGE_CONSTANTS = {
   ADD_TASKS: "Add Tasks",
   EDIT_TASKS: "Edit Tasks",
   EDIT_MEDICATION_ADMINISTRATION: "Edit Medication Administration",
-  APPROVE_AMEND_NOTE: "Approve Amend Note",
+  ADT_APPROVE_AMEND_NOTE: "app:adt:approveAmendNote",
 };
 
 export const DOSE_UNITS = ["ml", "mg", "mcg"];
