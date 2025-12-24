@@ -39,14 +39,14 @@ const Allergies = (props) => {
           allergy?.resource?.recordedDate
         );
         const allergyData = {
-          allergen: allergy.resource.code.coding[0].display,
+          allergen: allergy.resource.code?.coding[0]?.display,
           id: allergy.resource.id,
           severity: getSeverity(allergy.resource.criticality),
           reaction: getAllergyReactions(allergy.resource.reaction),
           comments: getComments(allergy.resource.note),
           sortWeight: getSortingWait(getSeverity(allergy.resource.criticality)),
           provider: allergy.resource.recorder.display,
-          date: formatDate(recordedDate)
+          date: formatDate(recordedDate),
         };
 
         if (
@@ -62,13 +62,15 @@ const Allergies = (props) => {
   const getSortingWait = (severity) => {
     if (severity === "Severe") return -1;
     if (severity === "Moderate") return 0;
-    return 1;
+    if (severity === "Mild") return 1;
+    return 2;
   };
 
   const getSeverity = (criticality) => {
     if (criticality == "unable-to-assess") return "Moderate";
     else if (criticality == "high") return "Severe";
-    else return "Mild";
+    else if (criticality == "low") return "Mild";
+    else return "";
   };
 
   const getComments = (notes) =>
@@ -77,7 +79,7 @@ const Allergies = (props) => {
   const getAllergyReactions = (reactions) => {
     let allergyReactions = "";
     if (reactions && reactions.length > 0) {
-      reactions[0].manifestation.map((reaction) => {
+      reactions[0].manifestation?.map((reaction) => {
         allergyReactions =
           allergyReactions != ""
             ? `${allergyReactions}, ${reaction.coding[0].display}`
@@ -136,10 +138,7 @@ const Allergies = (props) => {
     {
       key: "date",
       header: (
-        <FormattedMessage
-          id={"DATE_COLUMN_HEADER"}
-          defaultMessage={`Date`}
-        />
+        <FormattedMessage id={"DATE_COLUMN_HEADER"} defaultMessage={`Date`} />
       ),
     },
   ];
@@ -183,19 +182,34 @@ const Allergies = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
-              <TableRow
-                key={index + row.id}
-                {...getRowProps({ row })}
-                data-testid="table-body-row"
-              >
-                {row.cells.map((cell) => (
-                  <TableCell key={cell.id} className={"high-severity-color"}>
-                    {cell.value}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
+            {rows.map((row, index) => {
+              const isNoKnownAllergy = row.cells.some(
+                (cell) =>
+                  cell.info.header === "allergen" &&
+                  cell.value?.toLowerCase() === "no known allergy"
+              );
+              const shouldStrikethrough = rows.length > 1 && isNoKnownAllergy;
+              return (
+                <TableRow
+                  key={index + row.id}
+                  {...getRowProps({ row })}
+                  data-testid="table-body-row"
+                >
+                  {row.cells.map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className={
+                        shouldStrikethrough
+                          ? "no-known-allergy"
+                          : "high-severity-color"
+                      }
+                    >
+                      {cell.value}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       )}

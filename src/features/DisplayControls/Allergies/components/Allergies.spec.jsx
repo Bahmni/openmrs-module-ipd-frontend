@@ -7,7 +7,6 @@ import {
 import Allergies from "./Allergies";
 import "@testing-library/jest-dom/extend-expect";
 import { IPDContext } from "../../../../context/IPDContext";
-import { mockConfig } from "../../../../utils/CommonUtils";
 
 const mockData1 = { ...mockAllergiesIntolerenceResponse.data };
 const mockUseFetchAllergiesIntolerance = jest.fn();
@@ -31,7 +30,7 @@ describe("Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visitSummary: mockVisitSummaryData
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -94,6 +93,7 @@ describe("Allergies", () => {
       expect(screen.getByRole(/table/i)).toBeInTheDocument();
     });
 
+    // Check Severe severity (weight -1) - appears first
     expect(screen.getAllByTestId("table-body-row")[0]).toHaveTextContent(
       "Beef"
     );
@@ -106,6 +106,27 @@ describe("Allergies", () => {
     expect(screen.getAllByTestId("table-body-row")[1]).toHaveTextContent(
       "Severe"
     );
+
+    // Check Moderate severity (weight 0) - appears second
+    expect(screen.getAllByTestId("table-body-row")[2]).toHaveTextContent(
+      "Dust"
+    );
+    expect(screen.getAllByTestId("table-body-row")[2]).toHaveTextContent(
+      "Moderate"
+    );
+
+    // Check Mild severity (weight 1) - appears third
+    expect(screen.getAllByTestId("table-body-row")[3]).toHaveTextContent(
+      "Wheat"
+    );
+    expect(screen.getAllByTestId("table-body-row")[3]).toHaveTextContent(
+      "Mild"
+    );
+
+    // Check No Known Allergy (weight 2) - appears last
+    expect(screen.getAllByTestId("table-body-row")[4]).toHaveTextContent(
+      "No Known Allergy"
+    );
   });
 
   it("should show table skeleton on loading", async () => {
@@ -116,7 +137,7 @@ describe("Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visitSummary: mockVisitSummaryData
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -139,7 +160,7 @@ describe("Allergies", () => {
     render(
       <IPDContext.Provider
         value={{
-          visitSummary: mockVisitSummaryData
+          visitSummary: mockVisitSummaryData,
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
@@ -160,7 +181,7 @@ describe("Allergies", () => {
           visitSummary: {
             ...mockVisitSummaryData,
             stopDateTime: 1698316200000,
-          }
+          },
         }}
       >
         <Allergies patientId={"__test_patient_uuid__"} />
