@@ -38,7 +38,7 @@ jest.mock("../../../i18n/I18nProvider", () => {
   const { IntlProvider } = require("react-intl");
   const messages = {
     AMENDMENT_NOTES_HEADER: "Amendment Note(s)",
-    ACKNOWLEDGEMENT_NOTES_HEADER: "Acknowledge Amend Note",
+    ACKNOWLEDGEMENT_NOTES_HEADER: "Acknowledge Amended Note",
     NOTES_HISTORY_SLIDER_TITLE: "Notes History",
   };
   return {
@@ -111,7 +111,7 @@ describe("DrugChartSlider", () => {
       />
     );
     expect(
-      screen.getByText(getHeaderTextMatcher("Acknowledge Amend Note"))
+      screen.getByText(getHeaderTextMatcher("Acknowledge Amended Note"))
     ).toBeInTheDocument();
   });
 
@@ -151,7 +151,7 @@ describe("DrugChartSlider", () => {
     );
     expect(screen.queryByText("Amendment Note(s)")).not.toBeInTheDocument();
     expect(
-      screen.queryByText("Acknowledge Amend Note")
+      screen.queryByText("Acknowledge Amended Note")
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Notes History")).not.toBeInTheDocument();
   });
@@ -197,7 +197,7 @@ describe("DrugChartSlider", () => {
       />
     );
     expect(
-      screen.getByText(getHeaderTextMatcher("Acknowledge Amend Note"))
+      screen.getByText(getHeaderTextMatcher("Acknowledge Amended Note"))
     ).toBeInTheDocument();
     expect(screen.getByText("Reviewed and approved")).toBeInTheDocument();
     expect(screen.getByText("Dr. Smith")).toBeInTheDocument();

@@ -63,6 +63,7 @@ export default function DrugChartWrapper(props) {
     deepLinkParams,
     privileges,
     scrollToSection,
+    provider,
   } = useContext(IPDContext);
   const {
     isSliderOpen,
@@ -394,6 +395,14 @@ export default function DrugChartWrapper(props) {
         window.__processedDeepLink = deepLinkKey;
         if (!canAcknowledgeAmendment(privileges)) {
           setShowPrivilegeWarning(true);
+          clearDeepLinkParams();
+          return;
+        }
+
+        const amendedByUuid =
+          foundSlot?.medicationAdministration?.amendedNotes?.[0]?.amendedBy
+            ?.uuid;
+        if (amendedByUuid && amendedByUuid === provider?.uuid) {
           clearDeepLinkParams();
           return;
         }

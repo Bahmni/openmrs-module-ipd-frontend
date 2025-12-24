@@ -165,7 +165,7 @@ const DrugChartSlider = (props) => {
       },
       acknowledgement: {
         id: "ACKNOWLEDGEMENT_NOTES_HEADER",
-        defaultMessage: "Acknowledge Amend Note",
+        defaultMessage: "Acknowledge Amended Note",
       },
       history: {
         id: "NOTES_HISTORY_SLIDER_TITLE",
