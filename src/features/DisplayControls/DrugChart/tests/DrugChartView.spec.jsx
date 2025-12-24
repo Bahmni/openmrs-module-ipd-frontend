@@ -465,7 +465,7 @@ describe("DrugChartWrapper - handleDeepLink for acknowledgement flow", () => {
     expect(window.__processedDeepLink).toBeDefined();
   });
 
-  it("should open acknowledge amend note slider when deep link is triggered with valid params", async () => {
+  it("should open acknowledge amended note slider when deep link is triggered with valid params", async () => {
     MockDate.set("2024-01-05 10:00");
     delete window.__processedDeepLink;
 
