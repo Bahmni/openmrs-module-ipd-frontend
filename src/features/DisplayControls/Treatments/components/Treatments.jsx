@@ -63,9 +63,10 @@ const Treatments = (props) => {
   } = useContext(SliderContext);
   const { config, handleAuditEvent, currentUser } = useContext(IPDContext);
   const {
-    enable24HourTime = {},
+    enable24HourTime = {}, addDispensedMedicationToDrugChart = false,
     allMedicinesInPrescriptionAvailableForIPD = true,
-  } = config;
+  } =
+    config;
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -214,8 +215,15 @@ const Treatments = (props) => {
     showEditDrugChartLink,
     showStopDrugChartLink,
     drugOrder,
-    drugOrderSchedule
+    drugOrderSchedule,
+    drugOrderAttributes
   ) => {
+    const isOrderDispensed =
+      drugOrderAttributes != null &&
+      drugOrderAttributes.some(
+        (attribute) =>
+          attribute.name === "Dispensed" && attribute.value === "true"
+      );
     if (
       !isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.EDIT_MEDICATION_TASKS)
     ) {
@@ -227,12 +235,14 @@ const Treatments = (props) => {
           <Link
             disabled={
               isAddToDrugChartDisabled ||
-              moment().valueOf() <= drugOrder.effectiveStartDate
+              moment().valueOf() <= drugOrder.effectiveStartDate ||
+              (!isOrderDispensed && addDispensedMedicationToDrugChart)
             }
             onClick={() => {
               if (
                 !(
                   isAddToDrugChartDisabled ||
+                  (!isOrderDispensed && addDispensedMedicationToDrugChart) ||
                   moment().valueOf() <= drugOrder.effectiveStartDate
                 )
               ) {
@@ -325,7 +335,8 @@ const Treatments = (props) => {
               showEditDrugChartLink,
               showStopDrugChartLink,
               drugOrder,
-              drugOrderObject.drugOrderSchedule
+              drugOrderObject.drugOrderSchedule,
+              drugOrderObject.drugOrderAttributes
             );
           const getStatus = () => {
             if (drugOrder.dateStopped) {
