@@ -1,6 +1,15 @@
 import React from "react";
 import { render } from "@testing-library/react";
+import { IntlProvider } from "react-intl";
 import { DrugInstructions } from "../components/DrugInstructions";
+
+const renderWithProviders = (ui) => {
+  return render(
+    <IntlProvider locale="en" messages={{}}>
+      {ui}
+    </IntlProvider>
+  );
+};
 
 const mockHostData = {
   drugOrder: {
@@ -11,7 +20,7 @@ const mockHostData = {
 
 describe("DrugInstructions", () => {
   it("should match snapshot", () => {
-    const { container } = render(<DrugInstructions hostData={mockHostData} />);
+    const { container } = renderWithProviders(<DrugInstructions hostData={mockHostData} />);
     expect(container).toMatchSnapshot();
   });
 });

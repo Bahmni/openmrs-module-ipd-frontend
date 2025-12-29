@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import "../styles/UpdateNursingTasks.scss";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
@@ -30,6 +30,7 @@ import {
   timeFormatFor12Hr,
   timeFormatFor24Hr,
   PRIVILEGE_CONSTANTS,
+  nonMedicationTaskKey,
 } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -38,7 +39,12 @@ import {
   formatTime,
   isTimeInFuture,
 } from "../../../../utils/DateTimeUtils";
-import { isSystemGeneratedTask, isUserPrivileged } from "../../../../utils/CommonUtils";
+import {
+  getLocalizedLabel,
+  getTranslationKey,
+  isSystemGeneratedTask, 
+  isUserPrivileged
+} from "../../../../utils/CommonUtils";
 
 const UpdateNursingTasks = (props) => {
   const {
@@ -47,6 +53,8 @@ const UpdateNursingTasks = (props) => {
     updateNursingTasksSlider,
     patientId,
     providerId,
+    setShowSuccessNotification,
+    setSuccessMessage,
     setShowNotification,
     setNotificationMessage,
     setNotificationStatus,
@@ -68,6 +76,7 @@ const UpdateNursingTasks = (props) => {
   const [showWarningNotification, setShowWarningNotification] = useState(false);
   const [isInvalidTime, setIsInvalidTime] = useState(false);
   const [invalidText, setInvalidText] = useState();
+  const intl = useIntl();
 
   const invalidTimeText = (
     <FormattedMessage
@@ -91,6 +100,13 @@ const UpdateNursingTasks = (props) => {
   const { nursingTasks = {}, enable24HourTime = {} } = config;
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
+  const saveAdministeredTasks = (task) => {
+    setShowSuccessNotification(true);
+    setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
+    task.status === "not-done"
+      ? handleAuditEvent("SKIP_SCHEDULED_MEDICATION_TASK")
+      : handleAuditEvent("ADMINISTER_MEDICATION_TASK");
+  };
   const saveAdministeredMedicationTasks = (status, messageId) => {
     setShowNotification(true);
     setNotificationStatus(status);
@@ -98,9 +114,11 @@ const UpdateNursingTasks = (props) => {
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
     updateIsPRNMedication(false);
-  };
+    };
 
   const saveAdministeredNonMedicationTasks = (status, messageId) => {
+    setShowSuccessNotification(true);
+    setSuccessMessage("NON_MEDICATION_TASK_UPDATE_MESSAGE");
     setShowNotification(true);
     setNotificationStatus(status);
     setNotificationMessage(messageId);
@@ -122,6 +140,7 @@ const UpdateNursingTasks = (props) => {
           handleAuditEvent("ADMINISTER_MEDICATION_TASK");
         }
       });
+      saveAdministeredTasks(administeredTasks[0]);
       saveAdministeredMedicationTasks("success", "NURSING_TASKS_SAVE_MESSAGE");
     } else {
       saveAdministeredMedicationTasks(
@@ -560,7 +579,14 @@ const UpdateNursingTasks = (props) => {
                         tasks[medicationTask.uuid]?.skipped && "red-text"
                       }`}
                     >
-                      {medicationTask.drugName}
+                      {getLocalizedLabel(
+                        intl,
+                        getTranslationKey(
+                          medicationTask.drugName,
+                          nonMedicationTaskKey
+                        ),
+                        medicationTask.drugName
+                      )}
                       {!isNonMedication ? (
                         <>
                           <FormattedMessage id={"AT"} defaultMessage={" at "} />
@@ -706,7 +732,17 @@ const UpdateNursingTasks = (props) => {
                     {tasks[medicationTask.uuid]?.skipped ? (
                       <OverflowMenuItem
                         itemText={
-                          !isNonMedication ? "Un-Skip Drug" : "Un-Skip Task"
+                          !isNonMedication
+                            ? getLocalizedLabel(
+                                intl,
+                                getTranslationKey("Un-Skip Drug"),
+                                "Un-Skip Drug"
+                              )
+                            : getLocalizedLabel(
+                                intl,
+                                getTranslationKey("Un-Skip Task"),
+                                "Un-Skip Task"
+                              )
                         }
                         onClick={() => {
                           handleSkipDrug(medicationTask, false);
@@ -714,7 +750,19 @@ const UpdateNursingTasks = (props) => {
                       />
                     ) : (
                       <OverflowMenuItem
-                        itemText={!isNonMedication ? "Skip Drug" : "Skip Task"}
+                        itemText={
+                          !isNonMedication
+                            ? getLocalizedLabel(
+                              intl,
+                                getTranslationKey("Skip Drug"),
+                                "Skip Drug"
+                              )
+                            : getLocalizedLabel(
+                              intl,
+                                getTranslationKey("Skip Task"),
+                                "Skip Task"
+                              )
+                        }
                         onClick={() => {
                           handleSkipDrug(medicationTask, true);
                         }}

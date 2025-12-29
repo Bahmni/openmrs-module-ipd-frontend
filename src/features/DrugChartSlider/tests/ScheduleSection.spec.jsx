@@ -1,6 +1,7 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
-import { ScheduleSection } from "../components/ScheduleSection"; // Replace 'YourComponent' with the actual file name
+import { IntlProvider } from "react-intl";
+import { ScheduleSection } from "../components/ScheduleSection";
 
 describe("ScheduleSection", () => {
   const props = {
@@ -24,7 +25,11 @@ describe("ScheduleSection", () => {
   };
 
   it("renders ScheduleSection component when firstday slots are missed", async () => {
-    const { container } = render(<ScheduleSection {...props} />);
+    const { container } = render(
+      <IntlProvider locale="en">
+        <ScheduleSection {...props} />
+      </IntlProvider>
+    );
 
     await waitFor(() => {
       expect(container).toMatchSnapshot();
@@ -32,7 +37,9 @@ describe("ScheduleSection", () => {
   });
   it("renders ScheduleSection component when firstday slots  missed is 0", async () => {
     const { container } = render(
-      <ScheduleSection {...props} firstDaySlotsMissed={0} />
+      <IntlProvider locale="en">
+        <ScheduleSection {...props} firstDaySlotsMissed={0} />
+      </IntlProvider>
     );
 
     await waitFor(() => {

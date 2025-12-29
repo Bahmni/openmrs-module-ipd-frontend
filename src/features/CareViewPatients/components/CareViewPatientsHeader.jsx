@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import "../styles/CareViewPatientsHeader.scss";
 import {
-  IPD_WARD_SEARCH_PLACEHOLDER_TEXT,
   displayShiftTimings12HourFormat,
   displayShiftTimingsFormat,
 } from "../../../constants";
@@ -11,6 +10,7 @@ import { Dropdown, Search, Button } from "carbon-components-react";
 import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
 import { formatDate } from "../../../utils/DateTimeUtils";
 import { items } from "../utils/constants";
+import { useIntl } from "react-intl";
 
 export const CareViewPatientsHeader = (props) => {
   const {
@@ -25,8 +25,18 @@ export const CareViewPatientsHeader = (props) => {
     handlePrevious,
     enable24HourTime,
     filterValue,
-    setFilterValue,
+    setFilterValue
   } = props;
+  const intl = useIntl();
+  
+  const translatedItems = items.map((item) => ({
+    ...item,
+    text: intl.formatMessage({
+      id: item.id.toUpperCase(),
+      defaultMessage: item.text,
+    }),
+  }));
+
   const handleSearchOnChange = (e) => {
     const value = e.target.value;
     if (value === "") {
@@ -124,7 +134,11 @@ export const CareViewPatientsHeader = (props) => {
       </div>
       <div className="search-and-tasklist">
         <Search
-          placeholder={IPD_WARD_SEARCH_PLACEHOLDER_TEXT}
+          placeholder={intl.formatMessage({
+            id: "IPD_WARD_SEARCH_PLACEHOLDER_TEXT",
+            defaultMessage:
+              "Type a minimum of 3 characters to search patient by name, bed number or patient ID",
+          })}
           size="lg"
           id="ipd-ward-search"
           onChange={handleSearchOnChange}
@@ -138,13 +152,15 @@ export const CareViewPatientsHeader = (props) => {
         <Dropdown
           id="default"
           label="Dropdown menu options"
-          selectedItem={filterValue}
-          items={items}
+          selectedItem={filterValue && filterValue.id 
+            ? translatedItems.find(item => item.id === filterValue.id) || translatedItems[0]
+            : translatedItems[0]}
+          items={translatedItems}
           itemToString={(item) => (item ? item.text : "")}
           onChange={(event) => {
             event.selectedItem
-              ? setFilterValue(event.selectedItem)
-              : setFilterValue(items[2]);
+            ? setFilterValue && setFilterValue(event.selectedItem)
+            : setFilterValue && setFilterValue(translatedItems[2]);
           }}
           light={true}
         />

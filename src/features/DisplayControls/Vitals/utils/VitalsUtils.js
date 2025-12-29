@@ -36,10 +36,56 @@ const setDateAndTime = (latestDateAndTime, setVitalsDate, setVitalsTime) => {
   setVitalsTime(time);
 };
 
-export const getPatientVitals = async (patientUuid, conceptValues) => {
-  const queryParams = Object.values(conceptValues).map(
-    (concept) => `obsConcepts=${concept}`
-  );
+export const getConceptDetails = (conceptConfig, conceptDetails, intl) => {
+  let concepts = {};
+
+  Object.keys(conceptConfig).forEach((conceptName) => {
+    let obj;
+    if (Array.isArray(conceptConfig[conceptName])) {
+      obj = conceptDetails.filter((field) => {
+        return conceptConfig[conceptName].some((concept) => {
+          let conceptByLocale = intl.formatMessage({
+            id: concept,
+            defaultMessage: concept,
+          });
+          return field.fullName.toLowerCase() === conceptByLocale.toLowerCase();
+        });
+      });
+
+      concepts[conceptName] = obj.map((matchedField) => ({
+        name: matchedField.name,
+        unit: matchedField.units,
+      }));
+    } else {
+      const conceptByLocale = intl.formatMessage({
+        id: conceptConfig[conceptName],
+        defaultMessage: conceptConfig[conceptName],
+      });
+      obj = conceptDetails.find(
+        (field) => field.fullName.toLowerCase() === conceptByLocale.toLowerCase()
+      );
+      concepts[conceptName] = { name: obj?.name, unit: obj?.units };
+    }
+  });
+  return concepts;
+};
+
+export const getPatientVitals = async (patientUuid, conceptValues, intl) => {
+  const queryParams = Object.values(conceptValues).flatMap((concept) => {
+    let conceptByLocale = intl.formatMessage({
+      id: concept,
+      defaultMessage: concept,
+    });
+    return Array.isArray(concept)
+      ? concept.map((value) => {
+        conceptByLocale = intl.formatMessage({
+          id: value,
+          defaultMessage: value,
+        });
+        return `obsConcepts=${conceptByLocale}`;
+      })
+      : `obsConcepts=${conceptByLocale}`;
+  });
   const conceptParams = queryParams.join("&");
   try {
     const response = await axios.get(
@@ -53,10 +99,27 @@ export const getPatientVitals = async (patientUuid, conceptValues) => {
     return error;
   }
 };
-export const getPatientVitalsHistory = async (patientUuid, conceptValues) => {
-  const queryParams = Object.values(conceptValues).map(
-    (concept) => `obsConcepts=${concept}`
-  );
+
+export const getPatientVitalsHistory = async (
+  patientUuid,
+  conceptValues,
+  intl
+) => {
+  const queryParams = Object.values(conceptValues).flatMap((concept) => {
+    let conceptByLocale = intl.formatMessage({
+      id: concept,
+      defaultMessage: concept,
+    });
+    return Array.isArray(concept)
+      ? concept.map((value) => {
+        conceptByLocale = intl.formatMessage({
+          id: value,
+          defaultMessage: value,
+        });
+        return `obsConcepts=${conceptByLocale}`;
+      })
+      : `obsConcepts=${conceptByLocale}`;
+  });
   const conceptParams = queryParams.join("&");
   try {
     const response = await axios.get(
@@ -69,6 +132,27 @@ export const getPatientVitalsHistory = async (patientUuid, conceptValues) => {
   } catch (error) {
     return error;
   }
+};
+
+const getConceptValuesFromArray = (vitalsValues, concepts, isNumeric = true) => {
+  for (let concept of concepts) {
+    if (vitalsValues[concept.name]) {
+      const value = vitalsValues[concept.name]?.value;
+      const abnormal = vitalsValues[concept.name]?.abnormal;
+      const parsedValue = isNumeric ? parseInt(value, 10) : value;
+      
+      return {
+        value: isNumeric && isNaN(parsedValue) ? value : parsedValue,
+        abnormal: abnormal,
+        unit: concept.unit,
+      };
+    }
+  }
+  return {
+    value: "--",
+    abnormal: false,
+    unit: null,
+  };
 };
 
 export const mapVitalsData = (
@@ -167,12 +251,15 @@ export const mapVitalsData = (
             VitalsValues[latestVisitDate][conceptDetails.spO2.name]?.abnormal,
           unit: conceptDetails.spO2.unit,
         },
-        BMI: {
-          value: VitalsValues[latestVisitDate][conceptDetails.bmi.name]?.value,
-          abnormal:
-            VitalsValues[latestVisitDate][conceptDetails.bmi.name]?.abnormal,
-          unit: conceptDetails.bmi.unit,
-        },
+        BMI: Array.isArray(conceptDetails.bmi)
+          ? getConceptValuesFromArray(VitalsValues[latestVisitDate], conceptDetails.bmi, false)
+          : {
+              value: VitalsValues[latestVisitDate][conceptDetails.bmi.name]
+                ?.value,
+              abnormal:
+                VitalsValues[latestVisitDate][conceptDetails.bmi.name]?.abnormal,
+              unit: conceptDetails.bmi.unit,
+          },
       };
     }
   }
@@ -280,14 +367,16 @@ export const mapBiometricsHistory = (vitalsHistoryList, conceptDetails) => {
           ? innerMappedbiometrics[conceptDetails.weight.name].abnormal
           : false,
       },
-      bmi: {
-        value: innerMappedbiometrics[conceptDetails.bmi.name]
-          ? innerMappedbiometrics[conceptDetails.bmi.name]?.value
-          : "--",
-        abnormal: innerMappedbiometrics[conceptDetails.bmi.name]
-          ? innerMappedbiometrics[conceptDetails.bmi.name].abnormal
-          : false,
-      },
+      bmi: Array.isArray(conceptDetails.bmi)
+        ? getConceptValuesFromArray(innerMappedbiometrics, conceptDetails.bmi, false)
+        : {
+          value: innerMappedbiometrics[conceptDetails.bmi.name]
+            ? innerMappedbiometrics[conceptDetails.bmi.name]?.value
+            : "--",
+          abnormal: innerMappedbiometrics[conceptDetails.bmi.name]
+            ? innerMappedbiometrics[conceptDetails.bmi.name].abnormal
+            : false,
+        },
       muac: {
         value: innerMappedbiometrics[conceptDetails.muac.name]
           ? innerMappedbiometrics[conceptDetails.muac.name]?.value
@@ -298,10 +387,10 @@ export const mapBiometricsHistory = (vitalsHistoryList, conceptDetails) => {
       },
     };
     if (
-      innerMappedbiometrics[conceptDetails.bmi.name] ||
-      innerMappedbiometrics[conceptDetails.height.name] ||
-      innerMappedbiometrics[conceptDetails.weight.name] ||
-      innerMappedbiometrics[conceptDetails.muac.name]
+      pairedBiometrics.bmi.value !== "--" ||
+      pairedBiometrics.height.value !== "--" ||
+      pairedBiometrics.weight.value !== "--" ||
+      pairedBiometrics.muac.value !== "--"
     ) {
       biometricsHistory.push(pairedBiometrics);
     }
@@ -349,7 +438,7 @@ export const getVitalsHistoryHeaders = (conceptDetails) => [
     id: "4",
     header: (
       <FormattedMessage
-        id={"VRESPIRATORY_RATE_HEADER"}
+        id={"RESPIRATORY_RATE_HEADER"}
         defaultMessage={`R.rate ({unit})`}
         values={{ unit: conceptDetails.respiratoryRate.unit }}
       />
@@ -382,6 +471,14 @@ export const getVitalsHistoryHeaders = (conceptDetails) => [
     isSortable: false,
   },
 ];
+
+const getUnitFromArray = (concept) => {
+  if (Array.isArray(concept)) {
+    const found = concept.find((field) => field.unit !== undefined);
+    return found ? found.unit : undefined;
+  } 
+  return concept.unit;
+};
 
 export const getBiometricsHistoryHeaders = (conceptDetails) => [
   {
@@ -425,7 +522,7 @@ export const getBiometricsHistoryHeaders = (conceptDetails) => [
       <FormattedMessage
         id={"BMI_HEADER"}
         defaultMessage={`BMI ({unit})`}
-        values={{ unit: conceptDetails.bmi.unit }}
+        values={{ unit: getUnitFromArray(conceptDetails.bmi) }}
       />
     ),
     key: "bmi",

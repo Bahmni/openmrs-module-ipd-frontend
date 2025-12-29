@@ -8,6 +8,7 @@ import {
 } from "../../CareViewPatientsSummary/tests/CareViewPatientsSummaryMock";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { WARD_SUMMARY_HEADER } from "../../../constants";
+import { IntlProvider } from "react-intl";
 
 const mockContext = {
   selectedWard: { label: "ward", value: "uuid" },
@@ -102,9 +103,11 @@ describe("CareViewPatients", () => {
 
   it("should show search box", async () => {
     const { container } = render(
+      <IntlProvider locale="en">
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
       </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -120,9 +123,11 @@ describe("CareViewPatients", () => {
 
   it("should not call backend search api when the search value is less than 3", async () => {
     const { container, getByRole } = render(
+      <IntlProvider locale="en">
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
       </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -144,9 +149,11 @@ describe("CareViewPatients", () => {
       data: mockSearchPatientsList,
     });
     const { container, getByRole, getByText } = render(
+      <IntlProvider locale="en">
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
       </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -171,9 +178,11 @@ describe("CareViewPatients", () => {
       data: mockPatientsList,
     });
     const { container, getByRole, getByText } = render(
+      <IntlProvider locale="en">
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
       </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -204,9 +213,11 @@ describe("CareViewPatients", () => {
       data: mockSearchEmptyPatientsList,
     });
     const { container, getByRole, getByText, queryByText } = render(
+      <IntlProvider locale="en">
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
       </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -232,9 +243,11 @@ describe("CareViewPatients", () => {
       data: mockSearchPatientsList,
     });
     const { container, getByRole, getByText } = render(
+      <IntlProvider locale="en">
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
       </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -260,9 +273,11 @@ describe("CareViewPatients", () => {
       data: mockSearchPatientsList,
     });
     const { container, getByRole, getByText } = render(
+      <IntlProvider locale="en">
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
       </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -288,9 +303,11 @@ describe("CareViewPatients", () => {
       data: mockSearchPatientsList,
     });
     const { container, getByRole, getByText } = render(
+      <IntlProvider locale="en">
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
       </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -310,9 +327,11 @@ describe("CareViewPatients", () => {
 
   it("should update patient list when refresh patient list value is changed", async () => {
     const { rerender } = render(
+      <IntlProvider locale="en">
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
       </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -320,11 +339,13 @@ describe("CareViewPatients", () => {
     });
 
     rerender(
+      <IntlProvider locale="en">
       <CareViewContext.Provider
         value={{ ...mockContext, refreshPatientList: true }}
       >
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
       </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {

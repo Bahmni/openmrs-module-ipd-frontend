@@ -179,6 +179,30 @@ export const getFetchFormTranslationsUrl = (formName, formUuid) => {
   );
 };
 
+export const getTranslationKey = (attribute, moduleName) => {
+  if (typeof attribute !== "undefined") {
+    let keyPrefix = moduleName ? moduleName : "IPD";
+
+    let keyName = attribute
+      .toUpperCase()
+      .replace(/\s\s+/g, " ")
+      .replace(/[^a-zA-Z0-9 _]/g, "")
+      .trim()
+      .replace(/ /g, "_");
+
+    let translationKey = `${keyPrefix}_${keyName}`;
+    return translationKey;
+  }
+};
+
+export const getLocalizedLabel = (intl, id, defaultLabel) => {
+  return intl.messages[id] ? (
+    <FormattedMessage id={id} defaultMessage={defaultLabel} />
+  ) : (
+    defaultLabel
+  );
+};
+
 export const getNoDataCapturedMessage = (formName) => {
   const msg = (
     <FormattedMessage
@@ -253,27 +277,27 @@ export const mockConfig = {
   },
   vitalsConfig: {
     latestVitalsConceptValues: {
-      spO2: "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
-      weight: "Weight",
-      bmi: "BMI",
-      respiratoryRate: "Respiratory Rate",
-      systolicPressure: "Systolic blood pressure",
-      diastolicPressure: "Diastolic blood pressure",
-      temperature: "Temperature",
-      pulse: "Pulse",
-      height: "Height",
+      spO2: "VITALS_HEADER_SPO2_KEY",
+      weight: "VITALS_WEIGHT_KEY",
+      bmi: "VITALS_BMI_KEY",
+      respiratoryRate: "VITALS_RESPIRATORY_RATE_KEY",
+      systolicPressure: "VITALS_SYSTOLIC_PRESSURE_KEY",
+      diastolicPressure: "VITALS_DIASTOLIC_PRESSURE_KEY",
+      temperature: "VITALS_TEMPERATURE_KEY",
+      pulse: "VITALS_PULSE_KEY",
+      height: "VITALS_HEIGHT_KEY",
     },
     vitalsHistoryConceptValues: {
-      spO2: "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
-      weight: "Weight",
-      bmi: "BMI",
-      respiratoryRate: "Respiratory Rate",
-      systolicPressure: "Systolic blood pressure",
-      diastolicPressure: "Diastolic blood pressure",
-      temperature: "Temperature",
-      pulse: "Pulse",
-      height: "Height",
-      muac: "Mid-upper arm circumference",
+      spO2: "VITALS_HEADER_SPO2_KEY",
+      weight: "VITALS_WEIGHT_KEY",
+      bmi: "VITALS_BMI_KEY",
+      respiratoryRate: "VITALS_RESPIRATORY_RATE_KEY",
+      systolicPressure: "VITALS_SYSTOLIC_PRESSURE_KEY",
+      diastolicPressure: "VITALS_DIASTOLIC_PRESSURE_KEY",
+      temperature: "VITALS_TEMPERATURE_KEY",
+      pulse: "VITALS_PULSE_KEY",
+      height: "VITALS_HEIGHT_KEY",
+      muac: "VITALS_MUAC_KEY",
     },
   },
   patientFeedingRecordConfig: {

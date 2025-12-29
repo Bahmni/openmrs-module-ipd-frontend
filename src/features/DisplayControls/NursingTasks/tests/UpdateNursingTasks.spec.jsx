@@ -14,6 +14,7 @@ import {
   mockConfigFor12HourFormat,
 } from "../../../../utils/CommonUtils";
 import MockDate from "mockdate";
+import { IntlProvider } from "react-intl";
 import {mockUserWithAllRequiredPrivileges, mockUserWithoutAnyPrivilege} from '../../../../utils/mockUserData';
 
 const mockSetShowNotification = jest.fn();
@@ -37,6 +38,7 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should render UpdateNursingTasksSlider", function () {
     const { container } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -55,12 +57,14 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     expect(container).toMatchSnapshot();
   });
 
   it("should enable save Button when atleast one task is selected", function () {
     const { container } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -79,6 +83,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const saveButton = screen.getAllByText("Save")[1];
     expect(saveButton.disabled).toEqual(true);
@@ -89,6 +94,8 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should show notes and time when toggle switch is On", function () {
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -107,6 +114,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -121,6 +129,8 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should show time when toggle switch is On for Non medication tasks", function () {
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -139,6 +149,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -150,6 +161,8 @@ describe("UpdateNursingTasksSlider", function () {
   it("should save when toggle switch is and Time is entered for Non medication tasks", async () => {
     mockUpdateNonMedicationTask.mockResolvedValue(mockUpdateResponse);
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -168,6 +181,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -189,6 +203,8 @@ describe("UpdateNursingTasksSlider", function () {
   it("should show warning for empty notes when time is updated", function () {
     MockDate.set("2024-01-01 01:00 PM");
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -207,6 +223,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -222,6 +239,8 @@ describe("UpdateNursingTasksSlider", function () {
   it("should show warning for empty notes when time in 12 hour format is updated", function () {
     MockDate.set("2024-01-01 01:00 PM");
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfigFor12HourFormat,
@@ -240,6 +259,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -254,6 +274,8 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should render confirmation modal on click of save button", function () {
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -272,6 +294,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -292,6 +315,8 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should render confirmation modal on click of save button when time is in 12 hour format", function () {
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfigFor12HourFormat,
@@ -310,6 +335,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -330,6 +356,8 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should close the slider on click of cancel button when no changes are made", function () {
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -348,6 +376,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const cancelButton = screen.getAllByText("Cancel")[1];
     fireEvent.click(cancelButton);
@@ -357,6 +386,8 @@ describe("UpdateNursingTasksSlider", function () {
   it("should render confirmation modal on click of cancel button when changes are made", function () {
     MockDate.set("2024-01-01 13:00");
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -375,6 +406,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -399,6 +431,8 @@ describe("UpdateNursingTasksSlider", function () {
   it("should render confirmation modal on click of cancel button when changes are made when time is in 12 hour format", function () {
     MockDate.set("2024-01-01 01:00 PM");
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfigFor12HourFormat,
@@ -417,6 +451,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);
@@ -441,6 +476,8 @@ describe("UpdateNursingTasksSlider", function () {
   it("should show notes error when time is greater than administered time window", function () {
     MockDate.set("2024-01-01 13:00");
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -454,11 +491,13 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={jest.fn}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
+          setShowSuccessNotification={jest.fn()}
           setShowNotification={mockSetShowNotification}
           setNotificationMessage={mockSetNotificationMessage}
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
 
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
@@ -480,6 +519,8 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should show notes error when time in 12 hour format is greater than administered time window", function () {
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfigFor12HourFormat,
@@ -498,6 +539,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
 
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
@@ -519,6 +561,8 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should show OverflowMenu for a task", () => {
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -537,12 +581,15 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     expect(container.querySelectorAll(".bx--overflow-menu")).toBeTruthy();
   });
 
   it("should show Skip Drug option on click of Overflow menu button", () => {
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -561,6 +608,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const overflowMenuButton =
       container.querySelectorAll(".bx--overflow-menu")[0];
@@ -570,6 +618,8 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should hide the Administer Done toggle button on click of Skip Drug button", () => {
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -588,6 +638,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const overflowMenuButton =
       container.querySelectorAll(".bx--overflow-menu")[0];
@@ -599,6 +650,8 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should show notes as mandatory when Skip Drug button is clicked", () => {
     const { container } = render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -617,6 +670,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const overflowMenuButton =
       container.querySelectorAll(".bx--overflow-menu")[0];
@@ -631,6 +685,8 @@ describe("UpdateNursingTasksSlider", function () {
   it("should disable Done toggle if the task is not relevant", () => {
     MockDate.set("2023-11-21 6:00");
     render(
+      <IntlProvider locale="en">
+
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -649,12 +705,14 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     expect(screen.getByTestId("done-toggle").disabled).toBe(true);
   });
 
   it("should not show overflow menu for scheduled for text for PRN Nursing Task", async () => {
     const { container } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -673,6 +731,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const scheduledFor = screen.queryByText("Scheduled for");
     expect(scheduledFor).toBeNull();
@@ -683,6 +742,7 @@ describe("UpdateNursingTasksSlider", function () {
 
   it("should show PRN confirm message while saving PRN task", () => {
     const { container } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -701,6 +761,7 @@ describe("UpdateNursingTasksSlider", function () {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
     fireEvent.click(toggleButton);

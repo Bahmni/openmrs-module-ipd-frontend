@@ -11,6 +11,7 @@ import {
   getWardSummary,
 } from "../utils/CareViewSummary";
 import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -39,11 +40,55 @@ export const CareViewSummary = ({ callbacks, onHome }) => {
     provider,
     refreshSummary,
   } = useContext(CareViewContext);
+  const intl = useIntl();
 
   let existingSelectedWards =
     JSON.parse(localStorage.getItem("selected_wards")) || {};
 
-  const updateWardDetails = async () => {
+  const getWardList = async () => {
+    callbacks.setIsLoading(true);
+    const wardList = await getWardDetails();
+    const wardOptions = wardList?.map((ward) => {
+      const rawLabel = ward?.ward?.display;
+      const uuid = ward?.ward?.uuid;
+      const translatedLabel = rawLabel ? intl.formatMessage({
+        id: rawLabel,
+        defaultMessage: rawLabel,
+      }) : rawLabel;
+      return {
+        label: translatedLabel,
+        value: uuid,
+      };
+    });
+    setOptions(wardOptions);
+    if (existingSelectedWards) {
+      const ward = existingSelectedWards[provider.uuid];
+      if (ward) {
+        const translatedSelectedWard = wardOptions?.find(
+          (option) => option.value == ward.value
+        );
+        setSelectedWard(translatedSelectedWard);
+      } else setSelectedWard(wardOptions[0]);
+    } else {
+      setSelectedWard(wardOptions[0]);
+    }
+    callbacks.setIsLoading(false);
+  };
+  const getWardSummary = async () => {
+    callbacks.setIsLoading(true);
+    const response = await fetchWardSummary(selectedWard.value, provider.uuid);
+    if (response.status === 200) {
+      setWardSummary(response.data);
+    } else {
+      setWardSummary({});
+    }
+    callbacks.setIsLoading(false);
+  };
+  useEffect(() => {
+    getWardList();
+  }, []);
+
+   const updateWardDetails = async () => {
     setIsLoading(true);
     const wardOptions = await getWardOptions();
     setOptions(wardOptions);
@@ -157,7 +202,10 @@ export const CareViewSummary = ({ callbacks, onHome }) => {
         selectedValue={selectedWard}
         titleText={""}
         width={isMobileView ? "100%" : "200px"}
-        placeholder={"Select a Ward"}
+        placeholder={intl.formatMessage({
+          id: "SELECT_WARD_PLACEHOLDER_TEXT",
+          defaultMessage: "Select Ward",
+        })}
       />
       {!isTabletView && !isMobileView ? (
         <div className="summary-tiles">

@@ -8,11 +8,12 @@ import {
   mapBiometricsHistory,
   getVitalsHistoryHeaders,
   getBiometricsHistoryHeaders,
+  getConceptDetails
 } from "../utils/VitalsUtils";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import "../styles/Vitals.scss";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import VitalsHistory from "./VitalsHistory";
 import BiometricsHistory from "./BiometricsHistory";
 import { vitalsHeaders } from "../utils/VitalsUtils";
@@ -28,6 +29,7 @@ const Vitals = (props) => {
   const [vitalsDate, setVitalsDate] = useState(null);
   const [vitalsTime, setVitalsTime] = useState(null);
   const [isLoading, updateIsLoading] = useState(true);
+  const intl = useIntl();
 
   const [vitalsHistoryHeaders, setVitalsHistoryHeaders] = useState([]);
   const [biometricsHistoryHeaders, setBiometricsHistoryHeaders] = useState([]);
@@ -52,33 +54,22 @@ const Vitals = (props) => {
 
   const handleShowMore = () => setShowMore(!showMore);
 
-  const getConceptDetails = (conceptConfig, conceptDetails) => {
-    let concepts = {};
-
-    Object.keys(conceptConfig).forEach((conceptName) => {
-      const obj = conceptDetails.find(
-        (field) =>
-          field.fullName.toLowerCase() ===
-          conceptConfig[conceptName].toLowerCase()
-      );
-      concepts[conceptName] = { name: obj?.name, unit: obj?.units };
-    });
-    return concepts;
-  };
-
   useEffect(() => {
     const getVitals = async () => {
       const VitalsList = await getPatientVitals(
         patientId,
-        vitalsConfig.latestVitalsConceptValues
+        vitalsConfig.latestVitalsConceptValues,
+        intl
       );
       const vitalsHistoryList = await getPatientVitalsHistory(
         patientId,
-        vitalsConfig.vitalsHistoryConceptValues
+        vitalsConfig.vitalsHistoryConceptValues,
+        intl
       );
       const conceptDetails = getConceptDetails(
         vitalsConfig.latestVitalsConceptValues,
-        vitalsHistoryList.conceptDetails
+        VitalsList.conceptDetails,
+        intl
       );
       setVitals(
         mapVitalsData(
@@ -91,7 +82,8 @@ const Vitals = (props) => {
       );
       const vitalsHistoryDetails = getConceptDetails(
         vitalsConfig.vitalsHistoryConceptValues,
-        vitalsHistoryList.conceptDetails
+        vitalsHistoryList.conceptDetails,
+        intl
       );
       setVitalsHistoryHeaders(getVitalsHistoryHeaders(vitalsHistoryDetails));
       setBiometricsHistoryHeaders(

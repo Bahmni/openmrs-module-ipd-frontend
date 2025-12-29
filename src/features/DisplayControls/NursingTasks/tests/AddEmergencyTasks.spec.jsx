@@ -12,6 +12,7 @@ import MockDate from "mockdate";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
 import { mockUserWithAllRequiredPrivileges } from "../../../../utils/mockUserData";
+import { IntlProvider } from "react-intl";
 
 const mockGetDrugOrdersConfig = jest.fn();
 const mockFetchMedicationConfig = jest.fn();
@@ -87,6 +88,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should render the component with loading state", () => {
     const { getAllByText, container } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -99,6 +101,7 @@ describe("AddEmergencyTasks", () => {
           updateEmergencyTasksSlider={jest.fn}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     expect(getAllByText("Loading...")).toBeTruthy();
     expect(container).toMatchSnapshot();
@@ -106,6 +109,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should render the component", async () => {
     const { queryByText, getByText, container } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -118,6 +122,7 @@ describe("AddEmergencyTasks", () => {
           updateEmergencyTasksSlider={jest.fn}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     expect(getByText("Add Nursing Task")).toBeTruthy();
     await waitFor(() => {
@@ -131,6 +136,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should allow Drug search", async () => {
     const { container, getByText } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -143,12 +149,14 @@ describe("AddEmergencyTasks", () => {
           updateEmergencyTasksSlider={jest.fn}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     await selectDrug(container, getByText);
   });
 
   it("should set the dose units based on dosage form", async () => {
     const { container, getByText } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -161,6 +169,7 @@ describe("AddEmergencyTasks", () => {
           updateEmergencyTasksSlider={jest.fn}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     await selectDrug(container, getByText);
     await waitFor(() => {
@@ -172,6 +181,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should set the route based on dosage form", async () => {
     const { container, getByText } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -184,6 +194,7 @@ describe("AddEmergencyTasks", () => {
           updateEmergencyTasksSlider={jest.fn}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
     await selectDrug(container, getByText);
     await waitFor(() => {
@@ -196,6 +207,7 @@ describe("AddEmergencyTasks", () => {
   it("should enable save when all fields are added", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -208,6 +220,7 @@ describe("AddEmergencyTasks", () => {
           updateEmergencyTasksSlider={jest.fn}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
 
     const saveButton = screen.getAllByText("Save")[1];
@@ -262,6 +275,7 @@ describe("AddEmergencyTasks", () => {
   it("should call save by confirming popup when emergency task is saved", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -278,6 +292,7 @@ describe("AddEmergencyTasks", () => {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
 
     const saveButton = screen.getAllByText("Save")[1];
@@ -343,6 +358,7 @@ describe("AddEmergencyTasks", () => {
 
   it("should render confirmation modal on click of cancel button when changes are made", async () => {
     const { container, getByText } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -359,6 +375,7 @@ describe("AddEmergencyTasks", () => {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
 
     // Select Drug
@@ -385,6 +402,7 @@ describe("AddEmergencyTasks", () => {
   it("should save button be disabled when fields are not filled", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText, getAllByText, getByRole } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -401,6 +419,7 @@ describe("AddEmergencyTasks", () => {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -422,6 +441,7 @@ describe("AddEmergencyTasks", () => {
   it("should enable save when all fields are added for Non medication tasks", async () => {
     MockDate.set("2024-01-05 12:00");
     const { container, getByText, getAllByText, getByRole } = render(
+      <IntlProvider locale="en">
       <IPDContext.Provider
         value={{
           config: mockConfig,
@@ -438,6 +458,7 @@ describe("AddEmergencyTasks", () => {
           setNotificationStatus={mockSetNotificationStatus}
         />
       </IPDContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {

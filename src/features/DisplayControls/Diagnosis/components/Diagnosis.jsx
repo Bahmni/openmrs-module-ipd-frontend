@@ -49,9 +49,27 @@ const Diagnosis = (props) => {
           diagnosisArray.push({
             id: diagnosisId,
             diagnosis: diagnosisName,
-            order: diagnosis.order,
-            certainty: diagnosis.certainty,
-            status: status,
+            order: diagnosis.order ? (
+              <FormattedMessage
+                id={diagnosis.order}
+                defaultMessage={diagnosis.order}
+              />
+            ) : (
+              diagnosis.order
+            ),
+            certainty: diagnosis.certainty ? (
+              <FormattedMessage
+                id={diagnosis.certainty}
+                defaultMessage={diagnosis.certainty}
+              />
+            ) : (
+              diagnosis.certainty
+            ),
+            status: status ? (
+              <FormattedMessage id={status} defaultMessage={status} />
+            ) : (
+              status
+            ),
             diagnosedBy: diagnosis.providers[0].name,
             diagnosisDate: diagnosisDate,
             additionalData: {

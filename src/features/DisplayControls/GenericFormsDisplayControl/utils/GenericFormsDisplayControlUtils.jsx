@@ -1,6 +1,8 @@
+import React from "react";
 import axios from "axios";
 import { FETCH_FORM_DETAILS_URL } from "../../../../constants";
 import { getFetchFormTranslationsUrl } from "../../../../utils/CommonUtils";
+import { FormattedMessage } from "react-intl";
 
 export const fetchAllConceptsForForm = async (formUuid) => {
   try {
@@ -33,15 +35,30 @@ export const fetchFormTranslations = async (formName, formUuid) => {
 export const formDisplayControlHeaders = [
   {
     key: "Date",
-    header: "Date",
+    header: (
+      <FormattedMessage
+        id={"DATE_COLUMN_HEADER"}
+        defaultMessage={`Date`}
+      />
+    ),
   },
   {
     key: "Time",
-    header: "Time",
+    header: (
+      <FormattedMessage
+        id={"TIME_COLUMN_HEADER"}
+        defaultMessage={`Time`}
+      />
+    ),
   },
   {
     key: "Provider",
-    header: "Provider",
+    header: (
+      <FormattedMessage
+        id={"FORM_PROVIDER_COLUMN_HEADER"}
+        defaultMessage={`Provider`}
+      />
+    ),
   },
   {
     key: "",

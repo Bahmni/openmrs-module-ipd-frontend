@@ -369,3 +369,46 @@ export const mockNoVitalsData = {
   ],
   tabularData: {},
 };
+
+export const mockVitalsConceptDetails = {
+  pulse: {
+    name: "Pulse",
+    unit: "beats/min",
+  },
+  spO2: {
+    name: "SpO2",
+    unit: "%",
+  },
+  respiratoryRate: {
+    name: "Respiratory Rate",
+    unit: "breaths/min",
+  },
+  systolicPressure: {
+    name: "Systolic Blood Pressure",
+    unit: "mmHg",
+  },
+  diastolicPressure: {
+    name: "Diastolic Blood Pressure",
+    unit: "mmHg",
+  },
+  temperature: {
+    name: "Temperature",
+    unit: "C",
+  },
+  height: {
+    name: "HEIGHT",
+    unit: "Cm",
+  },
+  weight: {
+    name: "WEIGHT",
+    unit: "Kg",
+  },
+  bmi: {
+    name: "BMI",
+    unit: "Kg/m2",
+  },
+  muac: {
+    name: "MUAC",
+    unit: "Cm",
+  },
+};

@@ -90,27 +90,57 @@ const Allergies = (props) => {
   const headers = [
     {
       key: "allergen",
-      header: "Allergen",
+      header: (
+        <FormattedMessage
+          id={"ALLERGEN_COLUMN_HEADER"}
+          defaultMessage={`Allergen`}
+        />
+      ),
     },
     {
       key: "severity",
-      header: "Severity",
+      header: (
+        <FormattedMessage
+          id={"SEVERITY_COLUMN_HEADER"}
+          defaultMessage={`Severity`}
+        />
+      ),
     },
     {
       key: "reaction",
-      header: "Reaction",
+      header: (
+        <FormattedMessage
+          id={"REACTION_COLUMN_HEADER"}
+          defaultMessage={`Reaction`}
+        />
+      ),
     },
     {
       key: "comments",
-      header: "Comments",
+      header: (
+        <FormattedMessage
+          id={"COMMENTS_COLUMN_HEADER"}
+          defaultMessage={`Comments`}
+        />
+      ),
     },
     {
       key: "provider",
-      header: "Provider Name",
+      header: (
+        <FormattedMessage
+          id={"PROVIDER_COLUMN_HEADER"}
+          defaultMessage={`Provider Name`}
+        />
+      ),
     },
     {
       key: "date",
-      header: "Date",
+      header: (
+        <FormattedMessage
+          id={"DATE_COLUMN_HEADER"}
+          defaultMessage={`Date`}
+        />
+      ),
     },
   ];
 

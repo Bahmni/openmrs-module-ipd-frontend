@@ -4,7 +4,7 @@ import {
   invalidTimeText12Hour,
   invalidTimeText24Hour,
 } from "../utils/DrugChartSliderUtils";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { TimePicker, TimePicker24Hour, Title } from "bahmni-carbon-ui";
 import { timeText12, timeText24 } from "../../../constants";
 
@@ -27,6 +27,7 @@ export const ScheduleSection = ({
   showSchedulePassedWarning,
   enable24HourTimers,
 }) => {
+  const intl = useIntl();
   return (
     <>
       {enableSchedule && firstDaySlotsMissed > 0 && (
@@ -34,9 +35,8 @@ export const ScheduleSection = ({
           <div className="schedule-section">
             <Title
               text={
-                enable24HourTimers
-                  ? `Schedule time (start date, ${timeText24})`
-                  : `Schedule time (start date, ${timeText12})`
+                intl.formatMessage({ id: "DRUG_CHART_MODAL_SCHEDULE_START_DATE", defaultMessage: "Schedule time (start date, " }) +
+                (enable24HourTimers ? timeText24 : timeText12) + ")"
               }
               isRequired={true}
             />
@@ -98,9 +98,8 @@ export const ScheduleSection = ({
             <div className="schedule-section">
               <Title
                 text={
-                  enable24HourTimers
-                    ? `Schedule time (subsequent, ${timeText24})`
-                    : `Schedule time (subsequent, ${timeText12})`
+                  intl.formatMessage({ id: "DRUG_CHART_MODAL_SCHEDULE_SUBSEQUENT", defaultMessage: "Schedule time (subsequent, " }) +
+                  (enable24HourTimers ? timeText24 : timeText12) + ")"
                 }
                 isRequired={true}
               />
@@ -153,9 +152,8 @@ export const ScheduleSection = ({
           <div className="schedule-section">
             <Title
               text={
-                enable24HourTimers
-                  ? `Schedule time (remainder, ${timeText24})`
-                  : `Schedule time (remainder, ${timeText12})`
+                intl.formatMessage({ id: "DRUG_CHART_MODAL_SCHEDULE_REMAINDER", defaultMessage: "Schedule time (remainder, " }) +
+                (enable24HourTimers ? timeText24 : timeText12) + ")"
               }
               isRequired={true}
             />
@@ -227,9 +225,8 @@ export const ScheduleSection = ({
           <div className="schedule-section">
             <Title
               text={
-                enable24HourTimers
-                  ? `Schedule(s) (${timeText24})`
-                  : `Schedule(s) (${timeText12})`
+                intl.formatMessage({ id: "DRUG_CHART_MODAL_SCHEDULES", defaultMessage: "Schedule(s)" }) + " ("+
+                (enable24HourTimers ? timeText24 : timeText12) + ")"
               }
               isRequired={true}
             />

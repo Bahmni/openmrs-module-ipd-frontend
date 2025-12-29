@@ -45,6 +45,7 @@ import {
 } from "../../DrugChart/utils/DrugChartUtils";
 import { displayShiftTimingsFormat } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
+import { IntlProvider } from "react-intl";
 import { isUserPrivileged } from "../../../../utils/CommonUtils";
 export default function NursingTasks(props) {
   const { patientId } = props;
@@ -289,20 +290,20 @@ export default function NursingTasks(props) {
             isReadMode
           );
           const filteredData = extractedData
-          .map((extract) =>
-            extract.filter((data) => {
-              return !(
-                data.serviceType == asNeededPlaceholderConceptName &&
-                data.endTimeInEpochSeconds <= startEndDates.endDate
-              );
-            })
-          )
-          .filter((innerArray) => innerArray.length > 0);
-        setMedicationNursingTasks(
-          extractedNonMedicationTasks.length > 0
-            ? [...filteredData, ...extractedNonMedicationTasks]
-            : filteredData
-        );
+            .map((extract) =>
+              extract.filter((data) => {
+                return !(
+                  data.serviceType == asNeededPlaceholderConceptName &&
+                  data.endTimeInEpochSeconds <= startEndDates.endDate
+                );
+              })
+            )
+            .filter((innerArray) => innerArray.length > 0);
+          setMedicationNursingTasks(
+            extractedNonMedicationTasks.length > 0
+              ? [...filteredData, ...extractedNonMedicationTasks]
+              : filteredData
+          );
         }
         setIsLoading(false);
         setIsShiftsButtonsDisabled({
@@ -565,15 +566,15 @@ export default function NursingTasks(props) {
         />
       )}
       {isSliderOpen.emergencyTasks && (
-        <AddEmergencyTasks
-          patientId={patientId}
-          providerId={provider.uuid}
-          updateEmergencyTasksSlider={updateEmergencyTasksSlider}
-          setShowNotification={setShowNotification}
-          setNotificationMessage={setNotificationMessage}
-          setNotificationStatus={setNotificationStatus}
-          disabled={isReadMode}
-        />
+          <AddEmergencyTasks
+            patientId={patientId}
+            providerId={provider.uuid}
+            updateEmergencyTasksSlider={updateEmergencyTasksSlider}
+            setShowNotification={setShowNotification}
+            setNotificationMessage={setNotificationMessage}
+            setNotificationStatus={setNotificationStatus}
+            disabled={isReadMode}
+          />
       )}
       {isLoading ? (
         <div className="loading-parent" data-testid="loading-icon">

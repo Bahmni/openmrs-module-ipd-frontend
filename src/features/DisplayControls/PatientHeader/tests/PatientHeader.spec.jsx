@@ -8,6 +8,7 @@ import {
   bedInformation,
 } from "./PatientHeaderMockData";
 import { IPDContext } from "../../../../context/IPDContext";
+import { IntlProvider } from "react-intl";
 import { mockUserWithAllRequiredPrivileges, mockUserWithoutADTPrivilege } from "../../../../utils/mockUserData";
 const mockFetchPatientProfile = jest.fn();
 const mockContactDetailsConfig = jest.fn();
@@ -92,7 +93,9 @@ describe("PatientHeader", () => {
           currentUser: mockUserWithAllRequiredPrivileges,
         }}
       >
-        <PatientHeader patientId="123" setPatientDetailsOpen={jest.fn} />
+        <IntlProvider>
+          <PatientHeader patientId="123" setPatientDetailsOpen={jest.fn} />
+        </IntlProvider>
       </IPDContext.Provider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
@@ -160,13 +163,17 @@ describe("PatientHeader", () => {
 
   it("should display bed and ward information in patient header", async () => {
     render(
-      <IPDContext.Provider
-        value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
-      >
-        <PatientHeader patientId="123" />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{ isReadMode: false, visitSummary: { uuid: "123" } }}
+        >
+          <PatientHeader patientId="123" />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
-    await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
+    await waitFor(() => {
+      expect(screen.getByText("John Doe")).toBeTruthy();
+    });
     expect(screen.getByText("General Ward -ICU ICU1")).toBeTruthy();
   });
 });

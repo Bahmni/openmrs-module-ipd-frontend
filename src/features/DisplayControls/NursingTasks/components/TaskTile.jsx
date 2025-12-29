@@ -15,8 +15,14 @@ import {
   asNeededPlaceholderConceptName,
   timeFormatFor12Hr,
   timeFormatFor24Hr,
+  nonMedicationTaskKey,
 } from "../../../../constants";
-import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
+import { FormattedMessage, useIntl } from "react-intl";
+import {
+  getLocalizedLabel,
+  getTranslationKey,
+  isSystemGeneratedTask
+} from "../../../../utils/CommonUtils";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
@@ -47,11 +53,16 @@ export default function TaskTile(props) {
     creator,
     taskType,
   } = newMedicationNursingTask;
+  const intl = useIntl();
+
+  const more = <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more" />;
 
   const isRelevantTask = getRelevantTaskStatus(
     startTimeInEpochSeconds,
     nursingTasks
   );
+
+  const isSystemGeneratedTask = taskType?.display === "nursing_activity_system";
 
   const creatorName = (creator) => {
     var formattedName = creator.split(".").join(" ");
@@ -66,7 +77,13 @@ export default function TaskTile(props) {
         fontWeight: !isANonMedicationTask && isRelevantTask ? 500 : 400,
       }}
     >
-      {drugName}
+      {isSystemGeneratedTask
+        ? getLocalizedLabel(
+          intl,
+            getTranslationKey(drugName, nonMedicationTaskKey),
+            drugName
+          )
+        : drugName}
     </div>
   );
   const statusIcon = iconType(newMedicationNursingTask, nursingTasks);
@@ -99,6 +116,24 @@ export default function TaskTile(props) {
                 >
                   <SVGIcon iconType={statusIcon} />
                 </div>
+                {isANonMedicationTask ? (
+                  <TooltipDefinition
+                    tooltipText={
+                      isSystemGeneratedTask
+                        ? getLocalizedLabel(
+                          intl,
+                            getTranslationKey(drugName, nonMedicationTaskKey),
+                            drugName
+                          )
+                        : drugName
+                    }
+                    className={
+                      isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                    }
+                  >
+                    {drugNameText}
+                  </TooltipDefinition>
+                ) : (
                 <TooltipDefinition
                   tooltipText={drugName}
                   className={
@@ -107,9 +142,11 @@ export default function TaskTile(props) {
                 >
                   {drugNameText}
                 </TooltipDefinition>
+              )}
               </div>
             </div>
             {!isANonMedicationTask && (
+              <div className="tile-name-cell">
               <DisplayTags drugOrder={dosingInstructions} />
             ) ? (
               <DisplayTags drugOrder={dosingInstructions} />
@@ -120,15 +157,18 @@ export default function TaskTile(props) {
                   <span>{taskType.display}</span>
                 </Tag>
               )
-            )}
-          </div>
-          <div>
-            <div
-              className="tile-content-subtext"
-              style={{
-                color: isRelevantTask ? "#393939" : "#525252",
-              }}
-            >
+            )
+              </div>
+              )}
+            </div>
+            <div>
+              <div
+                className="tile-content-subtext"
+                style={{
+                  color: isRelevantTask ? "#393939" : "#525252",
+                  paddingLeft: "25px",
+               }}
+              >
               <span>{dosage}</span>
               {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
               {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
@@ -137,6 +177,7 @@ export default function TaskTile(props) {
               dosingInstructions?.asNeeded &&
               serviceType === asNeededPlaceholderConceptName
             ) && (
+              <div className="tile-content-subtext">
               <div className="tile-content-footer">
                 <div className="tile-date-time">
                   <Clock />
@@ -166,8 +207,13 @@ export default function TaskTile(props) {
                 </div>
                 {isGroupedTask && <div>({taskCount} more)</div>}
               </div>
-            )}
-          </div>
+            </div>
+          )}
+          {isGroupedTask && (
+            <div className="more-info">
+              ({taskCount} {more})
+            </div>
+          )}
         </div>
       </div>
       {isGroupedTask && (

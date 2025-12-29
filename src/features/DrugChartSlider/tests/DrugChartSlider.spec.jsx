@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { IntlProvider } from "react-intl";
 import DrugChartSlider from "../components/DrugChartSlider";
 import {
   mockStartTimeDrugOrder,
@@ -28,6 +29,19 @@ const mockSliderContext = {
     treatments: false,
   },
   setSliderContentModified: jest.fn(),
+};
+
+// Helper function to wrap component with all required providers
+const renderWithProviders = (component) => {
+  return render(
+    <IntlProvider locale="en">
+      <SliderContext.Provider value={mockSliderContext}>
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          {component}
+        </IPDContext.Provider>
+      </SliderContext.Provider>
+    </IntlProvider>
+  );
 };
 
 const mockHandleAuditEvent = jest.fn();
@@ -65,19 +79,15 @@ describe("DrugChartSlider", () => {
   });
 
   it("Component renders successfully", async () => {
-    render(
-      <SliderContext.Provider value={mockSliderContext}>
-        <IPDContext.Provider value={{ config: mockConfig }}>
-          <DrugChartSlider
-            hostData={{
-              drugOrder: mockStartTimeDrugOrder,
-              scheduleFrequencies: mockScheduleFrequencies,
-              startTimeFrequencies: mockStartTimeFrequencies,
-            }}
-            hostApi={{}}
-          />
-        </IPDContext.Provider>
-      </SliderContext.Provider>
+    renderWithProviders(
+      <DrugChartSlider
+        hostData={{
+          drugOrder: mockStartTimeDrugOrder,
+          scheduleFrequencies: mockScheduleFrequencies,
+          startTimeFrequencies: mockStartTimeFrequencies,
+        }}
+        hostApi={{}}
+      />
     );
     await waitFor(() => {
       expect(screen.getByText("Add to Drug Chart")).toBeTruthy();
@@ -85,7 +95,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show drug name field to be disabled", async () => {
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -107,7 +117,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show dose field to be disabled", async () => {
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -129,7 +139,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show duration field to be disabled", async () => {
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -151,7 +161,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show start date field to be disabled", async () => {
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -173,7 +183,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show notes field to be enabled", async () => {
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -195,7 +205,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("should enable schedule when frequency is present in scheduleFrequencies", async () => {
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -217,7 +227,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("should enable start time when frequency is present in scheduleFrequencies", async () => {
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -239,7 +249,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show Please select Schedule(s) when save is clicked without entering schedule", async () => {
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -261,7 +271,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("should show Please select Start Time when save is clicked without entering start time", async () => {
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -283,7 +293,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("Should show invalid time format error message when wrong time is entered in the field", async () => {
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -313,7 +323,7 @@ describe("DrugChartSlider", () => {
 
   it("Should show pre-filled timing in the schedule fields if the schedule time is provided from config", async () => {
     MockDate.set("2010-12-22T00:00:00+00:00");
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -340,7 +350,7 @@ describe("DrugChartSlider", () => {
 
   it("Should show timing in the schedule fields as hh:mm if the schedule time provided from config is passed", async () => {
     MockDate.set("2010-12-22T00:00:00.000+0530");
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -368,7 +378,7 @@ describe("DrugChartSlider", () => {
 
   it("Should render Drug Chart Slider for schedules with start, subsequent and remainder slots", async () => {
     MockDate.set("2010-12-22T11:08:00.000");
-    const { container } = render(
+    const { container } = renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -395,7 +405,7 @@ describe("DrugChartSlider", () => {
 
   it("Should render Drug Chart Slider for schedules with schedules fields", async () => {
     MockDate.set("2010-12-22T07:08:00.000");
-    const { container } = render(
+    const { container } = renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -422,7 +432,7 @@ describe("DrugChartSlider", () => {
 
   it("Should render Drug Chart Slider for As Needed medications with not time fields", async () => {
     MockDate.set("2010-12-22T07:08:00.000");
-    const { getByText, queryByText } = render(
+    const { getByText, queryByText } = renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent: mockHandleAuditEvent }}>
           <DrugChartSlider
@@ -451,7 +461,7 @@ describe("DrugChartSlider", () => {
 
   it("should render with previous time on click of edit drug chart link", async () => {
     MockDate.set("2010-12-22T07:08:00.000");
-    const { container, getByText } = render(
+    const { container, getByText } = renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig, handleAuditEvent: mockHandleAuditEvent }}>
           <DrugChartSlider
@@ -480,7 +490,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("should enable start time when frequency and duration is not present for continuous medications", async () => {
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider
@@ -503,7 +513,7 @@ describe("DrugChartSlider", () => {
 
   it("should enable schedule fields for the configurable time window and show system time for 12-hr format", async () => {
     MockDate.set("2010-12-22T09:00:00.000");
-    render(
+    renderWithProviders(
       <SliderContext.Provider value={mockSliderContext}>
         <IPDContext.Provider value={{ config: mockConfig }}>
           <DrugChartSlider

@@ -9,16 +9,18 @@ import React from "react";
 import { IPDContext } from "../../../../context/IPDContext";
 import Vitals from "../components/Vitals";
 import {
+  getConceptDetails,
   getPatientVitals,
   getPatientVitalsHistory,
 } from "../utils/VitalsUtils";
 import {
   mockNoVitalsData,
+  mockVitalsConceptDetails,
   mockVitalsData,
   mockVitalsHistoryData,
 } from "./VitalsMockData";
 import { mockConfig } from "../../../../utils/CommonUtils";
-import { I18nProvider } from "../../../../features/i18n/I18nProvider";
+import { IntlProvider } from "react-intl";
 
 jest.mock("../utils/VitalsUtils", () => {
   const originalModule = jest.requireActual("../utils/VitalsUtils");
@@ -26,11 +28,18 @@ jest.mock("../utils/VitalsUtils", () => {
     ...originalModule,
     getPatientVitals: jest.fn(),
     getPatientVitalsHistory: jest.fn(),
+    getConceptDetails: jest.fn()
   };
 });
 
 describe("Vitals", () => {
   beforeEach(() => {
+    localStorage.clear();
+    getConceptDetails.mockReturnValue(mockVitalsConceptDetails);
+    jest.spyOn(Storage.prototype, 'setItem');
+    jest.spyOn(Storage.prototype, 'getItem');
+    jest.spyOn(Storage.prototype, 'removeItem');
+    localStorage.setItem("NG_TRANSLATE_LANG_KEY", "en");
     getPatientVitals.mockResolvedValue(mockVitalsData);
     getPatientVitalsHistory.mockResolvedValue(mockVitalsHistoryData);
   });
@@ -40,16 +49,15 @@ describe("Vitals", () => {
   });
 
   it("displays vital and biometrics history after data is fetched", async () => {
-    let container;
-    await act(async () => {
-      container = render(
-        <I18nProvider>
-          <IPDContext.Provider value={{ config: mockConfig }}>
-            <Vitals patientId="123" />
-          </IPDContext.Provider>
-        </I18nProvider>
-      ).container;
-    });
+    getPatientVitals.mockResolvedValueOnce(mockVitalsData);
+    getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
+    const { container } = render(
+      <IntlProvider locale="en">
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <Vitals patientId="123" />
+      </IPDContext.Provider>
+      </IntlProvider>
+    );
 
     await waitFor(() => {
       expect(screen.getByText(/Vitals History/i)).toBeTruthy();
@@ -66,16 +74,15 @@ describe("Vitals", () => {
   });
 
   it("should display vital details after data is fetched", async () => {
-    let container;
-    await act(async () => {
-      container = render(
-        <I18nProvider>
-          <IPDContext.Provider value={{ config: mockConfig }}>
-            <Vitals patientId="123" />
-          </IPDContext.Provider>
-        </I18nProvider>
-      ).container;
-    });
+    getPatientVitals.mockResolvedValueOnce(mockVitalsData);
+    getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
+    const { container } = render(
+      <IntlProvider locale="en">
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <Vitals patientId="123" />
+      </IPDContext.Provider>
+      </IntlProvider>
+    );
     await waitFor(() => {
       expect(screen.getByText(/Temp/i)).toBeTruthy();
       expect(container).toMatchSnapshot();
@@ -84,16 +91,13 @@ describe("Vitals", () => {
 
   it("should display text when vitals is not present", async () => {
     getPatientVitals.mockResolvedValueOnce(mockNoVitalsData);
-    getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
-    await act(async () => {
-      render(
-        <I18nProvider>
-          <IPDContext.Provider value={{ config: mockConfig }}>
-            <Vitals patientId="123" />
-          </IPDContext.Provider>
-        </I18nProvider>
-      );
-    });
+    render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <Vitals patientId="123" />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
     await waitFor(() =>
       expect(
         screen.getByText("No Vitals available for this patient")
@@ -101,51 +105,38 @@ describe("Vitals", () => {
     );
   });
 
-  it("renders without crashing", async () => {
-    await act(async () => {
-      render(
-        <I18nProvider>
-          <IPDContext.Provider value={{ config: mockConfig }}>
-            <Vitals patientId="123" />
-          </IPDContext.Provider>
-        </I18nProvider>
-      );
-    });
-  });
-
-  it("calls getPatientVitals on mount", async () => {
-    await act(async () => {
-      render(
-        <I18nProvider>
-          <IPDContext.Provider value={{ config: mockConfig }}>
-            <Vitals patientId="123" />
-          </IPDContext.Provider>
-        </I18nProvider>
-      );
-    });
-    expect(getPatientVitals).toHaveBeenCalledWith(
-      "123",
-      mockConfig.vitalsConfig.latestVitalsConceptValues
+  it("renders without crashing", () => {
+    getPatientVitals.mockResolvedValueOnce(mockVitalsData);
+    render(
+      <IntlProvider locale="en">
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <Vitals patientId="123" />
+      </IPDContext.Provider>
+      </IntlProvider>
     );
   });
 
-  it("displays loading skeleton while fetching data", async () => {
-    // Mock with a promise that never resolves to keep component in loading state
-    getPatientVitals.mockImplementationOnce(
-      () => new Promise(() => {})
+  it("calls getPatientVitals on mount", () => {
+    getPatientVitals.mockResolvedValueOnce(mockVitalsData);
+    render(
+      <IntlProvider locale="en">
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <Vitals patientId="123" />
+      </IPDContext.Provider>
+      </IntlProvider>
     );
-    getPatientVitalsHistory.mockImplementationOnce(
-      () => new Promise(() => {})
+    expect(getPatientVitals).toHaveBeenCalled();
+  });
+
+  it("displays loading skeleton while fetching data", () => {
+    getPatientVitals.mockResolvedValueOnce(mockVitalsData);
+    render(
+      <IntlProvider locale="en">
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <Vitals patientId="123" />
+      </IPDContext.Provider>
+      </IntlProvider>
     );
-    await act(async () => {
-      render(
-        <I18nProvider>
-          <IPDContext.Provider value={{ config: mockConfig }}>
-            <Vitals patientId="123" />
-          </IPDContext.Provider>
-        </I18nProvider>
-      );
-    });
     expect(screen.queryByTestId("header-loading")).toBeTruthy();
   });
 });

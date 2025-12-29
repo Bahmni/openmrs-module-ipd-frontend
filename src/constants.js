@@ -17,6 +17,8 @@ export const ADDRESS_HEIRARCHY =
   hostUrl +
   "/openmrs/module/addresshierarchy/ajax/getOrderedAddressHierarchyLevels.form";
 export const homePageUrl = "/bahmni/home/#/dashboard";
+export const IPD_CONFIG_URL =
+  "/bahmni_config/openmrs/i18n/micro-frontends-dist/ipd";
 
 export const MEDICATIONS_BASE_URL = RESTWS_V1 + "/ipd/schedule/type/medication";
 export const EDIT_MEDICATIONS_BASE_URL =
@@ -139,6 +141,7 @@ export const WARD_SUMMARY_HEADER = {
   TOTAL_PATIENTS: "TOTAL_PATIENTS",
   MY_PATIENTS: "MY_PATIENTS",
 };
+export const nonMedicationTaskKey = "NON_MEDICATION_TASK";
 
 export const ForbiddenErrorMessage = "User doesn't have required privilege(s)";
 
