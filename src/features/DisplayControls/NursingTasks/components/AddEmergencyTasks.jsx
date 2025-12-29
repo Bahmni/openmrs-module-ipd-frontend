@@ -180,11 +180,12 @@ const AddEmergencyTasks = (props) => {
   const drugSearchHandler = (item) => {
     if (item) {
       setSelectedDrug(item.value);
-      const {
-        dosageForm: { display },
-      } = item.value;
-      if (Object.keys(dosageConfig).includes(display)) {
-        const { doseUnits, route } = dosageConfig[display];
+      const { dosageForm } = item.value || {};
+      if (
+        dosageForm &&
+        Object.keys(dosageConfig).includes(dosageForm?.display)
+      ) {
+        const { doseUnits, route } = dosageConfig[dosageForm?.display];
         if (doseUnits) {
           setDoseUnits({ label: doseUnits, value: doseUnits });
         }
