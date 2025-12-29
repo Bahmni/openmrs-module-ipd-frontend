@@ -93,7 +93,10 @@ describe("CareViewDashboard", () => {
     });
     MockDate.set("2023-01-01T12:00:00");
     mockGetSelectedWard.mockReturnValue({ value: "ward" });
-    mockFetchPatientsList.mockReturnValue(mockWithBookMarkPatientList);
+    mockFetchPatientsList.mockResolvedValue({
+      status: 200,
+      data: mockWithBookMarkPatientList,
+    });
     mockGetTasksForPatients.mockReturnValue([]);
     mockGetWardOptions.mockReturnValue(mockWardList);
     mockGetWardSummary.mockReturnValue({

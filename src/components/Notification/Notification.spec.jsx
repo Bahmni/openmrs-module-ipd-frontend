@@ -6,7 +6,7 @@ describe("Notification", () => {
   it("should show success notification", () => {
     const { container } = render(
       <Notification
-        hostData={{ notificationKind: "success" }}
+        hostData={{ notificationKind: "success", messageId: "SUCCESS_MESSAGE" }}
         hostApi={jest.fn()}
       />
     );
@@ -16,7 +16,7 @@ describe("Notification", () => {
   it("should show warning notification", () => {
     const { container } = render(
       <Notification
-        hostData={{ notificationKind: "warning" }}
+        hostData={{ notificationKind: "warning", messageId: "WARNING_MESSAGE" }}
         hostApi={jest.fn()}
       />
     );

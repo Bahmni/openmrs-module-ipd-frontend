@@ -55,6 +55,7 @@ export const CareViewPatients = () => {
     previous: false,
     next: false,
   });
+  const sortBy = careViewConfig.sortBy;
 
   let currentShiftArray, rangeArray, shiftIndex;
   if (ipdConfig.shiftDetails) {
@@ -68,17 +69,29 @@ export const CareViewPatients = () => {
   }
 
   const getPatientsList = async () => {
-    setIsLoading(true);
-    const { admittedPatients, totalPatients } = await fetchPatientsList(
-      selectedWard.value,
-      (currentPage - 1) * limit,
-      limit,
-      headerSelected,
-      provider.uuid
-    );
-    setPatientList(admittedPatients);
-    setTotalPatients(totalPatients);
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const response = await fetchPatientsList(
+        selectedWard.value,
+        (currentPage - 1) * limit,
+        headerSelected,
+        provider.uuid,
+        sortBy,
+        limit
+      );
+      if (response.status === 200) {
+        const { admittedPatients, totalPatients } = response.data;
+        setPatientList(admittedPatients);
+        setTotalPatients(totalPatients);
+      } else {
+        throw new Error("Failed to fetch data");
+      }
+    } catch (error) {
+      setPatientList([]);
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const getPatientsListBySearch = async (offset = 1) => {
@@ -89,6 +102,7 @@ export const CareViewPatients = () => {
         searchKeys,
         searchValue,
         (offset - 1) * limit,
+        sortBy,
         limit
       );
       if (response.status === 200) {

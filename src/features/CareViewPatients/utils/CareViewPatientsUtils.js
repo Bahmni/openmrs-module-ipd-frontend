@@ -10,9 +10,10 @@ import {
 export const fetchPatientsList = async (
   wardId,
   offset,
-  limit = 3,
   headerSelected,
-  providerUuid
+  providerUuid,
+  sortBy,
+  limit = 3
 ) => {
   const urls = {
     [WARD_SUMMARY_HEADER.TOTAL_PATIENTS]: GET_PATIENT_LIST_URL,
@@ -24,6 +25,7 @@ export const fetchPatientsList = async (
   const url = urls[headerSelected].replace("{wardId}", wardId);
   const params = {
     offset,
+    sortBy,
     limit,
     ...(headerSelected === WARD_SUMMARY_HEADER.MY_PATIENTS && { providerUuid }),
   };
@@ -44,6 +46,7 @@ export const fetchPatientsListBySearch = async (
   searchKeys,
   searchValue,
   offset,
+  sortBy,
   limit = 3
 ) => {
   try {
@@ -55,6 +58,7 @@ export const fetchPatientsListBySearch = async (
           limit,
           searchKeys,
           searchValue,
+          sortBy,
         },
         paramsSerializer: {
           indexes: null,

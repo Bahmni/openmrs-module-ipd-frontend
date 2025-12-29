@@ -336,11 +336,9 @@ describe("PatientMovementModal", () => {
     mockFetchVisitSummary.mockResolvedValue(
       visitSummaryToDischargeOrTransferMockData
     );
-    Object.defineProperty(window, "location", {
-      value: {
-        href: "/bahmni/adt/#/patient/patientMockUuid/visit/visitMockUuid/encounter/encounterUuid/bed",
-      },
-    });
+    mockUpdatePatientMovement.mockResolvedValueOnce(patientResponseData);
+    delete window.location;
+    window.location = {href: ""};
     const transferMethodCall = jest.fn();
     render(
       <IPDContext.Provider
@@ -377,7 +375,9 @@ describe("PatientMovementModal", () => {
       visitMock,
       patientResponseData.data.encounterUuid
     );
-    expect(window.location.href).toBe(expectedUrl);
+    await waitFor(() => {
+      expect(window.location.href).toBe(expectedUrl);
+    });
   });
 
   it("should display patient movement modal with a undo discharge dropdown", async () => {
@@ -409,11 +409,9 @@ describe("PatientMovementModal", () => {
     mockFetchVisitSummary.mockResolvedValue(
       visitSummaryToUndoDischargeMockData
     );
-    Object.defineProperty(window, "location", {
-      value: {
-        href: "/bahmni/adt/#/patient/patientMockUuid/visit/visitMockUuid/encounter/encounterUuid/bed",
-      },
-    });
+    mockUndoDischargePatient.mockResolvedValueOnce(patientResponseData);
+    delete window.location;
+    window.location = {href: ""};
     render(
       <IPDContext.Provider
         value={{
@@ -447,8 +445,10 @@ describe("PatientMovementModal", () => {
     const expectedUrl = getADTDashboardUrl(
       "patientMockUuid",
       visitMock,
-      patientResponseData.data.encounterUuid
+      visitSummaryToUndoDischargeMockData.data.dischargeDetails.uuid
     );
-    expect(window.location.href).toBe(expectedUrl);
+    await waitFor(() => {
+      expect(window.location.href).toBe(expectedUrl);
+    });
   });
 });

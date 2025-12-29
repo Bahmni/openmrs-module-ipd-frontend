@@ -62,7 +62,10 @@ jest.mock("../utils/CareViewPatientsUtils", () => {
 
 describe("CareViewPatients", () => {
   beforeEach(() => {
-    mockFetchPatientsList.mockResolvedValue(mockPatientsList);
+    mockFetchPatientsList.mockResolvedValue({
+      status: 200,
+      data: mockPatientsList,
+    });
     mockGetSlotsForPatients.mockReturnValue([]);
     mockGetTasksForPatients.mockReturnValue([]);
     mockCurrentShiftHoursArray.mockReturnValue({
@@ -163,7 +166,10 @@ describe("CareViewPatients", () => {
   });
 
   it("should show inital ward patient info on click of clear search input button", async () => {
-    mockFetchPatientsList.mockResolvedValue(mockPatientsList);
+    mockFetchPatientsList.mockResolvedValue({
+      status: 200,
+      data: mockPatientsList,
+    });
     const { container, getByRole, getByText } = render(
       <CareViewContext.Provider value={mockContext}>
         <CareViewPatients callbacks={{ setIsLoading: jest.fn }} />
