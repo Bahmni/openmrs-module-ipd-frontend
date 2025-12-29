@@ -6,6 +6,7 @@ import { SliderContext } from "../../../../context/SliderContext";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import {
   mockUserWithAllRequiredPrivileges,
   mockUserWithoutAnyPrivilege,
@@ -470,7 +471,9 @@ describe("Treatments", () => {
       >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
-            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            <RefreshDisplayControl.Provider value={[]}>
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </RefreshDisplayControl.Provider>
           </AllMedicationsContext.Provider>
         </SliderContext.Provider>
       </IPDContext.Provider>
@@ -683,7 +686,9 @@ describe("Treatments", () => {
       >
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
-            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            <RefreshDisplayControl.Provider value={[]}>
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </RefreshDisplayControl.Provider>
           </AllMedicationsContext.Provider>
         </SliderContext.Provider>
       </IPDContext.Provider>

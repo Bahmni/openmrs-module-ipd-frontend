@@ -146,8 +146,9 @@ export const setDosingInstructions = (drugOrder) => {
     drugOrder.dosingInstructions.dose +
     " " +
     drugOrder.dosingInstructions.doseUnits +
-    " - " +
-    drugOrder.dosingInstructions.route;
+    (drugOrder.dosingInstructions.route !== null
+      ? " - " + drugOrder.dosingInstructions.route
+      : "");
 
   if (drugOrder.dosingInstructions.frequency) {
     dosingInstructions += " - " + drugOrder.dosingInstructions.frequency;
