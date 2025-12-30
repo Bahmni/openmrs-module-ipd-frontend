@@ -8,7 +8,7 @@ import {
   getSelectedWard,
   getSlidesPerView,
   getWardOptions,
-  getWardSummary,
+  getWardSummary as fetchWardSummary,
 } from "../utils/CareViewSummary";
 import { FormattedMessage } from "react-intl";
 import { useIntl } from "react-intl";
@@ -47,10 +47,10 @@ export const CareViewSummary = ({ callbacks, onHome }) => {
 
   const getWardList = async () => {
     callbacks.setIsLoading(true);
-    const wardList = await getWardDetails();
+    const wardList = await getWardOptions();
     const wardOptions = wardList?.map((ward) => {
-      const rawLabel = ward?.ward?.display;
-      const uuid = ward?.ward?.uuid;
+      const rawLabel = ward?.label;
+      const uuid = ward?.value;
       const translatedLabel = rawLabel ? intl.formatMessage({
         id: rawLabel,
         defaultMessage: rawLabel,
@@ -74,7 +74,7 @@ export const CareViewSummary = ({ callbacks, onHome }) => {
     }
     callbacks.setIsLoading(false);
   };
-  const getWardSummary = async () => {
+  const fetchWardSummaryData = async () => {
     callbacks.setIsLoading(true);
     const response = await fetchWardSummary(selectedWard.value, provider.uuid);
     if (response.status === 200) {
@@ -100,7 +100,7 @@ export const CareViewSummary = ({ callbacks, onHome }) => {
     );
     setSelectedWard(selectedWard);
     if (selectedWard) {
-      const wardSummaryResponse = await getWardSummary(
+      const wardSummaryResponse = await fetchWardSummary(
         selectedWard.value,
         uuid
       );

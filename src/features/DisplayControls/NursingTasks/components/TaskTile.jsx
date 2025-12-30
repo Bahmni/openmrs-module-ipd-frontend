@@ -62,7 +62,7 @@ export default function TaskTile(props) {
     nursingTasks
   );
 
-  const isSystemGeneratedTask = taskType?.display === "nursing_activity_system";
+  const isSystemTask = taskType?.display === "nursing_activity_system";
 
   const creatorName = (creator) => {
     var formattedName = creator.split(".").join(" ");
@@ -77,7 +77,7 @@ export default function TaskTile(props) {
         fontWeight: !isANonMedicationTask && isRelevantTask ? 500 : 400,
       }}
     >
-      {isSystemGeneratedTask
+      {isSystemTask
         ? getLocalizedLabel(
           intl,
             getTranslationKey(drugName, nonMedicationTaskKey),
@@ -107,9 +107,8 @@ export default function TaskTile(props) {
         }`}
       >
         <div className="tile-content">
-          <div className="tile-title">
-            <div className={`tile-title ${stopTime && "red-text"}`}>
-              <div>
+          <div className={`tile-title ${stopTime && "red-text"}`}>
+            <div>
                 <div
                   className="nursing-task-icon-container"
                   data-testid={statusIcon}
@@ -119,7 +118,7 @@ export default function TaskTile(props) {
                 {isANonMedicationTask ? (
                   <TooltipDefinition
                     tooltipText={
-                      isSystemGeneratedTask
+                      isSystemTask
                         ? getLocalizedLabel(
                           intl,
                             getTranslationKey(drugName, nonMedicationTaskKey),
@@ -147,28 +146,25 @@ export default function TaskTile(props) {
             </div>
             {!isANonMedicationTask && (
               <div className="tile-name-cell">
-              <DisplayTags drugOrder={dosingInstructions} />
-            ) ? (
-              <DisplayTags drugOrder={dosingInstructions} />
-            ) : (
-              taskType &&
-              !isSystemGeneratedTask(newMedicationNursingTask) && (
-                <Tag type="blue">
-                  <span>{taskType.display}</span>
-                </Tag>
-              )
-            )
+                {dosingInstructions ? (
+                  <DisplayTags drugOrder={dosingInstructions} />
+                ) : (
+                  taskType &&
+                  !isSystemGeneratedTask(newMedicationNursingTask) && (
+                    <Tag type="blue">
+                      <span>{taskType.display}</span>
+                    </Tag>
+                  )
+                )}
               </div>
-              )}
-            </div>
-            <div>
-              <div
-                className="tile-content-subtext"
-                style={{
-                  color: isRelevantTask ? "#393939" : "#525252",
-                  paddingLeft: "25px",
-               }}
-              >
+            )}
+            <div
+              className="tile-content-subtext"
+              style={{
+                color: isRelevantTask ? "#393939" : "#525252",
+                paddingLeft: "25px",
+              }}
+            >
               <span>{dosage}</span>
               {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
               {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
@@ -177,7 +173,6 @@ export default function TaskTile(props) {
               dosingInstructions?.asNeeded &&
               serviceType === asNeededPlaceholderConceptName
             ) && (
-              <div className="tile-content-subtext">
               <div className="tile-content-footer">
                 <div className="tile-date-time">
                   <Clock />
@@ -207,9 +202,8 @@ export default function TaskTile(props) {
                 </div>
                 {isGroupedTask && <div>({taskCount} more)</div>}
               </div>
-            </div>
-          )}
-          {isGroupedTask && (
+            )}
+          {!isGroupedTask && (
             <div className="more-info">
               ({taskCount} {more})
             </div>
@@ -229,5 +223,5 @@ export default function TaskTile(props) {
   );
 }
 TaskTile.propTypes = {
-  medicationNursingTask: PropTypes.array.isRequired,
+  medicationNursingTask: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

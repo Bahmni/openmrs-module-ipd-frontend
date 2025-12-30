@@ -157,15 +157,17 @@ describe("PatientHeader", () => {
 
   it("should not display patient movement when adt privilege is not assigned to patient", async () => {
     const { container } = render(
-      <IPDContext.Provider
-        value={{
-          isReadMode: false,
-          visitSummary: { uuid: "123" },
-          currentUser: mockUserWithoutADTPrivilege,
-        }}
-      >
-        <PatientHeader patientId="123" />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            isReadMode: false,
+            visitSummary: { uuid: "123" },
+            currentUser: mockUserWithoutADTPrivilege,
+          }}
+        >
+          <PatientHeader patientId="123" />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
     expect(screen.queryByTestId("overflow-menu")).toBeFalsy();

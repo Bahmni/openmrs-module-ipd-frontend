@@ -20,6 +20,8 @@ import {mockUserWithAllRequiredPrivileges, mockUserWithoutAnyPrivilege} from '..
 const mockSetShowNotification = jest.fn();
 const mockSetNotificationMessage = jest.fn();
 const mockSetNotificationStatus = jest.fn();
+const mockSetShowSuccessNotification = jest.fn();
+const mockSetSuccessMessage = jest.fn();
 const mockUpdateEmergencyTasksSlider = jest.fn();
 const mockUpdateNonMedicationTask = jest.fn();
 const mockHandleAuditLogEvent = jest.fn();
@@ -176,6 +178,8 @@ describe("UpdateNursingTasksSlider", function () {
           updateNursingTasksSlider={mockUpdateEmergencyTasksSlider}
           patientId="test_patient_uuid"
           providerId="test_provider_uuid"
+          setShowSuccessNotification={mockSetShowSuccessNotification}
+          setSuccessMessage={mockSetSuccessMessage}
           setShowNotification={mockSetShowNotification}
           setNotificationMessage={mockSetNotificationMessage}
           setNotificationStatus={mockSetNotificationStatus}
@@ -780,26 +784,28 @@ describe("UpdateNursingTasksSlider", function () {
     expect(screen.getByText("Please confirm your PRN task")).toBeTruthy();
   });
 
-  it.only("should show toggle disabled when privileges are not preset", function () {
+  it("should show toggle disabled when privileges are not preset", function () {
     const { queryAllByTestId, container } = render(
-      <IPDContext.Provider
-        value={{
-          config: mockConfig,
-          handleAuditEvent: mockHandleAuditLogEvent,
-          currentUser: mockUserWithoutAnyPrivilege,
-        }}
-      >
-        <UpdateNursingTasks
-          medicationTasks={mockMedicationTasks}
-          groupSlotsByOrderId={mockGroupSlotsByOrderId}
-          updateNursingTasksSlider={jest.fn}
-          patientId="test_patient_uuid"
-          providerId="test_provider_uuid"
-          setShowNotification={mockSetShowNotification}
-          setNotificationMessage={mockSetNotificationMessage}
-          setNotificationStatus={mockSetNotificationStatus}
-        />
-      </IPDContext.Provider>
+      <IntlProvider locale="en" messages={{}}>
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithoutAnyPrivilege,
+          }}
+        >
+          <UpdateNursingTasks
+            medicationTasks={mockMedicationTasks}
+            groupSlotsByOrderId={mockGroupSlotsByOrderId}
+            updateNursingTasksSlider={jest.fn}
+            patientId="test_patient_uuid"
+            providerId="test_provider_uuid"
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     const toggleButton = queryAllByTestId("done-toggle")[0];
     expect(toggleButton.disabled).toBeTruthy();

@@ -567,9 +567,8 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                           |
                         </span>
                         <span>
-                          11
+                          9 Years, 9 Months, 19 Days
                         </span>
-                        yrs
                       </div>
                     </div>
                     <div
@@ -663,9 +662,8 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                           |
                         </span>
                         <span>
-                          4
+                          3 Years, 2 Months, 5 Days
                         </span>
-                        yrs
                       </div>
                     </div>
                     <div
@@ -759,9 +757,8 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                           |
                         </span>
                         <span>
-                          14
+                          13 Years, 6 Months, 19 Days
                         </span>
-                        yrs
                       </div>
                     </div>
                     <div
@@ -855,9 +852,8 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                           |
                         </span>
                         <span>
-                          10
+                          9 Years, 5 Months, 11 Days
                         </span>
-                        yrs
                         <div
                           class="treatments-notification"
                         >
@@ -882,6 +878,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                                 d="M29,30H3a1,1,0,0,1-.8872-1.4614l13-25a1,1,0,0,1,1.7744,0l13,25A1,1,0,0,1,29,30ZM4.6507,28H27.3493l.002-.0033L16.002,6.1714h-.004L4.6487,27.9967Z"
                               />
                             </svg>
+                             
                              
                           </div>
                           <div
@@ -993,9 +990,8 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                           |
                         </span>
                         <span>
-                          30
+                          28 Years, 10 Months, 13 Days
                         </span>
-                        yrs
                       </div>
                     </div>
                     <div

@@ -27,13 +27,13 @@ const mockGetSelectedWard = jest.fn();
 
 jest.mock("../../features/CareViewSummary/utils/CareViewSummary", () => {
   return {
-    getWardOptions: () => mockGetWardOptions(),
-    getWardSummary: () => mockGetWardSummary(),
-    getSelectedWard: () => mockGetSelectedWard(),
-    getSlidesPerView: () => mockGetSliderPerView(),
-    getSlotsForPatients: () => mockGetSlotsForPatients(),
-    getTasksForPatients: () => mockGetTasksForPatients(),
-    getPreviousShiftDetails: () => mockGetPreviousShiftDetails(),
+    getWardOptions: (...args) => mockGetWardOptions(...args),
+    getWardSummary: (...args) => mockGetWardSummary(...args),
+    getSelectedWard: (...args) => mockGetSelectedWard(...args),
+    getSlidesPerView: (...args) => mockGetSliderPerView(...args),
+    getSlotsForPatients: (...args) => mockGetSlotsForPatients(...args),
+    getTasksForPatients: (...args) => mockGetTasksForPatients(...args),
+    getPreviousShiftDetails: (...args) => mockGetPreviousShiftDetails(...args),
   };
 });
 jest.mock(
@@ -98,14 +98,15 @@ describe("CareViewDashboard", () => {
       data: mockWithBookMarkPatientList,
     });
     mockGetTasksForPatients.mockReturnValue([]);
-    mockGetWardOptions.mockReturnValue(mockWardList);
-    mockGetWardSummary.mockReturnValue({
+    mockGetWardOptions.mockResolvedValue(mockWardList);
+    mockGetWardSummary.mockResolvedValue({
       status: 200,
       data: {
         totalPatients: 5,
         totalProviderPatients: 2,
       },
     });
+    mockGetSliderPerView.mockReturnValue(3);
     mockCurrentShiftHoursArray.mockReturnValue({
       currentShiftHoursArray: [
         "06:00",
