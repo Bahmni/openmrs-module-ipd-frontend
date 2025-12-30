@@ -105,6 +105,7 @@
   "NON_MEDICATION_TASK_SAVE_MESSAGE": "Non-Medication task created successfully.",
   "NON_MEDICATION_TASK_SAVE_MESSAGE_FAILED": "Non-Medication task creation failed.",
   "VISIT_SUMMARY": "Visit Summaries",
+  "PATIENT_MOVEMENT": "Patient Movement",
   "EDIT_DRUG_CHART": "Edit Drug Chart",
   "DRUG_CHART_MODAL_EDIT_MESSAGE": "Medication task(s) updated successfully",
   "NO_MEDICATION_DRUG_CHART_MESSAGE": "No Medication has been scheduled in this shift",
@@ -243,5 +244,9 @@
   "SELECT_WARD_PLACEHOLDER_TEXT": "Select a Ward",
   "ALLTASKS": "All Tasks",
   "MEDICATIONTASKS": "Medication Tasks",
-  "NONMEDICATIONTASKS": "Non-Medication Tasks"
+  "NONMEDICATIONTASKS": "Non-Medication Tasks",
+  "ADMIT_PATIENT": "Admit Patient",
+  "DISCHARGE_PATIENT": "Discharge Patient",
+  "TRANSFER_PATIENT": "Transfer Patient",
+  "UNDO_DISCHARGE": "Undo Discharge"
 }

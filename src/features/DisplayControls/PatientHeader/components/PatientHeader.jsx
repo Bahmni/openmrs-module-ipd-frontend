@@ -26,7 +26,10 @@ import "../styles/PatientHeader.scss";
 import { ChevronDown20, ChevronUp20, HospitalBed16 } from "@carbon/icons-react";
 import PatientDetails from "./PatientDetails";
 import PatientMovementModal from "./PatientMovementModal";
-import { formatDate, getAgeInYearsMonthsDays } from "../../../../utils/DateTimeUtils";
+import {
+  formatDate,
+  getAgeInYearsMonthsDays,
+} from "../../../../utils/DateTimeUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { isUserPrivileged } from "../../../../utils/CommonUtils";
 import { PRIVILEGE_CONSTANTS } from "../../../../constants";
@@ -70,6 +73,11 @@ export const PatientHeader = (props) => {
     <FormattedMessage id="VISIT_SUMMARY" defaultMessage="Visit Summaries" />
   );
 
+  const patientMovementMessage = intl.formatMessage({
+    id: "PATIENT_MOVEMENT",
+    defaultMessage: "Patient Movement",
+  });
+
   const getContactDetailsConfigs = async () => {
     return await getConfigsForPatientContactDetails();
   };
@@ -82,7 +90,11 @@ export const PatientHeader = (props) => {
       familyName: patientInfo?.person?.preferredName.familyName,
       middleName: patientInfo?.person?.preferredName?.middleName,
       age: patientInfo?.person?.age,
-      ageInDetail: getAgeInYearsMonthsDays(patientInfo?.person?.birthdate, new Date(), intl),
+      ageInDetail: getAgeInYearsMonthsDays(
+        patientInfo?.person?.birthdate,
+        new Date(),
+        intl
+      ),
       birthDate: formatDate(patientInfo?.person?.birthdate),
       attributes: patientInfo?.person?.attributes,
       gender: getGender(patientInfo?.person?.gender),
@@ -169,7 +181,7 @@ export const PatientHeader = (props) => {
                       <OverflowMenuItem
                         data-testid="overflow-menu-item1"
                         title="item-patient-movement"
-                        itemText="Patient Movement"
+                        itemText={patientMovementMessage}
                         onClick={() => updatePatientMovementModal(!isModalOpen)}
                         disabled={isReadMode}
                       />

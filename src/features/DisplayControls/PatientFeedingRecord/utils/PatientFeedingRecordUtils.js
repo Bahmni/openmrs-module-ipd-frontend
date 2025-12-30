@@ -73,6 +73,7 @@ export const transformObsData = (obsData, config) => {
       (member) => member?.concept?.name === config?.amountValueConcept
     );
     quantityUnits = amountValue?.concept?.units;
+    if (dateTime?.value) {
     transformedData.push({
       id: obs.uuid,
       dateAndTime: formatDate(dateTime?.value, defaultDateTimeFormat),
@@ -81,6 +82,7 @@ export const transformObsData = (obsData, config) => {
       feedType: feedTypeValue && feedTypeValue.valueAsString,
       amount: amountValue && amountValue.value + " " + quantityUnits,
     });
+   }
   });
   return transformedData;
 };
