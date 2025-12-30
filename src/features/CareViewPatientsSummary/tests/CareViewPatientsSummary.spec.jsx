@@ -10,6 +10,7 @@ import {
   mockSlotsData,
 } from "../../CareViewSummary/tests/CareViewSummaryMock";
 import "@testing-library/jest-dom/extend-expect";
+import { IntlProvider } from "react-intl";
 
 const mockContext = {
   careViewConfig: { timeframeLimitInHours: 2 },
@@ -41,7 +42,7 @@ jest.mock("../../CareViewSummary/utils/CareViewSummary", () => {
   };
 });
 
-describe("CareViewPatientsSummary", function () {
+describe("CareViewPatientsSummary", () => {
   afterEach(() => {
     MockDate.reset();
   });
@@ -82,26 +83,30 @@ describe("CareViewPatientsSummary", function () {
 
   it("should match snapshot", () => {
     const { container } = render(
-      <CareViewContext.Provider value={mockContext}>
-        <CareViewPatientsSummary
-          patientsSummary={mockPatientsList.admittedPatients}
-          navHourEpoch={mockNavHourEpoch}
-          filterValue={mockFilterValue}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <CareViewPatientsSummary
+            patientsSummary={mockPatientsList.admittedPatients}
+            navHourEpoch={mockNavHourEpoch}
+            filterValue={mockFilterValue}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
     expect(container).toMatchSnapshot();
   });
 
   it("should fetch slot details on initial render", () => {
     render(
-      <CareViewContext.Provider value={mockContext}>
-        <CareViewPatientsSummary
-          patientsSummary={mockPatientsList.admittedPatients}
-          navHourEpoch={mockNavHourEpoch}
-          filterValue={mockFilterValue}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <CareViewPatientsSummary
+            patientsSummary={mockPatientsList.admittedPatients}
+            navHourEpoch={mockNavHourEpoch}
+            filterValue={mockFilterValue}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     expect(mockGetSlotsForPatients).toHaveBeenCalled();
@@ -109,13 +114,15 @@ describe("CareViewPatientsSummary", function () {
 
   it("renders table headers correctly", async () => {
     const { queryByTestId } = render(
-      <CareViewContext.Provider value={mockContext}>
-        <CareViewPatientsSummary
-          patientsSummary={mockPatientsList.admittedPatients}
-          navHourEpoch={mockNavHourEpoch}
-          filterValue={mockFilterValue}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <CareViewPatientsSummary
+            patientsSummary={mockPatientsList.admittedPatients}
+            navHourEpoch={mockNavHourEpoch}
+            filterValue={mockFilterValue}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -128,13 +135,15 @@ describe("CareViewPatientsSummary", function () {
 
   it("renders patient details correctly", async () => {
     const { queryByText } = render(
-      <CareViewContext.Provider value={mockContext}>
-        <CareViewPatientsSummary
-          patientsSummary={mockPatientsList.admittedPatients}
-          navHourEpoch={mockNavHourEpoch}
-          filterValue={mockFilterValue}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <CareViewPatientsSummary
+            patientsSummary={mockPatientsList.admittedPatients}
+            navHourEpoch={mockNavHourEpoch}
+            filterValue={mockFilterValue}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -143,19 +152,21 @@ describe("CareViewPatientsSummary", function () {
         queryByText("AnnonFN-Jcilhyxuen AnnonMN-Dylkrgbpwo AnnonLN-Gkksnhzbeu")
       ).toBeTruthy();
       expect(queryByText("A-6")).toBeTruthy();
-      expect(queryByText("14")).toBeTruthy();
+      expect(queryByText("13 Years, 6 Months, 19 Days")).toBeTruthy();
     });
   });
 
   it("renders slot details correctly", async () => {
     const { queryAllByText, queryAllByTestId } = render(
-      <CareViewContext.Provider value={mockContext}>
-        <CareViewPatientsSummary
-          patientsSummary={mockPatientsList.admittedPatients}
-          navHourEpoch={mockNavHourEpoch}
-          filterValue={mockFilterValue}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <CareViewPatientsSummary
+            patientsSummary={mockPatientsList.admittedPatients}
+            navHourEpoch={mockNavHourEpoch}
+            filterValue={mockFilterValue}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
@@ -170,13 +181,15 @@ describe("CareViewPatientsSummary", function () {
 
   it("should new treatments notification be present under patient details", async () => {
     render(
-      <CareViewContext.Provider value={mockContext}>
-        <CareViewPatientsSummary
-          patientsSummary={mockPatientsList.admittedPatients}
-          navHourEpoch={mockNavHourEpoch}
-          filterValue={mockFilterValue}
-        />
-      </CareViewContext.Provider>
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <CareViewPatientsSummary
+            patientsSummary={mockPatientsList.admittedPatients}
+            navHourEpoch={mockNavHourEpoch}
+            filterValue={mockFilterValue}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
     );
     const careViewPatientDetails = screen.getAllByText(/New treatment/i);
     expect(careViewPatientDetails.length).toBe(1);
