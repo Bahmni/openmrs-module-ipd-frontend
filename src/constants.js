@@ -72,6 +72,7 @@ export const BAHMNI_VALUE = "bahmni";
 export const CUSTOM_OUTPUT_VALUE =
   "custom:(uuid,name,answers:(uuid,name,mappings))";
 export const SEARCH_CONCEPT_URL = RESTWS_V1 + "/concept";
+export const GLOBAL_PROPERTY_URL = BAHMNI_CORE + "/sql/globalproperty";
 
 export const medicationFrequency = {
   START_TIME_DURATION_FREQUENCY: "START_TIME_DURATION_FREQUENCY",
