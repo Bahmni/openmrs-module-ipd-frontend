@@ -16,6 +16,11 @@ jest.mock("../hooks/useFetchAllergiesIntolerance", () => {
     useFetchAllergiesIntolerance: () => mockUseFetchAllergiesIntolerance(),
   };
 });
+jest.mock("../utils/AllergiesUtils", () => ({
+  getNoKnownAllergyUuid: jest.fn(() =>
+    Promise.resolve("f535bd4e-33ff-4f35-bf7c-189e07d1ac90")
+  ),
+}));
 
 describe("Allergies", () => {
   beforeEach(() => {
@@ -59,7 +64,7 @@ describe("Allergies", () => {
     expect(screen.getByText(/test comment/i)).toBeInTheDocument();
   });
 
-  it("should highlight column in red", async () => {
+  it("should highlight row in red for severe allergies", async () => {
     render(
       <IPDContext.Provider
         value={{
@@ -73,9 +78,32 @@ describe("Allergies", () => {
     await waitFor(() => {
       expect(screen.getByRole(/table/i)).toBeInTheDocument();
     });
-    expect(screen.getAllByRole("cell", { name: /severe/i })[0]).toHaveClass(
-      "high-severity-color"
+
+    // Check that rows with Severe allergies have high-severity-color class
+    const rows = screen.getAllByTestId("table-body-row");
+    expect(rows[0]).toHaveClass("high-severity-color"); // Beef - Severe
+    expect(rows[1]).toHaveClass("high-severity-color"); // Milk product - Severe
+  });
+
+  it("should apply strike-through styling to 'no known allergy' row when multiple allergies exist", async () => {
+    render(
+      <IPDContext.Provider
+        value={{
+          visitSummary: mockVisitSummaryData,
+        }}
+      >
+        <Allergies patientId={"__test_patient_uuid__"} />
+      </IPDContext.Provider>
     );
+
+    await waitFor(() => {
+      expect(screen.getByRole(/table/i)).toBeInTheDocument();
+    });
+
+    // Check that "No Known Allergy" row has no-known-allergy class when there are multiple allergies
+    const rows = screen.getAllByTestId("table-body-row");
+    expect(rows[4]).toHaveClass("no-known-allergy"); // No Known Allergy - last row
+    expect(rows[4]).toHaveTextContent("No Known Allergy");
   });
 
   it("should sort Allergen in ASC order based on severity", async () => {

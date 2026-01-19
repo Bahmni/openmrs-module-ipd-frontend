@@ -237,76 +237,79 @@ export const mockAllergiesIntolerenceResponse = {
         },
       },
       {
-        "resource": {
-          "resourceType": "AllergyIntolerance",
-          "id": "05a89077-169b-4164-82ea-9dadd4981848",
-          "meta": {
-            "versionId": "1766396887000",
-            "lastUpdated": "2025-12-22T15:18:07.000+05:30",
-            "tag": [
+        resource: {
+          resourceType: "AllergyIntolerance",
+          id: "05a89077-169b-4164-82ea-9dadd4981848",
+          meta: {
+            versionId: "1766396887000",
+            lastUpdated: "2025-12-22T15:18:07.000+05:30",
+            tag: [
               {
-                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationValue",
-                "code": "SUBSETTED",
-                "display": "Resource encoded in summary mode"
-              }
-            ]
-          },
-          "clinicalStatus": {
-            "coding": [
-              {
-                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
-                "code": "active",
-                "display": "Active"
-              }
+                system:
+                  "http://terminology.hl7.org/CodeSystem/v3-ObservationValue",
+                code: "SUBSETTED",
+                display: "Resource encoded in summary mode",
+              },
             ],
-            "text": "Active"
           },
-          "verificationStatus": {
-            "coding": [
+          clinicalStatus: {
+            coding: [
               {
-                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
-                "code": "confirmed",
-                "display": "Confirmed"
-              }
+                system:
+                  "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+                code: "active",
+                display: "Active",
+              },
             ],
-            "text": "Confirmed"
+            text: "Active",
           },
-          "type": "allergy",
-          "code": {
-            "coding": [
+          verificationStatus: {
+            coding: [
               {
-                "code": "82da9570-1462-4eca-b348-222227423394",
-                "display": "No Known Allergy"
-              }
+                system:
+                  "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+                code: "confirmed",
+                display: "Confirmed",
+              },
             ],
-            "text": "No Known Allergy"
+            text: "Confirmed",
           },
-          "patient": {
-            "reference": "Patient/c3277a06-cff9-48ff-b501-6fd04b261be2",
-            "type": "Patient",
-            "display": "Eyerusalem Eliyas (Identification Number: ET59150)"
+          type: "allergy",
+          code: {
+            coding: [
+              {
+                code: "f535bd4e-33ff-4f35-bf7c-189e07d1ac90",
+                display: "No Known Allergy",
+              },
+            ],
+            text: "No Known Allergy",
           },
-          "recordedDate": "2025-12-22T15:18:07+05:30",
-          "recorder": {
-            "reference": "Practitioner/c1c21e11-3f10-11e4-adec-0800271c1b75",
-            "type": "Practitioner",
-            "display": "Super Man"
+          patient: {
+            reference: "Patient/c3277a06-cff9-48ff-b501-6fd04b261be2",
+            type: "Patient",
+            display: "Eyerusalem Eliyas (Identification Number: ET59150)",
           },
-          "reaction": [
+          recordedDate: "2025-12-22T15:18:07+05:30",
+          recorder: {
+            reference: "Practitioner/c1c21e11-3f10-11e4-adec-0800271c1b75",
+            type: "Practitioner",
+            display: "Super Man",
+          },
+          reaction: [
             {
-              "substance": {
-                "coding": [
+              substance: {
+                coding: [
                   {
-                    "code": "82da9570-1462-4eca-b348-222227423394",
-                    "display": "No Known Allergy"
-                  }
+                    code: "f535bd4e-33ff-4f35-bf7c-189e07d1ac90",
+                    display: "No Known Allergy",
+                  },
                 ],
-                "text": "No Known Allergy"
-              }
-            }
-          ]
-        }
-      }
+                text: "No Known Allergy",
+              },
+            },
+          ],
+        },
+      },
     ],
   },
 };
