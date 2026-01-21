@@ -71,7 +71,7 @@ export const CareViewPatients = () => {
   const getPatientsList = async () => {
     try {
       setIsLoading(true);
-      const response = await fetchPatientsList(
+      const data = await fetchPatientsList(
         selectedWard.value,
         (currentPage - 1) * limit,
         headerSelected,
@@ -79,13 +79,9 @@ export const CareViewPatients = () => {
         sortBy,
         limit
       );
-      if (response.status === 200) {
-        const { admittedPatients, totalPatients } = response.data;
-        setPatientList(admittedPatients);
-        setTotalPatients(totalPatients);
-      } else {
-        throw new Error("Failed to fetch data");
-      }
+      const { admittedPatients, totalPatients } = data;
+      setPatientList(admittedPatients);
+      setTotalPatients(totalPatients);
     } catch (error) {
       setPatientList([]);
       console.error("Error fetching data:", error);

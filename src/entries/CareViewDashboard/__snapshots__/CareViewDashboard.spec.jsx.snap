@@ -190,7 +190,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           <span
             class="value-text"
           >
-            0
+            5
           </span>
         </div>
         <div
@@ -204,7 +204,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
           <span
             class="value-text"
           >
-            0
+            2
           </span>
         </div>
         <a

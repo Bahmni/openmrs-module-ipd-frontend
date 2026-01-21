@@ -76,38 +76,13 @@ export const CareViewSummary = ({ callbacks, onHome }) => {
   };
   const fetchWardSummaryData = async () => {
     callbacks.setIsLoading(true);
-    const response = await fetchWardSummary(selectedWard.value, provider.uuid);
-    if (response.status === 200) {
-      setWardSummary(response.data);
-    } else {
-      setWardSummary({});
-    }
+    const wardSummaryData = await fetchWardSummary(selectedWard.value, provider.uuid);
+    setWardSummary(wardSummaryData);
     callbacks.setIsLoading(false);
   };
   useEffect(() => {
     getWardList();
   }, []);
-
-   const updateWardDetails = async () => {
-    setIsLoading(true);
-    const wardOptions = await getWardOptions();
-    setOptions(wardOptions);
-    const uuid = provider.uuid;
-    const selectedWard = getSelectedWard(
-      existingSelectedWards,
-      uuid,
-      wardOptions
-    );
-    setSelectedWard(selectedWard);
-    if (selectedWard) {
-      const wardSummaryResponse = await fetchWardSummary(
-        selectedWard.value,
-        uuid
-      );
-      setWardSummary(wardSummaryResponse);
-    }
-    setIsLoading(false);
-  };
 
   const handleResize = () => {
     setScreenSize(window.outerWidth);
@@ -118,10 +93,6 @@ export const CareViewSummary = ({ callbacks, onHome }) => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
-
-  useEffect(() => {
-    updateWardDetails();
   }, []);
 
   useEffect(() => {
@@ -142,7 +113,7 @@ export const CareViewSummary = ({ callbacks, onHome }) => {
         "selected_wards",
         JSON.stringify(existingSelectedWards)
       );
-      updateWardDetails();
+      fetchWardSummaryData();
     }
   }, [selectedWard, refreshSummary]);
 

@@ -90,21 +90,16 @@ describe("CareViewDashboard", () => {
       pageSizeOptions: [10, 20, 30, 40, 50],
       defaultPageSize: 10,
       timeframeLimitInHours: 2,
+      sortBy: "bedNumber"
     });
     MockDate.set("2023-01-01T12:00:00");
     mockGetSelectedWard.mockReturnValue({ value: "ward" });
-    mockFetchPatientsList.mockResolvedValue({
-      status: 200,
-      data: mockWithBookMarkPatientList,
-    });
+    mockFetchPatientsList.mockResolvedValue(mockWithBookMarkPatientList);
     mockGetTasksForPatients.mockReturnValue([]);
     mockGetWardOptions.mockResolvedValue(mockWardList);
     mockGetWardSummary.mockResolvedValue({
-      status: 200,
-      data: {
-        totalPatients: 5,
-        totalProviderPatients: 2,
-      },
+      totalPatients: 5,
+      totalProviderPatients: 2,
     });
     mockGetSliderPerView.mockReturnValue(3);
     mockCurrentShiftHoursArray.mockReturnValue({
@@ -192,7 +187,7 @@ describe("CareViewDashboard", () => {
     expect(
       within(totalPatientsSummary).getByText(/Total patient/i)
     ).toBeTruthy();
-    expect(within(totalPatientsSummary).getByText(/0/i)).toBeTruthy();
+    expect(within(totalPatientsSummary).getByText(/5/i)).toBeTruthy();
 
     await waitFor(() => {
       const patientRow = container.querySelectorAll(
@@ -228,6 +223,6 @@ describe("CareViewDashboard", () => {
       ".bx--tile.summary-tile.selected-header"
     );
     expect(within(myPatientsSummary).getByText(/My patient/i)).toBeTruthy();
-    expect(within(myPatientsSummary).getByText(/0/i)).toBeTruthy();
+    expect(within(myPatientsSummary).getByText(/2/i)).toBeTruthy();
   });
 });
