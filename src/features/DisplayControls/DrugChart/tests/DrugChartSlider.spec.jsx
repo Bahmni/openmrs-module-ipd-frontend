@@ -9,20 +9,104 @@ const hostData = {
   drugName: "Paracetamol",
   dosageInfo: "500mg twice daily",
   medicationAdministrationNoteUUID: "note-uuid-1",
-  amendedNotes: [
-    {
-      amendedText: "Changed dose to 500mg",
-      amendedReason: "Dose adjustment",
-      approvalNotes: "Reviewed and approved",
-      approvalStatus: "APPROVED",
-      approvedBy: { display: "Dr. Smith" },
+  noteInfo: {
+    acknowledgementNotes: [],
+    original: {
+      uuid: "72841685-f9f7-4171-a55b-1a98ec37f9ea",
+      author: {
+        uuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
+        display: "Super Man",
+      },
+      recordedTime: 1770390923000,
+      text: "Initial note",
+      amendmentReason: null,
+      previousNoteUuid: null,
+      acknowledgement: null,
     },
+    newNote: null,
+    amendedNotes: [
+      {
+        uuid: "bce99f13-212d-4146-ab03-c9029eabb30f",
+        author: {
+          uuid: "9b2e6fe0-734c-11ee-98ee-0242ac130009",
+          display: "other.nurse - Other Nurse",
+        },
+        recordedTime: 1770400529000,
+        text: "Changed dose to 500mg",
+        amendmentReason: "Dose adjustment",
+        previousNoteUuid: "cecb1f04-b5fa-4285-8b57-311397f0b90b",
+        acknowledgement: null,
+      },
+      {
+        uuid: "cecb1f04-b5fa-4285-8b57-311397f0b90b",
+        author: {
+          uuid: "c1c26908-3f10-11e4-adec-0800271c1b75",
+          display: "Super Man",
+        },
+        recordedTime: 1770400012000,
+        text: "Time incorrect",
+        amendmentReason: "Incorrect Time",
+        previousNoteUuid: "c0f0e8b2-b62f-4fd9-94d6-073a7df56e33",
+        acknowledgement: null,
+      },
+    ],
+  },
+  notes: [
+    {
+      "uuid": "cecb1f04-b5fa-4285-8b57-311397f0b90b",
+      "author": {
+        "uuid": "c1c26908-3f10-11e4-adec-0800271c1b75",
+        "display": "Super Man",
+      },
+      "recordedTime": 1770400012000,
+      "text": "Time incorrect",
+      "amendmentReason": "Incorrect Time",
+      "previousNoteUuid": "c0f0e8b2-b62f-4fd9-94d6-073a7df56e33",
+      "acknowledgement": null
+    },
+    {
+      "uuid": "72841685-f9f7-4171-a55b-1a98ec37f9ea",
+      "author": {
+        "uuid": "c1c26908-3f10-11e4-adec-0800271c1b75",
+        "display": "Super Man",
+      },
+      "recordedTime": 1770390923000,
+      "text": "Notes for adding",
+      "amendmentReason": null,
+      "previousNoteUuid": null,
+      "acknowledgement": null
+    },
+    {
+      "uuid": "bce99f13-212d-4146-ab03-c9029eabb30f",
+      "author": {
+        "uuid": "9b2e6fe0-734c-11ee-98ee-0242ac130009",
+        "display": "other.nurse - Other Nurse",
+      },
+      "recordedTime": 1770400529000,
+      "text": "Incorrect unit given",
+      "amendmentReason": "Incorrect Unit",
+      "previousNoteUuid": "cecb1f04-b5fa-4285-8b57-311397f0b90b",
+      "acknowledgement": null
+    }
   ],
   performerName: "Nurse Joy",
   approvedTime: "2025-12-16T10:00:00Z",
   amendedTime: "2025-12-16T09:00:00Z",
   scheduledTime: "2025-12-16T08:00:00Z",
   existingNotes: "Initial note",
+};
+const hostDataWithAck = {
+  ...hostData,
+  noteInfo: {
+    ...hostData.noteInfo,
+    acknowledgementNotes: [{
+      text: "Reviewed and approved",
+      recordedTime: 1770410000000,
+      author: {
+        display: "Dr. Smith",
+      }
+    }],
+  },
 };
 
 const mockHostApi = {
@@ -159,7 +243,7 @@ describe("DrugChartSlider", () => {
   it("renders with minimal hostData", () => {
     renderWithProviders(
       <DrugChartSlider
-        hostData={{ drugName: "", dosageInfo: "" }}
+        hostData={{ drugName: "", dosageInfo: "", notes: [{}], noteInfo: {acknowledgementNotes:[],amendedNotes:[], } }}
         hostApi={mockHostApi}
         sliderType="amendment"
       />
@@ -189,7 +273,7 @@ describe("DrugChartSlider", () => {
   });
 
   it("renders acknowledgement slider with all required props", () => {
-    renderWithProviders(
+    const { container } = renderWithProviders(
       <DrugChartSlider
         hostData={hostData}
         hostApi={mockHostApi}
@@ -199,14 +283,14 @@ describe("DrugChartSlider", () => {
     expect(
       screen.getByText(getHeaderTextMatcher("Acknowledge Amended Note"))
     ).toBeInTheDocument();
-    expect(screen.getByText("Reviewed and approved")).toBeInTheDocument();
-    expect(screen.getByText("Dr. Smith")).toBeInTheDocument();
+    expect(container.querySelector(".drug-chart-note-acknowledgement__toggle")).toBeInTheDocument();
+    expect(screen.getByText("Acknowledgement Notes")).toBeInTheDocument();
   });
 
   it("renders history slider with all required props", () => {
     renderWithProviders(
       <DrugChartSlider
-        hostData={hostData}
+        hostData={hostDataWithAck}
         hostApi={mockHostApi}
         sliderType="history"
       />
@@ -216,7 +300,7 @@ describe("DrugChartSlider", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("Initial note")).toBeInTheDocument();
     // Use getAllByText for repeated text
-    expect(screen.getAllByText("Nurse Joy").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Dr. Smith").length).toBeGreaterThan(0);
   });
 
   it("calls hostApi.onModalClose when closeSideBar is triggered with all props", () => {

@@ -516,7 +516,7 @@ describe("DrugChartWrapper - handleDeepLink for acknowledgement flow", () => {
 
     const invalidDeepLinkParams = {
       openAcknowledge: false,
-      medicationAdministrationNoteUUID: "test-note-uuid-123",
+      medicationAdministrationUUID: "med-admin-uuid-1",
       medicationAdministrationEpoch: 1704441600000,
     };
 
@@ -553,7 +553,7 @@ describe("DrugChartWrapper - handleDeepLink for acknowledgement flow", () => {
     expect(window.__processedDeepLink).toBeUndefined();
   });
 
-  it("should NOT open acknowledgement slider when medicationAdministrationNoteUUID is missing", async () => {
+  it("should NOT open acknowledgement slider when medicationAdministrationUUID is missing", async () => {
     MockDate.set("2024-01-05 10:00");
 
     const invalidDeepLinkParams = {
@@ -599,7 +599,7 @@ describe("DrugChartWrapper - handleDeepLink for acknowledgement flow", () => {
 
     const invalidDeepLinkParams = {
       openAcknowledge: true,
-      medicationAdministrationNoteUUID: "test-note-uuid-123",
+      medicationAdministrationUUID: "med-admin-uuid-1",
     };
 
     mockFetchMedications.mockResolvedValue({

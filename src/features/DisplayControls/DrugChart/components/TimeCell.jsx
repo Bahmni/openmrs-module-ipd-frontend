@@ -1,14 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Tooltip, Button } from "carbon-components-react";
+import { Tooltip, Button, TooltipDefinition } from "carbon-components-react";
 import "../styles/TimeCell.scss";
 import SVGIcon from "./SVGIcon.jsx";
 import NoteIcon from "../../../../icons/note.svg";
 import AmendedIcon from "../../../../icons/acknowledge-pending.svg";
 import AcknowledgedIcon from "../../../../icons/acknowledged.svg";
-import { canAcknowledgeAmendment, ifMedicationNotesPresent } from "../utils/DrugChartUtils";
+import DocumentAdd from "../../../../icons/document-add.svg";
+import {
+  canAcknowledgeAmendment,
+  ifMedicationNotesPresent,
+} from "../utils/DrugChartUtils";
 import { timeFormatFor24Hr } from "../../../../constants.js";
 import moment from "moment";
+import { FormattedMessage } from "react-intl";
 
 export default function TimeCell(props) {
   const {
@@ -22,7 +27,7 @@ export default function TimeCell(props) {
     onIconClick,
     currentProviderUuid,
     config = {},
-    privileges
+    privileges,
   } = props;
   const left = [],
     right = [];
@@ -69,7 +74,7 @@ export default function TimeCell(props) {
         </div>
       );
     }
-    if (hasAmendedNotes && (isNoteCreator(slot) || canAcknowledgeAmendment(privileges))) {
+    if (hasAmendedNotes || isNewNotes(slot)) {
       return (
         <div className="note-icon-container">
           <AmendedIcon />
@@ -83,45 +88,71 @@ export default function TimeCell(props) {
     );
   };
 
-  const canAmendNotes = (slot) => {
-    const isAcknowledged =
-      slot?.originalSlot?.administrationSummary?.approvalStatus === "APPROVED";
-    
-    if (isAcknowledged) {
-      return false;
-    }
-
-    return isNoteCreator(slot);
+  const isNewNotes = (slot) => {
+    const { noteInfo = {} } = slot.originalSlot.administrationSummary;
+    return !!(
+      noteInfo.acknowledgementNotes.length === 0 &&
+      noteInfo.amendedNotes.length === 0 &&
+      noteInfo.newNote &&
+      !noteInfo.original
+    );
   };
 
   const renderTooltipContent = (notes, slot, amendedNotes = null) => {
-    const showAmendButton = canAmendNotes(slot);
+    const showAmendButton =
+      !isAcknowledged && !slot?.originalSlot?.administrationSummary.isMissed;
     const hasAmendedNotes = amendedNotes && amendedNotes.length > 0;
-    
-    const amendedText = hasAmendedNotes
-      ? amendedNotes
-          .filter(note => note?.amendedText)
-          .map(note => note.amendedText)
-          .join('\n\n')
-      : null;
+    const noteInfo = slot?.originalSlot?.administrationSummary?.noteInfo;
 
+    let amendedText;
+    if (hasAmendedNotes) {
+      amendedText = amendedNotes[0]?.text;
+    } else {
+      amendedText = noteInfo?.newNote?.text;
+    }
     const isAcknowledged =
-            slot?.originalSlot?.administrationSummary?.approvalStatus ===
-            "APPROVED";
-            
+      slot?.originalSlot?.administrationSummary?.approvalStatus === "APPROVED";
+
     return (
       <div className="tooltip-content">
         {!isAcknowledged && (
           <div>
-            {(isNoteCreator(slot)||canAcknowledgeAmendment(privileges)) ? (
-               <div className="tooltip-notes">
-                {amendedText || notes}
-              </div>
+            {isNoteCreator(slot) || canAcknowledgeAmendment(privileges) ? (
+              <div className="tooltip-notes">{amendedText || notes}</div>
             ) : (
               <div className="tooltip-notes">{notes}</div>
             )}
-           
-            {config?.drugChartNoteAmendment?.isAmendFeatureEnabled && showAmendButton && (
+
+            {config?.drugChartNoteAmendment?.isAmendFeatureEnabled &&
+              showAmendButton && (
+                <div className="tooltip-actions">
+                  <Button
+                    kind="ghost"
+                    size="sm"
+                    className="no-focus-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (slot.originalSlot) {
+                        slot.originalSlot.clickAction = "amend";
+                      }
+                      onIconClick && onIconClick(slot);
+                    }}
+                    onBlur={(e) => e.target.blur()}
+                  >
+                    Amend Note
+                  </Button>
+                </div>
+              )}
+          </div>
+        )}
+        {notes && amendedText && !isAcknowledged && (
+          <div style={{ marginTop: "12px" }}></div>
+        )}
+        {(amendedText || isNewNotes(slot)) &&
+          !isAcknowledged &&
+          canAcknowledgeAmendment(privileges) && (
+            <div>
+              {/*{!isNoteCreator(slot) && (*/}
               <div className="tooltip-actions">
                 <Button
                   kind="ghost"
@@ -130,44 +161,18 @@ export default function TimeCell(props) {
                   onClick={(e) => {
                     e.stopPropagation();
                     if (slot.originalSlot) {
-                      slot.originalSlot.clickAction = 'amend';
+                      slot.originalSlot.clickAction = "acknowledge";
                     }
-                     onIconClick && onIconClick(slot);
+                    onIconClick && onIconClick(slot);
                   }}
                   onBlur={(e) => e.target.blur()}
                 >
-                  Amend Note
+                  Acknowledge Note
                 </Button>
               </div>
-            )}
-          </div>
-        )}
-        {notes && amendedText && !isAcknowledged && (
-          <div style={{ marginTop: "12px" }}></div>
-        )}
-        {amendedText && !isAcknowledged && canAcknowledgeAmendment(privileges) && (
-          <div>
-            {!isNoteCreator(slot) && (
-            <div className="tooltip-actions">
-              <Button
-                kind="ghost"
-                size="sm"
-                className="no-focus-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (slot.originalSlot) {
-                    slot.originalSlot.clickAction = 'acknowledge';
-                  }
-                  onIconClick && onIconClick(slot);
-                }}
-                onBlur={(e) => e.target.blur()}
-              >
-                Acknowledge Note
-              </Button>
+              {/*)}*/}
             </div>
-            )}
-          </div>
-        )}
+          )}
         {isAcknowledged && (
           <div>
             <div className="tooltip-notes">
@@ -182,7 +187,7 @@ export default function TimeCell(props) {
                 onClick={(e) => {
                   e.stopPropagation();
                   if (slot.originalSlot) {
-                    slot.originalSlot.clickAction = 'viewHistory';
+                    slot.originalSlot.clickAction = "viewHistory";
                   }
                   onIconClick && onIconClick(slot);
                 }}
@@ -192,8 +197,7 @@ export default function TimeCell(props) {
               </Button>
             </div>
           </div>
-        )
-        }
+        )}
       </div>
     );
   };
@@ -214,17 +218,16 @@ export default function TimeCell(props) {
       >
         {left.map((slot) => {
           const { status, administrationInfo, notes, minutes } = slot;
-          const hasAmendedNotes =
-            slot?.originalSlot?.administrationSummary?.hasAmendedNotes || false;
-          const isAcknowledged =
-            slot?.originalSlot?.administrationSummary?.approvalStatus ===
-            "APPROVED";
-          const amendedNotesResponse = slot?.originalSlot?.medicationAdministration?.amendedNotes;
+          const summary = slot?.originalSlot?.administrationSummary;
+          const noteInfo = summary?.noteInfo || {};
+          const hasAmendedNotes = summary?.hasAmendedNotes || false;
+          const isAcknowledged = summary?.approvalStatus === "APPROVED";
+          const amendedNotesResponse = noteInfo?.amendedNotes;
 
           return (
             <div key={minutes}>
               <SVGIcon iconType={status} info={administrationInfo} />
-              {ifMedicationNotesPresent(notes, status) && (
+              {ifMedicationNotesPresent(notes, status) ? (
                 <span data-testid="left-notes">
                   <Tooltip
                     autoOrientation={true}
@@ -234,6 +237,33 @@ export default function TimeCell(props) {
                   >
                     {renderTooltipContent(notes, slot, amendedNotesResponse)}
                   </Tooltip>
+                </span>
+              ) : (
+                <span data-testid="add-left-notes">
+                  {(status === "Administered-Late" ||
+                    status === "Administered") && (
+                    <TooltipDefinition
+                      tooltipText={
+                        <div style={{ color: "#fff" }}>
+                          <FormattedMessage
+                            id="ADD_NOTES"
+                            defaultMessage="Add Notes"
+                          />
+                        </div>
+                      }
+                      direction="top"
+                    >
+                      <div
+                        className="note-icon-container"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onIconClick && onIconClick(slot);
+                        }}
+                      >
+                        <DocumentAdd />
+                      </div>
+                    </TooltipDefinition>
+                  )}
                 </span>
               )}
             </div>
@@ -251,18 +281,15 @@ export default function TimeCell(props) {
         >
           {right.map((slot) => {
             const { status, administrationInfo, notes, minutes } = slot;
-            const hasAmendedNotes =
-              slot?.originalSlot?.administrationSummary?.hasAmendedNotes ||
-              false;
-            const isAcknowledged =
-              slot?.originalSlot?.administrationSummary?.approvalStatus ===
-              "APPROVED";
-            const amendedNotesResponse = slot?.originalSlot?.medicationAdministration?.amendedNotes;
-
+            const summary = slot?.originalSlot?.administrationSummary;
+            const noteInfo = summary?.noteInfo || {};
+            const hasAmendedNotes = summary?.hasAmendedNotes || false;
+            const isAcknowledged = summary?.approvalStatus === "APPROVED";
+            const amendedNotesResponse = noteInfo?.amendedNotes;
             return (
               <div key={minutes}>
                 <SVGIcon iconType={status} info={administrationInfo} />
-                {ifMedicationNotesPresent(notes, status) && (
+                {ifMedicationNotesPresent(notes, status) ? (
                   <span data-testid="right-notes">
                     <Tooltip
                       autoOrientation={true}
@@ -270,8 +297,35 @@ export default function TimeCell(props) {
                         getNoteIcon(hasAmendedNotes, isAcknowledged, slot)
                       }
                     >
-                    {renderTooltipContent(notes, slot, amendedNotesResponse)}
+                      {renderTooltipContent(notes, slot, amendedNotesResponse)}
                     </Tooltip>
+                  </span>
+                ) : (
+                  <span data-testid="add-right-notes">
+                    {(status === "Administered-Late" ||
+                      status === "Administered") && (
+                      <TooltipDefinition
+                        tooltipText={
+                          <div style={{ color: "#fff" }}>
+                            <FormattedMessage
+                              id="ADD_NOTES"
+                              defaultMessage="Add Notes"
+                            />
+                          </div>
+                        }
+                        direction="top"
+                      >
+                        <div
+                          className="note-icon-container"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onIconClick && onIconClick(slot);
+                          }}
+                        >
+                          <DocumentAdd />
+                        </div>
+                      </TooltipDefinition>
+                    )}
                   </span>
                 )}
               </div>
@@ -296,5 +350,5 @@ TimeCell.propTypes = {
   onIconClick: PropTypes.func,
   currentProviderUuid: PropTypes.string,
   config: PropTypes.object,
-  privileges: PropTypes.array
+  privileges: PropTypes.array,
 };

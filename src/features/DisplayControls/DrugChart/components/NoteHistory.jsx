@@ -1,54 +1,46 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { NoteTile } from "./NoteTile";
-import { extractNameFromDisplay } from "../utils/DrugChartUtils";
+import AmendmentHistory from "../../../../components/AmendmentHistory/AmendmentHistory";
 
 const NoteHistory = ({ hostData }) => {
-  const amendedText = hostData.amendedNotes
-    ?.map((note) => note.amendedText)
-    .join("\n\n");
-  const amendedReason = hostData.amendedNotes
-    ?.map((note) => note.amendedReason)
-    .join("\n\n");
-  const amendedBy = hostData.amendedNotes
-    ?.map((note) => note.amendedBy?.display || hostData.performerName)
-    .join("\n\n");
-  const acknowledgedText = hostData.amendedNotes
-    ?.map((note) => note.approvalNotes)
-    .join("\n\n");
-  const acknowledgedByName =
-    hostData.amendedNotes?.find(
-      (note) => note.approvalStatus === "APPROVED" && note.approvedBy
-    )?.approvedBy?.display || hostData.performerName;
-
+  const {
+    acknowledgementNotes: ack,
+    original,
+    newNote,
+    amendedNotes: amended,
+  } = hostData.noteInfo;
   return (
     <>
-      {acknowledgedText && acknowledgedByName && (
+      {ack.length > 0 && (
         <NoteTile
           tagLabel="Acknowledged"
           tagType="green"
-          scheduledTime={hostData.approvedTime}
-          performerName={extractNameFromDisplay(acknowledgedByName)}
-          noteText={acknowledgedText}
+          scheduledTime={ack[0].recordedTime}
+          performerName={ack[0].author.display}
+          noteText={ack[0].text}
         />
       )}
-      {amendedText && amendedReason && (
+      {amended.length > 0 && <AmendmentHistory amendments={amended} />}
+      {original && (
         <NoteTile
-          tagLabel="Amended"
-          tagType="blue"
-          scheduledTime={hostData.amendedTime}
-          performerName={extractNameFromDisplay(amendedBy)}
-          noteText={amendedText}
-          noteReason={amendedReason}
+          tagLabel={"Original"}
+          tagType="gray"
+          scheduledTime={original.recordedTime}
+          performerName={original.author.display}
+          noteText={original.text}
         />
       )}
-      <NoteTile
-        tagLabel="Original"
-        tagType="gray"
-        scheduledTime={hostData.scheduledTime}
-        performerName={hostData.performerName}
-        noteText={hostData.existingNotes}
-      />
+      {newNote && (
+        <NoteTile
+          tagLabel={"New"}
+          tagType="gray"
+          scheduledTime={newNote.recordedTime}
+          performerName={newNote.author.display}
+          noteText={newNote.text}
+          noteReason={newNote.amendmentReason}
+        />
+      )}
     </>
   );
 };

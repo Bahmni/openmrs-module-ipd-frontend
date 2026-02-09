@@ -10,7 +10,7 @@ describe("NoteLegend", () => {
   it("should render note legends", () => {
     const { getByText } = render(<NoteLegend />);
     expect(getByText("Note")).toBeTruthy();
-    expect(getByText("Amended Note")).toBeTruthy();
+    expect(getByText("New / Amended Note")).toBeTruthy();
     expect(getByText("Acknowledged Note")).toBeTruthy();
   });
 });
