@@ -3,14 +3,16 @@
   padding: 16px;
   border-radius: 5px;
 
-  .note-tag{
+  .note-tag {
     margin-left: -5px;
   }
-  
-  .sub-header-tile {
+  .flex-centered {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .sub-header-tile {
+    @extend .flex-centered;
     font-size: 0.875rem;
     margin-top: 12px;
     margin-bottom: 8px;

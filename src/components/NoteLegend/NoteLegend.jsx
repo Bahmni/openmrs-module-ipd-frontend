@@ -14,7 +14,7 @@ export default function NoteLegend() {
       </div>
       <div>
         <AmendedNoteIcon />
-        <FormattedMessage id="AMENDED_NOTE" defaultMessage={"Amended Note"} />
+        <FormattedMessage id="AMENDED_NOTE" defaultMessage={"New / Amended Note"} />
       </div>
       <div>
         <AcknowledgedNoteIcon />

@@ -1108,7 +1108,7 @@ export const allMedicationData = {
 
 export const mockDeepLinkParams = {
   openAcknowledge: true,
-  medicationAdministrationNoteUUID: "test-note-uuid-123",
+  medicationAdministrationUUID: "med-admin-uuid-1",
   medicationAdministrationEpoch: 1704441600000, // Jan 5, 2024 06:00:00 in milliseconds
 };
 

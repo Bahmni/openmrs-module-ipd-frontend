@@ -11,7 +11,7 @@ exports[`NoteLegend should render without crashing 1`] = `
     </div>
     <div>
       <test-file-stub />
-      Amended Note
+      New / Amended Note
     </div>
     <div>
       <test-file-stub />
