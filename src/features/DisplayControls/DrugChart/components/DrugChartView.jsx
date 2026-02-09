@@ -215,17 +215,13 @@ export default function DrugChartWrapper(props) {
   };
 
   const handleSlotClick = (slot, rowData) => {
-    const clickableStatuses = [
-      "Administered",
-      "Administered-Late",
-      "Not-Administered",
-    ];
-    if (!clickableStatuses.includes(slot.administrationSummary?.status)) {
-      return;
-    }
-
     const action = slot.clickAction || slot.originalSlot?.clickAction;
-    setSelectedSlotData(prepareSlotData(slot, rowData, enable24HourTime));
+    let preparedSelectedSlotData = prepareSlotData(
+      slot,
+      rowData,
+      enable24HourTime
+    );
+    setSelectedSlotData(preparedSelectedSlotData);
 
     if (action === "acknowledge") {
       setSliderContentModified((prevState) => ({
@@ -243,10 +239,7 @@ export default function DrugChartWrapper(props) {
       updateHistoryViewer(true);
     } else {
       const hasAmendment =
-        slot?.medicationAdministration?.amendedNotes?.length > 0 &&
-        slot?.medicationAdministration?.amendedNotes.some(
-          (note) => note?.amendedText && note?.approvalStatus === "PENDING"
-        );
+        preparedSelectedSlotData.noteInfo.amendedNotes.length > 0;
 
       if (hasAmendment) {
         setSliderContentModified((prevState) => ({
@@ -328,14 +321,14 @@ export default function DrugChartWrapper(props) {
     const handleDeepLink = async () => {
       if (
         !deepLinkParams?.openAcknowledge ||
-        !deepLinkParams?.medicationAdministrationNoteUUID ||
+        !deepLinkParams?.medicationAdministrationUUID ||
         !deepLinkParams?.medicationAdministrationEpoch
       ) {
         return;
       }
 
       const deepLinkKey =
-        deepLinkParams.medicationAdministrationNoteUUID +
+        deepLinkParams.medicationAdministrationUUID +
         "-" +
         deepLinkParams.medicationAdministrationEpoch;
       if (window.__processedDeepLink === deepLinkKey) {
@@ -375,11 +368,10 @@ export default function DrugChartWrapper(props) {
         let foundSlot = null;
         let foundRowData = null;
         for (const medication of transformedMedications) {
-          const slot = medication.slots?.find((s) =>
-            s.medicationAdministration?.notes?.some(
-              (note) =>
-                note.uuid === deepLinkParams.medicationAdministrationNoteUUID
-            )
+          const slot = medication.slots?.find(
+            (s) =>
+              s.medicationAdministration?.uuid ===
+              deepLinkParams.medicationAdministrationUUID
           );
           if (slot) {
             foundSlot = slot;
@@ -398,18 +390,18 @@ export default function DrugChartWrapper(props) {
           clearDeepLinkParams();
           return;
         }
-
+        let preparedSelectedSlotData = prepareSlotData(
+          foundSlot,
+          foundRowData,
+          enable24HourTime
+        );
         const amendedByUuid =
-          foundSlot?.medicationAdministration?.amendedNotes?.[0]?.amendedBy
-            ?.uuid;
+          preparedSelectedSlotData.noteInfo.amendedNotes?.[0]?.amendedBy?.uuid;
         if (amendedByUuid && amendedByUuid === provider?.uuid) {
           clearDeepLinkParams();
           return;
         }
-
-        setSelectedSlotData(
-          prepareSlotData(foundSlot, foundRowData, enable24HourTime)
-        );
+        setSelectedSlotData(preparedSelectedSlotData);
 
         setSliderContentModified((prevState) => ({
           ...prevState,

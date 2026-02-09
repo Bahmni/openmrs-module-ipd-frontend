@@ -189,7 +189,7 @@ exports[`DrugChart should match snapshot 1`] = `
         </div>
         <div>
           <test-file-stub />
-          Amended Note
+          New / Amended Note
         </div>
         <div>
           <test-file-stub />
