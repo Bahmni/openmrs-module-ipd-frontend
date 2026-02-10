@@ -31,7 +31,7 @@ export default function TimeCell(props) {
   } = props;
   const left = [],
     right = [];
-  slotInfo.map((slot) => {
+  slotInfo.forEach((slot) => {
     const { time } = slot;
     const momentTime = moment(time, timeFormatFor24Hr);
     let diffStartTime = momentTime.diff(startTime);
@@ -89,20 +89,21 @@ export default function TimeCell(props) {
   };
 
   const isNewNotes = (slot) => {
-    const { noteInfo = {} } = slot.originalSlot.administrationSummary;
+    const { noteInfo = {} } = slot.originalSlot.administrationSummary || {};
     return !!(
-      noteInfo.acknowledgementNotes.length === 0 &&
-      noteInfo.amendedNotes.length === 0 &&
+      (noteInfo.acknowledgementNotes || []).length === 0 &&
+      (noteInfo.amendedNotes || []).length === 0 &&
       noteInfo.newNote &&
       !noteInfo.original
     );
   };
 
   const renderTooltipContent = (notes, slot, amendedNotes = null) => {
-    const showAmendButton =
-      !isAcknowledged && !slot?.originalSlot?.administrationSummary.isMissed;
+    const { administrationSummary = {} } = slot.originalSlot;
+    const noteInfo = administrationSummary?.noteInfo;
+    const isAcknowledged = administrationSummary?.approvalStatus === "APPROVED";
+    const showAmendButton = !isAcknowledged && !administrationSummary?.isMissed;
     const hasAmendedNotes = amendedNotes && amendedNotes.length > 0;
-    const noteInfo = slot?.originalSlot?.administrationSummary?.noteInfo;
 
     let amendedText;
     if (hasAmendedNotes) {
@@ -110,8 +111,6 @@ export default function TimeCell(props) {
     } else {
       amendedText = noteInfo?.newNote?.text;
     }
-    const isAcknowledged =
-      slot?.originalSlot?.administrationSummary?.approvalStatus === "APPROVED";
 
     return (
       <div className="tooltip-content">
@@ -145,14 +144,15 @@ export default function TimeCell(props) {
               )}
           </div>
         )}
+
         {notes && amendedText && !isAcknowledged && (
-          <div style={{ marginTop: "12px" }}></div>
+          <div style={{ marginTop: "12px" }} />
         )}
+
         {(amendedText || isNewNotes(slot)) &&
           !isAcknowledged &&
           canAcknowledgeAmendment(privileges) && (
             <div>
-              {/*{!isNoteCreator(slot) && (*/}
               <div className="tooltip-actions">
                 <Button
                   kind="ghost"
@@ -170,9 +170,9 @@ export default function TimeCell(props) {
                   Acknowledge Note
                 </Button>
               </div>
-              {/*)}*/}
             </div>
           )}
+
         {isAcknowledged && (
           <div>
             <div className="tooltip-notes">
@@ -202,6 +202,62 @@ export default function TimeCell(props) {
     );
   };
 
+  const renderSlot = (slot, position) => {
+    const { status, administrationInfo, notes, minutes } = slot;
+    const summary = slot?.originalSlot?.administrationSummary || {};
+    const noteInfo = summary?.noteInfo || {};
+    const hasAmendedNotes = summary?.hasAmendedNotes || false;
+    const isAcknowledged = summary?.approvalStatus === "APPROVED";
+    const amendedNotesResponse = noteInfo?.amendedNotes;
+
+    const content = ifMedicationNotesPresent(notes, status) ? (
+      <Tooltip
+        autoOrientation={true}
+        renderIcon={() => getNoteIcon(hasAmendedNotes, isAcknowledged, slot)}
+      >
+        {renderTooltipContent(notes, slot, amendedNotesResponse)}
+      </Tooltip>
+    ) : (
+      (status === "Administered-Late" || status === "Administered") && (
+        <TooltipDefinition
+          tooltipText={
+            <div style={{ color: "#fff", fontSize: "14px", fontWeight: 400 }}>
+              <FormattedMessage id="ADD_NOTES" defaultMessage="Add Notes" />
+            </div>
+          }
+          direction="top"
+        >
+          <div
+            className="note-icon-container"
+            onClick={(e) => {
+              e.stopPropagation();
+              onIconClick && onIconClick(slot);
+            }}
+          >
+            <DocumentAdd />
+          </div>
+        </TooltipDefinition>
+      )
+    );
+
+    return (
+      <div key={minutes}>
+        <SVGIcon iconType={status} info={administrationInfo} />
+        {content ? (
+          <span
+            data-testid={
+              ifMedicationNotesPresent(notes, status)
+                ? `${position}-notes`
+                : `add-${position}-note`
+            }
+          >
+            {content}
+          </span>
+        ) : null}
+      </div>
+    );
+  };
+
   return (
     <div
       className={
@@ -216,60 +272,9 @@ export default function TimeCell(props) {
           doHighlightCell && highlightedCell === "left" ? "highlightedCell" : ""
         }
       >
-        {left.map((slot) => {
-          const { status, administrationInfo, notes, minutes } = slot;
-          const summary = slot?.originalSlot?.administrationSummary;
-          const noteInfo = summary?.noteInfo || {};
-          const hasAmendedNotes = summary?.hasAmendedNotes || false;
-          const isAcknowledged = summary?.approvalStatus === "APPROVED";
-          const amendedNotesResponse = noteInfo?.amendedNotes;
-
-          return (
-            <div key={minutes}>
-              <SVGIcon iconType={status} info={administrationInfo} />
-              {ifMedicationNotesPresent(notes, status) ? (
-                <span data-testid="left-notes">
-                  <Tooltip
-                    autoOrientation={true}
-                    renderIcon={() =>
-                      getNoteIcon(hasAmendedNotes, isAcknowledged, slot)
-                    }
-                  >
-                    {renderTooltipContent(notes, slot, amendedNotesResponse)}
-                  </Tooltip>
-                </span>
-              ) : (
-                <span data-testid="add-left-notes">
-                  {(status === "Administered-Late" ||
-                    status === "Administered") && (
-                    <TooltipDefinition
-                      tooltipText={
-                        <div style={{ color: "#fff" }}>
-                          <FormattedMessage
-                            id="ADD_NOTES"
-                            defaultMessage="Add Notes"
-                          />
-                        </div>
-                      }
-                      direction="top"
-                    >
-                      <div
-                        className="note-icon-container"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onIconClick && onIconClick(slot);
-                        }}
-                      >
-                        <DocumentAdd />
-                      </div>
-                    </TooltipDefinition>
-                  )}
-                </span>
-              )}
-            </div>
-          );
-        })}
+        {left.map((slot) => renderSlot(slot, "left"))}
       </div>
+
       {!isBlank ? (
         <div
           data-testid="right-icon"
@@ -279,58 +284,7 @@ export default function TimeCell(props) {
               : ""
           }
         >
-          {right.map((slot) => {
-            const { status, administrationInfo, notes, minutes } = slot;
-            const summary = slot?.originalSlot?.administrationSummary;
-            const noteInfo = summary?.noteInfo || {};
-            const hasAmendedNotes = summary?.hasAmendedNotes || false;
-            const isAcknowledged = summary?.approvalStatus === "APPROVED";
-            const amendedNotesResponse = noteInfo?.amendedNotes;
-            return (
-              <div key={minutes}>
-                <SVGIcon iconType={status} info={administrationInfo} />
-                {ifMedicationNotesPresent(notes, status) ? (
-                  <span data-testid="right-notes">
-                    <Tooltip
-                      autoOrientation={true}
-                      renderIcon={() =>
-                        getNoteIcon(hasAmendedNotes, isAcknowledged, slot)
-                      }
-                    >
-                      {renderTooltipContent(notes, slot, amendedNotesResponse)}
-                    </Tooltip>
-                  </span>
-                ) : (
-                  <span data-testid="add-right-notes">
-                    {(status === "Administered-Late" ||
-                      status === "Administered") && (
-                      <TooltipDefinition
-                        tooltipText={
-                          <div style={{ color: "#fff" }}>
-                            <FormattedMessage
-                              id="ADD_NOTES"
-                              defaultMessage="Add Notes"
-                            />
-                          </div>
-                        }
-                        direction="top"
-                      >
-                        <div
-                          className="note-icon-container"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onIconClick && onIconClick(slot);
-                          }}
-                        >
-                          <DocumentAdd />
-                        </div>
-                      </TooltipDefinition>
-                    )}
-                  </span>
-                )}
-              </div>
-            );
-          })}
+          {right.map((slot) => renderSlot(slot, "right"))}
         </div>
       ) : (
         <div className="blank"></div>
