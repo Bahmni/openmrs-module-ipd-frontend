@@ -3,6 +3,7 @@ import { Tile, Tag } from "carbon-components-react";
 import PropTypes from "prop-types";
 import "../styles/NoteTile.scss";
 import moment from "moment";
+import { extractNameFromDisplay } from "../utils/DrugChartUtils";
 
 export const NoteTile = ({
   tagLabel,
@@ -32,7 +33,9 @@ export const NoteTile = ({
             </span>
           )}
           {performerName && (
-            <span className="performer-name">{performerName}</span>
+            <span className="performer-name">
+              {extractNameFromDisplay(performerName)}
+            </span>
           )}
         </div>
       )}

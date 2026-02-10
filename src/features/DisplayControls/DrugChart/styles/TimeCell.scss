@@ -66,6 +66,7 @@
 }
 
 .tooltip-content {
+  font-size: 14px;
   .tooltip-notes {
     margin-bottom: 8px;
     text-align: center;
@@ -78,7 +79,7 @@
     .bx--btn {
       text-align: center;
       justify-content: center;
-      color: #61A5FF;
+      color: #61a5ff;
     }
   }
 }
@@ -92,7 +93,7 @@
     box-shadow: none !important;
     border-color: transparent !important;
   }
-  
+
   &:focus::after,
   &:focus-visible::after {
     outline: 0 !important;
