@@ -9,7 +9,7 @@ import { timeFormatFor12Hr, timeFormatFor24Hr } from "../../../../constants";
 import moment from "moment";
 
 export default function CalendarRow(props) {
-  const { config } = useContext(IPDContext);
+  const { config, privileges } = useContext(IPDContext);
   const { onSlotClick } = useContext(DrugChartSlotContext);
   const { provider } = useContext(SliderContext);
   const { enable24HourTime = {}, shiftDetails: shiftConfig = {} } = config;
@@ -104,6 +104,7 @@ export default function CalendarRow(props) {
               onIconClick={handleIconClick}
               currentProviderUuid={provider?.uuid}
               config={config}
+	      privileges={privileges}
             />
           );
         }
@@ -116,6 +117,7 @@ export default function CalendarRow(props) {
             isWholeHourStartTime={isWholeHourStartTime}
             currentProviderUuid={provider?.uuid}
             config={config}
+            privileges={privileges}
           />
         );
       })}

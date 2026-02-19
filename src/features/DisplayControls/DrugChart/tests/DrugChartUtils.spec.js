@@ -4,6 +4,7 @@ import {
   getNextShiftDetails,
   getPreviousShiftDetails,
   getDateTime,
+  canAcknowledgeAmendment,
 } from "../utils/DrugChartUtils";
 import axios from "axios";
 import { mockResponse } from "./DrugChartUtilsMockData";
@@ -137,5 +138,31 @@ describe("DrugChartUtils", () => {
     const time = "08:00";
     const updatedDateTime = 1704441600000; // 5th Jan 2024 08:00
     expect(getDateTime(date, time)).toEqual(updatedDateTime);
+  });
+  describe("canAcknowledgeAmendment", () => {
+    it("returns true when privileges include APPROVE_AMEND_NOTE", () => {
+      const privileges = [
+        { name: "Approve Amend Note" },
+        { name: "OTHER_PRIVILEGE" },
+      ];
+      expect(canAcknowledgeAmendment(privileges)).toBe(true);
+    });
+
+    it("returns false when privileges do not include APPROVE_AMEND_NOTE", () => {
+      const privileges = [{ name: "OTHER_PRIVILEGE" }];
+      expect(canAcknowledgeAmendment(privileges)).toBe(false);
+    });
+
+    it("returns false when privileges is an empty array", () => {
+      expect(canAcknowledgeAmendment([])).toBe(false);
+    });
+
+    it("returns false when privileges is null", () => {
+      expect(canAcknowledgeAmendment(null)).toBe(false);
+    });
+
+    it("returns false when privileges is undefined", () => {
+      expect(canAcknowledgeAmendment(undefined)).toBe(false);
+    });
   });
 });

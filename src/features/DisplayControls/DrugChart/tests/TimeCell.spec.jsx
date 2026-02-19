@@ -266,4 +266,121 @@ describe("TimeCell", () => {
     expect(component.getByTestId("right-notes")).toBeTruthy();
     expect(component.queryByText("Amend Note")).not.toBeInTheDocument();
   });
+
+  it("should render Acknowledge button when amended notes are present, not acknowledged, and user has privilege", () => {
+    const slotWithAmendedNotes = [
+      {
+        time: "10:40",
+        status: "Administered",
+        administrationInfo: "Superman[12.20]",
+        notes: "test notes",
+        originalSlot: {
+          medicationAdministration: {
+            providers: [
+              { function: "Performer", provider: { uuid: "provider-123" } },
+            ],
+            amendedNotes: [
+              { amendedText: "Amended note text" }
+            ]
+          },
+          administrationSummary: {
+            status: "Administered",
+            hasAmendedNotes: true,
+            approvalStatus: null,
+          },
+        },
+      },
+    ];
+    const privileges = [{ name: "Approve Amend Note", retired: false }];
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
+    const { getByText } = render(
+      <TimeCell
+        slotInfo={slotWithAmendedNotes}
+        startTime={startTime}
+        endTime={endTime}
+        currentProviderUuid="provider-123"
+        privileges={privileges}
+      />
+    );
+    expect(getByText("Acknowledge Note")).toBeInTheDocument();
+  });
+
+  it("should NOT render Acknowledge button when slot is already acknowledged", () => {
+    const slotWithAmendedNotes = [
+      {
+        time: "10:40",
+        status: "Administered",
+        administrationInfo: "Superman[12.20]",
+        notes: "test notes",
+        originalSlot: {
+          medicationAdministration: {
+            providers: [
+              { function: "Performer", provider: { uuid: "provider-123" } },
+            ],
+            amendedNotes: [
+              { amendedText: "Amended note text" }
+            ]
+          },
+          administrationSummary: {
+            status: "Administered",
+            hasAmendedNotes: true,
+            approvalStatus: "APPROVED",
+          },
+        },
+      },
+    ];
+    const privileges = [{ name: "Approve Amend Note", retired: false }];
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
+    const { queryByText } = render(
+      <TimeCell
+        slotInfo={slotWithAmendedNotes}
+        startTime={startTime}
+        endTime={endTime}
+        currentProviderUuid="provider-123"
+        privileges={privileges}
+      />
+    );
+    expect(queryByText("Acknowledge Note")).not.toBeInTheDocument();
+  });
+
+  it("should NOT render Acknowledge button when user does not have privilege", () => {
+    const slotWithAmendedNotes = [
+      {
+        time: "10:40",
+        status: "Administered",
+        administrationInfo: "Superman[12.20]",
+        notes: "test notes",
+        originalSlot: {
+          medicationAdministration: {
+            providers: [
+              { function: "Performer", provider: { uuid: "provider-123" } },
+            ],
+            amendedNotes: [
+              { amendedText: "Amended note text" }
+            ]
+          },
+          administrationSummary: {
+            status: "Administered",
+            hasAmendedNotes: true,
+            approvalStatus: null,
+          },
+        },
+      },
+    ];
+    const privileges = [];
+    const startTime = moment("10:00", timeFormatFor24Hr);
+    const endTime = moment("11:00", timeFormatFor24Hr);
+    const { queryByText } = render(
+      <TimeCell
+        slotInfo={slotWithAmendedNotes}
+        startTime={startTime}
+        endTime={endTime}
+        currentProviderUuid="provider-123"
+        privileges={privileges}
+      />
+    );
+    expect(queryByText("Acknowledge Note")).not.toBeInTheDocument();
+  });
 });

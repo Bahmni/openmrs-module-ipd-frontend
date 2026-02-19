@@ -8,6 +8,7 @@ import { saveMedicationAcknowledgementNote } from "../utils/DrugChartUtils";
 
 jest.mock("../utils/DrugChartUtils", () => ({
   saveMedicationAcknowledgementNote: jest.fn(),
+  canAcknowledgeAmendment: jest.fn(() => true),
 }));
 
 jest.mock("../../../i18n/I18nProvider", () => ({
@@ -61,6 +62,7 @@ const renderComponent = (hostData = mockHostData) => {
 describe("DrugChartNoteAcknowledgementSlider", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    require("../utils/DrugChartUtils").canAcknowledgeAmendment.mockImplementation(() => true);
   });
 
   describe("Rendering", () => {
@@ -79,9 +81,16 @@ describe("DrugChartNoteAcknowledgementSlider", () => {
       expect(screen.getByText("500 mg - Oral")).toBeInTheDocument();
     });
 
-    it("should render acknowledge toggle", () => {
+    it("should render acknowledge toggle when canAcknowledgeAmendment returns true", () => {
+      require("../utils/DrugChartUtils").canAcknowledgeAmendment.mockImplementation(() => true);
       renderComponent();
       expect(screen.getByTestId("acknowledge-toggle")).toBeInTheDocument();
+    });
+
+    it("should NOT render acknowledge toggle when canAcknowledgeAmendment returns false", () => {
+      require("../utils/DrugChartUtils").canAcknowledgeAmendment.mockImplementation(() => false);
+      renderComponent();
+      expect(screen.queryByTestId("acknowledge-toggle")).not.toBeInTheDocument();
     });
 
     it("should render acknowledgement notes textarea", () => {

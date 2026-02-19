@@ -7,6 +7,7 @@ import {
   performerFunction,
   asNeededPlaceholderConceptName,
   timeFormatFor24Hr,
+  PRIVILEGE_CONSTANTS
 } from "../../../../constants";
 import _ from "lodash";
 import { FormattedMessage } from "react-intl";
@@ -490,4 +491,11 @@ export const setCurrentShiftTimes = (
     }
   }
   return [startDateTime, endDateTime];
+};
+
+export const canAcknowledgeAmendment = (privileges = []) => {
+  if (!Array.isArray(privileges)) return false;
+  return privileges.some(
+    (privilege) => PRIVILEGE_CONSTANTS.APPROVE_AMEND_NOTE === privilege.name
+  );
 };
