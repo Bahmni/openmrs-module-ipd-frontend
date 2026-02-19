@@ -7,12 +7,12 @@ import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
 import { SaveAndCloseButtons } from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import { SliderContext } from "../../../../context/SliderContext";
 import { IPDContext } from "../../../../context/IPDContext";
-import { saveMedicationAcknowledgementNote } from "../utils/DrugChartUtils";
+import { canAcknowledgeAmendment, saveMedicationAcknowledgementNote } from "../utils/DrugChartUtils";
 import { NoteTile } from "./NoteTile";
 
 const DrugChartNoteAcknowledgementSlider = (props) => {
   const { hostData, hostApi } = props;
-  const { provider } = useContext(IPDContext);
+  const { provider,privileges } = useContext(IPDContext);
   const { setSliderContentModified } = useContext(SliderContext);
   const [acknowledgementNotes, setAcknowledgementNotes] = useState("");
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
@@ -112,14 +112,14 @@ const DrugChartNoteAcknowledgementSlider = (props) => {
               />
             </div>
 
-          <Toggle
+            {canAcknowledgeAmendment(privileges) && <Toggle
             data-testId="acknowledge-toggle"
             size={"sm"}
             labelA="Acknowledge"
             labelB="Acknowledge"
             toggled={isAcknowledged}
             onToggle={handleToggleChange}
-          />
+          />}
       </div>
           <div style={{ marginBottom: "16px" }}>
             <TextArea

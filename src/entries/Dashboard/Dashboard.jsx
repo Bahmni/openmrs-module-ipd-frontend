@@ -41,7 +41,8 @@ export default function Dashboard(props) {
     isReadMode = false,
     visitSummary,
     source,
-    currentUser
+    currentUser,
+    privileges
   } = hostData;
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
@@ -208,6 +209,7 @@ export default function Dashboard(props) {
               isAllFormSummaryLoading,
               isAllFormsFilledInCurrentVisitLoading,
               currentUser,
+              privileges
             }}
           >
             <I18nProvider>

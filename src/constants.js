@@ -39,6 +39,8 @@ export const ALL_DRUG_ORDERS_URL = (visitUuid) =>
   RESTWS_V1 + `/ipdVisit/${visitUuid}/medication?includes=emergencyMedications`;
 export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
+export const CLINICAL_CONFIG_URL =
+  hostUrl + "/bahmni_config/openmrs/apps/clinical/app.json";
 export const DASHBORAD_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/ipdDashboard/app.json";
 export const PATIENT_PROFILE = RESTWS_V1 + "/patientprofile";
@@ -164,4 +166,5 @@ export const PRIVILEGE_CONSTANTS = {
   ADD_TASKS: "Add Tasks",
   EDIT_TASKS: "Edit Tasks",
   EDIT_MEDICATION_ADMINISTRATION: "Edit Medication Administration",
+  APPROVE_AMEND_NOTE: "Approve Amend Note",
 };
