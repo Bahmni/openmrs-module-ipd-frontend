@@ -6,7 +6,7 @@ import SVGIcon from "./SVGIcon.jsx";
 import NoteIcon from "../../../../icons/note.svg";
 import AmendedIcon from "../../../../icons/acknowledge-pending.svg";
 import AcknowledgedIcon from "../../../../icons/acknowledged.svg";
-import { ifMedicationNotesPresent } from "../utils/DrugChartUtils";
+import { canAcknowledgeAmendment, ifMedicationNotesPresent } from "../utils/DrugChartUtils";
 import { timeFormatFor24Hr } from "../../../../constants.js";
 import moment from "moment";
 
@@ -22,6 +22,7 @@ export default function TimeCell(props) {
     onIconClick,
     currentProviderUuid,
     config = {},
+    privileges
   } = props;
   const left = [],
     right = [];
@@ -68,7 +69,7 @@ export default function TimeCell(props) {
         </div>
       );
     }
-    if (hasAmendedNotes && isNoteCreator(slot)) {
+    if (hasAmendedNotes && (isNoteCreator(slot) || canAcknowledgeAmendment(privileges))) {
       return (
         <div className="note-icon-container">
           <AmendedIcon />
@@ -136,7 +137,7 @@ export default function TimeCell(props) {
         {notes && amendedText && !isAcknowledged && (
           <div style={{ marginTop: "12px" }}></div>
         )}
-        {amendedText && !isAcknowledged && (
+        {amendedText && !isAcknowledged && canAcknowledgeAmendment(privileges) && (
           <div>
             <div className="tooltip-notes">{amendedText}</div>
             <div className="tooltip-actions">
@@ -260,4 +261,5 @@ TimeCell.propTypes = {
   onIconClick: PropTypes.func,
   currentProviderUuid: PropTypes.string,
   config: PropTypes.object,
+  privileges: PropTypes.array
 };
