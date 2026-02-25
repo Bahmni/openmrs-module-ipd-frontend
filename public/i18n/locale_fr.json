@@ -243,5 +243,7 @@
   "DRUG_CHART_MODAL_SCHEDULES": "Horaire(s)",
   "DRUG_CHART_MODAL_SCHEDULE_INSTRUCTIONS": "Instructions",
   "DRUG_CHART_MODAL_ADDITIONAL_INSTRUCTIONS": "Instructions supplémentaires",
-  "DRUG_CHART_MODAL_NOTES": "Notes"
+  "DRUG_CHART_MODAL_NOTES": "Notes",
+  "ALL": "Tous",
+  "NEW": "Nouveau"
 }
