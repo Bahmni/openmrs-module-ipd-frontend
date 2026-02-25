@@ -251,5 +251,7 @@
   "UNDO_DISCHARGE": "Undo Discharge",
   "NOTE_AMENDMENT_SAVED_SUCCESS": "Amendment note saved successfully",
   "NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS": "Acknowledgement is successful",
-  "INSUFFICIENT_PRIVILEGE_TO_ACKNOWLEDGE": "Insufficient Acknowledge Privilege"
+  "INSUFFICIENT_PRIVILEGE_TO_ACKNOWLEDGE": "Insufficient Acknowledge Privilege",
+  "ALL": "All",
+  "NEW": "New"
 }
