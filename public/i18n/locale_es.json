@@ -211,5 +211,7 @@
   "VITALS_TEMPERATURE_KEY": "Temperature",
   "VITALS_PULSE_KEY": "Pulse",
   "VITALS_HEIGHT_KEY": "HEIGHT",
-  "VITALS_MUAC_KEY": "Mid-upper arm circumference"
+  "VITALS_MUAC_KEY": "Mid-upper arm circumference",
+  "ALL": "All",
+  "NEW": "New"
 }

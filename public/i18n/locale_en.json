@@ -121,5 +121,16 @@
   "VARIABLE_DOSE_ACTIONS_COLUMN": "Actions",
   "IN_PROGRESS": "In Progress",
   "VARIABLE_DOSAGE": "Variable Dosage",
-  "VARIABLE_DOSE_STAGES_DAYS": "{stages} Stages - {days} Days"
+  "VARIABLE_DOSE_STAGES_DAYS": "{stages} Stages - {days} Days",
+  "ALL": "All",
+  "NEW": "New",
+  "SAVE": "Save",
+  "CANCEL": "Cancel",
+  "TASK_TILE_MORE": "more",
+  "TASK_NAME_LABEL": "Task Name",
+  "TASK_NAME_PLACEHOLDER": "Enter a title for the task ",
+  "IPD_UNSKIP_TASK": "Unskip Task",
+  "IPD_SKIP_TASK": "Skip Task",
+  "IPD_UNSKIP_DRUG": "Unskip Drug",
+  "IPD_SKIP_DRUG": "Skip Drug"
 }
