@@ -2,6 +2,10 @@
 .patient-row-container {
   display: flex;
 
+  .task-filter-switcher .bx--content-switcher-btn {
+    justify-content: center;
+  }
+
   .patient-details-container {
     box-sizing: border-box;
     width: 420px;
