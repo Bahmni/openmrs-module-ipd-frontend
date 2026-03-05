@@ -28,7 +28,6 @@ export const CareViewPatientsHeader = (props) => {
     setFilterValue
   } = props;
   const intl = useIntl();
-  
   const translatedItems = items.map((item) => ({
     ...item,
     text: intl.formatMessage({
@@ -152,7 +151,7 @@ export const CareViewPatientsHeader = (props) => {
         <Dropdown
           id="default"
           label="Dropdown menu options"
-          selectedItem={filterValue && filterValue.id 
+          selectedItem={filterValue && filterValue.id
             ? translatedItems.find(item => item.id === filterValue.id) || translatedItems[0]
             : translatedItems[0]}
           items={translatedItems}

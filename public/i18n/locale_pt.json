@@ -90,7 +90,7 @@
   "NOT_CURRENT_PERIOD_MESSAGE": "You're not viewing the current period",
   "NO_IO_DATA_MESSAGE": "No intake output data is available for the patient in this period",
   "NO_PFR_DATA_MESSAGE": "No patient feeding record data is available for the patient in this period",
-  "SCHEDULE_TREATMENTS": "Schedule Treatments",
+  "SCHEDULE_TREATMENTS": "Schedule Medications",
   "DATE_TIME_HEADER": "Date and Time",
   "PULSE_HEADER": "Pulse ({unit})",
   "SPO2_HEADER": "SPO2 ({unit})",
@@ -183,7 +183,7 @@
   "CONFIRMED": "CONFIRMED",
   "Active": "Active",
   "Inactive": "Inactive",
-  
+
   "VITALS_HEADER_SPO2_KEY": "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
   "VITALS_WEIGHT_KEY": "WEIGHT",
   "VITALS_BMI_KEY": "BMI",

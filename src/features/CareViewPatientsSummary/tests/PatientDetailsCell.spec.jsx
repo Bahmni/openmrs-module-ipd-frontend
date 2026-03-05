@@ -73,7 +73,7 @@ describe("PatientDetailsCell", () => {
   });
 
   it("renders patient details correctly", async () => {
-    const { queryByText } = render(
+    const { queryByText, queryByTestId } = render(
       <IntlProvider locale="en">
         <CareViewContext.Provider value={mockContext}>
           <PatientDetailsCell
@@ -99,9 +99,90 @@ describe("PatientDetailsCell", () => {
       ).toBeTruthy();
       expect(queryByText("A-6")).toBeTruthy();
       expect(queryByText(/15 Years, 11 Months, 6 Days/)).toBeTruthy();
+      expect(queryByText(/1 New Medication\(s\)/)).toBeTruthy();
       expect(queryByText("dummy test,")).toBeTruthy();
       expect(queryByText("task 1,")).toBeTruthy();
       expect(queryByText("task 2")).toBeTruthy();
+      expect(queryByTestId("new-medications-notification")).toBeTruthy();
+      expect(queryByTestId("pending-tasks-notification")).toBeTruthy();
+    });
+  });
+
+  it("should render new medications notification and pending tasks in separate boxes", async () => {
+    const { queryByTestId } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={2}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={mockPreviousShiftPendingTask}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByTestId("new-medications-notification")).toBeTruthy();
+      expect(queryByTestId("pending-tasks-notification")).toBeTruthy();
+    });
+  });
+
+  it("should show only new medications notification when no pending tasks", async () => {
+    const { queryByTestId } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={1}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByTestId("new-medications-notification")).toBeTruthy();
+      expect(queryByTestId("pending-tasks-notification")).toBeFalsy();
+    });
+  });
+
+  it("should show only pending tasks notification when no new medications", async () => {
+    const { queryByTestId } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={0}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={mockPreviousShiftPendingTask}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByTestId("new-medications-notification")).toBeFalsy();
+      expect(queryByTestId("pending-tasks-notification")).toBeTruthy();
     });
   });
 

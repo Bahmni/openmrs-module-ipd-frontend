@@ -15,7 +15,59 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
           <td
             class="patient-details-container"
             data-testid="patient-details-header"
-          />
+          >
+            <div
+              class="bx--content-switcher bx--content-switcher--sm"
+              data-testid="task-filter-switcher"
+              role="tablist"
+            >
+              <button
+                aria-selected="true"
+                class="bx--content-switcher-btn bx--content-switcher--selected"
+                data-testid="filter-tab-all"
+                role="tab"
+                tabindex="0"
+                type="button"
+              >
+                <span
+                  class="bx--content-switcher__label"
+                  title="All"
+                >
+                  All
+                </span>
+              </button>
+              <button
+                aria-selected="false"
+                class="bx--content-switcher-btn"
+                data-testid="filter-tab-new"
+                role="tab"
+                tabindex="-1"
+                type="button"
+              >
+                <span
+                  class="bx--content-switcher__label"
+                  title="New"
+                >
+                  New
+                </span>
+              </button>
+              <button
+                aria-selected="false"
+                class="bx--content-switcher-btn"
+                data-testid="filter-tab-pending"
+                role="tab"
+                tabindex="-1"
+                type="button"
+              >
+                <span
+                  class="bx--content-switcher__label"
+                  title="Pending"
+                >
+                  Pending
+                </span>
+              </button>
+            </div>
+          </td>
           <td
             class="slot-details-header"
             data-testid="slot-details-header-0"
@@ -200,13 +252,14 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 </span>
                 <div
                   class="treatments-notification"
+                  data-testid="new-medications-notification"
                 >
                   <div
                     class="warning_icon"
                   >
                     <svg
                       aria-hidden="true"
-                      class="warning-icon-20"
+                      class="result-new-icon-20"
                       fill="currentColor"
                       focusable="false"
                       height="20"
@@ -215,28 +268,31 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                       width="20"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path
-                        d="M16 23a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 23zM15 12H17V21H15z"
+                      <circle
+                        cx="26"
+                        cy="26"
+                        r="4"
                       />
                       <path
-                        d="M29,30H3a1,1,0,0,1-.8872-1.4614l13-25a1,1,0,0,1,1.7744,0l13,25A1,1,0,0,1,29,30ZM4.6507,28H27.3493l.002-.0033L16.002,6.1714h-.004L4.6487,27.9967Z"
+                        d="M10 13H12V15H10zM10 18H12V20H10zM10 23H12V25H10zM14 13H22V15H14zM14 18H22V20H14zM14 23H18V25H14z"
+                      />
+                      <path
+                        d="M7,28V7h3v3H22V7h3V18h2V7a2,2,0,0,0-2-2H22V4a2,2,0,0,0-2-2H12a2,2,0,0,0-2,2V5H7A2,2,0,0,0,5,7V28a2,2,0,0,0,2,2H18V28ZM12,4h8V8H12Z"
                       />
                     </svg>
-                     
-                     
                   </div>
                   <div
                     class="treatments-notification-span"
                   >
                     <div>
                       • 
-                      1 New treatment(s): 
+                      1 New Medication(s): 
                       <a
                         class="bx--link"
                         data-testid="treatments-ipd-dashboard"
                         href="/bahmni/clinical/#/default/patient/7278eb93-8c1d-4ef4-bcbf-4c6ee91365f7/dashboard/visit/ipd/626b822d-741e-4a86-95ff-636eea753c2c?source=careViewDashboard"
                       >
-                        Schedule Treatments
+                        Schedule Medications
                       </a>
                     </div>
                   </div>

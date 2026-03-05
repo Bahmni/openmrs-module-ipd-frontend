@@ -28,19 +28,19 @@ describe("CareViewPatientsHeader", () => {
   it("should have now, navigation buttons and time frame", async () => {
     render(
       <IntlProvider locale="en">
-      <CareViewPatientsHeader
-        patientsSummary={mockPatientsList.admittedPatients}
-        handleKeyPress={mockHandleKeyPress}
-        handleClear={mockHandleClear}
-        searchValue={mockSearchValue}
-        updateSearchValue={mockUpdateSearchValue}
-        navHourEpoch={mockNavigationHourEpoch}
-        navButtonsDisabled={mockNavButtonsDisabled}
-        handleNow={mockHandleNow}
-        handleNext={mockHandleNext}
-        handlePrevious={mockHandlePrevious}
-        enable24HourTime={false}
-      />
+        <CareViewPatientsHeader
+            patientsSummary={mockPatientsList.admittedPatients}
+            handleKeyPress={mockHandleKeyPress}
+            handleClear={mockHandleClear}
+            searchValue={mockSearchValue}
+            updateSearchValue={mockUpdateSearchValue}
+            navHourEpoch={mockNavigationHourEpoch}
+            navButtonsDisabled={mockNavButtonsDisabled}
+            handleNow={mockHandleNow}
+            handleNext={mockHandleNext}
+            handlePrevious={mockHandlePrevious}
+            enable24HourTime={false}
+          />
       </IntlProvider>
     );
 
@@ -54,19 +54,19 @@ describe("CareViewPatientsHeader", () => {
   it("should have called handle now callback on click of Now Button in 12 houre format", async () => {
     render(
       <IntlProvider locale="en">
-      <CareViewPatientsHeader
-        patientsSummary={mockPatientsList.admittedPatients}
-        handleKeyPress={mockHandleKeyPress}
-        handleClear={mockHandleClear}
-        searchValue={mockSearchValue}
-        updateSearchValue={mockUpdateSearchValue}
-        navHourEpoch={mockNavigationHourEpoch}
-        navButtonsDisabled={mockNavButtonsDisabled}
-        handleNow={mockHandleNow}
-        handleNext={mockHandleNext}
-        handlePrevious={mockHandlePrevious}
-        enable24HourTime={false}
-      />
+        <CareViewPatientsHeader
+            patientsSummary={mockPatientsList.admittedPatients}
+            handleKeyPress={mockHandleKeyPress}
+            handleClear={mockHandleClear}
+            searchValue={mockSearchValue}
+            updateSearchValue={mockUpdateSearchValue}
+            navHourEpoch={mockNavigationHourEpoch}
+            navButtonsDisabled={mockNavButtonsDisabled}
+            handleNow={mockHandleNow}
+            handleNext={mockHandleNext}
+            handlePrevious={mockHandlePrevious}
+            enable24HourTime={false}
+          />
       </IntlProvider>
     );
     expect(mockHandleNow).toHaveBeenCalledTimes(1);
@@ -81,19 +81,19 @@ describe("CareViewPatientsHeader", () => {
   it("should have called handle now callback on click of Now Button", async () => {
     render(
       <IntlProvider locale="en">
-      <CareViewPatientsHeader
-        patientsSummary={mockPatientsList.admittedPatients}
-        handleKeyPress={mockHandleKeyPress}
-        handleClear={mockHandleClear}
-        searchValue={mockSearchValue}
-        updateSearchValue={mockUpdateSearchValue}
-        navHourEpoch={mockNavigationHourEpoch}
-        navButtonsDisabled={mockNavButtonsDisabled}
-        handleNow={mockHandleNow}
-        handleNext={mockHandleNext}
-        handlePrevious={mockHandlePrevious}
-        enable24HourTime={true}
-      />
+        <CareViewPatientsHeader
+            patientsSummary={mockPatientsList.admittedPatients}
+            handleKeyPress={mockHandleKeyPress}
+            handleClear={mockHandleClear}
+            searchValue={mockSearchValue}
+            updateSearchValue={mockUpdateSearchValue}
+            navHourEpoch={mockNavigationHourEpoch}
+            navButtonsDisabled={mockNavButtonsDisabled}
+            handleNow={mockHandleNow}
+            handleNext={mockHandleNext}
+            handlePrevious={mockHandlePrevious}
+            enable24HourTime={true}
+          />
       </IntlProvider>
     );
     expect(mockHandleNow).toHaveBeenCalledTimes(1);
@@ -106,20 +106,20 @@ describe("CareViewPatientsHeader", () => {
   });
 
   it("should have called handle previous callback on click of left arrow button", async () => {
-    render( 
+    render(
       <IntlProvider locale="en">
-      <CareViewPatientsHeader
-        patientsSummary={mockPatientsList.admittedPatients}
-        handleKeyPress={mockHandleKeyPress}
-        handleClear={mockHandleClear}
-        searchValue={mockSearchValue}
-        updateSearchValue={mockUpdateSearchValue}
-        navHourEpoch={mockNavigationHourEpoch}
-        navButtonsDisabled={mockNavButtonsDisabled}
-        handleNow={mockHandleNow}
-        handleNext={mockHandleNext}
-        handlePrevious={mockHandlePrevious}
-      />
+        <CareViewPatientsHeader
+            patientsSummary={mockPatientsList.admittedPatients}
+            handleKeyPress={mockHandleKeyPress}
+            handleClear={mockHandleClear}
+            searchValue={mockSearchValue}
+            updateSearchValue={mockUpdateSearchValue}
+            navHourEpoch={mockNavigationHourEpoch}
+            navButtonsDisabled={mockNavButtonsDisabled}
+            handleNow={mockHandleNow}
+            handleNext={mockHandleNext}
+            handlePrevious={mockHandlePrevious}
+          />
       </IntlProvider>
     );
     expect(mockHandlePrevious).toHaveBeenCalledTimes(0);
@@ -130,18 +130,18 @@ describe("CareViewPatientsHeader", () => {
   it("should have called handle next callback on click of right arrow button", async () => {
     render(
       <IntlProvider locale="en">
-      <CareViewPatientsHeader
-        patientsSummary={mockPatientsList.admittedPatients}
-        handleKeyPress={mockHandleKeyPress}
-        handleClear={mockHandleClear}
-        searchValue={mockSearchValue}
-        updateSearchValue={mockUpdateSearchValue}
-        navHourEpoch={mockNavigationHourEpoch}
-        navButtonsDisabled={mockNavButtonsDisabled}
-        handleNow={mockHandleNow}
-        handleNext={mockHandleNext}
-        handlePrevious={mockHandlePrevious}
-      />
+        <CareViewPatientsHeader
+            patientsSummary={mockPatientsList.admittedPatients}
+            handleKeyPress={mockHandleKeyPress}
+            handleClear={mockHandleClear}
+            searchValue={mockSearchValue}
+            updateSearchValue={mockUpdateSearchValue}
+            navHourEpoch={mockNavigationHourEpoch}
+            navButtonsDisabled={mockNavButtonsDisabled}
+            handleNow={mockHandleNow}
+            handleNext={mockHandleNext}
+            handlePrevious={mockHandlePrevious}
+          />
       </IntlProvider>
     );
     expect(mockHandleNext).toHaveBeenCalledTimes(0);
@@ -152,20 +152,20 @@ describe("CareViewPatientsHeader", () => {
   it("should have All Tasks as the default dropdown", async () => {
     render(
       <IntlProvider locale="en">
-      <CareViewPatientsHeader
-        patientsSummary={mockPatientsList.admittedPatients}
-        handleKeyPress={mockHandleKeyPress}
-        handleClear={mockHandleClear}
-        searchValue={mockSearchValue}
-        updateSearchValue={mockUpdateSearchValue}
-        navHourEpoch={mockNavigationHourEpoch}
-        navButtonsDisabled={mockNavButtonsDisabled}
-        handleNow={mockHandleNow}
-        handleNext={mockHandleNext}
-        handlePrevious={mockHandlePrevious}
-        filterValue={items[0].id}
-        setFilterValue={mockSetFilterValue}
-      />
+        <CareViewPatientsHeader
+            patientsSummary={mockPatientsList.admittedPatients}
+            handleKeyPress={mockHandleKeyPress}
+            handleClear={mockHandleClear}
+            searchValue={mockSearchValue}
+            updateSearchValue={mockUpdateSearchValue}
+            navHourEpoch={mockNavigationHourEpoch}
+            navButtonsDisabled={mockNavButtonsDisabled}
+            handleNow={mockHandleNow}
+            handleNext={mockHandleNext}
+            handlePrevious={mockHandlePrevious}
+            filterValue={items[0].id}
+            setFilterValue={mockSetFilterValue}
+          />
       </IntlProvider>
     );
     expect(screen.getByText("All Tasks")).toBeTruthy();
@@ -174,20 +174,20 @@ describe("CareViewPatientsHeader", () => {
   it("should have other options in the dropdown", async () => {
     render(
       <IntlProvider locale="en">
-      <CareViewPatientsHeader
-        patientsSummary={mockPatientsList.admittedPatients}
-        handleKeyPress={mockHandleKeyPress}
-        handleClear={mockHandleClear}
-        searchValue={mockSearchValue}
-        updateSearchValue={mockUpdateSearchValue}
-        navHourEpoch={mockNavigationHourEpoch}
-        navButtonsDisabled={mockNavButtonsDisabled}
-        handleNow={mockHandleNow}
-        handleNext={mockHandleNext}
-        handlePrevious={mockHandlePrevious}
-        filterValue={items[0].id}
-        setFilterValue={mockSetFilterValue}
-      />
+        <CareViewPatientsHeader
+            patientsSummary={mockPatientsList.admittedPatients}
+            handleKeyPress={mockHandleKeyPress}
+            handleClear={mockHandleClear}
+            searchValue={mockSearchValue}
+            updateSearchValue={mockUpdateSearchValue}
+            navHourEpoch={mockNavigationHourEpoch}
+            navButtonsDisabled={mockNavButtonsDisabled}
+            handleNow={mockHandleNow}
+            handleNext={mockHandleNext}
+            handlePrevious={mockHandlePrevious}
+            filterValue={items[0].id}
+            setFilterValue={mockSetFilterValue}
+          />
       </IntlProvider>
     );
 
@@ -199,4 +199,5 @@ describe("CareViewPatientsHeader", () => {
       expect(screen.getByText(item.text)).toBeTruthy();
     });
   });
+
 });

@@ -4,14 +4,17 @@ import {
   BookmarkAdd20,
   BookmarkFilled20,
   HospitalBed16,
+  ResultNew20,
   WarningAlt20,
 } from "@carbon/icons-react";
 import { Link } from "carbon-components-react";
 import { FormattedMessage, useIntl } from "react-intl";
 import propTypes from "prop-types";
-import PropTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
-import { getCurrentShiftTimes, getAgeInYearsMonthsDays } from "../../../utils/DateTimeUtils";
+import {
+  getCurrentShiftTimes,
+  getAgeInYearsMonthsDays,
+} from "../../../utils/DateTimeUtils";
 import { getIPDPatientDashboardUrl } from "../../../utils/CommonUtils";
 
 export const PatientDetailsCell = ({
@@ -21,7 +24,7 @@ export const PatientDetailsCell = ({
   navHourEpoch,
   newTreatments,
   visitDetails,
-  previousShiftPendingTasks
+  previousShiftPendingTasks,
 }) => {
   const { person, uuid } = patientDetails;
   const {
@@ -116,46 +119,62 @@ export const PatientDetailsCell = ({
           <FormattedMessage id={"PATIENT"} defaultMessage={"Patient"} />:{" "}
           <span>{person.display}</span>&nbsp;(
           <span>{person.gender}</span>)<span className={"separator"}>|</span>
-          <span>{getAgeInYearsMonthsDays(person.birthdate, new Date(), intl)}</span>
-          {(newTreatments > 0 || previousShiftPendingTasks.length > 0) && (
-            <>
-              <div className="treatments-notification">
-                <div className="warning_icon">
-                  <WarningAlt20 className={"warning-icon-20"} />{" "} </div>
-                <div className="treatments-notification-span">
-                 { newTreatments > 0 && <div>&bull; { newTreatments + " New treatment(s): "}
-                  <>
-                    <Link
-                      href={getIPDPatientDashboardUrl(
-                        patientDetails.uuid,
-                        visitDetails?.uuid,
-                        "careViewDashboard"
-                      )}
-                      data-testid="treatments-ipd-dashboard"
-                    >
-                      <FormattedMessage
-                        id={"SCHEDULE_TREATMENTS"}
-                        defaultMessage={"Schedule Treatments"}
-                      />
-                    </Link>
-                  </>
-                  </div>}
-                  { previousShiftPendingTasks.length > 0 &&
-                  <div> &bull;{" Previous Pending: "} {
-                    previousShiftPendingTasks.map((task, index) => (
-                      <span key={task.taskId}>
-                        {index === previousShiftPendingTasks.length - 1 ? (
-                          <span>{task.taskName}</span>
-                        ) : (
-                          <span>{task.taskName + ", "}</span>
-                        )}
-                      </span>
-                    ))
-                  }</div>
-                  }
+          <span>
+            {getAgeInYearsMonthsDays(person.birthdate, new Date(), intl)}
+          </span>
+          {newTreatments > 0 && (
+            <div
+              className="treatments-notification"
+              data-testid="new-medications-notification"
+            >
+              <div className="warning_icon">
+                <ResultNew20 className={"result-new-icon-20"} />
+              </div>
+              <div className="treatments-notification-span">
+                <div>
+                  &bull; {newTreatments + " New Medication(s): "}
+                  <Link
+                    href={getIPDPatientDashboardUrl(
+                      patientDetails.uuid,
+                      visitDetails?.uuid,
+                      "careViewDashboard"
+                    )}
+                    data-testid="treatments-ipd-dashboard"
+                  >
+                    <FormattedMessage
+                      id={"SCHEDULE_TREATMENTS"}
+                      defaultMessage={"Schedule Medications"}
+                    />
+                  </Link>
                 </div>
               </div>
-            </>
+            </div>
+          )}
+          {previousShiftPendingTasks.length > 0 && (
+            <div
+              className="treatments-notification"
+              data-testid="pending-tasks-notification"
+            >
+              <div className="warning_icon">
+                <WarningAlt20 className={"warning-icon-20"} />
+              </div>
+              <div className="treatments-notification-span">
+                <div>
+                  &bull;{" "}
+                  {previousShiftPendingTasks.length +
+                    " Pending Nursing Tasks: "}
+                  {previousShiftPendingTasks.map((task, index) => (
+                    <span key={task.taskId}>
+                      {index === previousShiftPendingTasks.length - 1 ? (
+                        <span>{task.taskName}</span>
+                      ) : (
+                        <span>{task.taskName + ", "}</span>
+                      )}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
         </div>
         {isBookmarked && (
@@ -187,8 +206,8 @@ export const PatientDetailsCell = ({
 
 PatientDetailsCell.propTypes = {
   patientDetails: {
-    person: PropTypes.object.isRequired,
-    uuid: PropTypes.string.isRequired,
+    person: propTypes.object.isRequired,
+    uuid: propTypes.string.isRequired,
   },
   bedDetails: propTypes.object.isRequired,
   careTeamDetails: propTypes.object.isRequired,
