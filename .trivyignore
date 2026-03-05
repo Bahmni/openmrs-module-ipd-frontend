@@ -32,4 +32,6 @@ CVE-2026-27903 # minimatch: https://avd.aquasec.com/nvd/cve-2026-27903
 CVE-2026-27904 # minimatch: https://avd.aquasec.com/nvd/cve-2026-27904
 GHSA-5c6j-r48x-rmvq # serialize-javascript: https://github.com/advisories/GHSA-5c6j-r48x-rmvq
 CVE-2026-27212 # swiper: https://avd.aquasec.com/nvd/cve-2026-27212
+GHSA-qffp-2rhf-9h96 # tar: transitive dev dep via terser-webpack-plugin#cacache, build-time only, no runtime exposure https://github.com/advisories/GHSA-qffp-2rhf-9h96
+
 
