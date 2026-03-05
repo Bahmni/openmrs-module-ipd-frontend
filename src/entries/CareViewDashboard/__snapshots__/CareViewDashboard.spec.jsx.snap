@@ -483,7 +483,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                     data-testid="patient-details-header"
                   >
                     <div
-                      class="bx--content-switcher bx--content-switcher--sm"
+                      class="bx--content-switcher task-filter-switcher bx--content-switcher--sm"
                       data-testid="task-filter-switcher"
                       role="tablist"
                     >
