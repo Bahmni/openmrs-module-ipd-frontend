@@ -35,6 +35,7 @@ export const Header = ({ timeframeLimitInHours, navHourEpoch }) => {
           selectedIndex={
             selectedTaskFilterIndex >= 0 ? selectedTaskFilterIndex : 0
           }
+          className="task-filter-switcher"
           data-testid="task-filter-switcher"
           size="sm"
         >
