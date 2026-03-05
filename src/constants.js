@@ -141,6 +141,13 @@ export const WARD_SUMMARY_HEADER = {
   MY_PATIENTS: "MY_PATIENTS",
 };
 
+export const TASK_FILTER_HEADER = {
+  ALL: "ALL",
+  NEW: "NEW",
+  PENDING: "PENDING",
+};
+export const nonMedicationTaskKey = "NON_MEDICATION_TASK";
+
 export const ForbiddenErrorMessage = "User doesn't have required privilege(s)";
 
 export const GenericErrorMessage = "Technical error";
