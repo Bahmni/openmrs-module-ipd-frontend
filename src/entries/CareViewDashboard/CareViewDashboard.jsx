@@ -7,7 +7,11 @@ import "./CareViewDashboard.scss";
 import { CareViewSummary } from "../../features/CareViewSummary/components/CareViewSummary";
 import { CareViewPatients } from "../../features/CareViewPatients/components/CareViewPatients";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
-import { homePageUrl, WARD_SUMMARY_HEADER } from "../../constants";
+import {
+  homePageUrl,
+  WARD_SUMMARY_HEADER,
+  TASK_FILTER_HEADER,
+} from "../../constants";
 import { CareViewContext } from "../../context/CareViewContext";
 import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
 import { getDashboardConfig } from "../../utils/CommonUtils";
@@ -26,6 +30,7 @@ const CareViewDashboard = (props) => {
   const [wardSummary, setWardSummary] = useState({});
   const [careViewConfig, setCareViewConfig] = useState({});
   const [ipdConfig, setIpdConfig] = useState({});
+  const [taskFilterType, setTaskFilterType] = useState(TASK_FILTER_HEADER.ALL);
   const getConfig = async () => {
     const config = await getConfigForCareViewDashboard();
     setCareViewConfig(config);
@@ -91,6 +96,8 @@ const CareViewDashboard = (props) => {
               refreshSummary,
               handleRefreshSummary,
               handleAuditEvent,
+              taskFilterType,
+              setTaskFilterType,
             }}
           >
             <CareViewSummary callbacks={{ setIsLoading }} onHome={onHome} />
