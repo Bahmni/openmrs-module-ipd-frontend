@@ -32,6 +32,7 @@ export const CareViewPatientsSummary = ({
     ipdConfig,
     taskFilterType = TASK_FILTER_HEADER.ALL,
   } = useContext(CareViewContext);
+  const { enableNurseAcknowledgement = false } = careViewConfig;
   const { shiftDetails: shiftConfig = {} } = ipdConfig;
   const timeframeLimitInHours = careViewConfig.timeframeLimitInHours;
   const shiftDetails = currentShiftHoursArray(new Date(), shiftConfig);
@@ -125,16 +126,18 @@ export const CareViewPatientsSummary = ({
             );
             const tasks = matchingShift ? matchingShift.tasks : [];
 
-            if (
-              taskFilterType === TASK_FILTER_HEADER.NEW &&
-              newTreatments === 0
-            )
-              return rows;
-            if (
-              taskFilterType === TASK_FILTER_HEADER.PENDING &&
-              tasks.length === 0
-            )
-              return rows;
+            if (enableNurseAcknowledgement) {
+              if (
+                taskFilterType === TASK_FILTER_HEADER.NEW &&
+                newTreatments === 0
+              )
+                return rows;
+              if (
+                taskFilterType === TASK_FILTER_HEADER.PENDING &&
+                tasks.length === 0
+              )
+                return rows;
+            }
 
             rows.push(
               <tr key={uuid} className={"patient-row-container"}>

@@ -10,6 +10,7 @@ const mockSetTaskFilterType = jest.fn();
 
 const makeContext = (overrides = {}) => ({
   ipdConfig: { enable24HourTime: true },
+  careViewConfig: { enableNurseAcknowledgement: true },
   taskFilterType: TASK_FILTER_HEADER.ALL,
   setTaskFilterType: mockSetTaskFilterType,
   ...overrides,
@@ -91,6 +92,28 @@ describe("Header", () => {
     expect(screen.getByText("All")).toBeTruthy();
     expect(screen.getByText("New")).toBeTruthy();
     expect(screen.getByText("Pending")).toBeTruthy();
+  });
+
+  it("should not render filter tabs when enableNurseAcknowledgement is false", () => {
+    render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider
+          value={makeContext({
+            careViewConfig: { enableNurseAcknowledgement: false },
+          })}
+        >
+          <Header
+            timeframeLimitInHours={2}
+            navHourEpoch={defaultNavHourEpoch}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+    expect(screen.getByTestId("patient-details-header")).toBeTruthy();
+    expect(screen.queryByTestId("task-filter-switcher")).toBeNull();
+    expect(screen.queryByText("All")).toBeNull();
+    expect(screen.queryByText("New")).toBeNull();
+    expect(screen.queryByText("Pending")).toBeNull();
   });
 
   it("should call setTaskFilterType with ALL when All tab is clicked", () => {

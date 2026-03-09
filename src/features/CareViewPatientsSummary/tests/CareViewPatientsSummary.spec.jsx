@@ -13,7 +13,10 @@ import "@testing-library/jest-dom/extend-expect";
 import { IntlProvider } from "react-intl";
 
 const mockContext = {
-  careViewConfig: { timeframeLimitInHours: 2 },
+  careViewConfig: {
+    timeframeLimitInHours: 2,
+    enableNurseAcknowledgement: true,
+  },
   ipdConfig: mockConfig,
 };
 const mockNavHourEpoch = {
@@ -281,6 +284,34 @@ describe("CareViewPatientsSummary", () => {
       expect(queryByText("A-6")).toBeTruthy();
       // PT49722 has no pending tasks — should be hidden
       expect(queryByText("C-1")).toBeFalsy();
+    });
+  });
+
+  it("should show all patients when enableNurseAcknowledgement is false regardless of filter", async () => {
+    const { queryByText } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider
+          value={{
+            ...mockContext,
+            careViewConfig: {
+              timeframeLimitInHours: 2,
+              enableNurseAcknowledgement: false,
+            },
+            taskFilterType: "NEW",
+          }}
+        >
+          <CareViewPatientsSummary
+            patientsSummary={mockPatientsList.admittedPatients}
+            navHourEpoch={mockNavHourEpoch}
+            filterValue={mockFilterValue}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("A-6")).toBeTruthy();
+      expect(queryByText("C-1")).toBeTruthy();
     });
   });
 });
