@@ -12,10 +12,12 @@ import { useIntl } from "react-intl";
 export const Header = ({ timeframeLimitInHours, navHourEpoch }) => {
   const {
     ipdConfig,
+    careViewConfig,
     taskFilterType = TASK_FILTER_HEADER.ALL,
     setTaskFilterType,
   } = useContext(CareViewContext);
   const { enable24HourTime = {} } = ipdConfig;
+  const { enableNurseAcknowledgement = false } = careViewConfig;
   const intl = useIntl();
   const taskFilterTypes = [
     TASK_FILTER_HEADER.ALL,
@@ -30,40 +32,42 @@ export const Header = ({ timeframeLimitInHours, navHourEpoch }) => {
         key="patient-details-header"
         data-testid="patient-details-header"
       >
-        <ContentSwitcher
-          onChange={(e) => setTaskFilterType && setTaskFilterType(e.name)}
-          selectedIndex={
-            selectedTaskFilterIndex >= 0 ? selectedTaskFilterIndex : 0
-          }
-          className="task-filter-switcher"
-          data-testid="task-filter-switcher"
-          size="sm"
-        >
-          <Switch
-            name={TASK_FILTER_HEADER.ALL}
-            text={intl.formatMessage({
-              id: TASK_FILTER_HEADER.ALL,
-              defaultMessage: "All",
-            })}
-            data-testid="filter-tab-all"
-          />
-          <Switch
-            name={TASK_FILTER_HEADER.NEW}
-            text={intl.formatMessage({
-              id: TASK_FILTER_HEADER.NEW,
-              defaultMessage: "New",
-            })}
-            data-testid="filter-tab-new"
-          />
-          <Switch
-            name={TASK_FILTER_HEADER.PENDING}
-            text={intl.formatMessage({
-              id: TASK_FILTER_HEADER.PENDING,
-              defaultMessage: "Pending",
-            })}
-            data-testid="filter-tab-pending"
-          />
-        </ContentSwitcher>
+        {enableNurseAcknowledgement && (
+          <ContentSwitcher
+            onChange={(e) => setTaskFilterType && setTaskFilterType(e.name)}
+            selectedIndex={
+              selectedTaskFilterIndex >= 0 ? selectedTaskFilterIndex : 0
+            }
+            className="task-filter-switcher"
+            data-testid="task-filter-switcher"
+            size="sm"
+          >
+            <Switch
+              name={TASK_FILTER_HEADER.ALL}
+              text={intl.formatMessage({
+                id: TASK_FILTER_HEADER.ALL,
+                defaultMessage: "All",
+              })}
+              data-testid="filter-tab-all"
+            />
+            <Switch
+              name={TASK_FILTER_HEADER.NEW}
+              text={intl.formatMessage({
+                id: TASK_FILTER_HEADER.NEW,
+                defaultMessage: "New",
+              })}
+              data-testid="filter-tab-new"
+            />
+            <Switch
+              name={TASK_FILTER_HEADER.PENDING}
+              text={intl.formatMessage({
+                id: TASK_FILTER_HEADER.PENDING,
+                defaultMessage: "Pending",
+              })}
+              data-testid="filter-tab-pending"
+            />
+          </ContentSwitcher>
+        )}
       </td>
       {Array.from({ length: timeframeLimitInHours }, (_, i) => {
         const startTime = navHourEpoch.startHourEpoch + i * 3600;

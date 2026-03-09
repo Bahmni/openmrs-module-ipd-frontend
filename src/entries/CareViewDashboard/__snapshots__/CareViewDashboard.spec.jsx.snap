@@ -481,59 +481,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   <td
                     class="patient-details-container"
                     data-testid="patient-details-header"
-                  >
-                    <div
-                      class="bx--content-switcher task-filter-switcher bx--content-switcher--sm"
-                      data-testid="task-filter-switcher"
-                      role="tablist"
-                    >
-                      <button
-                        aria-selected="true"
-                        class="bx--content-switcher-btn bx--content-switcher--selected"
-                        data-testid="filter-tab-all"
-                        role="tab"
-                        tabindex="0"
-                        type="button"
-                      >
-                        <span
-                          class="bx--content-switcher__label"
-                          title="All"
-                        >
-                          All
-                        </span>
-                      </button>
-                      <button
-                        aria-selected="false"
-                        class="bx--content-switcher-btn"
-                        data-testid="filter-tab-new"
-                        role="tab"
-                        tabindex="-1"
-                        type="button"
-                      >
-                        <span
-                          class="bx--content-switcher__label"
-                          title="New"
-                        >
-                          New
-                        </span>
-                      </button>
-                      <button
-                        aria-selected="false"
-                        class="bx--content-switcher-btn"
-                        data-testid="filter-tab-pending"
-                        role="tab"
-                        tabindex="-1"
-                        type="button"
-                      >
-                        <span
-                          class="bx--content-switcher__label"
-                          title="Pending"
-                        >
-                          Pending
-                        </span>
-                      </button>
-                    </div>
-                  </td>
+                  />
                   <td
                     class="slot-details-header"
                     data-testid="slot-details-header-0"
