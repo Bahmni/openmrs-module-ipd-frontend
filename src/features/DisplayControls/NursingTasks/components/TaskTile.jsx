@@ -74,8 +74,7 @@ export default function TaskTile(props) {
       };
 
   const creatorName = (creator) => {
-    var formattedName = creator.split(".").join(" ");
-    return formattedName;
+    return creator.split(".").join(" ");
   };
 
   const drugNameText = (
