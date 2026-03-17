@@ -48,10 +48,10 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
               </span>
             </span>
           </div>
+          <div
+            class="tile-name-cell"
+          />
         </div>
-        <div
-          class="tile-name-cell"
-        />
         <div
           class="tile-content-subtext"
           style="color: rgb(82, 82, 82); padding-left: 25px;"
@@ -141,10 +141,10 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
               </span>
             </span>
           </div>
+          <div
+            class="tile-name-cell"
+          />
         </div>
-        <div
-          class="tile-name-cell"
-        />
         <div
           class="tile-content-subtext"
           style="color: rgb(82, 82, 82); padding-left: 25px;"
@@ -170,11 +170,6 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
             </div>
              
           </div>
-        </div>
-        <div
-          class="more-info"
-        >
-          ( more)
         </div>
       </div>
     </div>
