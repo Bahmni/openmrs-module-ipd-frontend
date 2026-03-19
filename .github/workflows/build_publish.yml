@@ -54,7 +54,7 @@ jobs:
           file: package/docker/Dockerfile
           push: true
           tags: |
-            us-east1-docker.pkg.dev/cure-emr-gcp/bahmni/microfrontend-ipd:ipd-${{ github.run_number }}
+            us-east1-docker.pkg.dev/cure-emr-gcp/bahmni/microfrontend-ipd:${{ github.run_number }}
             us-east1-docker.pkg.dev/cure-emr-gcp/bahmni/microfrontend-ipd:latest
   trigger-workflow:
     name: Trigger workflow to deploy to Docker env
