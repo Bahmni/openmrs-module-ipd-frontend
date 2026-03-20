@@ -53,8 +53,6 @@ const UpdateNursingTasks = (props) => {
     updateNursingTasksSlider,
     patientId,
     providerId,
-    setShowSuccessNotification,
-    setSuccessMessage,
     setShowNotification,
     setNotificationMessage,
     setNotificationStatus,
@@ -102,8 +100,6 @@ const UpdateNursingTasks = (props) => {
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
   const saveAdministeredTasks = (task) => {
-    setShowSuccessNotification(true);
-    setSuccessMessage("NURSING_TASKS_SAVE_MESSAGE");
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
     updateIsPRNMedication(false);
@@ -121,8 +117,6 @@ const UpdateNursingTasks = (props) => {
     };
 
   const saveAdministeredNonMedicationTasks = (status, messageId) => {
-    setShowSuccessNotification(true);
-    setSuccessMessage("NON_MEDICATION_TASK_UPDATE_MESSAGE");
     setShowNotification(true);
     setNotificationStatus(status);
     setNotificationMessage(messageId);
