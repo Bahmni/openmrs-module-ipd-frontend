@@ -123,6 +123,7 @@ export const componentKeys = {
   INTAKE_OUTPUT: "IO",
   NUTRITION_ADVICE_FORM: "NAF",
   PATIENT_FEEDING_RECORD: "PFR",
+  CARE_INSTRUCTIONS: "CI",
 };
 
 export const performerFunction = "Performer";

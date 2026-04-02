@@ -253,5 +253,16 @@
   "NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS": "Acknowledgement is successful",
   "INSUFFICIENT_PRIVILEGE_TO_ACKNOWLEDGE": "Insufficient Acknowledge Privilege",
   "ALL": "All",
-  "NEW": "New"
+  "NEW": "New",
+  "CARE_INSTRUCTIONS_HEADER_KEY": "Care Instructions",
+  "CARE_INSTRUCTIONS_DATE_AND_TIME_HEADER": "Date and Time",
+  "CARE_INSTRUCTIONS_FORM_HEADER": "Form",
+  "CARE_INSTRUCTIONS_INSTRUCTION_TYPE_HEADER": "Instruction Type",
+  "CARE_INSTRUCTIONS_INSTRUCTION_HEADER": "Instruction",
+  "CARE_INSTRUCTIONS_PROVIDER_NAME_HEADER": "Provider Name",
+  "CARE_INSTRUCTIONS_ACTION_HEADER": "Action",
+  "NOT_ACKNOWLEDGED_TAB": "Not Acknowledged",
+  "ACKNOWLEDGED_TAB": "Acknowledged",
+  "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient",
+  "NO_ACKNOWLEDGED_RECORDS_MESSAGE": "No records available"
 }
