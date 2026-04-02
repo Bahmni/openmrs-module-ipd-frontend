@@ -155,5 +155,16 @@
   "IPD_UNSKIP_TASK": "Unskip Task",
   "IPD_SKIP_TASK": "Skip Task",
   "IPD_UNSKIP_DRUG": "Unskip Drug",
-  "IPD_SKIP_DRUG": "Skip Drug"
+  "IPD_SKIP_DRUG": "Skip Drug",
+  "CARE_INSTRUCTIONS_HEADER_KEY": "Care Instructions",
+  "CARE_INSTRUCTIONS_DATE_AND_TIME_HEADER": "Date and Time",
+  "CARE_INSTRUCTIONS_FORM_HEADER": "Form",
+  "CARE_INSTRUCTIONS_INSTRUCTION_TYPE_HEADER": "Instruction Type",
+  "CARE_INSTRUCTIONS_INSTRUCTION_HEADER": "Instruction",
+  "CARE_INSTRUCTIONS_PROVIDER_NAME_HEADER": "Provider Name",
+  "CARE_INSTRUCTIONS_ACTION_HEADER": "Action",
+  "NOT_ACKNOWLEDGED_TAB": "Not Acknowledged",
+  "ACKNOWLEDGED_TAB": "Acknowledged",
+  "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient",
+  "NO_ACKNOWLEDGED_RECORDS_MESSAGE": "No records available"
 }
