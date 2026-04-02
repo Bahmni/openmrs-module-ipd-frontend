@@ -36,5 +36,13 @@ CVE-2026-27904 # minimatch: https://avd.aquasec.com/nvd/cve-2026-27904
 GHSA-5c6j-r48x-rmvq # serialize-javascript: https://github.com/advisories/GHSA-5c6j-r48x-rmvq
 CVE-2026-27212 # swiper: https://avd.aquasec.com/nvd/cve-2026-27212
 GHSA-qffp-2rhf-9h96 # tar: transitive dev dep via terser-webpack-plugin#cacache, build-time only, no runtime exposure https://github.com/advisories/GHSA-qffp-2rhf-9h96
+CVE-2026-33228 # flatted: transitive dev dep via @storybook/react#react-docgen-typescript-plugin#flat-cache, build-time only, no runtime exposure https://avd.aquasec.com/nvd/cve-2026-33228
+CVE-2026-33937 # handlebars: transitive dev dep via @storybook/react#core-common, build-time only, no runtime exposure https://avd.aquasec.com/nvd/cve-2026-33937
+CVE-2026-33938 # handlebars: transitive dev dep via @storybook/react#core-common, build-time only, no runtime exposure https://avd.aquasec.com/nvd/cve-2026-33938
+CVE-2026-33939 # handlebars: transitive dev dep via @storybook/react#core-common, build-time only, no runtime exposure https://avd.aquasec.com/nvd/cve-2026-33939
+CVE-2026-33940 # handlebars: transitive dev dep via @storybook/react#core-common, build-time only, no runtime exposure https://avd.aquasec.com/nvd/cve-2026-33940
+CVE-2026-33941 # handlebars: transitive dev dep via @storybook/react#core-common, build-time only, no runtime exposure https://avd.aquasec.com/nvd/cve-2026-33941
+CVE-2026-4867 # path-to-regexp: transitive dev dep via webpack-dev-server#express, build-time only, no runtime exposure https://avd.aquasec.com/nvd/cve-2026-4867
+CVE-2026-33671 # picomatch: transitive dev dep via lint-staged/jest/sass, build-time only, no runtime exposure https://avd.aquasec.com/nvd/cve-2026-33671
 
 
