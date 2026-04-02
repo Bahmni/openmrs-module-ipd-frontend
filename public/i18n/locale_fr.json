@@ -245,5 +245,16 @@
   "DRUG_CHART_MODAL_ADDITIONAL_INSTRUCTIONS": "Instructions supplémentaires",
   "DRUG_CHART_MODAL_NOTES": "Notes",
   "ALL": "Tous",
-  "NEW": "Nouveau"
+  "NEW": "Nouveau",
+  "CARE_INSTRUCTIONS_HEADER_KEY": "Instructions de soins",
+  "CARE_INSTRUCTIONS_DATE_AND_TIME_HEADER": "Date et heure",
+  "CARE_INSTRUCTIONS_FORM_HEADER": "Formulaire",
+  "CARE_INSTRUCTIONS_INSTRUCTION_TYPE_HEADER": "Type d'instruction",
+  "CARE_INSTRUCTIONS_INSTRUCTION_HEADER": "Instruction",
+  "CARE_INSTRUCTIONS_PROVIDER_NAME_HEADER": "Nom du prestataire",
+  "CARE_INSTRUCTIONS_ACTION_HEADER": "Action",
+  "NOT_ACKNOWLEDGED_TAB": "Non acquitté",
+  "ACKNOWLEDGED_TAB": "Acquitté",
+  "NO_CARE_INSTRUCTIONS_MESSAGE": "Aucune instruction de soins disponible pour ce patient",
+  "NO_ACKNOWLEDGED_RECORDS_MESSAGE": "Aucun enregistrement disponible"
 }
