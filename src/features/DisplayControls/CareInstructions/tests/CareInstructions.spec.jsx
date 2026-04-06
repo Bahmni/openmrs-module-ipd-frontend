@@ -20,64 +20,39 @@ const mockFormConcepts = [
   },
 ];
 
-const mockAllFormsFilledInCurrentVisit = [
+const mockObservationsApiResponse = [
   {
-    formType: "v2",
-    formName: "Doctor Patient Progress Notes",
-    formVersion: 1,
-    visitUuid: "visit-uuid-1",
-    visitStartDateTime: 1713875236000,
-    encounterUuid: "encounter-uuid-1",
     encounterDateTime: 1713955252000,
-    providers: [{ providerName: "Dr. Smith", uuid: "provider-uuid-1" }],
+    encounterUuid: "encounter-uuid-1",
+    formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+    concept: { name: "Instruction for the Ward" },
+    value: "Patient should rest",
+    providers: [{ name: "Dr. Smith", uuid: "provider-uuid-1" }],
+    groupMembers: [],
   },
   {
-    formType: "v2",
-    formName: "Patient Progress Notes and Orders",
-    formVersion: 1,
-    visitUuid: "visit-uuid-1",
-    visitStartDateTime: 1713875236000,
-    encounterUuid: "encounter-uuid-2",
     encounterDateTime: 1713941600000,
-    providers: [{ providerName: "Dr. Jones", uuid: "provider-uuid-2" }],
+    encounterUuid: "encounter-uuid-2",
+    formFieldPath: "Patient Progress Notes and Orders.2/11-0",
+    concept: { name: "Physician Orders Comments (ET only)" },
+    value: "Monitor blood pressure",
+    providers: [{ name: "Dr. Jones", uuid: "provider-uuid-2" }],
+    groupMembers: [],
   },
 ];
 
-const mockEncounterObsResponse1 = {
-  observations: [
-    {
-      concept: { name: "Instruction for the Ward" },
-      value: "Patient should rest",
-      groupMembers: [],
-    },
-  ],
-};
-
-const mockEncounterObsResponse2 = {
-  observations: [
-    {
-      concept: { name: "Physician Orders Comments (ET only)" },
-      value: "Monitor blood pressure",
-      groupMembers: [],
-    },
-  ],
-};
-
 const mockIPDContextWithData = {
-  allFormsFilledInCurrentVisit: mockAllFormsFilledInCurrentVisit,
-  isAllFormsFilledInCurrentVisitLoading: false,
+  visit: "visit-uuid-1",
   config: { enable24HourTime: false },
 };
 
 const mockIPDContextEmpty = {
-  allFormsFilledInCurrentVisit: [],
-  isAllFormsFilledInCurrentVisitLoading: false,
+  visit: "visit-uuid-1",
   config: { enable24HourTime: false },
 };
 
-const mockIPDContextLoading = {
-  allFormsFilledInCurrentVisit: [],
-  isAllFormsFilledInCurrentVisitLoading: true,
+const mockIPDContextNoVisit = {
+  visit: null,
   config: { enable24HourTime: false },
 };
 
@@ -92,31 +67,33 @@ const renderWithProviders = (component, ipdContextValue) => {
 describe("CareInstructions", () => {
   beforeEach(() => {
     jest
-      .spyOn(CareInstructionsUtils, "fetchEncounterObs")
-      .mockImplementation((encounterUuid) => {
-        if (encounterUuid === "encounter-uuid-1") {
-          return Promise.resolve(mockEncounterObsResponse1);
-        }
-        if (encounterUuid === "encounter-uuid-2") {
-          return Promise.resolve(mockEncounterObsResponse2);
-        }
-        return Promise.resolve(null);
-      });
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockResolvedValue(mockObservationsApiResponse);
   });
 
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it("should render loading skeleton when data is loading", () => {
-    const { getByTestId } = renderWithProviders(
+  it("should render empty state when visit is not available", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockResolvedValue([]);
+    const { getByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
-      mockIPDContextLoading
+      mockIPDContextNoVisit
     );
-    expect(getByTestId("care-instructions-loading")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        getByText("No care instructions are available for the patient")
+      ).toBeInTheDocument();
+    });
   });
 
-  it("should render empty state when no matching forms exist", async () => {
+  it("should render empty state when no observations are returned", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockResolvedValue([]);
     const { getByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextEmpty
@@ -129,6 +106,9 @@ describe("CareInstructions", () => {
   });
 
   it("should render Not Acknowledged and Acknowledged tabs", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockResolvedValue([]);
     const { getByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextEmpty
@@ -167,6 +147,9 @@ describe("CareInstructions", () => {
   });
 
   it("should show Acknowledged tab content when Acknowledged tab is clicked", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockResolvedValue([]);
     const { getByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextEmpty
@@ -208,19 +191,22 @@ describe("CareInstructions", () => {
   });
 
   it("should render empty provider name when providers array is empty", async () => {
-    const contextWithEmptyProviders = {
-      ...mockIPDContextWithData,
-      allFormsFilledInCurrentVisit: [
+    jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockResolvedValue([
         {
-          ...mockAllFormsFilledInCurrentVisit[0],
+          encounterDateTime: 1713955252000,
           encounterUuid: "encounter-uuid-1",
+          formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+          concept: { name: "Instruction for the Ward" },
+          value: "Patient should rest",
           providers: [],
+          groupMembers: [],
         },
-      ],
-    };
+      ]);
     const { getByText, getAllByRole } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
-      contextWithEmptyProviders
+      mockIPDContextWithData
     );
     await waitFor(() => {
       expect(getByText("Patient should rest")).toBeInTheDocument();
@@ -241,70 +227,191 @@ describe("CareInstructions", () => {
       expect(rows[2].textContent).toContain("Monitor blood pressure");
     });
   });
+
+  it("should call fetchCareInstructionsObs with visit uuid and all concept names", async () => {
+    const fetchSpy = jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockResolvedValue([]);
+    renderWithProviders(
+      <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
+      mockIPDContextWithData
+    );
+    await waitFor(() => {
+      expect(fetchSpy).toHaveBeenCalledWith("visit-uuid-1", [
+        "Instruction for the Ward",
+        "Physician Orders Comments (ET only)",
+      ]);
+    });
+  });
+
+  it("should render loading skeleton while data is being fetched", async () => {
+    let resolveObs;
+    jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockReturnValue(
+        new Promise((resolve) => {
+          resolveObs = resolve;
+        })
+      );
+    const { getByTestId } = renderWithProviders(
+      <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
+      mockIPDContextWithData
+    );
+    expect(getByTestId("care-instructions-loading")).toBeInTheDocument();
+    resolveObs([]);
+  });
+
+  it("should render empty state when API call fails", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockRejectedValue(new Error("Network error"));
+    const { getByText } = renderWithProviders(
+      <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
+      mockIPDContextWithData
+    );
+    await waitFor(() => {
+      expect(
+        getByText("No care instructions are available for the patient")
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("should render separate rows when same form is filled in different encounters (AC #4)", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockResolvedValue([
+        {
+          encounterDateTime: 1713955252000,
+          encounterUuid: "encounter-uuid-1",
+          formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+          concept: { name: "Instruction for the Ward" },
+          value: "First instruction",
+          providers: [{ name: "Dr. Smith" }],
+          groupMembers: [],
+        },
+        {
+          encounterDateTime: 1713941600000,
+          encounterUuid: "encounter-uuid-3",
+          formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+          concept: { name: "Instruction for the Ward" },
+          value: "Second instruction",
+          providers: [{ name: "Dr. Smith" }],
+          groupMembers: [],
+        },
+      ]);
+    const { getByText, getAllByRole } = renderWithProviders(
+      <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
+      mockIPDContextWithData
+    );
+    await waitFor(() => {
+      expect(getByText("First instruction")).toBeInTheDocument();
+      expect(getByText("Second instruction")).toBeInTheDocument();
+      const rows = getAllByRole("row");
+      // header + 2 data rows
+      expect(rows).toHaveLength(3);
+    });
+  });
 });
 
-describe("extractInstructionsFromObs", () => {
-  it("should extract matching concept values from flat observations list", () => {
+describe("mapObservationsToInstructions", () => {
+  it("should map observations with valid formFieldPath to instructions", () => {
     const observations = [
       {
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Instruction for the Ward" },
         value: "Rest in bed",
-        groupMembers: [],
-      },
-      {
-        concept: { name: "Some Other Concept" },
-        value: "Other value",
-        groupMembers: [],
+        providers: [{ name: "Dr. Smith", uuid: "provider-uuid-1" }],
       },
     ];
-    const result = CareInstructionsUtils.extractInstructionsFromObs(
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
       observations,
-      ["Instruction for the Ward"]
+      mockFormConcepts
     );
     expect(result).toHaveLength(1);
-    expect(result[0].conceptName).toBe("Instruction for the Ward");
-    expect(result[0].value).toBe("Rest in bed");
+    expect(result[0].form).toBe("Doctor Patient Progress Notes");
+    expect(result[0].instructionType).toBe("Instruction for the Ward");
+    expect(result[0].instruction).toBe("Rest in bed");
+    expect(result[0].providerName).toBe("Dr. Smith");
+    expect(result[0].encounterUuid).toBe("encounter-uuid-1");
+    expect(result[0].action).toBe("");
   });
 
-  it("should recursively search groupMembers for matching concepts", () => {
+  it("should filter out observations with null formFieldPath", () => {
     const observations = [
       {
-        concept: { name: "Group Concept" },
-        value: null,
-        groupMembers: [
-          {
-            concept: { name: "Instruction for the Ward" },
-            value: "Nested instruction",
-            groupMembers: [],
-          },
-        ],
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: null,
+        concept: { name: "Instruction for the Ward" },
+        value: "Rest in bed",
+        providers: [{ name: "Dr. Smith" }],
       },
     ];
-    const result = CareInstructionsUtils.extractInstructionsFromObs(
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
       observations,
-      ["Instruction for the Ward"]
-    );
-    expect(result).toHaveLength(1);
-    expect(result[0].value).toBe("Nested instruction");
-  });
-
-  it("should return empty array when observations is empty", () => {
-    const result = CareInstructionsUtils.extractInstructionsFromObs(
-      [],
-      ["Instruction for the Ward"]
+      mockFormConcepts
     );
     expect(result).toHaveLength(0);
   });
 
-  it("should return empty array when configuredConcepts is empty", () => {
+  it("should filter out observations from forms not in config", () => {
     const observations = [
       {
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Unknown Form.1/5-0",
         concept: { name: "Instruction for the Ward" },
-        value: "Some value",
-        groupMembers: [],
+        value: "Rest in bed",
+        providers: [{ name: "Dr. Smith" }],
       },
     ];
-    const result = CareInstructionsUtils.extractInstructionsFromObs(
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
+      observations,
+      mockFormConcepts
+    );
+    expect(result).toHaveLength(0);
+  });
+
+  it("should filter out observations with concepts not configured for their form", () => {
+    const observations = [
+      {
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+        concept: { name: "Physician Orders Comments (ET only)" },
+        value: "Some value",
+        providers: [{ name: "Dr. Smith" }],
+      },
+    ];
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
+      observations,
+      mockFormConcepts
+    );
+    expect(result).toHaveLength(0);
+  });
+
+  it("should return empty array when observations is empty", () => {
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
+      [],
+      mockFormConcepts
+    );
+    expect(result).toHaveLength(0);
+  });
+
+  it("should return empty array when formConcepts is empty", () => {
+    const observations = [
+      {
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+        concept: { name: "Instruction for the Ward" },
+        value: "Some value",
+        providers: [{ name: "Dr. Smith" }],
+      },
+    ];
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
       observations,
       []
     );
@@ -314,36 +421,94 @@ describe("extractInstructionsFromObs", () => {
   it("should extract display name when obs value is a coded object", () => {
     const observations = [
       {
-        concept: { name: "Planned Return to Operating Room" },
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+        concept: { name: "Instruction for the Ward" },
         value: { uuid: "some-uuid", display: "Yes", name: "Yes" },
-        groupMembers: [],
+        providers: [{ name: "Dr. Smith" }],
       },
     ];
-    const result = CareInstructionsUtils.extractInstructionsFromObs(
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
       observations,
-      ["Planned Return to Operating Room"]
+      [
+        {
+          formName: "Doctor Patient Progress Notes",
+          concepts: ["Instruction for the Ward"],
+        },
+      ]
     );
     expect(result).toHaveLength(1);
-    expect(result[0].value).toBe("Yes");
+    expect(result[0].instruction).toBe("Yes");
   });
 
-  it("should return empty array when no concepts match", () => {
+  it("should return empty string for instruction when obs value is null", () => {
     const observations = [
       {
-        concept: { name: "Unrelated Concept" },
-        value: "Some value",
-        groupMembers: [],
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+        concept: { name: "Instruction for the Ward" },
+        value: null,
+        providers: [{ name: "Dr. Smith" }],
       },
     ];
-    const result = CareInstructionsUtils.extractInstructionsFromObs(
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
       observations,
-      ["Instruction for the Ward"]
+      mockFormConcepts
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].instruction).toBe("");
+  });
+
+  it("should return empty array when observations is null", () => {
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
+      null,
+      mockFormConcepts
     );
     expect(result).toHaveLength(0);
   });
+
+  it("should handle empty provider name when providers array is empty", () => {
+    const observations = [
+      {
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+        concept: { name: "Instruction for the Ward" },
+        value: "Rest in bed",
+        providers: [],
+      },
+    ];
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
+      observations,
+      mockFormConcepts
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].providerName).toBe("");
+  });
 });
 
-describe("fetchEncounterObs", () => {
+describe("serializeParams", () => {
+  it("should serialize array values as repeated params without brackets", () => {
+    const result = CareInstructionsUtils.serializeParams({
+      visitUuid: "visit-uuid-1",
+      concept: ["Physician Orders Comments", "Instruction for the Ward"],
+    });
+    expect(result).toBe(
+      "visitUuid=visit-uuid-1&concept=Physician%20Orders%20Comments&concept=Instruction%20for%20the%20Ward"
+    );
+  });
+
+  it("should serialize single string values", () => {
+    const result = CareInstructionsUtils.serializeParams({
+      visitUuid: "visit-uuid-1",
+    });
+    expect(result).toBe("visitUuid=visit-uuid-1");
+  });
+});
+
+describe("fetchCareInstructionsObs", () => {
   let mockAxios;
 
   beforeEach(() => {
@@ -354,27 +519,41 @@ describe("fetchEncounterObs", () => {
     mockAxios.restore();
   });
 
-  it("should call the correct URL with withCredentials and return response data", async () => {
-    const encounterUuid = "test-encounter-uuid";
-    const mockResponse = {
-      observations: [{ concept: { name: "Test" }, value: "Value" }],
-    };
-    mockAxios
-      .onGet(new RegExp(`.*${encounterUuid}.*`))
-      .reply(200, mockResponse);
+  it("should call the observations URL with visitUuid and concept params and return response data", async () => {
+    const mockResponse = [
+      {
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+        concept: { name: "Instruction for the Ward" },
+        value: "Test value",
+        providers: [{ name: "Dr. Smith" }],
+      },
+    ];
+    mockAxios.onGet(new RegExp(".*observations.*")).reply(200, mockResponse);
 
-    const result = await CareInstructionsUtils.fetchEncounterObs(encounterUuid);
+    const result = await CareInstructionsUtils.fetchCareInstructionsObs(
+      "visit-uuid-1",
+      ["Instruction for the Ward"]
+    );
 
     expect(result).toEqual(mockResponse);
-    expect(mockAxios.history.get[0].url).toContain(encounterUuid);
+    expect(mockAxios.history.get[0].params).toEqual({
+      visitUuid: "visit-uuid-1",
+      concept: ["Instruction for the Ward"],
+    });
+    expect(mockAxios.history.get[0].params).not.toHaveProperty("patientUuid");
     expect(mockAxios.history.get[0].withCredentials).toBe(true);
   });
 
-  it("should return null when the API call fails", async () => {
+  it("should return empty array when the API call fails", async () => {
     mockAxios.onGet(new RegExp(".*")).reply(500);
 
-    const result = await CareInstructionsUtils.fetchEncounterObs("any-uuid");
+    const result = await CareInstructionsUtils.fetchCareInstructionsObs(
+      "visit-uuid-1",
+      ["Instruction for the Ward"]
+    );
 
-    expect(result).toBeNull();
+    expect(result).toEqual([]);
   });
 });
