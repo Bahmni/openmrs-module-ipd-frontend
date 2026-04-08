@@ -160,7 +160,7 @@ const CareInstructions = (props) => {
               </TableCell>
               <TableCell>{row.form}</TableCell>
               <TableCell>{row.instructionType}</TableCell>
-              <TableCell>{row.instruction}</TableCell>
+              <TableCell className="instruction-cell">{row.instruction}</TableCell>
               <TableCell>{row.providerName}</TableCell>
               <TableCell>{row.action}</TableCell>
             </TableRow>
@@ -175,8 +175,8 @@ const CareInstructions = (props) => {
     return (
       <div className={"empty-state-message"}>
         <FormattedMessage
-          id={"NO_ACKNOWLEDGED_RECORDS_MESSAGE"}
-          defaultMessage={"No records available"}
+          id={"NO_CARE_INSTRUCTIONS_MESSAGE"}
+          defaultMessage={"No care instructions are available for the patient"}
         />
       </div>
     );
