@@ -263,6 +263,5 @@
   "CARE_INSTRUCTIONS_ACTION_HEADER": "Action",
   "NOT_ACKNOWLEDGED_TAB": "Not Acknowledged",
   "ACKNOWLEDGED_TAB": "Acknowledged",
-  "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient",
-  "NO_ACKNOWLEDGED_RECORDS_MESSAGE": "No records available"
+  "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient"
 }
