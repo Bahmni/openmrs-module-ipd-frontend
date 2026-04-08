@@ -1,5 +1,9 @@
 import axios from "axios";
-import { BAHMNI_CORE_OBSERVATIONS_BASE_URL } from "../../../../constants";
+import {
+  BAHMNI_CORE_OBSERVATIONS_BASE_URL,
+  defaultDateTimeFormat12Hrs,
+} from "../../../../constants";
+import { formatTime } from "../../../../utils/DateTimeUtils";
 
 const OBSERVATIONS_URL = BAHMNI_CORE_OBSERVATIONS_BASE_URL.replace(/\?$/, "");
 
@@ -57,12 +61,21 @@ export const mapObservationsToInstructions = (observations, formConcepts) => {
       return result;
     }
 
+    let instruction = extractObsValue(obs.value);
+    if (obs.type === "Datetime" || obs.concept?.dataType === "Datetime") {
+      instruction = formatTime(
+        obs.value,
+        "YYYY-MM-DD HH:mm:ss",
+        defaultDateTimeFormat12Hrs
+      );
+    }
+
     result.push({
       encounterUuid: obs.encounterUuid,
       encounterDateTime: obs.encounterDateTime,
       form: formName,
       instructionType: obs.concept.name,
-      instruction: extractObsValue(obs.value),
+      instruction,
       providerName: obs.providers?.[0]?.name ?? "",
       action: "",
     });
