@@ -35,13 +35,21 @@ describe("DrugChartNoteAmendment (presentational)", () => {
   });
 
   it("renders amendment reason select and notes textarea", () => {
-    render(<DrugChartNoteAmendment {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteAmendment {...defaultProps} />
+      </I18nProvider>
+    );
     expect(screen.getByLabelText(/Amendment Reason/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Amendment Notes/i)).toBeInTheDocument();
   });
 
   it("calls onReasonChange when select changes", () => {
-    render(<DrugChartNoteAmendment {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteAmendment {...defaultProps} />
+      </I18nProvider>
+    );
     fireEvent.change(screen.getByLabelText(/Amendment Reason/i), {
       target: { value: "Correction" },
     });
@@ -49,7 +57,11 @@ describe("DrugChartNoteAmendment (presentational)", () => {
   });
 
   it("calls onNotesChange when textarea changes", () => {
-    render(<DrugChartNoteAmendment {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteAmendment {...defaultProps} />
+      </I18nProvider>
+    );
     fireEvent.change(screen.getByLabelText(/Amendment Notes/i), {
       target: { value: "Some notes" },
     });
@@ -57,14 +69,22 @@ describe("DrugChartNoteAmendment (presentational)", () => {
   });
 
   it("shows error when reason is empty and isSaveDisabled is true", () => {
-    render(<DrugChartNoteAmendment {...defaultProps} isSaveDisabled={true} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteAmendment {...defaultProps} isSaveDisabled={true} />
+      </I18nProvider>
+    );
     expect(
       screen.getByText(/Amendment Reason is required/i)
     ).toBeInTheDocument();
   });
 
   it("shows error when notes are empty and isSaveDisabled is true", () => {
-    render(<DrugChartNoteAmendment {...defaultProps} isSaveDisabled={true} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteAmendment {...defaultProps} isSaveDisabled={true} />
+      </I18nProvider>
+    );
     expect(
       screen.getByText(/Amendment notes are required/i)
     ).toBeInTheDocument();

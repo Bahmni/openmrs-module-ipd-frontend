@@ -221,7 +221,6 @@
   "ENTER_ADT_NOTES": "Entrez les notes ADT",
   "IPD_WARD_SEARCH_PLACEHOLDER_TEXT": "Saisissez au moins 3 caractères pour rechercher un patient par nom, numéro de lit ou identifiant de patient",
   "MUAC_HEADER": "MUAC {{unit}}",
-
   "VITALS_HEADER_SPO2_KEY": "Saturation d'oxygène dans le sang",
   "VITALS_WEIGHT_KEY": "POIDS",
   "VITALS_BMI_KEY": "BMI",
@@ -255,5 +254,7 @@
   "CARE_INSTRUCTIONS_ACTION_HEADER": "Action",
   "NOT_ACKNOWLEDGED_TAB": "Non acquitté",
   "ACKNOWLEDGED_TAB": "Acquitté",
-  "NO_CARE_INSTRUCTIONS_MESSAGE": "Aucune instruction de soins disponible pour ce patient"
+  "NO_CARE_INSTRUCTIONS_MESSAGE": "Aucune instruction de soins disponible pour ce patient",
+  "ACKNOWLEDGE_NOTE": "Acquitter la note",
+  "AMEND_NOTE": "Modifier la note"
 }

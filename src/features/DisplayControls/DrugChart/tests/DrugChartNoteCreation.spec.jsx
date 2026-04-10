@@ -30,9 +30,12 @@ describe("DrugChartNoteCreation", () => {
     onReasonChange: mockOnReasonChange,
     onNotesChange: mockOnNotesChange,
   };
-
   it("renders the select dropdown with options", () => {
-    render(<DrugChartNoteCreation {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteCreation {...defaultProps} />
+      </I18nProvider>
+    );
     expect(screen.getByTestId("note-reason-select")).toBeInTheDocument();
     expect(screen.getByText("Select a reason")).toBeInTheDocument();
     expect(screen.getByText("Reason 1")).toBeInTheDocument();
@@ -40,25 +43,41 @@ describe("DrugChartNoteCreation", () => {
   });
 
   it("renders the textarea with placeholder", () => {
-    render(<DrugChartNoteCreation {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteCreation {...defaultProps} />
+      </I18nProvider>
+    );
     expect(screen.getByTestId("new-note")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Enter Notes")).toBeInTheDocument();
   });
 
   it("displays invalid text when reason is not selected and save is disabled", () => {
-    render(<DrugChartNoteCreation {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteCreation {...defaultProps} />
+      </I18nProvider>
+    );
     fireEvent.blur(screen.getByTestId("note-reason-select"));
     expect(screen.getByText("Reason is required")).toBeInTheDocument();
   });
 
   it("displays invalid text when notes are empty and save is disabled", () => {
-    render(<DrugChartNoteCreation {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteCreation {...defaultProps} />
+      </I18nProvider>
+    );
     fireEvent.blur(screen.getByTestId("new-note"));
     expect(screen.getByText("Notes are required")).toBeInTheDocument();
   });
 
   it("calls onReasonChange when a reason is selected", () => {
-    render(<DrugChartNoteCreation {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteCreation {...defaultProps} />
+      </I18nProvider>
+    );
     fireEvent.change(screen.getByTestId("note-reason-select"), {
       target: { value: "Reason 1" },
     });
@@ -66,7 +85,11 @@ describe("DrugChartNoteCreation", () => {
   });
 
   it("calls onNotesChange when notes are entered", () => {
-    render(<DrugChartNoteCreation {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteCreation {...defaultProps} />
+      </I18nProvider>
+    );
     fireEvent.change(screen.getByTestId("new-note"), {
       target: { value: "New note" },
     });
@@ -75,12 +98,14 @@ describe("DrugChartNoteCreation", () => {
 
   it("does not display invalid text when reason and notes are valid", () => {
     render(
-      <DrugChartNoteCreation
-        {...defaultProps}
-        amendmentReason="Reason 1"
-        amendmentNotes="Some notes"
-        isSaveDisabled={false}
-      />
+      <I18nProvider>
+        <DrugChartNoteCreation
+          {...defaultProps}
+          amendmentReason="Reason 1"
+          amendmentNotes="Some notes"
+          isSaveDisabled={false}
+        />
+      </I18nProvider>
     );
     expect(screen.queryByText("Reason is required")).not.toBeInTheDocument();
     expect(screen.queryByText("Notes are required")).not.toBeInTheDocument();

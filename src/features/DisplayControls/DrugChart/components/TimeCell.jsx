@@ -138,7 +138,10 @@ export default function TimeCell(props) {
                     }}
                     onBlur={(e) => e.target.blur()}
                   >
-                    Amend Note
+                    <FormattedMessage
+                      id={"AMEND_NOTE"}
+                      defaultMessage={"Amend Note"}
+                    />
                   </Button>
                 </div>
               )}
@@ -167,7 +170,10 @@ export default function TimeCell(props) {
                   }}
                   onBlur={(e) => e.target.blur()}
                 >
-                  Acknowledge Note
+                  <FormattedMessage
+                    id={"ACKNOWLEDGE_NOTE"}
+                    defaultMessage={"Acknowledge Note"}
+                  />
                 </Button>
               </div>
             </div>

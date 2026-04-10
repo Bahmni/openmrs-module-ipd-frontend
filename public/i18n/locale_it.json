@@ -173,7 +173,6 @@
   "CONFIRMED": "CONFIRMED",
   "Active": "Active",
   "Inactive": "Inactive",
-
   "VITALS_HEADER_SPO2_KEY": "Arterial Blood Oxygen Saturation (Pulse Oximeter)",
   "VITALS_WEIGHT_KEY": "WEIGHT",
   "VITALS_BMI_KEY": "BMI",
@@ -195,5 +194,7 @@
   "CARE_INSTRUCTIONS_ACTION_HEADER": "Action",
   "NOT_ACKNOWLEDGED_TAB": "Not Acknowledged",
   "ACKNOWLEDGED_TAB": "Acknowledged",
-  "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient"
+  "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient",
+  "ACKNOWLEDGE_NOTE": "Conferma nota",
+  "AMEND_NOTE": "Modifica nota"
 }
