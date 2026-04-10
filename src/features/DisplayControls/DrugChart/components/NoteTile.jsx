@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import "../styles/NoteTile.scss";
 import moment from "moment";
 import { extractNameFromDisplay } from "../utils/DrugChartUtils";
+import { FormattedMessage } from "react-intl";
 
 export const NoteTile = ({
   tagLabel,
@@ -42,7 +43,8 @@ export const NoteTile = ({
 
       {noteReason && (
         <p className="note-text">
-          <strong>Reason:</strong> {noteReason}
+          <strong>Reason:</strong>
+          <FormattedMessage id={noteReason} defaultMessage={noteReason} />
         </p>
       )}
 
