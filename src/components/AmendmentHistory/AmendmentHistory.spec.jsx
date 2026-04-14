@@ -1,6 +1,18 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { IntlProvider } from "react-intl";
 import AmendmentHistory from "./AmendmentHistory";
+import PropTypes from "prop-types";
+
+const messages = { AMENDED: "Amended" };
+const Wrapper = ({ children }) => (
+  <IntlProvider locale="en" messages={messages} defaultLocale="en">
+    {children}
+  </IntlProvider>
+);
+Wrapper.propTypes = {
+  children: PropTypes.element
+}
 
 describe("AmendmentHistory", () => {
   const mockAmendment = {
@@ -32,23 +44,37 @@ describe("AmendmentHistory", () => {
 
   describe("Rendering", () => {
     it("should render null when amendments array is empty", () => {
-      const { container } = render(<AmendmentHistory amendments={[]} />);
+      const { container } = render(
+        <Wrapper>
+          <AmendmentHistory amendments={[]} />
+        </Wrapper>
+      );
       expect(container.firstChild).toBeNull();
     });
 
     it("should render null when amendments is undefined", () => {
-      const { container } = render(<AmendmentHistory amendments={undefined} />);
+      const { container } = render(
+        <Wrapper>
+          <AmendmentHistory amendments={undefined} />
+        </Wrapper>
+      );
       expect(container.firstChild).toBeNull();
     });
 
     it("should render null when amendments is null", () => {
-      const { container } = render(<AmendmentHistory amendments={null} />);
+      const { container } = render(
+        <Wrapper>
+          <AmendmentHistory amendments={null} />
+        </Wrapper>
+      );
       expect(container.firstChild).toBeNull();
     });
 
     it("should render amendment history with single amendment", () => {
       const { container } = render(
-        <AmendmentHistory amendments={[mockAmendment]} />
+        <Wrapper>
+          <AmendmentHistory amendments={[mockAmendment]} />
+        </Wrapper>
       );
       expect(container.querySelector(".amendment-history")).toBeInTheDocument();
       expect(screen.getAllByTestId("note-tile")).toHaveLength(1);
@@ -57,7 +83,9 @@ describe("AmendmentHistory", () => {
     it("should render amendment history with multiple amendments", () => {
       const amendments = [mockAmendment, mockAmendment2, mockAmendment3];
       const { container } = render(
-        <AmendmentHistory amendments={amendments} />
+        <Wrapper>
+          <AmendmentHistory amendments={amendments} />
+        </Wrapper>
       );
       const mainDiv = container.querySelector(".amendment-history");
       expect(mainDiv).toBeInTheDocument();
@@ -69,20 +97,30 @@ describe("AmendmentHistory", () => {
 
   describe("Single Amendment Display", () => {
     it("should display single amendment with correct details", () => {
-      render(<AmendmentHistory amendments={[mockAmendment]} />);
+      render(
+        <Wrapper>
+          <AmendmentHistory amendments={[mockAmendment]} />
+        </Wrapper>
+      );
       expect(screen.getByText("Updated medication dosage")).toBeInTheDocument();
       expect(screen.getByText("Dosage adjustment")).toBeInTheDocument();
       expect(screen.getByText("Dr. John Doe")).toBeInTheDocument();
     });
 
     it("should not show chevron icon for single amendment", () => {
-      render(<AmendmentHistory amendments={[mockAmendment]} />);
+      render(
+        <Wrapper>
+          <AmendmentHistory amendments={[mockAmendment]} />
+        </Wrapper>
+      );
       expect(screen.queryByTestId("icon")).not.toBeInTheDocument();
     });
 
     it("should not have cursor pointer style for single amendment", () => {
       const { container } = render(
-        <AmendmentHistory amendments={[mockAmendment]} />
+        <Wrapper>
+          <AmendmentHistory amendments={[mockAmendment]} />
+        </Wrapper>
       );
       const parentDiv = container.querySelector(
         ".amendment-history > div:first-child > div"
@@ -94,7 +132,11 @@ describe("AmendmentHistory", () => {
   describe("Multiple Amendments Display - Collapsed State", () => {
     it("should display only first amendment when collapsed", () => {
       const amendments = [mockAmendment, mockAmendment2, mockAmendment3];
-      render(<AmendmentHistory amendments={amendments} />);
+      render(
+        <Wrapper>
+          <AmendmentHistory amendments={amendments} />
+        </Wrapper>
+      );
       const parentDiv = screen.getAllByTestId("note-tile")[0].parentElement;
       fireEvent.click(parentDiv);
       const noteTiles = screen.getAllByTestId("note-tile");
@@ -103,13 +145,20 @@ describe("AmendmentHistory", () => {
 
     it("should show correct tag label with amendment count", () => {
       const amendments = [mockAmendment, mockAmendment2, mockAmendment3];
-      render(<AmendmentHistory amendments={amendments} />);
+      render(
+        <Wrapper>
+          <AmendmentHistory amendments={amendments} />
+        </Wrapper>
+      );
       expect(screen.getByTestId("note-tag-Amended (3)")).toBeInTheDocument();
     });
+
     it("should have clickable style for multiple amendments", () => {
       const amendments = [mockAmendment, mockAmendment2];
       const { container } = render(
-        <AmendmentHistory amendments={amendments} />
+        <Wrapper>
+          <AmendmentHistory amendments={amendments} />
+        </Wrapper>
       );
       const clickableDiv = container.querySelector('[role="button"]');
       const styles = clickableDiv.getAttribute("style");
@@ -119,7 +168,11 @@ describe("AmendmentHistory", () => {
 
     it("should have no-margin and active-tile classes when not expanded", () => {
       const amendments = [mockAmendment, mockAmendment2];
-      render(<AmendmentHistory amendments={amendments} />);
+      render(
+        <Wrapper>
+          <AmendmentHistory amendments={amendments} />
+        </Wrapper>
+      );
       const parentDiv = screen.getAllByTestId("note-tile")[0].parentElement;
       fireEvent.click(parentDiv);
       const noteTile = screen.getByTestId("note-tile");
@@ -131,7 +184,11 @@ describe("AmendmentHistory", () => {
   describe("Multiple Amendments Display - Expanded State", () => {
     it("should display all amendments when expanded", () => {
       const amendments = [mockAmendment, mockAmendment2, mockAmendment3];
-      render(<AmendmentHistory amendments={amendments} />);
+      render(
+        <Wrapper>
+          <AmendmentHistory amendments={amendments} />
+        </Wrapper>
+      );
 
       const noteTiles = screen.getAllByTestId("note-tile");
       expect(noteTiles).toHaveLength(3);
@@ -140,7 +197,9 @@ describe("AmendmentHistory", () => {
     it("should add expanded class to main container when expanded", () => {
       const amendments = [mockAmendment, mockAmendment2];
       const { container } = render(
-        <AmendmentHistory amendments={amendments} />
+        <Wrapper>
+          <AmendmentHistory amendments={amendments} />
+        </Wrapper>
       );
       const mainDiv = container.querySelector(".amendment-history");
 
@@ -149,7 +208,11 @@ describe("AmendmentHistory", () => {
 
     it("should apply no-margin and active-tile classes when expanded", () => {
       const amendments = [mockAmendment, mockAmendment2];
-      render(<AmendmentHistory amendments={amendments} />);
+      render(
+        <Wrapper>
+          <AmendmentHistory amendments={amendments} />
+        </Wrapper>
+      );
 
       const noteTile = screen.getAllByTestId("note-tile")[0];
       expect(noteTile).toHaveClass("no-margin");

@@ -1,7 +1,7 @@
 import React from "react";
 import { TextArea, Toggle } from "carbon-components-react";
 import PropTypes from "prop-types";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { I18nProvider } from "../../../i18n/I18nProvider";
 import { canAcknowledgeAmendment } from "../utils/DrugChartUtils";
 import "../styles/DrugChartNoteAcknowledgement.scss";
@@ -15,7 +15,7 @@ const DrugChartNoteAcknowledgement = (props) => {
     onNotesChange,
     onToggleChange,
   } = props;
-
+  const intl = useIntl();
   return (
     <I18nProvider>
       <div className="drug-chart-note-acknowledgement__toggle">
@@ -48,9 +48,15 @@ const DrugChartNoteAcknowledgement = (props) => {
               <span style={{ color: "red" }}> *</span>
             </span>
           }
-          placeholder="Enter Notes"
+          placeholder={intl.formatMessage({
+            id: "ENTER_NOTES",
+            defaultMessage: "Enter Notes",
+          })}
           invalid={!acknowledgementNotes.trim() && isSaveDisabled}
-          invalidText="Acknowledgement notes are required"
+          invalidText={intl.formatMessage({
+            id: "ACKNOWLEDGEMENT_NOTE_REQUIRED",
+            defaultMessage: "Acknowledgement notes are required",
+          })}
         />
       </div>
     </I18nProvider>

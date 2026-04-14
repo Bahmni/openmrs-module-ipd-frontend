@@ -3,9 +3,11 @@ import "./AmendmentHistory.scss";
 import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
 import { NoteTile } from "../../features/DisplayControls/DrugChart/components/NoteTile";
 import PropTypes from "prop-types";
+import { useIntl } from "react-intl";
 
 const AmendmentHistory = ({ amendments = [] }) => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const intl = useIntl();
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -42,7 +44,10 @@ const AmendmentHistory = ({ amendments = [] }) => {
         <NoteTile
           noteReason={displayAmendments[0].amendmentReason}
           noteText={displayAmendments[0].text}
-          tagLabel={"Amended (" + totalAmendments + ")"}
+          tagLabel={`${intl.formatMessage({
+            id: "AMENDED",
+            defaultMessage: "Amended",
+          })} (${totalAmendments})`}
           performerName={displayAmendments[0].author.display}
           scheduledTime={displayAmendments[0].recordedTime}
           Icon={icon}
