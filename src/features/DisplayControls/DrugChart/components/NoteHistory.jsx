@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { NoteTile } from "./NoteTile";
 import AmendmentHistory from "../../../../components/AmendmentHistory/AmendmentHistory";
+import { useIntl } from "react-intl";
 
 const NoteHistory = ({ hostData }) => {
   const {
@@ -10,11 +11,15 @@ const NoteHistory = ({ hostData }) => {
     newNote,
     amendedNotes: amended,
   } = hostData.noteInfo;
+  const intl = useIntl();
   return (
     <>
       {ack.length > 0 && (
         <NoteTile
-          tagLabel="Acknowledged"
+          tagLabel={intl.formatMessage({
+            id: "ACKNOWLEDGED",
+            defaultMessage: "Acknowledged"
+          })}
           tagType="green"
           scheduledTime={ack[0].recordedTime}
           performerName={ack[0].author.display}
@@ -24,7 +29,10 @@ const NoteHistory = ({ hostData }) => {
       {amended.length > 0 && <AmendmentHistory amendments={amended} />}
       {original && (
         <NoteTile
-          tagLabel={"Original"}
+          tagLabel={intl.formatMessage({
+            id: "ORIGINAL",
+            defaultMessage: "Original"
+          })}
           tagType="gray"
           scheduledTime={original.recordedTime}
           performerName={original.author.display}
@@ -33,7 +41,10 @@ const NoteHistory = ({ hostData }) => {
       )}
       {newNote && (
         <NoteTile
-          tagLabel={"New"}
+          tagLabel={intl.formatMessage({
+            id: "NEW",
+            defaultMessage: "New"
+          })}
           tagType="gray"
           scheduledTime={newNote.recordedTime}
           performerName={newNote.author.display}

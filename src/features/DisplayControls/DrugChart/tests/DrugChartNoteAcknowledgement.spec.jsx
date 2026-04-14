@@ -10,7 +10,8 @@ jest.mock("../utils/DrugChartUtils", () => ({
 
 const messages = {
   ACKNOWLEDGEMENT_NOTES: "Acknowledgement Notes",
-  "Acknowledgement notes are required": "Acknowledgement notes are required",
+  ACKNOWLEDGEMENT_NOTE_REQUIRED: "Acknowledgement notes are required",
+  ENTER_NOTES: "Enter Notes",
 };
 
 // eslint-disable-next-line react/prop-types
@@ -37,13 +38,21 @@ describe("DrugChartNoteAcknowledgement (presentational)", () => {
   });
 
   it("renders acknowledgement toggle and notes textarea", () => {
-    render(<DrugChartNoteAcknowledgement {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteAcknowledgement {...defaultProps} />
+      </I18nProvider>
+    );
     expect(screen.getByLabelText(/Acknowledgement Notes/i)).toBeInTheDocument();
     expect(screen.getByRole("checkbox")).toBeInTheDocument();
   });
 
   it("calls onNotesChange when textarea changes", () => {
-    render(<DrugChartNoteAcknowledgement {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteAcknowledgement {...defaultProps} />
+      </I18nProvider>
+    );
     fireEvent.change(screen.getByLabelText(/Acknowledgement Notes/i), {
       target: { value: "Some notes" },
     });
@@ -51,14 +60,20 @@ describe("DrugChartNoteAcknowledgement (presentational)", () => {
   });
 
   it("calls onToggleChange when toggle is clicked", () => {
-    render(<DrugChartNoteAcknowledgement {...defaultProps} />);
+    render(
+      <I18nProvider>
+        <DrugChartNoteAcknowledgement {...defaultProps} />
+      </I18nProvider>
+    );
     fireEvent.click(screen.getByRole("checkbox"));
     expect(defaultProps.onToggleChange).toHaveBeenCalled();
   });
 
   it("shows error when notes are empty and isSaveDisabled is true", () => {
     render(
-      <DrugChartNoteAcknowledgement {...defaultProps} isSaveDisabled={true} />
+      <I18nProvider>
+        <DrugChartNoteAcknowledgement {...defaultProps} isSaveDisabled={true} />
+      </I18nProvider>
     );
     expect(
       screen.getByText(/Acknowledgement notes are required/i)

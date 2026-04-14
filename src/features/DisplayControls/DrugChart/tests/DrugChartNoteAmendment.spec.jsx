@@ -7,8 +7,10 @@ import { IntlProvider } from "react-intl";
 const messages = {
   AMENDMENT_REASON: "Amendment Reason",
   AMENDMENT_NOTES: "Amendment Notes",
-  "Amendment Reason is required": "Amendment Reason is required",
-  "Amendment notes are required": "Amendment notes are required",
+  INVALID_AMENDMENT_REASON: "Amendment Reason is required",
+  AMENDMENT_NOTE_REQUIRED: "Amendment notes are required",
+  SELECT_REASON: "Select a reason",
+  AMENDMENT_NOTE_PLACEHOLDER: "Enter amendment notes",
 };
 
 // eslint-disable-next-line react/prop-types

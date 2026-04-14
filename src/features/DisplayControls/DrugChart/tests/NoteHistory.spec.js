@@ -1,6 +1,19 @@
 import { render, screen } from "@testing-library/react";
 import NoteHistory from "../components/NoteHistory";
 import React from "react";
+import { IntlProvider } from "react-intl";
+
+const messages = {
+  ACKNOWLEDGED: "Acknowledged",
+  AMENDED: "Amended",
+  ORIGINAL: "Original",
+  NEW: "New",
+};
+const Wrapper = ({ children }) => (
+  <IntlProvider locale="en" messages={messages} defaultLocale="en">
+    {children}
+  </IntlProvider>
+);
 
 describe("Note History", () => {
   const hostdata = {
@@ -81,7 +94,11 @@ describe("Note History", () => {
     },
   };
   it("should render notes", () => {
-    render(<NoteHistory hostData={hostdata} />);
+    render(
+      <Wrapper>
+        <NoteHistory hostData={hostdata} />
+      </Wrapper>
+    );
     expect(screen.getByText("Acknowledged")).toBeInTheDocument();
     expect(screen.getByText("Amended (3)")).toBeInTheDocument();
     expect(screen.getByText("Original")).toBeInTheDocument();
