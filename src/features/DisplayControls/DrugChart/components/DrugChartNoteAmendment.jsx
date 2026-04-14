@@ -34,9 +34,18 @@ const DrugChartNoteAmendment = (props) => {
           value={amendmentReason}
           onChange={onReasonChange}
           invalid={!amendmentReason.trim() && isSaveDisabled}
-          invalidText="Amendment Reason is required"
+          invalidText={intl.formatMessage({
+            id: "INVALID_AMENDMENT_REASON",
+            defaultMessage: "Amendment Reason is required",
+          })}
         >
-          <SelectItem value="" text="Select a reason" />
+          <SelectItem
+            value=""
+            text={intl.formatMessage({
+              id: "SELECT_REASON",
+              defaultMessage: "Select a reason",
+            })}
+          />
           {amendmentReasons.map((reason) => (
             <SelectItem
               key={reason}
@@ -67,9 +76,15 @@ const DrugChartNoteAmendment = (props) => {
               <span style={{ color: "red" }}> *</span>
             </span>
           }
-          placeholder="Enter amendment notes"
+          placeholder={intl.formatMessage({
+            id: "AMENDMENT_NOTE_PLACEHOLDER",
+            defaultMessage: "Enter amendment notes",
+          })}
           invalid={!amendmentNotes.trim() && isSaveDisabled}
-          invalidText="Amendment notes are required"
+          invalidText={intl.formatMessage({
+            id: "AMENDMENT_NOTE_REQUIRED",
+            defaultMessage: "Amendment notes are required",
+          })}
         />
       </div>
     </I18nProvider>

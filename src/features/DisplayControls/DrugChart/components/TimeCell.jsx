@@ -182,7 +182,13 @@ export default function TimeCell(props) {
         {isAcknowledged && (
           <div>
             <div className="tooltip-notes">
-              <div>Amended Note:</div>
+              <div>
+                <FormattedMessage
+                  id={"LAST_AMENDED_NOTE"}
+                  defaultMessage={"Amended Note"}
+                />
+                :
+              </div>
               <div style={{ marginTop: "8px" }}>{amendedText}</div>
             </div>
             <div className="tooltip-actions">
@@ -199,7 +205,7 @@ export default function TimeCell(props) {
                 }}
                 onBlur={(e) => e.target.blur()}
               >
-                History
+                <FormattedMessage id={"HISTORY"} defaultMessage={"History"} />
               </Button>
             </div>
           </div>
