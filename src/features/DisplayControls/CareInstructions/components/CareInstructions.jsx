@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { FormattedMessage, useIntl } from "react-intl";
 import {
   DataTableSkeleton,
+  Link,
   Tab,
   Table,
   TableBody,
@@ -13,22 +14,39 @@ import {
   Tabs,
 } from "carbon-components-react";
 import { IPDContext } from "../../../../context/IPDContext";
+import { SliderContext } from "../../../../context/SliderContext";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import {
   fetchCareInstructionsObs,
   mapObservationsToInstructions,
 } from "../utils/CareInstructionsUtils.jsx";
 import { getDateTimeFromEpochTime } from "../../../../utils/DateTimeUtils";
+import AddEmergencyTasks from "../../NursingTasks/components/AddEmergencyTasks";
+import Notification from "../../../../components/Notification/Notification";
+import { isUserPrivileged } from "../../../../utils/CommonUtils";
+import { PRIVILEGE_CONSTANTS, componentKeys } from "../../../../constants";
 import "../styles/CareInstructions.scss";
 
 const SKELETON_ROW_COUNT = 3;
 const EMPTY_FORM_CONCEPTS = [];
 
 const CareInstructions = (props) => {
-  const { config: { formConcepts = EMPTY_FORM_CONCEPTS } = {} } = props;
+  const { patientId, config: { formConcepts = EMPTY_FORM_CONCEPTS } = {} } =
+    props;
   const ipdContext = useContext(IPDContext);
   const intl = useIntl();
-  const { visit, config } = ipdContext;
+  const { visit, config, currentUser } = ipdContext;
   const { enable24HourTime = false } = config || {};
+  const { isSliderOpen, updateSliderOpen, provider } =
+    useContext(SliderContext);
+  const refreshDisplayControl = useContext(RefreshDisplayControl);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationStatus, setNotificationStatus] = useState("");
+
+  const updateCareInstructionsTasksSlider = (value) => {
+    updateSliderOpen((prev) => ({ ...prev, careInstructionsTasks: value }));
+  };
 
   const allConceptNames = useMemo(
     () => [
@@ -160,9 +178,26 @@ const CareInstructions = (props) => {
               </TableCell>
               <TableCell>{row.form}</TableCell>
               <TableCell>{row.instructionType}</TableCell>
-              <TableCell className="instruction-cell">{row.instruction}</TableCell>
+              <TableCell className="instruction-cell">
+                {row.instruction}
+              </TableCell>
               <TableCell>{row.providerName}</TableCell>
-              <TableCell>{row.action}</TableCell>
+              <TableCell className="action-cell">
+                {isUserPrivileged(
+                  currentUser,
+                  PRIVILEGE_CONSTANTS.ADD_TASKS
+                ) && (
+                  <Link
+                    onClick={() => {
+                      if (!isSliderOpen.careInstructionsTasks) {
+                        updateCareInstructionsTasksSlider(true);
+                      }
+                    }}
+                  >
+                    <FormattedMessage id="ADD_TASK" defaultMessage="Add Task" />
+                  </Link>
+                )}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -215,11 +250,40 @@ const CareInstructions = (props) => {
           {renderAcknowledgedContent()}
         </Tab>
       </Tabs>
+      {isSliderOpen.careInstructionsTasks && (
+        <AddEmergencyTasks
+          patientId={patientId}
+          providerId={provider?.uuid}
+          updateEmergencyTasksSlider={updateCareInstructionsTasksSlider}
+          setShowNotification={setShowNotification}
+          setNotificationMessage={setNotificationMessage}
+          setNotificationStatus={setNotificationStatus}
+          hideMedicationTab={true}
+        />
+      )}
+      {showNotification && (
+        <Notification
+          hostData={{
+            notificationKind: notificationStatus,
+            messageId: notificationMessage,
+          }}
+          hostApi={{
+            onClose: () => {
+              setShowNotification(false);
+              refreshDisplayControl([
+                componentKeys.NURSING_TASKS,
+                componentKeys.CARE_INSTRUCTIONS,
+              ]);
+            },
+          }}
+        />
+      )}
     </div>
   );
 };
 
 CareInstructions.propTypes = {
+  patientId: PropTypes.string,
   config: PropTypes.shape({
     formConcepts: PropTypes.arrayOf(
       PropTypes.shape({

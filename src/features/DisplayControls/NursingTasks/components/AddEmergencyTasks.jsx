@@ -54,6 +54,7 @@ const AddEmergencyTasks = (props) => {
     setShowNotification,
     setNotificationMessage,
     setNotificationStatus,
+    hideMedicationTab = false,
   } = props;
 
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
@@ -62,7 +63,7 @@ const AddEmergencyTasks = (props) => {
   const [unitOptions, setUnitOptions] = useState([]);
   const [routeOptions, setRouteOptions] = useState([]);
   const [providerOptions, setProviderOptions] = useState([]);
-  const [activeTab, setActiveTab] = useState("Medication");
+  const [activeTab, setActiveTab] = useState(hideMedicationTab ? "Non-Medication" : "Medication");
   const [nonMedicationTaskTypeOptions, setNonMedicationTaskTypeOptions] =
     useState({});
   const { config = {}, handleAuditEvent, currentUser } = useContext(IPDContext);
@@ -468,7 +469,7 @@ const AddEmergencyTasks = (props) => {
       >
         <div className={"emergency-task-slider"}>
           <Tabs>
-            {isUserPrivileged(
+            {!hideMedicationTab && isUserPrivileged(
               currentUser,
               PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS
             ) && (
@@ -752,5 +753,6 @@ AddEmergencyTasks.propTypes = {
   setShowNotification: PropTypes.func.isRequired,
   setNotificationMessage: PropTypes.func.isRequired,
   setNotificationStatus: PropTypes.func.isRequired,
+  hideMedicationTab: PropTypes.bool,
 };
 export default AddEmergencyTasks;
