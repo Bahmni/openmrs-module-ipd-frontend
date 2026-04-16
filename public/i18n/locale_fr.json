@@ -119,7 +119,7 @@
   "NOT_CURRENT_PERIOD_MESSAGE": "Vous ne consultez pas la période en cours",
   "NO_IO_DATA_MESSAGE": "Aucune donnée d'admission et de sortie n'est disponible pour le patient au cours de cette période",
   "NO_PFR_DATA_MESSAGE": "Aucune donnée d'enregistrement d'alimentation du patient n'est disponible pour le patient au cours de cette période.",
-  "SCHEDULE_TREATMENTS": "Planifier les médicaments",
+  "SCHEDULE_TREATMENTS": "Reconnaître",
   "DATE_TIME_HEADER": "Date et heure",
   "PULSE_HEADER": "Pouls ({unit})",
   "SPO2_HEADER": "SPO2 ({unit})",
@@ -133,7 +133,7 @@
   "VITALS_HEADER_KEY": "Vitalité et valeurs nutritionnelles",
   "ALLERGIES_HEADER_KEY": "Allergies",
   "DIAGNOSIS_HEADER_KEY": "Diagnostic",
-  "TREATMENTS_HEADER_KEY": "Traitements",
+  "TREATMENTS_HEADER_KEY": "Médicaments",
   "NURSING_TASKS_HEADER_KEY": "Tâches infirmières",
   "DRUG_CHART_HEADER_KEY": "Tableau des médicaments",
   "INTAKE_OUTPUT_HEADER_KEY": "Admission / Sortie",
@@ -257,6 +257,6 @@
   "ACKNOWLEDGED_TAB": "Acquitté",
   "NO_CARE_INSTRUCTIONS_MESSAGE": "Aucune instruction de soins disponible pour ce patient",
   "NEW_MEDICATIONS": "Nouveaux médicament(s)",
-  "NEW_CARE_INSTRUCTIONS": "Nouvelle instruction de soins",
-  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Accuser réception"
+  "NEW_CARE_INSTRUCTIONS": "Nouvelle(s) instruction(s) de soins",
+  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Reconnaître"
 }

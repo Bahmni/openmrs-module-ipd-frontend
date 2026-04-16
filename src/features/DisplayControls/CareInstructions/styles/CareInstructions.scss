@@ -6,4 +6,12 @@
   .instruction-cell {
     white-space: pre-wrap;
   }
+
+  .action-cell {
+    white-space: nowrap;
+  }
+
+  .bx--tab-content {
+    padding: 1rem 0 0 0;
+  }
 }
