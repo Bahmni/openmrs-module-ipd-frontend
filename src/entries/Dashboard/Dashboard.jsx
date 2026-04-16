@@ -77,6 +77,7 @@ export default function Dashboard(props) {
     emergencyTasks: false,
     drugChartNoteAmendment: false,
     drugChartNoteAcknowledgement: false,
+    careInstructionsTasks: false,
   });
   const [sections, setSections] = useState([]);
   const [isSideNavExpanded, updateSideNav] = useState(false);

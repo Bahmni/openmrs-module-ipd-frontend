@@ -497,4 +497,32 @@ describe("AddEmergencyTasks", () => {
     })
 
   });
+
+  it("should hide Medication tab and show Non-Medication tab when hideMedicationTab is true", async () => {
+    const { queryByRole, getByRole } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            handleAuditEvent: mockHandleAuditEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <AddEmergencyTasks
+            patientId={"__patient_uuid__"}
+            providerId={"__provider_uuid__"}
+            updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+            hideMedicationTab={true}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    await waitFor(() => {
+      expect(queryByRole("tab", { name: /^medication$/i })).not.toBeInTheDocument();
+      expect(getByRole("tab", { name: /non \- medication/i })).toBeInTheDocument();
+    });
+  });
 });
