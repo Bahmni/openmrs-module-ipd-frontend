@@ -255,5 +255,8 @@
   "CARE_INSTRUCTIONS_ACTION_HEADER": "Action",
   "NOT_ACKNOWLEDGED_TAB": "Non acquitté",
   "ACKNOWLEDGED_TAB": "Acquitté",
-  "NO_CARE_INSTRUCTIONS_MESSAGE": "Aucune instruction de soins disponible pour ce patient"
+  "NO_CARE_INSTRUCTIONS_MESSAGE": "Aucune instruction de soins disponible pour ce patient",
+  "NEW_MEDICATIONS": "Nouveaux médicament(s)",
+  "NEW_CARE_INSTRUCTIONS": "Nouvelle instruction de soins",
+  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Accuser réception"
 }

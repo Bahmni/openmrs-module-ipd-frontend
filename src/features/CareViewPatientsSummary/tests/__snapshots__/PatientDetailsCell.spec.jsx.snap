@@ -69,7 +69,7 @@ exports[`PatientDetailsCell should not show nurse name if the current time cross
             yrs
             <div
               class="treatments-notification"
-              data-testid="new-medications-notification"
+              data-testid="new-notifications"
             >
               <div
                 class="warning_icon"
@@ -101,9 +101,13 @@ exports[`PatientDetailsCell should not show nurse name if the current time cross
               <div
                 class="treatments-notification-span"
               >
-                <div>
+                <div
+                  data-testid="new-medications-notification"
+                >
                   • 
-                  1 New Medication(s): 
+                  1 
+                  New Medication(s)
+                  : 
                   <a
                     class="bx--link"
                     data-testid="treatments-ipd-dashboard"
@@ -205,7 +209,7 @@ exports[`PatientDetailsCell should not show nurse name if the current time cross
           yrs
           <div
             class="treatments-notification"
-            data-testid="new-medications-notification"
+            data-testid="new-notifications"
           >
             <div
               class="warning_icon"
@@ -237,9 +241,13 @@ exports[`PatientDetailsCell should not show nurse name if the current time cross
             <div
               class="treatments-notification-span"
             >
-              <div>
+              <div
+                data-testid="new-medications-notification"
+              >
                 • 
-                1 New Medication(s): 
+                1 
+                New Medication(s)
+                : 
                 <a
                   class="bx--link"
                   data-testid="treatments-ipd-dashboard"
@@ -395,7 +403,7 @@ exports[`PatientDetailsCell should render patientDetailsCell component 1`] = `
         yrs
         <div
           class="treatments-notification"
-          data-testid="new-medications-notification"
+          data-testid="new-notifications"
         >
           <div
             class="warning_icon"
@@ -427,9 +435,13 @@ exports[`PatientDetailsCell should render patientDetailsCell component 1`] = `
           <div
             class="treatments-notification-span"
           >
-            <div>
+            <div
+              data-testid="new-medications-notification"
+            >
               • 
-              1 New Medication(s): 
+              1 
+              New Medication(s)
+              : 
               <a
                 class="bx--link"
                 data-testid="treatments-ipd-dashboard"
@@ -536,7 +548,7 @@ exports[`PatientDetailsCell should show nurse name only if a nurse bookmarks a p
             yrs
             <div
               class="treatments-notification"
-              data-testid="new-medications-notification"
+              data-testid="new-notifications"
             >
               <div
                 class="warning_icon"
@@ -568,9 +580,13 @@ exports[`PatientDetailsCell should show nurse name only if a nurse bookmarks a p
               <div
                 class="treatments-notification-span"
               >
-                <div>
+                <div
+                  data-testid="new-medications-notification"
+                >
                   • 
-                  1 New Medication(s): 
+                  1 
+                  New Medication(s)
+                  : 
                   <a
                     class="bx--link"
                     data-testid="treatments-ipd-dashboard"
@@ -677,7 +693,7 @@ exports[`PatientDetailsCell should show nurse name only if a nurse bookmarks a p
           yrs
           <div
             class="treatments-notification"
-            data-testid="new-medications-notification"
+            data-testid="new-notifications"
           >
             <div
               class="warning_icon"
@@ -709,9 +725,13 @@ exports[`PatientDetailsCell should show nurse name only if a nurse bookmarks a p
             <div
               class="treatments-notification-span"
             >
-              <div>
+              <div
+                data-testid="new-medications-notification"
+              >
                 • 
-                1 New Medication(s): 
+                1 
+                New Medication(s)
+                : 
                 <a
                   class="bx--link"
                   data-testid="treatments-ipd-dashboard"

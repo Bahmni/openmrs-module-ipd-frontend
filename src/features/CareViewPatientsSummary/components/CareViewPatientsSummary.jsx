@@ -16,6 +16,10 @@ import {
 } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 import { isSystemGeneratedTask } from "../../../utils/CommonUtils";
 import { TASK_FILTER_HEADER } from "../../../constants";
+import {
+  fetchBatchObservations,
+  mapObservationsToInstructions,
+} from "../../DisplayControls/CareInstructions/utils/CareInstructionsUtils";
 
 export const CareViewPatientsSummary = ({
   patientsSummary,
@@ -28,6 +32,7 @@ export const CareViewPatientsSummary = ({
     previousShiftNonMedicationDetails,
     setPreviousShiftNonMedicationDetails,
   ] = useState([]);
+  const [careInstructionsMap, setCareInstructionsMap] = useState({});
   const {
     careViewConfig,
     ipdConfig,
@@ -94,11 +99,33 @@ export const CareViewPatientsSummary = ({
     setPreviousShiftNonMedicationDetails(groupedData);
   };
 
+  const fetchCareInstructions = async (patients) => {
+    const ciSection = ipdConfig?.sections?.find((s) => s.componentKey === "CI");
+    const formConcepts = ciSection?.config?.formConcepts ?? [];
+    if (formConcepts.length === 0) return;
+
+    const concepts = [...new Set(formConcepts.flatMap((fc) => fc.concepts))];
+    const visitUuids = patients.map((p) => p.visitDetails.uuid);
+
+    const batchResult = await fetchBatchObservations(visitUuids, concepts);
+
+    const instructionsMap = {};
+    batchResult.forEach(({ visitUuid, observations }) => {
+      const instructions = mapObservationsToInstructions(
+        observations,
+        formConcepts
+      );
+      instructionsMap[visitUuid] = instructions;
+    });
+    setCareInstructionsMap(instructionsMap);
+  };
+
   useEffect(() => {
     if (patientsSummary.length > 0) {
       fetchPreviousShiftTasks(patientsSummary);
       fetchSlots(patientsSummary);
       fetchTasks(patientsSummary);
+      fetchCareInstructions(patientsSummary);
     }
   }, [patientsSummary, navHourEpoch]);
 
@@ -145,6 +172,9 @@ export const CareViewPatientsSummary = ({
                   careTeamDetails={careTeam}
                   navHourEpoch={navHourEpoch}
                   newTreatments={newTreatments}
+                  careInstructions={
+                    careInstructionsMap[visitDetails.uuid] || []
+                  }
                   visitDetails={visitDetails}
                   previousShiftPendingTasks={tasks}
                 />

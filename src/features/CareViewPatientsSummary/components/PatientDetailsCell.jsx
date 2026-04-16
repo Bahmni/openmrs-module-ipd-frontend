@@ -20,9 +20,11 @@ export const PatientDetailsCell = ({
   careTeamDetails,
   navHourEpoch,
   newTreatments,
+  careInstructions,
   visitDetails,
   previousShiftPendingTasks,
 }) => {
+  const careInstructionsCount = careInstructions?.length || 0;
   const { person, uuid } = patientDetails;
   const {
     ipdConfig,
@@ -117,31 +119,61 @@ export const PatientDetailsCell = ({
           <span>{person.gender}</span>)<span className={"separator"}>|</span>
           <span>{person.age}</span>
           <FormattedMessage id={"AGE_YEARS_LABEL"} defaultMessage={"yrs"} />
-          {newTreatments > 0 && (
+          {(newTreatments > 0 || careInstructionsCount > 0) && (
             <div
               className="treatments-notification"
-              data-testid="new-medications-notification"
+              data-testid="new-notifications"
             >
               <div className="warning_icon">
                 <ResultNew20 className={"result-new-icon-20"} />
               </div>
               <div className="treatments-notification-span">
-                <div>
-                  &bull; {newTreatments + " New Medication(s): "}
-                  <Link
-                    href={getIPDPatientDashboardUrl(
-                      patientDetails.uuid,
-                      visitDetails?.uuid,
-                      "careViewDashboard"
-                    )}
-                    data-testid="treatments-ipd-dashboard"
-                  >
+                {newTreatments > 0 && (
+                  <div data-testid="new-medications-notification">
+                    &bull; {newTreatments + " "}
                     <FormattedMessage
-                      id={"SCHEDULE_TREATMENTS"}
-                      defaultMessage={"Schedule Medications"}
+                      id={"NEW_MEDICATIONS"}
+                      defaultMessage={"New Medication(s)"}
                     />
-                  </Link>
-                </div>
+                    {": "}
+                    <Link
+                      href={getIPDPatientDashboardUrl(
+                        patientDetails.uuid,
+                        visitDetails?.uuid,
+                        "careViewDashboard"
+                      )}
+                      data-testid="treatments-ipd-dashboard"
+                    >
+                      <FormattedMessage
+                        id={"SCHEDULE_TREATMENTS"}
+                        defaultMessage={"Schedule Medications"}
+                      />
+                    </Link>
+                  </div>
+                )}
+                {careInstructionsCount > 0 && (
+                  <div data-testid="new-care-instructions-notification">
+                    &bull; {careInstructionsCount + " "}
+                    <FormattedMessage
+                      id={"NEW_CARE_INSTRUCTIONS"}
+                      defaultMessage={"New Care Instruction(s)"}
+                    />
+                    {": "}
+                    <Link
+                      href={getIPDPatientDashboardUrl(
+                        patientDetails.uuid,
+                        visitDetails?.uuid,
+                        "careViewDashboard"
+                      )}
+                      data-testid="care-instructions-ipd-dashboard"
+                    >
+                      <FormattedMessage
+                        id={"ACKNOWLEDGE_CARE_INSTRUCTIONS"}
+                        defaultMessage={"Acknowledge"}
+                      />
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -209,5 +241,6 @@ PatientDetailsCell.propTypes = {
   navHourEpoch: propTypes.object.isRequired,
   visitDetails: propTypes.object.isRequired,
   newTreatments: propTypes.number.isRequired,
-  previousShiftPendingTasks: propTypes.array,
+  careInstructions: propTypes.array.isRequired,
+  previousShiftPendingTasks: propTypes.array.isRequired,
 };
