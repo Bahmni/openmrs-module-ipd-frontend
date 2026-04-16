@@ -6,8 +6,38 @@ import MockAdapter from "axios-mock-adapter";
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
 import { IntlProvider } from "react-intl";
 import { IPDContext } from "../../../../context/IPDContext";
+import { SliderContext } from "../../../../context/SliderContext";
 import CareInstructions from "../components/CareInstructions";
 import * as CareInstructionsUtils from "../utils/CareInstructionsUtils.jsx";
+
+jest.mock(
+  "../../NursingTasks/components/AddEmergencyTasks",
+  () =>
+    ({ updateEmergencyTasksSlider, setShowNotification }) =>
+      (
+        <div data-testid="add-emergency-tasks-slider">
+          <button
+            data-testid="close-slider"
+            onClick={() => updateEmergencyTasksSlider(false)}
+          >
+            Close
+          </button>
+          <button
+            data-testid="save-task"
+            onClick={() => {
+              setShowNotification(true);
+              updateEmergencyTasksSlider(false);
+            }}
+          >
+            Save
+          </button>
+        </div>
+      )
+);
+jest.mock(
+  "../../../../components/Notification/Notification",
+  () => () => <div data-testid="task-notification" />
+);
 
 const mockFormConcepts = [
   {
@@ -41,25 +71,44 @@ const mockObservationsApiResponse = [
   },
 ];
 
+const mockCurrentUserWithPrivilege = {
+  privileges: [{ name: "Add Tasks" }],
+};
+
+const mockCurrentUserWithoutPrivilege = {
+  privileges: [],
+};
+
 const mockIPDContextWithData = {
   visit: "visit-uuid-1",
   config: { enable24HourTime: false },
+  currentUser: mockCurrentUserWithPrivilege,
 };
 
 const mockIPDContextEmpty = {
   visit: "visit-uuid-1",
   config: { enable24HourTime: false },
+  currentUser: mockCurrentUserWithPrivilege,
 };
 
 const mockIPDContextNoVisit = {
   visit: null,
   config: { enable24HourTime: false },
+  currentUser: mockCurrentUserWithPrivilege,
 };
 
-const renderWithProviders = (component, ipdContextValue) => {
+const mockSliderContext = {
+  isSliderOpen: { careInstructionsTasks: false },
+  updateSliderOpen: jest.fn(),
+  provider: { uuid: "provider-uuid-1" },
+};
+
+const renderWithProviders = (component, ipdContextValue, sliderContextValue = mockSliderContext) => {
   return render(
     <IPDContext.Provider value={ipdContextValue}>
-      <IntlProvider locale={"en"}>{component}</IntlProvider>
+      <SliderContext.Provider value={sliderContextValue}>
+        <IntlProvider locale={"en"}>{component}</IntlProvider>
+      </SliderContext.Provider>
     </IPDContext.Provider>
   );
 };
@@ -286,6 +335,124 @@ describe("CareInstructions", () => {
       );
       expect(elements.length).toBeGreaterThan(0);
       expect(elements[0]).toBeInTheDocument();
+    });
+  });
+
+  it("should render Add Task button in action column when user has ADD_TASKS privilege", async () => {
+    const { getAllByText } = renderWithProviders(
+      <CareInstructions
+        patientId="patient-uuid-1"
+        config={{ formConcepts: mockFormConcepts }}
+      />,
+      mockIPDContextWithData
+    );
+    await waitFor(() => {
+      const addTaskButtons = getAllByText("Add Task");
+      expect(addTaskButtons.length).toBeGreaterThan(0);
+    });
+  });
+
+  it("should open AddEmergencyTasks slider when Add Task button is clicked", async () => {
+    const mockUpdateSliderOpen = jest.fn();
+    const sliderContextClosed = {
+      isSliderOpen: { careInstructionsTasks: false },
+      updateSliderOpen: mockUpdateSliderOpen,
+      provider: { uuid: "provider-uuid-1" },
+    };
+    const { getAllByText } = renderWithProviders(
+      <CareInstructions
+        patientId="patient-uuid-1"
+        config={{ formConcepts: mockFormConcepts }}
+      />,
+      mockIPDContextWithData,
+      sliderContextClosed
+    );
+    await waitFor(() => {
+      expect(getAllByText("Add Task").length).toBeGreaterThan(0);
+    });
+    fireEvent.click(getAllByText("Add Task")[0]);
+    expect(mockUpdateSliderOpen).toHaveBeenCalled();
+  });
+
+  it("should render AddEmergencyTasks slider when careInstructionsTasks is open", async () => {
+    const sliderContextOpen = {
+      isSliderOpen: { careInstructionsTasks: true },
+      updateSliderOpen: jest.fn(),
+      provider: { uuid: "provider-uuid-1" },
+    };
+    const { getByTestId } = renderWithProviders(
+      <CareInstructions
+        patientId="patient-uuid-1"
+        config={{ formConcepts: mockFormConcepts }}
+      />,
+      mockIPDContextWithData,
+      sliderContextOpen
+    );
+    await waitFor(() => {
+      expect(getByTestId("add-emergency-tasks-slider")).toBeInTheDocument();
+    });
+  });
+
+  it("should close the slider when updateEmergencyTasksSlider is called with false", async () => {
+    const mockUpdateSliderOpen = jest.fn();
+    const sliderContextOpen = {
+      isSliderOpen: { careInstructionsTasks: true },
+      updateSliderOpen: mockUpdateSliderOpen,
+      provider: { uuid: "provider-uuid-1" },
+    };
+    const { getByTestId } = renderWithProviders(
+      <CareInstructions
+        patientId="patient-uuid-1"
+        config={{ formConcepts: mockFormConcepts }}
+      />,
+      mockIPDContextWithData,
+      sliderContextOpen
+    );
+    await waitFor(() => {
+      expect(getByTestId("add-emergency-tasks-slider")).toBeInTheDocument();
+    });
+    fireEvent.click(getByTestId("close-slider"));
+    expect(mockUpdateSliderOpen).toHaveBeenCalledWith(expect.any(Function));
+  });
+
+  it("should show notification after task is saved", async () => {
+    const sliderContextOpen = {
+      isSliderOpen: { careInstructionsTasks: true },
+      updateSliderOpen: jest.fn(),
+      provider: { uuid: "provider-uuid-1" },
+    };
+    const { getByTestId } = renderWithProviders(
+      <CareInstructions
+        patientId="patient-uuid-1"
+        config={{ formConcepts: mockFormConcepts }}
+      />,
+      mockIPDContextWithData,
+      sliderContextOpen
+    );
+    await waitFor(() => {
+      expect(getByTestId("add-emergency-tasks-slider")).toBeInTheDocument();
+    });
+    fireEvent.click(getByTestId("save-task"));
+    await waitFor(() => {
+      expect(getByTestId("task-notification")).toBeInTheDocument();
+    });
+  });
+
+  it("should not render Add Task button when user lacks ADD_TASKS privilege", async () => {
+    const ipdContextNoPrivilege = {
+      visit: "visit-uuid-1",
+      config: { enable24HourTime: false },
+      currentUser: mockCurrentUserWithoutPrivilege,
+    };
+    const { queryByText } = renderWithProviders(
+      <CareInstructions
+        patientId="patient-uuid-1"
+        config={{ formConcepts: mockFormConcepts }}
+      />,
+      ipdContextNoPrivilege
+    );
+    await waitFor(() => {
+      expect(queryByText("Add Task")).not.toBeInTheDocument();
     });
   });
 

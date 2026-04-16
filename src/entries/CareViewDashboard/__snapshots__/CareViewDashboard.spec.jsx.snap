@@ -904,7 +904,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                                 data-testid="treatments-ipd-dashboard"
                                 href="/bahmni/clinical/#/default/patient/7278eb93-8c1d-4ef4-bcbf-4c6ee91365f7/dashboard/visit/ipd/626b822d-741e-4a86-95ff-636eea753c2c?source=careViewDashboard"
                               >
-                                Schedule Medications
+                                Acknowledge
                               </a>
                             </div>
                           </div>
