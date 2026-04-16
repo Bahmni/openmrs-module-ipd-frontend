@@ -376,4 +376,127 @@ describe("PatientDetailsCell", () => {
       expect(mockContext.handleRefreshSummary).toHaveBeenCalledTimes(2);
     });
   });
+
+  it("should show care instructions notification when newCareInstructions > 0", async () => {
+    const { queryByTestId, queryByText } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={0}
+            careInstructions={[
+              { instruction: "Do X" },
+              { instruction: "Do Y" },
+              { instruction: "Do Z" },
+            ]}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByTestId("new-care-instructions-notification")).toBeTruthy();
+      expect(queryByText(/3 New Care Instruction\(s\)/)).toBeTruthy();
+      expect(queryByTestId("care-instructions-ipd-dashboard")).toBeTruthy();
+    });
+  });
+
+  it("should not show care instructions notification when newCareInstructions is 0", async () => {
+    const { queryByTestId } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={0}
+            careInstructions={[]}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByTestId("new-care-instructions-notification")).toBeFalsy();
+    });
+  });
+
+  it("should have care instructions link with proper URL", async () => {
+    const { queryByTestId } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={0}
+            careInstructions={[
+              { instruction: "Do X" },
+              { instruction: "Do Y" },
+            ]}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      const link = queryByTestId("care-instructions-ipd-dashboard");
+      expect(link).toBeTruthy();
+      expect(link.getAttribute("href")).toContain("source=careViewDashboard");
+    });
+  });
+
+  it("should display medications and care instructions together without whitespace", async () => {
+    const { queryByTestId, queryByText } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={2}
+            careInstructions={[
+              { instruction: "Do X" },
+              { instruction: "Do Y" },
+              { instruction: "Do Z" },
+            ]}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByTestId("new-notifications")).toBeTruthy();
+      expect(queryByTestId("new-medications-notification")).toBeTruthy();
+      expect(queryByTestId("new-care-instructions-notification")).toBeTruthy();
+      expect(queryByText(/2 New Medication\(s\)/)).toBeTruthy();
+      expect(queryByText(/3 New Care Instruction\(s\)/)).toBeTruthy();
+    });
+  });
 });

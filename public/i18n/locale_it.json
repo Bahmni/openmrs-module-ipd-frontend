@@ -216,5 +216,8 @@
   "NEW_NOTE_REASON": "Motivo",
   "NEW_NOTES": "Note",
   "NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS": "La conferma della nota è stata salvata con successo",
-  "NOTE_AMENDMENT_SAVED_SUCCESS": "La modifica della nota è stata salvata con successo"
+  "NOTE_AMENDMENT_SAVED_SUCCESS": "La modifica della nota è stata salvata con successo",
+  "NEW_MEDICATIONS": "New Medication(s)",
+  "NEW_CARE_INSTRUCTIONS": "New Care Instruction(s)",
+  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge"
 }

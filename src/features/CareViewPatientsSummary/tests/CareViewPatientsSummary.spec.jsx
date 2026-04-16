@@ -33,6 +33,8 @@ const mockGetColumnData = jest.fn();
 const mockCurrentShiftHoursArray = jest.fn();
 const mockSetCurrentShiftTimes = jest.fn();
 const mockGetPreviousShiftDetails = jest.fn();
+const mockFetchBatchObservations = jest.fn();
+const mockMapObservationsToInstructions = jest.fn();
 jest.mock("../../CareViewSummary/utils/CareViewSummary", () => {
   return {
     getSlotsForPatients: () => mockGetSlotsForPatients(),
@@ -43,6 +45,16 @@ jest.mock("../../CareViewSummary/utils/CareViewSummary", () => {
     getPreviousShiftDetails: () => mockGetPreviousShiftDetails(),
   };
 });
+jest.mock(
+  "../../DisplayControls/CareInstructions/utils/CareInstructionsUtils",
+  () => {
+    return {
+      fetchBatchObservations: (...args) => mockFetchBatchObservations(...args),
+      mapObservationsToInstructions: (...args) =>
+        mockMapObservationsToInstructions(...args),
+    };
+  }
+);
 
 describe("CareViewPatientsSummary", function () {
   afterEach(() => {
@@ -82,6 +94,8 @@ describe("CareViewPatientsSummary", function () {
       previousShiftIndex: 1,
       startDateTime: "1713187800000",
     });
+    mockFetchBatchObservations.mockResolvedValue([]);
+    mockMapObservationsToInstructions.mockReturnValue([]);
   });
 
   it("should match snapshot", () => {
@@ -316,6 +330,152 @@ describe("CareViewPatientsSummary", function () {
     await waitFor(() => {
       expect(queryByText("A-6")).toBeTruthy();
       expect(queryByText("C-1")).toBeTruthy();
+    });
+  });
+
+  describe("fetchCareInstructions", () => {
+    const ciFormConcepts = [
+      {
+        formName: "CI Form",
+        concepts: ["Instruction Concept A", "Instruction Concept B"],
+      },
+    ];
+
+    const mockContextWithCI = {
+      ...mockContext,
+      ipdConfig: {
+        ...mockConfig,
+        sections: [
+          ...mockConfig.sections,
+          {
+            title: "Care Instructions",
+            componentKey: "CI",
+            config: { formConcepts: ciFormConcepts },
+          },
+        ],
+      },
+    };
+
+    it("should fetch care instructions counts and store them keyed by visitUuid", async () => {
+      const visitUuid1 = "626b822d-741e-4a86-95ff-626eea753c4c";
+      const visitUuid2 = "626b822d-741e-4a86-95ff-636eea753c2c";
+      const visitUuid3 = "627b822d-741e-4a96-45ff-626eea753c4c";
+      const mockObservations1 = [{ encounterUuid: "enc-1" }];
+      const mockObservations2 = [
+        { encounterUuid: "enc-2" },
+        { encounterUuid: "enc-3" },
+      ];
+
+      mockFetchBatchObservations.mockResolvedValue([
+        { visitUuid: visitUuid1, observations: mockObservations1 },
+        { visitUuid: visitUuid2, observations: mockObservations2 },
+      ]);
+
+      mockMapObservationsToInstructions
+        .mockReturnValueOnce([{ instruction: "Do X" }])
+        .mockReturnValueOnce([
+          { instruction: "Do Y" },
+          { instruction: "Do Z" },
+        ]);
+
+      render(
+        <IntlProvider locale="en">
+          <CareViewContext.Provider value={mockContextWithCI}>
+            <CareViewPatientsSummary
+              patientsSummary={mockPatientsList.admittedPatients}
+              navHourEpoch={mockNavHourEpoch}
+              filterValue={mockFilterValue}
+            />
+          </CareViewContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        expect(mockFetchBatchObservations).toHaveBeenCalledWith(
+          [visitUuid1, visitUuid2, visitUuid3],
+          ["Instruction Concept A", "Instruction Concept B"]
+        );
+        expect(mockMapObservationsToInstructions).toHaveBeenCalledWith(
+          mockObservations1,
+          ciFormConcepts
+        );
+        expect(mockMapObservationsToInstructions).toHaveBeenCalledWith(
+          mockObservations2,
+          ciFormConcepts
+        );
+      });
+    });
+
+    it("should not call fetchBatchObservations when CI section has no formConcepts", async () => {
+      const contextWithEmptyCI = {
+        ...mockContext,
+        ipdConfig: {
+          ...mockConfig,
+          sections: [
+            ...mockConfig.sections,
+            {
+              title: "Care Instructions",
+              componentKey: "CI",
+              config: { formConcepts: [] },
+            },
+          ],
+        },
+      };
+
+      render(
+        <IntlProvider locale="en">
+          <CareViewContext.Provider value={contextWithEmptyCI}>
+            <CareViewPatientsSummary
+              patientsSummary={mockPatientsList.admittedPatients}
+              navHourEpoch={mockNavHourEpoch}
+              filterValue={mockFilterValue}
+            />
+          </CareViewContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        expect(mockFetchBatchObservations).not.toHaveBeenCalled();
+      });
+    });
+
+    it("should not call fetchBatchObservations when there is no CI section in ipdConfig", async () => {
+      render(
+        <IntlProvider locale="en">
+          <CareViewContext.Provider value={mockContext}>
+            <CareViewPatientsSummary
+              patientsSummary={mockPatientsList.admittedPatients}
+              navHourEpoch={mockNavHourEpoch}
+              filterValue={mockFilterValue}
+            />
+          </CareViewContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        expect(mockFetchBatchObservations).not.toHaveBeenCalled();
+      });
+    });
+
+    it("should handle empty batch response gracefully", async () => {
+      mockFetchBatchObservations.mockResolvedValue([]);
+
+      render(
+        <IntlProvider locale="en">
+          <CareViewContext.Provider value={mockContextWithCI}>
+            <CareViewPatientsSummary
+              patientsSummary={mockPatientsList.admittedPatients}
+              navHourEpoch={mockNavHourEpoch}
+              filterValue={mockFilterValue}
+            />
+          </CareViewContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        expect(mockFetchBatchObservations).toHaveBeenCalled();
+        expect(mockMapObservationsToInstructions).not.toHaveBeenCalled();
+      });
     });
   });
 });

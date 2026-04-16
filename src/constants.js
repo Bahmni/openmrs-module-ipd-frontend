@@ -99,6 +99,7 @@ export const GET_SEARCH_PATIENT_LIST_URL =
 export const GET_SLOTS_FOR_PATIENTS_URL =
   RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
 export const BAHMNI_CORE_OBSERVATIONS_BASE_URL = BAHMNI_CORE + "/observations?";
+export const OBSERVATIONS_BATCH_URL = BAHMNI_CORE + "/observations/batch";
 export const NON_MEDICATION_BASE_URL = RESTWS_V1 + "/tasks";
 
 export const GET_TASKS_FOR_PATIENTS_URL = RESTWS_V1 + "/tasks";

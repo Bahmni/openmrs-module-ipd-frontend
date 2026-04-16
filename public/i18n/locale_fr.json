@@ -277,5 +277,8 @@
   "NEW_NOTE_REASON": "Raison",
   "NEW_NOTES": "Notes",
   "NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS": "L'accusé de réception de la note a été enregistré avec succès",
-  "NOTE_AMENDMENT_SAVED_SUCCESS": "La modification de la note a été enregistrée avec succès"
+  "NOTE_AMENDMENT_SAVED_SUCCESS": "La modification de la note a été enregistrée avec succès",
+  "NEW_MEDICATIONS": "Nouveaux médicament(s)",
+  "NEW_CARE_INSTRUCTIONS": "Nouvelle instruction de soins",
+  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Accuser réception",
 }
