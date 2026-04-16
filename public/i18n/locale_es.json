@@ -222,9 +222,7 @@
   "CARE_INSTRUCTIONS_ACTION_HEADER": "Action",
   "NOT_ACKNOWLEDGED_TAB": "Not Acknowledged",
   "ACKNOWLEDGED_TAB": "Acknowledged",
-  "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient",
   "ACKNOWLEDGE_NOTE": "Confirmar nota",
-  "AMEND_NOTE": "Modificar nota",
   "AMENDED": "Modificado",
   "LAST_AMENDED_NOTE": "Nota modificada",
   "ACKNOWLEDGED": "Confirmado",
@@ -244,5 +242,10 @@
   "NEW_NOTE_REASON": "Motivo",
   "NEW_NOTES": "Notas",
   "NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS": "La confirmación de la nota se guardó correctamente",
-  "NOTE_AMENDMENT_SAVED_SUCCESS": "La modificación de la nota se guardó correctamente"
+  "NOTE_AMENDMENT_SAVED_SUCCESS": "La modificación de la nota se guardó correctamente",
+  "AMEND_NOTE": "Modificar nota",
+  "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient",
+  "NEW_MEDICATIONS": "New Medication(s)",
+  "NEW_CARE_INSTRUCTIONS": "New Care Instruction(s)",
+  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge"
 }

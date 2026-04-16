@@ -254,9 +254,7 @@
   "CARE_INSTRUCTIONS_ACTION_HEADER": "Action",
   "NOT_ACKNOWLEDGED_TAB": "Non acquitté",
   "ACKNOWLEDGED_TAB": "Acquitté",
-  "NO_CARE_INSTRUCTIONS_MESSAGE": "Aucune instruction de soins disponible pour ce patient",
   "ACKNOWLEDGE_NOTE": "Acquitter la note",
-  "AMEND_NOTE": "Modifier la note",
   "AMENDED": "Modifié",
   "LAST_AMENDED_NOTE": "Note modifiée",
   "ACKNOWLEDGED": "Acquitté",
@@ -276,5 +274,10 @@
   "NEW_NOTE_REASON": "Raison",
   "NEW_NOTES": "Notes",
   "NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS": "L'accusé de réception de la note a été enregistré avec succès",
-  "NOTE_AMENDMENT_SAVED_SUCCESS": "La modification de la note a été enregistrée avec succès"
+  "NOTE_AMENDMENT_SAVED_SUCCESS": "La modification de la note a été enregistrée avec succès",
+  "AMEND_NOTE": "Modifier la note",
+  "NO_CARE_INSTRUCTIONS_MESSAGE": "Aucune instruction de soins disponible pour ce patient",
+  "NEW_MEDICATIONS": "Nouveaux médicament(s)",
+  "NEW_CARE_INSTRUCTIONS": "Nouvelle instruction de soins",
+  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Accuser réception"
 }

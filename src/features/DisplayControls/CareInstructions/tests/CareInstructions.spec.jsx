@@ -570,3 +570,71 @@ describe("fetchCareInstructionsObs", () => {
     expect(result).toEqual([]);
   });
 });
+
+describe("fetchBatchObservations", () => {
+  let mockAxios;
+
+  beforeEach(() => {
+    mockAxios = new MockAdapter(axios);
+  });
+
+  afterEach(() => {
+    mockAxios.restore();
+  });
+
+  it("should POST to the batch URL and return grouped observations for multiple visits", async () => {
+    const mockResponse = [
+      {
+        visitUuid: "visit-uuid-1",
+        observations: [
+          {
+            encounterUuid: "encounter-uuid-1",
+            concept: { name: "Instruction for the Ward" },
+            value: "Rest in bed",
+          },
+        ],
+      },
+      {
+        visitUuid: "visit-uuid-2",
+        observations: [
+          {
+            encounterUuid: "encounter-uuid-2",
+            concept: { name: "Instruction for the Ward" },
+            value: "Monitor vitals",
+          },
+        ],
+      },
+    ];
+    mockAxios
+      .onPost(new RegExp(".*observations/batch.*"))
+      .reply(200, mockResponse);
+
+    const result = await CareInstructionsUtils.fetchBatchObservations(
+      ["visit-uuid-1", "visit-uuid-2"],
+      ["Instruction for the Ward"]
+    );
+
+    expect(result).toEqual(mockResponse);
+    expect(result).toHaveLength(2);
+    expect(result[0].visitUuid).toBe("visit-uuid-1");
+    expect(result[1].visitUuid).toBe("visit-uuid-2");
+
+    const requestBody = JSON.parse(mockAxios.history.post[0].data);
+    expect(requestBody).toEqual({
+      visitUuids: ["visit-uuid-1", "visit-uuid-2"],
+      concept: ["Instruction for the Ward"],
+    });
+    expect(mockAxios.history.post[0].withCredentials).toBe(true);
+  });
+
+  it("should return empty array when the API call fails", async () => {
+    mockAxios.onPost(new RegExp(".*observations/batch.*")).reply(500);
+
+    const result = await CareInstructionsUtils.fetchBatchObservations(
+      ["visit-uuid-1"],
+      ["Instruction for the Ward"]
+    );
+
+    expect(result).toEqual([]);
+  });
+});

@@ -252,7 +252,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 </span>
                 <div
                   class="treatments-notification"
-                  data-testid="new-medications-notification"
+                  data-testid="new-notifications"
                 >
                   <div
                     class="warning_icon"
@@ -284,9 +284,13 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                   <div
                     class="treatments-notification-span"
                   >
-                    <div>
+                    <div
+                      data-testid="new-medications-notification"
+                    >
                       • 
-                      1 New Medication(s): 
+                      1 
+                      New Medication(s)
+                      : 
                       <a
                         class="bx--link"
                         data-testid="treatments-ipd-dashboard"

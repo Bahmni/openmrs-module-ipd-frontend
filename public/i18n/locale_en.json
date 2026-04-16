@@ -262,7 +262,6 @@
   "CARE_INSTRUCTIONS_ACTION_HEADER": "Action",
   "NOT_ACKNOWLEDGED_TAB": "Not Acknowledged",
   "ACKNOWLEDGED_TAB": "Acknowledged",
-  "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient",
   "ACKNOWLEDGE_NOTE": "Acknowledge Note",
   "AMEND_NOTE": "Amend Note",
   "AMENDED": "Amended",
@@ -282,5 +281,9 @@
   "AMENDMENT_REASON": "Amendment Reason",
   "AMENDMENT_NOTES": "Amendment Notes",
   "NEW_NOTE_REASON": "Reason",
-  "NEW_NOTES": "Notes"
+  "NEW_NOTES": "Notes",
+  "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient",
+  "NEW_MEDICATIONS": "New Medication(s)",
+  "NEW_CARE_INSTRUCTIONS": "New Care Instruction(s)",
+  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge"
 }
