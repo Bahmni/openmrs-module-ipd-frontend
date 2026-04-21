@@ -18,18 +18,32 @@ import {
   formatDate,
 } from "../../../../utils/DateTimeUtils";
 import { IPDContext } from "../../../../context/IPDContext";
+import { getNoKnownAllergyUuid } from "../utils/AllergiesUtils";
 
 const Allergies = (props) => {
   const { patientId } = props;
   const { visitSummary } = useContext(IPDContext);
   const { allergiesData, isLoading } = useFetchAllergiesIntolerance(patientId);
   const [rows, setRows] = useState([]);
+  const [noKnownAllergyUuid, setNoKnownAllergyUuid] = useState(undefined);
   const NoAllergenMessage = (
     <FormattedMessage
       id={"NO_ALLERGENS_MESSAGE"}
       defaultMessage={"No Allergen is captured for this patient yet."}
     />
   );
+
+  useEffect(() => {
+    const fetchCode = async () => {
+      try {
+        const code = await getNoKnownAllergyUuid();
+        setNoKnownAllergyUuid(code);
+      } catch (error) {
+        console.error("Failed to fetch no known allergy code:", error);
+      }
+    };
+    fetchCode();
+  }, []);
 
   useEffect(() => {
     if (allergiesData && allergiesData.entry) {
@@ -39,14 +53,15 @@ const Allergies = (props) => {
           allergy?.resource?.recordedDate
         );
         const allergyData = {
-          allergen: allergy.resource.code.coding[0].display,
+          allergen: allergy.resource.code?.coding[0]?.display,
+          allergenCode: allergy.resource.code?.coding[0]?.code,
           id: allergy.resource.id,
           severity: getSeverity(allergy.resource.criticality),
           reaction: getAllergyReactions(allergy.resource.reaction),
           comments: getComments(allergy.resource.note),
           sortWeight: getSortingWait(getSeverity(allergy.resource.criticality)),
           provider: allergy.resource.recorder.display,
-          date: formatDate(recordedDate)
+          date: formatDate(recordedDate),
         };
 
         if (
@@ -62,13 +77,15 @@ const Allergies = (props) => {
   const getSortingWait = (severity) => {
     if (severity === "Severe") return -1;
     if (severity === "Moderate") return 0;
-    return 1;
+    if (severity === "Mild") return 1;
+    return 2;
   };
 
   const getSeverity = (criticality) => {
-    if (criticality == "unable-to-assess") return "Moderate";
-    else if (criticality == "high") return "Severe";
-    else return "Mild";
+    if (criticality === "unable-to-assess") return "Moderate";
+    else if (criticality === "high") return "Severe";
+    else if (criticality === "low") return "Mild";
+    else return "";
   };
 
   const getComments = (notes) =>
@@ -77,9 +94,9 @@ const Allergies = (props) => {
   const getAllergyReactions = (reactions) => {
     let allergyReactions = "";
     if (reactions && reactions.length > 0) {
-      reactions[0].manifestation.map((reaction) => {
+      reactions[0].manifestation?.forEach((reaction) => {
         allergyReactions =
-          allergyReactions != ""
+          allergyReactions !== ""
             ? `${allergyReactions}, ${reaction.coding[0].display}`
             : `${reaction.coding[0].display}`;
       });
@@ -90,39 +107,64 @@ const Allergies = (props) => {
   const headers = [
     {
       key: "allergen",
-      header: "Allergen",
+      header: (
+        <FormattedMessage
+          id={"ALLERGEN_COLUMN_HEADER"}
+          defaultMessage={`Allergen`}
+        />
+      ),
     },
     {
       key: "severity",
-      header: "Severity",
+      header: (
+        <FormattedMessage
+          id={"SEVERITY_COLUMN_HEADER"}
+          defaultMessage={`Severity`}
+        />
+      ),
     },
     {
       key: "reaction",
-      header: "Reaction",
+      header: (
+        <FormattedMessage
+          id={"REACTION_COLUMN_HEADER"}
+          defaultMessage={`Reaction`}
+        />
+      ),
     },
     {
       key: "comments",
-      header: "Comments",
+      header: (
+        <FormattedMessage
+          id={"COMMENTS_COLUMN_HEADER"}
+          defaultMessage={`Comments`}
+        />
+      ),
     },
     {
       key: "provider",
-      header: "Provider Name",
+      header: (
+        <FormattedMessage
+          id={"PROVIDER_COLUMN_HEADER"}
+          defaultMessage={`Provider Name`}
+        />
+      ),
     },
     {
       key: "date",
-      header: "Date",
+      header: (
+        <FormattedMessage id={"DATE_COLUMN_HEADER"} defaultMessage={`Date`} />
+      ),
     },
   ];
 
-  const sortedRow = (rows) => {
-    const sortedRows = rows
+  const sortedRow = (rows) =>
+    rows
       .sort((a, b) => {
         if (a === b) return 0;
         return a.allergen > b.allergen ? 1 : -1;
       })
       .sort((a, b) => a.sortWeight - b.sortWeight);
-    return sortedRows;
-  };
 
   if (isLoading)
     return (
@@ -137,7 +179,13 @@ const Allergies = (props) => {
     <div className="no-allergen-message"> {NoAllergenMessage} </div>
   ) : (
     <DataTable rows={rows} headers={headers} useZebraStyles={true}>
-      {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
+      {({
+        rows: dataTableRows,
+        headers,
+        getTableProps,
+        getHeaderProps,
+        getRowProps,
+      }) => (
         <Table {...getTableProps()} useZebraStyles>
           <TableHead>
             <TableRow>
@@ -153,19 +201,28 @@ const Allergies = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
-              <TableRow
-                key={index + row.id}
-                {...getRowProps({ row })}
-                data-testid="table-body-row"
-              >
-                {row.cells.map((cell) => (
-                  <TableCell key={cell.id} className={"high-severity-color"}>
-                    {cell.value}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
+            {dataTableRows.map((row, index) => {
+              const allergyRecord = rows[index];
+              const isNoKnownAllergy =
+                allergyRecord?.allergenCode === noKnownAllergyUuid;
+              const shouldStrikethrough = rows.length > 1 && isNoKnownAllergy;
+              return (
+                <TableRow
+                  key={index + row.id}
+                  {...getRowProps({ row })}
+                  data-testid="table-body-row"
+                  className={
+                    shouldStrikethrough
+                      ? "no-known-allergy"
+                      : "high-severity-color"
+                  }
+                >
+                  {row.cells.map((cell) => (
+                    <TableCell key={cell.id}>{cell.value}</TableCell>
+                  ))}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       )}
