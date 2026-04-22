@@ -33,18 +33,18 @@
   &__icon {
     fill: #ffffff;
     color: #ffffff;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
   }
 
   &__red-dot {
     position: absolute;
     top: 0;
     right: 0;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background-color: #da1e28;
+    background-color: #ff0000;
   }
 
   &__overlay-wrapper {
@@ -87,6 +87,10 @@
     outline: 2px solid #ffffff;
     outline-offset: -2px;
   }
+}
+
+.dashboard header.reg-header .ipd-draft-indicator__button {
+  padding: 14px 10px;
 }
 
 .hidden-mobile .ipd-draft-indicator__button,
