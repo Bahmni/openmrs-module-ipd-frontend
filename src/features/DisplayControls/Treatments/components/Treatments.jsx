@@ -63,10 +63,10 @@ const Treatments = (props) => {
   } = useContext(SliderContext);
   const { config, handleAuditEvent, currentUser } = useContext(IPDContext);
   const {
-    enable24HourTime = {}, addDispensedMedicationToDrugChart = false,
+    enable24HourTime = {},
+    addDispensedMedicationToDrugChart = false,
     allMedicinesInPrescriptionAvailableForIPD = true,
-  } =
-    config;
+  } = config;
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [treatments, setTreatments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -369,6 +369,10 @@ const Treatments = (props) => {
               additionalInstructions: drugOrderObject.additionalInstructions
                 ? drugOrderObject.additionalInstructions
                 : "",
+              rate: drugOrderObject.rate ? drugOrderObject.rate : null,
+              additives: drugOrderObject.additives
+                ? drugOrderObject.additives
+                : null,
               recordedDateTime: formatDate(
                 drugOrder.dateActivated,
                 defaultDateTimeFormat
@@ -390,6 +394,8 @@ const Treatments = (props) => {
         id: treatment.id,
         instructions: treatment.additionalData.instructions,
         additionalInstructions: treatment.additionalData.additionalInstructions,
+        rate: treatment.additionalData.rate,
+        additives: treatment.additionalData.additives,
         recordedDateTime: treatment.additionalData.recordedDateTime,
         provider: treatment.providerName,
         stopReason: treatment.additionalData.stopReason,

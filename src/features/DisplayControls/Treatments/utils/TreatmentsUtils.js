@@ -130,6 +130,12 @@ export const updateDrugOrderList = (drugOrderList) => {
       administrationInstructions.additionalInstructions
         ? administrationInstructions.additionalInstructions
         : "";
+    ipdDrugOrder.rate = administrationInstructions.rate
+      ? administrationInstructions.rate
+      : null;
+    ipdDrugOrder.additives = administrationInstructions.additives
+      ? administrationInstructions.additives
+      : null;
   });
   return drugOrderList;
 };
@@ -199,6 +205,8 @@ export const getDrugName = (drugOrderObject) => {
     drugOrder.drug &&
     (drugOrderObject.instructions ||
       drugOrderObject.additionalInstructions ||
+      drugOrderObject.rate ||
+      drugOrderObject.additives ||
       drugOrder.orderReasonConcept ||
       drugOrder.orderReasonText);
 
