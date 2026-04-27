@@ -21,7 +21,6 @@ import {
   disableDoneTogglePostNextTaskTime,
   updateNonMedicationTask,
 } from "../utils/NursingTasksUtils";
-import { saveEmergencyMedication } from "../utils/EmergencyTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import {
   performerFunction,
@@ -43,7 +42,7 @@ import {
   getLocalizedLabel,
   getTranslationKey,
   isSystemGeneratedTask,
-  isUserPrivileged
+  isUserPrivileged,
 } from "../../../../utils/CommonUtils";
 
 const UpdateNursingTasks = (props) => {
@@ -114,7 +113,7 @@ const UpdateNursingTasks = (props) => {
     setOpenConfirmationModal(false);
     updateNursingTasksSlider(false);
     updateIsPRNMedication(false);
-    };
+  };
 
   const saveAdministeredNonMedicationTasks = (status, messageId) => {
     setShowNotification(true);
@@ -127,9 +126,7 @@ const UpdateNursingTasks = (props) => {
   const handlePrimaryButtonClick = async () => {
     setIsSavingConfirmation(true);
     const administeredTasks = createAdministeredTasksPayload();
-    const response = isPRNMedication
-      ? await saveEmergencyMedication(administeredTasks[0])
-      : await saveAdministeredMedication(administeredTasks);
+    const response = await saveAdministeredMedication(administeredTasks);
     if (response.status === 200) {
       Object.keys(tasks).forEach((key) => {
         if (tasks[key].status === "not-done") {
@@ -553,14 +550,13 @@ const UpdateNursingTasks = (props) => {
                     onToggle={handleToggle}
                     disabled={
                       !verifyPrivileges(medicationTask) ||
-                      (!tasks[medicationTask.uuid]?.isRelevantTask ||
-                        (!medicationTask.isANonMedicationTask &&
-                          medicationTask.serviceType !==
-                            "AsNeededPlaceholder" &&
-                          disableDoneTogglePostNextTaskTime(
-                            medicationTask,
-                            groupSlotsByOrderId
-                          )))
+                      !tasks[medicationTask.uuid]?.isRelevantTask ||
+                      (!medicationTask.isANonMedicationTask &&
+                        medicationTask.serviceType !== "AsNeededPlaceholder" &&
+                        disableDoneTogglePostNextTaskTime(
+                          medicationTask,
+                          groupSlotsByOrderId
+                        ))
                     }
                   />
                 )}
@@ -723,53 +719,54 @@ const UpdateNursingTasks = (props) => {
                     )}
                   </div>
                 )}
-                {verifyPrivileges(medicationTask) && !tasks[medicationTask.uuid]?.dosingInstructions?.asNeeded && (
-                  <OverflowMenu
-                    flipped={true}
-                    disabled={tasks[medicationTask.uuid]?.isSelected}
-                    className={"overflowMenu"}
-                  >
-                    {tasks[medicationTask.uuid]?.skipped ? (
-                      <OverflowMenuItem
-                        itemText={
-                          !isNonMedication
-                            ? getLocalizedLabel(
-                                intl,
-                                getTranslationKey("Un-Skip Drug"),
-                                "Un-Skip Drug"
-                              )
-                            : getLocalizedLabel(
-                                intl,
-                                getTranslationKey("Un-Skip Task"),
-                                "Un-Skip Task"
-                              )
-                        }
-                        onClick={() => {
-                          handleSkipDrug(medicationTask, false);
-                        }}
-                      />
-                    ) : (
-                      <OverflowMenuItem
-                        itemText={
-                          !isNonMedication
-                            ? getLocalizedLabel(
-                              intl,
-                                getTranslationKey("Skip Drug"),
-                                "Skip Drug"
-                              )
-                            : getLocalizedLabel(
-                              intl,
-                                getTranslationKey("Skip Task"),
-                                "Skip Task"
-                              )
-                        }
-                        onClick={() => {
-                          handleSkipDrug(medicationTask, true);
-                        }}
-                      />
-                    )}
-                  </OverflowMenu>
-                )}
+                {verifyPrivileges(medicationTask) &&
+                  !tasks[medicationTask.uuid]?.dosingInstructions?.asNeeded && (
+                    <OverflowMenu
+                      flipped={true}
+                      disabled={tasks[medicationTask.uuid]?.isSelected}
+                      className={"overflowMenu"}
+                    >
+                      {tasks[medicationTask.uuid]?.skipped ? (
+                        <OverflowMenuItem
+                          itemText={
+                            !isNonMedication
+                              ? getLocalizedLabel(
+                                  intl,
+                                  getTranslationKey("Un-Skip Drug"),
+                                  "Un-Skip Drug"
+                                )
+                              : getLocalizedLabel(
+                                  intl,
+                                  getTranslationKey("Un-Skip Task"),
+                                  "Un-Skip Task"
+                                )
+                          }
+                          onClick={() => {
+                            handleSkipDrug(medicationTask, false);
+                          }}
+                        />
+                      ) : (
+                        <OverflowMenuItem
+                          itemText={
+                            !isNonMedication
+                              ? getLocalizedLabel(
+                                  intl,
+                                  getTranslationKey("Skip Drug"),
+                                  "Skip Drug"
+                                )
+                              : getLocalizedLabel(
+                                  intl,
+                                  getTranslationKey("Skip Task"),
+                                  "Skip Task"
+                                )
+                          }
+                          onClick={() => {
+                            handleSkipDrug(medicationTask, true);
+                          }}
+                        />
+                      )}
+                    </OverflowMenu>
+                  )}
               </div>
             );
           })}

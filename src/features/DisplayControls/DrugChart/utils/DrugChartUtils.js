@@ -74,11 +74,12 @@ export const transformDrugOrders = (orders) => {
         slots: [],
         dateStopped: order.drugOrder.dateStopped,
         orderReasonText: orderReasonText,
-        firstSlotStartTime:
-          order.drugOrderSchedule.slotStartTime ||
-          (order.drugOrderSchedule.firstDaySlotsStartTime &&
-            order.drugOrderSchedule.firstDaySlotsStartTime[0]) ||
-          order.drugOrderSchedule.dayWiseSlotsStartTime[0],
+        firstSlotStartTime: dosingInstructions.asNeeded
+          ? order.drugOrder.effectiveStartDate / 1000
+          : order.drugOrderSchedule.slotStartTime ||
+            (order.drugOrderSchedule.firstDaySlotsStartTime &&
+              order.drugOrderSchedule.firstDaySlotsStartTime[0]) ||
+            order.drugOrderSchedule.dayWiseSlotsStartTime[0],
         notes: order.drugOrderSchedule?.notes,
       };
     }

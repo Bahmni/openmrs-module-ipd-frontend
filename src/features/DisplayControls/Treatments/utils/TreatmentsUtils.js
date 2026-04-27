@@ -86,6 +86,8 @@ export const getConfigsForTreatments = async () => {
       enable24HourTimers: response.data.config.enable24HourTimers,
       startTimeFrequencies: response.data.config.drugChartStartTimeFrequencies,
       scheduleFrequencies: response.data.config.drugChartScheduleFrequencies,
+      prnFrequencyIntervalInMinutes:
+        response.data.config.prnFrequencyIntervalInMinutes || {},
     };
     return treatmentConfig;
   } catch (error) {
@@ -353,6 +355,24 @@ export const mapAdditionalDataForEmergencyTreatments = (
         ),
     };
   });
+};
+
+export const getPRNIntervalInMinutes = (frequency, configMap = {}) => {
+  if (configMap && configMap[frequency] !== undefined) {
+    return configMap[frequency];
+  }
+  return 0;
+};
+
+export const isPRNEligibleForNextDose = (
+  lastAdministrationTime,
+  frequency,
+  configMap = {}
+) => {
+  const intervalMinutes = getPRNIntervalInMinutes(frequency, configMap);
+  if (!intervalMinutes || !lastAdministrationTime) return true;
+  const minutesSinceLast = (Date.now() / 1000 - lastAdministrationTime) / 60;
+  return minutesSinceLast >= intervalMinutes;
 };
 
 export const getStopReason = (drugOrder) => {

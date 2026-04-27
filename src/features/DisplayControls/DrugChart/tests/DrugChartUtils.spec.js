@@ -227,6 +227,35 @@ describe("DrugChartUtils", () => {
       expect(med.dosingInstructions.doseUnits).toBeUndefined();
     });
 
+    it("should use effectiveStartDate / 1000 as firstSlotStartTime for PRN (asNeeded) orders", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [
+          {
+            drugOrder: {
+              uuid: "prn-order-1",
+              careSetting: "INPATIENT",
+              drug: { name: "PRN Drug" },
+              duration: 3,
+              durationUnits: "Day(s)",
+              effectiveStartDate: 1704441600000,
+              dosingInstructions: {
+                dose: 5,
+                doseUnits: "mg",
+                route: "Oral",
+                frequency: { display: "As needed" },
+                administrationInstructions: "{}",
+                asNeeded: true,
+              },
+            },
+            drugOrderSchedule: { slotStartTime: 9999 },
+          },
+        ],
+        emergencyMedications: [],
+      });
+      const med = result["prn-order-1"];
+      expect(med.firstSlotStartTime).toBe(1704441600000 / 1000);
+    });
+
     it("should handle non-compact units in emergency medications", () => {
       const result = transformDrugOrders({
         ipdDrugOrders: [],
