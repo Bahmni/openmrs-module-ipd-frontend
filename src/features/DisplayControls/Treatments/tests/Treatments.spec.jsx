@@ -20,6 +20,7 @@ jest.mock("../utils/TreatmentsUtils", () => {
     ...originalModule,
     getEncounterType: jest.fn(),
     stopDrugOrders: jest.fn(),
+    getSlotsForAnOrderAndServiceType: jest.fn().mockResolvedValue([]),
   };
 });
 
@@ -1139,4 +1140,62 @@ it("should render an Edit Drug Chart link disabled for IPD treatments read mode"
     expect(editDrugChartLink).toBeTruthy();
     expect(editDrugChartLink.className).toContain("bx--link--disabled");
   });
+});
+
+it("should render Add to Tasks link as disabled when PRN drug order autoExpireDate has passed", async () => {
+  const pastDate = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const treatments = [
+    {
+      drugOrder: {
+        uuid: "prn-expired-1",
+        effectiveStartDate: 1704785404,
+        dateStopped: null,
+        dateActivated: 1704785404,
+        scheduledDate: 1704785404,
+        autoExpireDate: pastDate,
+        drug: {
+          name: "PRN Drug",
+        },
+        dosingInstructions: {
+          dose: 2,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Once a day",
+          asNeeded: true,
+          administrationInstructions:
+            '{"instructions":"As needed","additionalInstructions":""}',
+        },
+        duration: 1,
+        durationUnits: "Day(s)",
+        careSetting: "INPATIENT",
+      },
+      provider: {
+        name: "Dr. Jane Doe",
+      },
+    },
+  ];
+  const updatedAllMedications = {
+    ...mockAllMedicationsProviderValue,
+    data: {
+      emergencyMedications: [],
+      ipdDrugOrders: treatments,
+    },
+  };
+  const { getByText } = render(
+    <IPDContext.Provider
+      value={{
+        config: mockConfig,
+        isReadMode: false,
+        currentUser: mockUserWithAllRequiredPrivileges,
+      }}
+    >
+      <SliderContext.Provider value={mockProviderValue}>
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    </IPDContext.Provider>
+  );
+  const addToTasksLink = await waitFor(() => getByText("Add to Tasks"));
+  expect(addToTasksLink.className).toContain("bx--link--disabled");
 });

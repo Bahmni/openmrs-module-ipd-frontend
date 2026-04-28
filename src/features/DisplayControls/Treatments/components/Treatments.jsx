@@ -235,7 +235,9 @@ const Treatments = (props) => {
       const isPRNDisabled =
         drugOrder.dosingInstructions?.asNeeded &&
         (drugOrderObject?.prnHasPendingPlaceholder ||
-          !drugOrderObject?.prnEligible);
+          !drugOrderObject?.prnEligible ||
+          (drugOrder.autoExpireDate &&
+            new Date() > new Date(drugOrder.autoExpireDate)));
       const isButtonDisabled =
         isAddToDrugChartDisabled ||
         moment().valueOf() <= drugOrder.effectiveStartDate ||
