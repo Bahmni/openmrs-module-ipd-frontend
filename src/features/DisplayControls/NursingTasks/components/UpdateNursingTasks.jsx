@@ -21,7 +21,6 @@ import {
   disableDoneTogglePostNextTaskTime,
   updateNonMedicationTask,
 } from "../utils/NursingTasksUtils";
-import { saveEmergencyMedication } from "../utils/EmergencyTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
 import {
   performerFunction,
@@ -704,17 +703,7 @@ const UpdateNursingTasks = (props) => {
                       {tasks[medicationTask.uuid]?.skipped ? (
                         <OverflowMenuItem
                           itemText={
-                            !isNonMedication
-                              ? getLocalizedLabel(
-                                  intl,
-                                  getTranslationKey("Un-Skip Drug"),
-                                  "Un-Skip Drug"
-                                )
-                              : getLocalizedLabel(
-                                  intl,
-                                  getTranslationKey("Un-Skip Task"),
-                                  "Un-Skip Task"
-                                )
+                            !isNonMedication ? "Un-Skip Drug" : "Un-Skip Task"
                           }
                           onClick={() => {
                             handleSkipDrug(medicationTask, false);
@@ -722,19 +711,7 @@ const UpdateNursingTasks = (props) => {
                         />
                       ) : (
                         <OverflowMenuItem
-                          itemText={
-                            !isNonMedication
-                              ? getLocalizedLabel(
-                                  intl,
-                                  getTranslationKey("Skip Drug"),
-                                  "Skip Drug"
-                                )
-                              : getLocalizedLabel(
-                                  intl,
-                                  getTranslationKey("Skip Task"),
-                                  "Skip Task"
-                                )
-                          }
+                          itemText={!isNonMedication ? "Skip Drug" : "Skip Task"}
                           onClick={() => {
                             handleSkipDrug(medicationTask, true);
                           }}

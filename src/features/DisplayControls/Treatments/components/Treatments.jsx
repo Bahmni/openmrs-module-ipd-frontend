@@ -217,8 +217,15 @@ const Treatments = (props) => {
     showStopDrugChartLink,
     drugOrder,
     drugOrderSchedule,
+    drugOrderAttributes,
     drugOrderObject
   ) => {
+    const isOrderDispensed =
+      drugOrderAttributes != null &&
+      drugOrderAttributes.some(
+        (attribute) =>
+          attribute.name === "Dispensed" && attribute.value === "true"
+      );
     if (
       !isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.EDIT_MEDICATION_TASKS)
     ) {
@@ -228,7 +235,9 @@ const Treatments = (props) => {
       const isPRNDisabled =
         drugOrder.dosingInstructions?.asNeeded &&
         (drugOrderObject?.prnHasPendingPlaceholder ||
-          !drugOrderObject?.prnEligible);
+          !drugOrderObject?.prnEligible ||
+          (drugOrder.autoExpireDate &&
+            new Date() > new Date(drugOrder.autoExpireDate)));
       const isButtonDisabled =
         isAddToDrugChartDisabled ||
         moment().valueOf() <= drugOrder.effectiveStartDate ||
@@ -237,17 +246,9 @@ const Treatments = (props) => {
       return {
         link: (
           <Link
-            disabled={
-              isAddToDrugChartDisabled ||
-              moment().valueOf() <= drugOrder.effectiveStartDate || isButtonDisabled
-            }
+            disabled={isButtonDisabled}
             onClick={() => {
-              if (
-                !(
-                  isAddToDrugChartDisabled ||
-                  moment().valueOf() <= drugOrder.effectiveStartDate || !isButtonDisabled
-                )
-              ) {
+              if (!isButtonDisabled) {
                 handleEditAndAddToDrugChartClick(
                   drugOrder.uuid,
                   showEditDrugChartLink,
