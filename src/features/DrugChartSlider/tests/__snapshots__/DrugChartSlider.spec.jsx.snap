@@ -641,6 +641,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
             </div>
           </div>
         </div>
+        <p
+          class="medication-schedule-heading"
+        >
+          Medication Schedule
+        </p>
         <div>
           <div
             class="schedule-section"
@@ -1496,7 +1501,36 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
             </div>
           </div>
         </div>
+        <p
+          class="medication-schedule-heading"
+        >
+          Medication Schedule
+        </p>
         <div>
+          <div
+            class="schedule-info-notification"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="20"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+              />
+              <path
+                d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+              />
+            </svg>
+            <span>
+              Any modifications in the timings will automatically update the remaining schedule for today.
+            </span>
+          </div>
           <div
             class="schedule-section"
           >
@@ -1596,6 +1630,53 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                 </div>
               </div>
             </div>
+          </div>
+          <div
+            class="apply-to-all-days-toggle"
+          >
+            <div
+              class="bx--form-item"
+            >
+              <input
+                class="bx--toggle-input bx--toggle-input--small"
+                disabled=""
+                id="apply-to-all-days-toggle"
+                type="checkbox"
+              />
+              <label
+                class="bx--toggle-input__label"
+                for="apply-to-all-days-toggle"
+              >
+                
+                <span
+                  class="bx--toggle__switch"
+                >
+                  <svg
+                    class="bx--toggle__check"
+                    height="5px"
+                    viewBox="0 0 6 5"
+                    width="6px"
+                  >
+                    <path
+                      d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
+                    />
+                  </svg>
+                  <span
+                    aria-hidden="true"
+                    class="bx--toggle__text--off"
+                  />
+                  <span
+                    aria-hidden="true"
+                    class="bx--toggle__text--on"
+                  />
+                </span>
+              </label>
+            </div>
+            <span
+              class="toggle-label-text"
+            >
+              Update Complete Schedule
+            </span>
           </div>
           <div
             class="schedule-section"
@@ -2511,7 +2592,36 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
             </div>
           </div>
         </div>
+        <p
+          class="medication-schedule-heading"
+        >
+          Medication Schedule
+        </p>
         <div>
+          <div
+            class="schedule-info-notification"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="20"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 32 32"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"
+              />
+              <path
+                d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
+              />
+            </svg>
+            <span>
+              Any modifications in the timings will automatically update the remaining schedule for today.
+            </span>
+          </div>
           <div
             class="schedule-section"
           >
@@ -2611,6 +2721,53 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                 </div>
               </div>
             </div>
+          </div>
+          <div
+            class="apply-to-all-days-toggle"
+          >
+            <div
+              class="bx--form-item"
+            >
+              <input
+                class="bx--toggle-input bx--toggle-input--small"
+                disabled=""
+                id="apply-to-all-days-toggle"
+                type="checkbox"
+              />
+              <label
+                class="bx--toggle-input__label"
+                for="apply-to-all-days-toggle"
+              >
+                
+                <span
+                  class="bx--toggle__switch"
+                >
+                  <svg
+                    class="bx--toggle__check"
+                    height="5px"
+                    viewBox="0 0 6 5"
+                    width="6px"
+                  >
+                    <path
+                      d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
+                    />
+                  </svg>
+                  <span
+                    aria-hidden="true"
+                    class="bx--toggle__text--off"
+                  />
+                  <span
+                    aria-hidden="true"
+                    class="bx--toggle__text--on"
+                  />
+                </span>
+              </label>
+            </div>
+            <span
+              class="toggle-label-text"
+            >
+              Update Complete Schedule
+            </span>
           </div>
           <div
             class="schedule-section"

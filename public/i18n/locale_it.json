@@ -219,5 +219,9 @@
   "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient",
   "NEW_MEDICATIONS": "New Medication(s)",
   "NEW_CARE_INSTRUCTIONS": "New Care Instruction(s)",
-  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge"
+  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge",
+  "DRUG_CHART_UPDATE_COMPLETE_SCHEDULE": "Update Complete Schedule",
+  "DRUG_CHART_SCHEDULE_MODIFICATION_INFO": "Any modifications in the timings will automatically update the remaining schedule for today.",
+  "DRUG_CHART_MODAL_SCHEDULE_NEXT_DAY_WARNING": "Updated timing causes highlighted doses to cross midnight and appear on the next day.",
+  "DRUG_CHART_MEDICATION_SCHEDULE": "Medication Schedule"
 }

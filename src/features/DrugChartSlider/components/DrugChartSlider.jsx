@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { TextArea } from "carbon-components-react";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { FormattedMessage ,useIntl} from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { I18nProvider } from "../../i18n/I18nProvider";
 import SideBarPanel from "../../SideBarPanel/components/SideBarPanel";
 import "../styles/DrugChartSlider.scss";
@@ -25,6 +25,11 @@ import {
   getUTCTimeEpoch,
   setDrugOrderScheduleIn24HourFormat,
   setDrugOrderScheduleIn12HourFormat,
+  computeShiftedSchedules,
+  detectNextDayCrossings,
+  isNextDayCrossing,
+  computeShiftedScheduleTimings,
+  computeOffsetMinutes,
 } from "../utils/DrugChartSliderUtils";
 import {
   epochTo24HourTimeFormat,
@@ -116,41 +121,333 @@ const DrugChartSlider = (props) => {
     setShowEmptyFinalDayScheduleWarning,
   ] = useState(false);
   const [isSaveDisabled, updateIsSaveDisabled] = useState(false);
+  const [applyToAllDays, setApplyToAllDays] = useState(false);
+  const [isToggleEnabled, setIsToggleEnabled] = useState(false);
+
+  // Stores the auto-filled moment for the first editable slot so that
+  // subsequent-day propagation uses the same reference as the day-1 cascade,
+  // preventing minute-level drift between the auto-filled day-1 slot and propagated subsequent-day slots.
+  const autoFilledFirstEditableSlotRef = useRef(null);
+
+  const [showScheduleNextDayWarning, setShowScheduleNextDayWarning] = useState(
+    []
+  );
+  const [
+    showFirstDayScheduleNextDayWarning,
+    setShowFirstDayScheduleNextDayWarning,
+  ] = useState([]);
+
+  const propagateToSubsequentDays = (newTime) => {
+    const base =
+      autoFilledFirstEditableSlotRef.current !== null
+        ? autoFilledFirstEditableSlotRef.current
+        : enableSchedule.scheduleTiming[firstDaySlotsMissed];
+    const scheduleM = enable24HourTimers
+      ? moment(typeof base === "string" ? base : base.format("HH:mm"), "HH:mm")
+      : moment.isMoment(base)
+      ? base.clone()
+      : moment(base, timeFormatFor12Hr);
+    const userM = enable24HourTimers
+      ? moment(newTime, "HH:mm")
+      : moment(newTime, timeFormatFor12Hr);
+    const offsetMinutes = userM.diff(scheduleM, "minutes");
+    const shifted = computeShiftedScheduleTimings(
+      enableSchedule.scheduleTiming,
+      offsetMinutes,
+      enable24HourTimers
+    );
+    setSchedules(shifted);
+    if (firstDaySlotsMissed > 0) {
+      setFinalDaySchedules(shifted.slice(0, firstDaySlotsMissed));
+    }
+    const crossings = detectNextDayCrossings(
+      enableSchedule.scheduleTiming,
+      offsetMinutes,
+      enable24HourTimers
+    );
+    setShowScheduleNextDayWarning(crossings);
+  };
+
+  const handleApplyToAllDaysToggle = (checked) => {
+    setApplyToAllDays(checked);
+    if (checked) {
+      const currentFirstSlot = firstDaySchedules[firstDaySlotsMissed];
+      if (
+        !currentFirstSlot ||
+        currentFirstSlot === "hh:mm" ||
+        currentFirstSlot === ""
+      )
+        return;
+      const timeStr = enable24HourTimers
+        ? currentFirstSlot
+        : moment.isMoment(currentFirstSlot)
+        ? currentFirstSlot.format(timeFormatFor12Hr)
+        : currentFirstSlot;
+      const isValid = enable24HourTimers
+        ? moment(timeStr, "HH:mm", true).isValid()
+        : moment(timeStr, timeFormatFor12Hr, true).isValid();
+      if (isValid) {
+        propagateToSubsequentDays(timeStr);
+        const editableCount = firstDaySchedules.length - firstDaySlotsMissed;
+        if (editableCount > 1) {
+          const base =
+            autoFilledFirstEditableSlotRef.current !== null
+              ? autoFilledFirstEditableSlotRef.current
+              : enableSchedule.scheduleTiming[firstDaySlotsMissed];
+          const offsetMinutes = computeOffsetMinutes(
+            base,
+            timeStr,
+            enable24HourTimers
+          );
+          const editableSlice = enableSchedule.scheduleTiming.slice(
+            firstDaySlotsMissed + 1
+          );
+          const shiftedSlice = computeShiftedScheduleTimings(
+            editableSlice,
+            offsetMinutes,
+            enable24HourTimers
+          );
+          setFirstDaySchedules((prev) => {
+            const updated = [...prev];
+            shiftedSlice.forEach((val, i) => {
+              updated[firstDaySlotsMissed + 1 + i] = val;
+            });
+            return updated;
+          });
+        }
+      }
+    } else {
+      const scheduleTimings = enable24HourTimers
+        ? enableSchedule.scheduleTiming
+        : enableSchedule.scheduleTiming.map((time) =>
+            moment(time, timeFormatFor12Hr)
+          );
+      setSchedules(scheduleTimings);
+      if (firstDaySlotsMissed > 0) {
+        setFinalDaySchedules(scheduleTimings.slice(0, firstDaySlotsMissed));
+      }
+      setShowScheduleNextDayWarning(
+        Array(enableSchedule.frequencyPerDay).fill(false)
+      );
+    }
+  };
 
   const handleFirstDaySchedule = (newSchedule, index) => {
     updateSliderContentModified(true);
+    const editableCount = firstDaySchedules.length - firstDaySlotsMissed;
+
+    // Cascade: only when editing first editable slot and original is valid
+    if (
+      index === firstDaySlotsMissed &&
+      editableCount > 1 &&
+      !isInvalidTimeTextPresent(enable24HourTimers) &&
+      newSchedule !== ""
+    ) {
+      const firstDoseOriginal = firstDaySchedules[firstDaySlotsMissed];
+      const isOriginalValid = enable24HourTimers
+        ? typeof firstDoseOriginal === "string" &&
+          firstDoseOriginal !== "" &&
+          firstDoseOriginal !== "hh:mm" &&
+          moment(firstDoseOriginal, "HH:mm", true).isValid()
+        : moment.isMoment(firstDoseOriginal)
+        ? firstDoseOriginal.isValid()
+        : typeof firstDoseOriginal === "string" &&
+          firstDoseOriginal !== "" &&
+          firstDoseOriginal !== "hh:mm" &&
+          moment(firstDoseOriginal, timeFormatFor12Hr, true).isValid();
+
+      if (isOriginalValid) {
+        const editablePortion = firstDaySchedules.slice(firstDaySlotsMissed);
+        const shiftedEditable = computeShiftedSchedules(
+          editablePortion,
+          firstDoseOriginal,
+          newSchedule,
+          enable24HourTimers
+        );
+        const newScheduleArray = [...firstDaySchedules];
+        shiftedEditable.forEach((val, i) => {
+          newScheduleArray[firstDaySlotsMissed + i] = val;
+        });
+        setFirstDaySchedules(newScheduleArray);
+
+        const offsetMinutes = computeOffsetMinutes(
+          firstDoseOriginal,
+          newSchedule,
+          enable24HourTimers
+        );
+        const editableWarnings = detectNextDayCrossings(
+          editablePortion.slice(1),
+          offsetMinutes,
+          enable24HourTimers,
+          showFirstDayScheduleNextDayWarning.slice(firstDaySlotsMissed + 1)
+        );
+        const fullWarnings = Array(firstDaySlotsMissed)
+          .fill(false)
+          .concat([false, ...editableWarnings]);
+        setShowFirstDayScheduleNextDayWarning(fullWarnings);
+
+        setShowFirstDaySchedulePassedWarning((prev) => {
+          const updated = [...prev];
+          shiftedEditable.forEach((val, i) => {
+            const arrayIndex = firstDaySlotsMissed + i;
+            if (fullWarnings[arrayIndex]) {
+              updated[arrayIndex] = false;
+            } else {
+              updated[arrayIndex] = isTimePassed(
+                val,
+                timeWindowToDisableSlots,
+                enable24HourTimers
+              );
+            }
+          });
+          return updated;
+        });
+        setIsToggleEnabled(true);
+        if (applyToAllDays) propagateToSubsequentDays(newSchedule);
+        return;
+      }
+    }
+
+    // Non-cascade: update only the triggered index
     const newScheduleArray = [...firstDaySchedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
       : moment(newSchedule, timeFormatFor12Hr);
     setFirstDaySchedules(newScheduleArray);
+    const prevFirstDaySlot = index > 0 ? firstDaySchedules[index - 1] : null;
+    const isManualNextDay =
+      prevFirstDaySlot !== null &&
+      prevFirstDaySlot !== "hh:mm" &&
+      isNextDayCrossing(newSchedule, prevFirstDaySlot, enable24HourTimers);
+    setShowFirstDayScheduleNextDayWarning((prev) => {
+      const updated = [...prev];
+      updated[index] = isManualNextDay;
+      return updated;
+    });
     if (!isInvalidTimeTextPresent(enable24HourTimers)) {
       setShowFirstDaySchedulePassedWarning((prevScheduleWarnings) => {
         const newSchedulePassedWarnings = [...prevScheduleWarnings];
-        newSchedulePassedWarnings[index] = isTimePassed(
-          newSchedule,
-          timeWindowToDisableSlots,
-          enable24HourTimers
-        );
+        newSchedulePassedWarnings[index] = isManualNextDay
+          ? false
+          : isTimePassed(
+              newSchedule,
+              timeWindowToDisableSlots,
+              enable24HourTimers
+            );
         return newSchedulePassedWarnings;
       });
+    }
+    if (index === firstDaySlotsMissed) {
+      const isNewScheduleValid = enable24HourTimers
+        ? moment(newSchedule, "HH:mm", true).isValid()
+        : moment(newSchedule, timeFormatFor12Hr, true).isValid();
+      if (isNewScheduleValid) {
+        setIsToggleEnabled(true);
+        if (applyToAllDays) propagateToSubsequentDays(newSchedule);
+      } else {
+        setIsToggleEnabled(false);
+      }
     }
   };
 
   const handleSubsequentDaySchedule = (newSchedule, index) => {
     updateSliderContentModified(true);
+
+    // Cascade: only when editing first dose and original first dose is valid
+    if (
+      index === 0 &&
+      schedules.length > 1 &&
+      !isInvalidTimeTextPresent(enable24HourTimers) &&
+      newSchedule !== ""
+    ) {
+      const firstDoseOriginal = schedules[0];
+      const isOriginalValid = enable24HourTimers
+        ? typeof firstDoseOriginal === "string" &&
+          firstDoseOriginal !== "" &&
+          moment(firstDoseOriginal, "HH:mm", true).isValid()
+        : moment.isMoment(firstDoseOriginal)
+        ? firstDoseOriginal.isValid()
+        : typeof firstDoseOriginal === "string" &&
+          firstDoseOriginal !== "" &&
+          moment(firstDoseOriginal, timeFormatFor12Hr, true).isValid();
+
+      if (isOriginalValid) {
+        const shifted = computeShiftedSchedules(
+          schedules,
+          firstDoseOriginal,
+          newSchedule,
+          enable24HourTimers
+        );
+        setSchedules(shifted);
+
+        const offsetMinutes = computeOffsetMinutes(
+          firstDoseOriginal,
+          newSchedule,
+          enable24HourTimers
+        );
+        const warnings = detectNextDayCrossings(
+          schedules.slice(1),
+          offsetMinutes,
+          enable24HourTimers,
+          showScheduleNextDayWarning.slice(1)
+        );
+        setShowScheduleNextDayWarning([false, ...warnings]);
+
+        const fullWarnings = [false, ...warnings];
+        setShowSchedulePassedWarning((prev) => {
+          const updated = [...prev];
+          shifted.forEach((val, i) => {
+            if (fullWarnings[i]) {
+              updated[i] = false;
+            } else {
+              updated[i] = isTimePassed(
+                val,
+                timeWindowToDisableSlots,
+                enable24HourTimers
+              );
+            }
+          });
+          return updated;
+        });
+
+        if (applyToAllDays && firstDaySlotsMissed > 0) {
+          setFinalDaySchedules((prev) =>
+            computeShiftedScheduleTimings(
+              prev,
+              offsetMinutes,
+              enable24HourTimers
+            )
+          );
+        }
+        return;
+      }
+    }
+
+    // Non-cascade: update only the triggered index
     const newScheduleArray = [...schedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
       : moment(newSchedule, timeFormatFor12Hr);
     setSchedules(newScheduleArray);
+    const prevScheduleSlot = index > 0 ? schedules[index - 1] : null;
+    const isManualNextDay =
+      prevScheduleSlot !== null &&
+      isNextDayCrossing(newSchedule, prevScheduleSlot, enable24HourTimers);
+    setShowScheduleNextDayWarning((prev) => {
+      const updated = [...prev];
+      updated[index] = isManualNextDay;
+      return updated;
+    });
     if (!isInvalidTimeTextPresent(enable24HourTimers)) {
       setShowSchedulePassedWarning((prevScheduleWarnings) => {
         const newSchedulePassedWarnings = [...prevScheduleWarnings];
-        newSchedulePassedWarnings[index] = isTimePassed(
-          newSchedule,
-          timeWindowToDisableSlots
-        );
+        newSchedulePassedWarnings[index] = isManualNextDay
+          ? false
+          : isTimePassed(
+              newSchedule,
+              timeWindowToDisableSlots,
+              enable24HourTimers
+            );
         return newSchedulePassedWarnings;
       });
     }
@@ -177,7 +474,12 @@ const DrugChartSlider = (props) => {
 
   const isValidSchedule = async () => {
     const { isValid, warningType } = await handleScheduleWarnings();
-    if (!isValid && (warningType === "empty" || warningType === "passed"))
+    if (!isValid && warningType === "empty") return false;
+    if (
+      !isValid &&
+      warningType === "passed" &&
+      !showScheduleNextDayWarning.some(Boolean)
+    )
       return false;
     return true;
   };
@@ -196,9 +498,12 @@ const DrugChartSlider = (props) => {
 
   const isValidFirstDaySchedule = async () => {
     const { isValid, warningType } = await handleFirstDayScheduleWarnings();
-    if (!isValid && (warningType === "empty" || warningType === "passed"))
-      return false;
-    return true;
+    if (!isValid && warningType === "empty") return false;
+    return !(
+      !isValid &&
+      warningType === "passed" &&
+      !showFirstDayScheduleNextDayWarning.some(Boolean)
+    );
   };
 
   const handleFinalDayScheduleWarnings = async () => {
@@ -293,14 +598,17 @@ const DrugChartSlider = (props) => {
           nextScheduleDate * hostData?.drugOrder?.drugOrder?.duration;
 
         const firstDaySchedulesUTCTimeEpoch = firstDaySchedules.reduce(
-          (result, schedule) => {
+          (result, schedule, i) => {
             if (schedule !== "hh:mm") {
+              const epoch = getUTCTimeEpoch(
+                schedule,
+                enable24HourTimers,
+                hostData?.drugOrder?.drugOrder?.scheduledDate
+              );
               result.push(
-                getUTCTimeEpoch(
-                  schedule,
-                  enable24HourTimers,
-                  hostData?.drugOrder?.drugOrder?.scheduledDate
-                )
+                showFirstDayScheduleNextDayWarning[i]
+                  ? epoch + nextScheduleDate
+                  : epoch
               );
             }
             return result;
@@ -308,13 +616,16 @@ const DrugChartSlider = (props) => {
           []
         );
 
-        const schedulesUTCTimeEpoch = schedules?.map((schedule) =>
-          getUTCTimeEpoch(
+        const schedulesUTCTimeEpoch = schedules?.map((schedule, i) => {
+          const epoch = getUTCTimeEpoch(
             schedule,
             enable24HourTimers,
             hostData?.drugOrder?.drugOrder?.scheduledDate
-          )
-        );
+          );
+          return showScheduleNextDayWarning[i]
+            ? epoch + nextScheduleDate
+            : epoch;
+        });
 
         const finalDaySchedulesUTCTimeEpoch = finalDaySchedules?.map(
           (schedule) =>
@@ -376,16 +687,14 @@ const DrugChartSlider = (props) => {
     moment().diff(timeMomentObject, "minutes") <= timeWindowToDisableSlots;
 
   useEffect(() => {
+    autoFilledFirstEditableSlotRef.current = null;
     if (isAutoFill) {
       const scheduleTimings = enable24HourTimers
         ? enableSchedule?.scheduleTiming
         : enableSchedule?.scheduleTiming.map((time) =>
             moment(time, timeFormatFor12Hr)
           );
-      const currentTimeMomentObject = moment(
-        moment(),
-        enable24HourTimers ? timeFormatFor24Hr : timeFormatFor12Hr
-      );
+      const currentTimeMomentObject = moment().startOf("minute");
       let finalScheduleCount = 0;
       scheduleTimings.forEach((schedule) => {
         if (isTimePassed(schedule, timeWindowToDisableSlots)) {
@@ -399,6 +708,7 @@ const DrugChartSlider = (props) => {
               currentTimeMomentObject,
             ]);
           } else {
+            autoFilledFirstEditableSlotRef.current = currentTimeMomentObject;
             setFirstDaySchedules((prevSchedules) => [
               ...prevSchedules,
               currentTimeMomentObject,
@@ -592,6 +902,14 @@ const DrugChartSlider = (props) => {
                 }
                 showSchedulePassedWarning={showSchedulePassedWarning}
                 enable24HourTimers={enable24HourTimers}
+                showScheduleNextDayWarning={showScheduleNextDayWarning}
+                showFirstDayScheduleNextDayWarning={
+                  showFirstDayScheduleNextDayWarning
+                }
+                applyToAllDays={applyToAllDays}
+                onApplyToAllDaysToggle={handleApplyToAllDaysToggle}
+                isToggleEnabled={isToggleEnabled}
+                duration={hostData?.drugOrder?.drugOrder?.duration}
               />
               {enableStartTime && (
                 <StartTimeSection
@@ -616,7 +934,10 @@ const DrugChartSlider = (props) => {
               rows={3}
               value={drugChartNotes}
               onChange={(e) => handleNotes(e)}
-              labelText={intl.formatMessage({ id: "DRUG_CHART_MODAL_NOTES", defaultMessage: "Notes" })}
+              labelText={intl.formatMessage({
+                id: "DRUG_CHART_MODAL_NOTES",
+                defaultMessage: "Notes",
+              })}
             />
           </div>
         </div>

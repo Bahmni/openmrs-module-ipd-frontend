@@ -1,3 +1,11 @@
+.medication-schedule-heading {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0.16px;
+  margin: 12px 0 12px 0;
+}
+
 .dose-field-with-units {
   display: flex;
   flex-direction: row;
@@ -81,6 +89,64 @@
   .inline-field {
     flex-wrap: wrap;
     padding: 0;
+  }
+}
+
+.schedule-info-notification {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 4px 0 8px 0;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0.16px;
+  color: rgba(0, 0, 0, 0.75);
+
+  svg {
+    fill: #161616;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+}
+
+.schedule-time-next-day {
+  .bx--time-picker__input-field {
+    border: 2px solid #0f62fe !important;
+  }
+}
+
+.apply-to-all-days-toggle {
+  display: flex;
+  align-items: center;
+  padding: 10px 0 10px 0;
+
+  .bx--form-item {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+  }
+
+  .bx--label {
+    display: none;
+  }
+
+  .bx--toggle-input__label {
+    margin-top: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bx--toggle-input--small + .bx--toggle-input__label > .bx--toggle__switch {
+    margin-top: 0;
+  }
+
+  .toggle-label-text {
+    margin-left: 8px;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #161616;
+    line-height: 18px;
+    align-self: center;
   }
 }
 

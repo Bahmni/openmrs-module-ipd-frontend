@@ -1,5 +1,5 @@
 import React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor, fireEvent } from "@testing-library/react";
 import { IntlProvider } from "react-intl";
 import { ScheduleSection } from "../components/ScheduleSection";
 
@@ -44,6 +44,111 @@ describe("ScheduleSection", () => {
 
     await waitFor(() => {
       expect(container).toMatchSnapshot();
+    });
+  });
+
+  it("shows next-day warning when showScheduleNextDayWarning has true value", async () => {
+    const { getByText } = render(
+      <IntlProvider locale="en">
+        <ScheduleSection
+          {...props}
+          firstDaySlotsMissed={0}
+          schedules={["09:00", "21:00", "00:00"]}
+          showScheduleNextDayWarning={[false, false, true]}
+        />
+      </IntlProvider>
+    );
+    await waitFor(() => {
+      expect(
+        getByText(
+          "Updated timing causes highlighted doses to cross midnight and appear on the next day."
+        )
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("renders toggle when firstDaySlotsMissed > 0 and duration > 1", async () => {
+    const { getByText } = render(
+      <IntlProvider locale="en">
+        <ScheduleSection
+          {...props}
+          duration={5}
+          onApplyToAllDaysToggle={jest.fn()}
+        />
+      </IntlProvider>
+    );
+    await waitFor(() => {
+      expect(getByText("Update Complete Schedule")).toBeInTheDocument();
+    });
+  });
+
+  it("does not render toggle when duration is 1", async () => {
+    const { queryByText } = render(
+      <IntlProvider locale="en">
+        <ScheduleSection
+          {...props}
+          duration={1}
+          onApplyToAllDaysToggle={jest.fn()}
+        />
+      </IntlProvider>
+    );
+    await waitFor(() => {
+      expect(queryByText("Update Complete Schedule")).not.toBeInTheDocument();
+    });
+  });
+
+  it("calls onApplyToAllDaysToggle when toggle is clicked", async () => {
+    const mockToggle = jest.fn();
+    const { getByRole } = render(
+      <IntlProvider locale="en">
+        <ScheduleSection
+          {...props}
+          duration={5}
+          isToggleEnabled={true}
+          onApplyToAllDaysToggle={mockToggle}
+        />
+      </IntlProvider>
+    );
+    await waitFor(() => {
+      const toggle = getByRole("checkbox");
+      fireEvent.click(toggle);
+      expect(mockToggle).toHaveBeenCalled();
+      expect(mockToggle.mock.calls[0][0]).toBe(true);
+    });
+  });
+
+  it("does not render toggle when firstDaySlotsMissed is 0", async () => {
+    const { queryByText } = render(
+      <IntlProvider locale="en">
+        <ScheduleSection
+          {...props}
+          firstDaySlotsMissed={0}
+          duration={5}
+          onApplyToAllDaysToggle={jest.fn()}
+        />
+      </IntlProvider>
+    );
+    await waitFor(() => {
+      expect(queryByText("Update Complete Schedule")).not.toBeInTheDocument();
+    });
+  });
+
+  it("shows next-day warning in firstDay section when showFirstDayScheduleNextDayWarning has true value", async () => {
+    const { getByText } = render(
+      <IntlProvider locale="en">
+        <ScheduleSection
+          {...props}
+          firstDaySlotsMissed={1}
+          showFirstDayScheduleNextDayWarning={[false, false, true]}
+        />
+      </IntlProvider>
+    );
+    await waitFor(() => {
+      expect(
+        getByText(
+          "Updated timing causes highlighted doses to cross midnight and appear on the next day."
+        )
+      ).toBeInTheDocument();
     });
   });
 });

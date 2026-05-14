@@ -6,6 +6,10 @@ import {
   updateStartTimeBasedOnFrequency,
   getUTCTimeEpoch,
   saveMedication,
+  computeShiftedSchedules,
+  detectNextDayCrossings,
+  isNextDayCrossing,
+  computeShiftedScheduleTimings,
 } from "../utils/DrugChartSliderUtils";
 import { timeFormatFor24Hr } from "../../../constants";
 import MockDate from "mockdate";
@@ -175,6 +179,140 @@ describe("DrugChartSliderUtils", () => {
       const response = await saveMedication(medication);
 
       expect(response).toBeUndefined();
+    });
+  });
+
+  describe("computeShiftedSchedules", () => {
+    it("shifts subsequent doses by the same offset as first dose change (24hr)", () => {
+      const schedules = ["06:00", "16:00", "23:00"];
+      const result = computeShiftedSchedules(schedules, "06:00", "04:00", true);
+      expect(result[0]).toBe("04:00");
+      expect(result[1]).toBe("14:00");
+      expect(result[2]).toBe("21:00");
+    });
+
+    it("only changes index 0 when there is one dose (24hr)", () => {
+      const schedules = ["06:00"];
+      const result = computeShiftedSchedules(schedules, "06:00", "04:00", true);
+      expect(result[0]).toBe("04:00");
+      expect(result.length).toBe(1);
+    });
+
+    it("shifts subsequent doses by offset for 12hr mode", () => {
+      const orig0 = moment("06:00 AM", "hh:mm A");
+      const orig1 = moment("04:00 PM", "hh:mm A");
+      const schedules = [orig0, orig1];
+      const result = computeShiftedSchedules(
+        schedules,
+        orig0,
+        "04:00 AM",
+        false
+      );
+      expect(moment.isMoment(result[0])).toBe(true);
+      expect(result[0].format("HH:mm")).toBe("04:00");
+      expect(result[1].format("HH:mm")).toBe("14:00");
+    });
+  });
+
+  describe("detectNextDayCrossings", () => {
+    it("detects when a shifted dose crosses midnight (24hr)", () => {
+      // 21:00 + 240 min = 25:00 → crosses midnight
+      const result = detectNextDayCrossings(["21:00"], 240, true);
+      expect(result[0]).toBe(true);
+    });
+
+    it("returns false when dose does not cross midnight (24hr)", () => {
+      // 09:00 + 240 min = 13:00 → no crossing
+      const result = detectNextDayCrossings(["09:00"], 240, true);
+      expect(result[0]).toBe(false);
+    });
+
+    it("detects backward crossing (negative offset, goes before midnight)", () => {
+      // 00:30 - 60 min = -30 → crosses midnight into previous day
+      const result = detectNextDayCrossings(["00:30"], -60, true);
+      expect(result[0]).toBe(true);
+    });
+
+    it("returns an array matching the length of subsequentSchedules", () => {
+      const result = detectNextDayCrossings(["09:00", "21:00"], 240, true);
+      expect(result.length).toBe(2);
+      expect(result[0]).toBe(false);
+      expect(result[1]).toBe(true);
+    });
+  });
+
+  describe("computeShiftedScheduleTimings", () => {
+    it("shifts all 24hr schedule timings forward by offset (Scenario 1)", () => {
+      // Schedule: 06:00, 14:00, 22:00 → +120 min → 08:00, 16:00, 00:00
+      const result = computeShiftedScheduleTimings(
+        ["06:00", "14:00", "22:00"],
+        120,
+        true
+      );
+      expect(result).toEqual(["08:00", "16:00", "00:00"]);
+    });
+
+    it("shifts all 24hr schedule timings backward by offset (Scenario 3: -120 min)", () => {
+      // Schedule: 06:00, 14:00, 22:00 → -120 min → 04:00, 12:00, 20:00
+      const result = computeShiftedScheduleTimings(
+        ["06:00", "14:00", "22:00"],
+        -120,
+        true
+      );
+      expect(result).toEqual(["04:00", "12:00", "20:00"]);
+    });
+
+    it("handles day wrap-around (forward past midnight)", () => {
+      // 22:00 + 180 min = 01:00
+      const result = computeShiftedScheduleTimings(["22:00"], 180, true);
+      expect(result).toEqual(["01:00"]);
+    });
+
+    it("handles day wrap-around (backward past midnight)", () => {
+      // 01:00 - 120 min = 23:00
+      const result = computeShiftedScheduleTimings(["01:00"], -120, true);
+      expect(result).toEqual(["23:00"]);
+    });
+
+    it("returns moment objects for 12hr mode", () => {
+      const result = computeShiftedScheduleTimings(
+        ["06:00", "14:00"],
+        60,
+        false
+      );
+      result.forEach((item) => expect(moment.isMoment(item)).toBe(true));
+      expect(result[0].hours()).toBe(7);
+      expect(result[1].hours()).toBe(15);
+    });
+  });
+
+  describe("isNextDayCrossing", () => {
+    it("returns true when 24hr new time is earlier than previous (crosses midnight)", () => {
+      // 02:45 after 20:00 → next day
+      expect(isNextDayCrossing("02:45", "20:00", true)).toBe(true);
+    });
+
+    it("returns false when 24hr new time is later than previous (same day)", () => {
+      // 23:45 after 19:00 → same day
+      expect(isNextDayCrossing("23:45", "19:00", true)).toBe(false);
+    });
+
+    it("returns true when 12hr new time is earlier than previous moment (crosses midnight)", () => {
+      const prevMoment = moment("08:00 PM", "hh:mm A");
+      expect(isNextDayCrossing("02:45 AM", prevMoment, false)).toBe(true);
+    });
+
+    it("returns false when 12hr new time is later than previous moment (same day)", () => {
+      const prevMoment = moment("07:00 PM", "hh:mm A");
+      expect(isNextDayCrossing("11:45 PM", prevMoment, false)).toBe(false);
+    });
+
+    it("returns false when prevTime is invalid (hh:mm placeholder)", () => {
+      expect(isNextDayCrossing("02:45", "hh:mm", true)).toBe(false);
+    });
+
+    it("returns false when newTime is invalid", () => {
+      expect(isNextDayCrossing("", "20:00", true)).toBe(false);
     });
   });
 });
