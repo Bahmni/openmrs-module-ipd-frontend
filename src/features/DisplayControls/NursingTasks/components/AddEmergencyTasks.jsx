@@ -56,6 +56,7 @@ const AddEmergencyTasks = (props) => {
     setNotificationMessage,
     setNotificationStatus,
     hideMedicationTab = false,
+    observationUuid,
   } = props;
 
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
@@ -64,7 +65,9 @@ const AddEmergencyTasks = (props) => {
   const [unitOptions, setUnitOptions] = useState([]);
   const [routeOptions, setRouteOptions] = useState([]);
   const [providerOptions, setProviderOptions] = useState([]);
-  const [activeTab, setActiveTab] = useState(hideMedicationTab ? "Non-Medication" : "Medication");
+  const [activeTab, setActiveTab] = useState(
+    hideMedicationTab ? "Non-Medication" : "Medication"
+  );
   const [nonMedicationTaskTypeOptions, setNonMedicationTaskTypeOptions] =
     useState({});
   const { config = {}, handleAuditEvent, currentUser } = useContext(IPDContext);
@@ -120,22 +123,66 @@ const AddEmergencyTasks = (props) => {
     />
   );
   const intl = useIntl();
-  const DOSE_LABEL = intl.formatMessage({ id: "DOSE_LABEL", defaultMessage: "Dose" });
-  const SELECT_DOSE_UNIT_PLACEHOLDER = intl.formatMessage({ id: "SELECT_DOSE_UNIT_PLACEHOLDER", defaultMessage: "Select Unit" });
-  const SELECT_ROUTE_PLACEHOLDER = intl.formatMessage({ id: "SELECT_ROUTE_PLACEHOLDER", defaultMessage: "Select Route" });
-  const ROUTE_LABEL = intl.formatMessage({ id: "ROUTE_LABEL", defaultMessage: "Route" });
-  const ADMINSTRATION_DATE_LABEL = intl.formatMessage({ id: "ADMINSTRATION_DATE_LABEL", defaultMessage: "Administration Date" });
-  const SELECT_PROVIDER_PLACEHOLDER = intl.formatMessage({ id: "SELECT_PROVIDER_PLACEHOLDER", defaultMessage: "Select Provider" });
-  const ACKNOWLEDGEMENT_PROVIDER_LABEL = intl.formatMessage({ id: "ACKNOWLEDGEMENT_PROVIDER_LABEL", defaultMessage: "Acknowledgement Requested From" });
-  const ADMINSTRATION_TIME_LABEL_24 = `${intl.formatMessage({ id: "ADMINSTRATION_TIME_LABEL", defaultMessage: "Administration Time" })} (${timeText24})`;
-  const ADMINSTRATION_TIME_LABEL_12 = `${intl.formatMessage({ id: "ADMINSTRATION_TIME_LABEL", defaultMessage: "Administration Time" })} (${timeText12})`;
-  const NOTES_LABEL = intl.formatMessage({ id: "NOTES_LABEL", defaultMessage: "Notes" });
-  const NOTES_PLACEHOLDER = intl.formatMessage({ id: "NOTES_PLACEHOLDER", defaultMessage: "Enter a maximum of 250 characters" });
-  const TASK_NAME_LABEL = intl.formatMessage({ id: "TASK_NAME_LABEL", defaultMessage: "Task Name" });
-  const TASK_NAME_PLACEHOLDER = intl.formatMessage({ id: "TASK_NAME_PLACEHOLDER", defaultMessage: "Enter a title for the task " });
-  const SCHEDULE_TIME_LABEL_24 = `${intl.formatMessage({ id: "SCHEDULE_TIME_LABEL", defaultMessage: "Schedule Time" })} (${timeText24})`;
-  const SCHEDULE_TIME_LABEL_12 = `${intl.formatMessage({ id: "SCHEDULE_TIME_LABEL", defaultMessage: "Schedule Time" })} (${timeText12})`;
-                 
+  const DOSE_LABEL = intl.formatMessage({
+    id: "DOSE_LABEL",
+    defaultMessage: "Dose",
+  });
+  const SELECT_DOSE_UNIT_PLACEHOLDER = intl.formatMessage({
+    id: "SELECT_DOSE_UNIT_PLACEHOLDER",
+    defaultMessage: "Select Unit",
+  });
+  const SELECT_ROUTE_PLACEHOLDER = intl.formatMessage({
+    id: "SELECT_ROUTE_PLACEHOLDER",
+    defaultMessage: "Select Route",
+  });
+  const ROUTE_LABEL = intl.formatMessage({
+    id: "ROUTE_LABEL",
+    defaultMessage: "Route",
+  });
+  const ADMINSTRATION_DATE_LABEL = intl.formatMessage({
+    id: "ADMINSTRATION_DATE_LABEL",
+    defaultMessage: "Administration Date",
+  });
+  const SELECT_PROVIDER_PLACEHOLDER = intl.formatMessage({
+    id: "SELECT_PROVIDER_PLACEHOLDER",
+    defaultMessage: "Select Provider",
+  });
+  const ACKNOWLEDGEMENT_PROVIDER_LABEL = intl.formatMessage({
+    id: "ACKNOWLEDGEMENT_PROVIDER_LABEL",
+    defaultMessage: "Acknowledgement Requested From",
+  });
+  const ADMINSTRATION_TIME_LABEL_24 = `${intl.formatMessage({
+    id: "ADMINSTRATION_TIME_LABEL",
+    defaultMessage: "Administration Time",
+  })} (${timeText24})`;
+  const ADMINSTRATION_TIME_LABEL_12 = `${intl.formatMessage({
+    id: "ADMINSTRATION_TIME_LABEL",
+    defaultMessage: "Administration Time",
+  })} (${timeText12})`;
+  const NOTES_LABEL = intl.formatMessage({
+    id: "NOTES_LABEL",
+    defaultMessage: "Notes",
+  });
+  const NOTES_PLACEHOLDER = intl.formatMessage({
+    id: "NOTES_PLACEHOLDER",
+    defaultMessage: "Enter a maximum of 250 characters",
+  });
+  const TASK_NAME_LABEL = intl.formatMessage({
+    id: "TASK_NAME_LABEL",
+    defaultMessage: "Task Name",
+  });
+  const TASK_NAME_PLACEHOLDER = intl.formatMessage({
+    id: "TASK_NAME_PLACEHOLDER",
+    defaultMessage: "Enter a title for the task ",
+  });
+  const SCHEDULE_TIME_LABEL_24 = `${intl.formatMessage({
+    id: "SCHEDULE_TIME_LABEL",
+    defaultMessage: "Schedule Time",
+  })} (${timeText24})`;
+  const SCHEDULE_TIME_LABEL_12 = `${intl.formatMessage({
+    id: "SCHEDULE_TIME_LABEL",
+    defaultMessage: "Schedule Time",
+  })} (${timeText12})`;
 
   const getNonMedicationTaskTypeOptions = async () => {
     setNonMedicationTaskTypeOptions(
@@ -300,6 +347,9 @@ const AddEmergencyTasks = (props) => {
       intent: "ORDER",
       taskType: nonMedicationTaskType ? nonMedicationTaskType : null,
       status: "REQUESTED",
+      ...(observationUuid && {
+        focus: { type: "Observation", reference: observationUuid },
+      }),
     };
     return nonMedicationPayload;
   };
@@ -488,139 +538,140 @@ const AddEmergencyTasks = (props) => {
       >
         <div className={"emergency-task-slider"}>
           <Tabs>
-            {!hideMedicationTab && isUserPrivileged(
-              currentUser,
-              PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS
-            ) && (
-              <Tab
-                id="Medication"
-                onClick={() => {
-                  setActiveTab("Medication");
-                  handleMedicationSaveButton();
-                }}
-                label={
-                  <FormattedMessage
-                    id={"MEDICATION"}
-                    defaultMessage={"Medication"}
-                  />
-                }
-              >
-                {isLoading && (
-                  <div>
-                    <Loading />
-                  </div>
-                )}
-                <div className={"emergency-task-slider-content"}>
-                  <SearchDrug onChange={drugSearchHandler} />
-                  <div className="inline-field">
-                    <div className="dosage-section-container">
-                      <NumberInputCarbon
-                        id={"Dropdown"}
-                        onChange={setDosage}
-                        style={{ width: "50%" }}
-                        value={dosage}
-                        label={DOSE_LABEL}
-                        isRequired={true}
-                        min={0}
-                      />
+            {!hideMedicationTab &&
+              isUserPrivileged(
+                currentUser,
+                PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS
+              ) && (
+                <Tab
+                  id="Medication"
+                  onClick={() => {
+                    setActiveTab("Medication");
+                    handleMedicationSaveButton();
+                  }}
+                  label={
+                    <FormattedMessage
+                      id={"MEDICATION"}
+                      defaultMessage={"Medication"}
+                    />
+                  }
+                >
+                  {isLoading && (
+                    <div>
+                      <Loading />
+                    </div>
+                  )}
+                  <div className={"emergency-task-slider-content"}>
+                    <SearchDrug onChange={drugSearchHandler} />
+                    <div className="inline-field">
+                      <div className="dosage-section-container">
+                        <NumberInputCarbon
+                          id={"Dropdown"}
+                          onChange={setDosage}
+                          style={{ width: "50%" }}
+                          value={dosage}
+                          label={DOSE_LABEL}
+                          isRequired={true}
+                          min={0}
+                        />
+                        <Dropdown
+                          id={"Dosage Dropdown"}
+                          onChange={(e) => {
+                            setDoseUnits(e);
+                          }}
+                          placeholder={SELECT_DOSE_UNIT_PLACEHOLDER}
+                          titleText={""}
+                          width={window.innerWidth > 480 ? "170px" : "100%"}
+                          style={{ paddingLeft: "10px", marginRight: 0 }}
+                          options={unitOptions}
+                          selectedValue={doseUnits}
+                        />
+                      </div>
                       <Dropdown
-                        id={"Dosage Dropdown"}
+                        id={"Route-Dropdown"}
                         onChange={(e) => {
-                          setDoseUnits(e);
+                          setRoutes(e);
                         }}
-                        placeholder={SELECT_DOSE_UNIT_PLACEHOLDER}
-                        titleText={""}
-                        width={window.innerWidth > 480 ? "170px" : "100%"}
-                        style={{ paddingLeft: "10px", marginRight: 0 }}
-                        options={unitOptions}
-                        selectedValue={doseUnits}
+                        placeholder={SELECT_ROUTE_PLACEHOLDER}
+                        titleText={ROUTE_LABEL}
+                        isRequired={true}
+                        options={routeOptions}
+                        width={"100%"}
+                        selectedValue={routes}
                       />
                     </div>
+                    <div
+                      className={"administration-info"}
+                      style={{ display: "flex", gap: "10px" }}
+                    >
+                      <DatePickerCarbon
+                        id={"Administration-Date"}
+                        onChange={(e) => {
+                          setAdministrationDate(new Date(e[0]));
+                          setIsDateChanged(true);
+                        }}
+                        title={ADMINSTRATION_DATE_LABEL}
+                        isRequired={true}
+                        value={administrationDate}
+                        dateFormat={"d M Y"}
+                        placeholder={"DD MMM YYYY"}
+                        maxDate={new Date()}
+                      />
+                      {enable24HourTime ? (
+                        <TimePicker24Hour
+                          defaultTime={administrationTime}
+                          onChange={(e) => {
+                            e != "" && setAdministrationTime(e);
+                            setIsTimeChanged(true);
+                          }}
+                          labelText={ADMINSTRATION_TIME_LABEL_24}
+                          width={"250px"}
+                          isRequired={true}
+                          customValidation={customValidation}
+                          actionForInvalidTime={actionForInvalidTime}
+                          invalid={isInvalidTime}
+                          invalidText={invalidText}
+                        />
+                      ) : (
+                        <TimePicker
+                          defaultTime={administrationTime}
+                          onChange={(e) => {
+                            e != "" && setAdministrationTime(e);
+                            setIsTimeChanged(true);
+                          }}
+                          labelText={ADMINSTRATION_TIME_LABEL_12}
+                          width={"155px"}
+                          isRequired={true}
+                          customValidation={customValidation}
+                          actionForInvalidTime={actionForInvalidTime}
+                          invalid={isInvalidTime}
+                          invalidText={invalidText}
+                        />
+                      )}
+                    </div>
                     <Dropdown
-                      id={"Route-Dropdown"}
-                      onChange={(e) => {
-                        setRoutes(e);
+                      id={"Provider-info"}
+                      onChange={(selectedItem) => {
+                        setRequestedProvider(selectedItem?.value);
                       }}
-                      placeholder={SELECT_ROUTE_PLACEHOLDER}
-                      titleText={ROUTE_LABEL}
+                      placeholder={SELECT_PROVIDER_PLACEHOLDER}
+                      titleText={ACKNOWLEDGEMENT_PROVIDER_LABEL}
                       isRequired={true}
-                      options={routeOptions}
+                      options={providerOptions}
                       width={"100%"}
-                      selectedValue={routes}
                     />
-                  </div>
-                  <div
-                    className={"administration-info"}
-                    style={{ display: "flex", gap: "10px" }}
-                  >
-                    <DatePickerCarbon
-                      id={"Administration-Date"}
+                    <TextArea
+                      labelText={<Title text={NOTES_LABEL} isRequired={true} />}
                       onChange={(e) => {
-                        setAdministrationDate(new Date(e[0]));
-                        setIsDateChanged(true);
+                        setNotes(e.target.value);
                       }}
-                      title={ADMINSTRATION_DATE_LABEL}
-                      isRequired={true}
-                      value={administrationDate}
-                      dateFormat={"d M Y"}
-                      placeholder={"DD MMM YYYY"}
-                      maxDate={new Date()}
+                      placeholder={NOTES_PLACEHOLDER}
+                      maxCount={250}
+                      rows={4}
                     />
-                    {enable24HourTime ? (
-                      <TimePicker24Hour
-                        defaultTime={administrationTime}
-                        onChange={(e) => {
-                          e != "" && setAdministrationTime(e);
-                          setIsTimeChanged(true);
-                        }}
-                        labelText={ADMINSTRATION_TIME_LABEL_24}
-                        width={"250px"}
-                        isRequired={true}
-                        customValidation={customValidation}
-                        actionForInvalidTime={actionForInvalidTime}
-                        invalid={isInvalidTime}
-                        invalidText={invalidText}
-                      />
-                    ) : (
-                      <TimePicker
-                        defaultTime={administrationTime}
-                        onChange={(e) => {
-                          e != "" && setAdministrationTime(e);
-                          setIsTimeChanged(true);
-                        }}
-                        labelText={ADMINSTRATION_TIME_LABEL_12}
-                        width={"155px"}
-                        isRequired={true}
-                        customValidation={customValidation}
-                        actionForInvalidTime={actionForInvalidTime}
-                        invalid={isInvalidTime}
-                        invalidText={invalidText}
-                      />
-                    )}
                   </div>
-                  <Dropdown
-                    id={"Provider-info"}
-                    onChange={(selectedItem) => {
-                      setRequestedProvider(selectedItem?.value);
-                    }}
-                    placeholder={SELECT_PROVIDER_PLACEHOLDER}
-                    titleText={ACKNOWLEDGEMENT_PROVIDER_LABEL}
-                    isRequired={true}
-                    options={providerOptions}
-                    width={"100%"}
-                  />
-                  <TextArea
-                    labelText={<Title text={NOTES_LABEL} isRequired={true} />}
-                    onChange={(e) => {
-                      setNotes(e.target.value);
-                    }}
-                    placeholder={NOTES_PLACEHOLDER}
-                    maxCount={250}
-                    rows={4}
-                  />
-                </div>
-              </Tab>
-            )}
+                </Tab>
+              )}
             {isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.ADD_TASKS) && (
               <Tab
                 id="Non - Medication"
@@ -642,7 +693,9 @@ const AddEmergencyTasks = (props) => {
                 )}
                 <div className="emergency-task-slider-content">
                   <TextArea
-                    labelText={<Title text={TASK_NAME_LABEL} isRequired={true} />}
+                    labelText={
+                      <Title text={TASK_NAME_LABEL} isRequired={true} />
+                    }
                     onChange={(e) => {
                       setTask(e.target.value);
                     }}
@@ -773,5 +826,6 @@ AddEmergencyTasks.propTypes = {
   setNotificationMessage: PropTypes.func.isRequired,
   setNotificationStatus: PropTypes.func.isRequired,
   hideMedicationTab: PropTypes.bool,
+  observationUuid: PropTypes.string,
 };
 export default AddEmergencyTasks;
