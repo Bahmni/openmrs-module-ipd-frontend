@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import axios from "axios";
@@ -10,34 +11,39 @@ import { SliderContext } from "../../../../context/SliderContext";
 import CareInstructions from "../components/CareInstructions";
 import * as CareInstructionsUtils from "../utils/CareInstructionsUtils.jsx";
 
-jest.mock(
-  "../../NursingTasks/components/AddEmergencyTasks",
-  () =>
-    ({ updateEmergencyTasksSlider, setShowNotification }) =>
-      (
-        <div data-testid="add-emergency-tasks-slider">
-          <button
-            data-testid="close-slider"
-            onClick={() => updateEmergencyTasksSlider(false)}
-          >
-            Close
-          </button>
-          <button
-            data-testid="save-task"
-            onClick={() => {
-              setShowNotification(true);
-              updateEmergencyTasksSlider(false);
-            }}
-          >
-            Save
-          </button>
-        </div>
-      )
-);
-jest.mock(
-  "../../../../components/Notification/Notification",
-  () => () => <div data-testid="task-notification" />
-);
+jest.mock("../../NursingTasks/components/AddEmergencyTasks", () => {
+  function MockAddEmergencyTasks({
+    updateEmergencyTasksSlider,
+    setShowNotification,
+  }) {
+    return (
+      <div data-testid="add-emergency-tasks-slider">
+        <button
+          data-testid="close-slider"
+          onClick={() => updateEmergencyTasksSlider(false)}
+        >
+          Close
+        </button>
+        <button
+          data-testid="save-task"
+          onClick={() => {
+            setShowNotification(true);
+            updateEmergencyTasksSlider(false);
+          }}
+        >
+          Save
+        </button>
+      </div>
+    );
+  }
+  return MockAddEmergencyTasks;
+});
+jest.mock("../../../../components/Notification/Notification", () => {
+  function MockNotification() {
+    return <div data-testid="task-notification" />;
+  }
+  return MockNotification;
+});
 
 const mockFormConcepts = [
   {
@@ -52,6 +58,7 @@ const mockFormConcepts = [
 
 const mockObservationsApiResponse = [
   {
+    uuid: "obs-uuid-1",
     encounterDateTime: 1713955252000,
     encounterUuid: "encounter-uuid-1",
     formFieldPath: "Doctor Patient Progress Notes.1/5-0",
@@ -61,6 +68,7 @@ const mockObservationsApiResponse = [
     groupMembers: [],
   },
   {
+    uuid: "obs-uuid-2",
     encounterDateTime: 1713941600000,
     encounterUuid: "encounter-uuid-2",
     formFieldPath: "Patient Progress Notes and Orders.2/11-0",
@@ -103,7 +111,11 @@ const mockSliderContext = {
   provider: { uuid: "provider-uuid-1" },
 };
 
-const renderWithProviders = (component, ipdContextValue, sliderContextValue = mockSliderContext) => {
+const renderWithProviders = (
+  component,
+  ipdContextValue,
+  sliderContextValue = mockSliderContext
+) => {
   return render(
     <IPDContext.Provider value={ipdContextValue}>
       <SliderContext.Provider value={sliderContextValue}>
@@ -118,6 +130,9 @@ describe("CareInstructions", () => {
     jest
       .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
       .mockResolvedValue(mockObservationsApiResponse);
+    jest
+      .spyOn(CareInstructionsUtils, "fetchTasksByObservationUuids")
+      .mockResolvedValue([]);
   });
 
   afterEach(() => {
@@ -215,11 +230,97 @@ describe("CareInstructions", () => {
     });
     fireEvent.click(getByText("Acknowledged"));
     await waitFor(() => {
-      // The Acknowledged tab also shows the empty state message since it's not yet implemented
       const elements = getAllByText(
         "No care instructions are available for the patient"
       );
       expect(elements.length).toBeGreaterThan(0);
+    });
+  });
+
+  it("should move instruction to Acknowledged tab when a task exists for its observationUuid", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchTasksByObservationUuids")
+      .mockResolvedValue([{ observationUuid: "obs-uuid-1" }]);
+
+    const { getByText, queryByText } = renderWithProviders(
+      <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
+      mockIPDContextWithData
+    );
+
+    // Wait until fetchTasksByObservationUuids resolves and obs-uuid-1 is removed from Not Acknowledged
+    await waitFor(() => {
+      expect(queryByText("Patient should rest")).not.toBeInTheDocument();
+    });
+    expect(getByText("Monitor blood pressure")).toBeInTheDocument();
+
+    fireEvent.click(getByText("Acknowledged"));
+
+    await waitFor(() => {
+      expect(getByText("Patient should rest")).toBeInTheDocument();
+    });
+  });
+
+  it("should keep all instructions in Not Acknowledged tab when no tasks exist", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchTasksByObservationUuids")
+      .mockResolvedValue([]);
+
+    const { getByText } = renderWithProviders(
+      <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
+      mockIPDContextWithData
+    );
+
+    await waitFor(() => {
+      expect(getByText("Patient should rest")).toBeInTheDocument();
+      expect(getByText("Monitor blood pressure")).toBeInTheDocument();
+    });
+  });
+
+  it("should only move the specific instruction whose observationUuid matches a task", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchTasksByObservationUuids")
+      .mockResolvedValue([{ observationUuid: "obs-uuid-1" }]);
+
+    const { getByText, queryByText } = renderWithProviders(
+      <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
+      mockIPDContextWithData
+    );
+
+    // Wait for tasks to resolve and obs-uuid-1 to leave Not Acknowledged
+    await waitFor(() => {
+      expect(queryByText("Patient should rest")).not.toBeInTheDocument();
+    });
+    // obs-uuid-2 (no matching task) must still be in Not Acknowledged
+    expect(getByText("Monitor blood pressure")).toBeInTheDocument();
+  });
+
+  it("should show notification after task is saved via slider", async () => {
+    const sliderOpenContext = {
+      isSliderOpen: { careInstructionsTasks: true },
+      updateSliderOpen: jest.fn(),
+      provider: { uuid: "provider-uuid-1" },
+    };
+
+    const { getByTestId } = renderWithProviders(
+      <CareInstructions
+        patientId="patient-uuid-1"
+        config={{ formConcepts: mockFormConcepts }}
+      />,
+      mockIPDContextWithData,
+      sliderOpenContext
+    );
+
+    // Slider is visible
+    await waitFor(() => {
+      expect(getByTestId("add-emergency-tasks-slider")).toBeInTheDocument();
+    });
+
+    // Save the task
+    fireEvent.click(getByTestId("save-task"));
+
+    // Notification appears confirming save success
+    await waitFor(() => {
+      expect(getByTestId("task-notification")).toBeInTheDocument();
     });
   });
 
