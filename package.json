@@ -44,7 +44,7 @@
     "@storybook/addon-styling": "0.3",
     "@storybook/react": "6.5",
     "@testing-library/react-hooks": "^8.0.1",
-    "axios": "1.15.0",
+    "axios": "1.15.2",
     "axios-mock-adapter": "^1.21.5",
     "bahmni-carbon-ui": "^0.1.9",
     "carbon-components": "^10.19.0",
@@ -96,6 +96,7 @@
   },
   "resolutions": {
     "@babel/traverse": "7.23.2",
+    "@babel/plugin-transform-modules-systemjs": "7.29.4",
     "browserify-sign": "4.2.2",
     "follow-redirects": "1.15.4",
     "braces": "^3.0.3",
