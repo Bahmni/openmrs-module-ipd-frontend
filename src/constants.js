@@ -103,6 +103,7 @@ export const OBSERVATIONS_BATCH_URL = BAHMNI_CORE + "/observations/batch";
 export const NON_MEDICATION_BASE_URL = RESTWS_V1 + "/tasks";
 
 export const GET_TASKS_FOR_PATIENTS_URL = RESTWS_V1 + "/tasks";
+export const FHIR_TASK_URL = FHIR2_R4 + "/Task";
 
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";

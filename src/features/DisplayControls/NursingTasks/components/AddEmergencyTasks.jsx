@@ -45,6 +45,7 @@ import {
 import AdministeredMedicationList from "./AdministeredMedicationList";
 import { IPDContext } from "../../../../context/IPDContext";
 import { getCookies, isUserPrivileged } from "../../../../utils/CommonUtils";
+import { useIntl } from "react-intl";
 
 const AddEmergencyTasks = (props) => {
   const {
@@ -55,6 +56,7 @@ const AddEmergencyTasks = (props) => {
     setNotificationMessage,
     setNotificationStatus,
     hideMedicationTab = false,
+    observationUuid,
   } = props;
 
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
@@ -63,7 +65,9 @@ const AddEmergencyTasks = (props) => {
   const [unitOptions, setUnitOptions] = useState([]);
   const [routeOptions, setRouteOptions] = useState([]);
   const [providerOptions, setProviderOptions] = useState([]);
-  const [activeTab, setActiveTab] = useState(hideMedicationTab ? "Non-Medication" : "Medication");
+  const [activeTab, setActiveTab] = useState(
+    hideMedicationTab ? "Non-Medication" : "Medication"
+  );
   const [nonMedicationTaskTypeOptions, setNonMedicationTaskTypeOptions] =
     useState({});
   const { config = {}, handleAuditEvent, currentUser } = useContext(IPDContext);
@@ -281,6 +285,9 @@ const AddEmergencyTasks = (props) => {
       intent: "ORDER",
       taskType: nonMedicationTaskType ? nonMedicationTaskType : null,
       status: "REQUESTED",
+      ...(observationUuid && {
+        focus: { type: "Observation", reference: observationUuid },
+      }),
     };
     return nonMedicationPayload;
   };
@@ -623,7 +630,9 @@ const AddEmergencyTasks = (props) => {
                 )}
                 <div className="emergency-task-slider-content">
                   <TextArea
-                    labelText={<Title text={"Task Name"} isRequired={true} />}
+                    labelText={
+                      <Title text={TASK_NAME_LABEL} isRequired={true} />
+                    }
                     onChange={(e) => {
                       setTask(e.target.value);
                     }}
@@ -754,5 +763,6 @@ AddEmergencyTasks.propTypes = {
   setNotificationMessage: PropTypes.func.isRequired,
   setNotificationStatus: PropTypes.func.isRequired,
   hideMedicationTab: PropTypes.bool,
+  observationUuid: PropTypes.string,
 };
 export default AddEmergencyTasks;

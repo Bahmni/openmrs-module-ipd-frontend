@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   BAHMNI_CORE_OBSERVATIONS_BASE_URL,
   OBSERVATIONS_BATCH_URL,
+  FHIR_TASK_URL,
   defaultDateTimeFormat12Hrs,
 } from "../../../../constants";
 import { formatTime } from "../../../../utils/DateTimeUtils";
@@ -26,6 +27,25 @@ export const fetchCareInstructionsObs = async (visitUuid, conceptNames) => {
     });
     return response.data;
   } catch (error) {
+    return [];
+  }
+};
+
+export const fetchTasksByObservationUuids = async (observationUuids) => {
+  if (!observationUuids || observationUuids.length === 0) return [];
+  try {
+    const url = `${FHIR_TASK_URL}?focus=${observationUuids
+      .map((uuid) => `Observation/${uuid}`)
+      .join(",")}`;
+
+    const response = await axios.get(url, { withCredentials: true });
+    const entries = response.data?.entry || [];
+    return entries.map((e) => ({
+      observationUuid: e.resource?.focus?.reference?.split("/").pop(),
+      uuid: e.resource?.id,
+    }));
+  } catch (error) {
+    console.error("Failed to fetch tasks by observation UUIDs", error);
     return [];
   }
 };
@@ -89,6 +109,7 @@ export const mapObservationsToInstructions = (observations, formConcepts) => {
     }
 
     result.push({
+      observationUuid: obs.uuid,
       encounterUuid: obs.encounterUuid,
       encounterDateTime: obs.encounterDateTime,
       form: formName,
