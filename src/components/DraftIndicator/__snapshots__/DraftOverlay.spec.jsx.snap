@@ -39,25 +39,31 @@ exports[`DraftOverlay should match snapshot with draft rows 1`] = `
       <div
         class="ipd-draft-overlay__row"
       >
-        <p
-          class="ipd-draft-overlay__patient-name"
+        <button
+          aria-label="Open draft for John Doe"
+          class="ipd-draft-overlay__row-button"
+          type="button"
         >
-          John Doe
-        </p>
-        <div
-          class="ipd-draft-overlay__row-details"
-        >
-          <span
-            class="ipd-draft-overlay__identifier"
+          <p
+            class="ipd-draft-overlay__patient-name"
           >
-            IQ000001
-          </span>
-          <span
-            class="ipd-draft-overlay__timestamp"
+            John Doe
+          </p>
+          <div
+            class="ipd-draft-overlay__row-details"
           >
-            15 Jan 2024, 10:30 AM
-          </span>
-        </div>
+            <span
+              class="ipd-draft-overlay__identifier"
+            >
+              IQ000001
+            </span>
+            <span
+              class="ipd-draft-overlay__timestamp"
+            >
+              15 Jan 2024, 10:10 AM
+            </span>
+          </div>
+        </button>
         <div
           class="ipd-draft-overlay__divider"
         />
@@ -65,25 +71,31 @@ exports[`DraftOverlay should match snapshot with draft rows 1`] = `
       <div
         class="ipd-draft-overlay__row"
       >
-        <p
-          class="ipd-draft-overlay__patient-name"
+        <button
+          aria-label="Open draft for Jane Smith"
+          class="ipd-draft-overlay__row-button"
+          type="button"
         >
-          Jane Smith
-        </p>
-        <div
-          class="ipd-draft-overlay__row-details"
-        >
-          <span
-            class="ipd-draft-overlay__identifier"
+          <p
+            class="ipd-draft-overlay__patient-name"
           >
-            IQ000002
-          </span>
-          <span
-            class="ipd-draft-overlay__timestamp"
+            Jane Smith
+          </p>
+          <div
+            class="ipd-draft-overlay__row-details"
           >
-            15 Jan 2024, 11:00 AM
-          </span>
-        </div>
+            <span
+              class="ipd-draft-overlay__identifier"
+            >
+              IQ000002
+            </span>
+            <span
+              class="ipd-draft-overlay__timestamp"
+            >
+              15 Jan 2024, 10:40 AM
+            </span>
+          </div>
+        </button>
       </div>
     </div>
   </div>
