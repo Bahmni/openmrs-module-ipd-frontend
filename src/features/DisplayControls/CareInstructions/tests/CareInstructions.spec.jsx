@@ -131,8 +131,8 @@ describe("CareInstructions", () => {
       .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
       .mockResolvedValue(mockObservationsApiResponse);
     jest
-      .spyOn(CareInstructionsUtils, "fetchTasksByObservationUuids")
-      .mockResolvedValue([]);
+      .spyOn(CareInstructionsUtils, "fetchAcknowledgedObservationUuids")
+      .mockResolvedValue(new Set());
   });
 
   afterEach(() => {
@@ -239,15 +239,15 @@ describe("CareInstructions", () => {
 
   it("should move instruction to Acknowledged tab when a task exists for its observationUuid", async () => {
     jest
-      .spyOn(CareInstructionsUtils, "fetchTasksByObservationUuids")
-      .mockResolvedValue([{ observationUuid: "obs-uuid-1" }]);
+      .spyOn(CareInstructionsUtils, "fetchAcknowledgedObservationUuids")
+      .mockResolvedValue(new Set(["obs-uuid-1"]));
 
     const { getByText, queryByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextWithData
     );
 
-    // Wait until fetchTasksByObservationUuids resolves and obs-uuid-1 is removed from Not Acknowledged
+    // Wait until fetchAcknowledgedObservationUuids resolves and obs-uuid-1 is removed from Not Acknowledged
     await waitFor(() => {
       expect(queryByText("Patient should rest")).not.toBeInTheDocument();
     });
@@ -262,8 +262,8 @@ describe("CareInstructions", () => {
 
   it("should keep all instructions in Not Acknowledged tab when no tasks exist", async () => {
     jest
-      .spyOn(CareInstructionsUtils, "fetchTasksByObservationUuids")
-      .mockResolvedValue([]);
+      .spyOn(CareInstructionsUtils, "fetchAcknowledgedObservationUuids")
+      .mockResolvedValue(new Set());
 
     const { getByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
@@ -278,8 +278,8 @@ describe("CareInstructions", () => {
 
   it("should only move the specific instruction whose observationUuid matches a task", async () => {
     jest
-      .spyOn(CareInstructionsUtils, "fetchTasksByObservationUuids")
-      .mockResolvedValue([{ observationUuid: "obs-uuid-1" }]);
+      .spyOn(CareInstructionsUtils, "fetchAcknowledgedObservationUuids")
+      .mockResolvedValue(new Set(["obs-uuid-1"]));
 
     const { getByText, queryByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,

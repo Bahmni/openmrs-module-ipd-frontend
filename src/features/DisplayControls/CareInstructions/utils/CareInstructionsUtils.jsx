@@ -34,20 +34,29 @@ export const fetchCareInstructionsObs = async (visitUuid, conceptNames) => {
 export const fetchTasksByObservationUuids = async (observationUuids) => {
   if (!observationUuids || observationUuids.length === 0) return [];
   try {
+    // No status filter: task existence (any status) indicates acknowledgement,
+    // because creating a task is the acknowledgement action in this workflow.
+    // &_count=500 avoids silent truncation at the default 10-result page size
+    // when called with all-patients observation UUIDs from the care view summary.
     const url = `${FHIR_TASK_URL}?focus=${observationUuids
       .map((uuid) => `Observation/${uuid}`)
-      .join(",")}`;
+      .join(",")}&_count=500`;
 
     const response = await axios.get(url, { withCredentials: true });
     const entries = response.data?.entry || [];
-    return entries.map((e) => ({
-      observationUuid: e.resource?.focus?.reference?.split("/").pop(),
-      uuid: e.resource?.id,
+    return entries.map((entry) => ({
+      observationUuid: entry.resource?.focus?.reference?.split("/").pop(),
+      uuid: entry.resource?.id,
     }));
   } catch (error) {
     console.error("Failed to fetch tasks by observation UUIDs", error);
     return [];
   }
+};
+
+export const fetchAcknowledgedObservationUuids = async (obsUuids) => {
+  const tasks = await fetchTasksByObservationUuids(obsUuids);
+  return new Set(tasks.map((task) => task.observationUuid).filter(Boolean));
 };
 
 export const fetchBatchObservations = async (visitUuids, concepts) => {
