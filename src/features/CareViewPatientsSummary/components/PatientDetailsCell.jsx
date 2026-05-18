@@ -23,11 +23,11 @@ export const PatientDetailsCell = ({
   careTeamDetails,
   navHourEpoch,
   newTreatments,
-  careInstructions,
+  unacknowledgedCareInstructions,
   visitDetails,
   previousShiftPendingTasks,
 }) => {
-  const careInstructionsCount = careInstructions?.length || 0;
+  const careInstructionsCount = unacknowledgedCareInstructions?.length || 0;
   const { person, uuid } = patientDetails;
   const {
     ipdConfig,
@@ -246,6 +246,6 @@ PatientDetailsCell.propTypes = {
   navHourEpoch: propTypes.object.isRequired,
   visitDetails: propTypes.object.isRequired,
   newTreatments: propTypes.number.isRequired,
-  careInstructions: propTypes.array.isRequired,
+  unacknowledgedCareInstructions: propTypes.array.isRequired,
   previousShiftPendingTasks: propTypes.array.isRequired,
 };

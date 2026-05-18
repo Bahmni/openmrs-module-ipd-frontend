@@ -16,6 +16,7 @@ import {
 } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 import { TASK_FILTER_HEADER } from "../../../constants";
 import {
+  fetchAcknowledgedObservationUuids,
   fetchBatchObservations,
   mapObservationsToInstructions,
 } from "../../DisplayControls/CareInstructions/utils/CareInstructionsUtils";
@@ -102,12 +103,16 @@ export const CareViewPatientsSummary = ({
   };
 
   const fetchCareInstructions = async (patients) => {
-    const ciSection = ipdConfig?.sections?.find((s) => s.componentKey === "CI");
+    const ciSection = ipdConfig?.sections?.find(
+      (section) => section.componentKey === "CI"
+    );
     const formConcepts = ciSection?.config?.formConcepts ?? [];
     if (formConcepts.length === 0) return;
 
-    const concepts = [...new Set(formConcepts.flatMap((fc) => fc.concepts))];
-    const visitUuids = patients.map((p) => p.visitDetails.uuid);
+    const concepts = [
+      ...new Set(formConcepts.flatMap((formConcept) => formConcept.concepts)),
+    ];
+    const visitUuids = patients.map((patient) => patient.visitDetails.uuid);
 
     const batchResult = await fetchBatchObservations(visitUuids, concepts);
 
@@ -119,6 +124,28 @@ export const CareViewPatientsSummary = ({
       );
       instructionsMap[visitUuid] = instructions;
     });
+
+    const allObsUuids = [
+      ...Object.values(instructionsMap).reduce((obsUuidSet, instructions) => {
+        instructions.forEach((instruction) => {
+          if (instruction.observationUuid)
+            obsUuidSet.add(instruction.observationUuid);
+        });
+        return obsUuidSet;
+      }, new Set()),
+    ];
+
+    if (enableNurseAcknowledgement && allObsUuids.length > 0) {
+      const acknowledgedUuids = await fetchAcknowledgedObservationUuids(
+        allObsUuids
+      );
+      Object.keys(instructionsMap).forEach((visitUuid) => {
+        instructionsMap[visitUuid] = instructionsMap[visitUuid].filter(
+          (instruction) => !acknowledgedUuids.has(instruction.observationUuid)
+        );
+      });
+    }
+
     setCareInstructionsMap(instructionsMap);
   };
 
@@ -174,7 +201,7 @@ export const CareViewPatientsSummary = ({
                   careTeamDetails={careTeam}
                   navHourEpoch={navHourEpoch}
                   newTreatments={newTreatments}
-                  careInstructions={
+                  unacknowledgedCareInstructions={
                     careInstructionsMap[visitDetails.uuid] || []
                   }
                   visitDetails={visitDetails}
