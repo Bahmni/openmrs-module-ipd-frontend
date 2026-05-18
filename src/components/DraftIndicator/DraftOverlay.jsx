@@ -8,27 +8,40 @@ import "./DraftOverlay.scss";
 const formatTimestamp = (timestamp) =>
   moment(timestamp).format("DD MMM YYYY, hh:mm A");
 
-const DraftRow = ({ draft, showDivider }) => (
+const DraftRow = ({ draft, showDivider, onSelect }) => (
   <div className="ipd-draft-overlay__row">
-    <p className="ipd-draft-overlay__patient-name">{draft.patientName}</p>
-    <div className="ipd-draft-overlay__row-details">
-      <span className="ipd-draft-overlay__identifier">{draft.identifier}</span>
-      <span className="ipd-draft-overlay__timestamp">
-        {formatTimestamp(draft.timestamp)}
-      </span>
-    </div>
+    <button
+      type="button"
+      className="ipd-draft-overlay__row-button"
+      onClick={() => onSelect(draft)}
+      aria-label={`Open draft for ${draft.patientName}`}
+    >
+      <p className="ipd-draft-overlay__patient-name">{draft.patientName}</p>
+      <div className="ipd-draft-overlay__row-details">
+        <span className="ipd-draft-overlay__identifier">
+          {draft.patientIdentifier}
+        </span>
+        <span className="ipd-draft-overlay__timestamp">
+          {formatTimestamp(draft.timestamp)}
+        </span>
+      </div>
+    </button>
     {showDivider && <div className="ipd-draft-overlay__divider" />}
   </div>
 );
 
 DraftRow.propTypes = {
   draft: PropTypes.shape({
+    draftUuid: PropTypes.string.isRequired,
     patientName: PropTypes.string.isRequired,
     patientUuid: PropTypes.string.isRequired,
-    identifier: PropTypes.string.isRequired,
-    timestamp: PropTypes.string.isRequired,
+    patientIdentifier: PropTypes.string,
+    encounterUuid: PropTypes.string,
+    formName: PropTypes.string,
+    timestamp: PropTypes.number.isRequired,
   }).isRequired,
   showDivider: PropTypes.bool.isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
 
 const EmptyState = () => (
@@ -45,7 +58,7 @@ const EmptyState = () => (
   </div>
 );
 
-const DraftOverlay = ({ formDrafts, onClose }) => (
+const DraftOverlay = ({ formDrafts, onClose, onSelect }) => (
   <div className="ipd-draft-overlay">
     <div className="ipd-draft-overlay__header">
       <span className="ipd-draft-overlay__title">
@@ -69,9 +82,10 @@ const DraftOverlay = ({ formDrafts, onClose }) => (
       ) : (
         formDrafts.map((draft, index) => (
           <DraftRow
-            key={draft.patientUuid}
+            key={draft.draftUuid}
             draft={draft}
             showDivider={index < formDrafts.length - 1}
+            onSelect={onSelect}
           />
         ))
       )}
@@ -82,13 +96,17 @@ const DraftOverlay = ({ formDrafts, onClose }) => (
 DraftOverlay.propTypes = {
   formDrafts: PropTypes.arrayOf(
     PropTypes.shape({
+      draftUuid: PropTypes.string.isRequired,
       patientName: PropTypes.string.isRequired,
       patientUuid: PropTypes.string.isRequired,
-      identifier: PropTypes.string.isRequired,
-      timestamp: PropTypes.string.isRequired,
+      patientIdentifier: PropTypes.string,
+      encounterUuid: PropTypes.string,
+      formName: PropTypes.string,
+      timestamp: PropTypes.number.isRequired,
     })
   ).isRequired,
   onClose: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
 
 export default DraftOverlay;

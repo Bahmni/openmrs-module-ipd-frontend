@@ -53,11 +53,10 @@
   }
 }
 
-.opd-header-wrapper .ipd-draft-indicator__button {
+.opd-header-wrapper .ipd-draft-indicator__button,
+.dashboard header .ipd-draft-indicator__button {
   background: #00796d;
   border-radius: 0;
-  padding: 15px;
-  height: 50px;
   margin: 0;
 
   &:hover {
@@ -66,27 +65,23 @@
   }
 
   &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
     outline: 2px solid #ffffff;
     outline-offset: -2px;
   }
 }
 
+.opd-header-wrapper .ipd-draft-indicator__button {
+  padding: 15px;
+  height: 50px;
+}
+
 .dashboard header .ipd-draft-indicator__button {
-  background: #00796d;
-  border-radius: 0;
   padding: 14px;
   height: 52px;
-  margin: 0;
-
-  &:hover {
-    opacity: 0.8;
-    background: #00796d;
-  }
-
-  &:focus {
-    outline: 2px solid #ffffff;
-    outline-offset: -2px;
-  }
 }
 
 .dashboard header.reg-header .ipd-draft-indicator__button {
@@ -106,6 +101,10 @@
   }
 
   &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
     outline: 2px solid #007fff;
   }
 }

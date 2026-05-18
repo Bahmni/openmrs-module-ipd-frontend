@@ -15,15 +15,13 @@ jest.mock("../../features/i18n/I18nProvider", () => {
   };
 });
 
-jest.mock("./DraftOverlayMockData", () => ({
-  mockFormDrafts: [
-    {
-      patientName: "John Doe",
-      patientUuid: "patient-uuid-1",
-      identifier: "IQ000001",
-      timestamp: "2024-01-15T10:30:00.000Z",
-    },
-  ],
+jest.mock("../../services/draftService", () => ({
+  fetchDraftsForProvider: jest.fn(),
+}));
+
+jest.mock("../../utils/CommonUtils", () => ({
+  ...jest.requireActual("../../utils/CommonUtils"),
+  getProviderUuid: jest.fn(),
 }));
 
 jest.mock("react-dom", () => ({
@@ -31,9 +29,30 @@ jest.mock("react-dom", () => ({
   createPortal: (node) => node,
 }));
 
+const mockDrafts = [
+  {
+    draftUuid: "draft-uuid-1",
+    patientName: "John Doe",
+    patientUuid: "patient-uuid-1",
+    patientIdentifier: "IQ000001",
+    encounterUuid: "encounter-uuid-1",
+    formName: "Form One",
+    timestamp: 1705313400000,
+  },
+];
+
 describe("DraftIndicator", () => {
+  let fetchDraftsForProvider;
+  let getProviderUuid;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    fetchDraftsForProvider =
+      require("../../services/draftService").fetchDraftsForProvider;
+    getProviderUuid = require("../../utils/CommonUtils").getProviderUuid;
+
+    getProviderUuid.mockResolvedValue("provider-uuid-456");
+    fetchDraftsForProvider.mockResolvedValue(mockDrafts);
   });
 
   it("should render the draft indicator button", async () => {
@@ -46,6 +65,14 @@ describe("DraftIndicator", () => {
     ).toBeTruthy();
   });
 
+  it("should fetch drafts with the correct providerUuid on mount", async () => {
+    await act(async () => {
+      render(<DraftIndicator />);
+    });
+    expect(fetchDraftsForProvider).toHaveBeenCalledTimes(1);
+    expect(fetchDraftsForProvider).toHaveBeenCalledWith("provider-uuid-456");
+  });
+
   it("should show red dot when there are drafts", async () => {
     let container;
     await act(async () => {
@@ -54,6 +81,19 @@ describe("DraftIndicator", () => {
     expect(
       container.querySelector(".ipd-draft-indicator__red-dot")
     ).toBeTruthy();
+  });
+
+  it("should not show red dot and not fetch when providerUuid is unavailable", async () => {
+    getProviderUuid.mockResolvedValue(null);
+
+    let container;
+    await act(async () => {
+      ({ container } = render(<DraftIndicator />));
+    });
+    expect(fetchDraftsForProvider).not.toHaveBeenCalled();
+    expect(
+      container.querySelector(".ipd-draft-indicator__red-dot")
+    ).toBeNull();
   });
 
   it("should not show overlay by default", async () => {
@@ -171,5 +211,39 @@ describe("DraftIndicator", () => {
     expect(
       container.querySelector(".ipd-draft-indicator__overlay-wrapper")
     ).toBeNull();
+  });
+
+  it("should navigate to the observation form and close overlay when a draft row is clicked", async () => {
+    const originalLocation = window.location;
+    Object.defineProperty(window, "location", {
+      writable: true,
+      value: { href: "" },
+    });
+
+    let container, getByLabelText;
+    await act(async () => {
+      ({ container, getByLabelText } = render(<DraftIndicator />));
+    });
+
+    await act(async () => {
+      fireEvent.click(getByLabelText("View observation drafts"));
+    });
+
+    const rowButton = container.querySelector(".ipd-draft-overlay__row-button");
+    await act(async () => {
+      fireEvent.click(rowButton);
+    });
+
+    expect(window.location.href).toBe(
+      `/bahmni/clinical/#/default/patient/patient-uuid-1/dashboard/concept-set-group/All%20Observation%20Templates`
+    );
+    expect(
+      container.querySelector(".ipd-draft-indicator__overlay-wrapper")
+    ).toBeNull();
+
+    Object.defineProperty(window, "location", {
+      writable: true,
+      value: originalLocation,
+    });
   });
 });

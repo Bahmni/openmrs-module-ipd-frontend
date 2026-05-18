@@ -3,12 +3,10 @@ import ReactDOM from "react-dom";
 import { AlignBoxMiddleLeft24 } from "@carbon/icons-react";
 import "./DraftIndicator.scss";
 import DraftOverlay from "./DraftOverlay";
-import { mockFormDrafts } from "./DraftOverlayMockData";
+import { fetchDraftsForProvider } from "../../services/draftService";
+import { getProviderUuid } from "../../utils/CommonUtils";
+import { CLINICAL_OBSERVATION_URL } from "../../constants";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
-
-const getFormDrafts = async () => {
-  return mockFormDrafts;
-};
 
 export const DraftIndicator = () => {
   const [formDrafts, setFormDrafts] = useState([]);
@@ -20,7 +18,9 @@ export const DraftIndicator = () => {
   useEffect(() => {
     const initialize = async () => {
       try {
-        const drafts = await getFormDrafts();
+        const providerUuid = await getProviderUuid();
+        if (!providerUuid) return;
+        const drafts = await fetchDraftsForProvider(providerUuid);
         setFormDrafts(drafts);
       } catch (error) {
         console.error("Failed to initialize draft indicator", error);
@@ -55,6 +55,12 @@ export const DraftIndicator = () => {
   };
 
   const closeOverlay = () => setIsOverlayOpen(false);
+
+  const handleDraftClick = (draft) => {
+    window.location.href = CLINICAL_OBSERVATION_URL(draft.patientUuid);
+    setIsOverlayOpen(false);
+  };
+
   const hasDrafts = formDrafts.length > 0;
 
   return (
@@ -84,7 +90,11 @@ export const DraftIndicator = () => {
               className="ipd-draft-indicator__overlay-wrapper"
               style={{ top: overlayPosition.top, right: overlayPosition.right }}
             >
-              <DraftOverlay formDrafts={formDrafts} onClose={closeOverlay} />
+              <DraftOverlay
+                formDrafts={formDrafts}
+                onClose={closeOverlay}
+                onSelect={handleDraftClick}
+              />
             </div>,
             document.body
           )}
