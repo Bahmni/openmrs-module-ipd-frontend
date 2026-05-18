@@ -386,7 +386,7 @@ describe("PatientDetailsCell", () => {
             bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
             careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
             newTreatments={0}
-            careInstructions={[
+            unacknowledgedCareInstructions={[
               { instruction: "Do X" },
               { instruction: "Do Y" },
               { instruction: "Do Z" },
@@ -418,7 +418,7 @@ describe("PatientDetailsCell", () => {
             bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
             careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
             newTreatments={0}
-            careInstructions={[]}
+            unacknowledgedCareInstructions={[]}
             visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
             navHourEpoch={{
               startHourEpoch: 1672575400,
@@ -444,7 +444,7 @@ describe("PatientDetailsCell", () => {
             bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
             careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
             newTreatments={0}
-            careInstructions={[
+            unacknowledgedCareInstructions={[
               { instruction: "Do X" },
               { instruction: "Do Y" },
             ]}
@@ -475,7 +475,7 @@ describe("PatientDetailsCell", () => {
             bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
             careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
             newTreatments={2}
-            careInstructions={[
+            unacknowledgedCareInstructions={[
               { instruction: "Do X" },
               { instruction: "Do Y" },
               { instruction: "Do Z" },
