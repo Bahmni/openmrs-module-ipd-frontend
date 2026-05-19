@@ -80,9 +80,14 @@ export const ExtractMedicationNursingTasksData = (
         } else {
           dosage = order.dose + order.doseUnits.display;
         }
+        const administrationInstructions = order.dosingInstructions
+          ? JSON.parse(order.dosingInstructions)
+          : null;
         dosingInstructions = {
           asNeeded: order.asNeeded,
-          frequency: order.frequency?.display,
+          frequency: administrationInstructions?.isLoadingDose
+            ? "Loading Dose"
+            : order.frequency?.display,
         };
       }
       if (serviceType == "EmergencyMedicationRequest") {

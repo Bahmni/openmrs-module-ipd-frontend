@@ -138,6 +138,9 @@ export const updateDrugOrderList = (drugOrderList) => {
     ipdDrugOrder.additives = administrationInstructions.additives
       ? administrationInstructions.additives
       : null;
+    if (administrationInstructions.isLoadingDose) {
+      ipdDrugOrder.drugOrder.dosingInstructions.frequency = "Loading Dose";
+    }
   });
   return drugOrderList;
 };

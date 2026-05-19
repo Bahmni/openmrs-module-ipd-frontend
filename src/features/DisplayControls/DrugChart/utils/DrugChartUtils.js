@@ -58,6 +58,9 @@ export const transformDrugOrders = (orders) => {
         dosage = dosingInstructions.dose;
         doseUnits = dosingInstructions.doseUnits;
       }
+      const parsedInstructions = JSON.parse(
+        dosingInstructions.administrationInstructions
+      );
       medicationData[order.drugOrder.uuid] = {
         name: drug?.name || drugNonCoded,
         dosingInstructions: {
@@ -65,10 +68,10 @@ export const transformDrugOrders = (orders) => {
           dosage,
           doseUnits,
           asNeeded: dosingInstructions.asNeeded,
-          frequency: dosingInstructions.frequency,
-          instructions: JSON.parse(
-            dosingInstructions.administrationInstructions
-          ),
+          frequency: parsedInstructions?.isLoadingDose
+            ? "Loading Dose"
+            : dosingInstructions.frequency,
+          instructions: parsedInstructions,
         },
         duration: duration ? duration + " " + durationUnits : null,
         slots: [],
