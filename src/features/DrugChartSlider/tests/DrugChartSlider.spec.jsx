@@ -729,7 +729,7 @@ describe("DrugChartSlider", () => {
       MockDate.reset();
     });
 
-    it("SC4: next-day warning renders when showScheduleNextDayWarning has a true entry", async () => {
+    it("SC4: next-day warning renders when showSubsequentDayScheduleNextDayWarning has a true entry", async () => {
       MockDate.set("2010-12-22T00:00:00.000Z");
       // Render ScheduleSection directly to verify the warning renders correctly
       const { getByText } = render(
@@ -752,7 +752,7 @@ describe("DrugChartSlider", () => {
             showEmptyFinalDayScheduleWarning={false}
             showSchedulePassedWarning={[false, false]}
             enable24HourTimers={true}
-            showScheduleNextDayWarning={[false, true]}
+            showSubsequentDayScheduleNextDayWarning={[false, true]}
           />
         </IntlProvider>
       );

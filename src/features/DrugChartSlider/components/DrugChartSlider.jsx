@@ -129,12 +129,17 @@ const DrugChartSlider = (props) => {
   // preventing minute-level drift between the auto-filled day-1 slot and propagated subsequent-day slots.
   const autoFilledFirstEditableSlotRef = useRef(null);
 
-  const [showScheduleNextDayWarning, setShowScheduleNextDayWarning] = useState(
-    []
-  );
+  const [
+    showSubsequentDayScheduleNextDayWarning,
+    setShowSubsequentDayScheduleNextDayWarning,
+  ] = useState([]);
   const [
     showFirstDayScheduleNextDayWarning,
     setShowFirstDayScheduleNextDayWarning,
+  ] = useState([]);
+  const [
+    showFinalDayScheduleNextDayWarning,
+    setShowFinalDayScheduleNextDayWarning,
   ] = useState([]);
 
   const propagateToSubsequentDays = (newTime) => {
@@ -159,13 +164,19 @@ const DrugChartSlider = (props) => {
     setSchedules(shifted);
     if (firstDaySlotsMissed > 0) {
       setFinalDaySchedules(shifted.slice(0, firstDaySlotsMissed));
+      const finalDayCrossings = detectNextDayCrossings(
+        enableSchedule.scheduleTiming.slice(0, firstDaySlotsMissed),
+        offsetMinutes,
+        enable24HourTimers
+      );
+      setShowFinalDayScheduleNextDayWarning(finalDayCrossings);
     }
     const crossings = detectNextDayCrossings(
       enableSchedule.scheduleTiming,
       offsetMinutes,
       enable24HourTimers
     );
-    setShowScheduleNextDayWarning(crossings);
+    setShowSubsequentDayScheduleNextDayWarning(crossings);
   };
 
   const handleApplyToAllDaysToggle = (checked) => {
@@ -225,8 +236,11 @@ const DrugChartSlider = (props) => {
       setSchedules(scheduleTimings);
       if (firstDaySlotsMissed > 0) {
         setFinalDaySchedules(scheduleTimings.slice(0, firstDaySlotsMissed));
+        setShowFinalDayScheduleNextDayWarning(
+          Array(firstDaySlotsMissed).fill(false)
+        );
       }
-      setShowScheduleNextDayWarning(
+      setShowSubsequentDayScheduleNextDayWarning(
         Array(enableSchedule.frequencyPerDay).fill(false)
       );
     }
@@ -389,9 +403,9 @@ const DrugChartSlider = (props) => {
           schedules.slice(1),
           offsetMinutes,
           enable24HourTimers,
-          showScheduleNextDayWarning.slice(1)
+          showSubsequentDayScheduleNextDayWarning.slice(1)
         );
-        setShowScheduleNextDayWarning([false, ...warnings]);
+        setShowSubsequentDayScheduleNextDayWarning([false, ...warnings]);
 
         const fullWarnings = [false, ...warnings];
         setShowSchedulePassedWarning((prev) => {
@@ -411,6 +425,13 @@ const DrugChartSlider = (props) => {
         });
 
         if (applyToAllDays && firstDaySlotsMissed > 0) {
+          const finalDayCrossings = detectNextDayCrossings(
+            finalDaySchedules,
+            offsetMinutes,
+            enable24HourTimers,
+            showFinalDayScheduleNextDayWarning
+          );
+          setShowFinalDayScheduleNextDayWarning(finalDayCrossings);
           setFinalDaySchedules((prev) =>
             computeShiftedScheduleTimings(
               prev,
@@ -433,7 +454,7 @@ const DrugChartSlider = (props) => {
     const isManualNextDay =
       prevScheduleSlot !== null &&
       isNextDayCrossing(newSchedule, prevScheduleSlot, enable24HourTimers);
-    setShowScheduleNextDayWarning((prev) => {
+    setShowSubsequentDayScheduleNextDayWarning((prev) => {
       const updated = [...prev];
       updated[index] = isManualNextDay;
       return updated;
@@ -460,6 +481,15 @@ const DrugChartSlider = (props) => {
       ? newSchedule
       : moment(newSchedule, timeFormatFor12Hr);
     setFinalDaySchedules(newScheduleArray);
+    const prevFinalSlot = index > 0 ? finalDaySchedules[index - 1] : null;
+    const isManualNextDay =
+      prevFinalSlot !== null &&
+      isNextDayCrossing(newSchedule, prevFinalSlot, enable24HourTimers);
+    setShowFinalDayScheduleNextDayWarning((prev) => {
+      const updated = [...prev];
+      updated[index] = isManualNextDay;
+      return updated;
+    });
   };
 
   const handleScheduleWarnings = async () => {
@@ -478,7 +508,7 @@ const DrugChartSlider = (props) => {
     if (
       !isValid &&
       warningType === "passed" &&
-      !showScheduleNextDayWarning.some(Boolean)
+      !showSubsequentDayScheduleNextDayWarning.some(Boolean)
     )
       return false;
     return true;
@@ -622,7 +652,7 @@ const DrugChartSlider = (props) => {
             enable24HourTimers,
             hostData?.drugOrder?.drugOrder?.scheduledDate
           );
-          return showScheduleNextDayWarning[i]
+          return showSubsequentDayScheduleNextDayWarning[i]
             ? epoch + nextScheduleDate
             : epoch;
         });
@@ -902,9 +932,14 @@ const DrugChartSlider = (props) => {
                 }
                 showSchedulePassedWarning={showSchedulePassedWarning}
                 enable24HourTimers={enable24HourTimers}
-                showScheduleNextDayWarning={showScheduleNextDayWarning}
+                showSubsequentDayScheduleNextDayWarning={
+                  showSubsequentDayScheduleNextDayWarning
+                }
                 showFirstDayScheduleNextDayWarning={
                   showFirstDayScheduleNextDayWarning
+                }
+                showFinalDayScheduleNextDayWarning={
+                  showFinalDayScheduleNextDayWarning
                 }
                 applyToAllDays={applyToAllDays}
                 onApplyToAllDaysToggle={handleApplyToAllDaysToggle}
