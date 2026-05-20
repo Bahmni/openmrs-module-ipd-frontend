@@ -7,6 +7,7 @@ import {
   getDrugName,
   getPRNIntervalInMinutes,
   isPRNEligibleForNextDose,
+  updateDrugOrderList,
 } from "../utils/TreatmentsUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
@@ -131,6 +132,33 @@ describe("TreatmentsUtils", () => {
 
     it("should return 0 when configMap is not provided", () => {
       expect(getPRNIntervalInMinutes("Once a day")).toBe(0);
+    });
+  });
+
+  describe("updateDrugOrderList", () => {
+    const buildDrugOrder = (frequency, isLoadingDose) => ({
+      drugOrder: {
+        dosingInstructions: {
+          dose: 1,
+          doseUnits: "mg",
+          frequency,
+          route: "Oral",
+          administrationInstructions: JSON.stringify({ isLoadingDose }),
+        },
+        durationUnits: "Day(s)",
+      },
+    });
+
+    it("should set uniformDosingType.frequency to 'Loading Dose' when isLoadingDose is true", () => {
+      const drugOrderList = [buildDrugOrder("STAT (Immediately)", true)];
+      const result = updateDrugOrderList(drugOrderList);
+      expect(result[0].uniformDosingType.frequency).toBe("Loading Dose");
+    });
+
+    it("should keep original frequency in uniformDosingType when isLoadingDose is false", () => {
+      const drugOrderList = [buildDrugOrder("Once a day", false)];
+      const result = updateDrugOrderList(drugOrderList);
+      expect(result[0].uniformDosingType.frequency).toBe("Once a day");
     });
   });
 
