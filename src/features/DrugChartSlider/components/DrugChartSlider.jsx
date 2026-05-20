@@ -593,7 +593,12 @@ const DrugChartSlider = (props) => {
 
   const isValidFinalDaySchedule = async () => {
     const { isValid, warningType } = await handleFinalDayScheduleWarnings();
-    if (!isValid && (warningType === "empty" || warningType === "passed"))
+    if (!isValid && warningType === "empty") return false;
+    if (
+      !isValid &&
+      warningType === "passed" &&
+      !showFinalDayScheduleNextDayWarning.some(Boolean)
+    )
       return false;
     return true;
   };
@@ -703,12 +708,16 @@ const DrugChartSlider = (props) => {
         });
 
         const finalDaySchedulesUTCTimeEpoch = finalDaySchedules?.map(
-          (schedule) =>
-            getUTCTimeEpoch(
+          (schedule, i) => {
+            const epoch = getUTCTimeEpoch(
               schedule,
               enable24HourTimers,
               hostData?.drugOrder?.drugOrder?.scheduledDate
-            )
+            );
+            return showFinalDayScheduleNextDayWarning[i]
+              ? epoch + nextScheduleDate
+              : epoch;
+          }
         );
 
         payload.firstDaySlotsStartTime =
