@@ -140,6 +140,7 @@ export const updateDrugOrderList = (drugOrderList) => {
       : null;
     if (administrationInstructions.isLoadingDose) {
       ipdDrugOrder.drugOrder.dosingInstructions.frequency = "Loading Dose";
+      ipdDrugOrder.uniformDosingType.frequency = "Loading Dose";
     }
   });
   return drugOrderList;
