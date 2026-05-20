@@ -476,6 +476,51 @@ const DrugChartSlider = (props) => {
 
   const handleFinalDaySchedule = (newSchedule, index) => {
     updateSliderContentModified(true);
+
+    // Cascade: only when editing first slot and original first slot is valid
+    if (
+      index === 0 &&
+      finalDaySchedules.length > 1 &&
+      !isInvalidTimeTextPresent(enable24HourTimers) &&
+      newSchedule !== ""
+    ) {
+      const firstDoseOriginal = finalDaySchedules[0];
+      const isOriginalValid = enable24HourTimers
+        ? typeof firstDoseOriginal === "string" &&
+          firstDoseOriginal !== "" &&
+          moment(firstDoseOriginal, "HH:mm", true).isValid()
+        : moment.isMoment(firstDoseOriginal)
+        ? firstDoseOriginal.isValid()
+        : typeof firstDoseOriginal === "string" &&
+          firstDoseOriginal !== "" &&
+          moment(firstDoseOriginal, timeFormatFor12Hr, true).isValid();
+
+      if (isOriginalValid) {
+        const shifted = computeShiftedSchedules(
+          finalDaySchedules,
+          firstDoseOriginal,
+          newSchedule,
+          enable24HourTimers
+        );
+        setFinalDaySchedules(shifted);
+
+        const offsetMinutes = computeOffsetMinutes(
+          firstDoseOriginal,
+          newSchedule,
+          enable24HourTimers
+        );
+        const warnings = detectNextDayCrossings(
+          finalDaySchedules.slice(1),
+          offsetMinutes,
+          enable24HourTimers,
+          showFinalDayScheduleNextDayWarning.slice(1)
+        );
+        setShowFinalDayScheduleNextDayWarning([false, ...warnings]);
+        return;
+      }
+    }
+
+    // Non-cascade: update only the triggered index
     const newScheduleArray = [...finalDaySchedules];
     newScheduleArray[index] = enable24HourTimers
       ? newSchedule
