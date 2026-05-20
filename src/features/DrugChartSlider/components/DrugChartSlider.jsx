@@ -56,7 +56,18 @@ const DrugChartSlider = (props) => {
             frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
         )
       : null;
+  const isLoadingDose = (() => {
+    try {
+      return JSON.parse(
+        hostData?.drugOrder?.drugOrder?.dosingInstructions
+          ?.administrationInstructions
+      )?.isLoadingDose;
+    } catch {
+      return false;
+    }
+  })();
   const enableStartTime =
+    isLoadingDose ||
     hostData?.startTimeFrequencies?.includes(
       hostData?.drugOrder?.uniformDosingType?.frequency
     ) ||
