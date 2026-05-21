@@ -729,7 +729,7 @@ describe("DrugChartSlider", () => {
       MockDate.reset();
     });
 
-    it("SC4: next-day warning renders when showScheduleNextDayWarning has a true entry", async () => {
+    it("SC4: next-day warning renders when showSubsequentDayScheduleNextDayWarning has a true entry", async () => {
       MockDate.set("2010-12-22T00:00:00.000Z");
       // Render ScheduleSection directly to verify the warning renders correctly
       const { getByText } = render(
@@ -752,7 +752,7 @@ describe("DrugChartSlider", () => {
             showEmptyFinalDayScheduleWarning={false}
             showSchedulePassedWarning={[false, false]}
             enable24HourTimers={true}
-            showScheduleNextDayWarning={[false, true]}
+            showSubsequentDayScheduleNextDayWarning={[false, true]}
           />
         </IntlProvider>
       );
@@ -1064,6 +1064,70 @@ describe("DrugChartSlider", () => {
       expect(
         payload.dayWiseSlotsStartTime[0] - payload.firstDaySlotsStartTime[0]
       ).toBe(10 * 3600);
+    });
+
+    it("AC5: changing first remainder slot cascades offset to remaining remainder slots", async () => {
+      // Edit mode: 3 slots/day, firstDaySlotsStartTime has 1 item → firstDaySlotsMissed=2
+      // remainingDaySlotsStartTime has 2 items → finalDaySchedules=["06:00","14:00"]
+      // inputs layout: [0,1]=hh:mm(disabled), [2]=day1 slot, [3,4,5]=subsequent, [6,7]=remainder
+      // Change inputs[6] 06:00→08:00 (+2h) → inputs[7] should cascade 14:00→16:00
+      const epoch06 = 1704088800; // 2024-01-01 06:00 UTC
+      const epoch14 = 1704117600; // 2024-01-01 14:00 UTC
+      const epoch22 = 1704146400; // 2024-01-01 22:00 UTC
+      const editDrugOrderThrice = {
+        ...mockScheduleDrugOrder,
+        uniformDosingType: {
+          ...mockScheduleDrugOrder.uniformDosingType,
+          frequency: "Thrice a day",
+        },
+        drugOrder: {
+          ...mockScheduleDrugOrder.drugOrder,
+          duration: 5,
+        },
+        drugOrderSchedule: {
+          firstDaySlotsStartTime: [epoch22],
+          dayWiseSlotsStartTime: [epoch06, epoch14, epoch22],
+          remainingDaySlotsStartTime: [epoch06, epoch14],
+          slotStartTime: null,
+          medicationAdministrationStarted: false,
+        },
+      };
+
+      render(
+        <IntlProvider locale="en">
+          <SliderContext.Provider value={mockSliderContext}>
+            <IPDContext.Provider
+              value={{ config: mockConfig, handleAuditEvent: jest.fn() }}
+            >
+              <DrugChartSlider
+                hostData={{
+                  enable24HourTimers: true,
+                  scheduleFrequencies: mockThriceDayFrequencies,
+                  startTimeFrequencies: mockStartTimeFrequencies,
+                  drugOrder: editDrugOrderThrice,
+                }}
+                hostApi={{}}
+                title=""
+                drugChartNotes=""
+                setDrugChartNotes={jest.fn()}
+              />
+            </IPDContext.Provider>
+          </SliderContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        expect(document.querySelectorAll("#time-selector").length).toBe(8);
+      });
+
+      const inputs = document.querySelectorAll("#time-selector");
+      fireEvent.change(inputs[6], { target: { value: "08:00" } });
+      fireEvent.blur(inputs[6]);
+
+      await waitFor(() => {
+        const updated = document.querySelectorAll("#time-selector");
+        expect(updated[7].value).toBe("16:00");
+      });
     });
   });
 });

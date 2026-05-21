@@ -47,14 +47,14 @@ describe("ScheduleSection", () => {
     });
   });
 
-  it("shows next-day warning when showScheduleNextDayWarning has true value", async () => {
+  it("shows next-day warning when showSubsequentDayScheduleNextDayWarning has true value", async () => {
     const { getByText } = render(
       <IntlProvider locale="en">
         <ScheduleSection
           {...props}
           firstDaySlotsMissed={0}
           schedules={["09:00", "21:00", "00:00"]}
-          showScheduleNextDayWarning={[false, false, true]}
+          showSubsequentDayScheduleNextDayWarning={[false, false, true]}
         />
       </IntlProvider>
     );
@@ -149,6 +149,25 @@ describe("ScheduleSection", () => {
           "Updated timing causes highlighted doses to cross midnight and appear on the next day."
         )
       ).toBeInTheDocument();
+    });
+  });
+
+  it("shows only first-day warning when both first-day and subsequent have midnight crossings", async () => {
+    const { getAllByText } = render(
+      <IntlProvider locale="en">
+        <ScheduleSection
+          {...props}
+          firstDaySlotsMissed={1}
+          showFirstDayScheduleNextDayWarning={[false, false, true]}
+          showSubsequentDayScheduleNextDayWarning={[false, false, true]}
+        />
+      </IntlProvider>
+    );
+    await waitFor(() => {
+      const warnings = getAllByText(
+        "Updated timing causes highlighted doses to cross midnight and appear on the next day."
+      );
+      expect(warnings).toHaveLength(1);
     });
   });
 });

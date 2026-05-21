@@ -28,17 +28,25 @@ export const ScheduleSection = ({
   showEmptyFinalDayScheduleWarning,
   showSchedulePassedWarning,
   enable24HourTimers,
-  showScheduleNextDayWarning = [],
+  showSubsequentDayScheduleNextDayWarning = [],
   showFirstDayScheduleNextDayWarning = [],
+  showFinalDayScheduleNextDayWarning = [],
   applyToAllDays = false,
   onApplyToAllDaysToggle = () => {},
   isToggleEnabled = false,
   duration,
 }) => {
   const intl = useIntl();
-  const hasAnyNextDay =
-    showFirstDayScheduleNextDayWarning.some((v) => v === true) ||
-    showScheduleNextDayWarning.some((v) => v === true);
+  const hasFirstDayNextDay = showFirstDayScheduleNextDayWarning.some(
+    (v) => v === true
+  );
+  const hasSubsequentNextDay =
+    !hasFirstDayNextDay &&
+    showSubsequentDayScheduleNextDayWarning.some((v) => v === true);
+  const hasFinalDayNextDay =
+    !hasFirstDayNextDay &&
+    !hasSubsequentNextDay &&
+    showFinalDayScheduleNextDayWarning.some((v) => v === true);
 
   return (
     <>
@@ -140,18 +148,18 @@ export const ScheduleSection = ({
                 <FormattedMessage id="DRUG_CHART_MODAL_SCHEDULE_PASSED_WARNING"></FormattedMessage>
               </p>
             )}
+            {hasFirstDayNextDay && (
+              <div className="schedule-info-notification schedule-next-day-notification">
+                <Information20 />
+                <span>
+                  <FormattedMessage
+                    id="DRUG_CHART_MODAL_SCHEDULE_NEXT_DAY_WARNING"
+                    defaultMessage="Updated timing causes highlighted doses to cross midnight and appear on the next day."
+                  />
+                </span>
+              </div>
+            )}
           </div>
-          {hasAnyNextDay && (
-            <div className="schedule-info-notification schedule-next-day-notification">
-              <Information20 />
-              <span>
-                <FormattedMessage
-                  id="DRUG_CHART_MODAL_SCHEDULE_NEXT_DAY_WARNING"
-                  defaultMessage="Updated timing causes highlighted doses to cross midnight and appear on the next day."
-                />
-              </span>
-            </div>
-          )}
           {duration > 1 && (
             <div className="apply-to-all-days-toggle">
               <Toggle
@@ -192,7 +200,7 @@ export const ScheduleSection = ({
                     enable24HourTimers ? (
                       <div
                         className={`schedule-time${
-                          showScheduleNextDayWarning[index]
+                          showSubsequentDayScheduleNextDayWarning[index]
                             ? " schedule-time-next-day"
                             : ""
                         }`}
@@ -213,7 +221,7 @@ export const ScheduleSection = ({
                     ) : (
                       <div
                         className={`schedule-time${
-                          showScheduleNextDayWarning[index]
+                          showSubsequentDayScheduleNextDayWarning[index]
                             ? " schedule-time-next-day"
                             : ""
                         }`}
@@ -243,6 +251,17 @@ export const ScheduleSection = ({
                   <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
                 </p>
               )}
+              {hasSubsequentNextDay && (
+                <div className="schedule-info-notification schedule-next-day-notification">
+                  <Information20 />
+                  <span>
+                    <FormattedMessage
+                      id="DRUG_CHART_MODAL_SCHEDULE_NEXT_DAY_WARNING"
+                      defaultMessage="Updated timing causes highlighted doses to cross midnight and appear on the next day."
+                    />
+                  </span>
+                </div>
+              )}
             </div>
           )}
           <div className="schedule-section">
@@ -265,11 +284,15 @@ export const ScheduleSection = ({
                 (_, index) =>
                   enable24HourTimers ? (
                     <div
-                      className={
+                      className={`${
                         enableSchedule?.frequencyPerDay == 4
                           ? "schedule-time-remainder"
                           : "schedule-time"
-                      }
+                      }${
+                        showFinalDayScheduleNextDayWarning[index]
+                          ? " schedule-time-next-day"
+                          : ""
+                      }`}
                       key={index}
                     >
                       <TimePicker24Hour
@@ -286,11 +309,15 @@ export const ScheduleSection = ({
                     </div>
                   ) : (
                     <div
-                      className={
+                      className={`${
                         enableSchedule?.frequencyPerDay == 4
                           ? "schedule-time-remainder"
                           : "schedule-time"
-                      }
+                      }${
+                        showFinalDayScheduleNextDayWarning[index]
+                          ? " schedule-time-next-day"
+                          : ""
+                      }`}
                       key={index}
                     >
                       <TimePicker
@@ -318,6 +345,17 @@ export const ScheduleSection = ({
               <FormattedMessage id="DRUG_CHART_MODAL_EMPTY_SCHEDULE_WARNING"></FormattedMessage>
             </p>
           )}
+          {hasFinalDayNextDay && (
+            <div className="schedule-info-notification schedule-next-day-notification">
+              <Information20 />
+              <span>
+                <FormattedMessage
+                  id="DRUG_CHART_MODAL_SCHEDULE_NEXT_DAY_WARNING"
+                  defaultMessage="Updated timing causes highlighted doses to cross midnight and appear on the next day."
+                />
+              </span>
+            </div>
+          )}
         </div>
       )}
       {enableSchedule && firstDaySlotsMissed == 0 && (
@@ -342,7 +380,7 @@ export const ScheduleSection = ({
                   enable24HourTimers ? (
                     <div
                       className={`schedule-time${
-                        showScheduleNextDayWarning[index]
+                        showSubsequentDayScheduleNextDayWarning[index]
                           ? " schedule-time-next-day"
                           : ""
                       }`}
@@ -363,7 +401,7 @@ export const ScheduleSection = ({
                   ) : (
                     <div
                       className={`schedule-time${
-                        showScheduleNextDayWarning[index]
+                        showSubsequentDayScheduleNextDayWarning[index]
                           ? " schedule-time-next-day"
                           : ""
                       }`}
@@ -401,7 +439,7 @@ export const ScheduleSection = ({
               </p>
             )}
           </div>
-          {hasAnyNextDay && (
+          {hasSubsequentNextDay && (
             <div className="schedule-info-notification schedule-next-day-notification">
               <Information20 />
               <span>
@@ -438,8 +476,9 @@ ScheduleSection.propTypes = {
   showEmptyFinalDayScheduleWarning: PropTypes.bool.isRequired,
   showSchedulePassedWarning: PropTypes.array.isRequired,
   enable24HourTimers: PropTypes.bool.isRequired,
-  showScheduleNextDayWarning: PropTypes.array,
+  showSubsequentDayScheduleNextDayWarning: PropTypes.array,
   showFirstDayScheduleNextDayWarning: PropTypes.array,
+  showFinalDayScheduleNextDayWarning: PropTypes.array,
   applyToAllDays: PropTypes.bool,
   onApplyToAllDaysToggle: PropTypes.func,
   isToggleEnabled: PropTypes.bool,
