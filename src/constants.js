@@ -170,6 +170,7 @@ export const DAEMON_USER = {
 };
 
 export const FORM_DRAFT_LIST_URL = RESTWS_V1 + "/bahmnicore/formdraft/list";
+export const DRAFT_UPDATES_CHANNEL = "bahmni-draft-indicator-update";
 export const USER_URL = RESTWS_V1 + "/user";
 export const PROVIDER_URL = RESTWS_V1 + "/provider";
 export const CLINICAL_OBSERVATION_URL = (patientUuid) =>

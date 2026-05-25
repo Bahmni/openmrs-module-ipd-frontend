@@ -82,7 +82,7 @@ const CareViewDashboard = (props) => {
             {isUserPrivileged(
               currentUser,
               PRIVILEGE_CONSTANTS.OBSERVATION_TAB
-            ) && <DraftIndicator />}
+            ) && <DraftIndicator providerUuid={hostData.provider?.uuid} />}
             <ProviderActions onLogOut={onLogOut} />
           </div>
         </Header>

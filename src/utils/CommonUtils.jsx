@@ -130,34 +130,6 @@ export const fetchVisitEncounterOrderTypes = async () => {
   }
 };
 
-
-let cachedProviderUuid = null;
-
-export const getProviderUuid = async () => {
-  if (cachedProviderUuid) return cachedProviderUuid;
-  try {
-    const cookies = document.cookie.split("; ");
-    const userCookie = cookies.find((c) => c.startsWith("bahmni.user="));
-    if (!userCookie) return null;
-    const username = decodeURIComponent(
-      userCookie.slice("bahmni.user=".length)
-    ).replace(/^"|"$/g, "");
-    const userResponse = await axios.get(USER_URL, {
-      params: { username, v: "custom:(uuid)" },
-    });
-    const userUuid = userResponse.data?.results?.[0]?.uuid;
-    if (!userUuid) return null;
-    const providerResponse = await axios.get(PROVIDER_URL, {
-      params: { user: userUuid, v: "custom:(uuid)" },
-    });
-    const providerUuid = providerResponse.data?.results?.[0]?.uuid ?? null;
-    cachedProviderUuid = providerUuid;
-    return providerUuid;
-  } catch {
-    return null;
-  }
-};
-
 export const getCookies = () => {
   const cookies = document.cookie.split(";");
   const cookiesObj = {};
