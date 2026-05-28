@@ -16,10 +16,10 @@ jest.mock("../hooks/useFetchAllergiesIntolerance", () => {
     useFetchAllergiesIntolerance: () => mockUseFetchAllergiesIntolerance(),
   };
 });
-jest.mock("../utils/AllergiesUtils", () => ({
-  getNoKnownAllergyUuid: jest.fn(() =>
-    Promise.resolve("f535bd4e-33ff-4f35-bf7c-189e07d1ac90")
-  ),
+jest.mock("../hooks/useFetchNoKnownAllergyUuid", () => ({
+  useFetchNoKnownAllergyUuid: () => ({
+    noKnownAllergyUuid: "f535bd4e-33ff-4f35-bf7c-189e07d1ac90",
+  }),
 }));
 
 describe("Allergies", () => {

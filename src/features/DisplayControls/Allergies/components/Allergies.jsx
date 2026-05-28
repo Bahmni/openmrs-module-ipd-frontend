@@ -10,6 +10,7 @@ import {
 } from "carbon-components-react";
 import React, { useContext, useEffect, useState } from "react";
 import { useFetchAllergiesIntolerance } from "../hooks/useFetchAllergiesIntolerance";
+import { useFetchNoKnownAllergyUuid } from "../hooks/useFetchNoKnownAllergyUuid";
 import PropTypes from "prop-types";
 import "../styles/Allergies.scss";
 import { FormattedMessage } from "react-intl";
@@ -18,32 +19,19 @@ import {
   formatDate,
 } from "../../../../utils/DateTimeUtils";
 import { IPDContext } from "../../../../context/IPDContext";
-import { getNoKnownAllergyUuid } from "../utils/AllergiesUtils";
 
 const Allergies = (props) => {
   const { patientId } = props;
   const { visitSummary } = useContext(IPDContext);
   const { allergiesData, isLoading } = useFetchAllergiesIntolerance(patientId);
+  const { noKnownAllergyUuid } = useFetchNoKnownAllergyUuid();
   const [rows, setRows] = useState([]);
-  const [noKnownAllergyUuid, setNoKnownAllergyUuid] = useState(undefined);
   const NoAllergenMessage = (
     <FormattedMessage
       id={"NO_ALLERGENS_MESSAGE"}
       defaultMessage={"No Allergen is captured for this patient yet."}
     />
   );
-
-  useEffect(() => {
-    const fetchCode = async () => {
-      try {
-        const code = await getNoKnownAllergyUuid();
-        setNoKnownAllergyUuid(code);
-      } catch (error) {
-        console.error("Failed to fetch no known allergy code:", error);
-      }
-    };
-    fetchCode();
-  }, []);
 
   useEffect(() => {
     if (allergiesData && allergiesData.entry) {
