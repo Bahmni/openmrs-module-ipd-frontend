@@ -38,9 +38,15 @@ export const isTimePassed = (
 const areSchedulesInOrder = (allSchedule, timeFormat) => {
   return allSchedule.every((schedule, index) => {
     if (index === 0) return true;
-    const currentTime = moment(schedule, timeFormat);
-    const prevTime = moment(allSchedule[index - 1], timeFormat);
-    return currentTime.isAfter(prevTime);
+    const curr = moment.isMoment(schedule)
+      ? schedule
+      : moment(schedule, timeFormat);
+    const prev = moment.isMoment(allSchedule[index - 1])
+      ? allSchedule[index - 1]
+      : moment(allSchedule[index - 1], timeFormat);
+    const currMinutes = curr.hours() * 60 + curr.minutes();
+    const prevMinutes = prev.hours() * 60 + prev.minutes();
+    return currMinutes > prevMinutes;
   });
 };
 

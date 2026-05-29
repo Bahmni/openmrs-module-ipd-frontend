@@ -997,8 +997,6 @@ describe("DrugChartSlider", () => {
       });
 
       const payload = mockSaveMedication.mock.calls[0][0];
-      // With toggle OFF: subsequent first slot = original 06:00 next day
-      // firstDay first slot = 20:00 same day → diff = 10h
       expect(
         payload.dayWiseSlotsStartTime[0] - payload.firstDaySlotsStartTime[0]
       ).toBe(10 * 3600);
@@ -1013,11 +1011,9 @@ describe("DrugChartSlider", () => {
         ).toBeGreaterThan(0);
       });
 
-      // Enable toggle first (initial value "22:00" → offset=0, no shift)
       const toggleEl = document.querySelector("#apply-to-all-days-toggle");
       fireEvent.click(toggleEl);
 
-      // Then change Day 1 slot: 22:00 → 20:00 → re-propagation triggers (-120 min)
       const inputs = document.querySelectorAll("#time-selector");
       fireEvent.change(inputs[2], { target: { value: "20:00" } });
       fireEvent.blur(inputs[2]);
@@ -1029,10 +1025,34 @@ describe("DrugChartSlider", () => {
       });
 
       const payload = mockSaveMedication.mock.calls[0][0];
-      // Re-propagated: subsequent first slot = 04:00 next day → diff = 8h
       expect(
         payload.dayWiseSlotsStartTime[0] - payload.firstDaySlotsStartTime[0]
       ).toBe(8 * 3600);
+    });
+
+    it("AC5: midnight-crossing subsequent slot stays in dayWiseSlotsStartTime (no double +86400)", async () => {
+      renderMultiDay();
+
+      await waitFor(() => {
+        expect(
+          document.querySelectorAll("#time-selector").length
+        ).toBeGreaterThan(0);
+      });
+
+      const inputs = document.querySelectorAll("#time-selector");
+      fireEvent.change(inputs[3], { target: { value: "08:00" } });
+      fireEvent.blur(inputs[3]);
+
+      fireEvent.click(screen.getByRole("button", { name: "Save" }));
+
+      await waitFor(() => {
+        expect(mockSaveMedication).toHaveBeenCalled();
+      });
+
+      const payload = mockSaveMedication.mock.calls[0][0];
+      const slots = payload.dayWiseSlotsStartTime;
+      expect(slots.length).toBe(3);
+      expect(slots[0] - slots[2]).toBe(8 * 3600);
     });
 
     it("AC4: toggle ON then OFF reverts subsequent days to original schedule timings (Scenario 2 revert)", async () => {
@@ -1060,17 +1080,12 @@ describe("DrugChartSlider", () => {
       });
 
       const payload = mockSaveMedication.mock.calls[0][0];
-      // After toggle OFF: subsequent reverts to original schedule 06:00 next day → diff = 10h
       expect(
         payload.dayWiseSlotsStartTime[0] - payload.firstDaySlotsStartTime[0]
       ).toBe(10 * 3600);
     });
 
     it("AC5: changing first remainder slot cascades offset to remaining remainder slots", async () => {
-      // Edit mode: 3 slots/day, firstDaySlotsStartTime has 1 item → firstDaySlotsMissed=2
-      // remainingDaySlotsStartTime has 2 items → finalDaySchedules=["06:00","14:00"]
-      // inputs layout: [0,1]=hh:mm(disabled), [2]=day1 slot, [3,4,5]=subsequent, [6,7]=remainder
-      // Change inputs[6] 06:00→08:00 (+2h) → inputs[7] should cascade 14:00→16:00
       const epoch06 = 1704088800; // 2024-01-01 06:00 UTC
       const epoch14 = 1704117600; // 2024-01-01 14:00 UTC
       const epoch22 = 1704146400; // 2024-01-01 22:00 UTC
