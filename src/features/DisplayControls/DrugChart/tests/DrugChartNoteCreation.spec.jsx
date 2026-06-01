@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import DrugChartNoteCreation from "../components/DrugChartNoteCreation";
 import { IntlProvider } from "react-intl";
 const messages = {
