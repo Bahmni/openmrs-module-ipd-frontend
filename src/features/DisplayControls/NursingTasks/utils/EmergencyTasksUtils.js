@@ -21,7 +21,7 @@ export const getProviders = async () => {
   try {
     return await axios.get(
       GET_ALL_PROVIDERS_URL.concat(
-        "&attrName=practitioner_type&attrValue=Doctor"
+        "&attrName=Can%20acknowledge%20emergency%20medication&attrValue=true"
       )
     );
   } catch (e) {
