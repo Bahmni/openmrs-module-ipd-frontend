@@ -23,9 +23,9 @@ import {
   getStopReason,
   getSlotsForAnOrderAndServiceType,
   isPRNEligibleForNextDose,
+  isMedicationCourseEndedBeforeAdmission,
 } from "../utils/TreatmentsUtils";
 import {
-  isIPDrugOrder,
   getCookies,
   isUserPrivileged,
 } from "../../../../utils/CommonUtils";
@@ -238,11 +238,17 @@ const Treatments = (props) => {
           !drugOrderObject?.prnEligible ||
           (drugOrder.autoExpireDate &&
             new Date() > new Date(drugOrder.autoExpireDate)));
+      const isMedicationCompleted =
+        drugOrderObject?.drugOrderSchedule?.allSlotsAttended ||
+        (!drugOrder.dosingInstructions?.asNeeded &&
+          drugOrder.autoExpireDate &&
+          new Date() > new Date(drugOrder.autoExpireDate));
       const isButtonDisabled =
         isAddToDrugChartDisabled ||
         moment().valueOf() <= drugOrder.effectiveStartDate ||
         (!isOrderDispensed && addDispensedMedicationToDrugChart) ||
-        isPRNDisabled;
+        isPRNDisabled ||
+        isMedicationCompleted;
       return {
         link: (
           <Link
@@ -298,11 +304,14 @@ const Treatments = (props) => {
   };
 
   const modifyPrescribedTreatmentData = async (drugOrders, prnInterval) => {
-    if (!allMedicinesInPrescriptionAvailableForIPD) {
-      drugOrders = drugOrders.filter((drugOrderObject) =>
-        isIPDrugOrder(drugOrderObject.drugOrder)
-      );
-    }
+    const admissionDate = visitSummary?.startDateTime;
+    drugOrders = drugOrders.filter(
+      (drugOrderObject) =>
+        !isMedicationCourseEndedBeforeAdmission(
+          drugOrderObject.drugOrder,
+          admissionDate
+        )
+    );
     const prescribedTreatments = await Promise.all(
       drugOrders
         .filter(

@@ -146,6 +146,25 @@ export const updateDrugOrderList = (drugOrderList) => {
   return drugOrderList;
 };
 
+export const isMedicationCourseEndedBeforeAdmission = (
+  drugOrder,
+  admissionDate
+) => {
+  const { autoExpireDate, effectiveStartDate, careSetting } = drugOrder;
+
+  if (careSetting === "OUTPATIENT") {
+    // OPD medications: filter once the course is no longer ongoing
+    if (!autoExpireDate) return false;
+    return new Date(autoExpireDate) < new Date();
+  }
+
+  // INPATIENT medications prescribed on or after admission (current visit): always show
+  if (new Date(effectiveStartDate) >= new Date(admissionDate)) return false;
+  // INPATIENT medications from a prior IPD stay: filter if course ended before this admission
+  if (!autoExpireDate) return false;
+  return new Date(autoExpireDate) < new Date(admissionDate);
+};
+
 export const AddToDrugChart = (
   <FormattedMessage
     id={"ADD_TO_DRUG_CHART"}

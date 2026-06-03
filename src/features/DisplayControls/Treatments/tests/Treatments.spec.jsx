@@ -188,16 +188,14 @@ describe("Treatments", () => {
     });
   });
 
-  it("should not show OPD treatments only when allMedicinesInPrescriptionAvailableForIPD config is false", async () => {
+  it("should show OPD treatments in IPD treatments view (preceding visit medications)", async () => {
     const treatments = [
       {
         drugOrder: {
           uuid: "1",
           effectiveStartDate: new Date("01/01/2022"),
           dateStopped: null,
-          drug: {
-            name: "Drug 1",
-          },
+          drug: { name: "Drug 1" },
           dosingInstructions: {
             dose: 1,
             doseUnits: "mg",
@@ -207,31 +205,18 @@ describe("Treatments", () => {
               '{"instructions":"As directed","additionalInstructions":"all good"}',
           },
           duration: 7,
-          durationUnits: "days",
-          provider: {
-            name: "Dr. John Doe",
-          },
+          durationUnits: "Day(s)",
           careSetting: "OUTPATIENT",
         },
+        provider: { name: "Dr. John Doe" },
       },
     ];
     const updatedAllMedications = {
       ...mockAllMedicationsProviderValue,
-      data: {
-        emergencyMedications: [],
-        ipdDrugOrders: treatments,
-      },
+      data: { emergencyMedications: [], ipdDrugOrders: treatments },
     };
     const { getByText } = render(
-      <IPDContext.Provider
-        value={{
-          config: {
-            ...mockConfig,
-            allMedicinesInPrescriptionAvailableForIPD: false,
-          },
-          isReadMode: false,
-        }}
-      >
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
         <SliderContext.Provider value={mockProviderValue}>
           <AllMedicationsContext.Provider value={updatedAllMedications}>
             <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
@@ -240,9 +225,278 @@ describe("Treatments", () => {
       </IPDContext.Provider>
     );
     await waitFor(() => {
-      expect(
-        getByText("No IPD Medication is prescribed for this patient yet")
-      ).toBeTruthy();
+      expect(getByText("Drug 1")).toBeTruthy();
+    });
+  });
+
+  describe("AC4: Admission-date filter", () => {
+    const admissionDate = new Date("2024-01-10").getTime();
+    const mockSliderWithAdmission = {
+      ...mockProviderValue,
+      visitSummary: { startDateTime: admissionDate },
+    };
+    const buildDrugOrder = (
+      autoExpireDate,
+      effectiveStartDate,
+      careSetting = "OUTPATIENT"
+    ) => ({
+      drugOrder: {
+        uuid: "ac4-drug",
+        effectiveStartDate,
+        dateStopped: null,
+        drug: { name: "AC4 Drug" },
+        autoExpireDate,
+        dosingInstructions: {
+          dose: 1,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Once a day",
+          administrationInstructions: "{}",
+        },
+        durationUnits: "Day(s)",
+        careSetting,
+      },
+      provider: { name: "Dr. Test" },
+    });
+
+    it("should NOT render OPD drug whose course ended before admission", async () => {
+      const treatments = [
+        buildDrugOrder(
+          new Date("2024-01-05").getTime(), // expired before admission
+          new Date("2024-01-01").getTime() // prescribed before admission
+        ),
+      ];
+      const { queryByText } = render(
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+          <SliderContext.Provider value={mockSliderWithAdmission}>
+            <AllMedicationsContext.Provider
+              value={{
+                ...mockAllMedicationsProviderValue,
+                data: { emergencyMedications: [], ipdDrugOrders: treatments },
+              }}
+            >
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </AllMedicationsContext.Provider>
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      );
+      await waitFor(() => {
+        expect(queryByText("AC4 Drug")).toBeNull();
+      });
+    });
+
+    it("should NOT render OPD drug whose course ended after admission but is no longer ongoing", async () => {
+      const treatments = [
+        buildDrugOrder(
+          new Date("2024-02-01").getTime(), // expired after admission but before today
+          new Date("2024-01-01").getTime() // prescribed before admission
+        ),
+      ];
+      const { queryByText } = render(
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+          <SliderContext.Provider value={mockSliderWithAdmission}>
+            <AllMedicationsContext.Provider
+              value={{
+                ...mockAllMedicationsProviderValue,
+                data: { emergencyMedications: [], ipdDrugOrders: treatments },
+              }}
+            >
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </AllMedicationsContext.Provider>
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      );
+      await waitFor(() => {
+        expect(queryByText("AC4 Drug")).toBeNull();
+      });
+    });
+
+    it("should render OPD drug whose course is still ongoing", async () => {
+      const futureDate = new Date();
+      futureDate.setFullYear(futureDate.getFullYear() + 1);
+      const treatments = [
+        buildDrugOrder(
+          futureDate.getTime(), // still ongoing
+          new Date("2024-01-01").getTime() // prescribed before admission
+        ),
+      ];
+      const { getByText } = render(
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+          <SliderContext.Provider value={mockSliderWithAdmission}>
+            <AllMedicationsContext.Provider
+              value={{
+                ...mockAllMedicationsProviderValue,
+                data: { emergencyMedications: [], ipdDrugOrders: treatments },
+              }}
+            >
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </AllMedicationsContext.Provider>
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      );
+      await waitFor(() => {
+        expect(getByText("AC4 Drug")).toBeTruthy();
+      });
+    });
+
+    it("should render OPD drug with no autoExpireDate (open-ended) regardless of admission date", async () => {
+      const treatments = [
+        buildDrugOrder(null, new Date("2024-01-01").getTime()),
+      ];
+      const { getByText } = render(
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+          <SliderContext.Provider value={mockSliderWithAdmission}>
+            <AllMedicationsContext.Provider
+              value={{
+                ...mockAllMedicationsProviderValue,
+                data: { emergencyMedications: [], ipdDrugOrders: treatments },
+              }}
+            >
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </AllMedicationsContext.Provider>
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      );
+      await waitFor(() => {
+        expect(getByText("AC4 Drug")).toBeTruthy();
+      });
+    });
+
+    it("should render IPD drug (prescribed after admission) even if course is now complete", async () => {
+      const treatments = [
+        buildDrugOrder(
+          new Date("2024-01-15").getTime(), // expired after admission but before today
+          new Date("2024-01-12").getTime(), // prescribed AFTER admission (IPD drug)
+          "INPATIENT"
+        ),
+      ];
+      const { getByText } = render(
+        <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+          <SliderContext.Provider value={mockSliderWithAdmission}>
+            <AllMedicationsContext.Provider
+              value={{
+                ...mockAllMedicationsProviderValue,
+                data: { emergencyMedications: [], ipdDrugOrders: treatments },
+              }}
+            >
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </AllMedicationsContext.Provider>
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      );
+      await waitFor(() => {
+        expect(getByText("AC4 Drug")).toBeTruthy();
+      });
+    });
+  });
+
+  describe("AC5: Add to Drug Chart disabled for completed medications", () => {
+    it("should disable Add to Tasks link for PRN drug when allSlotsAttended is true", async () => {
+      const prnDrug = {
+        drugOrder: {
+          uuid: "prn-completed",
+          effectiveStartDate: new Date("01/01/2022"),
+          dateStopped: null,
+          drug: { name: "PRN Drug" },
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            route: "Oral",
+            frequency: "Once a day",
+            asNeeded: true,
+            administrationInstructions: "{}",
+          },
+          durationUnits: "Day(s)",
+          careSetting: "INPATIENT",
+        },
+        provider: { name: "Dr. Test" },
+        drugOrderSchedule: { allSlotsAttended: true },
+        prnHasPendingPlaceholder: false,
+        prnEligible: true,
+      };
+      const { getByText } = render(
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            isReadMode: false,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <SliderContext.Provider value={mockProviderValue}>
+            <AllMedicationsContext.Provider
+              value={{
+                ...mockAllMedicationsProviderValue,
+                data: {
+                  emergencyMedications: [],
+                  ipdDrugOrders: [prnDrug],
+                },
+              }}
+            >
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </AllMedicationsContext.Provider>
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      );
+      await waitFor(() => {
+        const link = getByText("Add to Tasks").closest("a");
+        expect(link).toHaveAttribute("aria-disabled", "true");
+      });
+    });
+
+    it("should disable Add to Drug Chart link for a non-PRN drug whose autoExpireDate has passed", async () => {
+      const admissionDate = new Date("2024-01-10").getTime();
+      const expiredDrug = {
+        drugOrder: {
+          uuid: "expired-drug",
+          effectiveStartDate: new Date("2024-01-12").getTime(), // prescribed after admission (IPD drug)
+          dateStopped: null,
+          drug: { name: "Expired Drug" },
+          autoExpireDate: new Date("2024-01-15").getTime(), // course ended during IPD stay
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            route: "Oral",
+            frequency: "Once a day",
+            asNeeded: false,
+            administrationInstructions: "{}",
+          },
+          durationUnits: "Day(s)",
+          careSetting: "INPATIENT",
+        },
+        provider: { name: "Dr. Test" },
+      };
+      const { getByText } = render(
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            isReadMode: false,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <SliderContext.Provider
+            value={{
+              ...mockProviderValue,
+              visitSummary: { startDateTime: admissionDate },
+            }}
+          >
+            <AllMedicationsContext.Provider
+              value={{
+                ...mockAllMedicationsProviderValue,
+                data: {
+                  emergencyMedications: [],
+                  ipdDrugOrders: [expiredDrug],
+                },
+              }}
+            >
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </AllMedicationsContext.Provider>
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      );
+      await waitFor(() => {
+        const link = getByText("Add to Drug Chart").closest("a");
+        expect(link).toHaveAttribute("aria-disabled", "true");
+      });
     });
   });
 
@@ -1189,7 +1443,12 @@ it("should render Add to Tasks link as disabled when PRN drug order autoExpireDa
         currentUser: mockUserWithAllRequiredPrivileges,
       }}
     >
-      <SliderContext.Provider value={mockProviderValue}>
+      <SliderContext.Provider
+        value={{
+          ...mockProviderValue,
+          visitSummary: { startDateTime: new Date("2024-01-01").getTime() },
+        }}
+      >
         <AllMedicationsContext.Provider value={updatedAllMedications}>
           <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
         </AllMedicationsContext.Provider>
