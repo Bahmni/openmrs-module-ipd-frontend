@@ -35,12 +35,9 @@ export const isTimePassed = (
   return currentTime.isAfter(enteredTime);
 };
 
-const areSchedulesInOrder = (allSchedule, timeFormat, nextDayFlags = []) => {
+const areSchedulesInOrder = (allSchedule, timeFormat) => {
   return allSchedule.every((schedule, index) => {
     if (index === 0) return true;
-    // A slot flagged as crossing midnight is expected to be less than its
-    // predecessor — that is valid, not an ordering error.
-    if (nextDayFlags[index] === true) return true;
     const curr = moment.isMoment(schedule)
       ? schedule
       : moment(schedule, timeFormat);
@@ -53,17 +50,13 @@ const areSchedulesInOrder = (allSchedule, timeFormat, nextDayFlags = []) => {
   });
 };
 
-export const validateSchedules = async (
-  schedules,
-  timeFormat,
-  nextDayFlags = []
-) => {
+export const validateSchedules = async (schedules, timeFormat) => {
   if (schedules?.length > 0) {
     if (schedules.some((schedule) => schedule === "")) {
       return { isValid: false, warningType: "empty" };
     }
 
-    if (areSchedulesInOrder(schedules, timeFormat, nextDayFlags)) {
+    if (areSchedulesInOrder(schedules, timeFormat)) {
       return { isValid: true, warningType: "" };
     } else {
       return { isValid: false, warningType: "passed" };

@@ -96,32 +96,6 @@ describe("DrugChartSliderUtils", () => {
 
       expect(result).toEqual({ isValid: true, warningType: "" });
     });
-
-    it("should return valid when last slot crosses midnight and nextDayFlags marks it as next-day", async () => {
-      const schedules = ["09:00", "15:00", "21:00", "02:45"];
-      const nextDayFlags = [false, false, false, true];
-
-      const result = await validateSchedules(
-        schedules,
-        timeFormatFor24Hr,
-        nextDayFlags
-      );
-
-      expect(result).toEqual({ isValid: true, warningType: "" });
-    });
-
-    it('should still return invalid with warningType "passed" when truly out-of-order without midnight crossing', async () => {
-      const schedules = ["09:00", "15:00", "10:00", "21:00"];
-      const nextDayFlags = [false, false, false, false];
-
-      const result = await validateSchedules(
-        schedules,
-        timeFormatFor24Hr,
-        nextDayFlags
-      );
-
-      expect(result).toEqual({ isValid: false, warningType: "passed" });
-    });
   });
 
   describe("updateStartTimeBasedOnFrequency", () => {
