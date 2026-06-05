@@ -68,9 +68,7 @@ export const transformDrugOrders = (orders) => {
           dosage,
           doseUnits,
           asNeeded: dosingInstructions.asNeeded,
-          frequency: parsedInstructions?.isLoadingDose
-            ? "Loading Dose"
-            : dosingInstructions.frequency,
+          frequency: dosingInstructions.frequency,
           instructions: parsedInstructions,
         },
         duration: duration ? duration + " " + durationUnits : null,

@@ -1,9 +1,19 @@
 import React from "react";
 import VerticalTabs from "../../../../components/VerticalTabs/VerticalTabs";
 import PropTypes from "prop-types";
+import VariableDoseStagesTable from "./VariableDoseStagesTable";
 
 const ExpandableRowData = (props) => {
   const { expandTreatmentData } = props;
+
+  if (expandTreatmentData.isVariableDose) {
+    return (
+      <VariableDoseStagesTable
+        fhirDosages={expandTreatmentData.fhirDosages || []}
+        effectiveStartDate={expandTreatmentData.effectiveStartDate}
+      />
+    );
+  }
 
   const fetchAdditionalData = (additionalData) => {
     return additionalData

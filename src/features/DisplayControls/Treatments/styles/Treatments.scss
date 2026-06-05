@@ -8,6 +8,9 @@
 
 .treatments-drug-name {
   width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .notes-icon-div,
@@ -27,6 +30,22 @@
   .display-tags {
     display: flex;
   }
+}
+
+.variable-dose-row {
+  background-color: #fef5d3 !important;
+}
+
+.variable-dose-cell {
+  background-color: #fef5d3 !important;
+}
+
+.tooltip-content-separater {
+  height: 1px;
+  background-color: #bbb8b8;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .strike-through {

@@ -5,6 +5,7 @@ import {
   stopDrugOrders,
   getEncounterType,
   getDrugName,
+  setDosingInstructions,
   getPRNIntervalInMinutes,
   isPRNEligibleForNextDose,
   updateDrugOrderList,
@@ -12,6 +13,9 @@ import {
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
 import "@testing-library/jest-dom/extend-expect";
+
+const FHIR_DOSING_INSTRUCTION_TYPE =
+  "org.openmrs.module.bahmniemrapi.drugorder.dosinginstructions.FhirDosingInstructions";
 
 jest.mock("axios");
 
@@ -136,27 +140,19 @@ describe("TreatmentsUtils", () => {
   });
 
   describe("updateDrugOrderList", () => {
-    const buildDrugOrder = (frequency, isLoadingDose) => ({
-      drugOrder: {
-        dosingInstructions: {
-          dose: 1,
-          doseUnits: "mg",
-          frequency,
-          route: "Oral",
-          administrationInstructions: JSON.stringify({ isLoadingDose }),
+    it("should keep original frequency in uniformDosingType for regular orders", () => {
+      const drugOrderList = [{
+        drugOrder: {
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            frequency: "Once a day",
+            route: "Oral",
+            administrationInstructions: JSON.stringify({ isLoadingDose: false }),
+          },
+          durationUnits: "Day(s)",
         },
-        durationUnits: "Day(s)",
-      },
-    });
-
-    it("should set uniformDosingType.frequency to 'Loading Dose' when isLoadingDose is true", () => {
-      const drugOrderList = [buildDrugOrder("STAT (Immediately)", true)];
-      const result = updateDrugOrderList(drugOrderList);
-      expect(result[0].uniformDosingType.frequency).toBe("Loading Dose");
-    });
-
-    it("should keep original frequency in uniformDosingType when isLoadingDose is false", () => {
-      const drugOrderList = [buildDrugOrder("Once a day", false)];
+      }];
       const result = updateDrugOrderList(drugOrderList);
       expect(result[0].uniformDosingType.frequency).toBe("Once a day");
     });
@@ -223,5 +219,34 @@ describe("TreatmentsUtils", () => {
       queryByText("Paracetamol").classList.contains("strike-through")
     ).toBeFalsy();
     expect(queryByTestId("notes-icon")).toBeTruthy();
+  });
+
+  describe("setDosingInstructions", () => {
+    it("should return Variable Dosage Protocol for variable dose orders", () => {
+      const drugOrder = {
+        dosingInstructionType: FHIR_DOSING_INSTRUCTION_TYPE,
+        dosingInstructions: { dose: 10, doseUnits: "mg", route: null },
+        dateStopped: null,
+      };
+      const { getByText } = render(setDosingInstructions(drugOrder));
+      expect(getByText("Variable Dosage Protocol")).toBeInTheDocument();
+    });
+
+    it("should return regular dosage string for non-variable dose orders", () => {
+      const drugOrder = {
+        dosingInstructionType: "FlexibleDosingInstructions",
+        dosingInstructions: {
+          dose: 100,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Once a day",
+        },
+        duration: 5,
+        durationUnits: "Day(s)",
+        dateStopped: null,
+      };
+      const { getByText } = render(setDosingInstructions(drugOrder));
+      expect(getByText(/100 mg - Oral - Once a day/)).toBeInTheDocument();
+    });
   });
 });

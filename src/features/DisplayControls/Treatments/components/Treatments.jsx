@@ -29,6 +29,7 @@ import {
   getCookies,
   isUserPrivileged,
 } from "../../../../utils/CommonUtils";
+import { isVariableDoseOrder } from "../../../../utils/FhirDosingUtils";
 import {
   ForbiddenErrorMessage,
   GenericErrorMessage,
@@ -396,6 +397,9 @@ const Treatments = (props) => {
               );
             }
           };
+          const isVariableDose = isVariableDoseOrder(
+            drugOrder.dosingInstructionType
+          );
           return {
             id: drugOrder.uuid,
             startDate: formatDate(drugOrder.effectiveStartDate),
@@ -403,7 +407,7 @@ const Treatments = (props) => {
             dosageDetails: setDosingInstructions(drugOrder),
             providerName: drugOrderObject.provider.name,
             status: getStatus(),
-            actions: actionsObjectValue.link,
+            actions: isVariableDose ? null : actionsObjectValue.link,
             additionalData: {
               instructions: drugOrderObject.instructions
                 ? drugOrderObject.instructions
@@ -426,6 +430,11 @@ const Treatments = (props) => {
                 " | " +
                 formatDate(drugOrder.dateStopped, defaultDateTimeFormat),
               isScheduled: actionsObjectValue?.isScheduled,
+              isVariableDose,
+              fhirDosages: isVariableDose
+                ? drugOrderObject.fhirDosages || []
+                : [],
+              effectiveStartDate: drugOrder.effectiveStartDate,
             },
           };
         })
@@ -443,6 +452,9 @@ const Treatments = (props) => {
         stopReason: treatment.additionalData.stopReason,
         stopperAdditionalData: treatment.additionalData.stopperAdditionalData,
         isNotScheduled: !(treatment.additionalData.isScheduled ?? true),
+        isVariableDose: treatment.additionalData.isVariableDose,
+        fhirDosages: treatment.additionalData.fhirDosages,
+        effectiveStartDate: treatment.additionalData.effectiveStartDate,
       };
     });
     setAdditionalData(additionalMappedData);
@@ -646,6 +658,7 @@ const Treatments = (props) => {
             return <TreatmentExpandableRow data={additionalData} />;
           }}
           useZebraStyles={true}
+          isExpandable={(data) => !!data.isVariableDose}
         />
       )}
     </>

@@ -11,8 +11,14 @@ table.bx--data-table {
     background: transparent;
   }
   tr.bx--expandable-row.expandable-row-content {
-    td {
+    > td {
       background-color: transparent !important;
+    }
+  }
+  tr.bx--expandable-row.variable-dose-expanded-row {
+    > td {
+      background-color: #ffffff !important;
+      padding: 0 !important;
     }
   }
 }
@@ -25,5 +31,26 @@ table.bx--data-table {
     td.bx--table-expand {
       background-color: #f2ffea !important;
     }
+  }
+  .variable-dose-row {
+    td.bx--table-expand {
+      background-color: #fef5d3 !important;
+    }
+  }
+  tbody tr.green-row:hover td {
+    background-color: #f2ffea !important;
+    opacity: 1 !important;
+  }
+  tbody tr.green-row:hover .bx--table-expand__button {
+    background-color: transparent !important;
+    opacity: 1 !important;
+  }
+  tbody tr.variable-dose-row:hover td {
+    background-color: #fef5d3 !important;
+    opacity: 1 !important;
+  }
+  tbody tr.variable-dose-row:hover .bx--table-expand__button {
+    background-color: transparent !important;
+    opacity: 1 !important;
   }
 }

@@ -251,5 +251,12 @@
   "DRUG_CHART_UPDATE_COMPLETE_SCHEDULE": "Update Complete Schedule",
   "DRUG_CHART_SCHEDULE_MODIFICATION_INFO": "Any modifications in the timings will automatically update the remaining schedule for today.",
   "DRUG_CHART_MODAL_SCHEDULE_NEXT_DAY_WARNING": "Updated timing causes highlighted doses to cross midnight and appear on the next day.",
-  "DRUG_CHART_MEDICATION_SCHEDULE": "Medication Schedule"
+  "DRUG_CHART_MEDICATION_SCHEDULE": "Medication Schedule",
+  "VARIABLE_DOSAGE_PROTOCOL": "Variable Dosage Protocol",
+  "VARIABLE_DOSE_STAGE_COLUMN": "Stage",
+  "VARIABLE_DOSE_START_DATE_COLUMN": "Start Date",
+  "VARIABLE_DOSE_DOSE_COLUMN": "Dose",
+  "VARIABLE_DOSE_FREQUENCY_COLUMN": "Frequency",
+  "VARIABLE_DOSE_DURATION_COLUMN": "Duration",
+  "VARIABLE_DOSE_ACTIONS_COLUMN": "Actions"
 }

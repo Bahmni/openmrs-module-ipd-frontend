@@ -11,9 +11,16 @@ import {
 } from "../../../../constants";
 import axios from "axios";
 import { FormattedMessage } from "react-intl";
+import NoteIcon from "../../../../icons/note.svg";
 import NotesIcon from "../../../../icons/notes.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
+import { TooltipCarbon } from "bahmni-carbon-ui";
 import { formatDate } from "../../../../utils/DateTimeUtils";
+import {
+  parseFhirDosages,
+  parseFlatAdminInstructions,
+  isVariableDoseOrder,
+} from "../../../../utils/FhirDosingUtils";
 
 export const treatmentHeaders = [
   {
@@ -122,25 +129,37 @@ export const updateDrugOrderList = (drugOrderList) => {
     };
     ipdDrugOrder.route = ipdDrugOrder.drugOrder.dosingInstructions.route;
     ipdDrugOrder.durationUnit = ipdDrugOrder.drugOrder.durationUnits;
-    const administrationInstructions = JSON.parse(
-      ipdDrugOrder.drugOrder.dosingInstructions.administrationInstructions
-    );
-    ipdDrugOrder.instructions = administrationInstructions.instructions
-      ? administrationInstructions.instructions
-      : "";
-    ipdDrugOrder.additionalInstructions =
-      administrationInstructions.additionalInstructions
-        ? administrationInstructions.additionalInstructions
-        : "";
-    ipdDrugOrder.rate = administrationInstructions.rate
-      ? administrationInstructions.rate
-      : null;
-    ipdDrugOrder.additives = administrationInstructions.additives
-      ? administrationInstructions.additives
-      : null;
-    if (administrationInstructions.isLoadingDose) {
-      ipdDrugOrder.drugOrder.dosingInstructions.frequency = "Loading Dose";
-      ipdDrugOrder.uniformDosingType.frequency = "Loading Dose";
+    const adminInstructionsStr =
+      ipdDrugOrder.drugOrder.dosingInstructions.administrationInstructions;
+    if (isVariableDoseOrder(ipdDrugOrder.drugOrder.dosingInstructionType)) {
+      const fhirDosages = parseFhirDosages(adminInstructionsStr) || [];
+      ipdDrugOrder.fhirDosages = fhirDosages;
+      ipdDrugOrder.instructions = "";
+      ipdDrugOrder.additionalInstructions = "";
+      ipdDrugOrder.rate = null;
+      ipdDrugOrder.additives = null;
+
+      const { quantity, quantityUnits, doseUnits } =
+        ipdDrugOrder.drugOrder.dosingInstructions;
+      const displayDose = quantity || null;
+      const displayUnits = quantityUnits || doseUnits || null;
+
+      ipdDrugOrder.drugOrder.dosingInstructions.dose = displayDose;
+      ipdDrugOrder.drugOrder.dosingInstructions.doseUnits = displayUnits;
+      ipdDrugOrder.drugOrder.dosingInstructions.frequency = null;
+      ipdDrugOrder.uniformDosingType = {
+        dose: displayDose,
+        doseUnits: displayUnits,
+        frequency: null,
+      };
+    } else {
+      const administrationInstructions =
+        parseFlatAdminInstructions(adminInstructionsStr);
+      ipdDrugOrder.instructions = administrationInstructions.instructions || "";
+      ipdDrugOrder.additionalInstructions =
+        administrationInstructions.additionalInstructions || "";
+      ipdDrugOrder.rate = administrationInstructions.rate || null;
+      ipdDrugOrder.additives = administrationInstructions.additives || null;
     }
   });
   return drugOrderList;
@@ -200,6 +219,17 @@ export const isDrugOrderStoppedWithoutAdministration = (drugOrderObject) => {
 };
 
 export const setDosingInstructions = (drugOrder) => {
+  if (isVariableDoseOrder(drugOrder.dosingInstructionType)) {
+    return (
+      <div className={drugOrder.dateStopped ? "strike-through" : ""}>
+        <FormattedMessage
+          id="VARIABLE_DOSAGE_PROTOCOL"
+          defaultMessage="Variable Dosage Protocol"
+        />
+      </div>
+    );
+  }
+
   let dosingInstructions =
     drugOrder.dosingInstructions.dose +
     " " +
@@ -226,7 +256,7 @@ export const setDosingInstructions = (drugOrder) => {
 export const getDrugName = (drugOrderObject) => {
   const drugOrder = drugOrderObject.drugOrder;
   const drugNonCoded = drugOrder.drugNonCoded || null;
-  const isNotesIconDiv =
+  const hasNoteContent =
     drugOrder.drug &&
     (drugOrderObject.instructions ||
       drugOrderObject.additionalInstructions ||
@@ -235,8 +265,64 @@ export const getDrugName = (drugOrderObject) => {
       drugOrder.orderReasonConcept ||
       drugOrder.orderReasonText);
 
+  const noteTooltipContent = hasNoteContent ? (
+    <div>
+      {drugOrderObject.instructions && (
+        <>Instructions:&nbsp;{drugOrderObject.instructions}</>
+      )}
+      {drugOrderObject.additionalInstructions && (
+        <>
+          {drugOrderObject.instructions && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
+          Additional Instructions:&nbsp;{drugOrderObject.additionalInstructions}
+        </>
+      )}
+      {drugOrderObject.rate && (
+        <>
+          {(drugOrderObject.instructions ||
+            drugOrderObject.additionalInstructions) && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
+          Rate:&nbsp;{drugOrderObject.rate} ml/hr
+        </>
+      )}
+      {drugOrderObject.additives && (
+        <>
+          {(drugOrderObject.instructions ||
+            drugOrderObject.additionalInstructions ||
+            drugOrderObject.rate) && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
+          Additives:&nbsp;{drugOrderObject.additives}
+        </>
+      )}
+      {getStopReason(drugOrder) && (
+        <>
+          {(drugOrderObject.instructions ||
+            drugOrderObject.additionalInstructions) && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
+          Stopped Notes:&nbsp;{getStopReason(drugOrder)}
+        </>
+      )}
+    </div>
+  ) : null;
+
   const drugNameValue = (
-    <div className={isNotesIconDiv ? "notes-icon-div" : "no-notes-icon-div"}>
+    <div className={hasNoteContent ? "notes-icon-div" : "no-notes-icon-div"}>
       <span
         className={`treatments-drug-name ${
           drugOrder.dateStopped && "strike-through"
@@ -245,8 +331,11 @@ export const getDrugName = (drugOrderObject) => {
         <span>
           {drugNonCoded !== null ? drugNonCoded : drugOrder.drug.name}
         </span>
-        {isNotesIconDiv && (
-          <NotesIcon className="notes-icon" data-testid="notes-icon" />
+        {hasNoteContent && (
+          <TooltipCarbon
+            icon={() => <NoteIcon data-testid="notes-icon" />}
+            content={noteTooltipContent}
+          />
         )}
       </span>
       <div className={"display-tags"}>
