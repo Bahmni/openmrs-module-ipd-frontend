@@ -542,7 +542,8 @@ const DrugChartSlider = (props) => {
   const handleScheduleWarnings = async () => {
     const { isValid, warningType } = await validateSchedules(
       schedules,
-      timeFormat
+      timeFormat,
+      showSubsequentDayScheduleNextDayWarning
     );
     setShowEmptyScheduleWarning(!isValid && warningType === "empty");
     setShowScheduleOrderWarning(!isValid && warningType === "passed");
@@ -562,11 +563,20 @@ const DrugChartSlider = (props) => {
   };
 
   const handleFirstDayScheduleWarnings = async () => {
+    const filteredSchedules = firstDaySchedules.filter(
+      (firstDaySchedule) => firstDaySchedule !== UNSET_SCHEDULE_TIME
+    );
+    const filteredNextDayFlags = firstDaySchedules.reduce(
+      (flags, schedule, i) =>
+        schedule !== UNSET_SCHEDULE_TIME
+          ? [...flags, showFirstDayScheduleNextDayWarning[i] || false]
+          : flags,
+      []
+    );
     const { isValid, warningType } = await validateSchedules(
-      firstDaySchedules.filter(
-        (firstDaySchedule) => firstDaySchedule != UNSET_SCHEDULE_TIME
-      ),
-      timeFormat
+      filteredSchedules,
+      timeFormat,
+      filteredNextDayFlags
     );
     setShowEmptyFirstDayScheduleWarning(!isValid && warningType === "empty");
     setShowFirstDayScheduleOrderWarning(!isValid && warningType === "passed");
@@ -586,7 +596,8 @@ const DrugChartSlider = (props) => {
   const handleFinalDayScheduleWarnings = async () => {
     const { isValid, warningType } = await validateSchedules(
       finalDaySchedules,
-      timeFormat
+      timeFormat,
+      showFinalDayScheduleNextDayWarning
     );
     setShowEmptyFinalDayScheduleWarning(!isValid && warningType === "empty");
     setShowFinalDayScheduleOrderWarning(!isValid && warningType === "passed");
