@@ -9,6 +9,7 @@ import {
   getPRNIntervalInMinutes,
   isPRNEligibleForNextDose,
   updateDrugOrderList,
+  shouldIncludeInIPDDashboard,
 } from "../utils/TreatmentsUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
@@ -155,6 +156,79 @@ describe("TreatmentsUtils", () => {
       }];
       const result = updateDrugOrderList(drugOrderList);
       expect(result[0].uniformDosingType.frequency).toBe("Once a day");
+    });
+
+    it("should set isDischargeMedication to true when isDischargeMedication is true in administrationInstructions", () => {
+      const drugOrder = {
+        drugOrder: {
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            frequency: "Once a day",
+            route: "Oral",
+            administrationInstructions: JSON.stringify({
+              isLoadingDose: false,
+              isDischargeMedication: true,
+            }),
+          },
+          durationUnits: "Day(s)",
+        },
+      };
+      const result = updateDrugOrderList([drugOrder]);
+      expect(result[0].isDischargeMedication).toBe(true);
+    });
+
+    it("should set isDischargeMedication to false when not present in administrationInstructions", () => {
+      const drugOrder = {
+        drugOrder: {
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            frequency: "Once a day",
+            route: "Oral",
+            administrationInstructions: JSON.stringify({
+              isLoadingDose: false,
+            }),
+          },
+          durationUnits: "Day(s)",
+        },
+      };
+      const result = updateDrugOrderList([drugOrder]);
+      expect(result[0].isDischargeMedication).toBe(false);
+    });
+  });
+
+  describe("shouldIncludeInIPDDashboard", () => {
+    const buildOrder = (careSetting, isDischargeMedication) => ({
+      drugOrder: { careSetting },
+      isDischargeMedication,
+    });
+
+    it("should exclude OUTPATIENT order with DISCH tag", () => {
+      expect(
+        shouldIncludeInIPDDashboard(buildOrder("OUTPATIENT", true), true)
+      ).toBe(false);
+    });
+
+    it("should include OUTPATIENT order without DISCH tag", () => {
+      expect(
+        shouldIncludeInIPDDashboard(buildOrder("OUTPATIENT", false), true)
+      ).toBe(true);
+    });
+
+    it("should include INPATIENT order regardless of DISCH tag", () => {
+      expect(
+        shouldIncludeInIPDDashboard(buildOrder("INPATIENT", false), true)
+      ).toBe(true);
+    });
+
+    it("should include only INPATIENT orders when allMedicinesInPrescriptionAvailableForIPD is false", () => {
+      expect(
+        shouldIncludeInIPDDashboard(buildOrder("INPATIENT", false), false)
+      ).toBe(true);
+      expect(
+        shouldIncludeInIPDDashboard(buildOrder("OUTPATIENT", false), false)
+      ).toBe(false);
     });
   });
 

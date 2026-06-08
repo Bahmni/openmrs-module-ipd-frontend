@@ -21,6 +21,7 @@ import {
   parseFlatAdminInstructions,
   isVariableDoseOrder,
 } from "../../../../utils/FhirDosingUtils";
+import { isIPDrugOrder } from "../../../../utils/CommonUtils";
 
 export const treatmentHeaders = [
   {
@@ -160,6 +161,8 @@ export const updateDrugOrderList = (drugOrderList) => {
         administrationInstructions.additionalInstructions || "";
       ipdDrugOrder.rate = administrationInstructions.rate || null;
       ipdDrugOrder.additives = administrationInstructions.additives || null;
+      ipdDrugOrder.isDischargeMedication =
+        administrationInstructions.isDischargeMedication || false;
     }
   });
   return drugOrderList;
@@ -172,16 +175,25 @@ export const isMedicationCourseEndedBeforeAdmission = (
   const { autoExpireDate, effectiveStartDate, careSetting } = drugOrder;
 
   if (careSetting === "OUTPATIENT") {
-    // OPD medications: filter once the course is no longer ongoing
     if (!autoExpireDate) return false;
     return new Date(autoExpireDate) < new Date();
   }
 
-  // INPATIENT medications prescribed on or after admission (current visit): always show
   if (new Date(effectiveStartDate) >= new Date(admissionDate)) return false;
-  // INPATIENT medications from a prior IPD stay: filter if course ended before this admission
   if (!autoExpireDate) return false;
   return new Date(autoExpireDate) < new Date(admissionDate);
+};
+
+export const shouldIncludeInIPDDashboard = (
+  drugOrderObject,
+  allMedicinesInPrescriptionAvailableForIPD
+) => {
+  if (!allMedicinesInPrescriptionAvailableForIPD)
+    return isIPDrugOrder(drugOrderObject.drugOrder);
+  return !(
+    !isIPDrugOrder(drugOrderObject.drugOrder) &&
+    drugOrderObject.isDischargeMedication
+  );
 };
 
 export const AddToDrugChart = (

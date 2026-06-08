@@ -24,6 +24,7 @@ import {
   getSlotsForAnOrderAndServiceType,
   isPRNEligibleForNextDose,
   isMedicationCourseEndedBeforeAdmission,
+  shouldIncludeInIPDDashboard,
 } from "../utils/TreatmentsUtils";
 import {
   getCookies,
@@ -306,13 +307,20 @@ const Treatments = (props) => {
 
   const modifyPrescribedTreatmentData = async (drugOrders, prnInterval) => {
     const admissionDate = visitSummary?.startDateTime;
-    drugOrders = drugOrders.filter(
-      (drugOrderObject) =>
-        !isMedicationCourseEndedBeforeAdmission(
+    drugOrders = drugOrders.filter((drugOrderObject) => {
+      if (
+        isMedicationCourseEndedBeforeAdmission(
           drugOrderObject.drugOrder,
           admissionDate
         )
-    );
+      ) {
+        return false;
+      }
+      return shouldIncludeInIPDDashboard(
+        drugOrderObject,
+        allMedicinesInPrescriptionAvailableForIPD
+      );
+    });
     const prescribedTreatments = await Promise.all(
       drugOrders
         .filter(
