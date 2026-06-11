@@ -597,6 +597,93 @@ describe("DrugChartUtils", () => {
       expect(mapped).toHaveLength(1);
       expect(mapped[0].slots).toHaveLength(1);
       expect(mapped[0].slots[0].startTime).toBe(startTime);
+     });
+   });
+  describe("transformDrugOrders", () => {
+    it("should skip emergency medications with null drug", () => {
+      const orders = {
+        ipdDrugOrders: [],
+        emergencyMedications: [
+          {
+            drug: null,
+            uuid: "em-uuid-1",
+            route: { display: "Oral" },
+            administeredDateTime: 1700000000000,
+            dose: 500,
+            doseUnits: { display: "mg" },
+          },
+        ],
+      };
+      const result = transformDrugOrders(orders);
+      expect(result).toEqual({});
+    });
+
+    it("should skip emergency medications with undefined drug", () => {
+      const orders = {
+        ipdDrugOrders: [],
+        emergencyMedications: [
+          {
+            uuid: "em-uuid-1",
+            route: { display: "Oral" },
+            administeredDateTime: 1700000000000,
+            dose: 500,
+            doseUnits: { display: "mg" },
+          },
+        ],
+      };
+      const result = transformDrugOrders(orders);
+      expect(result).toEqual({});
+    });
+
+    it("should process emergency medications with valid drug", () => {
+      const orders = {
+        ipdDrugOrders: [],
+        emergencyMedications: [
+          {
+            drug: { uuid: "drug-uuid", display: "Paracetamol" },
+            uuid: "em-uuid-1",
+            route: { display: "Oral" },
+            administeredDateTime: 1700000000000,
+            dose: 500,
+            doseUnits: { display: "mg" },
+          },
+        ],
+      };
+      const result = transformDrugOrders(orders);
+      expect(result["em-uuid-1"]).toBeDefined();
+      expect(result["em-uuid-1"].name).toBe("Paracetamol");
+      expect(result["em-uuid-1"].dosingInstructions.emergency).toBe(true);
+      expect(result["em-uuid-1"].dosingInstructions.dosage).toBe("500mg");
+      expect(result["em-uuid-1"].dosingInstructions.route).toBe("Oral");
+      expect(result["em-uuid-1"].firstSlotStartTime).toBe(1700000000);
+    });
+
+    it("should process mix of valid and null-drug emergency medications", () => {
+      const orders = {
+        ipdDrugOrders: [],
+        emergencyMedications: [
+          {
+            drug: null,
+            uuid: "em-null",
+            route: { display: "Oral" },
+            administeredDateTime: 1700000000000,
+            dose: 500,
+            doseUnits: { display: "mg" },
+          },
+          {
+            drug: { uuid: "drug-uuid", display: "Ibuprofen" },
+            uuid: "em-valid",
+            route: { display: "IV" },
+            administeredDateTime: 1700001000000,
+            dose: 200,
+            doseUnits: { display: "ml" },
+          },
+        ],
+      };
+      const result = transformDrugOrders(orders);
+      expect(result["em-null"]).toBeUndefined();
+      expect(result["em-valid"]).toBeDefined();
+      expect(result["em-valid"].name).toBe("Ibuprofen");
     });
   });
 });
