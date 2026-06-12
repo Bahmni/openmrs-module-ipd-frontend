@@ -60,6 +60,7 @@ const CareInstructions = (props) => {
   const [acknowledgedObsUuids, setAcknowledgedObsUuids] = useState(new Set());
   const [selectedObservationUuid, setSelectedObservationUuid] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAcknowledgedLoading, setIsAcknowledgedLoading] = useState(false);
 
   const careInstructionsHeaders = useMemo(
     () => [
@@ -152,7 +153,10 @@ const CareInstructions = (props) => {
       .map((instruction) => instruction.observationUuid)
       .filter(Boolean);
     if (obsUuids.length === 0) return;
-    fetchAcknowledgedObservationUuids(obsUuids).then(setAcknowledgedObsUuids);
+    setIsAcknowledgedLoading(true);
+    fetchAcknowledgedObservationUuids(obsUuids)
+      .then(setAcknowledgedObsUuids)
+      .finally(() => setIsAcknowledgedLoading(false));
   }, [instructions]);
 
   const notAcknowledgedInstructions = useMemo(
@@ -181,7 +185,10 @@ const CareInstructions = (props) => {
       </TableHead>
       <TableBody>
         {rows.map((row) => (
-          <TableRow key={row.id}>
+          <TableRow
+            key={row.id}
+            className={row.previousVersionUuid ? "edited-instruction-row" : ""}
+          >
             <TableCell>
               {getDateTimeFromEpochTime(
                 row.encounterDateTime,
@@ -246,7 +253,7 @@ const CareInstructions = (props) => {
     return renderInstructionRows(acknowledgedInstructions);
   };
 
-  if (isLoading) {
+  if (isLoading || isAcknowledgedLoading) {
     return (
       <div data-testid="care-instructions-loading">
         <DataTableSkeleton

@@ -1,3 +1,5 @@
+$edited-instruction-highlight: #e9f3fb;
+
 .care-instructions-display-control {
   .empty-state-message {
     padding-top: 10px;
@@ -13,5 +15,12 @@
 
   .bx--tab-content {
     padding: 1rem 0 0 0;
+  }
+
+  .edited-instruction-row {
+    background-color: $edited-instruction-highlight;
+    td {
+      background-color: $edited-instruction-highlight !important;
+    }
   }
 }

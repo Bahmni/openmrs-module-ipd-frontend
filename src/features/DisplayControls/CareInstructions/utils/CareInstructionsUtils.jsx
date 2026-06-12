@@ -125,6 +125,7 @@ export const mapObservationsToInstructions = (observations, formConcepts) => {
       instructionType: obs.concept.name,
       instruction,
       providerName: obs.providers?.[0]?.name ?? "",
+      previousVersionUuid: obs.previousVersionUuid ?? null,
       action: "",
     });
 
