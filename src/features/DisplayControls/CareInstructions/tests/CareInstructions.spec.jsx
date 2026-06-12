@@ -557,6 +557,61 @@ describe("CareInstructions", () => {
     });
   });
 
+  it("should add edited-instruction-row class when obs has previousVersionUuid set by backend", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockResolvedValue([
+        {
+          uuid: "obs-uuid-edited",
+          encounterDateTime: 1713955252000,
+          encounterUuid: "encounter-uuid-1",
+          formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+          concept: { name: "Instruction for the Ward" },
+          value: "Edited instruction",
+          providers: [{ name: "Dr. Smith" }],
+          previousVersionUuid: "obs-uuid-original",
+          groupMembers: [],
+        },
+      ]);
+
+    const { getAllByRole } = renderWithProviders(
+      <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
+      mockIPDContextWithData
+    );
+
+    await waitFor(() => {
+      const rows = getAllByRole("row");
+      expect(rows[1].className).toContain("edited-instruction-row");
+    });
+  });
+
+  it("should not add edited-instruction-row class when previousVersionUuid is null", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockResolvedValue([
+        {
+          uuid: "obs-uuid-normal",
+          encounterDateTime: 1713955252000,
+          encounterUuid: "encounter-uuid-1",
+          formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+          concept: { name: "Instruction for the Ward" },
+          value: "Normal instruction",
+          providers: [{ name: "Dr. Smith" }],
+          groupMembers: [],
+        },
+      ]);
+
+    const { getAllByRole } = renderWithProviders(
+      <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
+      mockIPDContextWithData
+    );
+
+    await waitFor(() => {
+      const rows = getAllByRole("row");
+      expect(rows[1].className).not.toContain("edited-instruction-row");
+    });
+  });
+
   it("should render separate rows when same form is filled in different encounters (AC #4)", async () => {
     jest
       .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
@@ -767,6 +822,45 @@ describe("mapObservationsToInstructions", () => {
     );
     expect(result).toHaveLength(1);
     expect(result[0].providerName).toBe("");
+  });
+
+  it("should map previousVersionUuid from obs to instruction", () => {
+    const observations = [
+      {
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+        concept: { name: "Instruction for the Ward" },
+        value: "Updated instruction",
+        providers: [{ name: "Dr. Smith" }],
+        previousVersionUuid: "prev-obs-uuid-123",
+      },
+    ];
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
+      observations,
+      mockFormConcepts
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].previousVersionUuid).toBe("prev-obs-uuid-123");
+  });
+
+  it("should set previousVersionUuid to null when obs has no previousVersionUuid", () => {
+    const observations = [
+      {
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+        concept: { name: "Instruction for the Ward" },
+        value: "Some instruction",
+        providers: [{ name: "Dr. Smith" }],
+      },
+    ];
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
+      observations,
+      mockFormConcepts
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].previousVersionUuid).toBeNull();
   });
 });
 
