@@ -192,3 +192,8 @@ export const sliderTypes = {
   ACKNOWLEDGEMENT: "acknowledgement",
   HISTORY: "history",
 };
+
+export const DOSE_UNITS = ["ml", "mg", "mcg"];
+
+export const LOADING_DOSE_SEQUENCE_OFFSET = 1;
+export const NO_LOADING_DOSE_SEQUENCE_OFFSET = 0;

@@ -745,6 +745,10 @@ const DrugChartSlider = (props) => {
           medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
       }
     }
+    if (hostData?.drugOrder?.variableDosageSequence != null) {
+      payload.variableDosageSequence =
+        hostData.drugOrder.variableDosageSequence;
+    }
     return payload;
   };
 

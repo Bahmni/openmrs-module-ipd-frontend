@@ -15,7 +15,7 @@
   .order-details {
     display: flex;
     flex-direction: column;
-    max-width: calc(100% - 6rem);
+    max-width: calc(100% - 8rem);
     gap: 2px;
   }
 
@@ -45,16 +45,22 @@
   .medication-tags {
     margin-left: auto;
     margin-right: 0;
+    .bx--tag {
+      white-space: nowrap;
+    }
   }
 }
 
 .drug-name-container {
   display: flex;
   align-items: center;
+  overflow: hidden;
 }
 
 .name-tooltip {
-  max-width: 100%;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
   [id*="definition-tooltip-"] {
     color: #fff;
     font-size: 0.875rem;
@@ -72,6 +78,7 @@
 }
 
 .note-icon-container {
+  flex-shrink: 0;
   cursor: pointer;
   margin-left: 5px;
 }
@@ -89,4 +96,18 @@
   background-color: #ff0000;
   min-width: 64px;
   margin: 4px 0;
+}
+
+.bx--tooltip__content {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.vdp-tooltip-stage {
+  margin-bottom: 24px;
+
+  .vdp-tooltip-stage-header {
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
 }

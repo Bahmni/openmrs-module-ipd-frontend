@@ -10,6 +10,7 @@ import {
   isPRNEligibleForNextDose,
   updateDrugOrderList,
   shouldIncludeInIPDDashboard,
+  getActiveStageIndex,
 } from "../utils/TreatmentsUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
@@ -321,6 +322,67 @@ describe("TreatmentsUtils", () => {
       };
       const { getByText } = render(setDosingInstructions(drugOrder));
       expect(getByText(/100 mg - Oral - Once a day/)).toBeInTheDocument();
+    });
+  });
+
+  describe("getActiveStageIndex", () => {
+    const ONE_DAY_MS = 86400000;
+    const pastDate = Date.now() - ONE_DAY_MS;
+    const futureDate = Date.now() + ONE_DAY_MS;
+
+    const dosage = (sequence) => ({ sequence });
+    const scheduled = (sequence, allAttended = false) => ({
+      variableDosageSequence: sequence,
+      isScheduled: true,
+      allAttended,
+    });
+
+    it("should return index of first unscheduled stage whose start date has passed", () => {
+      const fhirDosages = [dosage(1), dosage(2)];
+      const stageSchedules = [scheduled(1, true)];
+      const startDates = [pastDate, pastDate];
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(1);
+    });
+
+    it("should return -1 when a scheduled stage is not yet attended", () => {
+      const fhirDosages = [dosage(1), dosage(2)];
+      const stageSchedules = [scheduled(1, false)];
+      const startDates = [pastDate, pastDate];
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(-1);
+    });
+
+    it("should return -1 when all stages are attended", () => {
+      const fhirDosages = [dosage(1), dosage(2)];
+      const stageSchedules = [scheduled(1, true), scheduled(2, true)];
+      const startDates = [pastDate, pastDate];
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(-1);
+    });
+
+    it("should return -1 when next stage start date is in the future", () => {
+      const fhirDosages = [dosage(1), dosage(2)];
+      const stageSchedules = [scheduled(1, true)];
+      const startDates = [pastDate, futureDate];
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(-1);
+    });
+
+    it("should return -1 when no stages are scheduled and start date is in the future", () => {
+      const fhirDosages = [dosage(1)];
+      const stageSchedules = [];
+      const startDates = [futureDate];
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(-1);
+    });
+
+    it("should return 0 when first stage is unscheduled and start date has passed", () => {
+      const fhirDosages = [dosage(1), dosage(2)];
+      const stageSchedules = [];
+      const startDates = [pastDate, futureDate];
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(0);
+    });
+
+    it("should return -1 when stageSchedules is null", () => {
+      const fhirDosages = [dosage(1)];
+      const startDates = [futureDate];
+      expect(getActiveStageIndex(fhirDosages, null, startDates)).toBe(-1);
     });
   });
 });

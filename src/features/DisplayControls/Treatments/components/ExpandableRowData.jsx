@@ -11,6 +11,12 @@ const ExpandableRowData = (props) => {
       <VariableDoseStagesTable
         fhirDosages={expandTreatmentData.fhirDosages || []}
         effectiveStartDate={expandTreatmentData.effectiveStartDate}
+        stageSchedules={expandTreatmentData.stageSchedules || []}
+        isAddToDrugChartDisabled={expandTreatmentData.isAddToDrugChartDisabled}
+        isReadMode={expandTreatmentData.isReadMode}
+        hasScheduleEditPrivilege={expandTreatmentData.hasScheduleEditPrivilege}
+        onAddToDrugChart={expandTreatmentData.onAddToDrugChart}
+        onEditDrugChart={expandTreatmentData.onEditDrugChart}
       />
     );
   }

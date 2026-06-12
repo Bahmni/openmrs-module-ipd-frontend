@@ -29,7 +29,7 @@ const ExpandableDataTable = (props) => {
       rows={rows}
       headers={headers}
       additionalData={additionalData}
-      useZebraStyles={useZebraStyles}
+      useZebraStyles={false}
       render={({
         rows,
         headers,
@@ -37,56 +37,78 @@ const ExpandableDataTable = (props) => {
         getRowProps,
         getTableProps,
         getExpandHeaderProps,
-      }) => (
-        <Table
-          {...getTableProps()}
-          data-testid="expandable-datatable"
-          className="expandable-datatable"
-        >
-          <TableHead>
-            <TableRow>
-              <TableExpandHeader
-                style={{ padding: "0px" }}
-                id="expand"
-                enableToggle
-                {...getExpandHeaderProps()}
-              />
-              {headers.map((header) => (
-                <TableHeader key={header.key} {...getHeaderProps({ header })}>
-                  {header.header}
-                </TableHeader>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => {
-              const matchedData = additionalData.find(
-                (data) => data.id === row.id
-              );
-              if (matchedData) {
+      }) => {
+        let zebraIndex = 0;
+        return (
+          <Table
+            {...getTableProps()}
+            data-testid="expandable-datatable"
+            className="expandable-datatable"
+          >
+            <TableHead>
+              <TableRow>
+                <TableExpandHeader
+                  style={{ padding: "0px" }}
+                  id="expand"
+                  enableToggle
+                  {...getExpandHeaderProps()}
+                />
+                {headers.map((header) => (
+                  <TableHeader key={header.key} {...getHeaderProps({ header })}>
+                    {header.header}
+                  </TableHeader>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => {
+                const matchedData = additionalData.find(
+                  (data) => data.id === row.id
+                );
+                if (!matchedData) return null;
+
                 const expandable = isExpandable
                   ? isExpandable(matchedData)
                   : true;
                 const rowClassName = matchedData?.isNotScheduled
                   ? "green-row"
+                  : matchedData?.isInProgress
+                  ? "in-progress-row"
+                  : matchedData?.isCompleted
+                  ? ""
                   : matchedData?.isVariableDose
                   ? "variable-dose-row"
                   : "";
                 const cellClassName = matchedData?.isNotScheduled
                   ? "green-cell"
+                  : matchedData?.isInProgress
+                  ? "in-progress-cell"
+                  : matchedData?.isCompleted
+                  ? ""
                   : matchedData?.isVariableDose
                   ? "variable-dose-cell"
                   : "";
+
+                const isPlainRow = useZebraStyles && !rowClassName;
+                const isZebraRow = isPlainRow && zebraIndex % 2 !== 0;
+                if (isPlainRow) zebraIndex++;
+
+                const zebraClass = isZebraRow ? "zebra-row" : isPlainRow ? "plain-row" : "";
+                const zebraCellClass = isZebraRow ? "zebra-cell" : isPlainRow ? "plain-cell" : "";
+
+                const rowClass = [rowClassName, zebraClass].filter(Boolean).join(" ");
+                const cellClass = [cellClassName, zebraCellClass].filter(Boolean).join(" ");
+
                 if (expandable) {
                   return (
                     <React.Fragment key={row.id}>
                       <TableExpandRow
                         {...getRowProps({ row })}
                         data-testid="expandable-row"
-                        className={rowClassName}
+                        className={rowClass}
                       >
                         {row.cells.map((cell) => (
-                          <TableCell key={cell.id} className={cellClassName}>
+                          <TableCell key={cell.id} className={cellClass}>
                             {cell.value}
                           </TableCell>
                         ))}
@@ -105,24 +127,24 @@ const ExpandableDataTable = (props) => {
                     key={row.id}
                     {...getRowProps({ row })}
                     data-testid="non-expandable-row"
-                    className={rowClassName}
+                    className={rowClass}
                   >
                     <TableCell
                       style={{ padding: "0px", width: "2rem" }}
-                      className={cellClassName}
+                      className={cellClass}
                     />
                     {row.cells.map((cell) => (
-                      <TableCell key={cell.id} className={cellClassName}>
+                      <TableCell key={cell.id} className={cellClass}>
                         {cell.value}
                       </TableCell>
                     ))}
                   </TableRow>
                 );
-              }
-            })}
-          </TableBody>
-        </Table>
-      )}
+              })}
+            </TableBody>
+          </Table>
+        );
+      }}
     />
   );
 };

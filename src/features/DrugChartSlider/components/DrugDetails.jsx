@@ -66,14 +66,20 @@ export const DrugDetails = ({ hostData }) => {
             id={"Dropdown"}
             onChange={() => {}}
             label={intl.formatMessage({ id: "DRUG_CHART_MODAL_DURATION", defaultMessage: "Duration" })}
-            value={hostData?.drugOrder?.drugOrder?.duration}
+            value={
+              hostData?.drugOrder?.durationDisplayValue ??
+              hostData?.drugOrder?.drugOrder?.duration
+            }
             isDisabled={true}
           />
           <DropdownCarbon
             id={"Dropdown"}
             onChange={() => {}}
             titleText={" "}
-            selectedValue={hostData?.drugOrder?.drugOrder?.durationUnits}
+            selectedValue={
+              hostData?.drugOrder?.durationDisplayUnits ||
+              hostData?.drugOrder?.drugOrder?.durationUnits
+            }
             options={[]}
             isDisabled={true}
           />

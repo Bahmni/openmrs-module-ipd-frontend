@@ -10,11 +10,18 @@ import {
   PRIVILEGE_CONSTANTS,
   displayShiftTimingsFormat,
   displayShiftTimings12HourFormat,
+  DOSE_UNITS,
 } from "../../../../constants";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import _ from "lodash";
 import { FormattedMessage } from "react-intl";
 import { getAdministrationStatus } from "../../../../utils/CommonUtils";
+import {
+  getDosageBySequence,
+  fhirDosageToDisplayStage,
+  parseFhirDosages,
+  parseFlatAdminInstructions,
+} from "../../../../utils/FhirDosingUtils";
 
 export const fetchMedications = async (
   patientUuid,
@@ -46,21 +53,25 @@ export const transformDrugOrders = (orders) => {
         drugNonCoded,
         orderReasonText,
       } = order.drugOrder;
+      const fhirDosagesParsed = parseFhirDosages(
+        dosingInstructions.administrationInstructions
+      );
+      const isVariableDose = fhirDosagesParsed !== null;
+      const parsedInstructions = isVariableDose
+        ? fhirDosagesParsed
+        : parseFlatAdminInstructions(dosingInstructions.administrationInstructions);
       let dosage = "",
         doseUnits;
-      if (
-        dosingInstructions.doseUnits?.toLowerCase() === "ml" ||
-        dosingInstructions.doseUnits?.toLowerCase() === "mg" ||
-        dosingInstructions.doseUnits?.toLowerCase() === "mcg"
-      ) {
+      if (isVariableDose) {
+        dosage = dosingInstructions.quantity || "";
+        doseUnits =
+          dosingInstructions.quantityUnits || dosingInstructions.doseUnits || "";
+      } else if (DOSE_UNITS.includes(dosingInstructions.doseUnits?.toLowerCase())) {
         dosage = dosingInstructions.dose + dosingInstructions.doseUnits;
       } else {
         dosage = dosingInstructions.dose;
         doseUnits = dosingInstructions.doseUnits;
       }
-      const parsedInstructions = JSON.parse(
-        dosingInstructions.administrationInstructions
-      );
       medicationData[order.drugOrder.uuid] = {
         name: drug?.name || drugNonCoded,
         dosingInstructions: {
@@ -69,7 +80,7 @@ export const transformDrugOrders = (orders) => {
           doseUnits,
           asNeeded: dosingInstructions.asNeeded,
           frequency: dosingInstructions.frequency,
-          instructions: parsedInstructions,
+          instructions: isVariableDose ? null : parsedInstructions,
         },
         duration: duration ? duration + " " + durationUnits : null,
         slots: [],
@@ -77,11 +88,18 @@ export const transformDrugOrders = (orders) => {
         orderReasonText: orderReasonText,
         firstSlotStartTime: dosingInstructions.asNeeded
           ? order.drugOrder.effectiveStartDate / 1000
+          : isVariableDose
+          ? order.drugOrder.effectiveStartDate / 1000
           : order.drugOrderSchedule.slotStartTime ||
             (order.drugOrderSchedule.firstDaySlotsStartTime &&
               order.drugOrderSchedule.firstDaySlotsStartTime[0]) ||
             order.drugOrderSchedule.dayWiseSlotsStartTime[0],
-        notes: order.drugOrderSchedule?.notes,
+        notes: isVariableDose ? null : order.drugOrderSchedule?.notes,
+        isVariableDose,
+        fhirDosages: isVariableDose ? parsedInstructions : null,
+        stageSchedules: isVariableDose
+          ? order.drugOrderSchedule?.stageSchedules || []
+          : null,
       };
     }
   });
@@ -92,11 +110,7 @@ export const transformDrugOrders = (orders) => {
       : null;
     let dosage = "",
       doseUnits;
-    if (
-      medication.doseUnits?.display?.toLowerCase() === "ml" ||
-      medication.doseUnits?.display?.toLowerCase() === "mg" ||
-      medication.doseUnits?.display?.toLowerCase() === "mcg"
-    ) {
+    if (DOSE_UNITS.includes(medication.doseUnits?.display?.toLowerCase())) {
       dosage = medication.dose + medication.doseUnits.display;
     } else {
       dosage = medication.dose;
@@ -559,32 +573,51 @@ export const extractNotesSummary = (notes) => {
 
 export const prepareSlotData = (slot, rowData, enable24HourTime) => {
   let dosageInfo = "";
-  const dosingInstructions = rowData?.dosingInstructions;
 
-  if (dosingInstructions) {
-    if (dosingInstructions.dosage) {
-      dosageInfo = dosingInstructions.dosage;
-      if (dosingInstructions.doseUnits) {
-        dosageInfo += " " + dosingInstructions.doseUnits;
+  if (rowData?.isVariableDose && slot?.variableDosageSequence != null) {
+    const stageDosage = getDosageBySequence(
+      rowData.fhirDosages,
+      slot.variableDosageSequence
+    );
+    if (stageDosage) {
+      const stageInfo = fhirDosageToDisplayStage(stageDosage);
+      dosageInfo = stageInfo.dose || "";
+      if (stageDosage.route?.text) {
+        dosageInfo = dosageInfo
+          ? dosageInfo + " - " + stageDosage.route.text
+          : stageDosage.route.text;
+      }
+      if (stageInfo.frequency) {
+        dosageInfo = dosageInfo
+          ? dosageInfo + " - " + stageInfo.frequency
+          : stageInfo.frequency;
       }
     }
-
-    if (dosingInstructions.route) {
-      const routeDisplay =
-        typeof dosingInstructions.route === "string"
-          ? dosingInstructions.route
-          : dosingInstructions.route.display || dosingInstructions.route;
-      dosageInfo =
-        dosageInfo.length > 0
-          ? dosageInfo + " - " + routeDisplay
-          : routeDisplay;
-    }
-
-    if (dosingInstructions.frequency?.display) {
-      dosageInfo =
-        dosageInfo.length > 0
-          ? dosageInfo + " - " + dosingInstructions.frequency.display
-          : dosingInstructions.frequency.display;
+  } else {
+    const dosingInstructions = rowData?.dosingInstructions;
+    if (dosingInstructions) {
+      if (dosingInstructions.dosage) {
+        dosageInfo = dosingInstructions.dosage;
+        if (dosingInstructions.doseUnits) {
+          dosageInfo += " " + dosingInstructions.doseUnits;
+        }
+      }
+      if (dosingInstructions.route) {
+        const routeDisplay =
+          typeof dosingInstructions.route === "string"
+            ? dosingInstructions.route
+            : dosingInstructions.route.display || dosingInstructions.route;
+        dosageInfo =
+          dosageInfo.length > 0
+            ? dosageInfo + " - " + routeDisplay
+            : routeDisplay;
+      }
+      if (dosingInstructions.frequency?.display) {
+        dosageInfo =
+          dosageInfo.length > 0
+            ? dosageInfo + " - " + dosingInstructions.frequency.display
+            : dosingInstructions.frequency.display;
+      }
     }
   }
 
