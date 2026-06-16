@@ -1,7 +1,11 @@
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import Treatments from "../components/Treatments";
-import { getEncounterType, stopDrugOrders } from "../utils/TreatmentsUtils";
+import {
+  getEncounterType,
+  isPRNEligibleForNextDose,
+  stopDrugOrders,
+} from "../utils/TreatmentsUtils";
 import { SliderContext } from "../../../../context/SliderContext";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -21,6 +25,7 @@ jest.mock("../utils/TreatmentsUtils", () => {
     getEncounterType: jest.fn(),
     stopDrugOrders: jest.fn(),
     getSlotsForAnOrderAndServiceType: jest.fn().mockResolvedValue([]),
+    isPRNEligibleForNextDose: jest.fn().mockReturnValue(true),
   };
 });
 
@@ -391,7 +396,7 @@ describe("Treatments", () => {
   });
 
   describe("AC5: Add to Drug Chart disabled for completed medications", () => {
-    it("should disable Add to Tasks link for PRN drug when allSlotsAttended is true", async () => {
+    it("should enable Add PRN Tasks button after task completion when time interval has passed", async () => {
       const prnDrug = {
         drugOrder: {
           uuid: "prn-completed",
@@ -413,6 +418,57 @@ describe("Treatments", () => {
         drugOrderSchedule: { allSlotsAttended: true },
         prnHasPendingPlaceholder: false,
         prnEligible: true,
+      };
+      const { getByText } = render(
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            isReadMode: false,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <SliderContext.Provider value={mockProviderValue}>
+            <AllMedicationsContext.Provider
+              value={{
+                ...mockAllMedicationsProviderValue,
+                data: {
+                  emergencyMedications: [],
+                  ipdDrugOrders: [prnDrug],
+                },
+              }}
+            >
+              <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+            </AllMedicationsContext.Provider>
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      );
+      await waitFor(() => {
+        const link = getByText("Add to Tasks").closest("a");
+        expect(link).not.toHaveAttribute("aria-disabled", "true");
+      });
+    });
+
+    it("should keep Add PRN Tasks button disabled after task completion when time interval has not passed", async () => {
+      isPRNEligibleForNextDose.mockReturnValueOnce(false);
+      const prnDrug = {
+        drugOrder: {
+          uuid: "prn-not-yet-eligible",
+          effectiveStartDate: new Date("01/01/2022"),
+          dateStopped: null,
+          drug: { name: "PRN Drug" },
+          dosingInstructions: {
+            dose: 1,
+            doseUnits: "mg",
+            route: "Oral",
+            frequency: "Every Hour",
+            asNeeded: true,
+            administrationInstructions: "{}",
+          },
+          durationUnits: "Day(s)",
+          careSetting: "INPATIENT",
+        },
+        provider: { name: "Dr. Test" },
+        drugOrderSchedule: { allSlotsAttended: true },
       };
       const { getByText } = render(
         <IPDContext.Provider

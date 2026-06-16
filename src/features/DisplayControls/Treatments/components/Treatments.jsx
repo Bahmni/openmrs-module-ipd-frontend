@@ -27,10 +27,7 @@ import {
   shouldIncludeInIPDDashboard,
   buildStageDrugOrder,
 } from "../utils/TreatmentsUtils";
-import {
-  getCookies,
-  isUserPrivileged,
-} from "../../../../utils/CommonUtils";
+import { getCookies, isUserPrivileged } from "../../../../utils/CommonUtils";
 import {
   isVariableDoseOrder,
   fhirDosageToDisplayStage,
@@ -235,7 +232,8 @@ const Treatments = (props) => {
           slotStartTime: stageStatus.slotStartTime,
           firstDaySlotsStartTime: stageStatus.firstDaySlotsStartTime || null,
           dayWiseSlotsStartTime: stageStatus.dayWiseSlotsStartTime || null,
-          remainingDaySlotsStartTime: stageStatus.remainingDaySlotsStartTime || null,
+          remainingDaySlotsStartTime:
+            stageStatus.remainingDaySlotsStartTime || null,
           notes: stageStatus.notes,
           medicationAdministrationStarted: stageStatus.administrationStarted,
           pendingSlotsAvailable: stageStatus.pendingSlotsAvailable,
@@ -332,10 +330,10 @@ const Treatments = (props) => {
           (drugOrder.autoExpireDate &&
             new Date() > new Date(drugOrder.autoExpireDate)));
       const isMedicationCompleted =
-        drugOrderObject?.drugOrderSchedule?.allSlotsAttended ||
-        (!drugOrder.dosingInstructions?.asNeeded &&
-          drugOrder.autoExpireDate &&
-          new Date() > new Date(drugOrder.autoExpireDate));
+        !drugOrder.dosingInstructions?.asNeeded &&
+        (drugOrderObject?.drugOrderSchedule?.allSlotsAttended ||
+          (drugOrder.autoExpireDate &&
+            new Date() > new Date(drugOrder.autoExpireDate)));
       const isButtonDisabled =
         isAddToDrugChartDisabled ||
         moment().valueOf() <= drugOrder.effectiveStartDate ||
@@ -494,7 +492,10 @@ const Treatments = (props) => {
             if (isVariableDose) {
               if (isAllStagesAttended) {
                 return (
-                  <FormattedMessage id={"COMPLETED"} defaultMessage={"Completed"} />
+                  <FormattedMessage
+                    id={"COMPLETED"}
+                    defaultMessage={"Completed"}
+                  />
                 );
               }
               if (isInProgress) {
@@ -603,9 +604,11 @@ const Treatments = (props) => {
         fhirDosages: treatment.additionalData.fhirDosages,
         effectiveStartDate: treatment.additionalData.effectiveStartDate,
         stageSchedules: treatment.additionalData.stageSchedules,
-        isAddToDrugChartDisabled: treatment.additionalData.isAddToDrugChartDisabled,
+        isAddToDrugChartDisabled:
+          treatment.additionalData.isAddToDrugChartDisabled,
         isReadMode: treatment.additionalData.isReadMode,
-        hasScheduleEditPrivilege: treatment.additionalData.hasScheduleEditPrivilege,
+        hasScheduleEditPrivilege:
+          treatment.additionalData.hasScheduleEditPrivilege,
         onAddToDrugChart: treatment.additionalData.onAddToDrugChart,
         onEditDrugChart: treatment.additionalData.onEditDrugChart,
         isInProgress: treatment.additionalData.isInProgress,
