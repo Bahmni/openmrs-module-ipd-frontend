@@ -348,7 +348,7 @@ const AddEmergencyTasks = (props) => {
       taskType: nonMedicationTaskType ? nonMedicationTaskType : null,
       status: "REQUESTED",
       ...(observationUuid && {
-        focus: { type: "Observation", reference: observationUuid },
+        focus: { type: "Observation", reference: `Observation/${observationUuid}` },
       }),
     };
     return nonMedicationPayload;
