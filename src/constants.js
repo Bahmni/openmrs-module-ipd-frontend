@@ -6,6 +6,8 @@ export const BASE_URL =
     ? __webpack_public_path__
     : "/";
 export const LS_LANG_KEY = "NG_TRANSLATE_LANG_KEY";
+export const CONFIG_TRANSLATIONS_BASE = "/bahmni_config/openmrs/i18n/ipd/";
+export const BUNDLED_TRANSLATIONS_BASE = "i18n";
 
 const hostUrl = localStorage.getItem("host")
   ? "https://" + localStorage.getItem("host")
