@@ -281,10 +281,14 @@ export default function Dashboard(props) {
                             key={el.componentKey}
                             onClick={() => scrollToSection(el.componentKey)}
                           >
-                            <FormattedMessage
-                              id={el.translationKey}
-                              defaultMessage={el.title}
-                            />
+                            {el.translationKey ? (
+                              <FormattedMessage
+                                id={el.translationKey}
+                                defaultMessage={el.title}
+                              />
+                            ) : (
+                              el.title
+                            )}
                           </SideNavLink>
                         );
                       })}
@@ -318,10 +322,14 @@ export default function Dashboard(props) {
                               <AccordionItem
                                 open
                                 title={
-                                  <FormattedMessage
-                                    id={el.translationKey}
-                                    defaultMessage={el.title}
-                                  />
+                                  el.translationKey ? (
+                                    <FormattedMessage
+                                      id={el.translationKey}
+                                      defaultMessage={el.title}
+                                    />
+                                  ) : (
+                                    el.title
+                                  )
                                 }
                               >
                                 <RefreshDisplayControl.Provider
