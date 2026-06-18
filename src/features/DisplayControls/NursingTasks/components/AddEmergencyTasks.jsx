@@ -57,6 +57,7 @@ const AddEmergencyTasks = (props) => {
     setNotificationStatus,
     hideMedicationTab = false,
     observationUuid,
+    orderUuid,
   } = props;
 
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
@@ -287,6 +288,9 @@ const AddEmergencyTasks = (props) => {
       status: "REQUESTED",
       ...(observationUuid && {
         focus: { type: "Observation", reference: observationUuid },
+      }),
+      ...(orderUuid && {
+        basedOn: { type: "ServiceRequest", reference: `ServiceRequest/${orderUuid}` },
       }),
     };
     return nonMedicationPayload;
@@ -764,5 +768,6 @@ AddEmergencyTasks.propTypes = {
   setNotificationStatus: PropTypes.func.isRequired,
   hideMedicationTab: PropTypes.bool,
   observationUuid: PropTypes.string,
+  orderUuid: PropTypes.string,
 };
 export default AddEmergencyTasks;
