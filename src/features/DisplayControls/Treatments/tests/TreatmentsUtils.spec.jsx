@@ -323,6 +323,123 @@ describe("TreatmentsUtils", () => {
       const { getByText } = render(setDosingInstructions(drugOrder));
       expect(getByText(/100 mg - Oral - Once a day/)).toBeInTheDocument();
     });
+
+    it("should render 4-box intra-day dose as M-A-E-N format with duration", () => {
+      const drugOrder = {
+        dosingInstructionType: "FlexibleDosingInstructions",
+        dosingInstructions: {
+          dose: null,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Four times a day",
+        },
+        duration: 5,
+        durationUnits: "Day(s)",
+        dateStopped: null,
+      };
+      const intradayDose = { morning: 10, afternoon: 0, evening: 20, night: 10 };
+      const { getByText } = render(setDosingInstructions(drugOrder, intradayDose));
+      expect(getByText("10-0-20-10 mg - Oral - Four times a day - for 5 Day(s)")).toBeInTheDocument();
+    });
+
+    it("should render 4-box intra-day dose without duration when duration is absent", () => {
+      const drugOrder = {
+        dosingInstructionType: "FlexibleDosingInstructions",
+        dosingInstructions: {
+          dose: null,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Four times a day",
+        },
+        dateStopped: null,
+      };
+      const intradayDose = { morning: 10, afternoon: 0, evening: 20, night: 10 };
+      const { getByText } = render(setDosingInstructions(drugOrder, intradayDose));
+      expect(getByText("10-0-20-10 mg - Oral - Four times a day")).toBeInTheDocument();
+    });
+
+    it("should render legacy 3-box intra-day dose (no nightDose) with night defaulting to 0", () => {
+      const drugOrder = {
+        dosingInstructionType: "FlexibleDosingInstructions",
+        dosingInstructions: {
+          dose: null,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: null,
+        },
+        dateStopped: null,
+      };
+      const intradayDose = { morning: 5, afternoon: 5, evening: 5, night: undefined };
+      const { getByText } = render(setDosingInstructions(drugOrder, intradayDose));
+      expect(getByText("5-5-5-0 mg - Oral")).toBeInTheDocument();
+    });
+
+    it("should render uniform-dose order unchanged when no intradayDose provided", () => {
+      const drugOrder = {
+        dosingInstructionType: "FlexibleDosingInstructions",
+        dosingInstructions: {
+          dose: 250,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Twice a day",
+        },
+        dateStopped: null,
+      };
+      const { getByText } = render(setDosingInstructions(drugOrder));
+      expect(getByText("250 mg - Oral - Twice a day")).toBeInTheDocument();
+    });
+  });
+
+  describe("updateDrugOrderList intra-day dose extraction", () => {
+    const buildIntraOrder = (adminInstructions) => ({
+      drugOrder: {
+        dosingInstructions: {
+          dose: null,
+          doseUnits: "mg",
+          frequency: "Four times a day",
+          route: "Oral",
+          administrationInstructions: JSON.stringify(adminInstructions),
+        },
+        durationUnits: "Day(s)",
+      },
+    });
+
+    it("should extract 4-box intraday dose onto intradayDose when all fields present", () => {
+      const order = buildIntraOrder({
+        morningDose: 10,
+        afternoonDose: 0,
+        eveningDose: 20,
+        nightDose: 10,
+      });
+      const result = updateDrugOrderList([order]);
+      expect(result[0].intradayDose).toEqual({
+        morning: 10,
+        afternoon: 0,
+        evening: 20,
+        night: 10,
+      });
+    });
+
+    it("should extract legacy 3-box intraday dose with nightDose absent (undefined)", () => {
+      const order = buildIntraOrder({
+        morningDose: 5,
+        afternoonDose: 5,
+        eveningDose: 5,
+      });
+      const result = updateDrugOrderList([order]);
+      expect(result[0].intradayDose).toEqual({
+        morning: 5,
+        afternoon: 5,
+        evening: 5,
+        night: undefined,
+      });
+    });
+
+    it("should not set intradayDose for uniform-dose orders without intraday fields", () => {
+      const order = buildIntraOrder({ instructions: "Take with food" });
+      const result = updateDrugOrderList([order]);
+      expect(result[0].intradayDose).toBeUndefined();
+    });
   });
 
   describe("getActiveStageIndex", () => {
