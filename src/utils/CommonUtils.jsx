@@ -6,10 +6,8 @@ import {
   FETCH_ALL_FORM_DETAILS_URL,
   FETCH_ALL_OBSERVATIONS_IN_ENCOUNTER_URL,
   FORM_BASE_URL,
-  PROVIDER_URL,
   SEARCH_CONCEPT_URL,
   SEARCH_DRUG_URL,
-  USER_URL,
   DAEMON_USER,
 } from "../constants";
 import { FormattedMessage } from "react-intl";

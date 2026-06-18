@@ -23,6 +23,9 @@ const mockSetShowNotification = jest.fn();
 const mockSetNotificationMessage = jest.fn();
 const mockSetNotificationStatus = jest.fn();
 const mockSaveEmergencyMedication = jest.fn();
+const mockSaveNonMedicationTask = jest.fn();
+const mockGetEncounterUuid = jest.fn();
+const mockGetEncounterType = jest.fn();
 const mockHandleAuditEvent = jest.fn();
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
@@ -32,6 +35,9 @@ jest.mock("../utils/EmergencyTasksUtils", () => {
     fetchMedicationConfig: () => mockFetchMedicationConfig(),
     getProviders: () => mockGetProviders(),
     saveEmergencyMedication: () => mockSaveEmergencyMedication(),
+    saveNonMedicationTask: (payload) => mockSaveNonMedicationTask(payload),
+    getEncounterUuid: (payload) => mockGetEncounterUuid(payload),
+    getEncounterType: (type) => mockGetEncounterType(type),
   };
 });
 
@@ -48,6 +54,9 @@ jest.mock("../../../../utils/CommonUtils", () => {
   return {
     ...originalModule,
     searchDrugsByName: () => mockSearchDrug(),
+    getCookies: () => ({
+      "bahmni.user.location": JSON.stringify({ uuid: "__location_uuid__" }),
+    }),
   };
 });
 
@@ -523,6 +532,108 @@ describe("AddEmergencyTasks", () => {
     await waitFor(() => {
       expect(queryByRole("tab", { name: /^medication$/i })).not.toBeInTheDocument();
       expect(getByRole("tab", { name: /non \- medication/i })).toBeInTheDocument();
+    });
+  });
+
+  describe("non-medication task payload", () => {
+    const renderNonMedicationTab = async (extraProps = {}) => {
+      const utils = render(
+        <IntlProvider locale="en">
+          <IPDContext.Provider
+            value={{
+              config: mockConfig,
+              handleAuditEvent: mockHandleAuditEvent,
+              currentUser: mockUserWithAllRequiredPrivileges,
+            }}
+          >
+            <AddEmergencyTasks
+              patientId={"__patient_uuid__"}
+              providerId={"__provider_uuid__"}
+              updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+              hideMedicationTab={true}
+              {...extraProps}
+            />
+          </IPDContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByRole("tab", { name: /non \- medication/i })).toBeInTheDocument();
+      });
+
+      const { container } = utils;
+      const timeInput = container.querySelector(".bx--time-picker__input-field");
+      fireEvent.change(timeInput, { target: { value: "9:00" } });
+      fireEvent.blur(timeInput);
+
+      const taskInput = container.querySelector("textarea");
+      fireEvent.change(taskInput, { target: { value: "Test task" } });
+
+      const saveButton = screen.getAllByText("Save")[1];
+      await waitFor(() => expect(saveButton.disabled).toBe(false));
+      fireEvent.click(saveButton);
+
+      return utils;
+    };
+
+    beforeEach(() => {
+      mockGetEncounterType.mockResolvedValue({ uuid: "__encounter_type_uuid__" });
+      mockGetEncounterUuid.mockResolvedValue({ encounterUuid: "__encounter_uuid__" });
+      mockSaveNonMedicationTask.mockResolvedValue({ status: 200 });
+    });
+
+    afterEach(() => {
+      mockGetEncounterType.mockReset();
+      mockGetEncounterUuid.mockReset();
+      mockSaveNonMedicationTask.mockReset();
+    });
+
+    it("should include focus with FHIR-formatted Observation reference when observationUuid is provided", async () => {
+      await renderNonMedicationTab({ observationUuid: "__obs_uuid__" });
+
+      await waitFor(() => {
+        expect(mockSaveNonMedicationTask).toHaveBeenCalledWith(
+          expect.objectContaining({
+            focus: { type: "Observation", reference: "Observation/__obs_uuid__" },
+          })
+        );
+      });
+    });
+
+    it("should include basedOn with FHIR-formatted ServiceRequest reference when orderUuid is provided", async () => {
+      await renderNonMedicationTab({ observationUuid: "__obs_uuid__", orderUuid: "__order_uuid__" });
+
+      await waitFor(() => {
+        expect(mockSaveNonMedicationTask).toHaveBeenCalledWith(
+          expect.objectContaining({
+            basedOn: { type: "ServiceRequest", reference: "ServiceRequest/__order_uuid__" },
+          })
+        );
+      });
+    });
+
+    it("should omit basedOn from payload when orderUuid is null", async () => {
+      await renderNonMedicationTab({ observationUuid: "__obs_uuid__", orderUuid: null });
+
+      await waitFor(() => {
+        expect(mockSaveNonMedicationTask).toHaveBeenCalled();
+        const payload = mockSaveNonMedicationTask.mock.calls[0][0];
+        expect(payload).not.toHaveProperty("basedOn");
+      });
+    });
+
+    it("should omit both focus and basedOn when neither observationUuid nor orderUuid is provided", async () => {
+      await renderNonMedicationTab();
+
+      await waitFor(() => {
+        expect(mockSaveNonMedicationTask).toHaveBeenCalled();
+        const payload = mockSaveNonMedicationTask.mock.calls[0][0];
+        expect(payload).not.toHaveProperty("focus");
+        expect(payload).not.toHaveProperty("basedOn");
+      });
     });
   });
 });

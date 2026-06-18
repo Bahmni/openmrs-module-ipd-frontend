@@ -58,7 +58,7 @@ const CareInstructions = (props) => {
 
   const [instructions, setInstructions] = useState([]);
   const [acknowledgedObsUuids, setAcknowledgedObsUuids] = useState(new Set());
-  const [selectedObservationUuid, setSelectedObservationUuid] = useState(null);
+  const [selectedInstruction, setSelectedInstruction] = useState({ observationUuid: null, orderUuid: null });
   const [isLoading, setIsLoading] = useState(false);
   const [isAcknowledgedLoading, setIsAcknowledgedLoading] = useState(false);
 
@@ -206,7 +206,7 @@ const CareInstructions = (props) => {
                 <Link
                   onClick={() => {
                     if (!isSliderOpen.careInstructionsTasks) {
-                      setSelectedObservationUuid(row.observationUuid);
+                      setSelectedInstruction({ observationUuid: row.observationUuid, orderUuid: row.orderUuid });
                       updateCareInstructionsTasksSlider(true);
                     }
                   }}
@@ -295,7 +295,8 @@ const CareInstructions = (props) => {
           setNotificationMessage={setNotificationMessage}
           setNotificationStatus={setNotificationStatus}
           hideMedicationTab={true}
-          observationUuid={selectedObservationUuid}
+          observationUuid={selectedInstruction.observationUuid}
+          orderUuid={selectedInstruction.orderUuid}
         />
       )}
       {showNotification && (
