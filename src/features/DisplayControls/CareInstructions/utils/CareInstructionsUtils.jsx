@@ -21,7 +21,7 @@ export const serializeParams = (params) =>
 export const fetchCareInstructionsObs = async (visitUuid, conceptNames) => {
   try {
     const response = await axios.get(OBSERVATIONS_URL, {
-      params: { visitUuid, concept: conceptNames },
+      params: { visitUuid, concept: conceptNames, filterObsWithOrders: false },
       paramsSerializer: serializeParams,
       withCredentials: true,
     });
@@ -59,11 +59,12 @@ export const fetchAcknowledgedObservationUuids = async (obsUuids) => {
   return new Set(tasks.map((task) => task.observationUuid).filter(Boolean));
 };
 
-export const fetchBatchObservations = async (visitUuids, concepts) => {
+export const fetchBatchObservations = async (visitUuids, concepts, filterObsWithOrders = false) => {
   try {
     const request = {
       visitUuids,
       concept: concepts,
+      filterObsWithOrders,
     };
 
     const response = await axios.post(OBSERVATIONS_BATCH_URL, request, {
@@ -119,6 +120,7 @@ export const mapObservationsToInstructions = (observations, formConcepts) => {
 
     result.push({
       observationUuid: obs.uuid,
+      orderUuid: obs.orderUuid ?? null,
       encounterUuid: obs.encounterUuid,
       encounterDateTime: obs.encounterDateTime,
       form: formName,

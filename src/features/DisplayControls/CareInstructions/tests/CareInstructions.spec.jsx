@@ -15,9 +15,15 @@ jest.mock("../../NursingTasks/components/AddEmergencyTasks", () => {
   function MockAddEmergencyTasks({
     updateEmergencyTasksSlider,
     setShowNotification,
+    observationUuid,
+    orderUuid,
   }) {
     return (
-      <div data-testid="add-emergency-tasks-slider">
+      <div
+        data-testid="add-emergency-tasks-slider"
+        data-observation-uuid={observationUuid || ""}
+        data-order-uuid={orderUuid || ""}
+      >
         <button
           data-testid="close-slider"
           onClick={() => updateEmergencyTasksSlider(false)}
@@ -557,6 +563,54 @@ describe("CareInstructions", () => {
     });
   });
 
+  it("should pass observationUuid and orderUuid to AddEmergencyTasks slider when Add Task is clicked", async () => {
+    jest
+      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
+      .mockResolvedValue([
+        {
+          uuid: "obs-uuid-with-order",
+          encounterDateTime: 1713955252000,
+          encounterUuid: "encounter-uuid-1",
+          formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+          concept: { name: "Instruction for the Ward" },
+          value: "Patient should rest",
+          providers: [{ name: "Dr. Smith", uuid: "provider-uuid-1" }],
+          orderUuid: "order-uuid-1",
+          groupMembers: [],
+        },
+      ]);
+    const mockUpdateSliderOpen = jest.fn();
+    const makeJsx = (sliderOpen) => (
+      <IPDContext.Provider value={mockIPDContextWithData}>
+        <SliderContext.Provider
+          value={{
+            isSliderOpen: { careInstructionsTasks: sliderOpen },
+            updateSliderOpen: mockUpdateSliderOpen,
+            provider: { uuid: "provider-uuid-1" },
+          }}
+        >
+          <IntlProvider locale="en">
+            <CareInstructions
+              patientId="patient-uuid-1"
+              config={{ formConcepts: mockFormConcepts }}
+            />
+          </IntlProvider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
+    );
+
+    const { getByText, getByTestId, rerender } = render(makeJsx(false));
+
+    await waitFor(() => expect(getByText("Add Task")).toBeInTheDocument());
+    fireEvent.click(getByText("Add Task"));
+
+    rerender(makeJsx(true));
+
+    const slider = getByTestId("add-emergency-tasks-slider");
+    expect(slider.getAttribute("data-observation-uuid")).toBe("obs-uuid-with-order");
+    expect(slider.getAttribute("data-order-uuid")).toBe("order-uuid-1");
+  });
+
   it("should add edited-instruction-row class when obs has previousVersionUuid set by backend", async () => {
     jest
       .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
@@ -862,6 +916,45 @@ describe("mapObservationsToInstructions", () => {
     expect(result).toHaveLength(1);
     expect(result[0].previousVersionUuid).toBeNull();
   });
+
+  it("should map orderUuid from obs to instruction", () => {
+    const observations = [
+      {
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+        concept: { name: "Instruction for the Ward" },
+        value: "Medication instruction",
+        providers: [{ name: "Dr. Smith" }],
+        orderUuid: "order-uuid-1",
+      },
+    ];
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
+      observations,
+      mockFormConcepts
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].orderUuid).toBe("order-uuid-1");
+  });
+
+  it("should set orderUuid to null when obs has no orderUuid", () => {
+    const observations = [
+      {
+        encounterDateTime: 1713955252000,
+        encounterUuid: "encounter-uuid-1",
+        formFieldPath: "Doctor Patient Progress Notes.1/5-0",
+        concept: { name: "Instruction for the Ward" },
+        value: "Non-order instruction",
+        providers: [{ name: "Dr. Smith" }],
+      },
+    ];
+    const result = CareInstructionsUtils.mapObservationsToInstructions(
+      observations,
+      mockFormConcepts
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].orderUuid).toBeNull();
+  });
 });
 
 describe("serializeParams", () => {
@@ -916,6 +1009,7 @@ describe("fetchCareInstructionsObs", () => {
     expect(mockAxios.history.get[0].params).toEqual({
       visitUuid: "visit-uuid-1",
       concept: ["Instruction for the Ward"],
+      filterObsWithOrders: false,
     });
     expect(mockAxios.history.get[0].params).not.toHaveProperty("patientUuid");
     expect(mockAxios.history.get[0].withCredentials).toBe(true);
@@ -985,6 +1079,7 @@ describe("fetchBatchObservations", () => {
     expect(requestBody).toEqual({
       visitUuids: ["visit-uuid-1", "visit-uuid-2"],
       concept: ["Instruction for the Ward"],
+      filterObsWithOrders: false,
     });
     expect(mockAxios.history.post[0].withCredentials).toBe(true);
   });
@@ -998,5 +1093,18 @@ describe("fetchBatchObservations", () => {
     );
 
     expect(result).toEqual([]);
+  });
+
+  it("should send filterObsWithOrders=true when explicitly passed as true", async () => {
+    mockAxios.onPost(new RegExp(".*observations/batch.*")).reply(200, []);
+
+    await CareInstructionsUtils.fetchBatchObservations(
+      ["visit-uuid-1"],
+      ["Instruction for the Ward"],
+      true
+    );
+
+    const requestBody = JSON.parse(mockAxios.history.post[0].data);
+    expect(requestBody.filterObsWithOrders).toBe(true);
   });
 });
