@@ -41,10 +41,7 @@ export const transformDrugOrders = (orders) => {
   const { ipdDrugOrders, emergencyMedications } = orders;
   const medicationData = {};
   ipdDrugOrders.forEach((order) => {
-    if (
-      order.drugOrder?.careSetting === "INPATIENT" &&
-      order.drugOrderSchedule
-    ) {
+    if (order.drugOrderSchedule) {
       const {
         dosingInstructions,
         drug,
@@ -59,14 +56,20 @@ export const transformDrugOrders = (orders) => {
       const isVariableDose = fhirDosagesParsed !== null;
       const parsedInstructions = isVariableDose
         ? fhirDosagesParsed
-        : parseFlatAdminInstructions(dosingInstructions.administrationInstructions);
+        : parseFlatAdminInstructions(
+            dosingInstructions.administrationInstructions
+          );
       let dosage = "",
         doseUnits;
       if (isVariableDose) {
         dosage = dosingInstructions.quantity || "";
         doseUnits =
-          dosingInstructions.quantityUnits || dosingInstructions.doseUnits || "";
-      } else if (DOSE_UNITS.includes(dosingInstructions.doseUnits?.toLowerCase())) {
+          dosingInstructions.quantityUnits ||
+          dosingInstructions.doseUnits ||
+          "";
+      } else if (
+        DOSE_UNITS.includes(dosingInstructions.doseUnits?.toLowerCase())
+      ) {
         dosage = dosingInstructions.dose + dosingInstructions.doseUnits;
       } else {
         dosage = dosingInstructions.dose;

@@ -1514,3 +1514,130 @@ it("should render Add to Tasks link as disabled when PRN drug order autoExpireDa
   const addToTasksLink = await waitFor(() => getByText("Add to Tasks"));
   expect(addToTasksLink.className).toContain("bx--link--disabled");
 });
+
+it("should hide a stopped order whose uuid matches a REVISE discharge order's previousOrderUuid", async () => {
+  const treatments = [
+    {
+      drugOrder: {
+        uuid: "original-uuid",
+        action: "NEW",
+        previousOrderUuid: null,
+        effectiveStartDate: 1704785404,
+        dateStopped: 1704785404,
+        dateActivated: 1704785404,
+        scheduledDate: 1704785404,
+        drug: { name: "Stopped Drug" },
+        dosingInstructions: {
+          dose: 1,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Once a day",
+          administrationInstructions: '{"instructions":"As directed"}',
+        },
+        duration: 7,
+        durationUnits: "Day(s)",
+        careSetting: "INPATIENT",
+      },
+      isDischargeMedication: false,
+      provider: { name: "Dr. John Doe" },
+    },
+    {
+      drugOrder: {
+        uuid: "revise-uuid",
+        action: "REVISE",
+        previousOrderUuid: "original-uuid",
+        effectiveStartDate: 1704785404,
+        dateStopped: null,
+        dateActivated: 1704785404,
+        scheduledDate: 1704785404,
+        drug: { name: "Stopped Drug" },
+        dosingInstructions: {
+          dose: 1,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Once a day",
+          administrationInstructions: '{"instructions":"As directed","isDischargeMedication":true}',
+        },
+        duration: 7,
+        durationUnits: "Day(s)",
+        careSetting: "INPATIENT",
+      },
+      isDischargeMedication: true,
+      provider: { name: "Dr. John Doe" },
+    },
+  ];
+
+  const updatedAllMedications = {
+    ...mockAllMedicationsProviderValue,
+    data: { emergencyMedications: [], ipdDrugOrders: treatments },
+  };
+
+  const { queryByText } = render(
+    <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+      <SliderContext.Provider value={mockProviderValue}>
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    </IPDContext.Provider>
+  );
+
+  await waitFor(() => {
+    expect(queryByText("Stopped Drug")).toBeFalsy();
+  });
+});
+
+it("should keep a stopped order whose uuid does NOT match any discharge REVISE previousOrderUuid", async () => {
+  const treatments = [
+    {
+      drugOrder: {
+        uuid: "stopped-uuid",
+        action: "NEW",
+        previousOrderUuid: null,
+        effectiveStartDate: 1704785404,
+        dateStopped: 1704785404,
+        dateActivated: 1704785404,
+        scheduledDate: 1704785404,
+        drug: { name: "Retained Stopped Drug" },
+        dosingInstructions: {
+          dose: 1,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Once a day",
+          administrationInstructions: '{"instructions":"As directed"}',
+        },
+        duration: 7,
+        durationUnits: "Day(s)",
+        careSetting: "INPATIENT",
+      },
+      isDischargeMedication: false,
+      drugOrderSchedule: {
+        firstDaySlotsStartTime: [],
+        dayWiseSlotsStartTime: [],
+        remainingDaySlotsStartTime: [],
+        slotStartTime: null,
+        medicationAdministrationStarted: true,
+      },
+      provider: { name: "Dr. John Doe" },
+    },
+  ];
+
+  const updatedAllMedications = {
+    ...mockAllMedicationsProviderValue,
+    data: { emergencyMedications: [], ipdDrugOrders: treatments },
+  };
+
+  const { queryByText } = render(
+    <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+      <SliderContext.Provider value={mockProviderValue}>
+        <AllMedicationsContext.Provider value={updatedAllMedications}>
+          <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+        </AllMedicationsContext.Provider>
+      </SliderContext.Provider>
+    </IPDContext.Provider>
+  );
+
+  await waitFor(() => {
+    expect(queryByText("Retained Stopped Drug")).toBeTruthy();
+  });
+});

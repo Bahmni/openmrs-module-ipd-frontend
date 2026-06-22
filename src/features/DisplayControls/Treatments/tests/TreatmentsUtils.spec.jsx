@@ -11,6 +11,9 @@ import {
   updateDrugOrderList,
   shouldIncludeInIPDDashboard,
   getActiveStageIndex,
+  getDischargeRevisedOrderUuids,
+  isSupersededByDischargeRevision,
+  DRUG_ORDER_ACTIONS,
 } from "../utils/TreatmentsUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
@@ -217,10 +220,16 @@ describe("TreatmentsUtils", () => {
       ).toBe(true);
     });
 
-    it("should include INPATIENT order regardless of DISCH tag", () => {
+    it("should include INPATIENT order without DISCH tag", () => {
       expect(
         shouldIncludeInIPDDashboard(buildOrder("INPATIENT", false), true)
       ).toBe(true);
+    });
+
+    it("should exclude INPATIENT order with DISCH tag", () => {
+      expect(
+        shouldIncludeInIPDDashboard(buildOrder("INPATIENT", true), true)
+      ).toBe(false);
     });
 
     it("should include only INPATIENT orders when allMedicinesInPrescriptionAvailableForIPD is false", () => {
@@ -230,6 +239,77 @@ describe("TreatmentsUtils", () => {
       expect(
         shouldIncludeInIPDDashboard(buildOrder("OUTPATIENT", false), false)
       ).toBe(false);
+    });
+
+    it("should exclude INPATIENT discharge order when allMedicinesInPrescriptionAvailableForIPD is false", () => {
+      expect(
+        shouldIncludeInIPDDashboard(buildOrder("INPATIENT", true), false)
+      ).toBe(false);
+    });
+  });
+
+  describe("getDischargeRevisedOrderUuids", () => {
+    const buildDrugOrder = (action, isDischargeMedication, previousOrderUuid) => ({
+      drugOrder: { action, previousOrderUuid },
+      isDischargeMedication,
+    });
+
+    it("should return empty Set for empty array", () => {
+      expect(getDischargeRevisedOrderUuids([])).toEqual(new Set());
+    });
+
+    it("should include previousOrderUuid for REVISE + isDischargeMedication=true", () => {
+      const orders = [buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, true, "uuid-123")];
+      expect(getDischargeRevisedOrderUuids(orders)).toEqual(new Set(["uuid-123"]));
+    });
+
+    it("should NOT include uuid for REVISE + isDischargeMedication=false", () => {
+      const orders = [buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, false, "uuid-123")];
+      expect(getDischargeRevisedOrderUuids(orders)).toEqual(new Set());
+    });
+
+    it("should NOT include uuid for NEW + isDischargeMedication=true", () => {
+      const orders = [buildDrugOrder(DRUG_ORDER_ACTIONS.NEW, true, "uuid-123")];
+      expect(getDischargeRevisedOrderUuids(orders)).toEqual(new Set());
+    });
+
+    it("should NOT include entry when previousOrderUuid is null", () => {
+      const orders = [buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, true, null)];
+      expect(getDischargeRevisedOrderUuids(orders)).toEqual(new Set());
+    });
+
+    it("should NOT include entry when previousOrderUuid is undefined", () => {
+      const orders = [buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, true, undefined)];
+      expect(getDischargeRevisedOrderUuids(orders)).toEqual(new Set());
+    });
+
+    it("should include all previousOrderUuids for multiple qualifying orders", () => {
+      const orders = [
+        buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, true, "uuid-1"),
+        buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, true, "uuid-2"),
+        buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, false, "uuid-3"),
+      ];
+      expect(getDischargeRevisedOrderUuids(orders)).toEqual(new Set(["uuid-1", "uuid-2"]));
+    });
+  });
+
+  describe("isSupersededByDischargeRevision", () => {
+    it("should return true when order is stopped and uuid is in discharge revised set", () => {
+      const order = { drugOrder: { dateStopped: 1704785404, uuid: "uuid-1" } };
+      const uuids = new Set(["uuid-1"]);
+      expect(isSupersededByDischargeRevision(order, uuids)).toBe(true);
+    });
+
+    it("should return false when order is stopped but uuid is NOT in discharge revised set", () => {
+      const order = { drugOrder: { dateStopped: 1704785404, uuid: "uuid-2" } };
+      const uuids = new Set(["uuid-1"]);
+      expect(isSupersededByDischargeRevision(order, uuids)).toBe(false);
+    });
+
+    it("should return false when order is NOT stopped even if uuid is in discharge revised set", () => {
+      const order = { drugOrder: { dateStopped: null, uuid: "uuid-1" } };
+      const uuids = new Set(["uuid-1"]);
+      expect(isSupersededByDischargeRevision(order, uuids)).toBe(false);
     });
   });
 
