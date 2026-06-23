@@ -29,6 +29,7 @@ const VariableDoseStagesTable = ({
   effectiveStartDate,
   onAddToDrugChart,
   onEditDrugChart,
+  onStopDrugChart,
   stageSchedules,
   isAddToDrugChartDisabled,
   isReadMode,
@@ -45,12 +46,14 @@ const VariableDoseStagesTable = ({
 
   return (
     <div className="vdp-section">
-      <p className="vdp-title">
-        <FormattedMessage
-          id="VARIABLE_DOSAGE_PROTOCOL"
-          defaultMessage="Variable Dosage Protocol"
-        />
-      </p>
+      <div className="vdp-header">
+        <p className="vdp-title">
+          <FormattedMessage
+            id="VARIABLE_DOSAGE_PROTOCOL"
+            defaultMessage="Variable Dosage Protocol"
+          />
+        </p>
+      </div>
       <Table className="vdp-table">
         <TableHead>
           <TableRow>
@@ -99,6 +102,7 @@ const VariableDoseStagesTable = ({
             );
             const isScheduled = stageStatus?.isScheduled;
             const adminStarted = stageStatus?.administrationStarted;
+            const pendingSlotsAvailable = stageStatus?.pendingSlotsAvailable;
             const isActiveStage = index === activeStageIndex;
 
             const stage = stages[index];
@@ -177,11 +181,11 @@ const VariableDoseStagesTable = ({
                 <TableCell>{stage.frequency}</TableCell>
                 <TableCell>{stage.duration}</TableCell>
                 <TableCell>
-                  {isActiveStage && (
+                  {isActiveStage && onAddToDrugChart && (
                     <Link
                       disabled={isButtonDisabled}
                       onClick={() => {
-                        if (!isButtonDisabled && onAddToDrugChart) onAddToDrugChart(index);
+                        if (!isButtonDisabled) onAddToDrugChart(index);
                       }}
                     >
                       <FormattedMessage
@@ -203,6 +207,19 @@ const VariableDoseStagesTable = ({
                       />
                     </Link>
                   )}
+                  {adminStarted && pendingSlotsAvailable && onStopDrugChart && (
+                    <Link
+                      disabled={isReadMode}
+                      onClick={() => {
+                        if (!isReadMode) onStopDrugChart();
+                      }}
+                    >
+                      <FormattedMessage
+                        id="STOP_DRUG"
+                        defaultMessage="Stop drug"
+                      />
+                    </Link>
+                  )}
                 </TableCell>
               </TableRow>
             );
@@ -218,6 +235,7 @@ VariableDoseStagesTable.propTypes = {
   effectiveStartDate: PropTypes.number.isRequired,
   onAddToDrugChart: PropTypes.func,
   onEditDrugChart: PropTypes.func,
+  onStopDrugChart: PropTypes.func,
   stageSchedules: PropTypes.array,
   isAddToDrugChartDisabled: PropTypes.bool,
   isReadMode: PropTypes.bool,

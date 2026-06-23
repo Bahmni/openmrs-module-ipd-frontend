@@ -17,6 +17,7 @@ const ExpandableRowData = (props) => {
         hasScheduleEditPrivilege={expandTreatmentData.hasScheduleEditPrivilege}
         onAddToDrugChart={expandTreatmentData.onAddToDrugChart}
         onEditDrugChart={expandTreatmentData.onEditDrugChart}
+        onStopDrugChart={expandTreatmentData.onStopDrugChart}
       />
     );
   }

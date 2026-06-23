@@ -74,7 +74,7 @@ const ExpandableDataTable = (props) => {
                   ? "green-row"
                   : matchedData?.isInProgress
                   ? "in-progress-row"
-                  : matchedData?.isCompleted
+                  : matchedData?.isCompleted || matchedData?.dateStopped
                   ? ""
                   : matchedData?.isVariableDose
                   ? "variable-dose-row"
@@ -83,7 +83,7 @@ const ExpandableDataTable = (props) => {
                   ? "green-cell"
                   : matchedData?.isInProgress
                   ? "in-progress-cell"
-                  : matchedData?.isCompleted
+                  : matchedData?.isCompleted || matchedData?.dateStopped
                   ? ""
                   : matchedData?.isVariableDose
                   ? "variable-dose-cell"

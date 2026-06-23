@@ -493,4 +493,94 @@ describe("stage button behaviour", () => {
     expect(addLink).toBeInTheDocument();
     expect(addLink).toHaveAttribute("aria-disabled", "true");
   });
+
+  it("shows Stop drug link when stage has administrationStarted and pendingSlotsAvailable", () => {
+    const onStopDrugChart = jest.fn();
+    render(
+      <VariableDoseStagesTable
+        fhirDosages={noLoadingDoseFhirDosages}
+        effectiveStartDate={effectiveStartDate}
+        {...defaultStageProps}
+        stageSchedules={[
+          {
+            variableDosageSequence: 1,
+            isScheduled: true,
+            administrationStarted: true,
+            pendingSlotsAvailable: true,
+            allAttended: false,
+          },
+        ]}
+        onStopDrugChart={onStopDrugChart}
+      />
+    );
+    expect(screen.getByText("Stop drug")).toBeInTheDocument();
+  });
+
+  it("does not show Stop drug link when onStopDrugChart is not provided", () => {
+    render(
+      <VariableDoseStagesTable
+        fhirDosages={noLoadingDoseFhirDosages}
+        effectiveStartDate={effectiveStartDate}
+        {...defaultStageProps}
+        stageSchedules={[
+          {
+            variableDosageSequence: 1,
+            isScheduled: true,
+            administrationStarted: true,
+            pendingSlotsAvailable: true,
+            allAttended: false,
+          },
+        ]}
+      />
+    );
+    expect(screen.queryByText("Stop drug")).toBeNull();
+  });
+
+  it("calls onStopDrugChart when Stop drug link is clicked", () => {
+    const onStopDrugChart = jest.fn();
+    render(
+      <VariableDoseStagesTable
+        fhirDosages={noLoadingDoseFhirDosages}
+        effectiveStartDate={effectiveStartDate}
+        {...defaultStageProps}
+        stageSchedules={[
+          {
+            variableDosageSequence: 1,
+            isScheduled: true,
+            administrationStarted: true,
+            pendingSlotsAvailable: true,
+            allAttended: false,
+          },
+        ]}
+        onStopDrugChart={onStopDrugChart}
+        isReadMode={false}
+      />
+    );
+    screen.getByText("Stop drug").click();
+    expect(onStopDrugChart).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not call onStopDrugChart when Stop drug link is clicked in read mode", () => {
+    const onStopDrugChart = jest.fn();
+    render(
+      <VariableDoseStagesTable
+        fhirDosages={noLoadingDoseFhirDosages}
+        effectiveStartDate={effectiveStartDate}
+        {...defaultStageProps}
+        stageSchedules={[
+          {
+            variableDosageSequence: 1,
+            isScheduled: true,
+            administrationStarted: true,
+            pendingSlotsAvailable: true,
+            allAttended: false,
+          },
+        ]}
+        onStopDrugChart={onStopDrugChart}
+        isReadMode={true}
+      />
+    );
+    screen.getByText("Stop drug").click();
+    expect(onStopDrugChart).not.toHaveBeenCalled();
+  });
 });
