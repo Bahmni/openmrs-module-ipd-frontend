@@ -142,7 +142,9 @@ export const updateDrugOrderList = (drugOrderList) => {
       ipdDrugOrder.additionalInstructions = "";
       ipdDrugOrder.rate = null;
       ipdDrugOrder.additives = null;
-      ipdDrugOrder.isDischargeMedication = false;
+      const administrationInstructions = parseFlatAdminInstructions(adminInstructionsStr);
+      ipdDrugOrder.isDischargeMedication =
+        administrationInstructions.isDischargeMedication || false;
 
       const { quantity, quantityUnits, doseUnits } =
         ipdDrugOrder.drugOrder.dosingInstructions;
