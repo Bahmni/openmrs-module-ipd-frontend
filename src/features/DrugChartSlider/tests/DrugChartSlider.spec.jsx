@@ -1145,4 +1145,89 @@ describe("DrugChartSlider", () => {
       });
     });
   });
+
+  describe("intraday dose support", () => {
+    const mockIntradayDrugOrder = {
+      drugOrder: {
+        drugNonCoded: null,
+        drug: { uuid: "drug-1", name: "Prednisolone" },
+        duration: 5,
+        durationUnits: "Day(s)",
+        dosingInstructions: { asNeeded: false },
+      },
+      uniformDosingType: { dose: null, doseUnits: "mg", frequency: null },
+      intradayDose: { morning: 10, afternoon: 0, evening: 20, night: 0 },
+    };
+
+    const mockIntradayScheduleFrequencies = [
+      { name: "Twice a day", frequencyPerDay: 2, scheduleTiming: ["08:00", "20:00"] },
+      { name: "Thrice a day", frequencyPerDay: 3, scheduleTiming: ["08:00", "14:00", "20:00"] },
+    ];
+
+    it("resolves enableSchedule from scheduleFrequencies by frequencyPerDay for intraday with 2 non-zero doses", async () => {
+      renderWithProviders(
+        <DrugChartSlider
+          hostData={{
+            enable24HourTimers: true,
+            scheduleFrequencies: mockIntradayScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockIntradayDrugOrder,
+          }}
+          hostApi={{}}
+          title=""
+          drugChartNotes=""
+          setDrugChartNotes={jest.fn()}
+        />
+      );
+
+      await waitFor(() => {
+        expect(document.querySelectorAll("#time-selector").length).toBeGreaterThan(0);
+      });
+    });
+
+    it("does not render StartTimeSection for intraday orders", async () => {
+      const { queryByLabelText } = renderWithProviders(
+        <DrugChartSlider
+          hostData={{
+            enable24HourTimers: true,
+            scheduleFrequencies: mockIntradayScheduleFrequencies,
+            startTimeFrequencies: mockStartTimeFrequencies,
+            drugOrder: mockIntradayDrugOrder,
+          }}
+          hostApi={{}}
+          title=""
+          drugChartNotes=""
+          setDrugChartNotes={jest.fn()}
+        />
+      );
+
+      await waitFor(() => {
+        expect(queryByLabelText(/start time/i)).toBeNull();
+      });
+    });
+
+    it("falls back gracefully when no matching scheduleFrequency found for intraday", async () => {
+      const drugOrderWith3Doses = {
+        ...mockIntradayDrugOrder,
+        intradayDose: { morning: 10, afternoon: 5, evening: 10, night: 0 },
+      };
+
+      expect(() =>
+        renderWithProviders(
+          <DrugChartSlider
+            hostData={{
+              enable24HourTimers: true,
+              scheduleFrequencies: [],
+              startTimeFrequencies: mockStartTimeFrequencies,
+              drugOrder: drugOrderWith3Doses,
+            }}
+            hostApi={{}}
+            title=""
+            drugChartNotes=""
+            setDrugChartNotes={jest.fn()}
+          />
+        )
+      ).not.toThrow();
+    });
+  });
 });

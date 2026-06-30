@@ -52,6 +52,7 @@ export default function TaskTile(props) {
     isANonMedicationTask,
     creator,
     taskType,
+    intradayDoseString,
   } = newMedicationNursingTask;
   const intl = useIntl();
 
@@ -164,9 +165,15 @@ export default function TaskTile(props) {
               paddingLeft: "25px",
             }}
           >
-            <span>{dosage}</span>
-            {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
-            {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
+            {intradayDoseString ? (
+              <span>{intradayDoseString}</span>
+            ) : (
+              <>
+                <span>{dosage}</span>
+                {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
+                {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
+              </>
+            )}
           </div>
           {!(
             dosingInstructions?.asNeeded &&

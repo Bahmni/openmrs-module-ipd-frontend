@@ -728,6 +728,7 @@ export const mockExtractedMedicationNursingTasksData = [
       orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750884",
       serviceType: "MedicationRequest",
       lastAdministrationTime: null,
+      intradayDoseString: null,
     },
     {
       drugName: "Paracetamol 120 mg (Tablet)",
@@ -744,6 +745,7 @@ export const mockExtractedMedicationNursingTasksData = [
       orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750885",
       serviceType: "MedicationRequest",
       lastAdministrationTime: null,
+      intradayDoseString: null,
     },
   ],
   [
@@ -762,6 +764,7 @@ export const mockExtractedMedicationNursingTasksData = [
       isDisabled: false,
       serviceType: "MedicationRequest",
       lastAdministrationTime: null,
+      intradayDoseString: null,
     },
   ],
 ];
@@ -788,6 +791,7 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       orderId: "paracetamol-125mg-tablet-uuid",
       serviceType: "MedicationRequest",
       lastAdministrationTime: 1702650700,
+      intradayDoseString: null,
     },
   ],
   [
@@ -811,6 +815,7 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       orderId: "paracetamol-120mg-tablet-uuid",
       serviceType: "MedicationRequest",
       lastAdministrationTime: 1702670700,
+      intradayDoseString: null,
     },
   ],
 ];
@@ -835,6 +840,7 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
       isDisabled: true,
       serviceType: "MedicationRequest",
       lastAdministrationTime: null,
+      intradayDoseString: null,
     },
   ],
   [
@@ -857,6 +863,7 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
       serviceType: "MedicationRequest",
       isDisabled: true,
       lastAdministrationTime: null,
+      intradayDoseString: null,
     },
   ],
 ];
@@ -881,6 +888,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       serviceType: "MedicationRequest",
       status: "missed",
       lastAdministrationTime: null,
+      intradayDoseString: null,
     },
   ],
   [
@@ -903,6 +911,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       serviceType: "MedicationRequest",
       status: "missed",
       lastAdministrationTime: null,
+      intradayDoseString: null,
     },
   ],
   [
@@ -925,6 +934,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       serviceType: "MedicationRequest",
       status: "missed",
       lastAdministrationTime: null,
+      intradayDoseString: null,
     },
   ],
 ];
@@ -949,6 +959,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       serviceType: "MedicationRequest",
       isDisabled: false,
       lastAdministrationTime: null,
+      intradayDoseString: null,
     },
   ],
   [
@@ -970,6 +981,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       serviceType: "MedicationRequest",
       isDisabled: false,
       lastAdministrationTime: null,
+      intradayDoseString: null,
     },
   ],
   [
@@ -991,6 +1003,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       serviceType: "MedicationRequest",
       isDisabled: false,
       lastAdministrationTime: null,
+      intradayDoseString: null,
     },
   ],
   [
@@ -1014,6 +1027,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       serviceType: "MedicationRequest",
       isDisabled: true,
       lastAdministrationTime: 1702650700,
+      intradayDoseString: null,
     },
   ],
   [
@@ -1037,6 +1051,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       orderId: "paracetamol-120mg-tablet-uuid",
       serviceType: "MedicationRequest",
       lastAdministrationTime: 1702670800,
+      intradayDoseString: null,
     },
   ],
 ];

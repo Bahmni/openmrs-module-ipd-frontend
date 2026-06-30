@@ -22,6 +22,8 @@ export default function DrugListCell(props) {
     isVariableDose,
     fhirDosages,
     stageSchedules,
+    isIntraday,
+    intradayDoseString,
   } = props.drugInfo;
   const { instructions, dosage, doseUnits, route } = dosingInstructions;
   const { config } = useContext(IPDContext);
@@ -244,6 +246,8 @@ export default function DrugListCell(props) {
                 values={{ stages: vdpStages.filter((s) => !s.isLoadingDose).length, days: totalDays }}
               />
             </>
+          ) : isIntraday ? (
+            <>{intradayDoseString}</>
           ) : (
             <>
               {dosage}

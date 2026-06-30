@@ -611,7 +611,11 @@ const UpdateNursingTasks = (props) => {
                     <></>
                   )}
                 </div>
-                {tasks[medicationTask.uuid]?.route ? (
+                {medicationTask.intradayDoseString ? (
+                  <div className="task-details">
+                    <span>{medicationTask.intradayDoseString}</span>
+                  </div>
+                ) : tasks[medicationTask.uuid]?.route ? (
                   <div className="task-details">
                     <span>{medicationTask.dosage}</span>
                     {medicationTask.doseType && (

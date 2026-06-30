@@ -174,3 +174,36 @@ describe("variable dose order", () => {
     expect(MockTooltip).not.toHaveBeenCalled();
   });
 });
+
+describe("intraday order in DrugListCell", () => {
+  it("renders intradayDoseString when isIntraday is true", () => {
+    const intradayDrugInfo = {
+      dosingInstructions: {
+        dosage: null,
+        doseUnits: "mg",
+        route: "Oral",
+        frequency: null,
+        instructions: null,
+        asNeeded: false,
+      },
+      duration: "5 Day(s)",
+      name: "Prednisolone",
+      slots: [],
+      notes: null,
+      orderReasonText: null,
+      isVariableDose: false,
+      fhirDosages: null,
+      stageSchedules: null,
+      isIntraday: true,
+      intradayDoseString: "10-0-30-10 mg - Oral - for 5 Day(s)",
+    };
+
+    const { getByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        <DrugListCell drugInfo={intradayDrugInfo} />
+      </IPDContext.Provider>
+    );
+
+    expect(getByText("10-0-30-10 mg - Oral - for 5 Day(s)")).toBeTruthy();
+  });
+});

@@ -132,4 +132,32 @@ describe("TaskTile", () => {
     );
     expect(getByText("bailly rurangirwa")).toBeTruthy();
   });
+
+  it("should render intradayDoseString instead of separate dosage/doseType/drugRoute when intradayDoseString is set", () => {
+    const intradayTaskData = [
+      {
+        drugName: "Prednisolone",
+        drugRoute: "Oral",
+        duration: "5 Day(s)",
+        dosage: null,
+        doseType: "mg",
+        uuid: "intraday-task-uuid",
+        startTimeInEpochSeconds: 1703601000,
+        startTime: "08:00",
+        orderId: "intraday-order-uuid",
+        isDisabled: false,
+        intradayDoseString: "10-0-30-10 mg - Oral - for 5 Day(s)",
+      },
+    ];
+
+    const { getByText } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <TaskTile medicationNursingTask={intradayTaskData} />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    expect(getByText("10-0-30-10 mg - Oral - for 5 Day(s)")).toBeTruthy();
+  });
 });

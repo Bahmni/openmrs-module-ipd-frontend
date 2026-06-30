@@ -243,8 +243,84 @@ button[class*="bx--"]:disabled {
   font-size: 0.85rem;
 }
 
-.bx--number input[type="number"]:disabled ~ .bx--number__controls {
+.dose-field-with-units .bx--number input[type="number"]:disabled ~ .bx--number__controls,
+.duration-field-with-units .bx--number input[type="number"]:disabled ~ .bx--number__controls {
   width: 55%;
+  background-color: #efefef;
+}
+
+.dose-field-with-units .bx--number input[type="number"]:disabled ~ .bx--number__controls .bx--number__control-btn::before,
+.dose-field-with-units .bx--number input[type="number"]:disabled ~ .bx--number__controls .bx--number__control-btn::after,
+.duration-field-with-units .bx--number input[type="number"]:disabled ~ .bx--number__controls .bx--number__control-btn::before,
+.duration-field-with-units .bx--number input[type="number"]:disabled ~ .bx--number__controls .bx--number__control-btn::after {
+  background-color: transparent;
+}
+
+.dose-field-with-units > * {
+  min-width: 0;
+}
+
+.dose-field-with-units.intraday-dose-field {
+  width: 100%;
+  margin-right: 0;
+}
+
+.intraday-dose-field > *:not(.dropdown) {
+  flex-grow: 1;
+}
+
+.intraday-dose-field .dropdown {
+  width: 90px;
+  flex-shrink: 0;
+  margin-right: 0 !important;
+}
+
+.intraday-dose-field .bx--number input[type="number"] {
+  min-width: 0;
+}
+
+.intraday-dose-field .bx--number input[type="number"]:disabled ~ .bx--number__controls {
+  width: 40%;
+}
+
+.dose-field-with-units .bx--number input[type="number"]:disabled {
+  padding-right: 50%;
+}
+
+.intraday-dose-field .bx--number input[type="number"]:disabled {
+  padding-right: 40%;
+  padding-left: 8px;
+}
+
+.intraday-route-duration {
+  gap: 10px;
+}
+
+.intraday-route-duration .route {
+  width: 40%;
+}
+
+.intraday-route-duration .route .bx--list-box__wrapper {
+  max-width: none;
+}
+
+.intraday-route-duration .duration-field-with-units {
+  flex: 1;
+  margin-right: 0;
+}
+
+.intraday-route-duration .duration-field-with-units .dropdown {
+  flex-grow: 1;
+  margin-right: 0 !important;
+}
+
+.intraday-start-date {
+  width: 40%;
+  overflow: hidden;
+}
+
+.intraday-start-date .date-picker-carbon {
+  width: 100%;
 }
 
 .bx--time-picker .bx--select-input {

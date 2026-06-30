@@ -304,4 +304,79 @@ describe("NursingTasksUtils", () => {
       });
     });
   });
+
+  describe("ExtractMedicationNursingTasksData - intraday orders", () => {
+    it("sets intradayDoseString on slotInfo for a slot with intraday dosingInstructions", () => {
+      const intradayTaskData = [
+        {
+          slots: [
+            {
+              id: 1,
+              uuid: "intraday-slot-uuid",
+              serviceType: "MedicationRequest",
+              status: "SCHEDULED",
+              startTime: 1690906550,
+              order: {
+                uuid: "intraday-order-uuid",
+                drug: { display: "Prednisolone" },
+                route: { display: "Oral" },
+                dose: null,
+                doseUnits: { display: "mg" },
+                duration: 5,
+                durationUnits: { display: "Day(s)" },
+                autoExpireDate: 1691791200000,
+                asNeeded: false,
+                frequency: null,
+                dosingInstructions: JSON.stringify({
+                  morningDose: 10,
+                  afternoonDose: 0,
+                  eveningDose: 30,
+                  nightDose: 10,
+                }),
+              },
+            },
+          ],
+        },
+      ];
+
+      const filterValue = { id: "pending" };
+      const result = ExtractMedicationNursingTasksData(intradayTaskData, filterValue, false);
+      const slotInfo = result[0][0];
+      expect(slotInfo.intradayDoseString).toBe("10-0-30-10 mg - Oral - for 5 Day(s)");
+    });
+
+    it("sets intradayDoseString to null for non-intraday orders", () => {
+      const regularTaskData = [
+        {
+          slots: [
+            {
+              id: 1,
+              uuid: "regular-slot-uuid",
+              serviceType: "MedicationRequest",
+              status: "SCHEDULED",
+              startTime: 1690906550,
+              order: {
+                uuid: "regular-order-uuid",
+                drug: { display: "Paracetamol" },
+                route: { display: "Oral" },
+                dose: 25,
+                doseUnits: { display: "mg" },
+                duration: 3,
+                durationUnits: { display: "Day(s)" },
+                autoExpireDate: 1691791200000,
+                asNeeded: false,
+                frequency: { display: "Once a day" },
+                dosingInstructions: JSON.stringify({ instructions: "After meals" }),
+              },
+            },
+          ],
+        },
+      ];
+
+      const filterValue = { id: "pending" };
+      const result = ExtractMedicationNursingTasksData(regularTaskData, filterValue, false);
+      const slotInfo = result[0][0];
+      expect(slotInfo.intradayDoseString).toBeNull();
+    });
+  });
 });

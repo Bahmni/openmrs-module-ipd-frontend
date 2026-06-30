@@ -50,20 +50,31 @@ const DrugChartSlider = (props) => {
   const timeWindowToDisableSlots =
     drugChartSlider.timeInMinutesToDisableSlotPostScheduledTime;
 
-  const enableSchedule =
-    hostData?.drugOrder?.uniformDosingType?.frequency &&
-    hostData?.drugOrder?.drugOrder?.duration
+  const intradayDose = hostData?.drugOrder?.intradayDose;
+  const intradayDosesPerDay = intradayDose
+    ? Object.values(intradayDose).filter((v) => v != null && v !== 0).length
+    : null;
+
+  const enableSchedule = hostData?.drugOrder?.drugOrder?.duration
+    ? intradayDose && intradayDosesPerDay
+      ? hostData?.scheduleFrequencies?.find(
+          (f) => f.frequencyPerDay === intradayDosesPerDay
+        ) || null
+      : hostData?.drugOrder?.uniformDosingType?.frequency
       ? hostData?.scheduleFrequencies?.find(
           (frequency) =>
             frequency.name === hostData?.drugOrder?.uniformDosingType?.frequency
         )
-      : null;
-  const enableStartTime =
+      : null
+    : null;
+
+  const enableStartTime = !intradayDose && (
     hostData?.startTimeFrequencies?.includes(
       hostData?.drugOrder?.uniformDosingType?.frequency
     ) ||
     !hostData?.drugOrder?.uniformDosingType?.frequency ||
-    !hostData?.drugOrder?.drugOrder?.duration;
+    !hostData?.drugOrder?.drugOrder?.duration
+  );
   const enable24HourTimers = hostData?.enable24HourTimers || false;
   const timeFormat = enable24HourTimers ? timeFormatFor24Hr : timeFormatFor12Hr;
   const isEdit = Boolean(hostData?.drugOrder?.drugOrderSchedule);
@@ -978,7 +989,7 @@ const DrugChartSlider = (props) => {
     <I18nProvider>
       <SideBarPanel title={sliderTitle} closeSideBar={handleClose}>
         <div style={{ padding: "20px", paddingBottom: "120px" }}>
-          <DrugDetails hostData={hostData} />
+          <DrugDetails hostData={hostData} intradayFrequencyName={enableSchedule?.name} />
           {!hostData?.drugOrder?.drugOrder?.dosingInstructions?.asNeeded && (
             <>
               <ScheduleSection

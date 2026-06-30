@@ -22,6 +22,10 @@ import {
   parseFhirDosages,
   parseFlatAdminInstructions,
 } from "../../../../utils/FhirDosingUtils";
+import {
+  formatIntradayDoseString,
+  isIntradayDosingInstruction,
+} from "../../Treatments/utils/TreatmentsUtils";
 
 export const fetchMedications = async (
   patientUuid,
@@ -70,10 +74,32 @@ export const transformDrugOrders = (orders) => {
       } else if (
         DOSE_UNITS.includes(dosingInstructions.doseUnits?.toLowerCase())
       ) {
-        dosage = dosingInstructions.dose + dosingInstructions.doseUnits;
+        dosage =
+          dosingInstructions.dose != null
+            ? dosingInstructions.dose + dosingInstructions.doseUnits
+            : "";
       } else {
         dosage = dosingInstructions.dose;
         doseUnits = dosingInstructions.doseUnits;
+      }
+      const isIntraday =
+        !isVariableDose && isIntradayDosingInstruction(parsedInstructions);
+      let intradayDoseString = null;
+      if (isIntraday) {
+        const intradayDose = {
+          morning: parsedInstructions.morningDose,
+          afternoon: parsedInstructions.afternoonDose,
+          evening: parsedInstructions.eveningDose,
+          night: parsedInstructions.nightDose,
+        };
+        intradayDoseString = formatIntradayDoseString(
+          intradayDose,
+          dosingInstructions.doseUnits,
+          dosingInstructions.route,
+          null,
+          duration,
+          durationUnits
+        );
       }
       medicationData[order.drugOrder.uuid] = {
         name: drug?.name || drugNonCoded,
@@ -103,6 +129,8 @@ export const transformDrugOrders = (orders) => {
         stageSchedules: isVariableDose
           ? order.drugOrderSchedule?.stageSchedules || []
           : null,
+        isIntraday,
+        intradayDoseString,
       };
     }
   });
@@ -596,6 +624,8 @@ export const prepareSlotData = (slot, rowData, enable24HourTime) => {
           : stageInfo.frequency;
       }
     }
+  } else if (rowData?.isIntraday && rowData?.intradayDoseString) {
+    dosageInfo = rowData.intradayDoseString;
   } else {
     const dosingInstructions = rowData?.dosingInstructions;
     if (dosingInstructions) {

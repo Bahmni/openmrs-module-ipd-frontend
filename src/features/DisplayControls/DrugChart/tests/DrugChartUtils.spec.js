@@ -489,4 +489,74 @@ describe("DrugChartUtils", () => {
       expect(result["regular-order-1"].isVariableDose).toBe(false);
     });
   });
+
+  describe("transformDrugOrders - intraday orders", () => {
+    const createIntradayOrder = () => ({
+      drugOrder: {
+        uuid: "intraday-order-1",
+        careSetting: "INPATIENT",
+        drug: { name: "Prednisolone" },
+        duration: 5,
+        durationUnits: "Day(s)",
+        dosingInstructions: {
+          dose: null,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: null,
+          administrationInstructions: JSON.stringify({
+            morningDose: 10,
+            afternoonDose: 0,
+            eveningDose: 30,
+            nightDose: 10,
+          }),
+        },
+      },
+      drugOrderSchedule: { slotStartTime: 1000 },
+    });
+
+    it("sets isIntraday to true for an intraday order", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createIntradayOrder()],
+        emergencyMedications: [],
+      });
+      expect(result["intraday-order-1"].isIntraday).toBe(true);
+    });
+
+    it("sets intradayDoseString with correct format", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createIntradayOrder()],
+        emergencyMedications: [],
+      });
+      expect(result["intraday-order-1"].intradayDoseString).toBe(
+        "10-0-30-10 mg - Oral - for 5 Day(s)"
+      );
+    });
+
+    it("sets isIntraday to false for a non-intraday order", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [
+          {
+            drugOrder: {
+              uuid: "regular-1",
+              careSetting: "INPATIENT",
+              drug: { name: "Drug A" },
+              duration: 3,
+              durationUnits: "Day(s)",
+              dosingInstructions: {
+                dose: 10,
+                doseUnits: "Tablet",
+                route: "Oral",
+                frequency: "Once a day",
+                administrationInstructions: "{}",
+              },
+            },
+            drugOrderSchedule: { slotStartTime: 1000 },
+          },
+        ],
+        emergencyMedications: [],
+      });
+      expect(result["regular-1"].isIntraday).toBe(false);
+      expect(result["regular-1"].intradayDoseString).toBeNull();
+    });
+  });
 });
