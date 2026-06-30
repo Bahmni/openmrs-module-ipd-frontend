@@ -105,5 +105,11 @@
   "WEIGHT_HEADER": "Weight ({unit})",
   "BMI_HEADER": "BMI ({unit})",
   "MUAC": "MUAC ({unit})",
-  "CREATED_BY": "Created by {provider}"
+  "CREATED_BY": "Created by {provider}",
+  "ALLERGEN_COLUMN_HEADER": "Allergen",
+  "SEVERITY_COLUMN_HEADER": "Severity",
+  "REACTION_COLUMN_HEADER": "Reaction",
+  "COMMENTS_COLUMN_HEADER": "Comments",
+  "PROVIDER_COLUMN_HEADER": "Provider Name",
+  "DATE_COLUMN_HEADER": "Date"
 }
