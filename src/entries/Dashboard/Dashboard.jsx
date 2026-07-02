@@ -22,6 +22,7 @@ import {
   getAppLandingPageUrl,
   getDashboardConfig,
   getPatientDashboardUrl,
+  getShiftDetailsFromGlobalProperty,
   isUserPrivileged,
 } from "../../utils/CommonUtils";
 import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
@@ -104,7 +105,12 @@ export default function Dashboard(props) {
 
   const fetchConfig = async () => {
     const configData = await getDashboardConfig();
-    const config = configData.data || {};
+    let config = configData.data || {};
+
+    // Always fetch shift details from Global Property
+    const shiftDetails = await getShiftDetailsFromGlobalProperty();
+    config.shiftDetails = shiftDetails;
+
     setDashboardConfig(config);
     setIsConfigLoaded(true);
     const { sections = [] } = config;

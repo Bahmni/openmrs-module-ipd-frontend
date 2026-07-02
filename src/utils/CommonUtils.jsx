@@ -6,6 +6,7 @@ import {
   FETCH_ALL_FORM_DETAILS_URL,
   FETCH_ALL_OBSERVATIONS_IN_ENCOUNTER_URL,
   FORM_BASE_URL,
+  GLOBAL_PROPERTY_URL,
   SEARCH_CONCEPT_URL,
   SEARCH_DRUG_URL,
   DAEMON_USER,
@@ -148,6 +149,32 @@ export const getDashboardConfig = async () => {
   } catch (error) {
     return error;
   }
+};
+
+export const getShiftDetailsFromGlobalProperty = async () => {
+  try {
+    const response = await axios.get(GLOBAL_PROPERTY_URL, {
+      params: { property: "ipd.shiftDetails" },
+      withCredentials: true,
+      headers: { Accept: "text/plain" },
+    });
+    if (response.status !== 200) throw new Error(response.statusText);
+    const shiftDetails = JSON.parse(response.data);
+    if (shiftDetails && Object.keys(shiftDetails).length > 0) {
+      return shiftDetails;
+    }
+  } catch (error) {
+    console.warn(
+      "Failed to fetch shift details from Global Property 'ipd.shiftDetails'. " +
+        "Using default fallback timings. Please configure the Global Property for your region. Error:",
+      error.message
+    );
+  }
+  // Default fallback
+  return {
+    1: { shiftStartTime: "08:00", shiftEndTime: "19:00" },
+    2: { shiftStartTime: "19:00", shiftEndTime: "08:00" },
+  };
 };
 
 export const getAllFormsInfo = async () => {

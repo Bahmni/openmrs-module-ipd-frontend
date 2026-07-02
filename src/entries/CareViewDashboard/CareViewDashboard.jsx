@@ -15,7 +15,11 @@ import {
 } from "../../constants";
 import { CareViewContext } from "../../context/CareViewContext";
 import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
-import { getDashboardConfig, isUserPrivileged } from "../../utils/CommonUtils";
+import {
+  getDashboardConfig,
+  getShiftDetailsFromGlobalProperty,
+  isUserPrivileged,
+} from "../../utils/CommonUtils";
 import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
 import { DraftIndicator } from "../../components/DraftIndicator/DraftIndicator";
 
@@ -58,7 +62,12 @@ const CareViewDashboard = (props) => {
 
   const getIpdConfig = async () => {
     const configData = await getDashboardConfig();
-    const config = configData.data || {};
+    let config = configData.data || {};
+
+    // Always fetch shift details from Global Property
+    const shiftDetails = await getShiftDetailsFromGlobalProperty();
+    config.shiftDetails = shiftDetails;
+
     setIpdConfig(config);
   };
 
