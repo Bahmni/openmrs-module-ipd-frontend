@@ -138,4 +138,32 @@ describe("DrugChartUtils", () => {
     const updatedDateTime = 1704441600000; // 5th Jan 2024 08:00
     expect(getDateTime(date, time)).toEqual(updatedDateTime);
   });
+    it("should use effectiveStartDate / 1000 as firstSlotStartTime for PRN (asNeeded) orders", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [
+          {
+            drugOrder: {
+              uuid: "prn-order-1",
+              careSetting: "INPATIENT",
+              drug: { name: "PRN Drug" },
+              duration: 3,
+              durationUnits: "Day(s)",
+              effectiveStartDate: 1704441600000,
+              dosingInstructions: {
+                dose: 5,
+                doseUnits: "mg",
+                route: "Oral",
+                frequency: { display: "As needed" },
+                administrationInstructions: "{}",
+                asNeeded: true,
+              },
+            },
+            drugOrderSchedule: { slotStartTime: 9999 },
+          },
+        ],
+        emergencyMedications: [],
+      });
+      const med = result["prn-order-1"];
+      expect(med.firstSlotStartTime).toBe(1704441600000 / 1000);
+    });
 });

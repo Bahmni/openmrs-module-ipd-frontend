@@ -5,6 +5,8 @@ import {
   stopDrugOrders,
   getEncounterType,
   getDrugName,
+  getPRNIntervalInMinutes,
+  isPRNEligibleForNextDose,
 } from "../utils/TreatmentsUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
@@ -109,6 +111,67 @@ describe("TreatmentsUtils", () => {
       getByText("Paracetamol").closest(".strike-through");
     expect(strikeThroughElement).toBeInTheDocument();
     expect(queryByTestId("notes-icon")).toBeFalsy();
+  });
+
+  describe("getPRNIntervalInMinutes", () => {
+    it("should return interval from configMap when frequency is present", () => {
+      const configMap = { "Once a day": 60, "Twice a day": 30 };
+      expect(getPRNIntervalInMinutes("Once a day", configMap)).toBe(60);
+      expect(getPRNIntervalInMinutes("Twice a day", configMap)).toBe(30);
+    });
+
+    it("should return 0 when frequency is not in configMap", () => {
+      const configMap = { "Once a day": 60 };
+      expect(getPRNIntervalInMinutes("Every 4 hours", configMap)).toBe(0);
+    });
+
+    it("should return 0 when configMap is empty", () => {
+      expect(getPRNIntervalInMinutes("Once a day", {})).toBe(0);
+    });
+
+    it("should return 0 when configMap is not provided", () => {
+      expect(getPRNIntervalInMinutes("Once a day")).toBe(0);
+    });
+  });
+
+  describe("isPRNEligibleForNextDose", () => {
+    it("should return true when no lastAdministrationTime is provided", () => {
+      const configMap = { "Once a day": 60 };
+      expect(isPRNEligibleForNextDose(null, "Once a day", configMap)).toBe(
+        true
+      );
+      expect(isPRNEligibleForNextDose(undefined, "Once a day", configMap)).toBe(
+        true
+      );
+    });
+
+    it("should return true when no interval is configured for the frequency", () => {
+      const lastAdminTime = Date.now() / 1000 - 10; // 10 seconds ago
+      expect(
+        isPRNEligibleForNextDose(lastAdminTime, "Unknown Frequency", {})
+      ).toBe(true);
+    });
+
+    it("should return true when enough time has elapsed since last administration", () => {
+      const configMap = { "Once a day": 60 };
+      const lastAdminTime = Date.now() / 1000 - 65 * 60; // 65 minutes ago
+      expect(
+        isPRNEligibleForNextDose(lastAdminTime, "Once a day", configMap)
+      ).toBe(true);
+    });
+
+    it("should return false when not enough time has elapsed since last administration", () => {
+      const configMap = { "Once a day": 60 };
+      const lastAdminTime = Date.now() / 1000 - 30 * 60; // 30 minutes ago
+      expect(
+        isPRNEligibleForNextDose(lastAdminTime, "Once a day", configMap)
+      ).toBe(false);
+    });
+
+    it("should return true when configMap is not provided", () => {
+      const lastAdminTime = Date.now() / 1000 - 10;
+      expect(isPRNEligibleForNextDose(lastAdminTime, "Once a day")).toBe(true);
+    });
   });
 
   it("should return drug name without strike-through when dateStopped is null and anyone of the instructions is present", () => {
