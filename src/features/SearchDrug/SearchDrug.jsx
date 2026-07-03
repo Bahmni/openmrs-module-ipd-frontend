@@ -6,10 +6,10 @@ import { Title } from "bahmni-carbon-ui";
 import { FormattedMessage } from "react-intl";
 import { useIntl } from "react-intl";
 
-
 const SearchDrug = (props) => {
   const { onChange } = props;
   const [items, setItems] = useState([]);
+  const [hasNoDrugs, setHasNoDrugs] = useState(false);
   const intl = useIntl();
 
   const onChangeHandler = async (searchStr) => {
@@ -18,12 +18,8 @@ const SearchDrug = (props) => {
       if (response.status === 200) {
         const drugs = response.data.results;
         if (drugs.length === 0) {
-          setItems([
-            {
-              label: <FormattedMessage id={"NO_DRUGS_FOUND_MESSAGE"} defaultMessage={"No Drugs Found"} />,
-              disabled: true,
-            },
-          ]);
+          setItems([]);
+          setHasNoDrugs(true);
         } else {
           setItems(
             drugs.map((drug) => {
@@ -33,10 +29,12 @@ const SearchDrug = (props) => {
               };
             })
           );
+          setHasNoDrugs(false);
         }
       }
     } else {
       setItems([]);
+      setHasNoDrugs(false);
     }
   };
 
@@ -45,19 +43,34 @@ const SearchDrug = (props) => {
       <ComboBox
         id={"SearchDrug"}
         items={items}
-        placeholder={intl.formatMessage({ id: "SELECT_DRUG_PLACEHOLDER", defaultMessage: "Type to Search Drug" })}
+        placeholder={intl.formatMessage({
+          id: "SELECT_DRUG_PLACEHOLDER",
+          defaultMessage: "Type to Search Drug",
+        })}
         onChange={(e) => {
           onChange(e.selectedItem);
         }}
         size={"xl"}
         titleText={
           <Title
-            text={intl.formatMessage({ id: "DRUG_NAME_LABEL", defaultMessage: "Drug Name (Emergency / Ad hoc)" })}
+            text={intl.formatMessage({
+              id: "DRUG_NAME_LABEL",
+              defaultMessage: "Drug Name (Emergency / Ad hoc)",
+            })}
             isRequired={true}
           />
         }
         onInputChange={onChangeHandler}
       />
+      {hasNoDrugs && (
+        <div style={{ marginTop: "0.5rem", color: "#525252" }}>
+          <FormattedMessage
+            disabled
+            id={"NO_DRUGS_FOUND_MESSAGE"}
+            defaultMessage={"No Drugs Found"}
+          />
+        </div>
+      )}
     </div>
   );
 };
