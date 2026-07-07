@@ -1085,6 +1085,78 @@ describe("DrugChartSlider", () => {
       ).toBe(10 * 3600);
     });
 
+    it("midnight-crossing Day 1 slot does not trigger ascending order warning on save", async () => {
+      // 4x/day: 06:00, 12:00, 18:00, 23:00. MockDate at 14:00 → 06:00 and 12:00 are past.
+      // firstDaySlotsMissed = 2. Nurse changes 18:00 → 20:00; cascade shifts 23:00 → 01:00 AM
+      // (midnight crossing). Save must succeed without showing the ascending order warning.
+      const mockFourTimesFrequencies = [
+        {
+          name: "Four times a day",
+          frequencyPerDay: 4,
+          scheduleTiming: ["06:00", "12:00", "18:00", "23:00"],
+        },
+      ];
+
+      const mockFourTimeDrugOrder = {
+        ...mockScheduleDrugOrder,
+        uniformDosingType: {
+          ...mockScheduleDrugOrder.uniformDosingType,
+          frequency: "Four times a day",
+        },
+        drugOrder: {
+          ...mockScheduleDrugOrder.drugOrder,
+          duration: 4,
+        },
+      };
+
+      MockDate.set("2010-12-22T14:00:00.000Z");
+
+      render(
+        <IntlProvider locale="en">
+          <SliderContext.Provider value={mockSliderContext}>
+            <IPDContext.Provider
+              value={{ config: mockConfig, handleAuditEvent: jest.fn() }}
+            >
+              <DrugChartSlider
+                hostData={{
+                  enable24HourTimers: true,
+                  scheduleFrequencies: mockFourTimesFrequencies,
+                  startTimeFrequencies: mockStartTimeFrequencies,
+                  drugOrder: mockFourTimeDrugOrder,
+                }}
+                hostApi={{}}
+                title=""
+                drugChartNotes=""
+                setDrugChartNotes={jest.fn()}
+              />
+            </IPDContext.Provider>
+          </SliderContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        expect(
+          document.querySelectorAll("#time-selector").length
+        ).toBeGreaterThan(0);
+      });
+
+      // inputs[2] = first editable Day 1 slot (18:00); change to 20:00 (+2h)
+      // cascade shifts inputs[3] (23:00) → 01:00 (crosses midnight)
+      const inputs = document.querySelectorAll("#time-selector");
+      fireEvent.change(inputs[2], { target: { value: "20:00" } });
+      fireEvent.blur(inputs[2]);
+
+      fireEvent.click(screen.getByRole("button", { name: "Save" }));
+
+      await waitFor(() => {
+        expect(mockSaveMedication).toHaveBeenCalled();
+      });
+
+      expect(
+        screen.queryByText(/time entered is not in the correct order/i)
+      ).not.toBeInTheDocument();
+    });
+
     it("AC5: changing first remainder slot cascades offset to remaining remainder slots", async () => {
       const epoch06 = 1704088800; // 2024-01-01 06:00 UTC
       const epoch14 = 1704117600; // 2024-01-01 14:00 UTC
@@ -1160,8 +1232,16 @@ describe("DrugChartSlider", () => {
     };
 
     const mockIntradayScheduleFrequencies = [
-      { name: "Twice a day", frequencyPerDay: 2, scheduleTiming: ["08:00", "20:00"] },
-      { name: "Thrice a day", frequencyPerDay: 3, scheduleTiming: ["08:00", "14:00", "20:00"] },
+      {
+        name: "Twice a day",
+        frequencyPerDay: 2,
+        scheduleTiming: ["08:00", "20:00"],
+      },
+      {
+        name: "Thrice a day",
+        frequencyPerDay: 3,
+        scheduleTiming: ["08:00", "14:00", "20:00"],
+      },
     ];
 
     it("resolves enableSchedule from scheduleFrequencies by frequencyPerDay for intraday with 2 non-zero doses", async () => {
@@ -1181,7 +1261,9 @@ describe("DrugChartSlider", () => {
       );
 
       await waitFor(() => {
-        expect(document.querySelectorAll("#time-selector").length).toBeGreaterThan(0);
+        expect(
+          document.querySelectorAll("#time-selector").length
+        ).toBeGreaterThan(0);
       });
     });
 
