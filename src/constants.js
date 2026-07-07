@@ -48,7 +48,7 @@ export const MEDICATION_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/clinical/medication.json";
 export const DRUG_ORDERS_CONFIG_URL = BAHMNI_CORE + "/config/drugOrders";
 export const GET_ALL_PROVIDERS_URL =
-  RESTWS_V1 + "/provider?v=custom:(person,uuid,retired)";
+  RESTWS_V1 + "/provider?v=custom:(person,uuid,retired,attributes)";
 export const SEARCH_DRUG_URL =
   RESTWS_V1 +
   "/drug?q={queryString}&s=ordered&v=custom:(uuid,strength,name,dosageForm)";

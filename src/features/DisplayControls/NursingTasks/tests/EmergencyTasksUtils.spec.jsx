@@ -52,7 +52,7 @@ describe("EmergencyTasksUtils", () => {
     it("should make axios get call with custom provider url", async () => {
       axios.get.mockImplementation(() => Promise.resolve(providersMockData));
 
-      const expectedUrl = `/openmrs/ws/rest/v1/provider?v=custom:(person,uuid,retired)&attrName=practitioner_type&attrValue=Doctor`;
+      const expectedUrl = `/openmrs/ws/rest/v1/provider?v=custom:(person,uuid,retired,attributes)&attrName=Can%20acknowledge%20emergency%20medication&attrValue=true`;
       await getProviders();
       expect(axios.get).toHaveBeenCalledWith(expectedUrl);
     });
