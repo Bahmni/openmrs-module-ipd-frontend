@@ -22,6 +22,9 @@ import {
   isDrugOrderStoppedWithoutAdministration,
   getStopReason,
   getSlotsForAnOrderAndServiceType,
+  isPRNEligibleForNextDose,
+  getOrderFrequencies,
+  getFrequencyPerDayMap,
 } from "../utils/TreatmentsUtils";
 import {
   isIPDrugOrder,
@@ -35,6 +38,7 @@ import {
   defaultDateTimeFormat,
   errorCodes,
   serviceType,
+  DEFAULT_PRN_BUFFER_IN_MINUTES,
 } from "../../../../constants";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
@@ -64,6 +68,7 @@ const Treatments = (props) => {
   const { config, handleAuditEvent, currentUser } = useContext(IPDContext);
   const {
     enable24HourTime = {},
+    addDispensedMedicationToDrugChart = false,
     allMedicinesInPrescriptionAvailableForIPD = true,
   } = config;
   const refreshDisplayControl = useContext(RefreshDisplayControl);
@@ -214,28 +219,39 @@ const Treatments = (props) => {
     showEditDrugChartLink,
     showStopDrugChartLink,
     drugOrder,
-    drugOrderSchedule
+    drugOrderSchedule,
+    drugOrderAttributes,
+    drugOrderObject
   ) => {
+    const isOrderDispensed =
+      drugOrderAttributes != null &&
+      drugOrderAttributes.some(
+        (attribute) =>
+          attribute.name === "Dispensed" && attribute.value === "true"
+      );
     if (
       !isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.EDIT_MEDICATION_TASKS)
     ) {
       return {};
     }
     if (!showEditDrugChartLink && !showStopDrugChartLink) {
+      const isPRNDisabled =
+        drugOrder.dosingInstructions?.asNeeded &&
+        (drugOrderObject?.prnHasPendingPlaceholder ||
+          !drugOrderObject?.prnEligible ||
+          (drugOrder.autoExpireDate &&
+            new Date() > new Date(drugOrder.autoExpireDate)));
+      const isButtonDisabled =
+        isAddToDrugChartDisabled ||
+        moment().valueOf() <= drugOrder.effectiveStartDate ||
+        (!isOrderDispensed && addDispensedMedicationToDrugChart) ||
+        isPRNDisabled;
       return {
         link: (
           <Link
-            disabled={
-              isAddToDrugChartDisabled ||
-              moment().valueOf() <= drugOrder.effectiveStartDate
-            }
+            disabled={isButtonDisabled}
             onClick={() => {
-              if (
-                !(
-                  isAddToDrugChartDisabled ||
-                  moment().valueOf() <= drugOrder.effectiveStartDate
-                )
-              ) {
+              if (!isButtonDisabled) {
                 handleEditAndAddToDrugChartClick(
                   drugOrder.uuid,
                   showEditDrugChartLink,
@@ -284,7 +300,11 @@ const Treatments = (props) => {
     }
   };
 
-  const modifyPrescribedTreatmentData = async (drugOrders) => {
+  const modifyPrescribedTreatmentData = async (
+    drugOrders,
+    frequencyPerDayMap,
+    prnBufferTimeInMinutes
+  ) => {
     if (!allMedicinesInPrescriptionAvailableForIPD) {
       drugOrders = drugOrders.filter((drugOrderObject) =>
         isIPDrugOrder(drugOrderObject.drugOrder)
@@ -300,15 +320,33 @@ const Treatments = (props) => {
           let showEditDrugChartLink;
           let showStopDrugChartLink;
           if (drugOrderObject.drugOrder.dosingInstructions.asNeeded) {
-            const placeholderSlot = await getSlotsForAnOrderAndServiceType(
-              patientId,
-              drugOrderObject.drugOrder.uuid,
-              serviceType.AS_NEEDED_PLACEHOLDER
+            const [placeholderSlots, adminSlots] = await Promise.all([
+              getSlotsForAnOrderAndServiceType(
+                patientId,
+                drugOrderObject.drugOrder.uuid,
+                serviceType.AS_NEEDED_PLACEHOLDER
+              ),
+              getSlotsForAnOrderAndServiceType(
+                patientId,
+                drugOrderObject.drugOrder.uuid,
+                serviceType.AS_NEEDED_MEDICATION_REQUEST
+              ),
+            ]);
+            const lastAdminTime =
+              adminSlots.length > 0
+                ? Math.max(...adminSlots.map((s) => s.startTime))
+                : null;
+            const frequency =
+              drugOrderObject.drugOrder.dosingInstructions.frequency;
+            drugOrderObject.prnHasPendingPlaceholder = placeholderSlots.some(
+              (s) => s.status === "SCHEDULED" && !s.medicationAdministration
             );
-            if (placeholderSlot.length > 0) {
-              showEditDrugChartLink = false;
-              showStopDrugChartLink = true;
-            }
+            drugOrderObject.prnEligible = isPRNEligibleForNextDose(
+              lastAdminTime,
+              frequency,
+              frequencyPerDayMap,
+              prnBufferTimeInMinutes
+            );
           } else if (drugOrderObject.drugOrderSchedule != null) {
             showStopDrugChartLink =
               !!drugOrderObject.drugOrderSchedule
@@ -325,7 +363,9 @@ const Treatments = (props) => {
               showEditDrugChartLink,
               showStopDrugChartLink,
               drugOrder,
-              drugOrderObject.drugOrderSchedule
+              drugOrderObject.drugOrderSchedule,
+              drugOrderObject.drugOrderAttributes,
+              drugOrderObject
             );
           const getStatus = () => {
             if (drugOrder.dateStopped) {
@@ -334,6 +374,18 @@ const Treatments = (props) => {
                   <FormattedMessage id="STOPPED" defaultMessage="Stopped" />
                 </span>
               );
+            } else if (drugOrder.dosingInstructions?.asNeeded) {
+              if (
+                drugOrder.autoExpireDate &&
+                new Date() > new Date(drugOrder.autoExpireDate)
+              ) {
+                return (
+                  <FormattedMessage
+                    id={"COMPLETED"}
+                    defaultMessage={"Completed"}
+                  />
+                );
+              }
             } else if (drugOrderObject.drugOrderSchedule?.allSlotsAttended) {
               return (
                 <FormattedMessage
@@ -409,12 +461,31 @@ const Treatments = (props) => {
   useEffect(() => {
     const setMedicationsData = async () => {
       if (allMedications.data) {
+        const [treatmentConfigs, orderFrequencies] = await Promise.all([
+          getConfigsForTreatments(),
+          getOrderFrequencies(),
+        ]);
+        const prnBufferTimeInMinutes =
+          treatmentConfigs.prnBufferTimeInMinutes ||
+          DEFAULT_PRN_BUFFER_IN_MINUTES;
+        const frequencyPerDayMap = getFrequencyPerDayMap(orderFrequencies);
+        setSelectedDrugOrder({
+          patientId: patientId,
+          scheduleFrequencies: treatmentConfigs.scheduleFrequencies,
+          startTimeFrequencies: treatmentConfigs.startTimeFrequencies,
+          enable24HourTimers: enable24HourTime,
+          drugOrder: null,
+        });
+
         let allTreatments = [];
         const allMedicationsList = { ...allMedications.data };
         if (allMedicationsList.ipdDrugOrders.length > 0) {
           drugOrderList = updateDrugOrderList(allMedicationsList.ipdDrugOrders);
-          const allPrescribedTreatmentData =
-            await modifyPrescribedTreatmentData(drugOrderList);
+          const allPrescribedTreatmentData = await modifyPrescribedTreatmentData(
+            drugOrderList,
+            frequencyPerDayMap,
+            prnBufferTimeInMinutes
+          );
           allTreatments = [...allPrescribedTreatmentData];
         }
         if (
@@ -436,7 +507,7 @@ const Treatments = (props) => {
             b.additionalData.startTimeForSort
         );
         setTreatments(allTreatments);
-        getTreatmentConfigs();
+        setIsLoading(false);
       } else if (
         allMedications.error.response.status === errorCodes.FORBIDDEN
       ) {
