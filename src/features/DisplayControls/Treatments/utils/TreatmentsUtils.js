@@ -4,6 +4,8 @@ import {
   BAHMNI_ENCOUNTER_URL,
   ENCOUNTER_TYPE_URL,
   MEDICATIONS_BASE_URL,
+  ORDER_FREQUENCY_URL,
+  DEFAULT_PRN_BUFFER_IN_MINUTES,
   requesterFunction,
   verifierFunction,
   defaultDateTimeFormat,
@@ -55,18 +57,44 @@ export const getConfigsForTreatments = async () => {
     });
 
     if (response.status !== 200) throw new Error(response.statusText);
+    const configuredBuffer = response.data.config.prnBufferTimeInMinutes;
+    const parsedBuffer = Number(configuredBuffer);
     const treatmentConfig = {
       enable24HourTimers: response.data.config.enable24HourTimers,
       startTimeFrequencies: response.data.config.drugChartStartTimeFrequencies,
       scheduleFrequencies: response.data.config.drugChartScheduleFrequencies,
-      prnFrequencyIntervalInMinutes:
-        response.data.config.prnFrequencyIntervalInMinutes || {},
+      prnBufferTimeInMinutes:
+        configuredBuffer && !isNaN(parsedBuffer)
+          ? parsedBuffer
+          : DEFAULT_PRN_BUFFER_IN_MINUTES,
     };
     return treatmentConfig;
   } catch (error) {
     return error;
   }
 };
+
+export const getOrderFrequencies = async () => {
+  try {
+    const response = await axios.get(ORDER_FREQUENCY_URL, {
+      withCredentials: true,
+    });
+
+    if (response.status !== 200) throw new Error(response.statusText);
+    return response.data.results || [];
+  } catch (error) {
+    return [];
+  }
+};
+
+export const getFrequencyPerDayMap = (orderFrequencies = []) =>
+  orderFrequencies.reduce((frequencyPerDayMap, orderFrequency) => {
+    if (orderFrequency?.display && orderFrequency?.frequencyPerDay != null) {
+      frequencyPerDayMap[orderFrequency.display] =
+        orderFrequency.frequencyPerDay;
+    }
+    return frequencyPerDayMap;
+  }, {});
 
 export const getSlotsForAnOrderAndServiceType = async (
   patientUuid,
@@ -318,20 +346,28 @@ export const mapAdditionalDataForEmergencyTreatments = (
   });
 };
 
-export const getPRNIntervalInMinutes = (frequency, configMap = {}) => {
-  if (configMap && configMap[frequency] !== undefined) {
-    return configMap[frequency];
-  }
-  return 0;
+export const getPRNIntervalInMinutes = (
+  frequency,
+  frequencyPerDayMap = {},
+  bufferTimeInMinutes = 0
+) => {
+  const frequencyPerDay = frequencyPerDayMap[frequency];
+  if (!frequencyPerDay) return 0;
+  return (24 * 60) / frequencyPerDay - bufferTimeInMinutes;
 };
 
 export const isPRNEligibleForNextDose = (
   lastAdministrationTime,
   frequency,
-  configMap = {}
+  frequencyPerDayMap = {},
+  bufferTimeInMinutes = 0
 ) => {
-  const intervalMinutes = getPRNIntervalInMinutes(frequency, configMap);
-  if (!intervalMinutes || !lastAdministrationTime) return true;
+  const intervalMinutes = getPRNIntervalInMinutes(
+    frequency,
+    frequencyPerDayMap,
+    bufferTimeInMinutes
+  );
+  if (intervalMinutes <= 0 || !lastAdministrationTime) return true;
   const minutesSinceLast = (Date.now() / 1000 - lastAdministrationTime) / 60;
   return minutesSinceLast >= intervalMinutes;
 };

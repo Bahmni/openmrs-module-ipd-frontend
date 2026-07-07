@@ -23,6 +23,8 @@ import {
   getStopReason,
   getSlotsForAnOrderAndServiceType,
   isPRNEligibleForNextDose,
+  getOrderFrequencies,
+  getFrequencyPerDayMap,
 } from "../utils/TreatmentsUtils";
 import {
   isIPDrugOrder,
@@ -36,6 +38,7 @@ import {
   defaultDateTimeFormat,
   errorCodes,
   serviceType,
+  DEFAULT_PRN_BUFFER_IN_MINUTES,
 } from "../../../../constants";
 import "../styles/Treatments.scss";
 import DrugChartSlider from "../../../DrugChartSlider/components/DrugChartSlider";
@@ -297,7 +300,11 @@ const Treatments = (props) => {
     }
   };
 
-  const modifyPrescribedTreatmentData = async (drugOrders, prnInterval) => {
+  const modifyPrescribedTreatmentData = async (
+    drugOrders,
+    frequencyPerDayMap,
+    prnBufferTimeInMinutes
+  ) => {
     if (!allMedicinesInPrescriptionAvailableForIPD) {
       drugOrders = drugOrders.filter((drugOrderObject) =>
         isIPDrugOrder(drugOrderObject.drugOrder)
@@ -337,7 +344,8 @@ const Treatments = (props) => {
             drugOrderObject.prnEligible = isPRNEligibleForNextDose(
               lastAdminTime,
               frequency,
-              prnInterval
+              frequencyPerDayMap,
+              prnBufferTimeInMinutes
             );
           } else if (drugOrderObject.drugOrderSchedule != null) {
             showStopDrugChartLink =
@@ -453,9 +461,14 @@ const Treatments = (props) => {
   useEffect(() => {
     const setMedicationsData = async () => {
       if (allMedications.data) {
-        const treatmentConfigs = await getConfigsForTreatments();
-        const prnInterval =
-          treatmentConfigs.prnFrequencyIntervalInMinutes || {};
+        const [treatmentConfigs, orderFrequencies] = await Promise.all([
+          getConfigsForTreatments(),
+          getOrderFrequencies(),
+        ]);
+        const prnBufferTimeInMinutes =
+          treatmentConfigs.prnBufferTimeInMinutes ||
+          DEFAULT_PRN_BUFFER_IN_MINUTES;
+        const frequencyPerDayMap = getFrequencyPerDayMap(orderFrequencies);
         setSelectedDrugOrder({
           patientId: patientId,
           scheduleFrequencies: treatmentConfigs.scheduleFrequencies,
@@ -468,8 +481,11 @@ const Treatments = (props) => {
         const allMedicationsList = { ...allMedications.data };
         if (allMedicationsList.ipdDrugOrders.length > 0) {
           drugOrderList = updateDrugOrderList(allMedicationsList.ipdDrugOrders);
-          const allPrescribedTreatmentData =
-            await modifyPrescribedTreatmentData(drugOrderList, prnInterval);
+          const allPrescribedTreatmentData = await modifyPrescribedTreatmentData(
+            drugOrderList,
+            frequencyPerDayMap,
+            prnBufferTimeInMinutes
+          );
           allTreatments = [...allPrescribedTreatmentData];
         }
         if (
