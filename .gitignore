@@ -5,3 +5,4 @@ yarn-error.log
 .talismanrc
 .DS_Store
 coverage
+claude-docs
