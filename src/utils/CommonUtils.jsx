@@ -159,7 +159,7 @@ export const getShiftDetailsFromGlobalProperty = async () => {
       headers: { Accept: "text/plain" },
     });
     if (response.status !== 200) throw new Error(response.statusText);
-    const shiftDetails = JSON.parse(response.data);
+    const shiftDetails = response.data;
     if (shiftDetails && Object.keys(shiftDetails).length > 0) {
       return shiftDetails;
     }
