@@ -377,6 +377,27 @@ describe("TreatmentsUtils", () => {
     expect(queryByTestId("notes-icon")).toBeTruthy();
   });
 
+  it("should show Note icon for non-coded drugs with frequency", () => {
+    const drugOrderObject = {
+      drugOrder: {
+        drugNonCoded: "Sample Non-Coded Drug",
+        dateStopped: null,
+        dosingInstructions: { frequency: "Twice a day" },
+      },
+      instructions: "Sample Instruction",
+      additionalInstructions: "Sample Additional Instruction",
+    };
+
+    const { queryByText, queryByTestId } = render(
+      <IPDContext.Provider value={{ config: mockConfig }}>
+        {getDrugName(drugOrderObject)}
+      </IPDContext.Provider>
+    );
+
+    expect(queryByText("Sample Non-Coded Drug")).toBeTruthy();
+    expect(queryByTestId("notes-icon")).toBeTruthy();
+  });
+
   describe("setDosingInstructions", () => {
     it("should return Variable Dosage Protocol for variable dose orders", () => {
       const drugOrder = {

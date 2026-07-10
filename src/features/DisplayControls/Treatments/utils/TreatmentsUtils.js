@@ -352,7 +352,7 @@ export const getDrugName = (drugOrderObject) => {
   const drugOrder = drugOrderObject.drugOrder;
   const drugNonCoded = drugOrder.drugNonCoded || null;
   const hasNoteContent =
-    drugOrder.drug &&
+    (drugOrder.drug || drugNonCoded) &&
     (drugOrderObject.instructions ||
       drugOrderObject.additionalInstructions ||
       drugOrderObject.rate ||
