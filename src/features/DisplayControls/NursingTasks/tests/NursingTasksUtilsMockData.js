@@ -1269,6 +1269,40 @@ export const mockNonMedicationTileData = [
   },
 ];
 
+export const mockSystemGeneratedTaskWithMapping = [
+  {
+    drugName: "Complete Nursing Initial Assessment Form",
+    uuid: "system-task-uuid-1",
+    startTimeInEpochSeconds: 1703601000,
+    startTime: "16:38",
+    isDisabled: false,
+    partOf: null,
+    taskType: { display: "nursing_activity_system" },
+    creator: {
+      uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
+      display: "superman",
+    },
+    isANonMedicationTask: true,
+  },
+];
+
+export const mockSystemGeneratedTaskWithoutMapping = [
+  {
+    drugName: "Unknown System Task",
+    uuid: "system-task-uuid-2",
+    startTimeInEpochSeconds: 1703601000,
+    startTime: "16:38",
+    isDisabled: false,
+    partOf: null,
+    taskType: { display: "nursing_activity_system" },
+    creator: {
+      uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
+      display: "superman",
+    },
+    isANonMedicationTask: true,
+  },
+];
+
 export const mockShiftResponse = [
   {
     id: 14,

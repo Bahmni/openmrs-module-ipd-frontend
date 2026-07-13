@@ -10,10 +10,12 @@ import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
 import {
   parseFhirDosages,
   getDosageBySequence,
-  fromUcumDurationUnit,
   fhirDosageToDisplayStage,
 } from "../../../../utils/FhirDosingUtils";
-import { formatIntradayDoseString, isIntradayDosingInstruction } from "../../Treatments/utils/TreatmentsUtils";
+import {
+  formatIntradayDoseString,
+  isIntradayDosingInstruction,
+} from "../../Treatments/utils/TreatmentsUtils";
 import moment from "moment";
 
 export const fetchMedicationNursingTasks = async (
@@ -72,7 +74,13 @@ export const ExtractMedicationNursingTasksData = (
             ? medicationAdministration.administeredDateTime
             : ""
           : "";
-      let drugName, drugRoute, duration, dosage, doseType, dosingInstructions, intradayDoseString = null;
+      let drugName,
+        drugRoute,
+        duration,
+        dosage,
+        doseType,
+        dosingInstructions,
+        intradayDoseString = null;
       if (order) {
         drugName = order.drugNonCoded ? order.drugNonCoded : order.drug.display;
         drugRoute = order.route?.display;
@@ -92,7 +100,10 @@ export const ExtractMedicationNursingTasksData = (
           asNeeded: order.asNeeded,
           frequency: order.frequency?.display,
         };
-        if (administrationInstructions && isIntradayDosingInstruction(administrationInstructions)) {
+        if (
+          administrationInstructions &&
+          isIntradayDosingInstruction(administrationInstructions)
+        ) {
           const intradayDose = {
             morning: administrationInstructions.morningDose,
             afternoon: administrationInstructions.afternoonDose,
@@ -475,4 +486,13 @@ export const disableDoneTogglePostNextTaskTime = (
     taskWithJustGreaterTime &&
     currentTimeInEpoch >= taskWithJustGreaterTime.startTimeInEpochSeconds
   );
+};
+
+export const getLatestFormUuid = (formName, allFormsSummary) => {
+  if (!formName || !allFormsSummary || !allFormsSummary.length) return null;
+  const matches = allFormsSummary.filter((f) => f.name === formName);
+  if (!matches.length) return null;
+  return matches.sort(
+    (a, b) => parseFloat(b.version) - parseFloat(a.version)
+  )[0].uuid;
 };
