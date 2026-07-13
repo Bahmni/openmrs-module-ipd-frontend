@@ -13,8 +13,9 @@ exports[`PatientHeader should display all details of the patient 1`] = `
       >
         <img
           alt="patient-image"
-          class="patient-image"
-          src="AxiosError: Network Error"
+          class="patient-image patient-image--clickable"
+          data-testid="patient-photo"
+          src="http://localhost/patient.jpg"
         />
         <div
           class="bx--col"
@@ -100,7 +101,6 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                   d="M16 10L26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
                 />
               </svg>
-               
             </a>
             <div
               class="other-info"
@@ -333,8 +333,9 @@ exports[`PatientHeader should display patient movement item on click of overflow
       >
         <img
           alt="patient-image"
-          class="patient-image"
-          src="AxiosError: Network Error"
+          class="patient-image patient-image--clickable"
+          data-testid="patient-photo"
+          src="http://localhost/patient.jpg"
         />
         <div
           class="bx--col"
@@ -501,8 +502,9 @@ exports[`PatientHeader should display patient movement overflow menu item as dis
       >
         <img
           alt="patient-image"
-          class="patient-image"
-          src="AxiosError: Network Error"
+          class="patient-image patient-image--clickable"
+          data-testid="patient-photo"
+          src="http://localhost/patient.jpg"
         />
         <div
           class="bx--col"
