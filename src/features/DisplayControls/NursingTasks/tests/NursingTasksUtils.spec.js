@@ -135,6 +135,113 @@ describe("NursingTasksUtils", () => {
     });
   });
 
+  describe("ExtractMedicationNursingTasksData - variable dose slots", () => {
+    const makeVariableDoseSlot = (sequence) => ({
+      uuid: "slot-uuid-vd",
+      startTime: 1704785404,
+      status: "SCHEDULED",
+      variableDosageSequence: sequence,
+      order: {
+        uuid: "order-vd",
+        drug: { display: "Prednisolone" },
+        drugNonCoded: null,
+        dose: null,
+        doseUnits: { display: "Tablet(s)" },
+        route: { display: "Oral" },
+        duration: 5,
+        durationUnits: { display: "Day(s)" },
+        dosingInstructions: JSON.stringify([
+          {
+            sequence: 1,
+            text: "Loading Dose",
+            timing: { code: { text: "Once" } },
+            doseAndRate: [{ doseQuantity: { value: 5, unit: "Tablet(s)" } }],
+            extension: [{ url: "isLoadingDose", valueBoolean: true }],
+          },
+          {
+            sequence: 2,
+            text: "Stage 1",
+            timing: {
+              code: { text: "Once a day" },
+              repeat: { duration: 3, durationUnit: "d" },
+            },
+            doseAndRate: [{ doseQuantity: { value: 3, unit: "Tablet(s)" } }],
+            extension: [{ url: "isLoadingDose", valueBoolean: false }],
+          },
+        ]),
+        asNeeded: false,
+        frequency: null,
+        dateStopped: null,
+        autoExpireDate: null,
+      },
+      medicationAdministration: null,
+      serviceType: "MedicationRequest",
+    });
+
+    const mockVDNursingData = [{ slots: [makeVariableDoseSlot(2)] }];
+
+    it("extracts stage-specific dose from FHIR dosages for variable dose slot (sequence=2 → 3 Tablet(s))", () => {
+      const result = ExtractMedicationNursingTasksData(
+        mockVDNursingData,
+        { id: "allTasks" },
+        false
+      );
+      // allTasks pending SCHEDULED slot
+      const allSlots = result.flat();
+      const slot = allSlots.find((s) => s.uuid === "slot-uuid-vd");
+      expect(slot).toBeDefined();
+      expect(slot.dosage).toBe(3);
+      expect(slot.doseType).toBe("Tablet(s)");
+    });
+
+    it("extracts stage-specific frequency from FHIR dosages", () => {
+      const result = ExtractMedicationNursingTasksData(
+        mockVDNursingData,
+        { id: "allTasks" },
+        false
+      );
+      const allSlots = result.flat();
+      const slot = allSlots.find((s) => s.uuid === "slot-uuid-vd");
+      expect(slot.dosingInstructions.frequency).toBe("Once a day");
+    });
+
+    it("falls through to existing logic when variableDosageSequence is null", () => {
+      const regularSlot = {
+        uuid: "slot-uuid-regular",
+        startTime: 1704785404,
+        status: "SCHEDULED",
+        variableDosageSequence: null,
+        order: {
+          uuid: "order-regular",
+          drug: { display: "Paracetamol" },
+          drugNonCoded: null,
+          dose: 10,
+          doseUnits: { display: "Tablet(s)" },
+          route: { display: "Oral" },
+          duration: 3,
+          durationUnits: { display: "Day(s)" },
+          dosingInstructions: "{}",
+          asNeeded: false,
+          frequency: null,
+          dateStopped: null,
+          autoExpireDate: null,
+        },
+        medicationAdministration: null,
+        serviceType: "MedicationRequest",
+      };
+      const result = ExtractMedicationNursingTasksData(
+        [{ slots: [regularSlot] }],
+        { id: "allTasks" },
+        false
+      );
+      const allSlots = result.flat();
+      const slot = allSlots.find((s) => s.uuid === "slot-uuid-regular");
+      expect(slot).toBeDefined();
+      expect(slot.dosage).toBe(10);
+      expect(slot.doseType).toBe("Tablet(s)");
+    });
+  });
+
   describe("saveMedicationNursingTask", () => {
     it("should save administered medication successfully", async () => {
       const administeredMedication = [

@@ -4,8 +4,15 @@ import {
   ADMINISTERED_MEDICATIONS_BASE_URL,
   asNeededPlaceholderConceptName,
   NON_MEDICATION_BASE_URL,
+  DOSE_UNITS,
 } from "../../../../constants";
 import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
+import {
+  parseFhirDosages,
+  getDosageBySequence,
+  fromUcumDurationUnit,
+  fhirDosageToDisplayStage,
+} from "../../../../utils/FhirDosingUtils";
 import moment from "moment";
 
 export const fetchMedicationNursingTasks = async (
@@ -71,10 +78,7 @@ export const ExtractMedicationNursingTasksData = (
         if (order.duration) {
           duration = order.duration + " " + order.durationUnits.display;
         }
-        if (
-          order.doseUnits.display !== "ml" &&
-          order.doseUnits.display !== "mg"
-        ) {
+        if (!DOSE_UNITS.includes(order.doseUnits.display)) {
           dosage = order.dose;
           doseType = order.doseUnits.display;
         } else {
@@ -84,6 +88,33 @@ export const ExtractMedicationNursingTasksData = (
           asNeeded: order.asNeeded,
           frequency: order.frequency?.display,
         };
+      }
+      if (slot.variableDosageSequence != null) {
+        const fhirDosages = parseFhirDosages(order?.dosingInstructions);
+        const stageDosage = getDosageBySequence(
+          fhirDosages,
+          slot.variableDosageSequence
+        );
+        if (stageDosage) {
+          const dr = stageDosage.doseAndRate?.[0];
+          if (dr?.doseQuantity) {
+            const val = dr.doseQuantity.value;
+            const unit = dr.doseQuantity.unit || "";
+            if (DOSE_UNITS.includes(unit.toLowerCase())) {
+              dosage = val + unit;
+              doseType = "";
+            } else {
+              dosage = val;
+              doseType = unit;
+            }
+          }
+          const stageInfo = fhirDosageToDisplayStage(stageDosage);
+          dosingInstructions = {
+            asNeeded: false,
+            frequency: stageInfo.frequency || null,
+          };
+          duration = stageInfo.duration || null;
+        }
       }
       if (serviceType == "EmergencyMedicationRequest") {
         drugName = medicationAdministration.drug?.display;

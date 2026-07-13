@@ -20,7 +20,10 @@ import {
   parseFhirDosages,
   parseFlatAdminInstructions,
   isVariableDoseOrder,
+  fromUcumDurationUnit,
+  LOADING_DOSE_DURATION_DISPLAY,
 } from "../../../../utils/FhirDosingUtils";
+import moment from "moment";
 
 export const treatmentHeaders = [
   {
@@ -364,4 +367,72 @@ export const getStopReason = (drugOrder) => {
   const stopReason = conceptName + (conceptName && notes ? ": " : "") + notes;
 
   return stopReason.trim() !== "" ? stopReason : null;
+};
+
+export const buildStageDrugOrder = (
+  drugOrderObject,
+  dosage,
+  stageInfo,
+  drugOrderSchedule = null,
+  stageStartDate = null
+) => {
+  const dr = dosage.doseAndRate?.[0];
+  const { fhirDosages: _fhirDosages, ...drugOrderWithoutVdpData } = drugOrderObject;
+  return {
+    ...drugOrderWithoutVdpData,
+    drugOrderSchedule,
+    uniformDosingType: {
+      frequency: stageInfo.frequency,
+      dose: dr?.doseQuantity?.value || null,
+      doseUnits: dr?.doseQuantity?.unit || null,
+    },
+    route: dosage.route?.text || drugOrderObject.route || null,
+    instructions: stageInfo.instructions || "",
+    additionalInstructions: stageInfo.additionalInstructions || "",
+    rate: stageInfo.rate || null,
+    additives: stageInfo.additives || null,
+    durationDisplayValue: stageInfo.isLoadingDose ? 1 : null,
+    durationDisplayUnits: stageInfo.isLoadingDose ? LOADING_DOSE_DURATION_DISPLAY : null,
+    drugOrder: {
+      ...drugOrderObject.drugOrder,
+      duration: stageInfo.durationDays || 0,
+      durationUnits: fromUcumDurationUnit(dosage.timing?.repeat?.durationUnit),
+      ...(stageStartDate != null && { scheduledDate: stageStartDate }),
+    },
+    variableDosageSequence: dosage.sequence,
+  };
+};
+
+export const getActiveStageIndex = (fhirDosages, stageSchedules, startDates) => {
+  const scheduleBySequence = new Map(
+    (stageSchedules || []).map((s) => [s.variableDosageSequence, s])
+  );
+
+  const getSchedule = (index) => scheduleBySequence.get(fhirDosages[index].sequence);
+  const isScheduled = (schedule) => schedule?.isScheduled === true;
+  const isAttended = (schedule) => schedule?.allAttended === true;
+  const isActive = (schedule) => isScheduled(schedule) && !isAttended(schedule);
+
+  let stageToAddToDrugChart = -1;
+
+  for (let i = 0; i < fhirDosages.length; i++) {
+    const schedule = getSchedule(i);
+
+    if (isScheduled(schedule)) {
+      if (!isAttended(schedule)) return -1;
+      stageToAddToDrugChart = -1;
+      continue;
+    }
+
+    if (i > 0) {
+      const prevSchedule = getSchedule(i - 1);
+      if (isActive(prevSchedule)) return -1;
+      if (!isScheduled(prevSchedule) && startDates[i - 1] >= startDates[i]) break;
+    }
+    if (moment().valueOf() < startDates[i]) break;
+
+    stageToAddToDrugChart = i;
+  }
+
+  return stageToAddToDrugChart;
 };

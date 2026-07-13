@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const safeParseJson = (str) => {
   if (!str) return null;
   try {
@@ -24,6 +26,8 @@ export const parseFlatAdminInstructions = (adminInstructionsStr) => {
 export const isVariableDoseOrder = (dosingInstructionType) =>
   dosingInstructionType ===
   "org.openmrs.module.bahmniemrapi.drugorder.dosinginstructions.FhirDosingInstructions";
+
+export const LOADING_DOSE_DURATION_DISPLAY = "Occurrence(s)";
 
 const UCUM_TO_DISPLAY = { d: "Day(s)", wk: "Week(s)", mo: "Month(s)" };
 const DISPLAY_TO_DAYS = {
@@ -57,7 +61,7 @@ export const fhirDosageToDisplayStage = (dosage) => {
     dosage.timing?.repeat?.durationUnit
   );
   const duration = isLoadingDose
-    ? "1 Occurrence(s)"
+    ? `1 ${LOADING_DOSE_DURATION_DISPLAY}`
     : dosage.timing?.repeat
     ? `${dosage.timing.repeat.duration} ${durationUnit}`
     : "";
@@ -82,11 +86,18 @@ export const fhirDosageToDisplayStage = (dosage) => {
 };
 
 export const computeStageStartDates = (fhirDosages, effectiveStartDate) => {
+  const startOfPrescriptionDay = moment(effectiveStartDate).startOf("day").valueOf();
   let cumulativeDays = 0;
   return (fhirDosages || []).map((dosage) => {
-    const startDate = effectiveStartDate + cumulativeDays * 24 * 60 * 60 * 1000;
+    const startDate =
+      cumulativeDays === 0
+        ? effectiveStartDate
+        : startOfPrescriptionDay + cumulativeDays * 24 * 60 * 60 * 1000;
     const stage = fhirDosageToDisplayStage(dosage);
     cumulativeDays += stage.durationDays;
     return startDate;
   });
 };
+
+export const getDosageBySequence = (fhirDosages, sequence) =>
+  (fhirDosages || []).find((d) => d.sequence === sequence) || null;
