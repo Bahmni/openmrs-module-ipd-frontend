@@ -11,9 +11,16 @@ import {
 } from "../../../../constants";
 import axios from "axios";
 import { FormattedMessage } from "react-intl";
+import NoteIcon from "../../../../icons/note.svg";
 import NotesIcon from "../../../../icons/notes.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
+import { TooltipCarbon } from "bahmni-carbon-ui";
 import { formatDate } from "../../../../utils/DateTimeUtils";
+import {
+  parseFhirDosages,
+  parseFlatAdminInstructions,
+  isVariableDoseOrder,
+} from "../../../../utils/FhirDosingUtils";
 
 export const treatmentHeaders = [
   {
@@ -93,16 +100,38 @@ export const updateDrugOrderList = (drugOrderList) => {
     };
     ipdDrugOrder.route = ipdDrugOrder.drugOrder.dosingInstructions.route;
     ipdDrugOrder.durationUnit = ipdDrugOrder.drugOrder.durationUnits;
-    const administrationInstructions = JSON.parse(
-      ipdDrugOrder.drugOrder.dosingInstructions.administrationInstructions
-    );
-    ipdDrugOrder.instructions = administrationInstructions.instructions
-      ? administrationInstructions.instructions
-      : "";
-    ipdDrugOrder.additionalInstructions =
-      administrationInstructions.additionalInstructions
-        ? administrationInstructions.additionalInstructions
-        : "";
+    const adminInstructionsStr =
+      ipdDrugOrder.drugOrder.dosingInstructions.administrationInstructions;
+    if (isVariableDoseOrder(ipdDrugOrder.drugOrder.dosingInstructionType)) {
+      const fhirDosages = parseFhirDosages(adminInstructionsStr) || [];
+      ipdDrugOrder.fhirDosages = fhirDosages;
+      ipdDrugOrder.instructions = "";
+      ipdDrugOrder.additionalInstructions = "";
+      ipdDrugOrder.rate = null;
+      ipdDrugOrder.additives = null;
+
+      const { quantity, quantityUnits, doseUnits } =
+        ipdDrugOrder.drugOrder.dosingInstructions;
+      const displayDose = quantity || null;
+      const displayUnits = quantityUnits || doseUnits || null;
+
+      ipdDrugOrder.drugOrder.dosingInstructions.dose = displayDose;
+      ipdDrugOrder.drugOrder.dosingInstructions.doseUnits = displayUnits;
+      ipdDrugOrder.drugOrder.dosingInstructions.frequency = null;
+      ipdDrugOrder.uniformDosingType = {
+        dose: displayDose,
+        doseUnits: displayUnits,
+        frequency: null,
+      };
+    } else {
+      const administrationInstructions =
+        parseFlatAdminInstructions(adminInstructionsStr);
+      ipdDrugOrder.instructions = administrationInstructions.instructions || "";
+      ipdDrugOrder.additionalInstructions =
+        administrationInstructions.additionalInstructions || "";
+      ipdDrugOrder.rate = administrationInstructions.rate || null;
+      ipdDrugOrder.additives = administrationInstructions.additives || null;
+    }
   });
   return drugOrderList;
 };
@@ -142,6 +171,17 @@ export const isDrugOrderStoppedWithoutAdministration = (drugOrderObject) => {
 };
 
 export const setDosingInstructions = (drugOrder) => {
+  if (isVariableDoseOrder(drugOrder.dosingInstructionType)) {
+    return (
+      <div className={drugOrder.dateStopped ? "strike-through" : ""}>
+        <FormattedMessage
+          id="VARIABLE_DOSAGE_PROTOCOL"
+          defaultMessage="Variable Dosage Protocol"
+        />
+      </div>
+    );
+  }
+
   let dosingInstructions =
     drugOrder.dosingInstructions.dose +
     " " +

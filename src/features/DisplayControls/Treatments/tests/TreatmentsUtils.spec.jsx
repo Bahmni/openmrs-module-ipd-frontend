@@ -5,10 +5,14 @@ import {
   stopDrugOrders,
   getEncounterType,
   getDrugName,
+  setDosingInstructions
 } from "../utils/TreatmentsUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
 import "@testing-library/jest-dom/extend-expect";
+
+const FHIR_DOSING_INSTRUCTION_TYPE =
+  "org.openmrs.module.bahmniemrapi.drugorder.dosinginstructions.FhirDosingInstructions";
 
 jest.mock("axios");
 
@@ -132,5 +136,34 @@ describe("TreatmentsUtils", () => {
       queryByText("Paracetamol").classList.contains("strike-through")
     ).toBeFalsy();
     expect(queryByTestId("notes-icon")).toBeTruthy();
+  });
+
+  describe("setDosingInstructions", () => {
+    it("should return Variable Dosage Protocol for variable dose orders", () => {
+      const drugOrder = {
+        dosingInstructionType: FHIR_DOSING_INSTRUCTION_TYPE,
+        dosingInstructions: { dose: 10, doseUnits: "mg", route: null },
+        dateStopped: null,
+      };
+      const { getByText } = render(setDosingInstructions(drugOrder));
+      expect(getByText("Variable Dosage Protocol")).toBeInTheDocument();
+    });
+
+    it("should return regular dosage string for non-variable dose orders", () => {
+      const drugOrder = {
+        dosingInstructionType: "FlexibleDosingInstructions",
+        dosingInstructions: {
+          dose: 100,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Once a day",
+        },
+        duration: 5,
+        durationUnits: "Day(s)",
+        dateStopped: null,
+      };
+      const { getByText } = render(setDosingInstructions(drugOrder));
+      expect(getByText(/100 mg - Oral - Once a day/)).toBeInTheDocument();
+    });
   });
 });
