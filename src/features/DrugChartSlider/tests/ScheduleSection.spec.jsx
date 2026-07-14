@@ -133,6 +133,23 @@ describe("ScheduleSection", () => {
     });
   });
 
+  it("shows complete schedule required warning below toggle when flag is true", async () => {
+    const { getByText } = render(
+      <IntlProvider locale="en">
+        <ScheduleSection
+          {...props}
+          duration={5}
+          showApplyToAllDaysRequiredWarning={true}
+        />
+      </IntlProvider>
+    );
+    await waitFor(() => {
+      expect(
+        getByText("Please ensure complete schedule is updated to proceed.")
+      ).toBeInTheDocument();
+    });
+  });
+
   it("shows next-day warning in firstDay section when showFirstDayScheduleNextDayWarning has true value", async () => {
     const { getByText } = render(
       <IntlProvider locale="en">

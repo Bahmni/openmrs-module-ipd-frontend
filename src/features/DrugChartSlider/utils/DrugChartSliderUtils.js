@@ -38,18 +38,14 @@ export const isTimePassed = (
 const areSchedulesInOrder = (allSchedule, timeFormat, nextDayFlags = []) => {
   return allSchedule.every((schedule, index) => {
     if (index === 0) return true;
-    // A slot flagged as crossing midnight is expected to be numerically less
-    // than its predecessor — that is intentional, not an ordering error.
     if (nextDayFlags[index] === true) return true;
-    const curr = moment.isMoment(schedule)
+    const currentTime = moment.isMoment(schedule)
       ? schedule
       : moment(schedule, timeFormat);
-    const prev = moment.isMoment(allSchedule[index - 1])
+    const prevTime = moment.isMoment(allSchedule[index - 1])
       ? allSchedule[index - 1]
       : moment(allSchedule[index - 1], timeFormat);
-    const currMinutes = curr.hours() * 60 + curr.minutes();
-    const prevMinutes = prev.hours() * 60 + prev.minutes();
-    return currMinutes > prevMinutes;
+    return currentTime.isAfter(prevTime);
   });
 };
 
@@ -217,6 +213,10 @@ export const computeShiftedSchedules = (
 };
 
 export const isNextDayCrossing = (newTime, prevTime, enable24HourTimers) => {
+  if (typeof newTime === "number" && typeof prevTime === "number") {
+    return newTime < prevTime;
+  }
+
   const newM = enable24HourTimers
     ? moment(newTime, "HH:mm", true)
     : moment(newTime, timeFormatFor12Hr, true);

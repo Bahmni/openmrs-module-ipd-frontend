@@ -6,6 +6,7 @@ import {
   getDateTime,
   canAcknowledgeAmendment,
   transformDrugOrders,
+  mapDrugOrdersAndSlots,
 } from "../utils/DrugChartUtils";
 import axios from "axios";
 import { mockResponse } from "./DrugChartUtilsMockData";
@@ -371,9 +372,7 @@ describe("DrugChartUtils", () => {
               sequence: 1,
               text: "Loading Dose",
               timing: { code: { text: "Once" } },
-              doseAndRate: [
-                { doseQuantity: { value: 5, unit: "Tablet(s)" } },
-              ],
+              doseAndRate: [{ doseQuantity: { value: 5, unit: "Tablet(s)" } }],
               additionalInstruction: [],
               patientInstruction: "",
               extension: [{ url: "isLoadingDose", valueBoolean: true }],
@@ -385,9 +384,7 @@ describe("DrugChartUtils", () => {
                 code: { text: "Once a day" },
                 repeat: { duration: 3, durationUnit: "d" },
               },
-              doseAndRate: [
-                { doseQuantity: { value: 3, unit: "Tablet(s)" } },
-              ],
+              doseAndRate: [{ doseQuantity: { value: 3, unit: "Tablet(s)" } }],
               additionalInstruction: [],
               patientInstruction: "",
               extension: [{ url: "isLoadingDose", valueBoolean: false }],
@@ -557,6 +554,49 @@ describe("DrugChartUtils", () => {
       });
       expect(result["regular-1"].isIntraday).toBe(false);
       expect(result["regular-1"].intradayDoseString).toBeNull();
+    });
+  });
+
+  describe("mapDrugOrdersAndSlots", () => {
+    it("deduplicates slots having same order and startTime", () => {
+      const orderUuid = "order-1";
+      const startTime = 1784075400;
+      const drugOrders = {
+        [orderUuid]: {
+          firstSlotStartTime: startTime,
+          slots: [],
+        },
+      };
+
+      const drugChartData = [
+        {
+          slots: [
+            {
+              id: 1,
+              startTime,
+              status: "SCHEDULED",
+              serviceType: "MedicationRequest",
+              order: { uuid: orderUuid },
+              medicationAdministration: null,
+            },
+            {
+              id: 2,
+              startTime,
+              status: "SCHEDULED",
+              serviceType: "MedicationRequest",
+              order: { uuid: orderUuid },
+              medicationAdministration: null,
+            },
+          ],
+        },
+      ];
+
+      const mapped = mapDrugOrdersAndSlots(drugChartData, drugOrders, {
+        timeInMinutesFromNowToShowPastTaskAsLate: 0,
+      });
+      expect(mapped).toHaveLength(1);
+      expect(mapped[0].slots).toHaveLength(1);
+      expect(mapped[0].slots[0].startTime).toBe(startTime);
     });
   });
 });

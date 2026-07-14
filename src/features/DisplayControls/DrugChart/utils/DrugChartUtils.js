@@ -279,7 +279,7 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
           approvalStatus =
             noteInfo.acknowledgementNotes.length > 0 ? "APPROVED" : "PENDING";
         }
-        orders[uuid].slots.push({
+        const mappedSlot = {
           ...slot,
           administrationSummary: {
             performerName,
@@ -290,7 +290,19 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
             noteInfo,
             isMissed: status === "MISSED",
           },
-        });
+        };
+
+        const duplicateIndex = orders[uuid].slots.findIndex(
+          (existingSlot) => existingSlot.startTime === startTime
+        );
+        if (duplicateIndex === -1) {
+          orders[uuid].slots.push(mappedSlot);
+        } else if (
+          !orders[uuid].slots[duplicateIndex].medicationAdministration &&
+          mappedSlot.medicationAdministration
+        ) {
+          orders[uuid].slots[duplicateIndex] = mappedSlot;
+        }
       }
     });
     const mappedOrders = Object.keys(orders).map((orderUuid) => {

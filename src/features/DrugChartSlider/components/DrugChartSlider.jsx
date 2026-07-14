@@ -67,7 +67,6 @@ const DrugChartSlider = (props) => {
         )
       : null
     : null;
-
   const enableStartTime =
     !intradayDose &&
     (hostData?.startTimeFrequencies?.includes(
@@ -154,6 +153,11 @@ const DrugChartSlider = (props) => {
     showFinalDayScheduleNextDayWarning,
     setShowFinalDayScheduleNextDayWarning,
   ] = useState([]);
+  const requiresCompleteScheduleUpdate =
+    enableSchedule &&
+    (hostData?.drugOrder?.drugOrder?.duration || 0) > 1 &&
+    showFirstDayScheduleNextDayWarning.some(Boolean) &&
+    !applyToAllDays;
 
   const propagateToSubsequentDays = (newTime) => {
     const base =
@@ -557,7 +561,11 @@ const DrugChartSlider = (props) => {
       showSubsequentDayScheduleNextDayWarning
     );
     setShowEmptyScheduleWarning(!isValid && warningType === "empty");
-    setShowScheduleOrderWarning(!isValid && warningType === "passed");
+    setShowScheduleOrderWarning(
+      !isValid &&
+        warningType === "passed" &&
+        !showSubsequentDayScheduleNextDayWarning.some(Boolean)
+    );
     return { isValid, warningType };
   };
 
@@ -575,16 +583,15 @@ const DrugChartSlider = (props) => {
 
   const handleFirstDayScheduleWarnings = async () => {
     const filteredSchedules = firstDaySchedules.filter(
-      (firstDaySchedule) => firstDaySchedule !== UNSET_SCHEDULE_TIME
+      (firstDaySchedule) => firstDaySchedule != UNSET_SCHEDULE_TIME
     );
     const filteredNextDayFlags = firstDaySchedules.reduce(
-      (filteredWarningFlags, scheduleTime, scheduleIndex) =>
-        scheduleTime !== UNSET_SCHEDULE_TIME
-          ? [
-              ...filteredWarningFlags,
-              showFirstDayScheduleNextDayWarning[scheduleIndex] || false,
-            ]
-          : filteredWarningFlags,
+      (flags, schedule, index) => {
+        if (schedule != UNSET_SCHEDULE_TIME) {
+          flags.push(showFirstDayScheduleNextDayWarning[index] || false);
+        }
+        return flags;
+      },
       []
     );
     const { isValid, warningType } = await validateSchedules(
@@ -593,7 +600,11 @@ const DrugChartSlider = (props) => {
       filteredNextDayFlags
     );
     setShowEmptyFirstDayScheduleWarning(!isValid && warningType === "empty");
-    setShowFirstDayScheduleOrderWarning(!isValid && warningType === "passed");
+    setShowFirstDayScheduleOrderWarning(
+      !isValid &&
+        warningType === "passed" &&
+        !filteredNextDayFlags.some(Boolean)
+    );
     return { isValid, warningType };
   };
 
@@ -614,7 +625,11 @@ const DrugChartSlider = (props) => {
       showFinalDayScheduleNextDayWarning
     );
     setShowEmptyFinalDayScheduleWarning(!isValid && warningType === "empty");
-    setShowFinalDayScheduleOrderWarning(!isValid && warningType === "passed");
+    setShowFinalDayScheduleOrderWarning(
+      !isValid &&
+        warningType === "passed" &&
+        !showFinalDayScheduleNextDayWarning.some(Boolean)
+    );
     return { isValid, warningType };
   };
 
@@ -701,18 +716,20 @@ const DrugChartSlider = (props) => {
       }
       if (enableSchedule) {
         const nextScheduleDate = 24 * 60 * 60;
+        const orderDuration = hostData?.drugOrder?.drugOrder?.duration || 0;
+        const remainingDayOffsetDays = orderDuration === 2 ? 2 : Math.max(0, orderDuration - 1);
         const finalScheduleDate =
-          nextScheduleDate * hostData?.drugOrder?.drugOrder?.duration;
+          nextScheduleDate * remainingDayOffsetDays;
 
         const firstDaySchedulesUTCTimeEpoch = firstDaySchedules.reduce(
           (result, schedule, i) => {
             if (schedule !== UNSET_SCHEDULE_TIME) {
+              const epoch = getUTCTimeEpoch(
+                schedule,
+                enable24HourTimers,
+                hostData?.drugOrder?.drugOrder?.scheduledDate
+              );
               if (!showFirstDayScheduleNextDayWarning[i]) {
-                const epoch = getUTCTimeEpoch(
-                  schedule,
-                  enable24HourTimers,
-                  hostData?.drugOrder?.drugOrder?.scheduledDate
-                );
                 result.push(epoch);
               }
             }
@@ -720,111 +737,83 @@ const DrugChartSlider = (props) => {
           },
           []
         );
+        
+        const firstDayMidnightCrossingSlots = [];
+        firstDaySchedules.forEach((schedule, i) => {
+          if (schedule !== UNSET_SCHEDULE_TIME && showFirstDayScheduleNextDayWarning[i]) {
+            const epoch = getUTCTimeEpoch(
+              schedule,
+              enable24HourTimers,
+              hostData?.drugOrder?.drugOrder?.scheduledDate
+            );
+            firstDayMidnightCrossingSlots.push(epoch);
+          }
+        });
 
         const hasDayWiseOffset = firstDaySchedules.some(
           (schedule) => schedule == UNSET_SCHEDULE_TIME
         );
-
-        const getDayWiseEpoch = (epoch, isCrossing) => {
-          if (hasDayWiseOffset) return epoch + nextScheduleDate;
-          return isCrossing ? epoch + nextScheduleDate : epoch;
-        };
-
-        const firstDayCrossingEpochs = firstDaySchedules.reduce(
-          (result, schedule, i) => {
-            if (
-              schedule !== UNSET_SCHEDULE_TIME &&
-              showFirstDayScheduleNextDayWarning[i]
-            ) {
-              const epoch = getUTCTimeEpoch(
-                schedule,
-                enable24HourTimers,
-                hostData?.drugOrder?.drugOrder?.scheduledDate
-              );
-              result.push(getDayWiseEpoch(epoch, true));
-            }
-            return result;
-          },
-          []
-        );
-
-        const dayWiseScheduleEpochs = (schedules || []).reduce(
-          (result, schedule, i) => {
-            if (schedule !== UNSET_SCHEDULE_TIME) {
-              const isCrossing = !!showSubsequentDayScheduleNextDayWarning[i];
-              const epoch = getUTCTimeEpoch(
-                schedule,
-                enable24HourTimers,
-                hostData?.drugOrder?.drugOrder?.scheduledDate
-              );
-              result.push({
-                epoch: getDayWiseEpoch(epoch, isCrossing),
-                isCrossing,
-              });
-            }
-            return result;
-          },
-          []
-        );
-
-        const dayWiseRegularEpochs = [...dayWiseScheduleEpochs];
-        let crossingsToDrop = firstDayCrossingEpochs.length;
-        for (
-          let i = dayWiseRegularEpochs.length - 1;
-          i >= 0 && crossingsToDrop > 0;
-          i -= 1
-        ) {
-          if (dayWiseRegularEpochs[i]?.isCrossing) {
-            dayWiseRegularEpochs.splice(i, 1);
-            crossingsToDrop -= 1;
-          }
-        }
-
-        const dayWiseSlotsWithCrossings = [
-          ...firstDayCrossingEpochs,
-          ...dayWiseRegularEpochs.map((slot) => slot.epoch),
-        ];
-
-        const subsequentDayCrossingEpochs = (schedules || []).reduce(
-          (result, schedule, i) => {
-            if (
-              schedule !== UNSET_SCHEDULE_TIME &&
-              showSubsequentDayScheduleNextDayWarning[i]
-            ) {
-              const epoch = getUTCTimeEpoch(
-                schedule,
-                enable24HourTimers,
-                hostData?.drugOrder?.drugOrder?.scheduledDate
-              );
-              result.push(epoch);
-            }
-            return result;
-          },
-          []
-        );
+        const schedulesUTCTimeEpoch = schedules?.map((schedule, i) => {
+          const epoch = getUTCTimeEpoch(
+            schedule,
+            enable24HourTimers,
+            hostData?.drugOrder?.drugOrder?.scheduledDate
+          );
+          return epoch;
+        });
 
         const finalDaySchedulesUTCTimeEpoch = finalDaySchedules?.map(
-          (schedule) =>
-            getUTCTimeEpoch(
+          (schedule, i) => {
+            const epoch = getUTCTimeEpoch(
               schedule,
               enable24HourTimers,
               hostData?.drugOrder?.drugOrder?.scheduledDate
-            )
+            );
+            return showFinalDayScheduleNextDayWarning[i]
+              ? epoch + nextScheduleDate
+              : epoch;
+          }
         );
-
-        const finalDaySchedulesWithCrossings = [
-          ...subsequentDayCrossingEpochs,
-          ...(finalDaySchedulesUTCTimeEpoch || []),
-        ];
 
         payload.firstDaySlotsStartTime =
           firstDaySlotsMissed > 0 ? firstDaySchedulesUTCTimeEpoch : [];
-        payload.dayWiseSlotsStartTime = dayWiseSlotsWithCrossings;
-        const remainingDaySlotsStartTime = finalDaySchedulesWithCrossings?.map(
-          (scheduleEpoch) => scheduleEpoch + finalScheduleDate
-        );
+        
+        const dayWiseSlots = [...firstDayMidnightCrossingSlots];
+        const subsequentDayMidnightCrossingSlots = [];
 
-        payload.remainingDaySlotsStartTime = remainingDaySlotsStartTime;
+        schedulesUTCTimeEpoch.forEach((epoch, i) => {
+          if (showSubsequentDayScheduleNextDayWarning[i]) {
+            subsequentDayMidnightCrossingSlots.push(epoch);
+          } else {
+            dayWiseSlots.push(epoch);
+          }
+        });
+        
+        const uniqueDayWiseSlots = [...new Set(dayWiseSlots)];
+
+        payload.dayWiseSlotsStartTime = hasDayWiseOffset
+          ? uniqueDayWiseSlots.map((slot) => slot + nextScheduleDate)
+          : uniqueDayWiseSlots;
+        
+        const remainingDaySlotsStartTime = finalDaySchedulesUTCTimeEpoch?.map(
+          (schedules) => schedules + finalScheduleDate
+        );
+        
+        const shiftedSubsequentCrossings = subsequentDayMidnightCrossingSlots.map(
+          (slot) => slot + finalScheduleDate
+        );
+        const shouldCarrySubsequentCrossings = orderDuration > 2;
+        if (
+          shouldCarrySubsequentCrossings &&
+          subsequentDayMidnightCrossingSlots.length > 0
+        ) {
+          payload.remainingDaySlotsStartTime = [
+            ...shiftedSubsequentCrossings,
+            ...(remainingDaySlotsStartTime || [])
+          ];
+        } else {
+          payload.remainingDaySlotsStartTime = remainingDaySlotsStartTime;
+        }
         payload.medicationFrequency =
           medicationFrequency.FIXED_SCHEDULE_FREQUENCY;
       }
@@ -840,6 +829,7 @@ const DrugChartSlider = (props) => {
     if (hostData?.drugOrder?.drugOrder?.dosingInstructions?.asNeeded)
       return true;
     if (isInvalidTimeTextPresent(enable24HourTimers)) return false;
+    if (requiresCompleteScheduleUpdate) return false;
     if (enableSchedule) {
       const validFirstDaySchedules = await isValidFirstDaySchedule();
       const validSchedules = await isValidSchedule();
@@ -950,7 +940,7 @@ const DrugChartSlider = (props) => {
       : enableSchedule?.scheduleTiming?.map((time) =>
           moment(time, timeFormatFor12Hr)
         );
-    if (scheduleTimings && firstDaySlotsMissed > 0 && isAutoFill) {
+    if (scheduleTimings && firstDaySlotsMissed > 0 && isAutoFill && !isEdit) {
       setFinalDaySchedules(scheduleTimings.slice(0, firstDaySlotsMissed) || []);
       const quantity =
         hostData?.drugOrder?.drugOrder?.dosingInstructions?.quantity;
@@ -975,27 +965,172 @@ const DrugChartSlider = (props) => {
           : epochTo12HourTimeFormat(drugOrderSchedule.slotStartTime);
         setStartTime(startTimeValue);
       }
-      if (scheduleTimings.firstDaySlotsStartTime) {
-        let frequency = enableSchedule?.frequencyPerDay;
-        setFirstDaySlotsMissed(
-          frequency - scheduleTimings.firstDaySlotsStartTime.length
-        );
-        scheduleTimings.firstDaySlotsStartTime.forEach((schedule) => {
-          while (scheduleTimings.firstDaySlotsStartTime.length < frequency) {
-            setFirstDaySchedules((prevSchedules) => [
-              ...prevSchedules,
-              UNSET_SCHEDULE_TIME,
-            ]);
-            frequency--;
+      let firstDayFromApi = scheduleTimings.firstDaySlotsStartTime
+        ? [...scheduleTimings.firstDaySlotsStartTime]
+        : [];
+      const dayWiseFromApi = scheduleTimings.dayWiseSlotsStartTime
+        ? [...scheduleTimings.dayWiseSlotsStartTime]
+        : [];
+      const orderDuration = hostData?.drugOrder?.drugOrder?.duration || 0;
+      const frequency = enableSchedule?.frequencyPerDay || 0;
+
+      if (firstDayFromApi.length > 0 && dayWiseFromApi.length > 0) {
+        const firstDayLast = firstDayFromApi[firstDayFromApi.length - 1];
+        const parseTimeToMinutes = (time) => {
+          const parsed = moment.isMoment(time)
+            ? time.clone()
+            : moment(
+                time,
+                [
+                  timeFormatFor24Hr,
+                  timeFormatFor12Hr,
+                  "H:mm",
+                  "h:mm A",
+                  "h:mm a",
+                  "hh:mm a",
+                ],
+                false
+              );
+          if (!parsed.isValid()) return null;
+          return parsed.hours() * 60 + parsed.minutes();
+        };
+        const firstDayLastMinutes = parseTimeToMinutes(firstDayLast);
+        const firstDayWrapMinutes = parseTimeToMinutes(dayWiseFromApi[0]);
+        const hasAnyDayWiseSlotAfterFirstDayLast = dayWiseFromApi.some(
+          (time) => {
+            const currentMinutes = parseTimeToMinutes(time);
+            if (currentMinutes === null || firstDayLastMinutes === null) {
+              return false;
+            }
+            return currentMinutes > firstDayLastMinutes;
           }
-          setFirstDaySchedules((prevSchedules) => [...prevSchedules, schedule]);
-        });
+        );
+        const isCrossingFromFirstDayToDayWise =
+          firstDayWrapMinutes !== null &&
+          firstDayLastMinutes !== null &&
+          firstDayWrapMinutes < firstDayLastMinutes;
+        const isMidnightCrossingFlow =
+          isCrossingFromFirstDayToDayWise &&
+          !hasAnyDayWiseSlotAfterFirstDayLast;
+
+        if (isMidnightCrossingFlow) {
+          firstDayFromApi.push(dayWiseFromApi[0]);
+          const shiftedSlot = dayWiseFromApi.shift();
+          dayWiseFromApi.push(shiftedSlot);
+        }
       }
 
-      setSchedules(scheduleTimings.dayWiseSlotsStartTime || []);
+      const firstDaySlotsMissedCount = Math.max(
+        0,
+        frequency - firstDayFromApi.length
+      );
+      setFirstDaySlotsMissed(firstDaySlotsMissedCount);
 
-      if (scheduleTimings.dayWiseSlotsStartTime?.length > 1) {
-        const loadedTimes = scheduleTimings.dayWiseSlotsStartTime;
+      const currentFirstDaySchedules =
+        firstDayFromApi.length > 0
+          ? [
+              ...Array(firstDaySlotsMissedCount).fill(UNSET_SCHEDULE_TIME),
+              ...firstDayFromApi,
+            ]
+          : [];
+      setFirstDaySchedules(currentFirstDaySchedules);
+      if (currentFirstDaySchedules.length > 0) {
+        const firstDayFlags = currentFirstDaySchedules.map((time, i) => {
+          if (time == UNSET_SCHEDULE_TIME || i === 0) return false;
+          const prev = currentFirstDaySchedules[i - 1];
+          if (prev == UNSET_SCHEDULE_TIME) return false;
+          return isNextDayCrossing(time, prev, enable24HourTimers);
+        });
+        setShowFirstDayScheduleNextDayWarning(firstDayFlags);
+      }
+
+      const remainingDayFromApi = scheduleTimings.remainingDaySlotsStartTime
+        ? [...scheduleTimings.remainingDaySlotsStartTime]
+        : [];
+
+      if (
+        orderDuration === 2 &&
+        dayWiseFromApi.length === 0 &&
+        remainingDayFromApi.length > 0
+      ) {
+        const expectedDayWiseCount = frequency;
+        const expectedRemainderCount = firstDaySlotsMissedCount;
+        const minMergedLength = expectedDayWiseCount + expectedRemainderCount;
+
+        if (
+          expectedDayWiseCount > 0 &&
+          expectedRemainderCount >= 0 &&
+          remainingDayFromApi.length >= minMergedLength
+        ) {
+          const reconstructedDayWise = remainingDayFromApi.slice(
+            remainingDayFromApi.length - expectedDayWiseCount
+          );
+          const reconstructedRemainder = remainingDayFromApi.slice(
+            0,
+            expectedRemainderCount
+          );
+          dayWiseFromApi.push(...reconstructedDayWise);
+          remainingDayFromApi.splice(
+            0,
+            remainingDayFromApi.length,
+            ...reconstructedRemainder
+          );
+        } else {
+          const reconstructedRemainder = remainingDayFromApi.slice(
+            0,
+            firstDaySlotsMissedCount
+          );
+          const firstDayLastSlot = firstDayFromApi[firstDayFromApi.length - 1];
+          const reconstructedDayWise = [...reconstructedRemainder];
+          if (
+            firstDayLastSlot &&
+            reconstructedDayWise.length < (enableSchedule?.frequencyPerDay || 0)
+          ) {
+            reconstructedDayWise.push(firstDayLastSlot);
+          }
+          dayWiseFromApi.push(...reconstructedDayWise);
+          remainingDayFromApi.splice(
+            0,
+            remainingDayFromApi.length,
+            ...reconstructedRemainder
+          );
+        }
+      }
+      if (dayWiseFromApi.length > 0 && remainingDayFromApi.length > 0) {
+        const dayWiseLast = dayWiseFromApi[dayWiseFromApi.length - 1];
+        const remainingFirst = remainingDayFromApi[0];
+        const parseTimeToMinutes = (time) => {
+          const parsed = moment.isMoment(time)
+            ? time.clone()
+            : moment(
+                time,
+                [
+                  timeFormatFor24Hr,
+                  timeFormatFor12Hr,
+                  "H:mm",
+                  "h:mm A",
+                  "h:mm a",
+                  "hh:mm a",
+                ],
+                false
+              );
+          if (!parsed.isValid()) return null;
+          return parsed.hours() * 60 + parsed.minutes();
+        };
+        const dayWiseLastMinutes = parseTimeToMinutes(dayWiseLast);
+        const remainingFirstMinutes = parseTimeToMinutes(remainingFirst);
+        if (
+          dayWiseLastMinutes !== null &&
+          remainingFirstMinutes !== null &&
+          dayWiseLastMinutes === remainingFirstMinutes
+        ) {
+          remainingDayFromApi.shift();
+        }
+      }
+
+      setSchedules(dayWiseFromApi);
+      if (dayWiseFromApi.length > 1) {
+        const loadedTimes = dayWiseFromApi;
         const nextDayFlags = loadedTimes.map((time, i) => {
           if (i === 0) return false;
           return isNextDayCrossing(
@@ -1007,20 +1142,18 @@ const DrugChartSlider = (props) => {
         setShowSubsequentDayScheduleNextDayWarning(nextDayFlags);
       }
 
-      const remainingSlots = scheduleTimings.remainingDaySlotsStartTime ?? [];
-      setFinalDaySchedules(remainingSlots);
-      if (remainingSlots.length > 1) {
-        setShowFinalDayScheduleNextDayWarning(
-          remainingSlots.map((time, i) =>
-            i === 0
-              ? false
-              : isNextDayCrossing(
-                  time,
-                  remainingSlots[i - 1],
-                  enable24HourTimers
-                )
-          )
-        );
+      setFinalDaySchedules(remainingDayFromApi);
+      if (remainingDayFromApi.length > 1) {
+        const loadedFinalDayTimes = remainingDayFromApi;
+        const finalDayFlags = loadedFinalDayTimes.map((time, i) => {
+          if (i === 0) return false;
+          return isNextDayCrossing(
+            time,
+            loadedFinalDayTimes[i - 1],
+            enable24HourTimers
+          );
+        });
+        setShowFinalDayScheduleNextDayWarning(finalDayFlags);
       }
     }
   }, [isEdit, enable24HourTimers, enableSchedule]);
@@ -1123,6 +1256,7 @@ const DrugChartSlider = (props) => {
                 onApplyToAllDaysToggle={handleApplyToAllDaysToggle}
                 isToggleEnabled={isToggleEnabled}
                 duration={hostData?.drugOrder?.drugOrder?.duration}
+                showApplyToAllDaysRequiredWarning={requiresCompleteScheduleUpdate}
               />
               {enableStartTime && (
                 <StartTimeSection
@@ -1157,7 +1291,7 @@ const DrugChartSlider = (props) => {
         <SaveAndCloseButtons
           onSave={() => handleSave()}
           onClose={() => handleCancel()}
-          isSaveDisabled={isSaveDisabled}
+          isSaveDisabled={isSaveDisabled || requiresCompleteScheduleUpdate}
         />
       </SideBarPanel>
     </I18nProvider>
