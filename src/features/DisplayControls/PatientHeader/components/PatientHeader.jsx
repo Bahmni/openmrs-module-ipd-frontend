@@ -1,4 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import {
@@ -26,6 +31,7 @@ import "../styles/PatientHeader.scss";
 import { ChevronDown20, ChevronUp20, HospitalBed16 } from "@carbon/icons-react";
 import PatientDetails from "./PatientDetails";
 import PatientMovementModal from "./PatientMovementModal";
+import PatientPhotoModal from "./PatientPhotoModal";
 import {
   formatDate,
   getAgeInYearsMonthsDays,
@@ -46,6 +52,9 @@ export const PatientHeader = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bedInformation, setBedInformation] = useState();
   const [profilePicture, setProfilePicture] = useState();
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [hasImageLoadError, setHasImageLoadError] = useState(false);
+
   const showDetails = (
     <FormattedMessage id="SHOW_PATIENT_DETAILS" defaultMessage="Show Details" />
   );
@@ -120,25 +129,47 @@ export const PatientHeader = (props) => {
     return patientProfile?.relationships;
   };
 
-  const toggleDetailsView = () => togglePatientDetails(!showPatientDetails);
-  const updatePatientMovementModal = (isOpen) => {
-    setIsModalOpen(isOpen);
+  const handleTogglePatientDetails = () => {
+    const nextValue = !showPatientDetails;
+    togglePatientDetails(nextValue);
+    setPatientDetailsOpen(nextValue);
   };
+
+  const openMovementModal = useCallback(() => {
+    setIsPhotoModalOpen(false);
+    setIsModalOpen((prev) => !prev);
+  }, []);
+
+  const closePhotoModal = useCallback(() => setIsPhotoModalOpen(false), []);
+
+  const openPhotoModal = useCallback(() => {
+    setIsPhotoModalOpen(true);
+    setIsModalOpen(false);
+  }, []);
+
+  const handleImageLoadError = useCallback(() => {
+    setHasImageLoadError(true);
+    setIsPhotoModalOpen(false);
+  }, []);
+
   useEffect(() => {
     const getPatientInfo = async () => {
       const patientProfile = await fetchPatientProfile(patientId);
       const patientInfo = patientProfile?.patient;
-      const patientProfilePicture = await fetchPatientProfilePicture(patientId);
+      const patientProfilePicture = await fetchPatientProfilePicture(
+        patientId
+      ).catch(() => undefined);
+      setHasImageLoadError(false);
       setProfilePicture(patientProfilePicture);
       const locationMap = await fetchAddressMapping();
       const patientAttributes = extractPatientInfo(patientInfo, locationMap);
       const contactConfigs = await getContactDetailsConfigs();
       const patientRelatives = extractPatientRelationships(patientProfile);
-      const bedInformation = await getBedInformation(
+      const bedInformationData = await getBedInformation(
         patientId,
         visitSummary.uuid
       );
-      setBedInformation(bedInformation[0]);
+      setBedInformation(bedInformationData[0]);
       setMappedContacts(
         mapContact(patientAttributes, contactConfigs.contactDetails)
       );
@@ -157,9 +188,12 @@ export const PatientHeader = (props) => {
             <Grid>
               <Row className="patient-image-and-details">
                 <img
-                  className={"patient-image"}
+                  className={`patient-image patient-image--clickable`}
                   src={profilePicture}
                   alt="patient-image"
+                  onClick={openPhotoModal}
+                  onError={handleImageLoadError}
+                  data-testid="patient-photo"
                 />
                 <Column>
                   <Row className="header-title-row">
@@ -167,53 +201,44 @@ export const PatientHeader = (props) => {
                       <h1 className="patient-name">
                         {patientDetails?.fullName}
                       </h1>
-                      <Link onClick={() => openVisitSummary()}>
+                      <Link onClick={openVisitSummary}>
                         {visitSummaryMessage}
                       </Link>
                     </div>
                     {isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.ADT) && (
-                    <OverflowMenu
-                      data-testid="overflow-menu"
-                      flipped={true}
-                      aria-label="overflow-menu"
-                      className="patient-movement-overflow"
-                    >
-                      <OverflowMenuItem
-                        data-testid="overflow-menu-item1"
-                        title="item-patient-movement"
-                        itemText={patientMovementMessage}
-                        onClick={() => updatePatientMovementModal(!isModalOpen)}
-                        disabled={isReadMode}
-                      />
-                    </OverflowMenu>
+                      <OverflowMenu
+                        data-testid="overflow-menu"
+                        flipped={true}
+                        aria-label="overflow-menu"
+                        className="patient-movement-overflow"
+                      >
+                        <OverflowMenuItem
+                          data-testid="overflow-menu-item1"
+                          title="item-patient-movement"
+                          itemText={patientMovementMessage}
+                          onClick={openMovementModal}
+                          disabled={isReadMode}
+                        />
+                      </OverflowMenu>
                     )}
                   </Row>
                   <Row>
-                    {showPatientDetails ? (
-                      <Link
-                        kind="tertiary"
-                        className="show-more"
-                        size="sm"
-                        onClick={() => {
-                          setPatientDetailsOpen(!showPatientDetails);
-                          toggleDetailsView();
-                        }}
-                      >
-                        {hideDetails} <ChevronUp20 />{" "}
-                      </Link>
-                    ) : (
-                      <Link
-                        kind="tertiary"
-                        className="show-more"
-                        size="sm"
-                        onClick={() => {
-                          setPatientDetailsOpen(!showPatientDetails);
-                          toggleDetailsView();
-                        }}
-                      >
-                        {showDetails} <ChevronDown20 />
-                      </Link>
-                    )}
+                    <Link
+                      kind="tertiary"
+                      className="show-more"
+                      size="sm"
+                      onClick={handleTogglePatientDetails}
+                    >
+                      {showPatientDetails ? (
+                        <>
+                          {hideDetails} <ChevronUp20 />
+                        </>
+                      ) : (
+                        <>
+                          {showDetails} <ChevronDown20 />
+                        </>
+                      )}
+                    </Link>
                     <div className="other-info">
                       <div className="patient-basic-info">
                         <h3 className="patient-info">
@@ -257,15 +282,12 @@ export const PatientHeader = (props) => {
       </Tile>
       <div>
         {isModalOpen && (
-          <div>
-            <PatientMovementModal
-              updatePatientMovementModal={(isOpen) =>
-                updatePatientMovementModal(isOpen)
-              }
-            />
-          </div>
+          <PatientMovementModal updatePatientMovementModal={setIsModalOpen} />
         )}
       </div>
+      {isPhotoModalOpen && (
+        <PatientPhotoModal src={profilePicture} onClose={closePhotoModal} />
+      )}
     </>
   );
 };

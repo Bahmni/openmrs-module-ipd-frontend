@@ -14,6 +14,7 @@ const mockFetchPatientProfile = jest.fn();
 const mockContactDetailsConfig = jest.fn();
 const mockFetchAddressMapping = jest.fn();
 const mockBedInformation = jest.fn();
+const mockFetchPatientProfilePicture = jest.fn();
 
 jest.mock("../utils/PatientHeaderUtils", () => {
   const originalModule = jest.requireActual("../utils/PatientHeaderUtils");
@@ -23,6 +24,7 @@ jest.mock("../utils/PatientHeaderUtils", () => {
     getConfigsForPatientContactDetails: () => mockContactDetailsConfig(),
     fetchAddressMapping: () => mockFetchAddressMapping(),
     getBedInformation: () => mockBedInformation("123", "123"),
+    fetchPatientProfilePicture: () => mockFetchPatientProfilePicture("123"),
   };
 });
 jest.mock("../../../../utils/DateTimeUtils", () => ({
@@ -41,11 +43,30 @@ jest.mock("../../../../utils/DateTimeUtils", () => ({
 }));
 
 describe("PatientHeader", () => {
+  const renderPatientHeader = () => (
+    <IntlProvider locale="en">
+      <IPDContext.Provider
+        value={{
+          isReadMode: false,
+          visitSummary: { uuid: "123" },
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
+        <PatientHeader
+          patientId="123"
+          openVisitSummary={jest.fn()}
+          setPatientDetailsOpen={jest.fn()}
+        />
+      </IPDContext.Provider>
+    </IntlProvider>
+  );
+
   beforeEach(() => {
     mockContactDetailsConfig.mockResolvedValue(contactConfigMockData);
     mockFetchPatientProfile.mockResolvedValue(patientProfileMockData);
     mockFetchAddressMapping.mockResolvedValue(addressMappingMockData);
     mockBedInformation.mockResolvedValue(bedInformation);
+    mockFetchPatientProfilePicture.mockResolvedValue("http://localhost/patient.jpg");
   });
 
   afterEach(() => {
@@ -110,13 +131,13 @@ describe("PatientHeader", () => {
   it("should display all details of the patient", async () => {
     const { container } = render(
       <IntlProvider locale="en">
-      <IPDContext.Provider
-        value={{
-          isReadMode: false,
-          visitSummary: { uuid: "123" },
-          currentUser: mockUserWithAllRequiredPrivileges,
-        }}
-      >
+        <IPDContext.Provider
+          value={{
+            isReadMode: false,
+            visitSummary: { uuid: "123" },
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
           <PatientHeader patientId="123" setPatientDetailsOpen={jest.fn} />
         </IPDContext.Provider>
       </IntlProvider>
@@ -137,16 +158,16 @@ describe("PatientHeader", () => {
 
   it("should display patient movement item on click of overflow menu icon", async () => {
     const { container } = render(
-  <IntlProvider locale="en">   
-      <IPDContext.Provider
-        value={{
-          isReadMode: false,
-          visitSummary: { uuid: "123" },
-          currentUser: mockUserWithAllRequiredPrivileges,
-        }}
-      >
-        <PatientHeader patientId="123" />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            isReadMode: false,
+            visitSummary: { uuid: "123" },
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <PatientHeader patientId="123" />
+        </IPDContext.Provider>
       </IntlProvider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
@@ -176,16 +197,16 @@ describe("PatientHeader", () => {
   it("should display patient movement overflow menu item as disabled", async () => {
     const { container } = render(
       <IntlProvider locale="en">
-      <IPDContext.Provider
-        value={{
-          isReadMode: true,
-          visitSummary: { uuid: "123" },
-          currentUser: mockUserWithAllRequiredPrivileges,
-        }}
-      >
-        <PatientHeader patientId="123" />
-      </IPDContext.Provider>
-      </IntlProvider> 
+        <IPDContext.Provider
+          value={{
+            isReadMode: true,
+            visitSummary: { uuid: "123" },
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <PatientHeader patientId="123" />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
     screen.getByTestId("overflow-menu").click();
@@ -209,4 +230,80 @@ describe("PatientHeader", () => {
     });
     expect(screen.getByText("General Ward -ICU ICU1")).toBeTruthy();
   });
+
+  it("should open photo modal when patient photo is clicked", async () => {
+    render(renderPatientHeader());
+    await waitFor(() =>
+      expect(screen.getByTestId("patient-photo").getAttribute("src")).toBe(
+        "http://localhost/patient.jpg"
+      )
+    );
+    expect(screen.queryByTestId("photo-modal-overlay")).toBeNull();
+    fireEvent.click(screen.getByTestId("patient-photo"));
+    expect(screen.getByTestId("photo-modal-overlay")).toBeTruthy();
+  });
+
+  it("should close photo modal when backdrop is clicked", async () => {
+    render(renderPatientHeader());
+    await waitFor(() =>
+      expect(screen.getByTestId("patient-photo").getAttribute("src")).toBe(
+        "http://localhost/patient.jpg"
+      )
+    );
+    fireEvent.click(screen.getByTestId("patient-photo"));
+    expect(screen.getByTestId("photo-modal-overlay")).toBeTruthy();
+    fireEvent.click(screen.getByTestId("photo-modal-overlay"));
+    await waitFor(() =>
+      expect(screen.queryByTestId("photo-modal-overlay")).toBeNull()
+    );
+  });
+
+  it("should close photo modal when Esc key is pressed", async () => {
+    render(renderPatientHeader());
+    await waitFor(() =>
+      expect(screen.getByTestId("patient-photo").getAttribute("src")).toBe(
+        "http://localhost/patient.jpg"
+      )
+    );
+    fireEvent.click(screen.getByTestId("patient-photo"));
+    expect(screen.getByTestId("photo-modal-overlay")).toBeTruthy();
+    fireEvent.keyDown(document, { key: "Escape" });
+    await waitFor(() =>
+      expect(screen.queryByTestId("photo-modal-overlay")).toBeNull()
+    );
+  });
+
+  it("should close the photo modal when patient movement is opened from the overflow menu", async () => {
+    render(renderPatientHeader());
+    await waitFor(() =>
+      expect(screen.getByTestId("patient-photo").getAttribute("src")).toBe(
+        "http://localhost/patient.jpg"
+      )
+    );
+    fireEvent.click(screen.getByTestId("patient-photo"));
+    expect(screen.getByTestId("photo-modal-overlay")).toBeTruthy();
+
+    fireEvent.click(screen.getByTestId("overflow-menu"));
+    fireEvent.click(screen.getByTestId("overflow-menu-item1"));
+
+    expect(screen.queryByTestId("photo-modal-overlay")).toBeNull();
+  });
+
+  it("should close the patient movement modal when the photo is clicked to open the photo modal", async () => {
+    render(renderPatientHeader());
+    await waitFor(() =>
+      expect(screen.getByTestId("patient-photo").getAttribute("src")).toBe(
+        "http://localhost/patient.jpg"
+      )
+    );
+    fireEvent.click(screen.getByTestId("overflow-menu"));
+    fireEvent.click(screen.getByTestId("overflow-menu-item1"));
+    expect(screen.queryByTestId("photo-modal-overlay")).toBeNull();
+
+    fireEvent.click(screen.getByTestId("patient-photo"));
+
+    expect(screen.getByTestId("photo-modal-overlay")).toBeTruthy();
+  });
 });
+
+

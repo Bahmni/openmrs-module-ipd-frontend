@@ -1,6 +1,7 @@
 .patient-header {
   margin: 10px 0 10px 0;
   padding: 0;
+
   .patient-name {
     color: #393939;
     font-size: 20px;
@@ -54,7 +55,7 @@
   .patient-image {
     height: 56px;
     width: auto;
-    border: 1px solid #ccc;
+    border: 5px solid #ccc;
     border-radius: 100%;
   }
 
@@ -64,6 +65,7 @@
     align-items: center;
     height: 100%;
   }
+
   .patient-info {
     padding: 0 10px;
     min-width: fit-content;
@@ -114,4 +116,59 @@
 
 .patient-movement-ipd-dropdown {
   width: 100%;
+}
+
+.patient-image--clickable {
+  cursor: pointer;
+}
+
+.patient-photo-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .patient-photo-overlay-inner {
+    position: relative;
+    display: inline-block;
+  }
+
+  .patient-photo-overlay-close {
+    position: absolute;
+    top: -11px;
+    right: -11px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 22px;
+    text-align: center;
+    cursor: pointer;
+    display: block;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    z-index: 1;
+    padding: 0;
+
+    &:hover {
+      background: #e0e0e0;
+    }
+  }
+
+  .patient-photo-modal-image {
+    display: block;
+    max-width: 80vw;
+    max-height: 80vh;
+    width: 20em;
+    height: 20em;
+    object-fit: contain;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+  }
 }
