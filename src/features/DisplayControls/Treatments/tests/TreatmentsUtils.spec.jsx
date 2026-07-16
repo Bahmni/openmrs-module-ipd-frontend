@@ -16,6 +16,7 @@ import {
   DRUG_ORDER_ACTIONS,
   formatIntradayDoseString,
   modifyEmergencyTreatmentData,
+  buildStageDrugOrder,
 } from "../utils/TreatmentsUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
@@ -148,18 +149,22 @@ describe("TreatmentsUtils", () => {
 
   describe("updateDrugOrderList", () => {
     it("should keep original frequency in uniformDosingType for regular orders", () => {
-      const drugOrderList = [{
-        drugOrder: {
-          dosingInstructions: {
-            dose: 1,
-            doseUnits: "mg",
-            frequency: "Once a day",
-            route: "Oral",
-            administrationInstructions: JSON.stringify({ isLoadingDose: false }),
+      const drugOrderList = [
+        {
+          drugOrder: {
+            dosingInstructions: {
+              dose: 1,
+              doseUnits: "mg",
+              frequency: "Once a day",
+              route: "Oral",
+              administrationInstructions: JSON.stringify({
+                isLoadingDose: false,
+              }),
+            },
+            durationUnits: "Day(s)",
           },
-          durationUnits: "Day(s)",
         },
-      }];
+      ];
       const result = updateDrugOrderList(drugOrderList);
       expect(result[0].uniformDosingType.frequency).toBe("Once a day");
     });
@@ -251,7 +256,11 @@ describe("TreatmentsUtils", () => {
   });
 
   describe("getDischargeRevisedOrderUuids", () => {
-    const buildDrugOrder = (action, isDischargeMedication, previousOrderUuid) => ({
+    const buildDrugOrder = (
+      action,
+      isDischargeMedication,
+      previousOrderUuid
+    ) => ({
       drugOrder: { action, previousOrderUuid },
       isDischargeMedication,
     });
@@ -261,12 +270,18 @@ describe("TreatmentsUtils", () => {
     });
 
     it("should include previousOrderUuid for REVISE + isDischargeMedication=true", () => {
-      const orders = [buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, true, "uuid-123")];
-      expect(getDischargeRevisedOrderUuids(orders)).toEqual(new Set(["uuid-123"]));
+      const orders = [
+        buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, true, "uuid-123"),
+      ];
+      expect(getDischargeRevisedOrderUuids(orders)).toEqual(
+        new Set(["uuid-123"])
+      );
     });
 
     it("should NOT include uuid for REVISE + isDischargeMedication=false", () => {
-      const orders = [buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, false, "uuid-123")];
+      const orders = [
+        buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, false, "uuid-123"),
+      ];
       expect(getDischargeRevisedOrderUuids(orders)).toEqual(new Set());
     });
 
@@ -281,7 +296,9 @@ describe("TreatmentsUtils", () => {
     });
 
     it("should NOT include entry when previousOrderUuid is undefined", () => {
-      const orders = [buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, true, undefined)];
+      const orders = [
+        buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, true, undefined),
+      ];
       expect(getDischargeRevisedOrderUuids(orders)).toEqual(new Set());
     });
 
@@ -291,7 +308,9 @@ describe("TreatmentsUtils", () => {
         buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, true, "uuid-2"),
         buildDrugOrder(DRUG_ORDER_ACTIONS.REVISE, false, "uuid-3"),
       ];
-      expect(getDischargeRevisedOrderUuids(orders)).toEqual(new Set(["uuid-1", "uuid-2"]));
+      expect(getDischargeRevisedOrderUuids(orders)).toEqual(
+        new Set(["uuid-1", "uuid-2"])
+      );
     });
   });
 
@@ -440,9 +459,18 @@ describe("TreatmentsUtils", () => {
         durationUnits: "Day(s)",
         dateStopped: null,
       };
-      const intradayDose = { morning: 10, afternoon: 0, evening: 20, night: 10 };
-      const { getByText } = render(setDosingInstructions(drugOrder, intradayDose));
-      expect(getByText("10-0-20-10 mg - Oral - Four times a day - for 5 Day(s)")).toBeInTheDocument();
+      const intradayDose = {
+        morning: 10,
+        afternoon: 0,
+        evening: 20,
+        night: 10,
+      };
+      const { getByText } = render(
+        setDosingInstructions(drugOrder, intradayDose)
+      );
+      expect(
+        getByText("10-0-20-10 mg - Oral - Four times a day - for 5 Day(s)")
+      ).toBeInTheDocument();
     });
 
     it("should render 4-box intra-day dose without duration when duration is absent", () => {
@@ -456,9 +484,18 @@ describe("TreatmentsUtils", () => {
         },
         dateStopped: null,
       };
-      const intradayDose = { morning: 10, afternoon: 0, evening: 20, night: 10 };
-      const { getByText } = render(setDosingInstructions(drugOrder, intradayDose));
-      expect(getByText("10-0-20-10 mg - Oral - Four times a day")).toBeInTheDocument();
+      const intradayDose = {
+        morning: 10,
+        afternoon: 0,
+        evening: 20,
+        night: 10,
+      };
+      const { getByText } = render(
+        setDosingInstructions(drugOrder, intradayDose)
+      );
+      expect(
+        getByText("10-0-20-10 mg - Oral - Four times a day")
+      ).toBeInTheDocument();
     });
 
     it("should render legacy 3-box intra-day dose (no nightDose) with night defaulting to 0", () => {
@@ -472,8 +509,15 @@ describe("TreatmentsUtils", () => {
         },
         dateStopped: null,
       };
-      const intradayDose = { morning: 5, afternoon: 5, evening: 5, night: undefined };
-      const { getByText } = render(setDosingInstructions(drugOrder, intradayDose));
+      const intradayDose = {
+        morning: 5,
+        afternoon: 5,
+        evening: 5,
+        night: undefined,
+      };
+      const { getByText } = render(
+        setDosingInstructions(drugOrder, intradayDose)
+      );
       expect(getByText("5-5-5-0 mg - Oral")).toBeInTheDocument();
     });
 
@@ -561,42 +605,54 @@ describe("TreatmentsUtils", () => {
       const fhirDosages = [dosage(1), dosage(2)];
       const stageSchedules = [scheduled(1, true)];
       const startDates = [pastDate, pastDate];
-      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(1);
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(
+        1
+      );
     });
 
     it("should return -1 when a scheduled stage is not yet attended", () => {
       const fhirDosages = [dosage(1), dosage(2)];
       const stageSchedules = [scheduled(1, false)];
       const startDates = [pastDate, pastDate];
-      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(-1);
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(
+        -1
+      );
     });
 
     it("should return -1 when all stages are attended", () => {
       const fhirDosages = [dosage(1), dosage(2)];
       const stageSchedules = [scheduled(1, true), scheduled(2, true)];
       const startDates = [pastDate, pastDate];
-      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(-1);
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(
+        -1
+      );
     });
 
     it("should return -1 when next stage start date is in the future", () => {
       const fhirDosages = [dosage(1), dosage(2)];
       const stageSchedules = [scheduled(1, true)];
       const startDates = [pastDate, futureDate];
-      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(-1);
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(
+        -1
+      );
     });
 
     it("should return -1 when no stages are scheduled and start date is in the future", () => {
       const fhirDosages = [dosage(1)];
       const stageSchedules = [];
       const startDates = [futureDate];
-      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(-1);
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(
+        -1
+      );
     });
 
     it("should return 0 when first stage is unscheduled and start date has passed", () => {
       const fhirDosages = [dosage(1), dosage(2)];
       const stageSchedules = [];
       const startDates = [pastDate, futureDate];
-      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(0);
+      expect(getActiveStageIndex(fhirDosages, stageSchedules, startDates)).toBe(
+        0
+      );
     });
 
     it("should return -1 when stageSchedules is null", () => {
@@ -653,8 +709,8 @@ describe("TreatmentsUtils", () => {
         null
       );
       expect(result).toBe("10-0-5-0");
-      });
     });
+  });
   describe("modifyEmergencyTreatmentData", () => {
     const validEmergencyMedication = {
       uuid: "em-uuid-1",
@@ -720,6 +776,145 @@ describe("TreatmentsUtils", () => {
     it("should return empty array for empty input", () => {
       const result = modifyEmergencyTreatmentData([]);
       expect(result).toHaveLength(0);
+    });
+  });
+
+  describe("buildStageDrugOrder", () => {
+    const baseDrugOrderObject = {
+      drugOrder: { uuid: "order-uuid", drug: { name: "TestDrug" } },
+      route: null,
+    };
+
+    const buildFhirDosage = (duration, durationUnit) => ({
+      sequence: 1,
+      doseAndRate: [
+        {
+          doseQuantity: { value: 10, unit: "mg" },
+          rateQuantity: { value: 5 },
+        },
+      ],
+      route: { text: "Oral" },
+      timing: {
+        code: { text: "Once a day" },
+        repeat: { duration, durationUnit },
+      },
+      extension: [],
+    });
+
+    it("should store raw duration matching the durationUnits for day units", () => {
+      const dosage = buildFhirDosage(5, "d");
+      const stageInfo = {
+        frequency: "Once a day",
+        instructions: null,
+        additionalInstructions: null,
+        rate: null,
+        additives: null,
+        isLoadingDose: false,
+        durationDays: 5,
+      };
+
+      const result = buildStageDrugOrder(
+        baseDrugOrderObject,
+        dosage,
+        stageInfo
+      );
+
+      expect(result.drugOrder.duration).toBe(5);
+      expect(result.drugOrder.durationUnits).toBe("Day(s)");
+    });
+
+    it("should store raw duration matching the durationUnits for week units", () => {
+      const dosage = buildFhirDosage(2, "wk");
+      const stageInfo = {
+        frequency: "Once a day",
+        instructions: null,
+        additionalInstructions: null,
+        rate: null,
+        additives: null,
+        isLoadingDose: false,
+        durationDays: 14,
+      };
+
+      const result = buildStageDrugOrder(
+        baseDrugOrderObject,
+        dosage,
+        stageInfo
+      );
+
+      expect(result.drugOrder.duration).toBe(2);
+      expect(result.drugOrder.durationUnits).toBe("Week(s)");
+    });
+
+    it("should store raw duration matching the durationUnits for month units", () => {
+      const dosage = buildFhirDosage(1, "mo");
+      const stageInfo = {
+        frequency: "Once a day",
+        instructions: null,
+        additionalInstructions: null,
+        rate: null,
+        additives: null,
+        isLoadingDose: false,
+        durationDays: 30,
+      };
+
+      const result = buildStageDrugOrder(
+        baseDrugOrderObject,
+        dosage,
+        stageInfo
+      );
+
+      expect(result.drugOrder.duration).toBe(1);
+      expect(result.drugOrder.durationUnits).toBe("Month(s)");
+    });
+
+    it("should set duration to 0 for loading dose stages", () => {
+      const dosage = buildFhirDosage(1, "d");
+      const stageInfo = {
+        frequency: null,
+        instructions: null,
+        additionalInstructions: null,
+        rate: null,
+        additives: null,
+        isLoadingDose: true,
+        durationDays: 0,
+      };
+
+      const result = buildStageDrugOrder(
+        baseDrugOrderObject,
+        dosage,
+        stageInfo
+      );
+
+      expect(result.drugOrder.duration).toBe(0);
+      expect(result.durationDisplayValue).toBe(1);
+    });
+
+    it("should handle missing timing.repeat gracefully", () => {
+      const dosage = {
+        sequence: 1,
+        doseAndRate: [{ doseQuantity: { value: 10, unit: "mg" } }],
+        route: { text: "Oral" },
+        timing: { code: { text: "Once a day" } },
+        extension: [],
+      };
+      const stageInfo = {
+        frequency: "Once a day",
+        instructions: null,
+        additionalInstructions: null,
+        rate: null,
+        additives: null,
+        isLoadingDose: false,
+        durationDays: 0,
+      };
+
+      const result = buildStageDrugOrder(
+        baseDrugOrderObject,
+        dosage,
+        stageInfo
+      );
+
+      expect(result.drugOrder.duration).toBe(0);
+      expect(result.drugOrder.durationUnits).toBe("Day(s)");
     });
   });
 });

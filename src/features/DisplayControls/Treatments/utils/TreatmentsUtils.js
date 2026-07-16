@@ -618,7 +618,7 @@ export const buildStageDrugOrder = (
     durationDisplayUnits: stageInfo.isLoadingDose ? LOADING_DOSE_DURATION_DISPLAY : null,
     drugOrder: {
       ...drugOrderObject.drugOrder,
-      duration: stageInfo.durationDays || 0,
+      duration: stageInfo.isLoadingDose ? 0 : (dosage.timing?.repeat?.duration || 0),
       durationUnits: fromUcumDurationUnit(dosage.timing?.repeat?.durationUnit),
       ...(stageStartDate != null && { scheduledDate: stageStartDate }),
     },
