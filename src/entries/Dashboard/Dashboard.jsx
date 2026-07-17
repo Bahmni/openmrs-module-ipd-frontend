@@ -3,6 +3,7 @@ import {
   Accordion,
   AccordionItem,
   Header,
+  HeaderGlobalBar,
   HeaderMenuButton,
   Link,
   Loading,
@@ -21,6 +22,7 @@ import {
   getAppLandingPageUrl,
   getDashboardConfig,
   getPatientDashboardUrl,
+  isUserPrivileged,
 } from "../../utils/CommonUtils";
 import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
 import RefreshDisplayControl from "../../context/RefreshDisplayControl";
@@ -28,8 +30,14 @@ import { SliderContext } from "../../context/SliderContext";
 import { IPDContext } from "../../context/IPDContext";
 import { AllMedicationsContextProvider } from "../../context/AllMedications";
 import { FormattedMessage } from "react-intl";
-import { homePageUrl, RESOLUTION_VALUE, IPD_PAGE_TITLE } from "../../constants";
+import {
+  homePageUrl,
+  RESOLUTION_VALUE,
+  IPD_PAGE_TITLE,
+  PRIVILEGE_CONSTANTS,
+} from "../../constants";
 import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
+import { DraftIndicator } from "../../components/DraftIndicator/DraftIndicator";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
@@ -254,7 +262,13 @@ export default function Dashboard(props) {
                     })}
                   </SideNavItems>
                 </SideNav>
-                <ProviderActions onLogOut={hostApi.onLogOut} />
+                  <HeaderGlobalBar>
+                    {isUserPrivileged(
+                      currentUser,
+                      PRIVILEGE_CONSTANTS.OBSERVATION_TAB
+                    ) && <DraftIndicator />}
+                    <ProviderActions onLogOut={hostApi.onLogOut} />
+                  </HeaderGlobalBar>
               </Header>
 
               <section

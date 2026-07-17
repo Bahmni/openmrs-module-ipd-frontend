@@ -1,0 +1,146 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DraftOverlay should match snapshot with draft rows 1`] = `
+<div>
+  <div
+    class="ipd-draft-overlay"
+  >
+    <div
+      class="ipd-draft-overlay__header"
+    >
+      <span
+        class="ipd-draft-overlay__title"
+      >
+        Observation Drafts (2)
+      </span>
+      <button
+        aria-label="Close drafts overlay"
+        class="ipd-draft-overlay__close-button"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          focusable="false"
+          height="16"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 32 32"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+          />
+        </svg>
+      </button>
+    </div>
+    <div
+      class="ipd-draft-overlay__content"
+    >
+      <div
+        class="ipd-draft-overlay__row"
+      >
+        <p
+          class="ipd-draft-overlay__patient-name"
+        >
+          John Doe
+        </p>
+        <div
+          class="ipd-draft-overlay__row-details"
+        >
+          <span
+            class="ipd-draft-overlay__identifier"
+          >
+            IQ000001
+          </span>
+          <span
+            class="ipd-draft-overlay__timestamp"
+          >
+            15 Jan 2024, 10:30 AM
+          </span>
+        </div>
+        <div
+          class="ipd-draft-overlay__divider"
+        />
+      </div>
+      <div
+        class="ipd-draft-overlay__row"
+      >
+        <p
+          class="ipd-draft-overlay__patient-name"
+        >
+          Jane Smith
+        </p>
+        <div
+          class="ipd-draft-overlay__row-details"
+        >
+          <span
+            class="ipd-draft-overlay__identifier"
+          >
+            IQ000002
+          </span>
+          <span
+            class="ipd-draft-overlay__timestamp"
+          >
+            15 Jan 2024, 11:00 AM
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DraftOverlay should match snapshot with empty state 1`] = `
+<div>
+  <div
+    class="ipd-draft-overlay"
+  >
+    <div
+      class="ipd-draft-overlay__header"
+    >
+      <span
+        class="ipd-draft-overlay__title"
+      >
+        Observation Drafts (0)
+      </span>
+      <button
+        aria-label="Close drafts overlay"
+        class="ipd-draft-overlay__close-button"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          focusable="false"
+          height="16"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 32 32"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+          />
+        </svg>
+      </button>
+    </div>
+    <div
+      class="ipd-draft-overlay__content"
+    >
+      <div
+        class="ipd-draft-overlay__empty-state"
+      >
+        <p
+          class="ipd-draft-overlay__empty-title"
+        >
+          No drafts yet
+        </p>
+        <p
+          class="ipd-draft-overlay__empty-message"
+        >
+          You don't have any saved drafts
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
