@@ -31,6 +31,24 @@ const ExpandableRowData = (props) => {
     };
   }
 
+  if (expandTreatmentData.rate) {
+    verticalTabsData["Rate"] = {
+      data: `${expandTreatmentData.rate} ml/hr`,
+      additionalData: [
+        fetchAdditionalData(expandTreatmentData.recordedDateTime),
+      ],
+    };
+  }
+
+  if (expandTreatmentData.additives) {
+    verticalTabsData["Additives"] = {
+      data: expandTreatmentData.additives,
+      additionalData: [
+        fetchAdditionalData(expandTreatmentData.recordedDateTime),
+      ],
+    };
+  }
+
   if (expandTreatmentData.approverNotes) {
     verticalTabsData["Acknowledgement Note"] = {
       data: expandTreatmentData.approverNotes,
