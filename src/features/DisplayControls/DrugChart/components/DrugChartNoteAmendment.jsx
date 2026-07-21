@@ -48,12 +48,9 @@ const DrugChartNoteAmendment = (props) => {
           />
           {amendmentReasons.map((reason) => (
             <SelectItem
-              key={reason}
-              value={reason}
-              text={intl.formatMessage({
-                id: reason,
-                defaultMessage: reason,
-              })}
+              key={reason.uuid}
+              value={reason.uuid}
+              text={reason.display}
             />
           ))}
         </Select>
