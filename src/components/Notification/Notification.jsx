@@ -10,6 +10,7 @@ export default function Notification(props) {
   const { hostData, hostApi } = props;
   const { notificationKind, messageId, messageDuration = 2000 } = hostData;
   const getMessage = (messageId) => {
+    if (!messageId) return null;
     return (
       <I18nProvider>
         <FormattedMessage id={messageId} />
