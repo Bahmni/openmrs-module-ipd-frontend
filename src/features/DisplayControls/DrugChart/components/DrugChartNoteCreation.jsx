@@ -44,12 +44,9 @@ const DrugChartNoteCreation = (props) => {
           />
           {amendmentReasons.map((reason) => (
             <SelectItem
-              key={reason}
-              value={reason}
-              text={intl.formatMessage({
-                id: reason,
-                defaultMessage: reason,
-              })}
+              key={reason.uuid}
+              value={reason.uuid}
+              text={reason.display}
             />
           ))}
         </Select>
@@ -75,7 +72,7 @@ const DrugChartNoteCreation = (props) => {
           invalid={!amendmentNotes.trim() && isSaveDisabled}
           invalidText={intl.formatMessage({
             id: "NOTE_REQUIRED",
-            defaultMessage: "Notes are required"
+            defaultMessage: "Notes are required",
           })}
         />
       </div>
@@ -84,7 +81,12 @@ const DrugChartNoteCreation = (props) => {
 };
 
 DrugChartNoteCreation.propTypes = {
-  amendmentReasons: PropTypes.arrayOf(PropTypes.string).isRequired,
+  amendmentReasons: PropTypes.arrayOf(
+    PropTypes.shape({
+      uuid: PropTypes.string,
+      display: PropTypes.string,
+    })
+  ).isRequired,
   amendmentReason: PropTypes.string.isRequired,
   amendmentNotes: PropTypes.string.isRequired,
   isSaveDisabled: PropTypes.bool.isRequired,

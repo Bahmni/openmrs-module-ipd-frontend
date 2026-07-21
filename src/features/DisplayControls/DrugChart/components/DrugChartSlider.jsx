@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import { I18nProvider } from "../../../i18n/I18nProvider";
@@ -12,6 +12,7 @@ import { SliderContext } from "../../../../context/SliderContext";
 import {
   saveMedicationAmendmentNote,
   saveMedicationAcknowledgementNote,
+  fetchAmendmentReasons,
 } from "../utils/DrugChartUtils";
 import "../styles/DrugChartSlider.scss";
 
@@ -23,8 +24,10 @@ const DrugChartSlider = (props) => {
   const { config, provider, privileges } = useContext(IPDContext) || {};
   const { setSliderContentModified } = useContext(SliderContext) || {};
   const { drugChartNoteAmendment = {} } = config || {};
-  const amendmentReasons = drugChartNoteAmendment.amendmentReasons || [];
+  const amendmentReasonConceptSetUuid =
+    drugChartNoteAmendment.amendmentReasonConceptSetUuid;
 
+  const [amendmentReasons, setAmendmentReasons] = useState([]);
   const [amendmentReason, setAmendmentReason] = useState("");
   const [amendmentNotes, setAmendmentNotes] = useState("");
 
@@ -32,6 +35,14 @@ const DrugChartSlider = (props) => {
   const [isAcknowledged, setIsAcknowledged] = useState(false);
 
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
+
+  useEffect(() => {
+    if (sliderType === sliderTypes.AMENDMENT && amendmentReasonConceptSetUuid) {
+      fetchAmendmentReasons(amendmentReasonConceptSetUuid).then((reasons) => {
+        setAmendmentReasons(reasons);
+      });
+    }
+  }, [sliderType, amendmentReasonConceptSetUuid]);
 
   const updateSliderContentModified = (type) => {
     setSliderContentModified?.((prev) => ({

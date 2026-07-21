@@ -30,6 +30,27 @@ export const fetchMedications = async (
   }
 };
 
+export const fetchAmendmentReasons = async (amendmentReasonConceptSetUuid) => {
+  const FHIR_VALUESET_URL = `/openmrs/ws/fhir2/R4/ValueSet/${amendmentReasonConceptSetUuid}/$expand`;
+  try {
+    const response = await axios.get(FHIR_VALUESET_URL);
+    if (
+      response.data &&
+      response.data.expansion &&
+      response.data.expansion.contains
+    ) {
+      return response.data.expansion.contains.map((item) => ({
+        uuid: item.code,
+        display: item.display,
+      }));
+    }
+    return [];
+  } catch (error) {
+    console.error("Error fetching amendment reasons:", error);
+    return [];
+  }
+};
+
 export const transformDrugOrders = (orders) => {
   const { ipdDrugOrders, emergencyMedications } = orders;
   const medicationData = {};
@@ -125,7 +146,7 @@ export const saveMedicationAmendmentNote = async (amendmentData) => {
     authorUuid: amendedByUuid,
     recordedTime: Math.floor(Date.now() / 1000),
     text: amendedText,
-    reason: amendedReason,
+    amendmentReasonUuid: amendedReason,
   };
 
   try {

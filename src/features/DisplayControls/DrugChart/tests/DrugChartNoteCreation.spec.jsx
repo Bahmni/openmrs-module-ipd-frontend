@@ -25,8 +25,13 @@ describe("DrugChartNoteCreation", () => {
   const mockOnReasonChange = jest.fn();
   const mockOnNotesChange = jest.fn();
 
+  // Shape matches what fetchAmendmentReasons() returns after mapping the FHIR
+  // ValueSet $expand response: [{ uuid: item.code, display: item.display }].
   const defaultProps = {
-    amendmentReasons: ["Reason 1", "Reason 2"],
+    amendmentReasons: [
+      { uuid: "reason-uuid-1", display: "Incorrect Time" },
+      { uuid: "reason-uuid-2", display: "Incorrect Dose" },
+    ],
     amendmentReason: "",
     amendmentNotes: "",
     isSaveDisabled: true,
@@ -41,8 +46,29 @@ describe("DrugChartNoteCreation", () => {
     );
     expect(screen.getByTestId("note-reason-select")).toBeInTheDocument();
     expect(screen.getByText("Select a reason")).toBeInTheDocument();
-    expect(screen.getByText("Reason 1")).toBeInTheDocument();
-    expect(screen.getByText("Reason 2")).toBeInTheDocument();
+    expect(screen.getByText("Incorrect Time")).toBeInTheDocument();
+    expect(screen.getByText("Incorrect Dose")).toBeInTheDocument();
+  });
+
+  it("renders no reason options when amendmentReasons is empty", () => {
+    render(
+      <I18nProvider>
+        <DrugChartNoteCreation {...defaultProps} amendmentReasons={[]} />
+      </I18nProvider>
+    );
+    expect(screen.getByTestId("note-reason-select")).toBeInTheDocument();
+    expect(screen.getByText("Select a reason")).toBeInTheDocument();
+    expect(screen.queryByText("Incorrect Time")).not.toBeInTheDocument();
+  });
+
+  it("uses reason.uuid as the option value and reason.display as the visible text", () => {
+    render(
+      <I18nProvider>
+        <DrugChartNoteCreation {...defaultProps} />
+      </I18nProvider>
+    );
+    const option = screen.getByText("Incorrect Time").closest("option");
+    expect(option).toHaveValue("reason-uuid-1");
   });
 
   it("renders the textarea with placeholder", () => {
@@ -82,7 +108,7 @@ describe("DrugChartNoteCreation", () => {
       </I18nProvider>
     );
     fireEvent.change(screen.getByTestId("note-reason-select"), {
-      target: { value: "Reason 1" },
+      target: { value: "reason-uuid-1" },
     });
     expect(mockOnReasonChange).toHaveBeenCalledWith(expect.anything());
   });
@@ -104,7 +130,7 @@ describe("DrugChartNoteCreation", () => {
       <I18nProvider>
         <DrugChartNoteCreation
           {...defaultProps}
-          amendmentReason="Reason 1"
+          amendmentReason="reason-uuid-1"
           amendmentNotes="Some notes"
           isSaveDisabled={false}
         />
