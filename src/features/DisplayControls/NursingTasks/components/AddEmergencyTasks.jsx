@@ -72,6 +72,8 @@ const AddEmergencyTasks = (props) => {
   const [nonMedicationTaskTypeOptions, setNonMedicationTaskTypeOptions] =
     useState({});
   const { config = {}, handleAuditEvent, currentUser } = useContext(IPDContext);
+  const { providerFilter = {} } = config;
+  const { attrName, attrValue } = providerFilter;
   const { enable24HourTime = {}, nonMedicationTaskTypes = [] } = config;
 
   const [selectedDrug, setSelectedDrug] = useState({});
@@ -223,7 +225,7 @@ const AddEmergencyTasks = (props) => {
   };
 
   const fetchAllProviders = async () => {
-    const providerResponse = await getProviders();
+    const providerResponse = await getProviders(attrName, attrValue);
     if (providerResponse.status === 200) {
       const data = providerResponse.data.results;
       setProviderOptions(
@@ -349,10 +351,16 @@ const AddEmergencyTasks = (props) => {
       taskType: nonMedicationTaskType ? nonMedicationTaskType : null,
       status: "REQUESTED",
       ...(observationUuid && {
-        focus: { type: "Observation", reference: `Observation/${observationUuid}` },
+        focus: {
+          type: "Observation",
+          reference: `Observation/${observationUuid}`,
+        },
       }),
       ...(orderUuid && {
-        basedOn: { type: "ServiceRequest", reference: `ServiceRequest/${orderUuid}` },
+        basedOn: {
+          type: "ServiceRequest",
+          reference: `ServiceRequest/${orderUuid}`,
+        },
       }),
     };
     return nonMedicationPayload;

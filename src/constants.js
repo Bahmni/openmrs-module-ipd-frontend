@@ -200,6 +200,8 @@ export const DOSE_UNITS = ["ml", "mg", "mcg"];
 
 export const LOADING_DOSE_SEQUENCE_OFFSET = 1;
 export const NO_LOADING_DOSE_SEQUENCE_OFFSET = 0;
+export const ATTR_NAME = "Can acknowledge emergency medication";
+export const ATTR_VALUE = true;
 
 export const TASK_COLORS = {
   LINK_BLUE: "#0f62fe",

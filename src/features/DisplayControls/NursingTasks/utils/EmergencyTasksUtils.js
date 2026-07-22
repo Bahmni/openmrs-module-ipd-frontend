@@ -7,6 +7,8 @@ import {
   ENCOUNTER_TYPE_URL,
   PATIENT_MOVEMENT_URL,
   NON_MEDICATION_BASE_URL,
+  ATTR_NAME,
+  ATTR_VALUE,
 } from "../../../../constants";
 
 export const getDrugOrdersConfig = async () => {
@@ -17,11 +19,16 @@ export const getDrugOrdersConfig = async () => {
   }
 };
 
-export const getProviders = async () => {
+export const getProviders = async (
+  attrName = ATTR_NAME,
+  attrValue = ATTR_VALUE
+) => {
   try {
     return await axios.get(
       GET_ALL_PROVIDERS_URL.concat(
-        "&attrName=Can%20acknowledge%20emergency%20medication&attrValue=true"
+        `&attrName=${encodeURIComponent(
+          attrName
+        )}&attrValue=${encodeURIComponent(attrValue)}`
       )
     );
   } catch (e) {
