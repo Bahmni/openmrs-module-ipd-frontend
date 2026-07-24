@@ -134,3 +134,17 @@ export const mapObservationsToInstructions = (observations, formConcepts) => {
     return result;
   }, []);
 };
+
+// Filters instructions from previous shifts.
+export const filterPreviousShiftInstructions = (
+  instructions,
+  currentShiftStartTime
+) => {
+  if (!instructions || instructions.length === 0) {
+    return [];
+  }
+
+  return instructions.filter(
+    (instruction) => instruction.encounterDateTime < currentShiftStartTime
+  );
+};

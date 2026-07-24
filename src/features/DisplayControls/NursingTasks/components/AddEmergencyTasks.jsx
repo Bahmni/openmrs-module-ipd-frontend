@@ -635,7 +635,7 @@ const AddEmergencyTasks = (props) => {
                 <div className="emergency-task-slider-content">
                   <TextArea
                     labelText={
-                      <Title text={TASK_NAME_LABEL} isRequired={true} />
+                      <Title text={"Task Name"} isRequired={true} />
                     }
                     onChange={(e) => {
                       setTask(e.target.value);

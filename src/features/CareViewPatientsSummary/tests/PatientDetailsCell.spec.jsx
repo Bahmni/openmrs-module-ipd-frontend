@@ -499,4 +499,164 @@ describe("PatientDetailsCell", () => {
       expect(queryByText(/3 New Care Instruction\(s\)/)).toBeTruthy();
     });
   });
+
+  it("should show previous shift care instructions notification when count > 0", async () => {
+    const { queryByTestId, queryByText } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={0}
+            unacknowledgedCareInstructions={[
+              { instruction: "Current instruction" },
+            ]}
+            previousShiftCareInstructions={[
+              { instruction: "NPO after midnight" },
+              { instruction: "Bed rest" },
+            ]}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByTestId("previous-shift-care-instructions-notification")).toBeTruthy();
+      expect(queryByText(/(Includes 2 from Previous Shift)/)).toBeTruthy();
+    });
+  });
+
+  it("should not show previous shift care instructions notification when count is 0", async () => {
+    const { queryByTestId } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={0}
+            unacknowledgedCareInstructions={[]}
+            previousShiftCareInstructions={[]}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByTestId("previous-shift-care-instructions-notification")).toBeFalsy();
+    });
+  });
+
+  it("should display previous shift care instructions with warning icon", async () => {
+    const { queryByTestId } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={0}
+            unacknowledgedCareInstructions={[
+              { instruction: "Current instruction" },
+            ]}
+            previousShiftCareInstructions={[
+              { instruction: "NPO after midnight" },
+            ]}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      const notification = queryByTestId("previous-shift-care-instructions-notification");
+      expect(notification).toBeTruthy();
+      expect(notification).toHaveClass("care-instructions-previous-shift");
+    });
+  });
+
+  it("should display multiple previous shift care instructions with correct count", async () => {
+    const { queryByText } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={0}
+            unacknowledgedCareInstructions={[
+              { instruction: "Current instruction" },
+            ]}
+            previousShiftCareInstructions={[
+              { instruction: "NPO after midnight" },
+              { instruction: "Bed rest" },
+              { instruction: "Monitor vitals" },
+            ]}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={[]}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText(/(Includes 3 from Previous Shift)/)).toBeTruthy();
+    });
+  });
+
+  it("should display all three notification types together", async () => {
+    const { queryByTestId } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={mockContext}>
+          <PatientDetailsCell
+            patientDetails={mockPatientsList.admittedPatients[0].patientDetails}
+            bedDetails={mockPatientsList.admittedPatients[0].bedDetails}
+            careTeamDetails={mockPatientsList.admittedPatients[0].careTeam}
+            newTreatments={1}
+            unacknowledgedCareInstructions={[
+              { instruction: "Monitor" },
+            ]}
+            previousShiftCareInstructions={[
+              { instruction: "NPO" },
+            ]}
+            visitDetails={{ uuid: "sderf908-3f10-11e4-adec-0800271c1b72" }}
+            navHourEpoch={{
+              startHourEpoch: 1672575400,
+              endHourEpoch: 1710511200,
+            }}
+            previousShiftPendingTasks={mockPreviousShiftPendingTask}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByTestId("new-medications-notification")).toBeTruthy();
+      expect(queryByTestId("new-care-instructions-notification")).toBeTruthy();
+      expect(queryByTestId("previous-shift-care-instructions-notification")).toBeTruthy();
+      expect(queryByTestId("pending-tasks-notification")).toBeTruthy();
+    });
+  });
 });
