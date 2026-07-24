@@ -19,6 +19,7 @@ import {
   fetchAcknowledgedObservationUuids,
   fetchBatchObservations,
   mapObservationsToInstructions,
+  filterPreviousShiftInstructions,
 } from "../../DisplayControls/CareInstructions/utils/CareInstructionsUtils";
 
 export const CareViewPatientsSummary = ({
@@ -33,6 +34,7 @@ export const CareViewPatientsSummary = ({
     setPreviousShiftNonMedicationDetails,
   ] = useState([]);
   const [careInstructionsMap, setCareInstructionsMap] = useState({});
+  const [previousShiftCareInstructionsMap, setPreviousShiftCareInstructionsMap] = useState({});
   const {
     careViewConfig,
     ipdConfig,
@@ -146,6 +148,20 @@ export const CareViewPatientsSummary = ({
       });
     }
 
+    // Calculate previous-shift care instructions
+    if (shiftDetails && Object.keys(shiftDetails).length > 0) {
+      const [currentShiftStartTime] = setCurrentShiftTimes(shiftDetails);
+      const previousShiftInstructionsMap = {};
+      Object.keys(instructionsMap).forEach((visitUuid) => {
+        const previousShiftInstructions = filterPreviousShiftInstructions(
+          instructionsMap[visitUuid],
+          currentShiftStartTime
+        );
+        previousShiftInstructionsMap[visitUuid] = previousShiftInstructions;
+      });
+      setPreviousShiftCareInstructionsMap(previousShiftInstructionsMap);
+    }
+
     setCareInstructionsMap(instructionsMap);
   };
 
@@ -203,6 +219,9 @@ export const CareViewPatientsSummary = ({
                   newTreatments={newTreatments}
                   unacknowledgedCareInstructions={
                     careInstructionsMap[visitDetails.uuid] || []
+                  }
+                  previousShiftCareInstructions={
+                    previousShiftCareInstructionsMap[visitDetails.uuid] || []
                   }
                   visitDetails={visitDetails}
                   previousShiftPendingTasks={tasks}

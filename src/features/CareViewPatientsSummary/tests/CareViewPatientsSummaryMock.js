@@ -1548,17 +1548,44 @@ export const mockWithMyPatientList = {
   totalPatients: 2,
 };
 
-export const mockPreviousShiftPendingTask =[
+export const mockPreviousShiftPendingTask = [
   {
-      "taskName": "dummy test",
-      "taskId": "86c56de5-3286-43bc-b2ab-03bda93574dd"
+    "taskName": "dummy test",
+    "taskId": "86c56de5-3286-43bc-b2ab-03bda93574dd"
   },
   {
-      "taskName": "task 1",
-      "taskId": "8ab43f2f-2789-4c29-90fc-2d7ff302e2b8"
+    "taskName": "task 1",
+    "taskId": "8ab43f2f-2789-4c29-90fc-2d7ff302e2b8"
   },
   {
-      "taskName": "task 2",
-      "taskId": "7931cf68-ad56-4e0d-8439-20e6935b7d97"
+    "taskName": "task 2",
+    "taskId": "7931cf68-ad56-4e0d-8439-20e6935b7d97"
+  }
+]
+
+export const mockPreviousShiftCareInstructions = [
+  {
+    "observationUuid": "obs-uuid-prev-1",
+    "orderUuid": null,
+    "encounterUuid": "encounter-prev-1",
+    "encounterDateTime": 1713187800000,
+    "form": "Care Instructions",
+    "instructionType": "Nursing Instructions",
+    "instruction": "NPO after midnight",
+    "providerName": "Dr. Smith",
+    "previousVersionUuid": null,
+    "action": ""
+  },
+  {
+    "observationUuid": "obs-uuid-prev-2",
+    "orderUuid": null,
+    "encounterUuid": "encounter-prev-2",
+    "encounterDateTime": 1713191400000,
+    "form": "Care Instructions",
+    "instructionType": "Nursing Instructions",
+    "instruction": "Bed rest",
+    "providerName": "Dr. Jones",
+    "previousVersionUuid": null,
+    "action": ""
   }
 ]
