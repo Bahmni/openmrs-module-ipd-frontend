@@ -47,3 +47,8 @@ CVE-2026-33671 # picomatch: transitive dev dep via lint-staged/jest/sass, build-
 CVE-2025-62718
 CVE-2026-40175
 CVE-2026-12143 # form-data: transitive via axios (prod) and @types/node-fetch/jsdom (dev), no direct multipart usage in this app https://avd.aquasec.com/nvd/cve-2026-12143
+CVE-2026-59874
+CVE-2026-59873
+GHSA-2p49-hgcm-8545
+CVE-2026-59869
+CVE-2026-13149
