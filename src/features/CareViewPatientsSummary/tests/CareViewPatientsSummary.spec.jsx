@@ -41,8 +41,6 @@ jest.mock("../../CareViewSummary/utils/CareViewSummary", () => {
     getSlotsForPatients: () => mockGetSlotsForPatients(),
     getTasksForPatients: () => mockGetTasksForPatients(),
     getColumnData: () => mockGetColumnData(),
-    currentShiftHoursArray: () => mockCurrentShiftHoursArray(),
-    setCurrentShiftTimes: () => mockSetCurrentShiftTimes(),
     getPreviousShiftDetails: () => mockGetPreviousShiftDetails(),
   };
 });
@@ -55,9 +53,19 @@ jest.mock(
         mockMapObservationsToInstructions(...args),
       fetchAcknowledgedObservationUuids: (...args) =>
         mockFetchAcknowledgedObsUuids(...args),
+      filterPreviousShiftInstructions: (instructions, shiftStartTime) => {
+        return instructions.filter((instr) => instr.encounterDateTime < shiftStartTime);
+      },
     };
   }
 );
+
+jest.mock("../../DisplayControls/DrugChart/utils/DrugChartUtils", () => {
+  return {
+    currentShiftHoursArray: () => mockCurrentShiftHoursArray(),
+    setCurrentShiftTimes: (...args) => mockSetCurrentShiftTimes(...args),
+  };
+});
 
 describe("CareViewPatientsSummary", function () {
   afterEach(() => {
@@ -723,6 +731,294 @@ describe("CareViewPatientsSummary", function () {
 
       await waitFor(() => {
         expect(mockFetchAcknowledgedObsUuids).not.toHaveBeenCalled();
+      });
+    });
+
+    it("should calculate and store previous shift care instructions separately", async () => {
+      const visitUuid1 = "626b822d-741e-4a86-95ff-626eea753c4c";
+      const currentShiftStartTime = 1713234600000;
+      const previousShiftTime = 1713187800000; // before current shift
+
+      mockFetchBatchObservations.mockResolvedValue([
+        {
+          visitUuid: visitUuid1,
+          observations: [
+            { uuid: "obs-prev", encounterDateTime: previousShiftTime },
+            { uuid: "obs-curr", encounterDateTime: 1713270000000 },
+          ],
+        },
+      ]);
+
+      mockMapObservationsToInstructions.mockReturnValue([
+        {
+          observationUuid: "obs-prev",
+          instruction: "NPO",
+          encounterDateTime: previousShiftTime,
+        },
+        {
+          observationUuid: "obs-curr",
+          instruction: "Monitor",
+          encounterDateTime: 1713270000000,
+        },
+      ]);
+
+      mockFetchAcknowledgedObsUuids.mockResolvedValue(new Set());
+      mockSetCurrentShiftTimes.mockReturnValue([currentShiftStartTime, 1713274200000]);
+
+      render(
+        <IntlProvider locale="en">
+          <CareViewContext.Provider value={mockContextWithCI}>
+            <CareViewPatientsSummary
+              patientsSummary={mockPatientsList.admittedPatients}
+              navHourEpoch={mockNavHourEpoch}
+              filterValue={mockFilterValue}
+            />
+          </CareViewContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        expect(mockSetCurrentShiftTimes).toHaveBeenCalled();
+      });
+    });
+
+    it("should not show previous shift care instructions notification when all instructions are from current shift", async () => {
+      const visitUuid1 = "626b822d-741e-4a86-95ff-626eea753c4c";
+      const currentShiftStartTime = 1713234600000;
+
+      mockFetchBatchObservations.mockResolvedValue([
+        {
+          visitUuid: visitUuid1,
+          observations: [
+            { uuid: "obs-curr-1", encounterDateTime: 1713270000000 },
+            { uuid: "obs-curr-2", encounterDateTime: 1713280000000 },
+          ],
+        },
+      ]);
+
+      mockMapObservationsToInstructions.mockReturnValue([
+        {
+          observationUuid: "obs-curr-1",
+          instruction: "Monitor",
+          encounterDateTime: 1713270000000,
+        },
+        {
+          observationUuid: "obs-curr-2",
+          instruction: "Check vitals",
+          encounterDateTime: 1713280000000,
+        },
+      ]);
+
+      mockFetchAcknowledgedObsUuids.mockResolvedValue(new Set());
+      mockSetCurrentShiftTimes.mockReturnValue([currentShiftStartTime, 1713274200000]);
+
+      render(
+        <IntlProvider locale="en">
+          <CareViewContext.Provider value={mockContextWithCI}>
+            <CareViewPatientsSummary
+              patientsSummary={mockPatientsList.admittedPatients}
+              navHourEpoch={mockNavHourEpoch}
+              filterValue={mockFilterValue}
+            />
+          </CareViewContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId("previous-shift-care-instructions-notification")
+        ).toBeNull();
+      });
+    });
+
+    it("should show previous shift care instructions notification when count > 0", async () => {
+      const visitUuid1 = "626b822d-741e-4a86-95ff-626eea753c4c";
+      const currentShiftStartTime = 1713234600000;
+      const previousShiftTime = 1713187800000;
+
+      mockFetchBatchObservations.mockResolvedValue([
+        {
+          visitUuid: visitUuid1,
+          observations: [
+            { uuid: "obs-prev-1", encounterDateTime: previousShiftTime },
+            { uuid: "obs-prev-2", encounterDateTime: previousShiftTime + 3600000 },
+            { uuid: "obs-curr", encounterDateTime: 1713270000000 },
+          ],
+        },
+      ]);
+
+      mockMapObservationsToInstructions.mockReturnValue([
+        {
+          observationUuid: "obs-prev-1",
+          instruction: "NPO",
+          encounterDateTime: previousShiftTime,
+        },
+        {
+          observationUuid: "obs-prev-2",
+          instruction: "Bed rest",
+          encounterDateTime: previousShiftTime + 3600000,
+        },
+        {
+          observationUuid: "obs-curr",
+          instruction: "Monitor",
+          encounterDateTime: 1713270000000,
+        },
+      ]);
+
+      mockFetchAcknowledgedObsUuids.mockResolvedValue(new Set());
+      mockSetCurrentShiftTimes.mockReturnValue([currentShiftStartTime, 1713274200000]);
+
+      render(
+        <IntlProvider locale="en">
+          <CareViewContext.Provider value={mockContextWithCI}>
+            <CareViewPatientsSummary
+              patientsSummary={mockPatientsList.admittedPatients}
+              navHourEpoch={mockNavHourEpoch}
+              filterValue={mockFilterValue}
+            />
+          </CareViewContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        const notification = screen.queryByTestId(
+          "previous-shift-care-instructions-notification"
+        );
+        expect(notification).toBeTruthy();
+        expect(notification).toHaveTextContent(/(Includes 2 from Previous Shift)/);
+      });
+    });
+
+    it("should handle multiple patients with different previous shift instruction counts", async () => {
+      const visitUuid1 = "626b822d-741e-4a86-95ff-626eea753c4c";
+      const visitUuid2 = "626b822d-741e-4a86-95ff-636eea753c2c";
+      const currentShiftStartTime = 1713234600000;
+      const previousShiftTime = 1713187800000;
+
+      mockFetchBatchObservations.mockResolvedValue([
+        {
+          visitUuid: visitUuid1,
+          observations: [
+            { uuid: "obs-p1-prev", encounterDateTime: previousShiftTime },
+          ],
+        },
+        {
+          visitUuid: visitUuid2,
+          observations: [
+            { uuid: "obs-p2-prev-1", encounterDateTime: previousShiftTime },
+            { uuid: "obs-p2-prev-2", encounterDateTime: previousShiftTime + 3600000 },
+            { uuid: "obs-p2-prev-3", encounterDateTime: previousShiftTime + 7200000 },
+          ],
+        },
+      ]);
+
+      mockMapObservationsToInstructions
+        .mockReturnValueOnce([
+          {
+            observationUuid: "obs-p1-prev",
+            instruction: "NPO",
+            encounterDateTime: previousShiftTime,
+          },
+        ])
+        .mockReturnValueOnce([
+          {
+            observationUuid: "obs-p2-prev-1",
+            instruction: "NPO",
+            encounterDateTime: previousShiftTime,
+          },
+          {
+            observationUuid: "obs-p2-prev-2",
+            instruction: "Bed rest",
+            encounterDateTime: previousShiftTime + 3600000,
+          },
+          {
+            observationUuid: "obs-p2-prev-3",
+            instruction: "Monitor",
+            encounterDateTime: previousShiftTime + 7200000,
+          },
+        ]);
+
+      mockFetchAcknowledgedObsUuids.mockResolvedValue(new Set());
+      mockSetCurrentShiftTimes.mockReturnValue([currentShiftStartTime, 1713274200000]);
+
+      render(
+        <IntlProvider locale="en">
+          <CareViewContext.Provider value={mockContextWithCI}>
+            <CareViewPatientsSummary
+              patientsSummary={mockPatientsList.admittedPatients}
+              navHourEpoch={mockNavHourEpoch}
+              filterValue={mockFilterValue}
+            />
+          </CareViewContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        const notifications = screen.queryAllByTestId(
+          "previous-shift-care-instructions-notification"
+        );
+        expect(notifications.length).toBe(2);
+      });
+    });
+
+    it("should isolate previous shift filtering per patient — Patient A's previous shift should not affect Patient B", async () => {
+      const visitUuid1 = "626b822d-741e-4a86-95ff-626eea753c4c";
+      const visitUuid2 = "626b822d-741e-4a86-95ff-636eea753c2c";
+      const currentShiftStartTime = 1713234600000;
+      const previousShiftTime = 1713187800000;
+
+      mockFetchBatchObservations.mockResolvedValue([
+        {
+          visitUuid: visitUuid1,
+          observations: [
+            { uuid: "obs-p1-prev", encounterDateTime: previousShiftTime },
+          ],
+        },
+        {
+          visitUuid: visitUuid2,
+          observations: [
+            { uuid: "obs-p2-curr", encounterDateTime: 1713270000000 },
+          ],
+        },
+      ]);
+
+      mockMapObservationsToInstructions
+        .mockReturnValueOnce([
+          {
+            observationUuid: "obs-p1-prev",
+            instruction: "NPO",
+            encounterDateTime: previousShiftTime,
+          },
+        ])
+        .mockReturnValueOnce([
+          {
+            observationUuid: "obs-p2-curr",
+            instruction: "Monitor",
+            encounterDateTime: 1713270000000,
+          },
+        ]);
+
+      mockFetchAcknowledgedObsUuids.mockResolvedValue(new Set());
+      mockSetCurrentShiftTimes.mockReturnValue([currentShiftStartTime, 1713274200000]);
+
+      render(
+        <IntlProvider locale="en">
+          <CareViewContext.Provider value={mockContextWithCI}>
+            <CareViewPatientsSummary
+              patientsSummary={mockPatientsList.admittedPatients}
+              navHourEpoch={mockNavHourEpoch}
+              filterValue={mockFilterValue}
+            />
+          </CareViewContext.Provider>
+        </IntlProvider>
+      );
+
+      await waitFor(() => {
+        const notifications = screen.queryAllByTestId(
+          "previous-shift-care-instructions-notification"
+        );
+        // Only Patient A should have the notification
+        expect(notifications.length).toBe(1);
       });
     });
   });
