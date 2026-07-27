@@ -28,6 +28,14 @@ jest.mock("bahmni-carbon-ui", () => {
   };
 });
 
+jest.mock("carbon-components-react", () => {
+  const actual = jest.requireActual("carbon-components-react");
+  return {
+    ...actual,
+    Tooltip: (props) => <div>{props.children}</div>,
+  };
+});
+
 jest.mock("../utils/DrugChartUtils", () => {
   const originalModule = jest.requireActual("../utils/DrugChartUtils");
   return {

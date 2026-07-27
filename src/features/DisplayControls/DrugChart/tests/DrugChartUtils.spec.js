@@ -139,7 +139,115 @@ describe("DrugChartUtils", () => {
     const updatedDateTime = 1704441600000; // 5th Jan 2024 08:00
     expect(getDateTime(date, time)).toEqual(updatedDateTime);
   });
+
   describe("transformDrugOrders - dosage formatting", () => {
+    const createOrder = (doseUnits) => ({
+      drugOrder: {
+        uuid: "order-1",
+        careSetting: "INPATIENT",
+        drug: { name: "Drug A" },
+        duration: 5,
+        durationUnits: "Day(s)",
+        dosingInstructions: {
+          dose: 10,
+          doseUnits,
+          route: "Oral",
+          frequency: { display: "Daily" },
+          administrationInstructions: "{}",
+        },
+      },
+      drugOrderSchedule: { slotStartTime: 1000 },
+    });
+
+    it("should concatenate compact units (ml, mg, mcg) with dose", () => {
+      ["ml", "mg", "mcg"].forEach((unit) => {
+        const result = transformDrugOrders({
+          ipdDrugOrders: [createOrder(unit)],
+          emergencyMedications: [],
+        });
+        const med = result["order-1"];
+        expect(med.dosingInstructions.dosage).toBe(`10${unit}`);
+        expect(med.dosingInstructions.doseUnits).toBeUndefined();
+      });
+    });
+
+    it("should separate non-compact units (e.g., Tablet) from dose", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createOrder("Tablet")],
+        emergencyMedications: [],
+      });
+      const med = result["order-1"];
+      expect(med.dosingInstructions.dosage).toBe(10);
+      expect(med.dosingInstructions.doseUnits).toBe("Tablet");
+    });
+
+    it("should handle compact units in emergency medications", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [],
+        emergencyMedications: [
+          {
+            uuid: "emerg-1",
+            dose: 20,
+            doseUnits: { display: "mcg" },
+            drug: { uuid: "drug-1", display: "Drug B" },
+            route: { display: "IV" },
+            administeredDateTime: 2000000,
+          },
+        ],
+      });
+      const med = result["emerg-1"];
+      expect(med.dosingInstructions.dosage).toBe("20mcg");
+      expect(med.dosingInstructions.doseUnits).toBeUndefined();
+    });
+
+    it("should use effectiveStartDate / 1000 as firstSlotStartTime for PRN (asNeeded) orders", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [
+          {
+            drugOrder: {
+              uuid: "prn-order-1",
+              careSetting: "INPATIENT",
+              drug: { name: "PRN Drug" },
+              duration: 3,
+              durationUnits: "Day(s)",
+              effectiveStartDate: 1704441600000,
+              dosingInstructions: {
+                dose: 5,
+                doseUnits: "mg",
+                route: "Oral",
+                frequency: { display: "As needed" },
+                administrationInstructions: "{}",
+                asNeeded: true,
+              },
+            },
+            drugOrderSchedule: { slotStartTime: 9999 },
+          },
+        ],
+        emergencyMedications: [],
+      });
+      const med = result["prn-order-1"];
+      expect(med.firstSlotStartTime).toBe(1704441600000 / 1000);
+    });
+
+    it("should handle non-compact units in emergency medications", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [],
+        emergencyMedications: [
+          {
+            uuid: "emerg-1",
+            dose: 2,
+            doseUnits: { display: "Tablet" },
+            drug: { uuid: "drug-1", display: "Drug C" },
+            route: { display: "Oral" },
+            administeredDateTime: 2000000,
+          },
+        ],
+      });
+      const med = result["emerg-1"];
+      expect(med.dosingInstructions.dosage).toBe(2);
+      expect(med.dosingInstructions.doseUnits).toBe("Tablet");
+    });
+
     it("should parse rate and additives from administrationInstructions JSON", () => {
       const result = transformDrugOrders({
         ipdDrugOrders: [
@@ -213,6 +321,7 @@ describe("DrugChartUtils", () => {
         "Take with water"
       );
     });
+  });
 
     const createOrder = (doseUnits) => ({
       drugOrder: {
@@ -290,6 +399,146 @@ describe("DrugChartUtils", () => {
       const med = result["emerg-1"];
       expect(med.dosingInstructions.dosage).toBe(2);
       expect(med.dosingInstructions.doseUnits).toBe("Tablet");
+    });
+  });
+
+  describe("transformDrugOrders - variable dose", () => {
+    const createVariableOrder = (stageSchedules = []) => ({
+      drugOrder: {
+        uuid: "vd-order-1",
+        careSetting: "INPATIENT",
+        drug: { name: "VD Drug" },
+        effectiveStartDate: 1704785404000,
+        duration: 5,
+        durationUnits: "Day(s)",
+        dosingInstructions: {
+          dose: null,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: null,
+          quantity: 18,
+          quantityUnits: "Tablet(s)",
+          administrationInstructions: JSON.stringify([
+            {
+              sequence: 1,
+              text: "Loading Dose",
+              timing: { code: { text: "Once" } },
+              doseAndRate: [
+                { doseQuantity: { value: 5, unit: "Tablet(s)" } },
+              ],
+              additionalInstruction: [],
+              patientInstruction: "",
+              extension: [{ url: "isLoadingDose", valueBoolean: true }],
+            },
+            {
+              sequence: 2,
+              text: "Stage 1",
+              timing: {
+                code: { text: "Once a day" },
+                repeat: { duration: 3, durationUnit: "d" },
+              },
+              doseAndRate: [
+                { doseQuantity: { value: 3, unit: "Tablet(s)" } },
+              ],
+              additionalInstruction: [],
+              patientInstruction: "",
+              extension: [{ url: "isLoadingDose", valueBoolean: false }],
+            },
+          ]),
+        },
+      },
+      drugOrderSchedule: {
+        stageSchedules,
+        slotStartTime: null,
+        dayWiseSlotsStartTime: null,
+      },
+    });
+
+    const createRegularOrder = () => ({
+      drugOrder: {
+        uuid: "regular-order-1",
+        careSetting: "INPATIENT",
+        drug: { name: "Regular Drug" },
+        duration: 3,
+        durationUnits: "Day(s)",
+        dosingInstructions: {
+          dose: 10,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: { display: "Daily" },
+          administrationInstructions: "{}",
+        },
+      },
+      drugOrderSchedule: { slotStartTime: 1000 },
+    });
+
+    it("sets isVariableDose true for FhirDosingInstructions order", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createVariableOrder()],
+        emergencyMedications: [],
+      });
+      expect(result["vd-order-1"].isVariableDose).toBe(true);
+    });
+
+    it("uses quantity as dosage for variable dose order", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createVariableOrder()],
+        emergencyMedications: [],
+      });
+      expect(result["vd-order-1"].dosingInstructions.dosage).toBe(18);
+    });
+
+    it("sets instructions to null for variable dose", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createVariableOrder()],
+        emergencyMedications: [],
+      });
+      expect(result["vd-order-1"].dosingInstructions.instructions).toBeNull();
+    });
+
+    it("sets notes to null for variable dose", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createVariableOrder()],
+        emergencyMedications: [],
+      });
+      expect(result["vd-order-1"].notes).toBeNull();
+    });
+
+    it("uses effectiveStartDate as firstSlotStartTime for variable dose", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createVariableOrder()],
+        emergencyMedications: [],
+      });
+      expect(result["vd-order-1"].firstSlotStartTime).toBe(
+        1704785404000 / 1000
+      );
+    });
+
+    it("passes stageSchedules from drugOrderSchedule", () => {
+      const stageSchedules = [{ variableDosageSequence: 1 }];
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createVariableOrder(stageSchedules)],
+        emergencyMedications: [],
+      });
+      expect(result["vd-order-1"].stageSchedules).toEqual(stageSchedules);
+    });
+
+    it("sets fhirDosages from parsedInstructions", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createVariableOrder()],
+        emergencyMedications: [],
+      });
+      expect(result["vd-order-1"].fhirDosages).toHaveLength(2);
+      expect(result["vd-order-1"].fhirDosages[0].sequence).toBe(1);
+      expect(result["vd-order-1"].fhirDosages[1].sequence).toBe(2);
+    });
+
+    it("regular order is not affected - isVariableDose is false", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createRegularOrder()],
+        emergencyMedications: [],
+      });
+      expect(result["regular-order-1"].isVariableDose).toBe(false);
     });
   });
 });

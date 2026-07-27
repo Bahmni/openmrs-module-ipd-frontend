@@ -6,10 +6,17 @@ import {
   performerFunction,
   asNeededPlaceholderConceptName,
   timeFormatFor24Hr,
+  DOSE_UNITS,
 } from "../../../../constants";
 import _ from "lodash";
 import { FormattedMessage } from "react-intl";
 import { getAdministrationStatus } from "../../../../utils/CommonUtils";
+import {
+  getDosageBySequence,
+  fhirDosageToDisplayStage,
+  parseFhirDosages,
+  parseFlatAdminInstructions,
+} from "../../../../utils/FhirDosingUtils";
 
 export const fetchMedications = async (
   patientUuid,
@@ -38,13 +45,20 @@ export const transformDrugOrders = (orders) => {
         drugNonCoded,
         orderReasonText,
       } = order.drugOrder;
+      const fhirDosagesParsed = parseFhirDosages(
+        dosingInstructions.administrationInstructions
+      );
+      const isVariableDose = fhirDosagesParsed !== null;
+      const parsedInstructions = isVariableDose
+        ? fhirDosagesParsed
+        : parseFlatAdminInstructions(dosingInstructions.administrationInstructions);
       let dosage = "",
         doseUnits;
-      if (
-        dosingInstructions.doseUnits?.toLowerCase() === "ml" ||
-        dosingInstructions.doseUnits?.toLowerCase() === "mg" ||
-        dosingInstructions.doseUnits?.toLowerCase() === "mcg"
-      ) {
+      if (isVariableDose) {
+        dosage = dosingInstructions.quantity || "";
+        doseUnits =
+          dosingInstructions.quantityUnits || dosingInstructions.doseUnits || "";
+      } else if (DOSE_UNITS.includes(dosingInstructions.doseUnits?.toLowerCase())) {
         dosage = dosingInstructions.dose + dosingInstructions.doseUnits;
       } else {
         dosage = dosingInstructions.dose;
@@ -58,20 +72,26 @@ export const transformDrugOrders = (orders) => {
           doseUnits,
           asNeeded: dosingInstructions.asNeeded,
           frequency: dosingInstructions.frequency,
-          instructions: JSON.parse(
-            dosingInstructions.administrationInstructions
-          ),
+          instructions: isVariableDose ? null : parsedInstructions,
         },
         duration: duration ? duration + " " + durationUnits : null,
         slots: [],
         dateStopped: order.drugOrder.dateStopped,
         orderReasonText: orderReasonText,
-        firstSlotStartTime:
-          order.drugOrderSchedule.slotStartTime ||
-          (order.drugOrderSchedule.firstDaySlotsStartTime &&
-            order.drugOrderSchedule.firstDaySlotsStartTime[0]) ||
-          order.drugOrderSchedule.dayWiseSlotsStartTime[0],
-        notes: order.drugOrderSchedule?.notes,
+        firstSlotStartTime: dosingInstructions.asNeeded
+          ? order.drugOrder.effectiveStartDate / 1000
+          : isVariableDose
+          ? order.drugOrder.effectiveStartDate / 1000
+          : order.drugOrderSchedule.slotStartTime ||
+            (order.drugOrderSchedule.firstDaySlotsStartTime &&
+              order.drugOrderSchedule.firstDaySlotsStartTime[0]) ||
+            order.drugOrderSchedule.dayWiseSlotsStartTime[0],
+        notes: isVariableDose ? null : order.drugOrderSchedule?.notes,
+        isVariableDose,
+        fhirDosages: isVariableDose ? parsedInstructions : null,
+        stageSchedules: isVariableDose
+          ? order.drugOrderSchedule?.stageSchedules || []
+          : null,
       };
     }
   });
@@ -82,11 +102,7 @@ export const transformDrugOrders = (orders) => {
       : null;
     let dosage = "",
       doseUnits;
-    if (
-      medication.doseUnits?.display?.toLowerCase() === "ml" ||
-      medication.doseUnits?.display?.toLowerCase() === "mg" ||
-      medication.doseUnits?.display?.toLowerCase() === "mcg"
-    ) {
+    if (DOSE_UNITS.includes(medication.doseUnits?.display?.toLowerCase())) {
       dosage = medication.dose + medication.doseUnits.display;
     } else {
       dosage = medication.dose;
@@ -426,3 +442,79 @@ export const setCurrentShiftTimes = (
   }
   return [startDateTime, endDateTime];
 };
+
+export const prepareSlotData = (slot, rowData, enable24HourTime) => {
+  let dosageInfo = "";
+
+  if (rowData?.isVariableDose && slot?.variableDosageSequence != null) {
+    const stageDosage = getDosageBySequence(
+      rowData.fhirDosages,
+      slot.variableDosageSequence
+    );
+    if (stageDosage) {
+      const stageInfo = fhirDosageToDisplayStage(stageDosage);
+      dosageInfo = stageInfo.dose || "";
+      if (stageDosage.route?.text) {
+        dosageInfo = dosageInfo
+          ? dosageInfo + " - " + stageDosage.route.text
+          : stageDosage.route.text;
+      }
+      if (stageInfo.frequency) {
+        dosageInfo = dosageInfo
+          ? dosageInfo + " - " + stageInfo.frequency
+          : stageInfo.frequency;
+      }
+    }
+  } else {
+    const dosingInstructions = rowData?.dosingInstructions;
+    if (dosingInstructions) {
+      if (dosingInstructions.dosage) {
+        dosageInfo = dosingInstructions.dosage;
+        if (dosingInstructions.doseUnits) {
+          dosageInfo += " " + dosingInstructions.doseUnits;
+        }
+      }
+      if (dosingInstructions.route) {
+        const routeDisplay =
+          typeof dosingInstructions.route === "string"
+            ? dosingInstructions.route
+            : dosingInstructions.route.display || dosingInstructions.route;
+        dosageInfo =
+          dosageInfo.length > 0
+            ? dosageInfo + " - " + routeDisplay
+            : routeDisplay;
+      }
+      if (dosingInstructions.frequency?.display) {
+        dosageInfo =
+          dosageInfo.length > 0
+            ? dosageInfo + " - " + dosingInstructions.frequency.display
+            : dosingInstructions.frequency.display;
+      }
+    }
+  }
+
+  const note = slot.medicationAdministration?.notes?.[0];
+  const dateFormat = enable24HourTime
+    ? displayShiftTimingsFormat
+    : displayShiftTimings12HourFormat;
+
+  const { noteInfo } = slot.administrationSummary;
+  const { amendedNotes } = noteInfo;
+  const amendNote = amendedNotes?.[0];
+  return {
+    slot,
+    drugName: rowData.name,
+    dosageInfo: dosageInfo,
+    scheduledTime: formatDate(slot.startTime * 1000, dateFormat),
+    amendedTime: formatDate(amendNote?.amendedTime, dateFormat),
+    approvedTime: formatDate(amendNote?.approvedDateTime, dateFormat),
+    status: slot.administrationSummary?.status,
+    performerName: slot.administrationSummary?.performerName,
+    existingNotes: slot.administrationSummary?.notes,
+    notes: slot.medicationAdministration?.notes,
+    noteInfo,
+    medicationAdministrationNoteUUID: note?.uuid,
+    medicationAdministrationUuid: slot.medicationAdministration?.uuid,
+  };
+};
+

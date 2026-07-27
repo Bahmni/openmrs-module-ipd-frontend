@@ -14,6 +14,11 @@ import { CareViewContext } from "../../../context/CareViewContext";
 import propTypes from "prop-types";
 import { isSystemGeneratedTask } from "../../../utils/CommonUtils";
 import { FormattedMessage } from "react-intl";
+import {
+  parseFhirDosages,
+  getDosageBySequence,
+  fhirDosageToDisplayStage,
+} from "../../../utils/FhirDosingUtils";
 
 export const SlotDetailsCell = ({
   uuid,
@@ -125,7 +130,24 @@ export const SlotDetailsCell = ({
           </div>
         );
       } else {
-        const { dose, doseUnits, route, drugNonCoded } = slotItem.order;
+        const { drugNonCoded } = slotItem.order;
+        let dose, doseUnitsDisplay, routeDisplay;
+
+        if (slotItem.variableDosageSequence != null) {
+          const fhirDosages = parseFhirDosages(slotItem.order.dosingInstructions);
+          const stageDosage = getDosageBySequence(fhirDosages, slotItem.variableDosageSequence);
+          if (stageDosage) {
+            const stageInfo = fhirDosageToDisplayStage(stageDosage);
+            dose = stageInfo.dose;
+            doseUnitsDisplay = stageDosage.doseAndRate?.[0]?.doseQuantity?.unit || "";
+            routeDisplay = stageDosage.route?.text;
+          }
+        } else {
+          dose = slotItem.order.dose;
+          doseUnitsDisplay = slotItem.order.doseUnits?.display;
+          routeDisplay = slotItem.order.route?.display;
+        }
+
         return (
           <div className="medication-task" key={`${slotItem.uuid}`}>
             <div className="logo">
@@ -143,12 +165,12 @@ export const SlotDetailsCell = ({
               </span>
               <div className="drug-details" data-testid="drug-details">
                 {dose && <span className="drug-detail">{dose}</span>}
-                {doseUnits && (
-                  <span className="drug-detail">{doseUnits?.display}</span>
+                {doseUnitsDisplay && (
+                  <span className="drug-detail">{doseUnitsDisplay}</span>
                 )}
-                {route && (
+                {routeDisplay && (
                   <span className="drug-detail">
-                    {route?.display && `  |  ${route.display}`}
+                    {`  |  ${routeDisplay}`}
                   </span>
                 )}
               </div>

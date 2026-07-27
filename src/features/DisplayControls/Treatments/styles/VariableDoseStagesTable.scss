@@ -1,0 +1,66 @@
+.vdp-section {
+  padding: 20px 16px 20px 2rem;
+  box-sizing: border-box;
+
+  .vdp-title {
+    color: #363466;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 0 0 6px;
+    margin: 0;
+    font-family: inherit;
+  }
+
+  .bx--data-table-container,
+  .vdp-table {
+    border: 1px solid #c6c6c6;
+    width: 100%;
+
+    tr {
+      background: transparent !important;
+      border: none !important;
+    }
+
+    th,
+    td {
+      padding: 0.875rem 1rem !important;
+      border: none !important;
+      border-left: none !important;
+      border-right: none !important;
+    }
+
+    thead th {
+      background-color: #e0e0e0 !important;
+      font-weight: 600 !important;
+      color: #161616 !important;
+    }
+
+    tbody td {
+      border-bottom: 1px solid #e0e0e0 !important;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none !important;
+    }
+  }
+}
+
+.vdp-table tbody .vdp-data-row:nth-child(odd) td {
+  background-color: #ffffff !important;
+}
+
+.vdp-table tbody .vdp-data-row:nth-child(even) td {
+  background-color: #f4f4f4 !important;
+}
+
+.stage-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .stage-note-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}

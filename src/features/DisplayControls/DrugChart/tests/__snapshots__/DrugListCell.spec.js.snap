@@ -34,8 +34,15 @@ exports[`DrugListCell should  match snapshot 1`] = `
           </span>
         </span>
          
-        <div>
-          TooltipCarbon
+        <div
+          class="note-icon-container"
+        >
+          <div>
+            <div>
+              Instructions: 
+              As directed
+            </div>
+          </div>
         </div>
       </div>
       <div>
@@ -98,8 +105,15 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
           </span>
         </span>
          
-        <div>
-          TooltipCarbon
+        <div
+          class="note-icon-container"
+        >
+          <div>
+            <div>
+              Instructions: 
+              As directed
+            </div>
+          </div>
         </div>
       </div>
       <div>
@@ -196,8 +210,15 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
           </span>
         </span>
          
-        <div>
-          TooltipCarbon
+        <div
+          class="note-icon-container"
+        >
+          <div>
+            <div>
+              Instructions: 
+              As directed
+            </div>
+          </div>
         </div>
       </div>
       <div>

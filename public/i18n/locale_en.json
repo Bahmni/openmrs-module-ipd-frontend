@@ -111,5 +111,15 @@
   "REACTION_COLUMN_HEADER": "Reaction",
   "COMMENTS_COLUMN_HEADER": "Comments",
   "PROVIDER_COLUMN_HEADER": "Provider Name",
-  "DATE_COLUMN_HEADER": "Date"
+  "DATE_COLUMN_HEADER": "Date",
+  "VARIABLE_DOSAGE_PROTOCOL": "Variable Dosage Protocol",
+  "VARIABLE_DOSE_STAGE_COLUMN": "Stage",
+  "VARIABLE_DOSE_START_DATE_COLUMN": "Start Date",
+  "VARIABLE_DOSE_DOSE_COLUMN": "Dose",
+  "VARIABLE_DOSE_FREQUENCY_COLUMN": "Frequency",
+  "VARIABLE_DOSE_DURATION_COLUMN": "Duration",
+  "VARIABLE_DOSE_ACTIONS_COLUMN": "Actions",
+  "IN_PROGRESS": "In Progress",
+  "VARIABLE_DOSAGE": "Variable Dosage",
+  "VARIABLE_DOSE_STAGES_DAYS": "{stages} Stages - {days} Days"
 }

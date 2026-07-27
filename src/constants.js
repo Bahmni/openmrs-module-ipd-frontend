@@ -161,3 +161,8 @@ export const PRIVILEGE_CONSTANTS = {
   EDIT_TASKS: "Edit Tasks",
   EDIT_MEDICATION_ADMINISTRATION: "Edit Medication Administration",
 };
+
+export const DOSE_UNITS = ["ml", "mg", "mcg"];
+
+export const LOADING_DOSE_SEQUENCE_OFFSET = 1;
+export const NO_LOADING_DOSE_SEQUENCE_OFFSET = 0;
