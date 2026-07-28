@@ -73,6 +73,17 @@ export const saveNonMedicationTask = async (nonMedicationTask) => {
   }
 };
 
+export const saveBulkNonMedicationTasks = async (nonMedicationTasks) => {
+  try {
+    return await axios.post(
+      `${NON_MEDICATION_BASE_URL}/bulk`,
+      nonMedicationTasks
+    );
+  } catch (error) {
+    return error.response;
+  }
+};
+
 export const getEncounterType = async (encounterType) => {
   try {
     const response = await axios.get(

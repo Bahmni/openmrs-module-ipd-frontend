@@ -141,6 +141,7 @@
   "PATIENT_FEEDING_RECORD_HEADER_KEY": "Dossier d'alimentation du patient",
   "ADD_NURSING_TASK": "Ajouter une tâche de soins infirmiers",
   "ADD_TASK": "Ajouter une tâche",
+  "ADD_MORE_TASK": "Ajouter plus",
   "NON_MEDICATION": "Non médicamenteux",
   "MEDICATION": "Médicament",
   "DIAGNOSIS_COLUMN_HEADER": "Diagnostic",
@@ -293,5 +294,7 @@
   "VARIABLE_DOSE_ACTIONS_COLUMN": "Actions",
   "IN_PROGRESS": "En cours",
   "VARIABLE_DOSAGE": "Dosage Variable",
-  "VARIABLE_DOSE_STAGES_DAYS": "{stages} Étapes - {days} Jours"
+  "VARIABLE_DOSE_STAGES_DAYS": "{stages} Étapes - {days} Jours",
+  "INSTRUCTION_LABEL": "Instruction",
+  "REMOVE": "Retirer"
 }

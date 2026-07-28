@@ -113,6 +113,7 @@
   "PATIENT_FEEDING_RECORD_HEADER_KEY": "Patient Feeding Record",
   "ADD_NURSING_TASK": "Add Nursing Task",
   "ADD_TASK": "Add Task",
+  "ADD_MORE_TASK": "Add More",
   "NON_MEDICATION": "Non - Medication",
   "MEDICATION": "Medication",
   "DIAGNOSIS_COLUMN_HEADER": "Diagnosis",
@@ -233,5 +234,7 @@
   "VARIABLE_DOSE_ACTIONS_COLUMN": "Actions",
   "IN_PROGRESS": "In corso",
   "VARIABLE_DOSAGE": "Dosaggio Variabile",
-  "VARIABLE_DOSE_STAGES_DAYS": "{stages} Fasi - {days} Giorni"
+  "VARIABLE_DOSE_STAGES_DAYS": "{stages} Fasi - {days} Giorni",
+  "INSTRUCTION_LABEL": "Istruzione",
+  "REMOVE": "Rimuovi"
 }
