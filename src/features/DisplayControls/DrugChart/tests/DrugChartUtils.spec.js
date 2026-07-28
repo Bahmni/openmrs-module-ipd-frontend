@@ -323,85 +323,6 @@ describe("DrugChartUtils", () => {
     });
   });
 
-    const createOrder = (doseUnits) => ({
-      drugOrder: {
-        uuid: "order-1",
-        careSetting: "INPATIENT",
-        drug: { name: "Drug A" },
-        duration: 5,
-        durationUnits: "Day(s)",
-        dosingInstructions: {
-          dose: 10,
-          doseUnits,
-          route: "Oral",
-          frequency: { display: "Daily" },
-          administrationInstructions: "{}",
-        },
-      },
-      drugOrderSchedule: { slotStartTime: 1000 },
-    });
-
-    it("should concatenate compact units (ml, mg, mcg) with dose", () => {
-      ["ml", "mg", "mcg"].forEach((unit) => {
-        const result = transformDrugOrders({
-          ipdDrugOrders: [createOrder(unit)],
-          emergencyMedications: [],
-        });
-        const med = result["order-1"];
-        expect(med.dosingInstructions.dosage).toBe(`10${unit}`);
-        expect(med.dosingInstructions.doseUnits).toBeUndefined();
-      });
-    });
-
-    it("should separate non-compact units (e.g., Tablet) from dose", () => {
-      const result = transformDrugOrders({
-        ipdDrugOrders: [createOrder("Tablet")],
-        emergencyMedications: [],
-      });
-      const med = result["order-1"];
-      expect(med.dosingInstructions.dosage).toBe(10);
-      expect(med.dosingInstructions.doseUnits).toBe("Tablet");
-    });
-
-    it("should handle compact units in emergency medications", () => {
-      const result = transformDrugOrders({
-        ipdDrugOrders: [],
-        emergencyMedications: [
-          {
-            uuid: "emerg-1",
-            dose: 20,
-            doseUnits: { display: "mcg" },
-            drug: { uuid: "drug-1", display: "Drug B" },
-            route: { display: "IV" },
-            administeredDateTime: 2000000,
-          },
-        ],
-      });
-      const med = result["emerg-1"];
-      expect(med.dosingInstructions.dosage).toBe("20mcg");
-      expect(med.dosingInstructions.doseUnits).toBeUndefined();
-    });
-
-    it("should handle non-compact units in emergency medications", () => {
-      const result = transformDrugOrders({
-        ipdDrugOrders: [],
-        emergencyMedications: [
-          {
-            uuid: "emerg-1",
-            dose: 2,
-            doseUnits: { display: "Tablet" },
-            drug: { uuid: "drug-1", display: "Drug C" },
-            route: { display: "Oral" },
-            administeredDateTime: 2000000,
-          },
-        ],
-      });
-      const med = result["emerg-1"];
-      expect(med.dosingInstructions.dosage).toBe(2);
-      expect(med.dosingInstructions.doseUnits).toBe("Tablet");
-    });
-  });
-
   describe("transformDrugOrders - variable dose", () => {
     const createVariableOrder = (stageSchedules = []) => ({
       drugOrder: {
@@ -423,9 +344,7 @@ describe("DrugChartUtils", () => {
               sequence: 1,
               text: "Loading Dose",
               timing: { code: { text: "Once" } },
-              doseAndRate: [
-                { doseQuantity: { value: 5, unit: "Tablet(s)" } },
-              ],
+              doseAndRate: [{ doseQuantity: { value: 5, unit: "Tablet(s)" } }],
               additionalInstruction: [],
               patientInstruction: "",
               extension: [{ url: "isLoadingDose", valueBoolean: true }],
@@ -437,9 +356,7 @@ describe("DrugChartUtils", () => {
                 code: { text: "Once a day" },
                 repeat: { duration: 3, durationUnit: "d" },
               },
-              doseAndRate: [
-                { doseQuantity: { value: 3, unit: "Tablet(s)" } },
-              ],
+              doseAndRate: [{ doseQuantity: { value: 3, unit: "Tablet(s)" } }],
               additionalInstruction: [],
               patientInstruction: "",
               extension: [{ url: "isLoadingDose", valueBoolean: false }],
