@@ -256,6 +256,7 @@ export const mockConfig = {
     timeInMinutesToDisableSlotPostScheduledTime: 60,
   },
   enable24HourTime: true,
+  enableAddMultipleTask: true,
   medicationTags: {
     asNeeded: "Rx-PRN",
     "STAT (Immediately)": "Rx-STAT",
@@ -360,6 +361,7 @@ export const mockConfigFor12HourFormat = {
     timeInMinutesToDisableSlotPostScheduledTime: 60,
   },
   enable24HourTime: false,
+  enableAddMultipleTask: true,
   medicationTags: {
     asNeeded: "Rx-PRN",
     "STAT (Immediately)": "Rx-STAT",

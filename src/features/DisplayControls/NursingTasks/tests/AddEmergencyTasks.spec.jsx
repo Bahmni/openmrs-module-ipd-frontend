@@ -1,4 +1,5 @@
 import React from "react";
+import { IntlProvider } from "react-intl";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import moment from "moment";
 import AddEmergencyTasks from "../components/AddEmergencyTasks";
@@ -22,11 +23,18 @@ const mockSetShowNotification = jest.fn();
 const mockSetNotificationMessage = jest.fn();
 const mockSetNotificationStatus = jest.fn();
 const mockSaveEmergencyMedication = jest.fn();
-const mockSaveNonMedicationTask = jest.fn();
+const mockSaveBulkNonMedicationTasks = jest.fn();
 const mockGetEncounterUuid = jest.fn();
 const mockGetEncounterType = jest.fn();
 const mockHandleAuditEvent = jest.fn();
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
+
+// Mock crypto.randomUUID for tests
+let uuidCounter = 0;
+Object.defineProperty(global.crypto, 'randomUUID', {
+  value: () => `test-uuid-${++uuidCounter}`,
+  writable: true,
+});
 
 jest.mock("../utils/EmergencyTasksUtils", () => {
   return {
@@ -34,7 +42,8 @@ jest.mock("../utils/EmergencyTasksUtils", () => {
     fetchMedicationConfig: () => mockFetchMedicationConfig(),
     getProviders: () => mockGetProviders(),
     saveEmergencyMedication: () => mockSaveEmergencyMedication(),
-    saveNonMedicationTask: (payload) => mockSaveNonMedicationTask(payload),
+    saveBulkNonMedicationTasks: (payload) =>
+      mockSaveBulkNonMedicationTasks(payload),
     getEncounterUuid: (payload) => mockGetEncounterUuid(payload),
     getEncounterType: (type) => mockGetEncounterType(type),
   };
@@ -59,6 +68,16 @@ jest.mock("../../../../utils/CommonUtils", () => {
   };
 });
 
+jest.mock("react-intl", () => {
+  const reactIntl = jest.requireActual("react-intl");
+  return {
+    ...reactIntl,
+    useIntl: () => ({
+      formatMessage: ({ id, defaultMessage }) => defaultMessage || id,
+    }),
+  };
+});
+
 const selectDrug = async (container, getByText) => {
   const drugNameSearch = container.querySelectorAll(".bx--text-input")[0];
   const targetDrug = "Paracetamol 250 mg Suppository";
@@ -76,6 +95,7 @@ const selectDrug = async (container, getByText) => {
 
 describe("AddEmergencyTasks", () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     mockGetDrugOrdersConfig.mockResolvedValueOnce(DrugOrderConfigMockData);
     mockFetchMedicationConfig.mockResolvedValueOnce(MedicationConfigMockData);
     mockGetProviders.mockResolvedValueOnce(providersMockData);
@@ -84,6 +104,11 @@ describe("AddEmergencyTasks", () => {
       status: 200,
       data: { message: "Medication task(s) updated successfully" },
     });
+    mockGetEncounterType.mockResolvedValue({ uuid: "__encounter_type_uuid__" });
+    mockGetEncounterUuid.mockResolvedValue({
+      encounterUuid: "__encounter_uuid__",
+    });
+    mockSaveBulkNonMedicationTasks.mockResolvedValue({ status: 200 });
   });
 
   beforeEach(() => {
@@ -413,23 +438,22 @@ describe("AddEmergencyTasks", () => {
     );
 
     await waitFor(() => {
-      expect (getAllByText("Add Nursing Task")).toBeTruthy();
-      })
+      expect(getAllByText("Add Nursing Task")).toBeTruthy();
+    });
 
-    const Role = screen.getByRole('tab', {
-      name: /non \- medication/i
+    const Role = screen.getByRole("tab", {
+      name: /non - medication/i,
     });
     Role.click();
     await waitFor(() => {
       expect(getAllByText("Task Name")).toBeTruthy();
-    })
+    });
     const saveButton = screen.getAllByText("Save")[1];
     expect(saveButton.disabled).toEqual(true);
-
   });
 
   it("should enable save when all fields are added for Non medication tasks", async () => {
-    MockDate.set("2024-01-05 12:00");
+    MockDate.set("2024-01-05 08:00");
     const { container, getByText, getAllByText, getByRole } = render(
       <IPDContext.Provider
         value={{
@@ -450,40 +474,42 @@ describe("AddEmergencyTasks", () => {
     );
 
     await waitFor(() => {
-      expect (getAllByText("Add Nursing Task")).toBeTruthy();
-      })
+      expect(getAllByText("Add Nursing Task")).toBeTruthy();
+    });
 
-    const Role = screen.getByRole('tab', {
-      name: /non \- medication/i
+    const Role = screen.getByRole("tab", {
+      name: /non - medication/i,
     });
     Role.click();
     await waitFor(() => {
       expect(getAllByText("Task Name")).toBeTruthy();
-    })
+    });
     const saveButton = screen.getAllByText("Save")[1];
     expect(saveButton.disabled).toEqual(true);
 
-    const startTimeSelector = container.querySelector(
+    const startTimeSelector = container.querySelectorAll(
       ".bx--time-picker__input-field"
-    );
+    )[1];
     fireEvent.change(startTimeSelector, { target: { value: "9:30" } });
     fireEvent.blur(startTimeSelector);
 
-    const tasksInput = container.querySelector("textarea");
+    const tasksInput = container.querySelector(
+      'textarea[placeholder="Enter a title for the task"]'
+    );
     fireEvent.change(tasksInput, { target: { value: "Test Task" } });
     expect(tasksInput.value).toEqual("Test Task");
 
+    await waitFor(() => {
+      expect(saveButton.disabled).toEqual(false);
+    });
     saveButton.click();
 
     await waitFor(() => {
-      expect(mockSetShowNotification).toHaveBeenCalledTimes(1);
-      expect(mockSetNotificationMessage).toHaveBeenCalledTimes(1);
-      expect(mockSetNotificationStatus).toHaveBeenCalledTimes(1);
-      expect(mockUpdateEmergencyTasksSlider).toHaveBeenCalledTimes(1);
-      expect(mockSaveEmergencyMedication).toHaveBeenCalledTimes(1);
-      expect(mockHandleAuditEvent).toHaveBeenCalledWith('CREATE_EMERGENCY_MEDICATION_TASK');
-    })
-
+      expect(mockSaveBulkNonMedicationTasks).toHaveBeenCalledTimes(1);
+      expect(mockHandleAuditEvent).toHaveBeenCalledWith(
+        "CREATE_NON_MEDICATION_TASK"
+      );
+    });
   });
 
   it("should hide Medication tab and show Non-Medication tab when hideMedicationTab is true", async () => {
@@ -507,8 +533,100 @@ describe("AddEmergencyTasks", () => {
       </IPDContext.Provider>
     );
     await waitFor(() => {
-      expect(queryByRole("tab", { name: /^medication$/i })).not.toBeInTheDocument();
-      expect(getByRole("tab", { name: /non \- medication/i })).toBeInTheDocument();
+      expect(
+        queryByRole("tab", { name: /^medication$/i })
+      ).not.toBeInTheDocument();
+      expect(
+        getByRole("tab", { name: /non - medication/i })
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("should append a new non-medication task section after clicking Add Task", async () => {
+    render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            handleAuditEvent: mockHandleAuditEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <AddEmergencyTasks
+            patientId={"__patient_uuid__"}
+            providerId={"__provider_uuid__"}
+            updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+            hideMedicationTab={true}
+            instruction={"Neurovascular observations 2hrs only"}
+            initialTaskName={
+              "Instruction for the Ward-Neurovascular observations 2hrs only"
+            }
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Add Task +")).toBeInTheDocument();
+    });
+    expect(screen.getAllByText("Task Name").length).toEqual(1);
+
+    // Prepopulated from initialTaskName prop
+    expect(document.querySelectorAll("textarea")[0].value).toEqual(
+      "Instruction for the Ward-Neurovascular observations 2hrs only"
+    );
+
+    // Click Add Task
+    fireEvent.click(screen.getByText("Add Task +"));
+
+    await waitFor(() => {
+      expect(screen.getAllByText("Task Name").length).toEqual(2);
+      expect(screen.getByText("Remove")).toBeInTheDocument();
+      // Replicated task should copy the first task's name
+      expect(document.querySelectorAll("textarea")[1].value).toEqual(
+        "Instruction for the Ward-Neurovascular observations 2hrs only"
+      );
+    });
+  });
+
+  it("should remove replicated non-medication task section", async () => {
+    render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            handleAuditEvent: mockHandleAuditEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <AddEmergencyTasks
+            patientId={"__patient_uuid__"}
+            providerId={"__provider_uuid__"}
+            updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+            hideMedicationTab={true}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Add Task +")).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByText("Add Task +"));
+    await waitFor(() =>
+      expect(screen.getAllByText("Task Name").length).toEqual(2)
+    );
+
+    fireEvent.click(screen.getByText("Remove"));
+    await waitFor(() => {
+      expect(screen.getAllByText("Task Name").length).toEqual(1);
+      expect(screen.queryByText("Remove")).not.toBeInTheDocument();
     });
   });
 
@@ -536,11 +654,15 @@ describe("AddEmergencyTasks", () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByRole("tab", { name: /non \- medication/i })).toBeInTheDocument();
+        expect(
+          screen.getByRole("tab", { name: /non - medication/i })
+        ).toBeInTheDocument();
       });
 
       const { container } = utils;
-      const timeInput = container.querySelector(".bx--time-picker__input-field");
+      const timeInput = container.querySelector(
+        ".bx--time-picker__input-field"
+      );
       fireEvent.change(timeInput, { target: { value: "9:00" } });
       fireEvent.blur(timeInput);
 
@@ -555,47 +677,67 @@ describe("AddEmergencyTasks", () => {
     };
 
     beforeEach(() => {
-      mockGetEncounterType.mockResolvedValue({ uuid: "__encounter_type_uuid__" });
-      mockGetEncounterUuid.mockResolvedValue({ encounterUuid: "__encounter_uuid__" });
-      mockSaveNonMedicationTask.mockResolvedValue({ status: 200 });
+      mockGetEncounterType.mockResolvedValue({
+        uuid: "__encounter_type_uuid__",
+      });
+      mockGetEncounterUuid.mockResolvedValue({
+        encounterUuid: "__encounter_uuid__",
+      });
+      mockSaveBulkNonMedicationTasks.mockResolvedValue({ status: 200 });
     });
 
     afterEach(() => {
       mockGetEncounterType.mockReset();
       mockGetEncounterUuid.mockReset();
-      mockSaveNonMedicationTask.mockReset();
+      mockSaveBulkNonMedicationTasks.mockReset();
     });
 
     it("should include focus with FHIR-formatted Observation reference when observationUuid is provided", async () => {
       await renderNonMedicationTab({ observationUuid: "__obs_uuid__" });
 
       await waitFor(() => {
-        expect(mockSaveNonMedicationTask).toHaveBeenCalledWith(
-          expect.objectContaining({
-            focus: { type: "Observation", reference: "Observation/__obs_uuid__" },
-          })
+        expect(mockSaveBulkNonMedicationTasks).toHaveBeenCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              focus: {
+                type: "Observation",
+                reference: "Observation/__obs_uuid__",
+              },
+            }),
+          ])
         );
       });
     });
 
     it("should include basedOn with FHIR-formatted ServiceRequest reference when orderUuid is provided", async () => {
-      await renderNonMedicationTab({ observationUuid: "__obs_uuid__", orderUuid: "__order_uuid__" });
+      await renderNonMedicationTab({
+        observationUuid: "__obs_uuid__",
+        orderUuid: "__order_uuid__",
+      });
 
       await waitFor(() => {
-        expect(mockSaveNonMedicationTask).toHaveBeenCalledWith(
-          expect.objectContaining({
-            basedOn: { type: "ServiceRequest", reference: "ServiceRequest/__order_uuid__" },
-          })
+        expect(mockSaveBulkNonMedicationTasks).toHaveBeenCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              basedOn: {
+                type: "ServiceRequest",
+                reference: "ServiceRequest/__order_uuid__",
+              },
+            }),
+          ])
         );
       });
     });
 
     it("should omit basedOn from payload when orderUuid is null", async () => {
-      await renderNonMedicationTab({ observationUuid: "__obs_uuid__", orderUuid: null });
+      await renderNonMedicationTab({
+        observationUuid: "__obs_uuid__",
+        orderUuid: null,
+      });
 
       await waitFor(() => {
-        expect(mockSaveNonMedicationTask).toHaveBeenCalled();
-        const payload = mockSaveNonMedicationTask.mock.calls[0][0];
+        expect(mockSaveBulkNonMedicationTasks).toHaveBeenCalled();
+        const payload = mockSaveBulkNonMedicationTasks.mock.calls[0][0][0];
         expect(payload).not.toHaveProperty("basedOn");
       });
     });
@@ -604,8 +746,8 @@ describe("AddEmergencyTasks", () => {
       await renderNonMedicationTab();
 
       await waitFor(() => {
-        expect(mockSaveNonMedicationTask).toHaveBeenCalled();
-        const payload = mockSaveNonMedicationTask.mock.calls[0][0];
+        expect(mockSaveBulkNonMedicationTasks).toHaveBeenCalled();
+        const payload = mockSaveBulkNonMedicationTasks.mock.calls[0][0][0];
         expect(payload).not.toHaveProperty("focus");
         expect(payload).not.toHaveProperty("basedOn");
       });

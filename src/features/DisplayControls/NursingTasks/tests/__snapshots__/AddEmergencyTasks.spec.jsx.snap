@@ -728,79 +728,95 @@ exports[`AddEmergencyTasks should render the component 1`] = `
             class="emergency-task-slider-content"
           >
             <div
-              class="bx--form-item"
+              class="add-more-task-button-container"
             >
-              <div
-                class="bx--text-area__label-wrapper"
+              <button
+                class="add-non-medication-task-button bx--btn bx--btn--sm bx--btn--tertiary"
+                tabindex="0"
+                type="button"
               >
-                <label
-                  class="bx--label"
-                >
-                  <div
-                    class="titleText"
-                  >
-                    <span>
-                      Task Name 
-                    </span>
-                    <span
-                      class="required"
-                    >
-                      *
-                    </span>
-                  </div>
-                </label>
-              </div>
-              <div
-                class="bx--text-area__wrapper"
-              >
-                <textarea
-                  class="bx--text-area"
-                  cols="50"
-                  placeholder="Enter a title for the task "
-                  rows="1"
-                />
-              </div>
+                Add Task
+                 +
+              </button>
             </div>
             <div
-              class="time-info"
+              class="non-medication-task-section "
             >
               <div
                 class="bx--form-item"
               >
-                <label
-                  class="bx--label"
-                  for="time-selector"
-                >
-                  <div
-                    class="titleText"
-                  >
-                    <span>
-                      Schedule Time (24 hrs format) 
-                    </span>
-                    <span
-                      class="required"
-                    >
-                      *
-                    </span>
-                  </div>
-                </label>
                 <div
-                  class="bx--time-picker"
+                  class="bx--text-area__label-wrapper"
                 >
-                  <div
-                    class="bx--time-picker__input"
+                  <label
+                    class="bx--label"
                   >
-                    <input
-                      autocomplete="off"
-                      class="bx--time-picker__input-field bx--text-input"
-                      id="time-selector"
-                      maxlength="5"
-                      pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
-                      placeholder="hh:mm"
-                      style="width: 250px; padding: 0px 0px 0px 1rem;"
-                      type="text"
-                      value="00:00"
-                    />
+                    <div
+                      class="titleText"
+                    >
+                      <span>
+                        Task Name 
+                      </span>
+                      <span
+                        class="required"
+                      >
+                        *
+                      </span>
+                    </div>
+                  </label>
+                </div>
+                <div
+                  class="bx--text-area__wrapper"
+                >
+                  <textarea
+                    class="bx--text-area"
+                    cols="50"
+                    placeholder="Enter a title for the task"
+                    rows="1"
+                  />
+                </div>
+              </div>
+              <div
+                class="time-info"
+              >
+                <div
+                  class="bx--form-item"
+                >
+                  <label
+                    class="bx--label"
+                    for="time-selector"
+                  >
+                    <div
+                      class="titleText"
+                    >
+                      <span>
+                        Schedule Time (24 hrs format) 
+                      </span>
+                      <span
+                        class="required"
+                      >
+                        *
+                      </span>
+                    </div>
+                  </label>
+                  <div
+                    class="bx--time-picker"
+                  >
+                    <div
+                      class="bx--time-picker__input"
+                    >
+                      <input
+                        autocomplete="off"
+                        class="bx--time-picker__input-field bx--text-input"
+                        id="time-selector"
+                        maxlength="5"
+                        pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
+                        placeholder="hh:mm"
+                        style="width: 250px; padding: 0px 0px 0px 1rem;"
+                        type="text"
+                        value="00:00"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1668,79 +1684,95 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
             class="emergency-task-slider-content"
           >
             <div
-              class="bx--form-item"
+              class="add-more-task-button-container"
             >
-              <div
-                class="bx--text-area__label-wrapper"
+              <button
+                class="add-non-medication-task-button bx--btn bx--btn--sm bx--btn--tertiary"
+                tabindex="0"
+                type="button"
               >
-                <label
-                  class="bx--label"
-                >
-                  <div
-                    class="titleText"
-                  >
-                    <span>
-                      Task Name 
-                    </span>
-                    <span
-                      class="required"
-                    >
-                      *
-                    </span>
-                  </div>
-                </label>
-              </div>
-              <div
-                class="bx--text-area__wrapper"
-              >
-                <textarea
-                  class="bx--text-area"
-                  cols="50"
-                  placeholder="Enter a title for the task "
-                  rows="1"
-                />
-              </div>
+                Add Task
+                 +
+              </button>
             </div>
             <div
-              class="time-info"
+              class="non-medication-task-section "
             >
               <div
                 class="bx--form-item"
               >
-                <label
-                  class="bx--label"
-                  for="time-selector"
-                >
-                  <div
-                    class="titleText"
-                  >
-                    <span>
-                      Schedule Time (24 hrs format) 
-                    </span>
-                    <span
-                      class="required"
-                    >
-                      *
-                    </span>
-                  </div>
-                </label>
                 <div
-                  class="bx--time-picker"
+                  class="bx--text-area__label-wrapper"
                 >
-                  <div
-                    class="bx--time-picker__input"
+                  <label
+                    class="bx--label"
                   >
-                    <input
-                      autocomplete="off"
-                      class="bx--time-picker__input-field bx--text-input"
-                      id="time-selector"
-                      maxlength="5"
-                      pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
-                      placeholder="hh:mm"
-                      style="width: 250px; padding: 0px 0px 0px 1rem;"
-                      type="text"
-                      value="00:00"
-                    />
+                    <div
+                      class="titleText"
+                    >
+                      <span>
+                        Task Name 
+                      </span>
+                      <span
+                        class="required"
+                      >
+                        *
+                      </span>
+                    </div>
+                  </label>
+                </div>
+                <div
+                  class="bx--text-area__wrapper"
+                >
+                  <textarea
+                    class="bx--text-area"
+                    cols="50"
+                    placeholder="Enter a title for the task"
+                    rows="1"
+                  />
+                </div>
+              </div>
+              <div
+                class="time-info"
+              >
+                <div
+                  class="bx--form-item"
+                >
+                  <label
+                    class="bx--label"
+                    for="time-selector"
+                  >
+                    <div
+                      class="titleText"
+                    >
+                      <span>
+                        Schedule Time (24 hrs format) 
+                      </span>
+                      <span
+                        class="required"
+                      >
+                        *
+                      </span>
+                    </div>
+                  </label>
+                  <div
+                    class="bx--time-picker"
+                  >
+                    <div
+                      class="bx--time-picker__input"
+                    >
+                      <input
+                        autocomplete="off"
+                        class="bx--time-picker__input-field bx--text-input"
+                        id="time-selector"
+                        maxlength="5"
+                        pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
+                        placeholder="hh:mm"
+                        style="width: 250px; padding: 0px 0px 0px 1rem;"
+                        type="text"
+                        value="00:00"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
