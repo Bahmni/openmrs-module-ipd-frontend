@@ -113,6 +113,7 @@
   "PATIENT_FEEDING_RECORD_HEADER_KEY": "Patient Feeding Record",
   "ADD_NURSING_TASK": "Add Nursing Task",
   "ADD_TASK": "Add Task",
+  "ADD_MORE_TASK": "Add More",
   "NON_MEDICATION": "Non - Medication",
   "MEDICATION": "Medication",
   "DIAGNOSIS_COLUMN_HEADER": "Diagnosis",
@@ -198,5 +199,7 @@
   "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient",
   "NEW_MEDICATIONS": "New Medication(s)",
   "NEW_CARE_INSTRUCTIONS": "New Care Instruction(s)",
-  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge"
+  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge",
+  "INSTRUCTION_LABEL": "Istruzione",
+  "REMOVE": "Rimuovi"
 }

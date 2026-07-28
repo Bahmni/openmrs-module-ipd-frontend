@@ -187,5 +187,8 @@
   "NO_CARE_INSTRUCTIONS_MESSAGE": "No care instructions are available for the patient",
   "NEW_MEDICATIONS": "New Medication(s)",
   "NEW_CARE_INSTRUCTIONS": "New Care Instruction(s)",
-  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge"
+  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge",
+  "INSTRUCTION_LABEL": "Instruction",
+  "ADD_MORE_TASK": "Add Task",
+  "REMOVE": "Remove"
 }
