@@ -30,6 +30,8 @@ import "../styles/CareInstructions.scss";
 
 const SKELETON_ROW_COUNT = 3;
 const EMPTY_FORM_CONCEPTS = [];
+const getInitialTaskName = (instructionType, instruction) =>
+  [instructionType, instruction].filter(Boolean).join(" - ");
 
 const CareInstructions = (props) => {
   const { patientId, config: { formConcepts = EMPTY_FORM_CONCEPTS } = {} } =
@@ -44,6 +46,7 @@ const CareInstructions = (props) => {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationStatus, setNotificationStatus] = useState("");
+  const providerUuid = provider?.uuid;
 
   const updateCareInstructionsTasksSlider = (value) => {
     updateSliderOpen((prev) => ({ ...prev, careInstructionsTasks: value }));
@@ -58,7 +61,12 @@ const CareInstructions = (props) => {
 
   const [instructions, setInstructions] = useState([]);
   const [acknowledgedObsUuids, setAcknowledgedObsUuids] = useState(new Set());
-  const [selectedInstruction, setSelectedInstruction] = useState({ observationUuid: null, orderUuid: null });
+  const [selectedInstruction, setSelectedInstruction] = useState({
+    observationUuid: null,
+    orderUuid: null,
+    instruction: "",
+    initialTaskName: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [isAcknowledgedLoading, setIsAcknowledgedLoading] = useState(false);
 
@@ -205,8 +213,22 @@ const CareInstructions = (props) => {
               {isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.ADD_TASKS) && (
                 <Link
                   onClick={() => {
+                    if (!providerUuid) {
+                      setNotificationStatus("error");
+                      setNotificationMessage("UNKNOWN_ERROR");
+                      setShowNotification(true);
+                      return;
+                    }
                     if (!isSliderOpen.careInstructionsTasks) {
-                      setSelectedInstruction({ observationUuid: row.observationUuid, orderUuid: row.orderUuid });
+                      setSelectedInstruction({
+                        observationUuid: row.observationUuid,
+                        orderUuid: row.orderUuid,
+                        instruction: row.instruction,
+                        initialTaskName: getInitialTaskName(
+                          row.instructionType,
+                          row.instruction
+                        ),
+                      });
                       updateCareInstructionsTasksSlider(true);
                     }
                   }}
@@ -289,7 +311,7 @@ const CareInstructions = (props) => {
       {isSliderOpen.careInstructionsTasks && (
         <AddEmergencyTasks
           patientId={patientId}
-          providerId={provider?.uuid}
+          providerId={providerUuid}
           updateEmergencyTasksSlider={updateCareInstructionsTasksSlider}
           setShowNotification={setShowNotification}
           setNotificationMessage={setNotificationMessage}
@@ -297,6 +319,8 @@ const CareInstructions = (props) => {
           hideMedicationTab={true}
           observationUuid={selectedInstruction.observationUuid}
           orderUuid={selectedInstruction.orderUuid}
+          instruction={selectedInstruction.instruction}
+          initialTaskName={selectedInstruction.initialTaskName}
         />
       )}
       {showNotification && (

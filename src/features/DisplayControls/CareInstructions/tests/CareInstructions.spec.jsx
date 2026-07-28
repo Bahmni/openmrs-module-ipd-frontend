@@ -17,12 +17,14 @@ jest.mock("../../NursingTasks/components/AddEmergencyTasks", () => {
     setShowNotification,
     observationUuid,
     orderUuid,
+    initialTaskName,
   }) {
     return (
       <div
         data-testid="add-emergency-tasks-slider"
         data-observation-uuid={observationUuid || ""}
         data-order-uuid={orderUuid || ""}
+        data-initial-task-name={initialTaskName || ""}
       >
         <button
           data-testid="close-slider"
@@ -563,7 +565,7 @@ describe("CareInstructions", () => {
     });
   });
 
-  it("should pass observationUuid and orderUuid to AddEmergencyTasks slider when Add Task is clicked", async () => {
+  it("should pass observationUuid, orderUuid and initialTaskName to AddEmergencyTasks slider when Add Task is clicked", async () => {
     jest
       .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
       .mockResolvedValue([
@@ -607,8 +609,13 @@ describe("CareInstructions", () => {
     rerender(makeJsx(true));
 
     const slider = getByTestId("add-emergency-tasks-slider");
-    expect(slider.getAttribute("data-observation-uuid")).toBe("obs-uuid-with-order");
+    expect(slider.getAttribute("data-observation-uuid")).toBe(
+      "obs-uuid-with-order"
+    );
     expect(slider.getAttribute("data-order-uuid")).toBe("order-uuid-1");
+    expect(slider.getAttribute("data-initial-task-name")).toBe(
+      "Instruction for the Ward - Patient should rest"
+    );
   });
 
   it("should add edited-instruction-row class when obs has previousVersionUuid set by backend", async () => {

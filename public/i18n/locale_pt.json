@@ -113,6 +113,7 @@
   "PATIENT_FEEDING_RECORD_HEADER_KEY": "Patient Feeding Record",
   "ADD_NURSING_TASK": "Add Nursing Task",
   "ADD_TASK": "Add Task",
+  "ADD_MORE_TASK": "Add More",
   "NON_MEDICATION": "Non - Medication",
   "MEDICATION": "Medication",
   "DIAGNOSIS_COLUMN_HEADER": "Diagnosis",
@@ -229,5 +230,7 @@
   "NOTE_AMENDMENT_SAVED_SUCCESS": "A alteração da nota foi guardada com sucesso",
   "NEW_MEDICATIONS": "New Medication(s)",
   "NEW_CARE_INSTRUCTIONS": "New Care Instruction(s)",
-  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge"
+  "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge",
+  "INSTRUCTION_LABEL": "Instrução",
+  "REMOVE": "Remover"
 }
