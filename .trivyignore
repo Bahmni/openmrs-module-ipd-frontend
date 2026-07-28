@@ -52,4 +52,7 @@ CVE-2026-59873
 GHSA-2p49-hgcm-8545
 CVE-2026-59869
 CVE-2026-13149
-CVE-2026-45623 
+CVE-2026-45623
+CVE-2026-14257 # brace-expansion: transitive dev dep, build-time only https://avd.aquasec.com/nvd/cve-2026-14257
+GHSA-r28c-9q8g-f849 # postcss: transitive dev dep, build-time only https://github.com/advisories/GHSA-r28c-9q8g-f849
+
