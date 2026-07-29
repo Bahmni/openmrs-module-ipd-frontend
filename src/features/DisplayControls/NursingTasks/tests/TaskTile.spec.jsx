@@ -9,12 +9,14 @@ import {
   mockCompletedPRNTaskTileData,
   mockPendingPRNTaskTileData,
   mockNonMedicationTileData,
+  mockStoppedNonMedicationTileData,
 } from "./NursingTasksUtilsMockData";
 import {
   mockConfig,
   mockConfigFor12HourFormat,
 } from "../../../../utils/CommonUtils";
 import { IPDContext } from "../../../../context/IPDContext";
+import { IntlProvider } from "react-intl";
 
 describe("TaskTile", () => {
   beforeEach(() => {
@@ -105,6 +107,17 @@ describe("TaskTile", () => {
     expect(administeredIcon).toBeTruthy();
     expect(getByText("Rx-PRN")).toBeTruthy();
     expect(getByText("04:38 PM - 07:10 AM (actual)")).toBeTruthy();
+  });
+
+  it("should render stopped icon when non-medication task status is Stopped", () => {
+    const { getByTestId } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <TaskTile medicationNursingTask={mockStoppedNonMedicationTileData} />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    expect(getByTestId("Stopped")).toBeTruthy();
   });
 
   it("should dislay provider name in the non-medication task tile", () => {

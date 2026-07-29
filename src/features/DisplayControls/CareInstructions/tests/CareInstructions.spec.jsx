@@ -10,6 +10,21 @@ import { IPDContext } from "../../../../context/IPDContext";
 import { SliderContext } from "../../../../context/SliderContext";
 import CareInstructions from "../components/CareInstructions";
 import * as CareInstructionsUtils from "../utils/CareInstructionsUtils.jsx";
+import * as NursingTasksUtils from "../../NursingTasks/utils/NursingTasksUtils";
+
+jest.mock("../../NursingTasks/utils/NursingTasksUtils", () => ({
+  updateNonMedicationTask: jest.fn(),
+}));
+
+jest.mock("../utils/CareInstructionsUtils.jsx", () => {
+  const actual = jest.requireActual("../utils/CareInstructionsUtils.jsx");
+  return {
+    ...actual,
+    fetchCareInstructionsObs: jest.fn(),
+    fetchAcknowledgedObservationUuids: jest.fn(),
+    fetchTasksByObservationUuids: jest.fn(),
+  };
+});
 
 jest.mock("../../NursingTasks/components/AddEmergencyTasks", () => {
   function MockAddEmergencyTasks({
@@ -88,7 +103,7 @@ const mockObservationsApiResponse = [
 ];
 
 const mockCurrentUserWithPrivilege = {
-  privileges: [{ name: "Add Tasks" }],
+  privileges: [{ name: "Add Tasks" }, { name: "Edit Tasks" }],
 };
 
 const mockCurrentUserWithoutPrivilege = {
@@ -135,22 +150,17 @@ const renderWithProviders = (
 
 describe("CareInstructions", () => {
   beforeEach(() => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
-      .mockResolvedValue(mockObservationsApiResponse);
-    jest
-      .spyOn(CareInstructionsUtils, "fetchAcknowledgedObservationUuids")
-      .mockResolvedValue(new Set());
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue(mockObservationsApiResponse);
+    CareInstructionsUtils.fetchAcknowledgedObservationUuids.mockResolvedValue(new Set());
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([]);
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   it("should render empty state when visit is not available", async () => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
-      .mockResolvedValue([]);
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue([]);
     const { getAllByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextNoVisit
@@ -165,9 +175,7 @@ describe("CareInstructions", () => {
   });
 
   it("should render empty state when no observations are returned", async () => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
-      .mockResolvedValue([]);
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue([]);
     const { getAllByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextEmpty
@@ -182,9 +190,7 @@ describe("CareInstructions", () => {
   });
 
   it("should render Not Acknowledged and Acknowledged tabs", async () => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
-      .mockResolvedValue([]);
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue([]);
     const { getByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextEmpty
@@ -223,9 +229,7 @@ describe("CareInstructions", () => {
   });
 
   it("should show Acknowledged tab content when Acknowledged tab is clicked", async () => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
-      .mockResolvedValue([]);
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue([]);
     const { getByText, getAllByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextEmpty
@@ -634,6 +638,7 @@ describe("CareInstructions", () => {
           groupMembers: [],
         },
       ]);
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([]);
 
     const { getAllByRole } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
@@ -678,6 +683,7 @@ describe("CareInstructions", () => {
       .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
       .mockResolvedValue([
         {
+          uuid: "obs-uuid-3",
           encounterDateTime: 1713955252000,
           encounterUuid: "encounter-uuid-1",
           formFieldPath: "Doctor Patient Progress Notes.1/5-0",
@@ -687,6 +693,7 @@ describe("CareInstructions", () => {
           groupMembers: [],
         },
         {
+          uuid: "obs-uuid-4",
           encounterDateTime: 1713941600000,
           encounterUuid: "encounter-uuid-3",
           formFieldPath: "Doctor Patient Progress Notes.1/5-0",
@@ -696,6 +703,7 @@ describe("CareInstructions", () => {
           groupMembers: [],
         },
       ]);
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([]);
     const { getByText, getAllByRole } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextWithData
@@ -985,9 +993,12 @@ describe("serializeParams", () => {
 
 describe("fetchCareInstructionsObs", () => {
   let mockAxios;
+  let actualFetchCareInstructionsObs;
 
   beforeEach(() => {
     mockAxios = new MockAdapter(axios);
+    // Use the actual implementation for this describe block
+    actualFetchCareInstructionsObs = jest.requireActual("../utils/CareInstructionsUtils.jsx").fetchCareInstructionsObs;
   });
 
   afterEach(() => {
@@ -1007,7 +1018,7 @@ describe("fetchCareInstructionsObs", () => {
     ];
     mockAxios.onGet(new RegExp(".*observations.*")).reply(200, mockResponse);
 
-    const result = await CareInstructionsUtils.fetchCareInstructionsObs(
+    const result = await actualFetchCareInstructionsObs(
       "visit-uuid-1",
       ["Instruction for the Ward"]
     );
@@ -1025,7 +1036,7 @@ describe("fetchCareInstructionsObs", () => {
   it("should return empty array when the API call fails", async () => {
     mockAxios.onGet(new RegExp(".*")).reply(500);
 
-    const result = await CareInstructionsUtils.fetchCareInstructionsObs(
+    const result = await actualFetchCareInstructionsObs(
       "visit-uuid-1",
       ["Instruction for the Ward"]
     );
@@ -1113,5 +1124,138 @@ describe("fetchBatchObservations", () => {
 
     const requestBody = JSON.parse(mockAxios.history.post[0].data);
     expect(requestBody.filterObsWithOrders).toBe(true);
+  });
+});
+
+describe("CareInstructions - Stop Tasks Feature", () => {
+  let mockAxios;
+
+  beforeEach(() => {
+    mockAxios = new MockAdapter(axios);
+    mockAxios
+      .onGet(new RegExp(".*observations.*"))
+      .reply(200, mockObservationsApiResponse);
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue(mockObservationsApiResponse);
+    CareInstructionsUtils.fetchAcknowledgedObservationUuids.mockResolvedValue(new Set());
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([
+      { uuid: "task-uuid-1", observationUuid: "obs-uuid-1" },
+      { uuid: "task-uuid-2", observationUuid: "obs-uuid-1" },
+    ]);
+  });
+
+  afterEach(() => {
+    mockAxios.restore();
+    jest.resetAllMocks();
+  });
+
+  it("should render Stop Tasks link when instruction has pending tasks and user has EDIT_TASKS privilege", async () => {
+    const { queryByText } = render(
+      <IntlProvider locale="en" messages={{}}>
+        <IPDContext.Provider value={mockIPDContextWithData}>
+          <SliderContext.Provider value={mockSliderContext}>
+            <CareInstructions patientId="patient-uuid-1" config={{ formConcepts: mockFormConcepts }} />
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("Stop Tasks")).toBeInTheDocument();
+    });
+  });
+
+  it("should not render Stop Tasks link when user lacks EDIT_TASKS privilege", async () => {
+    const contextWithoutPrivilege = {
+      ...mockIPDContextWithData,
+      currentUser: mockCurrentUserWithoutPrivilege,
+    };
+
+    const { queryByText } = render(
+      <IntlProvider locale="en" messages={{}}>
+        <IPDContext.Provider value={contextWithoutPrivilege}>
+          <SliderContext.Provider value={mockSliderContext}>
+            <CareInstructions patientId="patient-uuid-1" config={{ formConcepts: mockFormConcepts }} />
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("Stop Tasks")).not.toBeInTheDocument();
+    });
+  });
+
+  it("should not render Stop Tasks link when instruction has no pending tasks", async () => {
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([]);
+
+    const { queryByText } = render(
+      <IntlProvider locale="en" messages={{}}>
+        <IPDContext.Provider value={mockIPDContextWithData}>
+          <SliderContext.Provider value={mockSliderContext}>
+            <CareInstructions patientId="patient-uuid-1" config={{ formConcepts: mockFormConcepts }} />
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("Stop Tasks")).not.toBeInTheDocument();
+    });
+  });
+
+  it("should call fetchTasksByObservationUuids with instruction observation UUIDs", async () => {
+    render(
+      <IntlProvider locale="en" messages={{}}>
+        <IPDContext.Provider value={mockIPDContextWithData}>
+          <SliderContext.Provider value={mockSliderContext}>
+            <CareInstructions patientId="patient-uuid-1" config={{ formConcepts: mockFormConcepts }} />
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(CareInstructionsUtils.fetchTasksByObservationUuids).toHaveBeenCalledWith(
+        expect.arrayContaining(["obs-uuid-1", "obs-uuid-2"]),
+        "requested"
+      );
+    });
+  });
+
+  it("should call updateNonMedicationTask with CANCELLED status when Stop Tasks is confirmed", async () => {
+    const { getByText, getAllByText } = render(
+      <IntlProvider locale="en" messages={{}}>
+        <IPDContext.Provider value={mockIPDContextWithData}>
+          <SliderContext.Provider value={mockSliderContext}>
+            <CareInstructions patientId="patient-uuid-1" config={{ formConcepts: mockFormConcepts }} />
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    NursingTasksUtils.updateNonMedicationTask.mockResolvedValue({ status: 200 });
+
+    await waitFor(() => {
+      const stopTasksLinks = getAllByText("Stop Tasks");
+      fireEvent.click(stopTasksLinks[0]);
+    });
+
+    // Confirm in modal
+    await waitFor(() => {
+      const confirmButton = getByText("Confirm");
+      fireEvent.click(confirmButton);
+    });
+
+    await waitFor(() => {
+      expect(NursingTasksUtils.updateNonMedicationTask).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            uuid: "task-uuid-1",
+            status: "CANCELLED",
+            executionEndTime: expect.any(Number),
+          }),
+        ])
+      );
+    });
   });
 });

@@ -133,7 +133,7 @@ export const ExtractMedicationNursingTasksData = (
 
       if (
         (filterValue.id === "stopped" || filterValue.id === "allTasks") &&
-        slot.status === "STOPPED"
+        (slot.status === "STOPPED" || slot.status === "CANCELLED")
       ) {
         stoppedExtractedData.push({
           ...slotInfo,
@@ -290,7 +290,8 @@ export const ExtractNonMedicationTasks = (
   const groupedData = [],
     completedExtractedData = [],
     pendingExtractedData = [],
-    skippedExtractedData = [];
+    skippedExtractedData = [],
+    stoppedExtractedData = [];
   nonMedicationTasks?.forEach((nonMedicationTask) => {
     const {
       name,
@@ -316,11 +317,11 @@ export const ExtractNonMedicationTasks = (
       partOf,
       isDisabled: isReadMode
         ? true
-        : status === "COMPLETED" || status === "REJECTED",
+        : status === "COMPLETED" || status === "REJECTED" || status === "CANCELLED",
       executionEndTime: executionEndTime,
-      administeredTime: status === "REJECTED" ? null : executionEndTime,
+      administeredTime: (status === "REJECTED" || status === "CANCELLED") ? null : executionEndTime,
       administeredTimeInEpochSeconds:
-        status === "REJECTED" ? null : executionEndTime,
+        (status === "REJECTED" || status === "CANCELLED") ? null : executionEndTime,
       status,
       isANonMedicationTask: true,
       token,
@@ -333,6 +334,14 @@ export const ExtractNonMedicationTasks = (
       taskInfo.status === "REQUESTED"
     ) {
       pendingExtractedData.push(taskInfo);
+    } else if (
+      (filterValue.id === "stopped" || filterValue.id === "allTasks") &&
+      taskInfo.status === "CANCELLED"
+    ) {
+      stoppedExtractedData.push({
+        ...taskInfo,
+        status: "Stopped",
+      });
     } else if (
       (filterValue.id === "skipped" || filterValue.id === "allTasks") &&
       taskInfo.status === "REJECTED"
@@ -369,6 +378,7 @@ export const ExtractNonMedicationTasks = (
   }
 
   groupedData.push(...completedExtractedData.map((item) => [item]));
+  groupedData.push(...stoppedExtractedData.map((item) => [item]));
   groupedData.push(...skippedExtractedData.map((item) => [item]));
   return groupedData;
 };

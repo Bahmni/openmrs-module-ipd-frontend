@@ -31,22 +31,22 @@ export const fetchCareInstructionsObs = async (visitUuid, conceptNames) => {
   }
 };
 
-export const fetchTasksByObservationUuids = async (observationUuids) => {
+export const fetchTasksByObservationUuids = async (observationUuids, status = null) => {
   if (!observationUuids || observationUuids.length === 0) return [];
   try {
-    // No status filter: task existence (any status) indicates acknowledgement,
-    // because creating a task is the acknowledgement action in this workflow.
-    // &_count=500 avoids silent truncation at the default 10-result page size
-    // when called with all-patients observation UUIDs from the care view summary.
-    const url = `${FHIR_TASK_URL}?focus=${observationUuids
+    let url = `${FHIR_TASK_URL}?focus=${observationUuids
       .map((uuid) => `Observation/${uuid}`)
       .join(",")}&_count=500`;
+
+    if (status) {
+      url += `&status=${status}`;
+    }
 
     const response = await axios.get(url, { withCredentials: true });
     const entries = response.data?.entry || [];
     return entries.map((entry) => ({
-      observationUuid: entry.resource?.focus?.reference?.split("/").pop(),
       uuid: entry.resource?.id,
+      observationUuid: entry.resource?.focus?.reference?.split("/").pop(),
     }));
   } catch (error) {
     console.error("Failed to fetch tasks by observation UUIDs", error);
