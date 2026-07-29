@@ -41,7 +41,7 @@ export const iconType = (task, nursingTasks) => {
   else if (serviceType === asNeededMedicationRequestConceptName) {
     return "Administered";
   }
-  if (stopTime) return "Stopped";
+  if (stopTime || status === "Stopped" || status === "CANCELLED") return "Stopped";
   if (status === "Not Done" || status === "missed") return "Not-Administered";
   if (
     administeredTimeInEpochSeconds ||

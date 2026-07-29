@@ -13,6 +13,17 @@ $edited-instruction-highlight: #e9f3fb;
     white-space: nowrap;
   }
 
+  .stop-tasks-cell {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    min-width: 100px;
+
+    a {
+      display: inline-block;
+      white-space: nowrap;
+    }
+  }
+
   .bx--tab-content {
     padding: 1rem 0 0 0;
   }
