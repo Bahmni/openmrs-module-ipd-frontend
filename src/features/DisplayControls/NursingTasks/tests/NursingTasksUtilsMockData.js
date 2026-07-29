@@ -1269,6 +1269,24 @@ export const mockNonMedicationTileData = [
   },
 ];
 
+export const mockStoppedNonMedicationTileData = [
+  {
+    drugName: "Non-Medication task",
+    uuid: "72af0cfa-be74-42a8-b650-45f6978314dd",
+    startTimeInEpochSeconds: 1703601000,
+    startTime: "16:38",
+    isDisabled: true,
+    status: "Stopped",
+    partOf: null,
+    taskType: { display: "Non Medication Task" },
+    creator: {
+      uuid: "c1c21e11-3f10-11e4-adec-0800271c1b75",
+      display: "bailly.rurangirwa",
+    },
+    isANonMedicationTask: true,
+  },
+];
+
 export const mockSystemGeneratedTaskWithMapping = [
   {
     drugName: "Complete Nursing Initial Assessment Form",
