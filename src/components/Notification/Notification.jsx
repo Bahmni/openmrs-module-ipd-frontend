@@ -8,8 +8,9 @@ import "./Notification.scss";
 
 export default function Notification(props) {
   const { hostData, hostApi } = props;
-  const { notificationKind, messageId, messageDuration = 2000 } = hostData;
-  const getMessage = (messageId) => {
+  const { notificationKind, messageId, defaultMessage, messageDuration = 2000 } = hostData;
+  const getTitle = () => {
+    if (defaultMessage) return defaultMessage;
     if (!messageId) return null;
     return (
       <I18nProvider>
@@ -17,8 +18,8 @@ export default function Notification(props) {
       </I18nProvider>
     );
   };
-  
-  const title = useMemo(() => getMessage(messageId), [messageId]);
+
+  const title = useMemo(() => getTitle(), [messageId, defaultMessage]);
 
   return (
     <NotificationCarbon
@@ -40,6 +41,7 @@ Notification.propTypes = {
     notificationKind: PropTypes.string.isRequired,
     messageDuration: PropTypes.number,
     messageId: PropTypes.string,
+    defaultMessage: PropTypes.string,
   }),
   hostApi: PropTypes.shape({
     onClose: PropTypes.func,
