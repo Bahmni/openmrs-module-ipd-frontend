@@ -28,6 +28,9 @@ export const isVariableDoseOrder = (dosingInstructionType) =>
   "org.openmrs.module.bahmniemrapi.drugorder.dosinginstructions.FhirDosingInstructions";
 
 export const LOADING_DOSE_DURATION_DISPLAY = "Occurrence(s)";
+export const LOADING_DOSE_FREQUENCY = "Once";
+
+export const MEDICATION_ADDITIVES_EXTENSION_URL = "http://fhir.bahmni.org/ext/medication-additives";
 
 const UCUM_TO_DISPLAY = { d: "Day(s)", wk: "Week(s)", mo: "Month(s)" };
 const DISPLAY_TO_DAYS = {
@@ -47,16 +50,10 @@ const normalizeToDays = (duration, displayUnit) => {
   return d * multiplier;
 };
 
-const buildExtensionMap = (extensions) =>
-  (extensions || []).reduce((acc, e) => {
-    acc[e.url] = e.valueString !== undefined ? e.valueString : e.valueBoolean;
-    return acc;
-  }, {});
-
 export const fhirDosageToDisplayStage = (dosage) => {
-  const extMap = buildExtensionMap(dosage.extension);
+  const additives = (dosage.extension || []).find(e => e.url === MEDICATION_ADDITIVES_EXTENSION_URL)?.valueString || "";
   const dr = dosage.doseAndRate && dosage.doseAndRate[0];
-  const isLoadingDose = extMap.isLoadingDose === true;
+  const isLoadingDose = !!(dosage.timing?.repeat?.count === 1);
   const durationUnit = fromUcumDurationUnit(
     dosage.timing?.repeat?.durationUnit
   );
@@ -69,19 +66,23 @@ export const fhirDosageToDisplayStage = (dosage) => {
     ? 0
     : normalizeToDays(dosage.timing?.repeat?.duration, durationUnit);
 
+  const frequency = isLoadingDose
+    ? LOADING_DOSE_FREQUENCY
+    : (dosage.timing?.code?.text || "");
+
   return {
     stageName: dosage.text || String(dosage.sequence || ""),
     dose: dr
       ? `${dr.doseQuantity.value} ${dr.doseQuantity.unit || ""}`.trim()
       : "",
-    frequency: dosage.timing?.code?.text || "",
+    frequency,
     duration,
     durationDays,
     isLoadingDose,
     instructions: dosage.additionalInstruction?.[0]?.text || "",
     additionalInstructions: dosage.patientInstruction || "",
     rate: dr?.rateQuantity?.value ? String(dr.rateQuantity.value) : "",
-    additives: extMap.additives || "",
+    additives,
   };
 };
 

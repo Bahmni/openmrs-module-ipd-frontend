@@ -155,9 +155,8 @@ describe("NursingTasksUtils", () => {
           {
             sequence: 1,
             text: "Loading Dose",
-            timing: { code: { text: "Once" } },
+            timing: { code: { text: "Once" }, repeat: { count: 1 } },
             doseAndRate: [{ doseQuantity: { value: 5, unit: "Tablet(s)" } }],
-            extension: [{ url: "isLoadingDose", valueBoolean: true }],
           },
           {
             sequence: 2,
@@ -167,7 +166,6 @@ describe("NursingTasksUtils", () => {
               repeat: { duration: 3, durationUnit: "d" },
             },
             doseAndRate: [{ doseQuantity: { value: 3, unit: "Tablet(s)" } }],
-            extension: [{ url: "isLoadingDose", valueBoolean: false }],
           },
         ]),
         asNeeded: false,

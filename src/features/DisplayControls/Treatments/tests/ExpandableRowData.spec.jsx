@@ -7,14 +7,13 @@ const makeDosage = ({ sequence, text, isLoadingDose = false }) => ({
   sequence,
   text,
   timing: {
-    repeat: { duration: 3, durationUnit: "d", frequency: 1, period: 1, periodUnit: "d" },
+    repeat: isLoadingDose ? { count: 1 } : { duration: 3, durationUnit: "d" },
     code: { text: "Once a day" },
   },
   route: { text: "Oral" },
   doseAndRate: [{ type: { text: "ordered" }, doseQuantity: { value: 5, unit: "mg" } }],
   additionalInstruction: [],
   patientInstruction: "",
-  extension: [{ url: "isLoadingDose", valueBoolean: isLoadingDose }],
 });
 
 describe("ExpandableRowData", () => {

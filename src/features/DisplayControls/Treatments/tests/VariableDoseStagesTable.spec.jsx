@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import MockDate from "mockdate";
 import VariableDoseStagesTable from "../components/VariableDoseStagesTable";
+import { MEDICATION_ADDITIVES_EXTENSION_URL } from "../../../../utils/FhirDosingUtils";
 
 const makeDosage = ({
   sequence,
@@ -17,36 +18,37 @@ const makeDosage = ({
   additionalInstructions = "",
   rate = "",
   additives = "",
-}) => ({
-  sequence,
-  text,
-  timing: {
-    repeat: {
-      duration,
-      durationUnit,
-      frequency: 1,
-      period: 1,
-      periodUnit: "d",
-    },
-    code: { text: frequency },
-  },
-  route: { text: "Oral" },
-  doseAndRate: [
-    {
-      type: { text: "ordered" },
-      doseQuantity: { value: dose, unit },
-      ...(rate
-        ? { rateQuantity: { value: parseFloat(rate), unit: "ml/hr" } }
-        : {}),
-    },
-  ],
-  additionalInstruction: instructions ? [{ text: instructions }] : [],
-  patientInstruction: additionalInstructions,
-  extension: [
-    { url: "isLoadingDose", valueBoolean: isLoadingDose },
-    ...(additives ? [{ url: "additives", valueString: additives }] : []),
-  ],
-});
+}) => {
+  const timing = {
+    repeat: isLoadingDose
+      ? { count: 1 }
+      : { duration, durationUnit },
+  };
+  if (!isLoadingDose) {
+    timing.code = { text: frequency };
+  }
+  const dosage = {
+    sequence,
+    text,
+    timing,
+    route: { text: "Oral" },
+    doseAndRate: [
+      {
+        type: { text: "ordered" },
+        doseQuantity: { value: dose, unit },
+        ...(rate
+          ? { rateQuantity: { value: parseFloat(rate), unit: "ml/hr" } }
+          : {}),
+      },
+    ],
+    additionalInstruction: instructions ? [{ text: instructions }] : [],
+    patientInstruction: additionalInstructions,
+  };
+  if (additives) {
+    dosage.extension = [{ url: MEDICATION_ADDITIVES_EXTENSION_URL, valueString: additives }];
+  }
+  return dosage;
+};
 
 const mockFhirDosages = [
   makeDosage({

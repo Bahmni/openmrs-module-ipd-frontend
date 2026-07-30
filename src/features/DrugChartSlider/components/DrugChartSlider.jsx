@@ -942,10 +942,17 @@ const DrugChartSlider = (props) => {
         );
     if (scheduleTimings && firstDaySlotsMissed > 0 && isAutoFill && !isEdit) {
       setFinalDaySchedules(scheduleTimings.slice(0, firstDaySlotsMissed) || []);
-      const quantity =
-        hostData?.drugOrder?.drugOrder?.dosingInstructions?.quantity;
-      const dose = hostData?.drugOrder?.drugOrder?.dosingInstructions?.dose;
-      const totalNoOfSlots = Math.ceil(quantity / dose);
+      const isVdpStage = hostData?.drugOrder?.variableDosageSequence != null;
+      let totalNoOfSlots;
+      if (isVdpStage) {
+        const stageDurationInDays = hostData?.drugOrder?.drugOrder?.duration;
+        totalNoOfSlots = enableSchedule?.frequencyPerDay * stageDurationInDays;
+      } else {
+        const quantity =
+          hostData?.drugOrder?.drugOrder?.dosingInstructions?.quantity;
+        const dose = hostData?.drugOrder?.drugOrder?.dosingInstructions?.dose;
+        totalNoOfSlots = Math.ceil(quantity / dose);
+      }
       if (totalNoOfSlots === enableSchedule?.frequencyPerDay) {
         setSchedules([]);
       }
