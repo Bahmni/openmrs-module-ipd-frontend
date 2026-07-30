@@ -10,6 +10,8 @@ import {
   SEARCH_DRUG_URL,
   USER_URL,
   DAEMON_USER,
+  HOME_CONFIG_URL,
+  GLOBAL_PROPERTY_URL,
 } from "../constants";
 import { FormattedMessage } from "react-intl";
 export const getPatientDashboardUrl = (patientUuid) =>
@@ -145,6 +147,44 @@ export const getDashboardConfig = async () => {
   } catch (error) {
     return error;
   }
+};
+
+export const getFormDraftFeatureEnabled = async () => {
+  try {
+    const response = await axios.get(HOME_CONFIG_URL, {
+      withCredentials: true,
+    });
+    if (response.status !== 200) throw new Error(response.statusText);
+    return response.data?.config?.enableFormDraftFeature || false;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const getShiftDetailsFromGlobalProperty = async () => {
+  try {
+    const response = await axios.get(GLOBAL_PROPERTY_URL, {
+      params: { property: "ipd.shiftDetails" },
+      withCredentials: true,
+      headers: { Accept: "text/plain" },
+    });
+    if (response.status !== 200) throw new Error(response.statusText);
+    const shiftDetails = response.data;
+    if (shiftDetails && Object.keys(shiftDetails).length > 0) {
+      return shiftDetails;
+    }
+  } catch (error) {
+    console.warn(
+      "Failed to fetch shift details from Global Property 'ipd.shiftDetails'. " +
+        "Using default fallback timings. Please configure the Global Property for your region. Error:",
+      error.message
+    );
+  }
+  // Default fallback
+  return {
+    1: { shiftStartTime: "08:00", shiftEndTime: "19:00" },
+    2: { shiftStartTime: "19:00", shiftEndTime: "08:00" },
+  };
 };
 
 export const getAllFormsInfo = async () => {

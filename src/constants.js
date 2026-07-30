@@ -37,6 +37,8 @@ export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
 export const DASHBORAD_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/ipdDashboard/app.json";
+export const HOME_CONFIG_URL =
+  hostUrl + "/bahmni_config/openmrs/apps/home/app.json";
 export const PATIENT_PROFILE = RESTWS_V1 + "/patientprofile";
 export const MEDICATION_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/clinical/medication.json";

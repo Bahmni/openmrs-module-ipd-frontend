@@ -21,7 +21,9 @@ import {
   getAllFormsInfo,
   getAppLandingPageUrl,
   getDashboardConfig,
+  getFormDraftFeatureEnabled,
   getPatientDashboardUrl,
+  getShiftDetailsFromGlobalProperty,
   isUserPrivileged,
 } from "../../utils/CommonUtils";
 import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
@@ -86,7 +88,15 @@ export default function Dashboard(props) {
 
   const fetchConfig = async () => {
     const configData = await getDashboardConfig();
-    const config = configData.data || {};
+    let config = configData.data || {};
+
+    // Always fetch shift details from Global Property
+    const shiftDetails = await getShiftDetailsFromGlobalProperty();
+    config.shiftDetails = shiftDetails;
+
+    config.config = config.config || {};
+    config.config.enableFormDraftFeature = await getFormDraftFeatureEnabled();
+
     setDashboardConfig(config);
     setIsConfigLoaded(true);
     const { sections = [] } = config;
@@ -266,7 +276,11 @@ export default function Dashboard(props) {
                     {isUserPrivileged(
                       currentUser,
                       PRIVILEGE_CONSTANTS.OBSERVATION_TAB
-                    ) && <DraftIndicator providerUuid={provider?.uuid} />}
+                    ) &&
+                      dashboardConfig?.config &&
+                      dashboardConfig.config.enableFormDraftFeature && (
+                        <DraftIndicator providerUuid={provider?.uuid} />
+                      )}
                     <ProviderActions onLogOut={hostApi.onLogOut} />
                   </HeaderGlobalBar>
               </Header>

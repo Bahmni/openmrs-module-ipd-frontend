@@ -14,7 +14,12 @@ import {
 } from "../../constants";
 import { CareViewContext } from "../../context/CareViewContext";
 import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
-import { getDashboardConfig, isUserPrivileged } from "../../utils/CommonUtils";
+import {
+  getDashboardConfig,
+  getFormDraftFeatureEnabled,
+  getShiftDetailsFromGlobalProperty,
+  isUserPrivileged,
+} from "../../utils/CommonUtils";
 import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
 import { DraftIndicator } from "../../components/DraftIndicator/DraftIndicator";
 
@@ -56,7 +61,11 @@ const CareViewDashboard = (props) => {
 
   const getIpdConfig = async () => {
     const configData = await getDashboardConfig();
-    const config = configData.data || {};
+    let config = configData.data || {};
+    const shiftDetails = await getShiftDetailsFromGlobalProperty();
+    config.shiftDetails = shiftDetails;
+    config.config = config.config || {};
+    config.config.enableFormDraftFeature = await getFormDraftFeatureEnabled();
     setIpdConfig(config);
   };
 
@@ -80,7 +89,11 @@ const CareViewDashboard = (props) => {
             {isUserPrivileged(
               currentUser,
               PRIVILEGE_CONSTANTS.OBSERVATION_TAB
-            ) && <DraftIndicator providerUuid={hostData.provider?.uuid} />}
+            ) &&
+              ipdConfig?.config &&
+              ipdConfig.config.enableFormDraftFeature && (
+                <DraftIndicator providerUuid={hostData.provider?.uuid} />
+              )}
             <ProviderActions onLogOut={onLogOut} />
           </div>
         </Header>
