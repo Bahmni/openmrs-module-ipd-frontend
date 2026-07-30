@@ -301,7 +301,7 @@ describe("TreatmentsUtils", () => {
         code: { text: "Once a day" },
         repeat: { duration, durationUnit },
       },
-      extension: [],
+      
     });
 
     it("should store raw duration matching the durationUnits for day units", () => {
@@ -398,7 +398,7 @@ describe("TreatmentsUtils", () => {
         doseAndRate: [{ doseQuantity: { value: 10, unit: "mg" } }],
         route: { text: "Oral" },
         timing: { code: { text: "Once a day" } },
-        extension: [],
+        
       };
       const stageInfo = {
         frequency: "Once a day",

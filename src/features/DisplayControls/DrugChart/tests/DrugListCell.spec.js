@@ -78,11 +78,10 @@ describe("variable dose order", () => {
       {
         sequence: 1,
         text: "Loading Dose",
-        timing: { code: { text: "Once" } },
+        timing: { code: { text: "Once" }, repeat: { count: 1 } },
         doseAndRate: [{ doseQuantity: { value: 5, unit: "Tablet(s)" } }],
         additionalInstruction: [{ text: "After meals" }],
         patientInstruction: "",
-        extension: [{ url: "isLoadingDose", valueBoolean: true }],
       },
       {
         sequence: 2,
@@ -94,7 +93,6 @@ describe("variable dose order", () => {
         doseAndRate: [{ doseQuantity: { value: 3, unit: "Tablet(s)" } }],
         additionalInstruction: [],
         patientInstruction: "Take with food",
-        extension: [{ url: "isLoadingDose", valueBoolean: false }],
       },
     ],
     stageSchedules: [
@@ -158,12 +156,11 @@ describe("variable dose order", () => {
         {
           sequence: 1,
           text: "Stage 1",
-          timing: { code: { text: "Once a day" } },
+          timing: { code: { text: "Once a day" }, repeat: { duration: 3, durationUnit: "d" } },
           doseAndRate: [{ doseQuantity: { value: 5, unit: "Tablet(s)" } }],
           additionalInstruction: [],
           patientInstruction: "",
-          extension: [{ url: "isLoadingDose", valueBoolean: false }],
-        },
+          },
       ],
       stageSchedules: [],
     };
