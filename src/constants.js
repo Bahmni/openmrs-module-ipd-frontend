@@ -43,6 +43,8 @@ export const CLINICAL_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/clinical/app.json";
 export const DASHBORAD_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/ipdDashboard/app.json";
+export const HOME_CONFIG_URL =
+  hostUrl + "/bahmni_config/openmrs/apps/home/app.json";
 export const PATIENT_PROFILE = RESTWS_V1 + "/patientprofile";
 export const MEDICATION_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/clinical/medication.json";

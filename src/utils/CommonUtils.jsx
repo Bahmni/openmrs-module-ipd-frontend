@@ -10,6 +10,7 @@ import {
   SEARCH_CONCEPT_URL,
   SEARCH_DRUG_URL,
   DAEMON_USER,
+  HOME_CONFIG_URL,
 } from "../constants";
 import { FormattedMessage } from "react-intl";
 export const getPatientDashboardUrl = (patientUuid) =>
@@ -148,6 +149,18 @@ export const getDashboardConfig = async () => {
     return response;
   } catch (error) {
     return error;
+  }
+};
+
+export const getFormDraftFeatureEnabled = async () => {
+  try {
+    const response = await axios.get(HOME_CONFIG_URL, {
+      withCredentials: true,
+    });
+    if (response.status !== 200) throw new Error(response.statusText);
+    return response.data?.config?.enableFormDraftFeature || false;
+  } catch (error) {
+    return false;
   }
 };
 
