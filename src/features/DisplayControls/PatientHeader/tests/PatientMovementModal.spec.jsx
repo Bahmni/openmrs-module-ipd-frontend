@@ -338,7 +338,7 @@ describe("PatientMovementModal", () => {
     );
     Object.defineProperty(window, "location", {
       value: {
-        href: "/bahmni/adt/#/patient/patientMockUuid/visit/visitMockUuid/encounter/encounterUuid/bed",
+        href: `/bahmni/adt/#/patient/patientMockUuid/visit/visitMockUuid/encounter/${patientResponseData.data.encounterUuid}/bed`,
       },
     });
     const transferMethodCall = jest.fn();
@@ -411,7 +411,7 @@ describe("PatientMovementModal", () => {
     );
     Object.defineProperty(window, "location", {
       value: {
-        href: "/bahmni/adt/#/patient/patientMockUuid/visit/visitMockUuid/encounter/encounterUuid/bed",
+        href: `/bahmni/adt/#/patient/patientMockUuid/visit/visitMockUuid/encounter/${patientResponseData.data.encounterUuid}/bed`,
       },
     });
     render(

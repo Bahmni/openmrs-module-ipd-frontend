@@ -33,23 +33,21 @@ const getDateTimeForHour = (time, date = new Date()) => {
 };
 
 export const getCurrentShiftTimes = (shiftConfig) => {
-  const { currentShiftHoursArray: currentShift } = currentShiftHoursArray(
-    new Date(),
-    shiftConfig
-  );
+  const { currentShiftHoursArray: currentShift, rangeArray } =
+    currentShiftHoursArray(new Date(), shiftConfig);
   const firstHour = currentShift[0];
+  const currentRange = rangeArray[0];
+  const [, shiftEndTime] = currentRange.split("-");
 
-  const lastHour = currentShift[currentShift.length - 1];
   let startDateTime = getDateTimeForHour(firstHour);
+  let endDateTime = getDateTimeForHour(shiftEndTime);
 
-  let endDateTime = getDateTimeForHour(lastHour + 1);
-  if (lastHour < firstHour) {
+  if (shiftEndTime < firstHour) {
     const currentDate = new Date();
-
     const currentHour = currentDate.getHours();
     if (currentHour > 12) {
       currentDate.setDate(currentDate.getDate() + 1);
-      endDateTime = getDateTimeForHour(lastHour + 1, currentDate);
+      endDateTime = getDateTimeForHour(shiftEndTime, currentDate);
     } else {
       currentDate.setDate(currentDate.getDate() - 1);
       startDateTime = getDateTimeForHour(firstHour, currentDate);
