@@ -1,4 +1,4 @@
-import React, { useState, useRef, Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import {
   Accordion,
   AccordionItem,
@@ -8,7 +8,7 @@ import {
   Loading,
   SideNav,
   SideNavItems,
-  SideNavLink,
+  SideNavLink
 } from "carbon-components-react";
 import { Application24, Home24, UserActivity24 } from "@carbon/icons-react";
 import { componentMapping } from "./componentMapping";
@@ -21,6 +21,7 @@ import {
   getAppLandingPageUrl,
   getDashboardConfig,
   getPatientDashboardUrl,
+  getShiftDetailsFromGlobalProperty
 } from "../../utils/CommonUtils";
 import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
 import RefreshDisplayControl from "../../context/RefreshDisplayControl";
@@ -28,7 +29,7 @@ import { SliderContext } from "../../context/SliderContext";
 import { IPDContext } from "../../context/IPDContext";
 import { AllMedicationsContextProvider } from "../../context/AllMedications";
 import { FormattedMessage } from "react-intl";
-import { homePageUrl, RESOLUTION_VALUE, IPD_PAGE_TITLE } from "../../constants";
+import { homePageUrl, IPD_PAGE_TITLE, RESOLUTION_VALUE } from "../../constants";
 import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
 
 export default function Dashboard(props) {
@@ -78,7 +79,8 @@ export default function Dashboard(props) {
 
   const fetchConfig = async () => {
     const configData = await getDashboardConfig();
-    const config = configData.data || {};
+    let config = configData.data || {};
+    config.shiftDetails = await getShiftDetailsFromGlobalProperty();
     setDashboardConfig(config);
     setIsConfigLoaded(true);
     const { sections = [] } = config;
