@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
@@ -42,13 +42,15 @@ import {
   timeText24,
 } from "../../../../constants";
 import SearchDrug from "../../../SearchDrug/SearchDrug";
-import moment from "moment/moment";
+import moment from "moment";
 import {
   formatDate,
   dateTimeToEpochUTCTime,
   areDatesSame,
   convertTo24Hour,
   isTimeInFuture,
+  getStartOfToday,
+  getEndOfDay,
 } from "../../../../utils/DateTimeUtils";
 import AdministeredMedicationList from "./AdministeredMedicationList";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -56,6 +58,25 @@ import { getCookies, isUserPrivileged } from "../../../../utils/CommonUtils";
 import { useIntl } from "react-intl";
 
 const MAX_TASK_NAME_LENGTH = 255;
+
+const DEFAULT_NURSING_TASK_SCHEDULING = {
+  enableDateSelection: true,
+  maxFutureDaysAllowed: 60,
+};
+
+const toValidDate = (value, fallback = getStartOfToday()) => {
+  const parsedDate = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(parsedDate.getTime()) ? fallback : parsedDate;
+};
+
+const getMaxScheduleDate = (nursingTaskScheduling) => {
+  const maxDate = getStartOfToday();
+  const maxDays =
+    nursingTaskScheduling?.maxFutureDaysAllowed ??
+    DEFAULT_NURSING_TASK_SCHEDULING.maxFutureDaysAllowed;
+  maxDate.setDate(maxDate.getDate() + maxDays);
+  return getEndOfDay(maxDate);
+};
 
 const AddEmergencyTasks = (props) => {
   const {
@@ -90,7 +111,13 @@ const AddEmergencyTasks = (props) => {
     enable24HourTime = {},
     nonMedicationTaskTypes = [],
     enableAddMultipleTask = false,
+    nursingTaskScheduling = DEFAULT_NURSING_TASK_SCHEDULING,
   } = config;
+
+  const maxScheduleDate = useMemo(
+    () => getMaxScheduleDate(nursingTaskScheduling),
+    [nursingTaskScheduling?.maxFutureDaysAllowed]
+  );
 
   const [selectedDrug, setSelectedDrug] = useState({});
   const [doseUnits, setDoseUnits] = useState({});
@@ -114,6 +141,7 @@ const AddEmergencyTasks = (props) => {
       {
         id: crypto.randomUUID(),
         taskName: initialTaskName || "",
+        scheduleDate: getStartOfToday(),
         scheduleTime: defaultScheduleTime,
         taskType: null,
       },
@@ -372,7 +400,7 @@ const AddEmergencyTasks = (props) => {
 
   const createNonMedicationTaskPayload = (taskDetails, encounterUuid) => {
     const scheduleTimein24Hour = convertTo24Hour(taskDetails.scheduleTime);
-    const scheduleDate = new Date();
+    const scheduleDate = new Date(taskDetails.scheduleDate);
     const time = scheduleTimein24Hour.split(":");
     scheduleDate.setHours(time[0]);
     scheduleDate.setMinutes(time[1]);
@@ -517,6 +545,7 @@ const AddEmergencyTasks = (props) => {
       {
         id: crypto.randomUUID(),
         taskName: initialTaskName || "",
+        scheduleDate: getStartOfToday(),
         scheduleTime: currentTime,
         taskType: sourceTask?.taskType || null,
       },
@@ -584,6 +613,23 @@ const AddEmergencyTasks = (props) => {
         return updated;
       });
       return true;
+    }
+  };
+
+  const handleDateChange = (taskId, e) => {
+    if (e && e.length > 0) {
+      const selectedDate = toValidDate(e[0]);
+      updateNonMedicationTask(taskId, { scheduleDate: selectedDate });
+      const selectedTask = nonMedicationTasks.find(
+        (task) => task.id === taskId
+      );
+      if (selectedTask?.scheduleTime) {
+        customNonMedicationTaskValidation(
+          taskId,
+          selectedTask.scheduleTime,
+          selectedDate
+        );
+      }
     }
   };
 
@@ -666,7 +712,29 @@ const AddEmergencyTasks = (props) => {
     }
   };
 
-  const customNonMedicationTaskValidation = (taskId, time) => {
+  const customNonMedicationTaskValidation = (
+    taskId,
+    time,
+    selectedDateInput
+  ) => {
+    const taskDetails = nonMedicationTasks.find((task) => task.id === taskId);
+    const selectedDate = toValidDate(
+      selectedDateInput || taskDetails?.scheduleDate
+    );
+    const selectedDateOnly = new Date(selectedDate);
+    selectedDateOnly.setHours(0, 0, 0, 0);
+    const today = getStartOfToday();
+
+    if (selectedDateOnly > today) {
+      updateNonMedicationInvalidState(taskId, false);
+      return;
+    }
+
+    if (selectedDateOnly < today) {
+      updateNonMedicationInvalidState(taskId, true, invalidPastTimeText);
+      return;
+    }
+
     if (time) {
       if (
         isTimeInFuture(
@@ -960,7 +1028,27 @@ const AddEmergencyTasks = (props) => {
                             }
                           />
                         )}
-                      <div className="time-info">
+                      <div className="date-time-container">
+                        {nursingTaskScheduling?.enableDateSelection !==
+                          false && (
+                          <DatePickerCarbon
+                            id={`date-picker-${index}`}
+                            title={intl.formatMessage({
+                              id: "SCHEDULED_DATE",
+                              defaultMessage: "Scheduled Date",
+                            })}
+                            dateFormat="d M Y"
+                            value={toValidDate(taskDetails.scheduleDate)}
+                            onChange={(e) =>
+                              handleDateChange(taskDetails.id, e)
+                            }
+                            isRequired={true}
+                            className="date-picker-carbon"
+                            placeholder="DD MMM YYYY"
+                            minDate={getStartOfToday()}
+                            maxDate={maxScheduleDate}
+                          />
+                        )}
                         {enable24HourTime ? (
                           <TimePicker24Hour
                             defaultTime={taskDetails.scheduleTime}
