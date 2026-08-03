@@ -11,6 +11,7 @@ import {
   mockUpdateResponse,
 } from "./NursingTasksUtilsMockData";
 import { IPDContext } from "../../../../context/IPDContext";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import {
   mockConfig,
   mockConfigFor12HourFormat,
@@ -30,6 +31,7 @@ const mockSetSuccessMessage = jest.fn();
 const mockUpdateEmergencyTasksSlider = jest.fn();
 const mockUpdateNonMedicationTask = jest.fn();
 const mockHandleAuditLogEvent = jest.fn();
+const mockRefreshDisplayControl = jest.fn();
 
 jest.mock("../utils/NursingTasksUtils", () => {
   const originalModule = jest.requireActual("../utils/NursingTasksUtils");
@@ -174,18 +176,20 @@ describe("UpdateNursingTasksSlider", function () {
             currentUser: mockUserWithAllRequiredPrivileges,
           }}
         >
-          <UpdateNursingTasks
-            medicationTasks={mockNonMedicationTileData}
-            groupSlotsByOrderId={mockGroupSlotsByOrderId}
-            updateNursingTasksSlider={mockUpdateEmergencyTasksSlider}
-            patientId="test_patient_uuid"
-            providerId="test_provider_uuid"
-            setShowSuccessNotification={mockSetShowSuccessNotification}
-            setSuccessMessage={mockSetSuccessMessage}
-            setShowNotification={mockSetShowNotification}
-            setNotificationMessage={mockSetNotificationMessage}
-            setNotificationStatus={mockSetNotificationStatus}
-          />
+          <RefreshDisplayControl.Provider value={mockRefreshDisplayControl}>
+            <UpdateNursingTasks
+              medicationTasks={mockNonMedicationTileData}
+              groupSlotsByOrderId={mockGroupSlotsByOrderId}
+              updateNursingTasksSlider={mockUpdateEmergencyTasksSlider}
+              patientId="test_patient_uuid"
+              providerId="test_provider_uuid"
+              setShowSuccessNotification={mockSetShowSuccessNotification}
+              setSuccessMessage={mockSetSuccessMessage}
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+            />
+          </RefreshDisplayControl.Provider>
         </IPDContext.Provider>
       </IntlProvider>
     );
@@ -1072,7 +1076,6 @@ describe("UpdateNursingTasksSlider", function () {
     const stopTaskButton = screen.getByText("Stop Task");
     fireEvent.click(stopTaskButton);
 
-    // Save button should be enabled after stopping a task
     expect(saveButton.disabled).toBe(false);
   });
 
@@ -1168,7 +1171,148 @@ describe("UpdateNursingTasksSlider", function () {
     const stopTaskButton = screen.getByText("Stop Task");
     fireEvent.click(stopTaskButton);
 
-    // Verify that stop task button was successfully clicked and toggle is hidden
     expect(container.querySelectorAll(".bx--toggle__switch")).toHaveLength(0);
+  });
+
+  it("should deactivate Stop when Skip is activated (mutual exclusivity)", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <RefreshDisplayControl.Provider value={mockRefreshDisplayControl}>
+            <UpdateNursingTasks
+              medicationTasks={[mockNonMedicationTileData[0]]}
+              groupSlotsByOrderId={mockGroupSlotsByOrderId}
+              updateNursingTasksSlider={jest.fn}
+              patientId="test_patient_uuid"
+              providerId="test_provider_uuid"
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+            />
+          </RefreshDisplayControl.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+
+    fireEvent.click(overflowMenuButton);
+    let stopTaskButton = screen.getByText("Stop Task");
+    fireEvent.click(stopTaskButton);
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Unstop Task")).toBeTruthy();
+    expect(screen.queryByText("Stop Task")).toBeNull();
+
+    let skipDrugButton = screen.getByText("Skip Task");
+    fireEvent.click(skipDrugButton);
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Un-Skip Task")).toBeTruthy();
+    expect(screen.queryByText("Skip Task")).toBeNull();
+    expect(screen.getByText("Stop Task")).toBeTruthy(); // Stop Task should reappear
+    expect(screen.queryByText("Unstop Task")).toBeNull(); // Unstop should disappear
+  });
+
+  it("should deactivate Skip when Stop is activated (mutual exclusivity)", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <RefreshDisplayControl.Provider value={mockRefreshDisplayControl}>
+            <UpdateNursingTasks
+              medicationTasks={[mockNonMedicationTileData[0]]}
+              groupSlotsByOrderId={mockGroupSlotsByOrderId}
+              updateNursingTasksSlider={jest.fn}
+              patientId="test_patient_uuid"
+              providerId="test_provider_uuid"
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+            />
+          </RefreshDisplayControl.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+
+    fireEvent.click(overflowMenuButton);
+    let skipTaskButton = screen.getByText("Skip Task");
+    fireEvent.click(skipTaskButton);
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Un-Skip Task")).toBeTruthy();
+    expect(screen.queryByText("Skip Task")).toBeNull();
+
+    let stopTaskButton = screen.getByText("Stop Task");
+    fireEvent.click(stopTaskButton);
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Unstop Task")).toBeTruthy();
+    expect(screen.queryByText("Stop Task")).toBeNull();
+    expect(screen.getByText("Skip Task")).toBeTruthy(); // Skip Task should reappear
+    expect(screen.queryByText("Un-Skip Task")).toBeNull(); // Un-Skip should disappear
+  });
+
+  it("should not allow both Skip and Stop to be active simultaneously", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <RefreshDisplayControl.Provider value={mockRefreshDisplayControl}>
+            <UpdateNursingTasks
+              medicationTasks={[mockNonMedicationTileData[0]]}
+              groupSlotsByOrderId={mockGroupSlotsByOrderId}
+              updateNursingTasksSlider={jest.fn}
+              patientId="test_patient_uuid"
+              providerId="test_provider_uuid"
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+            />
+          </RefreshDisplayControl.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+
+    fireEvent.click(overflowMenuButton);
+    let skipTaskButton = screen.getByText("Skip Task");
+    fireEvent.click(skipTaskButton);
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Un-Skip Task")).toBeTruthy();
+    expect(screen.queryByText("Skip Task")).toBeNull();
+    expect(screen.getByText("Stop Task")).toBeTruthy();
+    expect(screen.queryByText("Unstop Task")).toBeNull();
+
+    fireEvent.click(screen.getByText("Stop Task"));
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Unstop Task")).toBeTruthy();
+    expect(screen.queryByText("Stop Task")).toBeNull();
+    expect(screen.getByText("Skip Task")).toBeTruthy();
+    expect(screen.queryByText("Un-Skip Task")).toBeNull();
   });
 });

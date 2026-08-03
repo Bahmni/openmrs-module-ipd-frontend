@@ -237,5 +237,12 @@
   "VARIABLE_DOSAGE": "Dosaggio Variabile",
   "VARIABLE_DOSE_STAGES_DAYS": "{stages} Fasi - {days} Giorni",
   "INSTRUCTION_LABEL": "Istruzione",
-  "REMOVE": "Rimuovi"
+  "REMOVE": "Rimuovi",
+  "STOP_TASKS": "Interrompi Attività",
+  "STOP_TASKS_CONFIRMATION_TITLE": "Interrompi Attività in Sospeso",
+  "STOP_TASKS_CONFIRMATION_MESSAGE": "Sei sicuro di voler interrompere tutte le attività in sospeso per questa istruzione?",
+  "STOP_TASKS_CONFIRM_BUTTON": "Conferma",
+  "STOP_TASKS_CANCEL_BUTTON": "Annulla",
+  "ALL_PENDING_TASKS_STOPPED_SUCCESSFULLY": "Tutte le attività in sospeso sono state interrotte con successo.",
+  "FAILED_TO_STOP_TASKS": "Errore nell'interruzione delle attività. Riprova."
 }
