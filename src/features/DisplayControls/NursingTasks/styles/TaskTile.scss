@@ -117,7 +117,8 @@
   font-weight: 400;
   color: #393939;
   letter-spacing: 0.12px;
-  padding: 2px 25px 2px;
+  padding: 0px 25px 0px;
+  margin-bottom: 20px;
 }
 
 .tile-content-footer {
@@ -130,7 +131,7 @@
   letter-spacing: 0.12px;
   align-items: center;
   display: flex;
-  bottom: 10px;
+  bottom: 5px;
   padding-left: 2px;
   justify-content: space-between;
   .tile-date-time {
@@ -138,8 +139,53 @@
   }
 }
 
+.footer-right-section {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.date-time-container {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+.date-row {
+  display: flex;
+  align-items: center;
+}
+
+.time-row {
+  display: flex;
+  align-items: center;
+}
+
 .tile-content-subtext-time {
   padding-left: 5px;
+}
+
+.tile-content-subtext-date {
+  padding-left: 5px;
+}
+
+.creator-name {
+  text-transform: capitalize;
+  font-size: 12px;
+  font-weight: 400;
+  font-style: italic;
+  color: #393939;
+  letter-spacing: 0.12px;
+}
+
+.grouped-task-count {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  font-style: italic;
+  color: #393939;
+  letter-spacing: 0.12px;
 }
 
 .nursing-task-icon-container {

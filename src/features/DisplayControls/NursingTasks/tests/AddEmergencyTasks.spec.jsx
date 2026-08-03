@@ -261,11 +261,12 @@ describe("AddEmergencyTasks", () => {
     // Set Administration Date
     const datePickerInput = container.querySelector(".bx--date-picker__input");
     fireEvent.change(datePickerInput, {
-      target: { value: moment().format("DD MMM YYYY") },
+      target: { value: moment().format("m/d/Y") },
     });
     fireEvent.blur(datePickerInput);
-    const dateInputField = container.querySelector(".bx--date-picker__input");
-    expect(dateInputField.value).toBe(moment().format("DD MMM YYYY"));
+    // Verify the date picker reflects a selected date in the format the
+    // component renders (e.g. "05 Jan 2024") rather than just existing.
+    expect(datePickerInput.value).toMatch(/^\d{2} [A-Za-z]{3} \d{4}$/);
 
     //Set Administration Time
     const startTimeSelector = container.querySelector(
@@ -592,6 +593,60 @@ describe("AddEmergencyTasks", () => {
     });
   });
 
+  it("should use current time (not previous task's time) when a new task is replicated", async () => {
+    MockDate.set("2024-01-01 09:00");
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            handleAuditEvent: mockHandleAuditEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <AddEmergencyTasks
+            patientId={"__patient_uuid__"}
+            providerId={"__provider_uuid__"}
+            updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+            hideMedicationTab={true}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Add Task +")).toBeInTheDocument();
+    });
+
+    // Change the first task's time to 12:30
+    const firstTimeInput = container.querySelector(
+      ".bx--time-picker__input-field"
+    );
+    fireEvent.change(firstTimeInput, { target: { value: "12:30" } });
+    fireEvent.blur(firstTimeInput);
+
+    // Advance mock time to simulate user clicking "Add More" later
+    MockDate.set("2024-01-01 10:15");
+
+    // Click Add Task — new task should default to current time, not 12:30
+    fireEvent.click(screen.getByText("Add Task +"));
+
+    await waitFor(() => {
+      expect(screen.getAllByText("Task Name").length).toEqual(2);
+    });
+
+    const allTimeInputs = container.querySelectorAll(
+      ".bx--time-picker__input-field"
+    );
+    // First task retains 12:30
+    expect(allTimeInputs[0].value).toBe("12:30");
+    // Second (replicated) task should show current time 10:15, NOT 12:30
+    expect(allTimeInputs[1].value).toBe("10:15");
+  });
+
   it("should remove replicated non-medication task section", async () => {
     render(
       <IntlProvider locale="en">
@@ -630,9 +685,9 @@ describe("AddEmergencyTasks", () => {
     });
   });
 
-  describe("non-medication task payload", () => {
-    const renderNonMedicationTab = async (extraProps = {}) => {
-      const utils = render(
+  it("should default scheduled date to today for non-medication task", async () => {
+    const { container } = render(
+      <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
             config: mockConfig,
@@ -648,9 +703,58 @@ describe("AddEmergencyTasks", () => {
             setNotificationMessage={mockSetNotificationMessage}
             setNotificationStatus={mockSetNotificationStatus}
             hideMedicationTab={true}
-            {...extraProps}
           />
         </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Add Task +")).toBeInTheDocument();
+    });
+
+    const scheduledDateInput = container.querySelector(
+      ".bx--date-picker__input"
+    );
+    const expectedDateFormat = moment().format("DD MMM YYYY");
+    expect(scheduledDateInput.value).toMatch(expectedDateFormat);
+  });
+
+  describe("non-medication task payload", () => {
+    const renderNonMedicationTab = async (
+      extraProps = {},
+      options = {},
+      configOverrides = {}
+    ) => {
+      const config = {
+        ...mockConfig,
+        ...configOverrides,
+        nursingTaskScheduling: {
+          ...mockConfig.nursingTaskScheduling,
+          ...(configOverrides.nursingTaskScheduling || {}),
+        },
+      };
+
+      const utils = render(
+        <IntlProvider locale="en">
+          <IPDContext.Provider
+            value={{
+              config,
+              handleAuditEvent: mockHandleAuditEvent,
+              currentUser: mockUserWithAllRequiredPrivileges,
+            }}
+          >
+            <AddEmergencyTasks
+              patientId={"__patient_uuid__"}
+              providerId={"__provider_uuid__"}
+              updateEmergencyTasksSlider={mockUpdateEmergencyTasksSlider}
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+              hideMedicationTab={true}
+              {...extraProps}
+            />
+          </IPDContext.Provider>
+        </IntlProvider>
       );
 
       await waitFor(() => {
@@ -660,10 +764,19 @@ describe("AddEmergencyTasks", () => {
       });
 
       const { container } = utils;
+      if (options.scheduleDateInput) {
+        const dateInput = container.querySelector(".bx--date-picker__input");
+        fireEvent.change(dateInput, {
+          target: { value: options.scheduleDateInput },
+        });
+        fireEvent.blur(dateInput);
+      }
       const timeInput = container.querySelector(
         ".bx--time-picker__input-field"
       );
-      fireEvent.change(timeInput, { target: { value: "9:00" } });
+      fireEvent.change(timeInput, {
+        target: { value: options.scheduleTimeInput || "9:00" },
+      });
       fireEvent.blur(timeInput);
 
       const taskInput = container.querySelector("textarea");
@@ -751,6 +864,70 @@ describe("AddEmergencyTasks", () => {
         expect(payload).not.toHaveProperty("focus");
         expect(payload).not.toHaveProperty("basedOn");
       });
+    });
+
+    it("should include requestedStartTime and requestedEndTime in payload with correct date", async () => {
+      await renderNonMedicationTab();
+
+      await waitFor(() => {
+        expect(mockSaveBulkNonMedicationTasks).toHaveBeenCalled();
+        const payload = mockSaveBulkNonMedicationTasks.mock.calls[0][0][0];
+
+        expect(payload).toHaveProperty("requestedStartTime");
+        expect(payload).toHaveProperty("requestedEndTime");
+        expect(typeof payload.requestedStartTime).toBe("number");
+        expect(typeof payload.requestedEndTime).toBe("number");
+      });
+    });
+
+    it("should persist the selected scheduled date in non-medication payload", async () => {
+      await renderNonMedicationTab(
+        {},
+        { scheduleDateInput: "03 Jan 2024", scheduleTimeInput: "9:00" }
+      );
+
+      await waitFor(() => {
+        expect(mockSaveBulkNonMedicationTasks).toHaveBeenCalled();
+      });
+
+      const payload = mockSaveBulkNonMedicationTasks.mock.calls[0][0][0];
+      const expectedDateTime = moment("03 Jan 2024 9:00", "DD MMM YYYY H:mm");
+      const expectedEpochMillis = expectedDateTime.unix() * 1000;
+
+      expect(payload.requestedStartTime).toEqual(expectedEpochMillis);
+      expect(payload.requestedEndTime).toEqual(expectedEpochMillis);
+    });
+
+    it("should show scheduled date picker when date selection is enabled", async () => {
+      const { container } = await renderNonMedicationTab(
+        {},
+        { scheduleTimeInput: "9:00" },
+        { nursingTaskScheduling: { enableDateSelection: true } }
+      );
+
+      expect(container.querySelector(".bx--date-picker__input")).toBeTruthy();
+    });
+
+    it("should hide scheduled date picker and use today's date when date selection is disabled", async () => {
+      const { container } = await renderNonMedicationTab(
+        {},
+        { scheduleTimeInput: "9:00" },
+        { nursingTaskScheduling: { enableDateSelection: false } }
+      );
+
+      expect(container.querySelector(".bx--date-picker__input")).toBeFalsy();
+
+      await waitFor(() => {
+        expect(mockSaveBulkNonMedicationTasks).toHaveBeenCalled();
+      });
+
+      const payload = mockSaveBulkNonMedicationTasks.mock.calls[0][0][0];
+      const todayDate = moment().format("DD MMM YYYY");
+      const expectedDateTime = moment(`${todayDate} 9:00`, "DD MMM YYYY H:mm");
+      const expectedEpochMillis = expectedDateTime.unix() * 1000;
+
+      expect(payload.requestedStartTime).toEqual(expectedEpochMillis);
+      expect(payload.requestedEndTime).toEqual(expectedEpochMillis);
     });
   });
 });

@@ -49,7 +49,7 @@ describe("TaskTile", () => {
 
     await waitFor(() => {
       expect(asFragment()).toMatchSnapshot();
-      expect(getByText("(1 more)")).toBeTruthy();
+      expect(getByText("(1 more task(s))")).toBeTruthy();
     });
   });
 
