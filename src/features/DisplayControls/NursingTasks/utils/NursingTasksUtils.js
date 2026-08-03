@@ -348,6 +348,7 @@ export const ExtractNonMedicationTasks = (
         minute: "2-digit",
         hourCycle: "h23",
       }),
+      requestedStartTime,
       partOf,
       isDisabled: isReadMode
         ? true

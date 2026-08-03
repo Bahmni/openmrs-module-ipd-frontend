@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
+import { Calendar16 } from "@carbon/icons-react";
 import {
   getTime,
   getRelevantTaskStatus,
@@ -16,7 +17,13 @@ import {
   timeFormatFor12Hr,
   timeFormatFor24Hr,
 } from "../../../../constants";
-import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
+import { FormattedMessage, useIntl } from "react-intl";
+import {
+  getLocalizedLabel,
+  getTranslationKey,
+  isSystemGeneratedTask,
+} from "../../../../utils/CommonUtils";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
@@ -46,7 +53,11 @@ export default function TaskTile(props) {
     isANonMedicationTask,
     creator,
     taskType,
+    requestedStartTime
   } = newMedicationNursingTask;
+  const intl = useIntl();
+
+  const moreTask = <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more task(s)" />;
 
   const isRelevantTask = getRelevantTaskStatus(
     startTimeInEpochSeconds,
@@ -121,7 +132,6 @@ export default function TaskTile(props) {
               )
             )}
           </div>
-          <div>
             <div
               className="tile-content-subtext"
               style={{
@@ -138,7 +148,16 @@ export default function TaskTile(props) {
             ) && (
               <div className="tile-content-footer">
                 <div className="tile-date-time">
-                  <Clock />
+                  <div className="date-time-container">
+                    <div className="date-row">
+                      <Calendar16 />
+                      <span className="tile-content-subtext-date">
+                      &nbsp;
+                        {formatDate(new Date(startTimeInEpochSeconds * 1000), "DD MMMM YYYY")}
+                    </span>
+                    </div>
+                    <div className="time-row">
+                      <Clock />
                   <div className="tile-content-subtext-time">
                     &nbsp;
                     {enable24HourTime
@@ -155,18 +174,24 @@ export default function TaskTile(props) {
                           timeFormatFor12Hr
                         )}
                   </div>
-                  &nbsp;
+                    </div>
+                  </div>
+                </div>
+                <div className="footer-right-section">
                   {creator &&
                     !isSystemGeneratedTask(newMedicationNursingTask) && (
-                      <span style={{ textTransform: "capitalize" }}>
+                      <span className="creator-name">
                         {creatorName(creator.display)}
                       </span>
                     )}
-                </div>
-                {isGroupedTask && <div>({taskCount} more)</div>}
+                {isGroupedTask && (
+                  <span className="grouped-task-count">
+                    ({taskCount} {moreTask})
+                  </span>
+                )}
               </div>
-            )}
           </div>
+            )}
         </div>
       </div>
       {isGroupedTask && (
@@ -182,5 +207,7 @@ export default function TaskTile(props) {
   );
 }
 TaskTile.propTypes = {
-  medicationNursingTask: PropTypes.array.isRequired,
+  medicationNursingTask: PropTypes.arrayOf(PropTypes.object).isRequired,
+  formUuid: PropTypes.string,
+  patientId: PropTypes.string,
 };
