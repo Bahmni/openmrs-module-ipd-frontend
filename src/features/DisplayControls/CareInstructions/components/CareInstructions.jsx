@@ -1,7 +1,11 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage, useIntl } from "react-intl";
-import moment from "moment";
 import {
   DataTableSkeleton,
   Link,
@@ -14,20 +18,18 @@ import {
   TableRow,
   Tabs,
   Modal,
-  Button,
 } from "carbon-components-react";
 import { IPDContext } from "../../../../context/IPDContext";
 import { SliderContext } from "../../../../context/SliderContext";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import {
-  fetchAcknowledgedObservationUuids,
   fetchCareInstructionsObs,
   fetchTasksByObservationUuids,
   mapObservationsToInstructions,
+  getAcknowledgedObservationUuids,
+  getPendingTaskUuidsByObservation,
 } from "../utils/CareInstructionsUtils.jsx";
-import {
-  updateNonMedicationTask,
-} from "../../NursingTasks/utils/NursingTasksUtils";
+import { updateNonMedicationTask } from "../../NursingTasks/utils/NursingTasksUtils";
 import { getDateTimeFromEpochTime } from "../../../../utils/DateTimeUtils";
 import AddEmergencyTasks from "../../NursingTasks/components/AddEmergencyTasks";
 import Notification from "../../../../components/Notification/Notification";
@@ -52,13 +54,11 @@ const CareInstructions = (props) => {
   const refreshDisplayControl = useContext(RefreshDisplayControl);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
-  const [notificationDirectMessage, setNotificationDirectMessage] = useState("");
   const [notificationStatus, setNotificationStatus] = useState("");
   const providerUuid = provider?.uuid;
 
   const handleSetNotificationMessage = (msg) => {
     setNotificationMessage(msg);
-    setNotificationDirectMessage("");
   };
 
   const updateCareInstructionsTasksSlider = (value) => {
@@ -73,7 +73,7 @@ const CareInstructions = (props) => {
   );
 
   const [instructions, setInstructions] = useState([]);
-  const [acknowledgedObsUuids, setAcknowledgedObsUuids] = useState(new Set());
+  const [allTasks, setAllTasks] = useState([]);
   const [selectedInstruction, setSelectedInstruction] = useState({
     observationUuid: null,
     orderUuid: null,
@@ -81,9 +81,19 @@ const CareInstructions = (props) => {
     initialTaskName: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [isAcknowledgedLoading, setIsAcknowledgedLoading] = useState(false);
-  const [pendingTaskUuidsByObservation, setPendingTaskUuidsByObservation] = useState({});
+  const [isTasksLoading, setIsTasksLoading] = useState(false);
   const [isStoppingTasks, setIsStoppingTasks] = useState(false);
+  const [isSubmittingStop, setIsSubmittingStop] = useState(false);
+
+  const acknowledgedObsUuids = useMemo(
+    () => getAcknowledgedObservationUuids(allTasks),
+    [allTasks]
+  );
+
+  const pendingTaskUuidsByObservation = useMemo(
+    () => getPendingTaskUuidsByObservation(allTasks),
+    [allTasks]
+  );
 
   const careInstructionsHeaders = useMemo(
     () => [
@@ -176,19 +186,11 @@ const CareInstructions = (props) => {
   }, [visit, formConcepts]);
 
   useEffect(() => {
-    const obsUuids = instructions
-      .map((instruction) => instruction.observationUuid)
-      .filter(Boolean);
-    if (obsUuids.length === 0) return;
-    setIsAcknowledgedLoading(true);
-    fetchAcknowledgedObservationUuids(obsUuids)
-      .then(setAcknowledgedObsUuids)
-      .finally(() => setIsAcknowledgedLoading(false));
-  }, [instructions]);
-
-  useEffect(() => {
-    const fetchPendingTasks = async () => {
-      if (instructions.length === 0) return;
+    const fetchTasks = async () => {
+      if (instructions.length === 0) {
+        return;
+      }
+      setIsTasksLoading(true);
       try {
         const observationUuids = new Set();
         instructions.forEach((instruction) => {
@@ -198,46 +200,45 @@ const CareInstructions = (props) => {
           }
         });
 
-        const pendingTasks = await fetchTasksByObservationUuids(
-          Array.from(observationUuids),
-          'requested'
+        const tasks = await fetchTasksByObservationUuids(
+          Array.from(observationUuids)
         );
 
-        const taskUuidsByObservation = {};
-        pendingTasks?.forEach((task) => {
-          const observationUuid = task.observationUuid;
-          if (observationUuid) {
-            if (!taskUuidsByObservation[observationUuid]) {
-              taskUuidsByObservation[observationUuid] = [];
-            }
-            taskUuidsByObservation[observationUuid].push(task.uuid);
-          }
-        });
-
-        setPendingTaskUuidsByObservation(taskUuidsByObservation);
+        setAllTasks(tasks);
       } catch (error) {
-        console.error("Failed to fetch pending tasks", error);
+        console.error("Failed to fetch tasks", error);
+        setAllTasks([]);
+      } finally {
+        setIsTasksLoading(false);
       }
     };
 
-    fetchPendingTasks();
+    fetchTasks();
   }, [instructions]);
 
   const getPendingTaskCount = (instruction) => {
-    const currentVersionCount = pendingTaskUuidsByObservation[instruction.observationUuid]?.length || 0;
+    const currentVersionCount =
+      pendingTaskUuidsByObservation[instruction.observationUuid]?.length || 0;
     const previousVersionCount = instruction.previousVersionUuid
-      ? pendingTaskUuidsByObservation[instruction.previousVersionUuid]?.length || 0
+      ? pendingTaskUuidsByObservation[instruction.previousVersionUuid]
+          ?.length || 0
       : 0;
     return currentVersionCount + previousVersionCount;
   };
 
   const notAcknowledgedInstructions = useMemo(
-    () => instructions.filter((row) => !acknowledgedObsUuids.has(row.observationUuid)),
+    () =>
+      instructions.filter(
+        (row) => !acknowledgedObsUuids.has(row.observationUuid)
+      ),
     [instructions, acknowledgedObsUuids]
   );
 
   const acknowledgedInstructions = useMemo(
-    () => instructions.filter((row) => acknowledgedObsUuids.has(row.observationUuid)),
+    () =>
+      instructions.filter((row) =>
+        acknowledgedObsUuids.has(row.observationUuid)
+      ),
     [instructions, acknowledgedObsUuids]
   );
 
@@ -297,20 +298,26 @@ const CareInstructions = (props) => {
               )}
             </TableCell>
             <TableCell className="stop-tasks-cell">
-              {getPendingTaskCount(row) > 0 && isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.EDIT_TASKS) && (
-                <Link
-                  style={{ whiteSpace: "nowrap" }}
-                  onClick={() => {
-                    setSelectedInstruction({
-                      observationUuid: row.observationUuid,
-                      previousVersionUuid: row.previousVersionUuid,
-                    });
-                    setIsStoppingTasks(true);
-                  }}
-                >
-                  <FormattedMessage id="STOP_TASKS" defaultMessage="Stop Tasks" />
-                </Link>
-              )}
+              {getPendingTaskCount(row) > 0 &&
+                isUserPrivileged(
+                  currentUser,
+                  PRIVILEGE_CONSTANTS.EDIT_TASKS
+                ) && (
+                  <Link
+                    onClick={() => {
+                      setSelectedInstruction({
+                        observationUuid: row.observationUuid,
+                        previousVersionUuid: row.previousVersionUuid,
+                      });
+                      setIsStoppingTasks(true);
+                    }}
+                  >
+                    <FormattedMessage
+                      id="STOP_TASKS"
+                      defaultMessage="Stop Tasks"
+                    />
+                  </Link>
+                )}
             </TableCell>
           </TableRow>
         ))}
@@ -350,7 +357,7 @@ const CareInstructions = (props) => {
     return renderInstructionRows(acknowledgedInstructions);
   };
 
-  if (isLoading || isAcknowledgedLoading) {
+  if (isLoading || isTasksLoading) {
     return (
       <div data-testid="care-instructions-loading">
         <DataTableSkeleton
@@ -402,8 +409,7 @@ const CareInstructions = (props) => {
         <Notification
           hostData={{
             notificationKind: notificationStatus,
-            messageId: notificationMessage,
-            defaultMessage: notificationDirectMessage || undefined,
+            defaultMessage: notificationMessage,
           }}
           hostApi={{
             onClose: () => {
@@ -416,75 +422,84 @@ const CareInstructions = (props) => {
           }}
         />
       )}
-      {isStoppingTasks && (
-        <Modal
-          open={isStoppingTasks}
-          modalHeading={intl.formatMessage({
-            id: "STOP_TASKS_CONFIRMATION_TITLE",
-            defaultMessage: "Stop Pending Tasks",
-          })}
-          onRequestClose={() => {
-            setIsStoppingTasks(false);
-          }}
-          primaryButtonText={intl.formatMessage({
-            id: "CONFIRM_BUTTON",
-            defaultMessage: "Confirm",
-          })}
-          secondaryButtonText={intl.formatMessage({
-            id: "CANCEL_BUTTON",
-            defaultMessage: "Cancel",
-          })}
-          onRequestSubmit={async () => {
-            try {
-              const currentVersionTaskUuids = pendingTaskUuidsByObservation[selectedInstruction.observationUuid] || [];
-              const previousVersionTaskUuids = selectedInstruction.previousVersionUuid
-                ? pendingTaskUuidsByObservation[selectedInstruction.previousVersionUuid] || []
-                : [];
+      <Modal
+        open={isStoppingTasks}
+        modalHeading={intl.formatMessage({
+          id: "STOP_TASKS_CONFIRMATION_TITLE",
+          defaultMessage: "Stop Pending Tasks",
+        })}
+        onRequestClose={() => {
+          setIsStoppingTasks(false);
+        }}
+        primaryButtonText={intl.formatMessage({
+          id: "STOP_TASKS_CONFIRM_BUTTON",
+          defaultMessage: "Confirm",
+        })}
+        secondaryButtonText={intl.formatMessage({
+          id: "STOP_TASKS_CANCEL_BUTTON",
+          defaultMessage: "Cancel",
+        })}
+        onRequestSubmit={async () => {
+          setIsSubmittingStop(true);
+          try {
+            const { observationUuid, previousVersionUuid } = selectedInstruction;
 
-              const taskUuidsToStop = [...currentVersionTaskUuids, ...previousVersionTaskUuids];
+            const taskUuidsToStop = [observationUuid, previousVersionUuid]
+              .filter(Boolean)
+              .flatMap(uuid => pendingTaskUuidsByObservation[uuid] ?? []);
 
-              const updatePayload = taskUuidsToStop.map((taskUuid) => ({
-                uuid: taskUuid,
-                executionEndTime: Date.now(),
-                status: "CANCELLED",
-              }));
+            if (taskUuidsToStop.length === 0) {
+              setIsStoppingTasks(false);
+              setIsSubmittingStop(false);
+              return;
+            }
 
-              const response = await updateNonMedicationTask(updatePayload);
+            const updatePayload = taskUuidsToStop.map((taskUuid) => ({
+              uuid: taskUuid,
+              executionEndTime: Date.now(),
+              status: "CANCELLED",
+            }));
 
-              if (response?.status === 200) {
-                setNotificationDirectMessage(intl.formatMessage({
+            const response = await updateNonMedicationTask(updatePayload);
+
+            if (response?.status === 200) {
+              setNotificationMessage(
+                intl.formatMessage({
                   id: "ALL_PENDING_TASKS_STOPPED_SUCCESSFULLY",
                   defaultMessage: "All pending tasks stopped successfully.",
-                }));
-                setNotificationMessage("");
-                setNotificationStatus("success");
-                setShowNotification(true);
-              } else {
-                throw new Error("Failed to update tasks");
-              }
+                })
+              );
+              setNotificationStatus("success");
+              setShowNotification(true);
+            } else {
+              throw new Error("Failed to update tasks");
+            }
 
-              setIsStoppingTasks(false);
-            } catch (error) {
-              setIsStoppingTasks(false);
-              setNotificationDirectMessage(intl.formatMessage({
+            setIsStoppingTasks(false);
+            setIsSubmittingStop(false);
+          } catch (error) {
+            setIsStoppingTasks(false);
+            setIsSubmittingStop(false);
+            setNotificationMessage(
+              intl.formatMessage({
                 id: "FAILED_TO_STOP_TASKS",
                 defaultMessage: "Failed to stop tasks. Please try again.",
-              }));
-              setNotificationMessage("");
-              setNotificationStatus("error");
-              setShowNotification(true);
-            }
-          }}
-          danger={true}
-        >
-          <p>
-            <FormattedMessage
-              id="STOP_TASKS_CONFIRMATION_MESSAGE"
-              defaultMessage="Are you sure you want to stop all pending tasks for this instruction?"
-            />
-          </p>
-        </Modal>
-      )}
+              })
+            );
+            setNotificationStatus("error");
+            setShowNotification(true);
+          }
+        }}
+        primaryButtonDisabled={isSubmittingStop}
+        danger={true}
+      >
+        <p>
+          <FormattedMessage
+            id="STOP_TASKS_CONFIRMATION_MESSAGE"
+            defaultMessage="Are you sure you want to stop all pending tasks for this instruction?"
+          />
+        </p>
+      </Modal>
     </div>
   );
 };
