@@ -132,7 +132,7 @@
   "TREATMENTS_WARNING_TEXT": "You will lose the details entered. Do you want to continue?",
   "SAVE": "Save",
   "CANCEL": "Cancel",
-  "TASK_TILE_MORE": "more",
+  "TASK_TILE_MORE": "more task(s)",
   "NON_MEDICATION_TASK_COMPLETE_NURSING_INITIAL_ASSESSMENT_FORM": "Complete Nursing Initial Assessment Form",
   "NON_MEDICATION_TASK_COMPLETE_NURSING_PHYSICAL_ASSESSMENT_FORM": "Complete Nursing Physical Assessment Form",
   "NON_MEDICATION_TASK_CHECK_WARD_INSTRUCTIONS": "Check Ward Instructions",
@@ -216,5 +216,6 @@
   "ACKNOWLEDGE_CARE_INSTRUCTIONS": "Acknowledge",
   "INSTRUCTION_LABEL": "Instruction",
   "ADD_MORE_TASK": "Add Task",
+  "SCHEDULED_DATE": "Scheduled Date",
   "REMOVE": "Remove"
 }

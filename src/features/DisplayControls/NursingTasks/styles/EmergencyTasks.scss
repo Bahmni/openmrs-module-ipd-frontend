@@ -43,6 +43,12 @@
     }
   }
 
+  .add-more-task-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 5px;
+  }
+
   .instruction-label {
     font-size: 0.875rem;
     font-weight: 600;
@@ -102,6 +108,43 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+
+  .date-time-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+
+    .date-picker-carbon {
+      width: 100%;
+    }
+
+    .bx--date-picker-container,
+    .bx--form-item {
+      margin-bottom: 0;
+    }
+
+    .bx--date-picker__input {
+      height: 40px;
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.125rem;
+      letter-spacing: 0.16px;
+    }
+
+    .bx--date-picker__icon {
+      cursor: pointer;
+    }
+
+    .bx--label {
+      margin-bottom: 8px;
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1rem;
+      letter-spacing: 0.32px;
+      color: #525252;
+    }
   }
 
   .replicated-task-section {

@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
+import { Calendar16 } from "@carbon/icons-react";
 import {
   getTime,
   getRelevantTaskStatus,
@@ -15,8 +16,17 @@ import {
   asNeededPlaceholderConceptName,
   timeFormatFor12Hr,
   timeFormatFor24Hr,
+  nonMedicationTaskKey,
+  TASK_COLORS,
+  NURSING_ACTIVITY_SYSTEM,
 } from "../../../../constants";
-import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
+import { FormattedMessage, useIntl } from "react-intl";
+import {
+  getLocalizedLabel,
+  getTranslationKey,
+  isSystemGeneratedTask,
+} from "../../../../utils/CommonUtils";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 
 export default function TaskTile(props) {
   const { medicationNursingTask } = props;
@@ -46,27 +56,44 @@ export default function TaskTile(props) {
     isANonMedicationTask,
     creator,
     taskType,
+    intradayDoseString,
+    requestedStartTime,
   } = newMedicationNursingTask;
+  const intl = useIntl();
+
+  const moreTask = <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more task(s)" />;
 
   const isRelevantTask = getRelevantTaskStatus(
     startTimeInEpochSeconds,
     nursingTasks
   );
 
+  const isSystemTask = taskType?.display === NURSING_ACTIVITY_SYSTEM;
+  const taskLabel = isSystemTask
+    ? getLocalizedLabel(
+        intl,
+        getTranslationKey(drugName, nonMedicationTaskKey),
+        drugName
+      )
+    : drugName;
+  const fontWeight = !isANonMedicationTask && isRelevantTask ? 500 : 400;
+  const taskTitleStyle = {
+    color: stopTime
+      ? TASK_COLORS.STOP_RED
+      : isRelevantTask
+      ? TASK_COLORS.RELEVANT_DARK
+      : TASK_COLORS.NON_RELEVANT_GRAY,
+    fontWeight,
+  };
+
   const creatorName = (creator) => {
     return creator.split(".").join(" ");
   };
 
   const drugNameText = (
-    <div
-      className="drug-title"
-      style={{
-        color: stopTime ? "#FF0000" : isRelevantTask ? "#393939" : "#525252",
-        fontWeight: !isANonMedicationTask && isRelevantTask ? 500 : 400,
-      }}
-    >
-      {drugName}
-    </div>
+    <span className="drug-title" style={taskTitleStyle}>
+      {taskLabel}
+    </span>
   );
   const statusIcon = iconType(newMedicationNursingTask, nursingTasks);
   return (
@@ -89,84 +116,105 @@ export default function TaskTile(props) {
         }`}
       >
         <div className="tile-content">
-          <div className="tile-title">
-            <div className={`tile-title ${stopTime && "red-text"}`}>
-              <div>
-                <div
-                  className="nursing-task-icon-container"
-                  data-testid={statusIcon}
-                >
-                  <SVGIcon iconType={statusIcon} />
-                </div>
-                <TooltipDefinition
-                  tooltipText={drugName}
-                  className={
-                    isDisabled ? "cursor-not-allowed" : "cursor-pointer"
-                  }
-                >
-                  {drugNameText}
-                </TooltipDefinition>
+          <div className={`tile-title ${stopTime && "red-text"}`}>
+            <div>
+              <div
+                className="nursing-task-icon-container"
+                data-testid={statusIcon}
+              >
+                <SVGIcon iconType={statusIcon} />
               </div>
+              <TooltipDefinition
+                tooltipText={isANonMedicationTask ? taskLabel : drugName}
+                className={
+                  isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+                }
+              >
+                {drugNameText}
+              </TooltipDefinition>
             </div>
             {!isANonMedicationTask && (
-              <DisplayTags drugOrder={dosingInstructions} />
-            ) ? (
-              <DisplayTags drugOrder={dosingInstructions} />
-            ) : (
-              taskType &&
-              !isSystemGeneratedTask(newMedicationNursingTask) && (
-                <Tag type="blue">
-                  <span>{taskType.display}</span>
-                </Tag>
-              )
-            )}
-          </div>
-          <div>
-            <div
-              className="tile-content-subtext"
-              style={{
-                color: isRelevantTask ? "#393939" : "#525252",
-              }}
-            >
-              <span>{dosage}</span>
-              {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
-              {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
-            </div>
-            {!(
-              dosingInstructions?.asNeeded &&
-              serviceType === asNeededPlaceholderConceptName
-            ) && (
-              <div className="tile-content-footer">
-                <div className="tile-date-time">
-                  <Clock />
-                  <div className="tile-content-subtext-time">
-                    &nbsp;
-                    {enable24HourTime
-                      ? getTime(
-                          administeredTimeInEpochSeconds,
-                          startTime,
-                          "hh:mm",
-                          timeFormatFor24Hr
-                        )
-                      : getTime(
-                          administeredTimeInEpochSeconds,
-                          startTime,
-                          "hh:mm",
-                          timeFormatFor12Hr
-                        )}
-                  </div>
-                  &nbsp;
-                  {creator &&
-                    !isSystemGeneratedTask(newMedicationNursingTask) && (
-                      <span style={{ textTransform: "capitalize" }}>
-                        {creatorName(creator.display)}
-                      </span>
-                    )}
-                </div>
-                {isGroupedTask && <div>({taskCount} more)</div>}
+              <div className="tile-name-cell">
+                {dosingInstructions ? (
+                  <DisplayTags drugOrder={dosingInstructions} />
+                ) : (
+                  taskType &&
+                  !isSystemGeneratedTask(newMedicationNursingTask) && (
+                    <Tag type="blue">
+                      <span>{taskType.display}</span>
+                    </Tag>
+                  )
+                )}
               </div>
             )}
           </div>
+          <div
+            className="tile-content-subtext"
+            style={{
+              color: isRelevantTask ? "#393939" : "#525252",
+              paddingLeft: "25px",
+            }}
+          >
+            {intradayDoseString ? (
+              <span>{intradayDoseString}</span>
+            ) : (
+              <>
+                <span>{dosage}</span>
+                {doseType && <span>&nbsp;-&nbsp;{doseType}</span>}
+                {drugRoute && <span>&nbsp;-&nbsp;{drugRoute}</span>}
+              </>
+            )}
+          </div>
+          {!(
+            dosingInstructions?.asNeeded &&
+            serviceType === asNeededPlaceholderConceptName
+          ) && (
+            <div className="tile-content-footer">
+              <div className="tile-date-time">
+                <div className="date-time-container">
+                  <div className="date-row">
+                    <Calendar16 />
+                    <span className="tile-content-subtext-date">
+                      &nbsp;
+                      {formatDate(new Date(startTimeInEpochSeconds * 1000), "DD MMMM YYYY")}
+                    </span>
+                  </div>
+                  <div className="time-row">
+                    <Clock />
+                    <div className="tile-content-subtext-time">
+                      &nbsp;
+                      {enable24HourTime
+                        ? getTime(
+                            administeredTimeInEpochSeconds,
+                            startTime,
+                            "hh:mm",
+                            timeFormatFor24Hr
+                          )
+                        : getTime(
+                            administeredTimeInEpochSeconds,
+                            startTime,
+                            "hh:mm",
+                            timeFormatFor12Hr
+                          )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="footer-right-section">
+                {creator &&
+                  !isSystemGeneratedTask(newMedicationNursingTask) && (
+                    <span className="creator-name">
+                      {creatorName(creator.display)}
+                    </span>
+                  )}
+                {isGroupedTask && (
+                  <span className="grouped-task-count">
+                    ({taskCount} {moreTask})
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
       {isGroupedTask && (
@@ -182,5 +230,5 @@ export default function TaskTile(props) {
   );
 }
 TaskTile.propTypes = {
-  medicationNursingTask: PropTypes.array.isRequired,
+  medicationNursingTask: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

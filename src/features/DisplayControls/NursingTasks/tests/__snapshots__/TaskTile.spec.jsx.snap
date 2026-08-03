@@ -184,6 +184,9 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
                
             </div>
           </div>
+          <div
+            class="footer-right-section"
+          />
         </div>
       </div>
     </div>

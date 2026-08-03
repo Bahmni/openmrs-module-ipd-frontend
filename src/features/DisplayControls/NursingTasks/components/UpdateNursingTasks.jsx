@@ -840,6 +840,7 @@ const UpdateNursingTasks = (props) => {
           <hr />
           <AdministeredMedicationList
             list={{ ...administeredTasks, ...skippedTasks }}
+            enable24Hour={enable24HourTime}
           />
         </Modal>
         <SaveAndCloseButtons
