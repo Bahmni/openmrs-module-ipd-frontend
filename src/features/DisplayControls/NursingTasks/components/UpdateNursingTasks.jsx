@@ -32,9 +32,11 @@ import {
   timeFormatFor12Hr,
   timeFormatFor24Hr,
   PRIVILEGE_CONSTANTS,
+  componentKeys,
 } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import {
   formatDate,
   formatTime,
@@ -101,6 +103,7 @@ const UpdateNursingTasks = (props) => {
     enable24HourTime = {},
   } = config;
   const intl = useIntl();
+  const refreshDisplayControl = useContext(RefreshDisplayControl);
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
   const saveAdministeredMedicationTasks = (status, messageId) => {
@@ -450,6 +453,10 @@ const UpdateNursingTasks = (props) => {
           "success",
           "NON_MEDICATION_TASK_UPDATE_MESSAGE"
         );
+        refreshDisplayControl([
+          componentKeys.NURSING_TASKS,
+          componentKeys.CARE_INSTRUCTIONS,
+        ]);
       } else {
         saveAdministeredNonMedicationTasks(
           "error",
@@ -490,12 +497,34 @@ const UpdateNursingTasks = (props) => {
     }
   };
 
+  const updateTaskWithMutualExclusivity = (medicationTask, property, isActive, conflictProperty) => {
+    updateTasks({
+      ...tasks,
+      [medicationTask.uuid]: {
+        ...tasks[medicationTask.uuid],
+        [property]: isActive,
+        [conflictProperty]: false,
+        scheduledTime: medicationTask.startTimeInEpochSeconds,
+      },
+    });
+    if (!tasks[medicationTask.uuid].notes) {
+      updateErrors({
+        ...errors,
+        [medicationTask.uuid]: true,
+      });
+    }
+  };
+
   const handleSkipDrug = (medicationTask, skipped) => {
-    handleTaskAction(medicationTask, "skipped", skipped);
+    skipped
+      ? updateTaskWithMutualExclusivity(medicationTask, "skipped", true, "stopped")
+      : handleTaskAction(medicationTask, "skipped", skipped);
   };
 
   const handleStopTask = (medicationTask, stopped) => {
-    handleTaskAction(medicationTask, "stopped", stopped);
+    stopped
+      ? updateTaskWithMutualExclusivity(medicationTask, "stopped", true, "skipped")
+      : handleTaskAction(medicationTask, "stopped", stopped);
   };
 
   const updateTaskStatusAndPayload = (
