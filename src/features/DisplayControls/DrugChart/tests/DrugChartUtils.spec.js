@@ -6,6 +6,7 @@ import {
   getPreviousShiftDetails,
   getDateTime,
   canAcknowledgeAmendment,
+  transformDrugOrders,
 } from "../utils/DrugChartUtils";
 import axios from "axios";
 import { mockResponse } from "./DrugChartUtilsMockData";
@@ -202,6 +203,157 @@ describe("DrugChartUtils", () => {
       axios.get.mockRejectedValue(new Error("network error"));
       const result = await fetchAmendmentReasons(conceptSetUuid);
       expect(result).toEqual([]);
+  describe("transformDrugOrders - dosage formatting", () => {
+    it("should parse rate and additives from administrationInstructions JSON", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [
+          {
+            drugOrder: {
+              uuid: "order-2",
+              careSetting: "INPATIENT",
+              drug: { name: "Normal Saline IV" },
+              duration: 7,
+              durationUnits: "Day(s)",
+              dosingInstructions: {
+                dose: 100,
+                doseUnits: "ml",
+                route: "Intravenous",
+                frequency: { display: "Once daily" },
+                administrationInstructions: JSON.stringify({
+                  instructions: "For IV infusion",
+                  additionalInstructions: "Monitor vitals",
+                  rate: 100,
+                  additives: "10 mEq KCl in saline",
+                }),
+              },
+            },
+            drugOrderSchedule: { slotStartTime: 1000 },
+          },
+        ],
+        emergencyMedications: [],
+      });
+      const med = result["order-2"];
+      expect(med.dosingInstructions.instructions.rate).toBe(100);
+      expect(med.dosingInstructions.instructions.additives).toBe(
+        "10 mEq KCl in saline"
+      );
+      expect(med.dosingInstructions.instructions.instructions).toBe(
+        "For IV infusion"
+      );
+      expect(med.dosingInstructions.instructions.additionalInstructions).toBe(
+        "Monitor vitals"
+      );
+    });
+
+    it("should handle missing rate and additives in administrationInstructions", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [
+          {
+            drugOrder: {
+              uuid: "order-3",
+              careSetting: "INPATIENT",
+              drug: { name: "Paracetamol" },
+              duration: 5,
+              durationUnits: "Day(s)",
+              dosingInstructions: {
+                dose: 1,
+                doseUnits: "Tablet",
+                route: "Oral",
+                frequency: { display: "Three times daily" },
+                administrationInstructions: JSON.stringify({
+                  instructions: "Take with water",
+                }),
+              },
+            },
+            drugOrderSchedule: { slotStartTime: 2000 },
+          },
+        ],
+        emergencyMedications: [],
+      });
+      const med = result["order-3"];
+      expect(med.dosingInstructions.instructions.rate).toBeUndefined();
+      expect(med.dosingInstructions.instructions.additives).toBeUndefined();
+      expect(med.dosingInstructions.instructions.instructions).toBe(
+        "Take with water"
+      );
+    });
+
+    const createOrder = (doseUnits) => ({
+      drugOrder: {
+        uuid: "order-1",
+        careSetting: "INPATIENT",
+        drug: { name: "Drug A" },
+        duration: 5,
+        durationUnits: "Day(s)",
+        dosingInstructions: {
+          dose: 10,
+          doseUnits,
+          route: "Oral",
+          frequency: { display: "Daily" },
+          administrationInstructions: "{}",
+        },
+      },
+      drugOrderSchedule: { slotStartTime: 1000 },
+    });
+
+    it("should concatenate compact units (ml, mg, mcg) with dose", () => {
+      ["ml", "mg", "mcg"].forEach((unit) => {
+        const result = transformDrugOrders({
+          ipdDrugOrders: [createOrder(unit)],
+          emergencyMedications: [],
+        });
+        const med = result["order-1"];
+        expect(med.dosingInstructions.dosage).toBe(`10${unit}`);
+        expect(med.dosingInstructions.doseUnits).toBeUndefined();
+      });
+    });
+
+    it("should separate non-compact units (e.g., Tablet) from dose", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [createOrder("Tablet")],
+        emergencyMedications: [],
+      });
+      const med = result["order-1"];
+      expect(med.dosingInstructions.dosage).toBe(10);
+      expect(med.dosingInstructions.doseUnits).toBe("Tablet");
+    });
+
+    it("should handle compact units in emergency medications", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [],
+        emergencyMedications: [
+          {
+            uuid: "emerg-1",
+            dose: 20,
+            doseUnits: { display: "mcg" },
+            drug: { uuid: "drug-1", display: "Drug B" },
+            route: { display: "IV" },
+            administeredDateTime: 2000000,
+          },
+        ],
+      });
+      const med = result["emerg-1"];
+      expect(med.dosingInstructions.dosage).toBe("20mcg");
+      expect(med.dosingInstructions.doseUnits).toBeUndefined();
+    });
+
+    it("should handle non-compact units in emergency medications", () => {
+      const result = transformDrugOrders({
+        ipdDrugOrders: [],
+        emergencyMedications: [
+          {
+            uuid: "emerg-1",
+            dose: 2,
+            doseUnits: { display: "Tablet" },
+            drug: { uuid: "drug-1", display: "Drug C" },
+            route: { display: "Oral" },
+            administeredDateTime: 2000000,
+          },
+        ],
+      });
+      const med = result["emerg-1"];
+      expect(med.dosingInstructions.dosage).toBe(2);
+      expect(med.dosingInstructions.doseUnits).toBe("Tablet");
     });
   });
 });

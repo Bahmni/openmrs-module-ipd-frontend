@@ -76,6 +76,10 @@ const Vitals = (props) => {
         patientId,
         vitalsConfig.vitalsHistoryConceptValues
       );
+      if (!vitalsHistoryList) {
+        updateIsLoading(false);
+        return;
+      }
       const conceptDetails = getConceptDetails(
         vitalsConfig.latestVitalsConceptValues,
         vitalsHistoryList.conceptDetails

@@ -128,5 +128,11 @@
   "AMENDMENT_REASON": "Amendment Reason",
   "AMENDMENT_NOTES": "Amendment Notes",
   "NEW_NOTE_REASON": "Reason",
-  "NEW_NOTES": "Notes"
+  "NEW_NOTES": "Notes",
+  "ALLERGEN_COLUMN_HEADER": "Allergen",
+  "SEVERITY_COLUMN_HEADER": "Severity",
+  "REACTION_COLUMN_HEADER": "Reaction",
+  "COMMENTS_COLUMN_HEADER": "Comments",
+  "PROVIDER_COLUMN_HEADER": "Provider Name",
+  "DATE_COLUMN_HEADER": "Date"
 }
