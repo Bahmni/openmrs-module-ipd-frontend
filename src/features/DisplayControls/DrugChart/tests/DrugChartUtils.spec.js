@@ -1,9 +1,11 @@
 import {
   fetchMedications,
+  fetchAmendmentReasons,
   currentShiftHoursArray,
   getNextShiftDetails,
   getPreviousShiftDetails,
   getDateTime,
+  canAcknowledgeAmendment,
   transformDrugOrders,
 } from "../utils/DrugChartUtils";
 import axios from "axios";
@@ -139,6 +141,68 @@ describe("DrugChartUtils", () => {
     const updatedDateTime = 1704441600000; // 5th Jan 2024 08:00
     expect(getDateTime(date, time)).toEqual(updatedDateTime);
   });
+  describe("canAcknowledgeAmendment", () => {
+    it("returns true when privileges include ADT_APPROVE_AMEND_NOTE", () => {
+      const privileges = [
+        { name: "app:adt:approveAmendNote" },
+        { name: "OTHER_PRIVILEGE" },
+      ];
+      expect(canAcknowledgeAmendment(privileges)).toBe(true);
+    });
+
+    it("returns false when privileges do not include ADT_APPROVE_AMEND_NOTE", () => {
+      const privileges = [{ name: "OTHER_PRIVILEGE" }];
+      expect(canAcknowledgeAmendment(privileges)).toBe(false);
+    });
+
+    it("returns false when privileges is an empty array", () => {
+      expect(canAcknowledgeAmendment([])).toBe(false);
+    });
+
+    it("returns false when privileges is null", () => {
+      expect(canAcknowledgeAmendment(null)).toBe(false);
+    });
+
+    it("returns false when privileges is undefined", () => {
+      expect(canAcknowledgeAmendment(undefined)).toBe(false);
+    });
+  });
+
+  describe("fetchAmendmentReasons", () => {
+    const conceptSetUuid = "amendment-reason-set-uuid";
+    const expectedUrl = `/openmrs/ws/fhir2/R4/ValueSet/${conceptSetUuid}/$expand`;
+
+    it("maps expansion.contains entries to {uuid, display} pairs", async () => {
+      axios.get.mockResolvedValue({
+        data: {
+          expansion: {
+            contains: [
+              { code: "reason-uuid-1", display: "Incorrect Time" },
+              { code: "reason-uuid-2", display: "Incorrect Dose" },
+            ],
+          },
+        },
+      });
+
+      const result = await fetchAmendmentReasons(conceptSetUuid);
+
+      expect(axios.get).toHaveBeenCalledWith(expectedUrl);
+      expect(result).toEqual([
+        { uuid: "reason-uuid-1", display: "Incorrect Time" },
+        { uuid: "reason-uuid-2", display: "Incorrect Dose" },
+      ]);
+    });
+
+    it("returns an empty array when expansion.contains is missing", async () => {
+      axios.get.mockResolvedValue({ data: { expansion: {} } });
+      const result = await fetchAmendmentReasons(conceptSetUuid);
+      expect(result).toEqual([]);
+    });
+
+    it("returns an empty array and does not throw when the request fails", async () => {
+      axios.get.mockRejectedValue(new Error("network error"));
+      const result = await fetchAmendmentReasons(conceptSetUuid);
+      expect(result).toEqual([]);
   describe("transformDrugOrders - dosage formatting", () => {
     it("should parse rate and additives from administrationInstructions JSON", () => {
       const result = transformDrugOrders({

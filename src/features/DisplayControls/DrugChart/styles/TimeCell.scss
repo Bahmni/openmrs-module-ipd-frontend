@@ -64,3 +64,39 @@
   border-left: var(--day-border);
   @extend .time-cell;
 }
+
+.tooltip-content {
+  font-size: 14px;
+  .tooltip-notes {
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .tooltip-actions {
+    display: flex;
+    justify-content: center;
+
+    .bx--btn {
+      text-align: center;
+      justify-content: center;
+      color: #61a5ff;
+    }
+  }
+}
+
+.no-focus-button {
+  &:focus,
+  &:focus-visible,
+  &:active,
+  &:active:focus {
+    outline: 0 !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+  }
+
+  &:focus::after,
+  &:focus-visible::after {
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+}
