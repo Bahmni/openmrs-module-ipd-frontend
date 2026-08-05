@@ -148,7 +148,7 @@ export const saveMedicationAmendmentNote = async (amendmentData) => {
     authorUuid: amendedByUuid,
     recordedTime: Math.floor(Date.now() / 1000),
     text: amendedText,
-    amendmentReasonUuid: amendedReason,
+    statusReasonUuid: amendedReason,
   };
 
   try {
