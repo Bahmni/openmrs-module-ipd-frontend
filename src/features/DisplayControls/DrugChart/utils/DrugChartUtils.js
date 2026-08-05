@@ -23,10 +23,6 @@ import {
   parseFlatAdminInstructions,
 } from "../../../../utils/FhirDosingUtils";
 
-const APPROVAL_STATUS = {
-  APPROVED: "APPROVED",
-};
-
 export const fetchMedications = async (
   patientUuid,
   startDateTime,
@@ -81,14 +77,20 @@ export const transformDrugOrders = (orders) => {
       const isVariableDose = fhirDosagesParsed !== null;
       const parsedInstructions = isVariableDose
         ? fhirDosagesParsed
-        : parseFlatAdminInstructions(dosingInstructions.administrationInstructions);
+        : parseFlatAdminInstructions(
+            dosingInstructions.administrationInstructions
+          );
       let dosage = "",
         doseUnits;
       if (isVariableDose) {
         dosage = dosingInstructions.quantity || "";
         doseUnits =
-          dosingInstructions.quantityUnits || dosingInstructions.doseUnits || "";
-      } else if (DOSE_UNITS.includes(dosingInstructions.doseUnits?.toLowerCase())) {
+          dosingInstructions.quantityUnits ||
+          dosingInstructions.doseUnits ||
+          "";
+      } else if (
+        DOSE_UNITS.includes(dosingInstructions.doseUnits?.toLowerCase())
+      ) {
         dosage = dosingInstructions.dose + dosingInstructions.doseUnits;
       } else {
         dosage = dosingInstructions.dose;
@@ -165,7 +167,7 @@ export const saveMedicationAmendmentNote = async (amendmentData) => {
     authorUuid: amendedByUuid,
     recordedTime: Math.floor(Date.now() / 1000),
     text: amendedText,
-    amendmentReasonUuid: amendedReason,
+    statusReasonUuid: amendedReason,
   };
 
   try {
@@ -668,3 +670,7 @@ export const prepareSlotData = (slot, rowData, enable24HourTime) => {
   };
 };
 
+export const extractNameFromDisplay = (display) => {
+  if (!display) return "";
+  return display.includes(" - ") ? display.split(" - ")[1] : display;
+};
