@@ -210,6 +210,47 @@ describe("UpdateNursingTasksSlider", function () {
     });
   });
 
+  it("should save when toggle switch is On for Non medication task with time outside administered window", async () => {
+    MockDate.set("2024-01-01 17:30"); // 52 minutes past startTime "16:38", outside 30-min window
+    mockUpdateNonMedicationTask.mockResolvedValue(mockUpdateResponse);
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <RefreshDisplayControl.Provider value={mockRefreshDisplayControl}>
+            <UpdateNursingTasks
+              medicationTasks={mockNonMedicationTileData}
+              groupSlotsByOrderId={mockGroupSlotsByOrderId}
+              updateNursingTasksSlider={mockUpdateEmergencyTasksSlider}
+              patientId="test_patient_uuid"
+              providerId="test_provider_uuid"
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+            />
+          </RefreshDisplayControl.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    fireEvent.click(toggleButton);
+
+    const saveButton = screen.getAllByText("Save")[1];
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(mockSetShowNotification).toHaveBeenCalledTimes(1);
+      expect(mockSetNotificationMessage).toHaveBeenCalledTimes(1);
+      expect(mockSetNotificationStatus).toHaveBeenCalledTimes(1);
+      expect(mockUpdateEmergencyTasksSlider).toHaveBeenCalledTimes(1);
+    });
+  });
+
   it("should show warning for empty notes when time is updated", function () {
     MockDate.set("2024-01-01 01:00 PM");
     const { container } = render(

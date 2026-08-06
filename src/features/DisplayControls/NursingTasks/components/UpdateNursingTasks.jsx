@@ -354,7 +354,7 @@ const UpdateNursingTasks = (props) => {
           actualTime: checked ? moment() : null,
         },
       });
-      if (!isPRNMedication) {
+      if (!isPRNMedication && !isNonMedication) {
         updateErrors({
           ...errors,
           [id]: Boolean(!tasks[id].notes),
