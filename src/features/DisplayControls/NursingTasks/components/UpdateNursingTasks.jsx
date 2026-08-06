@@ -107,6 +107,7 @@ const UpdateNursingTasks = (props) => {
     nursingTasks = {},
     enable24HourTime = {},
     taskToFormMapping = {},
+    enableStopTasks = false,
   } = config;
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
@@ -474,7 +475,6 @@ const UpdateNursingTasks = (props) => {
           "NON_MEDICATION_TASK_UPDATE_MESSAGE"
         );
         refreshDisplayControl([
-          componentKeys.NURSING_TASKS,
           componentKeys.CARE_INSTRUCTIONS,
         ]);
       } else {
@@ -875,34 +875,30 @@ const UpdateNursingTasks = (props) => {
                           }}
                         />
                       )}
-                      {medicationTask?.isANonMedicationTask && (
-                        <>
-                          {tasks[medicationTask.uuid]?.stopped ? (
-                            <OverflowMenuItem
-                              itemText={getLocalizedLabel(
-                                intl,
-                                getTranslationKey("Unstop Task"),
-                                "Unstop Task"
-                              )}
-                              onClick={(e) => {
-                                e?.preventDefault?.();
-                                handleStopTask(medicationTask, false);
-                              }}
-                            />
-                          ) : (
-                            <OverflowMenuItem
-                              itemText={getLocalizedLabel(
-                                intl,
-                                getTranslationKey("Stop Task"),
-                                "Stop Task"
-                              )}
-                              onClick={(e) => {
-                                e?.preventDefault?.();
-                                handleStopTask(medicationTask, true);
-                              }}
-                            />
-                          )}
-                        </>
+                      {medicationTask?.isANonMedicationTask && enableStopTasks && (
+                        tasks[medicationTask.uuid]?.stopped ? (
+                          <OverflowMenuItem
+                            itemText={getLocalizedLabel(
+                              intl,
+                              getTranslationKey("Unstop Task"),
+                              "Unstop Task"
+                            )}
+                            onClick={() => {
+                              handleStopTask(medicationTask, false);
+                            }}
+                          />
+                        ) : (
+                          <OverflowMenuItem
+                            itemText={getLocalizedLabel(
+                              intl,
+                              getTranslationKey("Stop Task"),
+                              "Stop Task"
+                            )}
+                            onClick={() => {
+                              handleStopTask(medicationTask, true);
+                            }}
+                          />
+                        )
                       )}
                     </OverflowMenu>
                   )}

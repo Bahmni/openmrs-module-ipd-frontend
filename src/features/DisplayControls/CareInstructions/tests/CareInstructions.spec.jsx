@@ -111,7 +111,7 @@ const mockCurrentUserWithoutPrivilege = {
 
 const mockIPDContextWithData = {
   visit: "visit-uuid-1",
-  config: { enable24HourTime: false },
+  config: { enable24HourTime: false, enableStopTasks: true },
   currentUser: mockCurrentUserWithPrivilege,
 };
 
