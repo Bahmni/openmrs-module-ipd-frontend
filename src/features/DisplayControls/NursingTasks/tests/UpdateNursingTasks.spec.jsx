@@ -879,7 +879,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
-            config: mockConfig,
+            config: { ...mockConfig, enableStopTasks: true },
             handleAuditEvent: mockHandleAuditLogEvent,
             currentUser: mockUserWithAllRequiredPrivileges,
           }}
@@ -908,7 +908,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
-            config: mockConfig,
+            config: { ...mockConfig, enableStopTasks: true },
             handleAuditEvent: mockHandleAuditLogEvent,
             currentUser: mockUserWithAllRequiredPrivileges,
           }}
@@ -939,7 +939,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
-            config: mockConfig,
+            config: { ...mockConfig, enableStopTasks: true },
             handleAuditEvent: mockHandleAuditLogEvent,
             currentUser: mockUserWithAllRequiredPrivileges,
           }}
@@ -974,7 +974,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
-            config: mockConfig,
+            config: { ...mockConfig, enableStopTasks: true },
             handleAuditEvent: mockHandleAuditLogEvent,
             currentUser: mockUserWithAllRequiredPrivileges,
           }}
@@ -1008,7 +1008,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
-            config: mockConfig,
+            config: { ...mockConfig, enableStopTasks: true },
             handleAuditEvent: mockHandleAuditLogEvent,
             currentUser: mockUserWithAllRequiredPrivileges,
           }}
@@ -1037,7 +1037,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
-            config: mockConfig,
+            config: { ...mockConfig, enableStopTasks: true },
             handleAuditEvent: mockHandleAuditLogEvent,
             currentUser: mockUserWithAllRequiredPrivileges,
           }}
@@ -1069,7 +1069,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
-            config: mockConfig,
+            config: { ...mockConfig, enableStopTasks: true },
             handleAuditEvent: mockHandleAuditLogEvent,
             currentUser: mockUserWithAllRequiredPrivileges,
           }}
@@ -1116,7 +1116,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
-            config: mockConfig,
+            config: { ...mockConfig, enableStopTasks: true },
             handleAuditEvent: mockHandleAuditLogEvent,
             currentUser: mockUserWithAllRequiredPrivileges,
           }}
@@ -1163,7 +1163,7 @@ describe("UpdateNursingTasksSlider", function () {
       <IntlProvider locale="en">
         <IPDContext.Provider
           value={{
-            config: mockConfig,
+            config: { ...mockConfig, enableStopTasks: true },
             handleAuditEvent: mockHandleAuditLogEvent,
             currentUser: mockUserWithAllRequiredPrivileges,
           }}
@@ -1204,5 +1204,63 @@ describe("UpdateNursingTasksSlider", function () {
     expect(screen.queryByText("Stop Task")).toBeNull();
     expect(screen.getByText("Skip Task")).toBeTruthy();
     expect(screen.queryByText("Un-Skip Task")).toBeNull();
+  });
+
+  it("should show Stop Task option in overflow menu when enableStopTasks is true", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: true },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <UpdateNursingTasks
+            medicationTasks={[mockNonMedicationTileData[0]]}
+            groupSlotsByOrderId={mockGroupSlotsByOrderId}
+            updateNursingTasksSlider={jest.fn}
+            patientId="test_patient_uuid"
+            providerId="test_provider_uuid"
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Stop Task")).toBeTruthy();
+  });
+
+  it("should not show Stop Task option in overflow menu when enableStopTasks is false", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: false },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <UpdateNursingTasks
+            medicationTasks={[mockNonMedicationTileData[0]]}
+            groupSlotsByOrderId={mockGroupSlotsByOrderId}
+            updateNursingTasksSlider={jest.fn}
+            patientId="test_patient_uuid"
+            providerId="test_provider_uuid"
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    expect(screen.queryByText("Stop Task")).toBeNull();
   });
 });
