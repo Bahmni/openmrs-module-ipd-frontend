@@ -17,9 +17,8 @@ import {
   timeFormatFor12Hr,
   timeFormatFor24Hr,
 } from "../../../../constants";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import {
-  getLocalizedLabel,
   getTranslationKey,
   isSystemGeneratedTask,
 } from "../../../../utils/CommonUtils";
@@ -55,9 +54,9 @@ export default function TaskTile(props) {
     taskType,
     requestedStartTime
   } = newMedicationNursingTask;
-  const intl = useIntl();
-
-  const moreTask = <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more task(s)" />;
+  const moreTask = (
+    <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more task(s)" />
+  );
 
   const isRelevantTask = getRelevantTaskStatus(
     startTimeInEpochSeconds,
@@ -153,7 +152,10 @@ export default function TaskTile(props) {
                       <Calendar16 />
                       <span className="tile-content-subtext-date">
                       &nbsp;
-                        {formatDate(new Date(startTimeInEpochSeconds * 1000), "DD MMMM YYYY")}
+                      {formatDate(
+                        new Date(startTimeInEpochSeconds * 1000),
+                        "DD MMMM YYYY"
+                      )}
                     </span>
                     </div>
                     <div className="time-row">

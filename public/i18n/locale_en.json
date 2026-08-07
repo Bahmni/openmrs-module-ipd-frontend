@@ -135,6 +135,8 @@
   "TASK_NAME_PLACEHOLDER": "Enter a title for the task ",
   "IPD_UNSKIP_TASK": "Unskip Task",
   "IPD_SKIP_TASK": "Skip Task",
+  "IPD_UNSTOP_TASK": "Un-Stop Task",
+  "IPD_STOP_TASK": "Stop Task",
   "IPD_UNSKIP_DRUG": "Unskip Drug",
   "IPD_SKIP_DRUG": "Skip Drug",
   "IPD_STOP_TASK": "Stop Task",
