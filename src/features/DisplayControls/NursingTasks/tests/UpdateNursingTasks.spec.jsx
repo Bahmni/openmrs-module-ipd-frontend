@@ -26,6 +26,8 @@ import {
 const mockSetShowNotification = jest.fn();
 const mockSetNotificationMessage = jest.fn();
 const mockSetNotificationStatus = jest.fn();
+const mockSetShowSuccessNotification = jest.fn();
+const mockSetSuccessMessage = jest.fn();
 const mockUpdateEmergencyTasksSlider = jest.fn();
 const mockUpdateNonMedicationTask = jest.fn();
 const mockHandleAuditLogEvent = jest.fn();
