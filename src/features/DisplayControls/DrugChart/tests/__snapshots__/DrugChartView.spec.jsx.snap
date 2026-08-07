@@ -205,8 +205,15 @@ exports[`DrugChartWrapper matches snapshot 1`] = `
                           </span>
                         </span>
                          
-                        <div>
-                          TooltipCarbon
+                        <div
+                          class="note-icon-container"
+                        >
+                          <div>
+                            <div>
+                              Instructions: 
+                              As directed
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div>

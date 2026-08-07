@@ -11,9 +11,19 @@ import {
 } from "../../../../constants";
 import axios from "axios";
 import { FormattedMessage } from "react-intl";
+import NoteIcon from "../../../../icons/note.svg";
 import NotesIcon from "../../../../icons/notes.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
+import { TooltipCarbon } from "bahmni-carbon-ui";
 import { formatDate } from "../../../../utils/DateTimeUtils";
+import {
+  parseFhirDosages,
+  parseFlatAdminInstructions,
+  isVariableDoseOrder,
+  fromUcumDurationUnit,
+  LOADING_DOSE_DURATION_DISPLAY,
+} from "../../../../utils/FhirDosingUtils";
+import moment from "moment";
 
 export const treatmentHeaders = [
   {
@@ -93,22 +103,42 @@ export const updateDrugOrderList = (drugOrderList) => {
     };
     ipdDrugOrder.route = ipdDrugOrder.drugOrder.dosingInstructions.route;
     ipdDrugOrder.durationUnit = ipdDrugOrder.drugOrder.durationUnits;
-    const administrationInstructions = JSON.parse(
-      ipdDrugOrder.drugOrder.dosingInstructions.administrationInstructions
-    );
-    ipdDrugOrder.instructions = administrationInstructions.instructions
-      ? administrationInstructions.instructions
-      : "";
-    ipdDrugOrder.additionalInstructions =
-      administrationInstructions.additionalInstructions
-        ? administrationInstructions.additionalInstructions
-        : "";
-    ipdDrugOrder.rate = administrationInstructions.rate
-      ? administrationInstructions.rate
-      : null;
-    ipdDrugOrder.additives = administrationInstructions.additives
-      ? administrationInstructions.additives
-      : null;
+    const adminInstructionsStr =
+      ipdDrugOrder.drugOrder.dosingInstructions.administrationInstructions;
+    if (isVariableDoseOrder(ipdDrugOrder.drugOrder.dosingInstructionType)) {
+      const fhirDosages = parseFhirDosages(adminInstructionsStr) || [];
+      ipdDrugOrder.fhirDosages = fhirDosages;
+      ipdDrugOrder.instructions = "";
+      ipdDrugOrder.additionalInstructions = "";
+      ipdDrugOrder.rate = null;
+      ipdDrugOrder.additives = null;
+
+      const { quantity, quantityUnits, doseUnits } =
+        ipdDrugOrder.drugOrder.dosingInstructions;
+      const displayDose = quantity || null;
+      const displayUnits = quantityUnits || doseUnits || null;
+
+      ipdDrugOrder.drugOrder.dosingInstructions.dose = displayDose;
+      ipdDrugOrder.drugOrder.dosingInstructions.doseUnits = displayUnits;
+      ipdDrugOrder.drugOrder.dosingInstructions.frequency = null;
+      ipdDrugOrder.uniformDosingType = {
+        dose: displayDose,
+        doseUnits: displayUnits,
+        frequency: null,
+      };
+    } else {
+      const administrationInstructions =
+        parseFlatAdminInstructions(adminInstructionsStr);
+      ipdDrugOrder.instructions = administrationInstructions.instructions || "";
+      ipdDrugOrder.additionalInstructions =
+        administrationInstructions.additionalInstructions || "";
+      ipdDrugOrder.rate = administrationInstructions.rate || null;
+      ipdDrugOrder.additives = administrationInstructions.additives || null;
+      if (administrationInstructions.isLoadingDose) {
+        ipdDrugOrder.drugOrder.dosingInstructions.frequency = "Loading Dose";
+        ipdDrugOrder.uniformDosingType.frequency = "Loading Dose";
+      }
+    }
   });
   return drugOrderList;
 };
@@ -148,6 +178,17 @@ export const isDrugOrderStoppedWithoutAdministration = (drugOrderObject) => {
 };
 
 export const setDosingInstructions = (drugOrder) => {
+  if (isVariableDoseOrder(drugOrder.dosingInstructionType)) {
+    return (
+      <div className={drugOrder.dateStopped ? "strike-through" : ""}>
+        <FormattedMessage
+          id="VARIABLE_DOSAGE_PROTOCOL"
+          defaultMessage="Variable Dosage Protocol"
+        />
+      </div>
+    );
+  }
+
   let dosingInstructions =
     drugOrder.dosingInstructions.dose +
     " " +
@@ -173,7 +214,7 @@ export const setDosingInstructions = (drugOrder) => {
 export const getDrugName = (drugOrderObject) => {
   const drugOrder = drugOrderObject.drugOrder;
   const drugNonCoded = drugOrder.drugNonCoded || null;
-  const isNotesIconDiv =
+  const hasNoteContent =
     drugOrder.drug &&
     (drugOrderObject.instructions ||
       drugOrderObject.additionalInstructions ||
@@ -182,8 +223,64 @@ export const getDrugName = (drugOrderObject) => {
       drugOrder.orderReasonConcept ||
       drugOrder.orderReasonText);
 
+  const noteTooltipContent = hasNoteContent ? (
+    <div>
+      {drugOrderObject.instructions && (
+        <>Instructions:&nbsp;{drugOrderObject.instructions}</>
+      )}
+      {drugOrderObject.additionalInstructions && (
+        <>
+          {drugOrderObject.instructions && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
+          Additional Instructions:&nbsp;{drugOrderObject.additionalInstructions}
+        </>
+      )}
+      {drugOrderObject.rate && (
+        <>
+          {(drugOrderObject.instructions ||
+            drugOrderObject.additionalInstructions) && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
+          Rate:&nbsp;{drugOrderObject.rate} ml/hr
+        </>
+      )}
+      {drugOrderObject.additives && (
+        <>
+          {(drugOrderObject.instructions ||
+            drugOrderObject.additionalInstructions ||
+            drugOrderObject.rate) && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
+          Additives:&nbsp;{drugOrderObject.additives}
+        </>
+      )}
+      {getStopReason(drugOrder) && (
+        <>
+          {(drugOrderObject.instructions ||
+            drugOrderObject.additionalInstructions) && (
+            <>
+              <br />
+              <div className="tooltip-content-separater" />
+            </>
+          )}
+          Stopped Notes:&nbsp;{getStopReason(drugOrder)}
+        </>
+      )}
+    </div>
+  ) : null;
+
   const drugNameValue = (
-    <div className={isNotesIconDiv ? "notes-icon-div" : "no-notes-icon-div"}>
+    <div className={hasNoteContent ? "notes-icon-div" : "no-notes-icon-div"}>
       <span
         className={`treatments-drug-name ${
           drugOrder.dateStopped && "strike-through"
@@ -192,8 +289,11 @@ export const getDrugName = (drugOrderObject) => {
         <span>
           {drugNonCoded !== null ? drugNonCoded : drugOrder.drug.name}
         </span>
-        {isNotesIconDiv && (
-          <NotesIcon className="notes-icon" data-testid="notes-icon" />
+        {hasNoteContent && (
+          <TooltipCarbon
+            icon={() => <NoteIcon data-testid="notes-icon" />}
+            content={noteTooltipContent}
+          />
         )}
       </span>
       <div className={"display-tags"}>
@@ -332,4 +432,72 @@ export const getStopReason = (drugOrder) => {
   const stopReason = conceptName + (conceptName && notes ? ": " : "") + notes;
 
   return stopReason.trim() !== "" ? stopReason : null;
+};
+
+export const buildStageDrugOrder = (
+  drugOrderObject,
+  dosage,
+  stageInfo,
+  drugOrderSchedule = null,
+  stageStartDate = null
+) => {
+  const dr = dosage.doseAndRate?.[0];
+  const { fhirDosages: _fhirDosages, ...drugOrderWithoutVdpData } = drugOrderObject;
+  return {
+    ...drugOrderWithoutVdpData,
+    drugOrderSchedule,
+    uniformDosingType: {
+      frequency: stageInfo.frequency,
+      dose: dr?.doseQuantity?.value || null,
+      doseUnits: dr?.doseQuantity?.unit || null,
+    },
+    route: dosage.route?.text || drugOrderObject.route || null,
+    instructions: stageInfo.instructions || "",
+    additionalInstructions: stageInfo.additionalInstructions || "",
+    rate: stageInfo.rate || null,
+    additives: stageInfo.additives || null,
+    durationDisplayValue: stageInfo.isLoadingDose ? 1 : null,
+    durationDisplayUnits: stageInfo.isLoadingDose ? LOADING_DOSE_DURATION_DISPLAY : null,
+    drugOrder: {
+      ...drugOrderObject.drugOrder,
+      duration: stageInfo.isLoadingDose ? 0 : (dosage.timing?.repeat?.duration || 0),
+      durationUnits: fromUcumDurationUnit(dosage.timing?.repeat?.durationUnit),
+      ...(stageStartDate != null && { scheduledDate: stageStartDate }),
+    },
+    variableDosageSequence: dosage.sequence,
+  };
+};
+
+export const getActiveStageIndex = (fhirDosages, stageSchedules, startDates) => {
+  const scheduleBySequence = new Map(
+    (stageSchedules || []).map((s) => [s.variableDosageSequence, s])
+  );
+
+  const getSchedule = (index) => scheduleBySequence.get(fhirDosages[index].sequence);
+  const isScheduled = (schedule) => schedule?.isScheduled === true;
+  const isAttended = (schedule) => schedule?.allAttended === true;
+  const isActive = (schedule) => isScheduled(schedule) && !isAttended(schedule);
+
+  let stageToAddToDrugChart = -1;
+
+  for (let i = 0; i < fhirDosages.length; i++) {
+    const schedule = getSchedule(i);
+
+    if (isScheduled(schedule)) {
+      if (!isAttended(schedule)) return -1;
+      stageToAddToDrugChart = -1;
+      continue;
+    }
+
+    if (i > 0) {
+      const prevSchedule = getSchedule(i - 1);
+      if (isActive(prevSchedule)) return -1;
+      if (!isScheduled(prevSchedule) && startDates[i - 1] >= startDates[i]) break;
+    }
+    if (moment().valueOf() < startDates[i]) break;
+
+    stageToAddToDrugChart = i;
+  }
+
+  return stageToAddToDrugChart;
 };

@@ -4,6 +4,11 @@ import moment from "moment";
 import DrugChart from "../DrugChart";
 import { useFetchMedications } from "../../../hooks/useFetchMedications";
 import { timeFormatFor24Hr } from "../../../constants";
+import {
+  parseFhirDosages,
+  getDosageBySequence,
+  fhirDosageToDisplayStage,
+} from "../../../utils/FhirDosingUtils";
 export const TransformDrugChartData = (drugChartData) => {
   const drugOrderData = [];
   const slotDataByOrder = [];
@@ -16,19 +21,30 @@ export const TransformDrugChartData = (drugChartData) => {
       const { startTime, status, order } = slot;
       const drugOrder = {
         uuid: order.uuid,
-        drugName: order.drug.display,
-        drugRoute: order.route.display,
+        drugName: order.drug?.display || order.drugNonCoded,
+        drugRoute: order.route?.display,
         administrationInfo: [],
       };
 
-      if (order.doseUnits.display !== "ml") {
-        drugOrder.dosage = order.dose;
-        drugOrder.doseType = order.doseUnits.display;
+      if (slot.variableDosageSequence != null) {
+        const fhirDosages = parseFhirDosages(order.dosingInstructions);
+        const stageDosage = getDosageBySequence(fhirDosages, slot.variableDosageSequence);
+        if (stageDosage) {
+          const stageInfo = fhirDosageToDisplayStage(stageDosage);
+          drugOrder.dosage = stageInfo.dose;
+          drugOrder.drugRoute = stageDosage.route?.text || drugOrder.drugRoute;
+          drugOrder.duration = stageInfo.duration;
+        }
       } else {
-        drugOrder.dosage = order.dose + order.doseUnits.display;
-      }
-      if (order.duration) {
-        drugOrder.duration = order.duration + " " + order.durationUnits.display;
+        if (order.doseUnits?.display !== "ml") {
+          drugOrder.dosage = order.dose;
+          drugOrder.doseType = order.doseUnits?.display;
+        } else {
+          drugOrder.dosage = order.dose + order.doseUnits.display;
+        }
+        if (order.duration) {
+          drugOrder.duration = order.duration + " " + order.durationUnits?.display;
+        }
       }
 
       const startDateTimeObj = new Date(startTime * 1000);

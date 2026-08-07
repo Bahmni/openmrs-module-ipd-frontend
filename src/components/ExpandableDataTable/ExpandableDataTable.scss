@@ -11,13 +11,51 @@ table.bx--data-table {
     background: transparent;
   }
   tr.bx--expandable-row.expandable-row-content {
-    td {
+    > td {
       background-color: transparent !important;
+    }
+  }
+  tr.bx--expandable-row.variable-dose-expanded-row {
+    > td {
+      background-color: #ffffff !important;
+      padding: 0 !important;
     }
   }
 }
 
 .expandable-datatable {
+  .plain-row {
+    .plain-cell {
+      background-color: #ffffff !important;
+    }
+    td.bx--table-expand {
+      background-color: #ffffff !important;
+    }
+  }
+  tbody tr.plain-row:hover td {
+    background-color: #e8e8e8 !important;
+    opacity: 1 !important;
+  }
+  tbody tr.plain-row:hover .bx--table-expand__button {
+    background-color: transparent !important;
+    opacity: 1 !important;
+  }
+  .zebra-row {
+    .zebra-cell {
+      background-color: #f4f4f4 !important;
+    }
+    td.bx--table-expand {
+      background-color: #f4f4f4 !important;
+    }
+  }
+  tbody tr.zebra-row:hover td {
+    background-color: #e8e8e8 !important;
+    opacity: 1 !important;
+  }
+  tbody tr.zebra-row:hover .bx--table-expand__button {
+    background-color: transparent !important;
+    opacity: 1 !important;
+  }
   .green-row {
     .green-cell {
       background-color: #f2ffea !important;
@@ -25,5 +63,42 @@ table.bx--data-table {
     td.bx--table-expand {
       background-color: #f2ffea !important;
     }
+  }
+  .variable-dose-row {
+    td.bx--table-expand {
+      background-color: #fef5d3 !important;
+    }
+  }
+  .in-progress-row {
+    .in-progress-cell {
+      background-color: #FFF8E0 !important;
+    }
+    td.bx--table-expand {
+      background-color: #FFF8E0 !important;
+    }
+  }
+  tbody tr.in-progress-row:hover td {
+    background-color: #FFF8E0 !important;
+    opacity: 1 !important;
+  }
+  tbody tr.in-progress-row:hover .bx--table-expand__button {
+    background-color: transparent !important;
+    opacity: 1 !important;
+  }
+  tbody tr.green-row:hover td {
+    background-color: #f2ffea !important;
+    opacity: 1 !important;
+  }
+  tbody tr.green-row:hover .bx--table-expand__button {
+    background-color: transparent !important;
+    opacity: 1 !important;
+  }
+  tbody tr.variable-dose-row:hover td {
+    background-color: #fef5d3 !important;
+    opacity: 1 !important;
+  }
+  tbody tr.variable-dose-row:hover .bx--table-expand__button {
+    background-color: transparent !important;
+    opacity: 1 !important;
   }
 }

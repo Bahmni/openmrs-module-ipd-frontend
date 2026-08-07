@@ -10,6 +10,7 @@ import {
   mockUserWithAllRequiredPrivileges,
   mockUserWithoutAnyPrivilege,
 } from "../../../../utils/mockUserData";
+import { variableDoseStopDrugOrder } from "./TreatmentsMockData";
 
 const mockHandleAuditEvent = jest.fn();
 
@@ -1068,6 +1069,128 @@ describe("Treatments", () => {
       expect(getByText(/drug 1/i)).toBeTruthy();
     });
     expect(getByText(/Completed/i)).toBeTruthy();
+  });
+
+  it("should show Stop drug link in expandable row for variable dose when administration has started", async () => {
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
+        emergencyMedications: [],
+        ipdDrugOrders: [variableDoseStopDrugOrder],
+      },
+    };
+
+    const { queryByText } = render(
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("VDP Drug")).toBeTruthy();
+    });
+    expect(queryByText("Stop drug")).toBeTruthy();
+  });
+
+  it("should not show Stop drug link for variable dose when administration has not started", async () => {
+    const notStartedOrder = {
+      ...variableDoseStopDrugOrder,
+      drugOrderSchedule: {
+        stageSchedules: [
+          {
+            variableDosageSequence: 1,
+            isScheduled: true,
+            administrationStarted: false,
+            pendingSlotsAvailable: true,
+            allAttended: false,
+          },
+        ],
+        medicationAdministrationStarted: false,
+      },
+    };
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
+        emergencyMedications: [],
+        ipdDrugOrders: [notStartedOrder],
+      },
+    };
+
+    const { queryByText } = render(
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithAllRequiredPrivileges,
+        }}
+      >
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("VDP Drug")).toBeTruthy();
+    });
+    expect(queryByText("Stop drug")).toBeFalsy();
+  });
+
+  it("should stop variable dose medication and show success stop notification on modal submit", async () => {
+    getEncounterType.mockResolvedValueOnce({
+      uuid: "81852aee-3f10-11e4-adec-0800271c1b75",
+    });
+    stopDrugOrders.mockResolvedValueOnce({ status: 200 });
+
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
+        emergencyMedications: [],
+        ipdDrugOrders: [variableDoseStopDrugOrder],
+      },
+    };
+
+    const { getAllByText, container } = render(
+      <IPDContext.Provider
+        value={{
+          config: mockConfig,
+          isReadMode: false,
+          currentUser: mockUserWithAllRequiredPrivileges,
+          handleAuditEvent: mockHandleAuditEvent,
+        }}
+      >
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            <Treatments patientId="3ae1ee52-e9b2-4934-876d-30711c0e3e2f" />
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
+    );
+
+    await waitFor(() => {
+      getAllByText("Stop drug")[0].click();
+      const reasonInputField = container.querySelector(".bx--text-area");
+      fireEvent.change(reasonInputField, { target: { value: "test reason" } });
+      const stopDrugButton = getAllByText("Stop drug")[1];
+      fireEvent.click(stopDrugButton);
+      expect(getEncounterType).toHaveBeenCalledWith("Consultation");
+      expect(stopDrugOrders).toHaveBeenCalled();
+    });
+    expect(mockHandleAuditEvent).toHaveBeenCalledWith(
+      "STOP_SCHEDULED_MEDICATION_TASK"
+    );
   });
 });
 
