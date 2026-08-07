@@ -20,9 +20,8 @@ import {
   TASK_COLORS,
   NURSING_ACTIVITY_SYSTEM,
 } from "../../../../constants";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import {
-  getLocalizedLabel,
   getTranslationKey,
   isSystemGeneratedTask,
 } from "../../../../utils/CommonUtils";
@@ -57,11 +56,10 @@ export default function TaskTile(props) {
     creator,
     taskType,
     intradayDoseString,
-    requestedStartTime,
   } = newMedicationNursingTask;
-  const intl = useIntl();
-
-  const moreTask = <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more task(s)" />;
+  const moreTask = (
+    <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more task(s)" />
+  );
 
   const isRelevantTask = getRelevantTaskStatus(
     startTimeInEpochSeconds,
@@ -69,13 +67,14 @@ export default function TaskTile(props) {
   );
 
   const isSystemTask = taskType?.display === NURSING_ACTIVITY_SYSTEM;
-  const taskLabel = isSystemTask
-    ? getLocalizedLabel(
-        intl,
-        getTranslationKey(drugName, nonMedicationTaskKey),
-        drugName
-      )
-    : drugName;
+  const taskLabel = isSystemTask ? (
+    <FormattedMessage
+      id={getTranslationKey(drugName, nonMedicationTaskKey)}
+      defaultMessage={drugName}
+    />
+  ) : (
+    drugName
+  );
   const fontWeight = !isANonMedicationTask && isRelevantTask ? 500 : 400;
   const taskTitleStyle = {
     color: stopTime
@@ -176,7 +175,10 @@ export default function TaskTile(props) {
                     <Calendar16 />
                     <span className="tile-content-subtext-date">
                       &nbsp;
-                      {formatDate(new Date(startTimeInEpochSeconds * 1000), "DD MMMM YYYY")}
+                      {formatDate(
+                        new Date(startTimeInEpochSeconds * 1000),
+                        "DD MMMM YYYY"
+                      )}
                     </span>
                   </div>
                   <div className="time-row">

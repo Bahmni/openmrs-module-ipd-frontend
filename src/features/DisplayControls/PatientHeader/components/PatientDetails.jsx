@@ -1,13 +1,13 @@
-import React from 'react'
-import { Tile, Row, Column} from "carbon-components-react";
-import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React from "react";
+import { Tile, Row, Column } from "carbon-components-react";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { useEffect } from "react";
+import { FormattedMessage } from "react-intl";
 
 const PatientDetails = ({patientDetails, patientDetailsHeaders, contacts, relationships}) => {
     const [locationComponent, setLocationComponents]= useState([]);
     const locationMapping = ()=> {
-        let reveresdAddress = [];
         for (const key in patientDetails.locations) {
             if (patientDetails.locations.hasOwnProperty(key)) {
               let value =  <span className="details-value">
@@ -39,10 +39,11 @@ const PatientDetails = ({patientDetails, patientDetailsHeaders, contacts, relati
                 <span className="details-headers">
                     {patientDetailsHeaders.contactDetails}
                 </span>
-                {contacts.map((contact)=> { 
+                {contacts.map((contact)=> {
                     return (
                         <span key={contact.id} className='details-value'>
-                            {contact.name} : {contact.value}
+                            <FormattedMessage id={contact.name} defaultMessage={contact.name} /> :{" "}
+                          {contact.value}
                         </span>
                     )
                 })}
@@ -53,18 +54,19 @@ const PatientDetails = ({patientDetails, patientDetailsHeaders, contacts, relati
                 <span className="details-headers">
                     {patientDetailsHeaders.relationships}
                 </span>
-                {relationships.map((relationship)=> { 
+                {relationships.map((relationship)=> {
                     return (
                         <span key={relationship.id} className='details-value'>
-                            {relationship.relationshipType} : {relationship.name}
+                            <FormattedMessage id={relationship.relationshipType} defaultMessage={relationship.relationshipType} />{" "}
+                          : {relationship.name}
                         </span>
-                    )
+                    );
                 })}
            </Tile>
           </Column>
         </Row>
        </Tile>
-  )
+  );
 };
 
 export default PatientDetails
