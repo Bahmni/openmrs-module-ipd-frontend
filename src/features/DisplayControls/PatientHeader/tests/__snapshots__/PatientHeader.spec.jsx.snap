@@ -187,42 +187,48 @@ exports[`PatientHeader should display all details of the patient 1`] = `
               class="details-value"
             >
               Country
-               : 
+               :
+               
               Ethiopia
             </span>
             <span
               class="details-value"
             >
               Region
-               : 
+               :
+               
               Region test
             </span>
             <span
               class="details-value"
             >
               Zone
-               : 
+               :
+               
               zone test
             </span>
             <span
               class="details-value"
             >
               Woreda
-               : 
+               :
+               
               W
             </span>
             <span
               class="details-value"
             >
               Kebele
-               : 
+               :
+               
               Kebele
             </span>
             <span
               class="details-value"
             >
               Address
-               : 
+               :
+               
               13-899
             </span>
           </div>
@@ -242,35 +248,40 @@ exports[`PatientHeader should display all details of the patient 1`] = `
               class="details-value"
             >
               Residence Phone
-               : 
+               :
+               
               22222222
             </span>
             <span
               class="details-value"
             >
               Mobile Phone
-               : 
+               :
+               
               999999999
             </span>
             <span
               class="details-value"
             >
               Work Phone
-               : 
+               :
+               
               34567890
             </span>
             <span
               class="details-value"
             >
               Other Phone
-               : 
+               :
+               
               99999999
             </span>
             <span
               class="details-value"
             >
               Email
-               : 
+               :
+               
               samuel email
             </span>
           </div>
@@ -290,14 +301,16 @@ exports[`PatientHeader should display all details of the patient 1`] = `
               class="details-value"
             >
               Father
-               : 
+               
+              : 
               Test Father
             </span>
             <span
               class="details-value"
             >
               Mother
-               : 
+               
+              : 
               Mother Test
             </span>
           </div>

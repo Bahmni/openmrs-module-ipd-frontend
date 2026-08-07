@@ -15,12 +15,17 @@ import {
   mockConfigFor12HourFormat,
 } from "../../../../utils/CommonUtils";
 import MockDate from "mockdate";
-import {mockUserWithAllRequiredPrivileges, mockUserWithoutAnyPrivilege} from '../../../../utils/mockUserData';
+import {
+  mockUserWithAllRequiredPrivileges,
+  mockUserWithoutAnyPrivilege,
+} from "../../../../utils/mockUserData";
 import { IntlProvider } from "react-intl";
 
 const mockSetShowNotification = jest.fn();
 const mockSetNotificationMessage = jest.fn();
 const mockSetNotificationStatus = jest.fn();
+const mockSetShowSuccessNotification = jest.fn();
+const mockSetSuccessMessage = jest.fn();
 const mockUpdateEmergencyTasksSlider = jest.fn();
 const mockUpdateNonMedicationTask = jest.fn();
 const mockHandleAuditLogEvent = jest.fn();
