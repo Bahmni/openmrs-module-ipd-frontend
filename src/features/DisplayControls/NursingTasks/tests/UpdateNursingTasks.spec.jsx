@@ -1118,7 +1118,7 @@ describe("UpdateNursingTasksSlider", function () {
     expect(saveButton.disabled).toBe(false);
   });
 
-  it("should show Unstop Task option when task is already stopped", () => {
+  it("should show Un-Stop Task option when task is already stopped", () => {
     const { container } = render(
       <IntlProvider locale="en">
         <IPDContext.Provider
@@ -1148,7 +1148,7 @@ describe("UpdateNursingTasksSlider", function () {
     fireEvent.click(stopTaskButton);
 
     fireEvent.click(overflowMenuButton);
-    expect(screen.getByText("Unstop Task")).toBeTruthy();
+    expect(screen.getByText("Un-Stop Task")).toBeTruthy();
     expect(screen.queryByText("Stop Task")).toBeNull();
   });
 
@@ -1247,7 +1247,7 @@ describe("UpdateNursingTasksSlider", function () {
     fireEvent.click(stopTaskButton);
 
     fireEvent.click(overflowMenuButton);
-    expect(screen.getByText("Unstop Task")).toBeTruthy();
+    expect(screen.getByText("Un-Stop Task")).toBeTruthy();
     expect(screen.queryByText("Stop Task")).toBeNull();
 
     let skipDrugButton = screen.getByText("Skip Task");
@@ -1257,7 +1257,7 @@ describe("UpdateNursingTasksSlider", function () {
     expect(screen.getByText("Un-Skip Task")).toBeTruthy();
     expect(screen.queryByText("Skip Task")).toBeNull();
     expect(screen.getByText("Stop Task")).toBeTruthy(); // Stop Task should reappear
-    expect(screen.queryByText("Unstop Task")).toBeNull(); // Unstop should disappear
+    expect(screen.queryByText("Un-Stop Task")).toBeNull(); // Unstop should disappear
   });
 
   it("should deactivate Skip when Stop is activated (mutual exclusivity)", () => {
@@ -1301,7 +1301,7 @@ describe("UpdateNursingTasksSlider", function () {
     fireEvent.click(stopTaskButton);
 
     fireEvent.click(overflowMenuButton);
-    expect(screen.getByText("Unstop Task")).toBeTruthy();
+    expect(screen.getByText("Un-Stop Task")).toBeTruthy();
     expect(screen.queryByText("Stop Task")).toBeNull();
     expect(screen.getByText("Skip Task")).toBeTruthy(); // Skip Task should reappear
     expect(screen.queryByText("Un-Skip Task")).toBeNull(); // Un-Skip should disappear
@@ -1344,12 +1344,12 @@ describe("UpdateNursingTasksSlider", function () {
     expect(screen.getByText("Un-Skip Task")).toBeTruthy();
     expect(screen.queryByText("Skip Task")).toBeNull();
     expect(screen.getByText("Stop Task")).toBeTruthy();
-    expect(screen.queryByText("Unstop Task")).toBeNull();
+    expect(screen.queryByText("Un-Stop Task")).toBeNull();
 
     fireEvent.click(screen.getByText("Stop Task"));
 
     fireEvent.click(overflowMenuButton);
-    expect(screen.getByText("Unstop Task")).toBeTruthy();
+    expect(screen.getByText("Un-Stop Task")).toBeTruthy();
     expect(screen.queryByText("Stop Task")).toBeNull();
     expect(screen.getByText("Skip Task")).toBeTruthy();
     expect(screen.queryByText("Un-Skip Task")).toBeNull();
