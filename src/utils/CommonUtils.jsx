@@ -254,14 +254,6 @@ export const getTranslationKey = (attribute, moduleName) => {
   }
 };
 
-export const getLocalizedLabel = (intl, id, defaultLabel) => {
-  return intl.messages[id] ? (
-    <FormattedMessage id={id} defaultMessage={defaultLabel} />
-  ) : (
-    defaultLabel
-  );
-};
-
 export const getNoDataCapturedMessage = (formName) => {
   const msg = (
     <FormattedMessage

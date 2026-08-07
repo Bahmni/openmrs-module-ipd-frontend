@@ -214,6 +214,8 @@
   "NON_MEDICATION_TASK_CAPTURE_PATIENT_WEIGHT_UPON_ADMISSION": "Capture patient weight upon admission",
   "IPD_UNSKIP_TASK": "Unskip Task",
   "IPD_SKIP_TASK": "Skip Task",
+  "IPD_UNSTOP_TASK": "Un-Stop Task",
+  "IPD_STOP_TASK": "Stop Task",
   "IPD_UNSKIP_DRUG": "Unskip Drug",
   "IPD_SKIP_DRUG": "Skip Drug",
   "PAGINATION_PREVIOUS_PAGE": "Previous page",

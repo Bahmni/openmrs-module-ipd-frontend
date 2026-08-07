@@ -3,8 +3,7 @@ import { Tile, Row, Column } from "carbon-components-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useEffect } from "react";
-import { getLocalizedLabel } from "../../../../utils/CommonUtils";
-import { useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 
 const PatientDetails = ({
   patientDetails,
@@ -13,13 +12,12 @@ const PatientDetails = ({
   relationships,
 }) => {
   const [locationComponent, setLocationComponents] = useState([]);
-  const intl = useIntl();
   const locationMapping = () => {
     for (const key in patientDetails.locations) {
       if (Object.prototype.hasOwnProperty.call(patientDetails.locations, key)) {
         let value = (
           <span className="details-value">
-            {getLocalizedLabel(intl, key, key)} :{" "}
+            <FormattedMessage id={key} defaultMessage={key} /> :{" "}
             {patientDetails.locations[key] != null
               ? patientDetails.locations[key]
               : " "}
@@ -57,7 +55,7 @@ const PatientDetails = ({
             {contacts.map((contact) => {
               return (
                 <span key={contact.id} className="details-value">
-                  {getLocalizedLabel(intl, contact.name, contact.name)} :{" "}
+                  <FormattedMessage id={contact.name} defaultMessage={contact.name} /> :{" "}
                   {contact.value}
                 </span>
               );
@@ -72,11 +70,7 @@ const PatientDetails = ({
             {relationships.map((relationship) => {
               return (
                 <span key={relationship.id} className="details-value">
-                  {getLocalizedLabel(
-                    intl,
-                    relationship.relationshipType,
-                    relationship.relationshipType
-                  )}{" "}
+                  <FormattedMessage id={relationship.relationshipType} defaultMessage={relationship.relationshipType} />{" "}
                   : {relationship.name}
                 </span>
               );

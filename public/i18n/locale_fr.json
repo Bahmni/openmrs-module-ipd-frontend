@@ -205,6 +205,8 @@
   "NON_MEDICATION_TASK_CAPTURE_PATIENT_WEIGHT_UPON_ADMISSION": "Capturer le poids du patient à l'admission",
   "IPD_UNSKIP_TASK": "Annuler l'ignorement de la tâche",
   "IPD_SKIP_TASK": "Ignorer la tâche",
+  "IPD_UNSTOP_TASK": "Annuler l'arrêt de la tâche",
+  "IPD_STOP_TASK": "Arrêter la tâche",
   "IPD_UNSKIP_DRUG": "Annuler l'ignorement du médicament",
   "IPD_SKIP_DRUG": "Ignorer le médicament",
   "PAGINATION_PREVIOUS_PAGE": "Page précédente",
