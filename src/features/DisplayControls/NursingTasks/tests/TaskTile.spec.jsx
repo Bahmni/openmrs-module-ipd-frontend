@@ -9,12 +9,14 @@ import {
   mockCompletedPRNTaskTileData,
   mockPendingPRNTaskTileData,
   mockNonMedicationTileData,
+  mockStoppedNonMedicationTileData,
 } from "./NursingTasksUtilsMockData";
 import {
   mockConfig,
   mockConfigFor12HourFormat,
 } from "../../../../utils/CommonUtils";
 import { IPDContext } from "../../../../context/IPDContext";
+import { IntlProvider } from "react-intl";
 
 describe("TaskTile", () => {
   beforeEach(() => {
@@ -26,31 +28,37 @@ describe("TaskTile", () => {
   });
   it("should match the snapshot for non grouped task", () => {
     const { asFragment } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <TaskTile medicationNursingTask={mockCompletedTaskTileData} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <TaskTile medicationNursingTask={mockCompletedTaskTileData} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("should match the snapshot for grouped task", async () => {
     const { asFragment, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <TaskTile medicationNursingTask={mockTaskTileDataForGroupedTask} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <TaskTile medicationNursingTask={mockTaskTileDataForGroupedTask} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
 
     await waitFor(() => {
       expect(asFragment()).toMatchSnapshot();
-      expect(getByText("(1 more)")).toBeTruthy();
+      expect(getByText("(1 more task(s))")).toBeTruthy();
     });
   });
 
   it("should disable tile when task is completed", () => {
     const { container, getByTestId } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <TaskTile medicationNursingTask={mockCompletedTaskTileData} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <TaskTile medicationNursingTask={mockCompletedTaskTileData} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
 
     const completedTile = container.querySelector(".disabled-tile");
@@ -62,9 +70,11 @@ describe("TaskTile", () => {
 
   it("should render pending icon when task is not administered", () => {
     const { getByTestId } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <TaskTile medicationNursingTask={mockPendingTaskTileData} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <TaskTile medicationNursingTask={mockPendingTaskTileData} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
 
     const pendingIcon = getByTestId("Pending");
@@ -74,9 +84,11 @@ describe("TaskTile", () => {
 
   it("should render placeholder Rx- PRN task with pending icon", () => {
     const { getByTestId, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <TaskTile medicationNursingTask={mockPendingPRNTaskTileData} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <TaskTile medicationNursingTask={mockPendingPRNTaskTileData} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     const pendingIcon = getByTestId("Pending");
     expect(pendingIcon).toBeTruthy();
@@ -85,9 +97,11 @@ describe("TaskTile", () => {
 
   it("should render administered PRN task with time and Rx-PRN tag", () => {
     const { getByTestId, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfig }}>
-        <TaskTile medicationNursingTask={mockCompletedPRNTaskTileData} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <TaskTile medicationNursingTask={mockCompletedPRNTaskTileData} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     const administeredIcon = getByTestId("Administered-Late");
     expect(administeredIcon).toBeTruthy();
@@ -97,9 +111,11 @@ describe("TaskTile", () => {
 
   it("should render administered PRN task with time and Rx-PRN tag when time in 12 hour format", () => {
     const { getByTestId, getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
-        <TaskTile medicationNursingTask={mockCompletedPRNTaskTileData} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
+          <TaskTile medicationNursingTask={mockCompletedPRNTaskTileData} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     const administeredIcon = getByTestId("Administered-Late");
     expect(administeredIcon).toBeTruthy();
@@ -107,11 +123,24 @@ describe("TaskTile", () => {
     expect(getByText("04:38 PM - 07:10 AM (actual)")).toBeTruthy();
   });
 
+  it("should render stopped icon when non-medication task status is Stopped", () => {
+    const { getByTestId } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfig }}>
+          <TaskTile medicationNursingTask={mockStoppedNonMedicationTileData} />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    expect(getByTestId("Stopped")).toBeTruthy();
+  });
+
   it("should dislay provider name in the non-medication task tile", () => {
     const { getByText } = render(
-      <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
-        <TaskTile medicationNursingTask={mockNonMedicationTileData} />
-      </IPDContext.Provider>
+      <IntlProvider locale="en">
+        <IPDContext.Provider value={{ config: mockConfigFor12HourFormat }}>
+          <TaskTile medicationNursingTask={mockNonMedicationTileData} />
+        </IPDContext.Provider>
+      </IntlProvider>
     );
     expect(getByText("bailly rurangirwa")).toBeTruthy();
   });

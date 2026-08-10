@@ -10,8 +10,18 @@ import { PatientDetailsCell } from "./PatientDetailsCell";
 import { SlotDetailsCell } from "./SlotDetailsCell";
 import { Header } from "./Header";
 import { getPreviousShiftDetails } from "../../CareViewSummary/utils/CareViewSummary";
-import { currentShiftHoursArray, setCurrentShiftTimes } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
+import {
+  currentShiftHoursArray,
+  setCurrentShiftTimes,
+} from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 import { isSystemGeneratedTask } from "../../../utils/CommonUtils";
+import { TASK_FILTER_HEADER } from "../../../constants";
+import {
+  fetchAcknowledgedObservationUuids,
+  fetchBatchObservations,
+  mapObservationsToInstructions,
+  filterPreviousShiftInstructions,
+} from "../../DisplayControls/CareInstructions/utils/CareInstructionsUtils";
 
 export const CareViewPatientsSummary = ({
   patientsSummary,
@@ -20,17 +30,23 @@ export const CareViewPatientsSummary = ({
 }) => {
   const [slotDetails, setSlotDetails] = useState([]);
   const [nonMedicationDetails, setNonMedicationDetails] = useState([]);
-  const [previousShiftNonMedicationDetails, setPreviousShiftNonMedicationDetails] = useState([]);
-  const { careViewConfig, ipdConfig } = useContext(CareViewContext);
+  const [
+    previousShiftNonMedicationDetails,
+    setPreviousShiftNonMedicationDetails,
+  ] = useState([]);
+  const [careInstructionsMap, setCareInstructionsMap] = useState({});
+  const [previousShiftCareInstructionsMap, setPreviousShiftCareInstructionsMap] = useState({});
+  const {
+    careViewConfig,
+    ipdConfig,
+    taskFilterType = TASK_FILTER_HEADER.ALL,
+  } = useContext(CareViewContext);
+  const { enableNurseAcknowledgement = false } = careViewConfig;
   const { shiftDetails: shiftConfig = {} } = ipdConfig;
   const timeframeLimitInHours = careViewConfig.timeframeLimitInHours;
-  const shiftDetails = currentShiftHoursArray(
-    new Date(),
-    shiftConfig
-  );
+  const shiftDetails = currentShiftHoursArray(new Date(), shiftConfig);
   const shiftRangeArray = shiftDetails.rangeArray;
   const shiftIndex = shiftDetails.shiftIndex;
- 
 
   const fetchSlots = async (patients) => {
     const patientUuids = patients.map((patient) => patient.patientDetails.uuid);
@@ -53,11 +69,8 @@ export const CareViewPatientsSummary = ({
   };
 
   const fetchPreviousShiftTasks = async (patients) => {
-    const [startDateTime, endDateTime] =  setCurrentShiftTimes(
-      shiftDetails
-    );
-    const previousShiftDetails =
-    getPreviousShiftDetails(
+    const [startDateTime, endDateTime] = setCurrentShiftTimes(shiftDetails);
+    const previousShiftDetails = getPreviousShiftDetails(
       shiftRangeArray,
       shiftIndex,
       startDateTime,
@@ -66,35 +79,96 @@ export const CareViewPatientsSummary = ({
     const patientUuids = patients.map((patient) => patient.patientDetails.uuid);
     const response = await getTasksForPatients(
       patientUuids,
-      previousShiftDetails.startDateTime ,
-      previousShiftDetails.endDateTime 
+      previousShiftDetails.startDateTime,
+      previousShiftDetails.endDateTime
     );
     const groupedData = [];
-    response.forEach(patientData => {
-    const patientUuid = patientData.patientUuid;
-    const patientTasks = [];
-    patientData.tasks.forEach(task => {
-      if (isSystemGeneratedTask(task) && task.status === "REQUESTED") {
-        
+    response.forEach((patientData) => {
+      const patientUuid = patientData.patientUuid;
+      const patientTasks = [];
+      patientData.tasks.forEach((task) => {
+        if (isSystemGeneratedTask(task) && task.status === "REQUESTED") {
           patientTasks.push({
-              taskName: task.name,
-              taskId: task.uuid 
+            taskName: task.name,
+            taskId: task.uuid,
           });
-      }
+        }
+      });
+      groupedData.push({
+        patient: patientUuid,
+        tasks: patientTasks,
+      });
     });
-    groupedData.push({
-      patient: patientUuid,
-      tasks: patientTasks
-    });
-  });
     setPreviousShiftNonMedicationDetails(groupedData);
-  }
- 
-  useEffect(() => { 
+  };
+
+  const fetchCareInstructions = async (patients) => {
+    const ciSection = ipdConfig?.sections?.find(
+      (section) => section.componentKey === "CI"
+    );
+    const formConcepts = ciSection?.config?.formConcepts ?? [];
+    if (formConcepts.length === 0) return;
+
+    const concepts = [
+      ...new Set(formConcepts.flatMap((formConcept) => formConcept.concepts)),
+    ];
+    const visitUuids = patients.map((patient) => patient.visitDetails.uuid);
+
+    const batchResult = await fetchBatchObservations(visitUuids, concepts);
+
+    const instructionsMap = {};
+    batchResult.forEach(({ visitUuid, observations }) => {
+      const instructions = mapObservationsToInstructions(
+        observations,
+        formConcepts
+      );
+      instructionsMap[visitUuid] = instructions;
+    });
+
+    const allObsUuids = [
+      ...Object.values(instructionsMap).reduce((obsUuidSet, instructions) => {
+        instructions.forEach((instruction) => {
+          if (instruction.observationUuid)
+            obsUuidSet.add(instruction.observationUuid);
+        });
+        return obsUuidSet;
+      }, new Set()),
+    ];
+
+    if (enableNurseAcknowledgement && allObsUuids.length > 0) {
+      const acknowledgedUuids = await fetchAcknowledgedObservationUuids(
+        allObsUuids
+      );
+      Object.keys(instructionsMap).forEach((visitUuid) => {
+        instructionsMap[visitUuid] = instructionsMap[visitUuid].filter(
+          (instruction) => !acknowledgedUuids.has(instruction.observationUuid)
+        );
+      });
+    }
+
+    // Calculate previous-shift care instructions
+    if (shiftDetails && Object.keys(shiftDetails).length > 0) {
+      const [currentShiftStartTime] = setCurrentShiftTimes(shiftDetails);
+      const previousShiftInstructionsMap = {};
+      Object.keys(instructionsMap).forEach((visitUuid) => {
+        const previousShiftInstructions = filterPreviousShiftInstructions(
+          instructionsMap[visitUuid],
+          currentShiftStartTime
+        );
+        previousShiftInstructionsMap[visitUuid] = previousShiftInstructions;
+      });
+      setPreviousShiftCareInstructionsMap(previousShiftInstructionsMap);
+    }
+
+    setCareInstructionsMap(instructionsMap);
+  };
+
+  useEffect(() => {
     if (patientsSummary.length > 0) {
       fetchPreviousShiftTasks(patientsSummary);
       fetchSlots(patientsSummary);
       fetchTasks(patientsSummary);
+      fetchCareInstructions(patientsSummary);
     }
   }, [patientsSummary, navHourEpoch]);
 
@@ -106,25 +180,47 @@ export const CareViewPatientsSummary = ({
             timeframeLimitInHours={timeframeLimitInHours}
             navHourEpoch={navHourEpoch}
           />
-          {patientsSummary.map((patientSummary, idx) => {
+          {patientsSummary.reduce((rows, patientSummary) => {
             const {
               patientDetails,
               bedDetails,
               careTeam,
               newTreatments,
-              visitDetails
+              visitDetails,
             } = patientSummary;
             const { uuid } = patientDetails;
-            const matchingShift = previousShiftNonMedicationDetails.find(shift => shift.patient === uuid);
+            const matchingShift = previousShiftNonMedicationDetails.find(
+              (shift) => shift.patient === uuid
+            );
             const tasks = matchingShift ? matchingShift.tasks : [];
-            return (
-              <tr key={idx} className={"patient-row-container"}>
+
+            if (enableNurseAcknowledgement) {
+              if (
+                taskFilterType === TASK_FILTER_HEADER.NEW &&
+                newTreatments === 0
+              )
+                return rows;
+              if (
+                taskFilterType === TASK_FILTER_HEADER.PENDING &&
+                tasks.length === 0
+              )
+                return rows;
+            }
+
+            rows.push(
+              <tr key={uuid} className={"patient-row-container"}>
                 <PatientDetailsCell
                   bedDetails={bedDetails}
                   patientDetails={patientDetails}
                   careTeamDetails={careTeam}
                   navHourEpoch={navHourEpoch}
                   newTreatments={newTreatments}
+                  unacknowledgedCareInstructions={
+                    careInstructionsMap[visitDetails.uuid] || []
+                  }
+                  previousShiftCareInstructions={
+                    previousShiftCareInstructionsMap[visitDetails.uuid] || []
+                  }
                   visitDetails={visitDetails}
                   previousShiftPendingTasks={tasks}
                 />
@@ -138,7 +234,8 @@ export const CareViewPatientsSummary = ({
                 />
               </tr>
             );
-          })}
+            return rows;
+          }, [])}
         </tbody>
       </table>
     </div>

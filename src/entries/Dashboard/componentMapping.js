@@ -37,4 +37,9 @@ export const componentMapping = {
       "../../features/DisplayControls/PatientFeedingRecord/components/PatientFeedingRecord"
     )
   ),
+  [componentKeys.CARE_INSTRUCTIONS]: lazy(() =>
+    import(
+      "../../features/DisplayControls/CareInstructions/components/CareInstructions"
+    )
+  ),
 };
