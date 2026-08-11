@@ -615,6 +615,38 @@ describe("AddEmergencyTasks", () => {
       });
     });
 
+    it("should save non-medication task only once when save button is clicked multiple times", async () => {
+      let resolveSave;
+      mockSaveNonMedicationTask.mockReturnValue(
+        new Promise((resolve) => {
+          resolveSave = resolve;
+        })
+      );
+
+      const sliderCallCountBefore = mockUpdateEmergencyTasksSlider.mock.calls.length;
+
+      await renderNonMedicationTab();
+
+      const saveButton = screen.getAllByText("Save")[1];
+      fireEvent.click(saveButton);
+      fireEvent.click(saveButton);
+      fireEvent.click(saveButton);
+      fireEvent.click(saveButton);
+
+      await waitFor(() => {
+        expect(mockSaveNonMedicationTask).toHaveBeenCalledTimes(1);
+      });
+
+      resolveSave({ status: 200 });
+
+      await waitFor(() => {
+        expect(mockUpdateEmergencyTasksSlider.mock.calls.length).toBe(
+          sliderCallCountBefore + 1
+        );
+      });
+      expect(mockSaveNonMedicationTask).toHaveBeenCalledTimes(1);
+    });
+
     it("should omit basedOn from payload when orderUuid is null", async () => {
       await renderNonMedicationTab({ observationUuid: "__obs_uuid__", orderUuid: null });
 

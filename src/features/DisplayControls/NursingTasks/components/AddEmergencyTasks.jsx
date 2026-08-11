@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
@@ -61,6 +61,7 @@ const AddEmergencyTasks = (props) => {
   } = props;
 
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
+  const isSavingNonMedicationTaskRef = useRef(false);
   const [isLoading, setIsLoading] = useState(true);
   const [dosageConfig, setDosageConfig] = useState({});
   const [unitOptions, setUnitOptions] = useState([]);
@@ -391,21 +392,35 @@ const AddEmergencyTasks = (props) => {
       setEmergencyTask(createEmergencyMedicationPayload());
       setOpenConfirmationModal(true);
     } else {
-      const nonMedicationTaskPayload = await createNonMedicationTaskPayload();
-      const response = await saveNonMedicationTask(nonMedicationTaskPayload);
-      if (response.status === 200) {
-        setIsSaveDisabled(false);
-        handleAuditEvent("CREATE_NON_MEDICATION_TASK");
-        updateNonMedicationTasksNotification(
-          "success",
-          "NON_MEDICATION_TASK_SAVE_MESSAGE"
-        );
-      } else {
+      if (isSavingNonMedicationTaskRef.current) {
+        return;
+      }
+      isSavingNonMedicationTaskRef.current = true;
+      setIsSaveDisabled(true);
+      try {
+        const nonMedicationTaskPayload = await createNonMedicationTaskPayload();
+        const response = await saveNonMedicationTask(nonMedicationTaskPayload);
+        if (response.status === 200) {
+          handleAuditEvent("CREATE_NON_MEDICATION_TASK");
+          updateNonMedicationTasksNotification(
+            "success",
+            "NON_MEDICATION_TASK_SAVE_MESSAGE"
+          );
+        } else {
+          setIsSaveDisabled(false);
+          updateNonMedicationTasksNotification(
+            "error",
+            "NON_MEDICATION_TASK_SAVE_MESSAGE_FAILED"
+          );
+        }
+      } catch (error) {
         setIsSaveDisabled(false);
         updateNonMedicationTasksNotification(
           "error",
           "NON_MEDICATION_TASK_SAVE_MESSAGE_FAILED"
         );
+      } finally {
+        isSavingNonMedicationTaskRef.current = false;
       }
     }
   };
