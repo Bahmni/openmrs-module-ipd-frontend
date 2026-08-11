@@ -10,7 +10,7 @@ import { I18nProvider } from "../../features/i18n/I18nProvider";
 import { homePageUrl, WARD_SUMMARY_HEADER } from "../../constants";
 import { CareViewContext } from "../../context/CareViewContext";
 import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
-import { getDashboardConfig } from "../../utils/CommonUtils";
+import { getDashboardConfig, getShiftDetailsFromGlobalProperty } from "../../utils/CommonUtils";
 import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
 
 const CareViewDashboard = (props) => {
@@ -45,7 +45,8 @@ const CareViewDashboard = (props) => {
 
   const getIpdConfig = async () => {
     const configData = await getDashboardConfig();
-    const config = configData.data || {};
+    let config = configData.data || {};
+    config.shiftDetails = await getShiftDetailsFromGlobalProperty();
     setIpdConfig(config);
   };
 
