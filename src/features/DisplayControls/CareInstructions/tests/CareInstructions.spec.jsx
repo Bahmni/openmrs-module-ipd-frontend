@@ -10,6 +10,20 @@ import { IPDContext } from "../../../../context/IPDContext";
 import { SliderContext } from "../../../../context/SliderContext";
 import CareInstructions from "../components/CareInstructions";
 import * as CareInstructionsUtils from "../utils/CareInstructionsUtils.jsx";
+import * as NursingTasksUtils from "../../NursingTasks/utils/NursingTasksUtils";
+
+jest.mock("../../NursingTasks/utils/NursingTasksUtils", () => ({
+  updateNonMedicationTask: jest.fn(),
+}));
+
+jest.mock("../utils/CareInstructionsUtils.jsx", () => {
+  const actual = jest.requireActual("../utils/CareInstructionsUtils.jsx");
+  return {
+    ...actual,
+    fetchCareInstructionsObs: jest.fn(),
+    fetchTasksByObservationUuids: jest.fn(),
+  };
+});
 
 jest.mock("../../NursingTasks/components/AddEmergencyTasks", () => {
   function MockAddEmergencyTasks({
@@ -17,12 +31,14 @@ jest.mock("../../NursingTasks/components/AddEmergencyTasks", () => {
     setShowNotification,
     observationUuid,
     orderUuid,
+    initialTaskName,
   }) {
     return (
       <div
         data-testid="add-emergency-tasks-slider"
         data-observation-uuid={observationUuid || ""}
         data-order-uuid={orderUuid || ""}
+        data-initial-task-name={initialTaskName || ""}
       >
         <button
           data-testid="close-slider"
@@ -86,7 +102,7 @@ const mockObservationsApiResponse = [
 ];
 
 const mockCurrentUserWithPrivilege = {
-  privileges: [{ name: "Add Tasks" }],
+  privileges: [{ name: "Add Tasks" }, { name: "Edit Tasks" }],
 };
 
 const mockCurrentUserWithoutPrivilege = {
@@ -95,7 +111,7 @@ const mockCurrentUserWithoutPrivilege = {
 
 const mockIPDContextWithData = {
   visit: "visit-uuid-1",
-  config: { enable24HourTime: false },
+  config: { enable24HourTime: false, enableStopTasks: true },
   currentUser: mockCurrentUserWithPrivilege,
 };
 
@@ -133,22 +149,16 @@ const renderWithProviders = (
 
 describe("CareInstructions", () => {
   beforeEach(() => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
-      .mockResolvedValue(mockObservationsApiResponse);
-    jest
-      .spyOn(CareInstructionsUtils, "fetchAcknowledgedObservationUuids")
-      .mockResolvedValue(new Set());
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue(mockObservationsApiResponse);
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([]);
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
 
   it("should render empty state when visit is not available", async () => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
-      .mockResolvedValue([]);
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue([]);
     const { getAllByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextNoVisit
@@ -163,9 +173,7 @@ describe("CareInstructions", () => {
   });
 
   it("should render empty state when no observations are returned", async () => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
-      .mockResolvedValue([]);
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue([]);
     const { getAllByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextEmpty
@@ -180,9 +188,7 @@ describe("CareInstructions", () => {
   });
 
   it("should render Not Acknowledged and Acknowledged tabs", async () => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
-      .mockResolvedValue([]);
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue([]);
     const { getByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextEmpty
@@ -221,9 +227,7 @@ describe("CareInstructions", () => {
   });
 
   it("should show Acknowledged tab content when Acknowledged tab is clicked", async () => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
-      .mockResolvedValue([]);
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue([]);
     const { getByText, getAllByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextEmpty
@@ -244,16 +248,16 @@ describe("CareInstructions", () => {
   });
 
   it("should move instruction to Acknowledged tab when a task exists for its observationUuid", async () => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchAcknowledgedObservationUuids")
-      .mockResolvedValue(new Set(["obs-uuid-1"]));
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([
+      { uuid: "task-uuid-1", observationUuid: "obs-uuid-1", status: "requested" },
+    ]);
 
     const { getByText, queryByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextWithData
     );
 
-    // Wait until fetchAcknowledgedObservationUuids resolves and obs-uuid-1 is removed from Not Acknowledged
+    // Wait until fetchTasksByObservationUuids resolves and obs-uuid-1 is moved to Acknowledged
     await waitFor(() => {
       expect(queryByText("Patient should rest")).not.toBeInTheDocument();
     });
@@ -267,9 +271,7 @@ describe("CareInstructions", () => {
   });
 
   it("should keep all instructions in Not Acknowledged tab when no tasks exist", async () => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchAcknowledgedObservationUuids")
-      .mockResolvedValue(new Set());
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([]);
 
     const { getByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
@@ -283,9 +285,9 @@ describe("CareInstructions", () => {
   });
 
   it("should only move the specific instruction whose observationUuid matches a task", async () => {
-    jest
-      .spyOn(CareInstructionsUtils, "fetchAcknowledgedObservationUuids")
-      .mockResolvedValue(new Set(["obs-uuid-1"]));
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([
+      { uuid: "task-uuid-1", observationUuid: "obs-uuid-1", status: "requested" },
+    ]);
 
     const { getByText, queryByText } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
@@ -563,7 +565,7 @@ describe("CareInstructions", () => {
     });
   });
 
-  it("should pass observationUuid and orderUuid to AddEmergencyTasks slider when Add Task is clicked", async () => {
+  it("should pass observationUuid, orderUuid and initialTaskName to AddEmergencyTasks slider when Add Task is clicked", async () => {
     jest
       .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
       .mockResolvedValue([
@@ -607,7 +609,9 @@ describe("CareInstructions", () => {
     rerender(makeJsx(true));
 
     const slider = getByTestId("add-emergency-tasks-slider");
-    expect(slider.getAttribute("data-observation-uuid")).toBe("obs-uuid-with-order");
+    expect(slider.getAttribute("data-observation-uuid")).toBe(
+      "obs-uuid-with-order"
+    );
     expect(slider.getAttribute("data-order-uuid")).toBe("order-uuid-1");
   });
 
@@ -627,6 +631,7 @@ describe("CareInstructions", () => {
           groupMembers: [],
         },
       ]);
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([]);
 
     const { getAllByRole } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
@@ -671,6 +676,7 @@ describe("CareInstructions", () => {
       .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
       .mockResolvedValue([
         {
+          uuid: "obs-uuid-3",
           encounterDateTime: 1713955252000,
           encounterUuid: "encounter-uuid-1",
           formFieldPath: "Doctor Patient Progress Notes.1/5-0",
@@ -680,6 +686,7 @@ describe("CareInstructions", () => {
           groupMembers: [],
         },
         {
+          uuid: "obs-uuid-4",
           encounterDateTime: 1713941600000,
           encounterUuid: "encounter-uuid-3",
           formFieldPath: "Doctor Patient Progress Notes.1/5-0",
@@ -689,6 +696,7 @@ describe("CareInstructions", () => {
           groupMembers: [],
         },
       ]);
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([]);
     const { getByText, getAllByRole } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextWithData
@@ -957,6 +965,101 @@ describe("mapObservationsToInstructions", () => {
   });
 });
 
+describe("getAcknowledgedObservationUuids", () => {
+  it("should return a set of all unique observationUuids from tasks", () => {
+    const tasks = [
+      { uuid: "task-uuid-1", observationUuid: "obs-uuid-1", status: "requested" },
+      { uuid: "task-uuid-2", observationUuid: "obs-uuid-1", status: "completed" },
+      { uuid: "task-uuid-3", observationUuid: "obs-uuid-2", status: "requested" },
+    ];
+
+    const result = CareInstructionsUtils.getAcknowledgedObservationUuids(tasks);
+
+    expect(result).toEqual(new Set(["obs-uuid-1", "obs-uuid-2"]));
+  });
+
+  it("should return empty set when tasks array is empty", () => {
+    const result = CareInstructionsUtils.getAcknowledgedObservationUuids([]);
+
+    expect(result).toEqual(new Set());
+  });
+
+  it("should filter out tasks with null or undefined observationUuid", () => {
+    const tasks = [
+      { uuid: "task-uuid-1", observationUuid: "obs-uuid-1", status: "requested" },
+      { uuid: "task-uuid-2", observationUuid: null, status: "completed" },
+      { uuid: "task-uuid-3", observationUuid: undefined, status: "requested" },
+    ];
+
+    const result = CareInstructionsUtils.getAcknowledgedObservationUuids(tasks);
+
+    expect(result).toEqual(new Set(["obs-uuid-1"]));
+  });
+});
+
+describe("getPendingTaskUuidsByObservation", () => {
+  it("should return pending task UUIDs grouped by observationUuid", () => {
+    const tasks = [
+      { uuid: "task-uuid-1", observationUuid: "obs-uuid-1", status: "requested" },
+      { uuid: "task-uuid-2", observationUuid: "obs-uuid-1", status: "requested" },
+      { uuid: "task-uuid-3", observationUuid: "obs-uuid-2", status: "completed" },
+      { uuid: "task-uuid-4", observationUuid: "obs-uuid-2", status: "requested" },
+    ];
+
+    const result = CareInstructionsUtils.getPendingTaskUuidsByObservation(tasks);
+
+    expect(result).toEqual({
+      "obs-uuid-1": ["task-uuid-1", "task-uuid-2"],
+      "obs-uuid-2": ["task-uuid-4"],
+    });
+  });
+
+  it("should return empty object when tasks array is empty", () => {
+    const result = CareInstructionsUtils.getPendingTaskUuidsByObservation([]);
+
+    expect(result).toEqual({});
+  });
+
+  it("should only include tasks with 'requested' status", () => {
+    const tasks = [
+      { uuid: "task-uuid-1", observationUuid: "obs-uuid-1", status: "requested" },
+      { uuid: "task-uuid-2", observationUuid: "obs-uuid-1", status: "completed" },
+      { uuid: "task-uuid-3", observationUuid: "obs-uuid-1", status: "cancelled" },
+    ];
+
+    const result = CareInstructionsUtils.getPendingTaskUuidsByObservation(tasks);
+
+    expect(result).toEqual({
+      "obs-uuid-1": ["task-uuid-1"],
+    });
+  });
+
+  it("should filter out tasks with null or undefined observationUuid", () => {
+    const tasks = [
+      { uuid: "task-uuid-1", observationUuid: "obs-uuid-1", status: "requested" },
+      { uuid: "task-uuid-2", observationUuid: null, status: "requested" },
+      { uuid: "task-uuid-3", observationUuid: undefined, status: "requested" },
+    ];
+
+    const result = CareInstructionsUtils.getPendingTaskUuidsByObservation(tasks);
+
+    expect(result).toEqual({
+      "obs-uuid-1": ["task-uuid-1"],
+    });
+  });
+
+  it("should not create entry for observationUuid with no pending tasks", () => {
+    const tasks = [
+      { uuid: "task-uuid-1", observationUuid: "obs-uuid-1", status: "completed" },
+      { uuid: "task-uuid-2", observationUuid: "obs-uuid-1", status: "cancelled" },
+    ];
+
+    const result = CareInstructionsUtils.getPendingTaskUuidsByObservation(tasks);
+
+    expect(result).toEqual({});
+  });
+});
+
 describe("serializeParams", () => {
   it("should serialize array values as repeated params without brackets", () => {
     const result = CareInstructionsUtils.serializeParams({
@@ -978,9 +1081,12 @@ describe("serializeParams", () => {
 
 describe("fetchCareInstructionsObs", () => {
   let mockAxios;
+  let actualFetchCareInstructionsObs;
 
   beforeEach(() => {
     mockAxios = new MockAdapter(axios);
+    // Use the actual implementation for this describe block
+    actualFetchCareInstructionsObs = jest.requireActual("../utils/CareInstructionsUtils.jsx").fetchCareInstructionsObs;
   });
 
   afterEach(() => {
@@ -1000,7 +1106,7 @@ describe("fetchCareInstructionsObs", () => {
     ];
     mockAxios.onGet(new RegExp(".*observations.*")).reply(200, mockResponse);
 
-    const result = await CareInstructionsUtils.fetchCareInstructionsObs(
+    const result = await actualFetchCareInstructionsObs(
       "visit-uuid-1",
       ["Instruction for the Ward"]
     );
@@ -1018,7 +1124,7 @@ describe("fetchCareInstructionsObs", () => {
   it("should return empty array when the API call fails", async () => {
     mockAxios.onGet(new RegExp(".*")).reply(500);
 
-    const result = await CareInstructionsUtils.fetchCareInstructionsObs(
+    const result = await actualFetchCareInstructionsObs(
       "visit-uuid-1",
       ["Instruction for the Ward"]
     );
@@ -1106,5 +1212,136 @@ describe("fetchBatchObservations", () => {
 
     const requestBody = JSON.parse(mockAxios.history.post[0].data);
     expect(requestBody.filterObsWithOrders).toBe(true);
+  });
+});
+
+describe("CareInstructions - Stop Tasks Feature", () => {
+  let mockAxios;
+
+  beforeEach(() => {
+    mockAxios = new MockAdapter(axios);
+    mockAxios
+      .onGet(new RegExp(".*observations.*"))
+      .reply(200, mockObservationsApiResponse);
+    CareInstructionsUtils.fetchCareInstructionsObs.mockResolvedValue(mockObservationsApiResponse);
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([
+      { uuid: "task-uuid-1", observationUuid: "obs-uuid-1", status: "requested" },
+      { uuid: "task-uuid-2", observationUuid: "obs-uuid-1", status: "requested" },
+    ]);
+  });
+
+  afterEach(() => {
+    mockAxios.restore();
+    jest.resetAllMocks();
+  });
+
+  it("should render Stop Tasks link when instruction has pending tasks and user has EDIT_TASKS privilege", async () => {
+    const { queryByText } = render(
+      <IntlProvider locale="en" messages={{}}>
+        <IPDContext.Provider value={mockIPDContextWithData}>
+          <SliderContext.Provider value={mockSliderContext}>
+            <CareInstructions patientId="patient-uuid-1" config={{ formConcepts: mockFormConcepts }} />
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("Stop Tasks")).toBeInTheDocument();
+    });
+  });
+
+  it("should not render Stop Tasks link when user lacks EDIT_TASKS privilege", async () => {
+    const contextWithoutPrivilege = {
+      ...mockIPDContextWithData,
+      currentUser: mockCurrentUserWithoutPrivilege,
+    };
+
+    const { queryByText } = render(
+      <IntlProvider locale="en" messages={{}}>
+        <IPDContext.Provider value={contextWithoutPrivilege}>
+          <SliderContext.Provider value={mockSliderContext}>
+            <CareInstructions patientId="patient-uuid-1" config={{ formConcepts: mockFormConcepts }} />
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("Stop Tasks")).not.toBeInTheDocument();
+    });
+  });
+
+  it("should not render Stop Tasks link when instruction has no pending tasks", async () => {
+    CareInstructionsUtils.fetchTasksByObservationUuids.mockResolvedValue([]);
+
+    const { queryByText } = render(
+      <IntlProvider locale="en" messages={{}}>
+        <IPDContext.Provider value={mockIPDContextWithData}>
+          <SliderContext.Provider value={mockSliderContext}>
+            <CareInstructions patientId="patient-uuid-1" config={{ formConcepts: mockFormConcepts }} />
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("Stop Tasks")).not.toBeInTheDocument();
+    });
+  });
+
+  it("should call fetchTasksByObservationUuids with instruction observation UUIDs", async () => {
+    render(
+      <IntlProvider locale="en" messages={{}}>
+        <IPDContext.Provider value={mockIPDContextWithData}>
+          <SliderContext.Provider value={mockSliderContext}>
+            <CareInstructions patientId="patient-uuid-1" config={{ formConcepts: mockFormConcepts }} />
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(CareInstructionsUtils.fetchTasksByObservationUuids).toHaveBeenCalledWith(
+        expect.arrayContaining(["obs-uuid-1", "obs-uuid-2"])
+      );
+    });
+  });
+
+  it("should call updateNonMedicationTask with CANCELLED status when Stop Tasks is confirmed", async () => {
+    const { getByText, getAllByText } = render(
+      <IntlProvider locale="en" messages={{}}>
+        <IPDContext.Provider value={mockIPDContextWithData}>
+          <SliderContext.Provider value={mockSliderContext}>
+            <CareInstructions patientId="patient-uuid-1" config={{ formConcepts: mockFormConcepts }} />
+          </SliderContext.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    NursingTasksUtils.updateNonMedicationTask.mockResolvedValue({ status: 200 });
+
+    await waitFor(() => {
+      const stopTasksLinks = getAllByText("Stop Tasks");
+      fireEvent.click(stopTasksLinks[0]);
+    });
+
+    // Confirm in modal
+    await waitFor(() => {
+      const confirmButton = getByText("Confirm");
+      fireEvent.click(confirmButton);
+    });
+
+    await waitFor(() => {
+      expect(NursingTasksUtils.updateNonMedicationTask).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            uuid: "task-uuid-1",
+            status: "CANCELLED",
+            executionEndTime: expect.any(Number),
+          }),
+        ])
+      );
+    });
   });
 });

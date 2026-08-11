@@ -17,6 +17,7 @@ import { CareViewContext } from "../../context/CareViewContext";
 import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
 import {
   getDashboardConfig,
+  getFormDraftFeatureEnabled,
   getShiftDetailsFromGlobalProperty,
   isUserPrivileged,
 } from "../../utils/CommonUtils";
@@ -63,11 +64,10 @@ const CareViewDashboard = (props) => {
   const getIpdConfig = async () => {
     const configData = await getDashboardConfig();
     let config = configData.data || {};
-
-    // Always fetch shift details from Global Property
     const shiftDetails = await getShiftDetailsFromGlobalProperty();
     config.shiftDetails = shiftDetails;
-
+    config.config = config.config || {};
+    config.config.enableFormDraftFeature = await getFormDraftFeatureEnabled();
     setIpdConfig(config);
   };
 
@@ -91,7 +91,11 @@ const CareViewDashboard = (props) => {
             {isUserPrivileged(
               currentUser,
               PRIVILEGE_CONSTANTS.OBSERVATION_TAB
-            ) && <DraftIndicator providerUuid={hostData.provider?.uuid} />}
+            ) &&
+              ipdConfig?.config &&
+              ipdConfig.config.enableFormDraftFeature && (
+                <DraftIndicator providerUuid={hostData.provider?.uuid} />
+              )}
             <ProviderActions onLogOut={onLogOut} />
           </div>
         </Header>

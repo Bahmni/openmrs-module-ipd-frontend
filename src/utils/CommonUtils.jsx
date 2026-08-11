@@ -10,6 +10,7 @@ import {
   SEARCH_CONCEPT_URL,
   SEARCH_DRUG_URL,
   DAEMON_USER,
+  HOME_CONFIG_URL,
 } from "../constants";
 import { FormattedMessage } from "react-intl";
 export const getPatientDashboardUrl = (patientUuid) =>
@@ -151,6 +152,18 @@ export const getDashboardConfig = async () => {
   }
 };
 
+export const getFormDraftFeatureEnabled = async () => {
+  try {
+    const response = await axios.get(HOME_CONFIG_URL, {
+      withCredentials: true,
+    });
+    if (response.status !== 200) throw new Error(response.statusText);
+    return response.data?.config?.enableFormDraftFeature || false;
+  } catch (error) {
+    return false;
+  }
+};
+
 export const getShiftDetailsFromGlobalProperty = async () => {
   try {
     const response = await axios.get(GLOBAL_PROPERTY_URL, {
@@ -241,14 +254,6 @@ export const getTranslationKey = (attribute, moduleName) => {
   }
 };
 
-export const getLocalizedLabel = (intl, id, defaultLabel) => {
-  return intl.messages[id] ? (
-    <FormattedMessage id={id} defaultMessage={defaultLabel} />
-  ) : (
-    defaultLabel
-  );
-};
-
 export const getNoDataCapturedMessage = (formName) => {
   const msg = (
     <FormattedMessage
@@ -311,6 +316,11 @@ export const mockConfig = {
     timeInMinutesToDisableSlotPostScheduledTime: 60,
   },
   enable24HourTime: true,
+  enableAddMultipleTask: true,
+  nursingTaskScheduling: {
+    enableDateSelection: true,
+    maxFutureDaysAllowed: 60,
+  },
   medicationTags: {
     asNeeded: "Rx-PRN",
     "STAT (Immediately)": "Rx-STAT",
@@ -416,6 +426,11 @@ export const mockConfigFor12HourFormat = {
     timeInMinutesToDisableSlotPostScheduledTime: 60,
   },
   enable24HourTime: false,
+  enableAddMultipleTask: true,
+  nursingTaskScheduling: {
+    enableDateSelection: true,
+    maxFutureDaysAllowed: 60,
+  },
   medicationTags: {
     asNeeded: "Rx-PRN",
     "STAT (Immediately)": "Rx-STAT",

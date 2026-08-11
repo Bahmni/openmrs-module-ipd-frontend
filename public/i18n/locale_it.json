@@ -113,6 +113,8 @@
   "PATIENT_FEEDING_RECORD_HEADER_KEY": "Patient Feeding Record",
   "ADD_NURSING_TASK": "Add Nursing Task",
   "ADD_TASK": "Add Task",
+  "ADD_MORE_TASK": "Add More",
+  "SCHEDULED_DATE": "Data Programmata",
   "NON_MEDICATION": "Non - Medication",
   "MEDICATION": "Medication",
   "DIAGNOSIS_COLUMN_HEADER": "Diagnosis",
@@ -161,7 +163,7 @@
   "TREATMENTS_WARNING_TEXT": "You will lose the details entered. Do you want to continue?",
   "SAVE": "Save",
   "CANCEL": "Cancel",
-  "TASK_TILE_MORE": "more",
+  "TASK_TILE_MORE": "più compiti(s)",
   "PAGINATION_PREVIOUS_PAGE": "Previous page",
   "PAGINATION_NEXT_PAGE": "Next page",
   "PAGINATION_ITEMS_PER_PAGE": "Items per page:",
@@ -233,5 +235,14 @@
   "VARIABLE_DOSE_ACTIONS_COLUMN": "Actions",
   "IN_PROGRESS": "In corso",
   "VARIABLE_DOSAGE": "Dosaggio Variabile",
-  "VARIABLE_DOSE_STAGES_DAYS": "{stages} Fasi - {days} Giorni"
+  "VARIABLE_DOSE_STAGES_DAYS": "{stages} Fasi - {days} Giorni",
+  "INSTRUCTION_LABEL": "Istruzione",
+  "REMOVE": "Rimuovi",
+  "STOP_TASKS": "Interrompi Attività",
+  "STOP_TASKS_CONFIRMATION_TITLE": "Interrompi Attività in Sospeso",
+  "STOP_TASKS_CONFIRMATION_MESSAGE": "Sei sicuro di voler interrompere tutte le attività in sospeso per questa istruzione?",
+  "STOP_TASKS_CONFIRM_BUTTON": "Conferma",
+  "STOP_TASKS_CANCEL_BUTTON": "Annulla",
+  "ALL_PENDING_TASKS_STOPPED_SUCCESSFULLY": "Tutte le attività in sospeso sono state interrotte con successo.",
+  "FAILED_TO_STOP_TASKS": "Errore nell'interruzione delle attività. Riprova."
 }

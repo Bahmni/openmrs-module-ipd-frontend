@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import PropTypes from "prop-types";
 import "../styles/UpdateNursingTasks.scss";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
@@ -40,7 +40,6 @@ import {
   isTimeInFuture,
 } from "../../../../utils/DateTimeUtils";
 import {
-  getLocalizedLabel,
   getTranslationKey,
   isSystemGeneratedTask,
   isUserPrivileged,
@@ -77,7 +76,10 @@ const UpdateNursingTasks = (props) => {
   const [isInvalidTime, setIsInvalidTime] = useState(false);
   const [invalidText, setInvalidText] = useState();
   const [isSavingConfirmation, setIsSavingConfirmation] = useState(false);
-  const intl = useIntl();
+
+  const isTouchDevice =
+    typeof window !== "undefined" &&
+    (navigator.maxTouchPoints > 0 || "ontouchstart" in window);
 
   const invalidTimeText = (
     <FormattedMessage
@@ -103,6 +105,7 @@ const UpdateNursingTasks = (props) => {
     nursingTasks = {},
     enable24HourTime = {},
     taskToFormMapping = {},
+    enableStopTasks = false,
   } = config;
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
@@ -210,13 +213,14 @@ const UpdateNursingTasks = (props) => {
   const getTaskNameElement = (medicationTask) => {
     const isSystemTask =
       medicationTask?.taskType?.display === NURSING_ACTIVITY_SYSTEM;
-    const taskLabel = isSystemTask
-      ? getLocalizedLabel(
-          intl,
-          getTranslationKey(medicationTask.drugName, nonMedicationTaskKey),
-          medicationTask.drugName
-        )
-      : medicationTask.drugName;
+    const taskLabel = isSystemTask ? (
+      <FormattedMessage
+        id={getTranslationKey(medicationTask.drugName, nonMedicationTaskKey)}
+        defaultMessage={medicationTask.drugName}
+      />
+    ) : (
+      medicationTask.drugName
+    );
 
     if (isSystemTask && allFormsSummary && taskToFormMapping) {
       const mappedFormName = taskToFormMapping[medicationTask.drugName];
@@ -284,6 +288,9 @@ const UpdateNursingTasks = (props) => {
         saveDisabled = false;
         setIsAnyMedicationSkipped(true);
       }
+      if (tasks[key].stopped) {
+        saveDisabled = false;
+      }
     });
     updateIsSaveDisabled(saveDisabled || isInvalidTime);
   };
@@ -347,7 +354,7 @@ const UpdateNursingTasks = (props) => {
           actualTime: checked ? moment() : null,
         },
       });
-      if (!isPRNMedication) {
+      if (!isPRNMedication && !isNonMedication) {
         updateErrors({
           ...errors,
           [id]: Boolean(!tasks[id].notes),
@@ -380,7 +387,7 @@ const UpdateNursingTasks = (props) => {
     } else {
       if (
         !isPRNMedication &&
-        (tasks[id].isTimeOutOfWindow || tasks[id].skipped)
+        (tasks[id].isTimeOutOfWindow || tasks[id].skipped || tasks[id].stopped)
       ) {
         updateErrors({
           ...errors,
@@ -414,7 +421,8 @@ const UpdateNursingTasks = (props) => {
         }
       });
     } else {
-      setSkippedTasks({});
+      updateShowErrors(true);
+      if (Object.keys(errors).length > 0) return;
       const nonMedicationPayload = [];
       let saveDisabled = true;
       Object.keys(tasks).forEach((key) => {
@@ -429,22 +437,18 @@ const UpdateNursingTasks = (props) => {
           });
         }
         if (tasks[key].skipped) {
-          setSkippedTasks((prev) => ({
-            ...prev,
-            [key]: { ...tasks[key], status: "not-done" },
-          }));
-          const utcTimeEpoch = moment.utc().unix() * 1000;
-          nonMedicationPayload.push({
-            uuid: key,
-            executionEndTime: utcTimeEpoch,
-            comment: tasks[key].notes,
-            status: "REJECTED",
-          });
+          const payload = updateTaskStatusAndPayload(key, "REJECTED");
+          nonMedicationPayload.push(payload);
+        }
+        if (tasks[key].stopped) {
+          saveDisabled = false;
+          const payload = updateTaskStatusAndPayload(key, "CANCELLED");
+          nonMedicationPayload.push(payload);
         }
       });
       updateIsSaveDisabled(saveDisabled || isInvalidTime);
       const response = await updateNonMedicationTask(nonMedicationPayload);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         Object.keys(tasks).forEach((key) => {
           if (tasks[key].isSelected) {
             handleAuditEvent("NON_MEDICATION_TASK_COMPLETED");
@@ -478,23 +482,77 @@ const UpdateNursingTasks = (props) => {
     updateShowErrors(false);
   };
 
-  const handleSkipDrug = (medicationTask, skipped) => {
+  const handleTaskAction = (medicationTask, taskProperty, isActive) => {
     updateTasks({
       ...tasks,
       [medicationTask.uuid]: {
         ...tasks[medicationTask.uuid],
-        skipped: skipped,
+        [taskProperty]: isActive,
         scheduledTime: medicationTask.startTimeInEpochSeconds,
       },
     });
-    if (skipped && !tasks[medicationTask.uuid].notes) {
+    if (isActive && !tasks[medicationTask.uuid].notes) {
       updateErrors({
         ...errors,
-        [medicationTask.uuid]: skipped,
+        [medicationTask.uuid]: isActive,
       });
     } else {
       delete errors[medicationTask.uuid];
     }
+  };
+
+  const updateTaskWithMutualExclusivity = (
+    medicationTask,
+    property,
+    isActive,
+    conflictProperty
+  ) => {
+    updateTasks({
+      ...tasks,
+      [medicationTask.uuid]: {
+        ...tasks[medicationTask.uuid],
+        [property]: isActive,
+        [conflictProperty]: false,
+        scheduledTime: medicationTask.startTimeInEpochSeconds,
+      },
+    });
+    if (!tasks[medicationTask.uuid].notes) {
+      updateErrors({
+        ...errors,
+        [medicationTask.uuid]: true,
+      });
+    }
+  };
+
+  const handleSkipDrug = (medicationTask, skipped) => {
+    skipped
+      ? updateTaskWithMutualExclusivity(
+          medicationTask,
+          "skipped",
+          true,
+          "stopped"
+        )
+      : handleTaskAction(medicationTask, "skipped", skipped);
+  };
+
+  const handleStopTask = (medicationTask, stopped) => {
+    stopped
+      ? updateTaskWithMutualExclusivity(
+          medicationTask,
+          "stopped",
+          true,
+          "skipped"
+        )
+      : handleTaskAction(medicationTask, "stopped", stopped);
+  };
+
+  const updateTaskStatusAndPayload = (taskKey, apiStatus) => {
+    return {
+      uuid: taskKey,
+      executionEndTime: Date.now(),
+      comment: tasks[taskKey].notes,
+      status: apiStatus,
+    };
   };
 
   const sliderCloseActions = {
@@ -579,28 +637,61 @@ const UpdateNursingTasks = (props) => {
             </div>
           )}
           {medicationTasks.map((medicationTask, index) => {
+            const isToggleDisabled =
+              !verifyPrivileges(medicationTask) ||
+              !tasks[medicationTask.uuid]?.isRelevantTask ||
+              (!medicationTask.isANonMedicationTask &&
+                medicationTask.serviceType !== "AsNeededPlaceholder" &&
+                disableDoneTogglePostNextTaskTime(
+                  medicationTask,
+                  groupSlotsByOrderId
+                ));
+
+            const onDoneToggleClick = () => {
+              if (isToggleDisabled) return;
+              handleToggle(
+                !tasks[medicationTask.uuid]?.isSelected,
+                medicationTask.uuid
+              );
+            };
+
             return (
               <div key={index} className={"nursing-task-section"}>
-                {!tasks[medicationTask.uuid]?.skipped && (
-                  <Toggle
-                    data-testId="done-toggle"
-                    id={medicationTask.uuid}
-                    size={"sm"}
-                    labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
-                    labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
-                    onToggle={handleToggle}
-                    disabled={
-                      !verifyPrivileges(medicationTask) ||
-                      !tasks[medicationTask.uuid]?.isRelevantTask ||
-                      (!medicationTask.isANonMedicationTask &&
-                        medicationTask.serviceType !== "AsNeededPlaceholder" &&
-                        disableDoneTogglePostNextTaskTime(
-                          medicationTask,
-                          groupSlotsByOrderId
-                        ))
-                    }
-                  />
-                )}
+                {!tasks[medicationTask.uuid]?.skipped &&
+                  !tasks[medicationTask.uuid]?.stopped &&
+                  (isTouchDevice ? (
+                    <div
+                      style={{ display: "contents" }}
+                      onClick={onDoneToggleClick}
+                    >
+                      <Toggle
+                        data-testId="done-toggle"
+                        id={medicationTask.uuid}
+                        size={"sm"}
+                        toggled={
+                          tasks[medicationTask.uuid]?.isSelected || false
+                        }
+                        labelA={getLabel(
+                          tasks[medicationTask.uuid]?.actualTime
+                        )}
+                        labelB={getLabel(
+                          tasks[medicationTask.uuid]?.actualTime
+                        )}
+                        onToggle={() => {}}
+                        disabled={isToggleDisabled}
+                      />
+                    </div>
+                  ) : (
+                    <Toggle
+                      data-testId="done-toggle"
+                      id={medicationTask.uuid}
+                      size={"sm"}
+                      labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
+                      labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
+                      onToggle={handleToggle}
+                      disabled={isToggleDisabled}
+                    />
+                  ))}
                 <div className={"medication-name"}>
                   {!isNonMedication ? (
                     <div
@@ -675,7 +766,8 @@ const UpdateNursingTasks = (props) => {
                   </div>
                 )}
                 {(tasks[medicationTask.uuid]?.actualTime ||
-                  tasks[medicationTask.uuid]?.skipped) && (
+                  tasks[medicationTask.uuid]?.skipped ||
+                  tasks[medicationTask.uuid]?.stopped) && (
                   <div style={{ display: "flex" }}>
                     {tasks[medicationTask.uuid]?.actualTime &&
                       !isSystemGeneratedNonMedication &&
@@ -714,7 +806,9 @@ const UpdateNursingTasks = (props) => {
                       ))}
 
                     {!isNonMedication ||
-                    (isNonMedication && tasks[medicationTask.uuid].skipped) ? (
+                    (isNonMedication &&
+                      (tasks[medicationTask.uuid].skipped ||
+                        tasks[medicationTask.uuid].stopped)) ? (
                       <div
                         className={`${
                           Boolean(tasks[medicationTask.uuid]?.actualTime) &&
@@ -731,7 +825,8 @@ const UpdateNursingTasks = (props) => {
                                   ? false
                                   : tasks[medicationTask.uuid]
                                       .isTimeOutOfWindow ||
-                                    tasks[medicationTask.uuid].skipped
+                                    tasks[medicationTask.uuid].skipped ||
+                                    tasks[medicationTask.uuid].stopped
                               }
                             />
                           }
@@ -767,17 +862,17 @@ const UpdateNursingTasks = (props) => {
                       {tasks[medicationTask.uuid]?.skipped ? (
                         <OverflowMenuItem
                           itemText={
-                            !isNonMedication
-                              ? getLocalizedLabel(
-                                  intl,
-                                  getTranslationKey("Un-Skip Drug"),
-                                  "Un-Skip Drug"
-                                )
-                              : getLocalizedLabel(
-                                  intl,
-                                  getTranslationKey("Un-Skip Task"),
-                                  "Un-Skip Task"
-                                )
+                            !isNonMedication ? (
+                              <FormattedMessage
+                                id="IPD_UNSKIP_DRUG"
+                                defaultMessage="Un-Skip Drug"
+                              />
+                            ) : (
+                              <FormattedMessage
+                                id="IPD_UNSKIP_TASK"
+                                defaultMessage="Un-Skip Task"
+                              />
+                            )
                           }
                           onClick={() => {
                             handleSkipDrug(medicationTask, false);
@@ -786,23 +881,50 @@ const UpdateNursingTasks = (props) => {
                       ) : (
                         <OverflowMenuItem
                           itemText={
-                            !isNonMedication
-                              ? getLocalizedLabel(
-                                  intl,
-                                  getTranslationKey("Skip Drug"),
-                                  "Skip Drug"
-                                )
-                              : getLocalizedLabel(
-                                  intl,
-                                  getTranslationKey("Skip Task"),
-                                  "Skip Task"
-                                )
+                            !isNonMedication ? (
+                              <FormattedMessage
+                                id="IPD_SKIP_DRUG"
+                                defaultMessage="Skip Drug"
+                              />
+                            ) : (
+                              <FormattedMessage
+                                id="IPD_SKIP_TASK"
+                                defaultMessage="Skip Task"
+                              />
+                            )
                           }
                           onClick={() => {
                             handleSkipDrug(medicationTask, true);
                           }}
                         />
                       )}
+                      {medicationTask?.isANonMedicationTask &&
+                        enableStopTasks &&
+                        (tasks[medicationTask.uuid]?.stopped ? (
+                          <OverflowMenuItem
+                            itemText={
+                              <FormattedMessage
+                                id="IPD_UNSTOP_TASK"
+                                defaultMessage="Un-Stop Task"
+                              />
+                            }
+                            onClick={() => {
+                              handleStopTask(medicationTask, false);
+                            }}
+                          />
+                        ) : (
+                          <OverflowMenuItem
+                            itemText={
+                              <FormattedMessage
+                                id="IPD_STOP_TASK"
+                                defaultMessage="Stop Task"
+                              />
+                            }
+                            onClick={() => {
+                              handleStopTask(medicationTask, true);
+                            }}
+                          />
+                        ))}
                     </OverflowMenu>
                   )}
               </div>
@@ -852,6 +974,7 @@ const UpdateNursingTasks = (props) => {
           <hr />
           <AdministeredMedicationList
             list={{ ...administeredTasks, ...skippedTasks }}
+            enable24Hour={enable24HourTime}
           />
         </Modal>
         <SaveAndCloseButtons

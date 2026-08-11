@@ -39,10 +39,10 @@ export const ALL_DRUG_ORDERS_URL = (visitUuid) =>
   RESTWS_V1 + `/ipdVisit/${visitUuid}/medication?includes=emergencyMedications`;
 export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
-export const CLINICAL_CONFIG_URL =
-  hostUrl + "/bahmni_config/openmrs/apps/clinical/app.json";
 export const DASHBORAD_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/ipdDashboard/app.json";
+export const HOME_CONFIG_URL =
+  hostUrl + "/bahmni_config/openmrs/apps/home/app.json";
 export const PATIENT_PROFILE = RESTWS_V1 + "/patientprofile";
 export const MEDICATION_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/clinical/medication.json";
@@ -200,6 +200,8 @@ export const DOSE_UNITS = ["ml", "mg", "mcg"];
 
 export const LOADING_DOSE_SEQUENCE_OFFSET = 1;
 export const NO_LOADING_DOSE_SEQUENCE_OFFSET = 0;
+export const ATTR_NAME = "Can acknowledge emergency medication";
+export const ATTR_VALUE = true;
 
 export const TASK_COLORS = {
   LINK_BLUE: "#0f62fe",

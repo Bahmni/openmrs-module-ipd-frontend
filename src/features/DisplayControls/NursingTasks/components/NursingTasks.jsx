@@ -625,6 +625,7 @@ export default function NursingTasks(props) {
                 componentKeys.TREATMENTS,
                 componentKeys.NURSING_TASKS,
                 componentKeys.DRUG_CHART,
+                componentKeys.CARE_INSTRUCTIONS,
               ]);
             },
           }}

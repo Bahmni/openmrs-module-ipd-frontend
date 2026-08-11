@@ -113,6 +113,8 @@
   "PATIENT_FEEDING_RECORD_HEADER_KEY": "Patient Feeding Record",
   "ADD_NURSING_TASK": "Add Nursing Task",
   "ADD_TASK": "Add Task",
+  "ADD_MORE_TASK": "Add More",
+  "SCHEDULED_DATE": "Data Agendada",
   "NON_MEDICATION": "Non - Medication",
   "MEDICATION": "Medication",
   "DIAGNOSIS_COLUMN_HEADER": "Diagnosis",
@@ -161,7 +163,7 @@
   "TREATMENTS_WARNING_TEXT": "You will lose the details entered. Do you want to continue?",
   "SAVE": "Save",
   "CANCEL": "Cancel",
-  "TASK_TILE_MORE": "mais",
+  "TASK_TILE_MORE": "mais tarefas(s)",
   "NON_MEDICATION_TASK_COMPLETE_NURSING_INITIAL_ASSESSMENT_FORM": "Formulário de Avaliação Inicial de Enfermagem Completo",
   "NON_MEDICATION_TASK_COMPLETE_NURSING_PHYSICAL_ASSESSMENT_FORM": "Formulário de Avaliação Física de Enfermagem Completo",
   "NON_MEDICATION_TASK_CHECK_WARD_INSTRUCTIONS": "Verificar Instruções da Enfermaria",
@@ -243,5 +245,14 @@
   "VARIABLE_DOSE_ACTIONS_COLUMN": "Actions",
   "IN_PROGRESS": "Em andamento",
   "VARIABLE_DOSAGE": "Dosagem Variável",
-  "VARIABLE_DOSE_STAGES_DAYS": "{stages} Etapas - {days} Dias"
+  "VARIABLE_DOSE_STAGES_DAYS": "{stages} Etapas - {days} Dias",
+  "INSTRUCTION_LABEL": "Instrução",
+  "REMOVE": "Remover",
+  "STOP_TASKS": "Parar Tarefas",
+  "STOP_TASKS_CONFIRMATION_TITLE": "Parar Tarefas Pendentes",
+  "STOP_TASKS_CONFIRMATION_MESSAGE": "Tem certeza de que deseja parar todas as tarefas pendentes para esta instrução?",
+  "STOP_TASKS_CONFIRM_BUTTON": "Confirmar",
+  "STOP_TASKS_CANCEL_BUTTON": "Cancelar",
+  "ALL_PENDING_TASKS_STOPPED_SUCCESSFULLY": "Todas as tarefas pendentes foram paradas com sucesso.",
+  "FAILED_TO_STOP_TASKS": "Falha ao parar as tarefas. Por favor, tente novamente."
 }

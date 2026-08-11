@@ -24,10 +24,12 @@ export const PatientDetailsCell = ({
   navHourEpoch,
   newTreatments,
   unacknowledgedCareInstructions,
+  previousShiftCareInstructions,
   visitDetails,
   previousShiftPendingTasks,
 }) => {
   const careInstructionsCount = unacknowledgedCareInstructions?.length || 0;
+  const previousShiftCareInstructionsCount = previousShiftCareInstructions?.length || 0;
   const { person, uuid } = patientDetails;
   const {
     ipdConfig,
@@ -158,25 +160,40 @@ export const PatientDetailsCell = ({
                 )}
                 {careInstructionsCount > 0 && (
                   <div data-testid="new-care-instructions-notification">
-                    &bull; {careInstructionsCount + " "}
-                    <FormattedMessage
-                      id={"NEW_CARE_INSTRUCTIONS"}
-                      defaultMessage={"New Care Instruction(s)"}
-                    />
-                    {": "}
-                    <Link
-                      href={getIPDPatientDashboardUrl(
-                        patientDetails.uuid,
-                        visitDetails?.uuid,
-                        "careViewDashboard"
-                      )}
-                      data-testid="care-instructions-ipd-dashboard"
-                    >
+                    <div>
+                      &bull; {careInstructionsCount + " "}
                       <FormattedMessage
-                        id={"ACKNOWLEDGE_CARE_INSTRUCTIONS"}
-                        defaultMessage={"Acknowledge"}
+                        id={"NEW_CARE_INSTRUCTIONS"}
+                        defaultMessage={"New Care Instruction(s)"}
                       />
-                    </Link>
+                      {": "}
+                      <Link
+                        href={getIPDPatientDashboardUrl(
+                          patientDetails.uuid,
+                          visitDetails?.uuid,
+                          "careViewDashboard"
+                        )}
+                        data-testid="care-instructions-ipd-dashboard"
+                      >
+                        <FormattedMessage
+                          id={"ACKNOWLEDGE_CARE_INSTRUCTIONS"}
+                          defaultMessage={"Acknowledge"}
+                        />
+                      </Link>
+                    </div>
+                    {previousShiftCareInstructionsCount > 0 && (
+                      <div
+                        className="care-instructions-previous-shift"
+                        data-testid="previous-shift-care-instructions-notification"
+                      >
+
+                        <FormattedMessage
+                          id={"PREVIOUS_SHIFT_CARE_INSTRUCTIONS"}
+                          defaultMessage={"(Includes {count} from Previous Shift)"}
+                          values={{ count: previousShiftCareInstructionsCount }}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -237,15 +254,16 @@ export const PatientDetailsCell = ({
 };
 
 PatientDetailsCell.propTypes = {
-  patientDetails: {
+  patientDetails: propTypes.shape({
     person: propTypes.object.isRequired,
     uuid: propTypes.string.isRequired,
-  },
+  }).isRequired,
   bedDetails: propTypes.object.isRequired,
   careTeamDetails: propTypes.object.isRequired,
   navHourEpoch: propTypes.object.isRequired,
   visitDetails: propTypes.object.isRequired,
   newTreatments: propTypes.number.isRequired,
   unacknowledgedCareInstructions: propTypes.array.isRequired,
+  previousShiftCareInstructions: propTypes.array.isRequired,
   previousShiftPendingTasks: propTypes.array.isRequired,
 };

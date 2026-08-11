@@ -11,6 +11,7 @@ import {
   mockUpdateResponse,
 } from "./NursingTasksUtilsMockData";
 import { IPDContext } from "../../../../context/IPDContext";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
 import {
   mockConfig,
   mockConfigFor12HourFormat,
@@ -30,6 +31,7 @@ const mockSetSuccessMessage = jest.fn();
 const mockUpdateEmergencyTasksSlider = jest.fn();
 const mockUpdateNonMedicationTask = jest.fn();
 const mockHandleAuditLogEvent = jest.fn();
+const mockRefreshDisplayControl = jest.fn();
 
 jest.mock("../utils/NursingTasksUtils", () => {
   const originalModule = jest.requireActual("../utils/NursingTasksUtils");
@@ -174,18 +176,20 @@ describe("UpdateNursingTasksSlider", function () {
             currentUser: mockUserWithAllRequiredPrivileges,
           }}
         >
-          <UpdateNursingTasks
-            medicationTasks={mockNonMedicationTileData}
-            groupSlotsByOrderId={mockGroupSlotsByOrderId}
-            updateNursingTasksSlider={mockUpdateEmergencyTasksSlider}
-            patientId="test_patient_uuid"
-            providerId="test_provider_uuid"
-            setShowSuccessNotification={mockSetShowSuccessNotification}
-            setSuccessMessage={mockSetSuccessMessage}
-            setShowNotification={mockSetShowNotification}
-            setNotificationMessage={mockSetNotificationMessage}
-            setNotificationStatus={mockSetNotificationStatus}
-          />
+          <RefreshDisplayControl.Provider value={mockRefreshDisplayControl}>
+            <UpdateNursingTasks
+              medicationTasks={mockNonMedicationTileData}
+              groupSlotsByOrderId={mockGroupSlotsByOrderId}
+              updateNursingTasksSlider={mockUpdateEmergencyTasksSlider}
+              patientId="test_patient_uuid"
+              providerId="test_provider_uuid"
+              setShowSuccessNotification={mockSetShowSuccessNotification}
+              setSuccessMessage={mockSetSuccessMessage}
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+            />
+          </RefreshDisplayControl.Provider>
         </IPDContext.Provider>
       </IntlProvider>
     );
@@ -194,6 +198,47 @@ describe("UpdateNursingTasksSlider", function () {
 
     const timePicker = container.querySelectorAll(".bx--time-picker")[0];
     expect(timePicker).toBeTruthy();
+
+    const saveButton = screen.getAllByText("Save")[1];
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(mockSetShowNotification).toHaveBeenCalledTimes(1);
+      expect(mockSetNotificationMessage).toHaveBeenCalledTimes(1);
+      expect(mockSetNotificationStatus).toHaveBeenCalledTimes(1);
+      expect(mockUpdateEmergencyTasksSlider).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("should save when toggle switch is On for Non medication task with time outside administered window", async () => {
+    MockDate.set("2024-01-01 17:30"); // 52 minutes past startTime "16:38", outside 30-min window
+    mockUpdateNonMedicationTask.mockResolvedValue(mockUpdateResponse);
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: mockConfig,
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <RefreshDisplayControl.Provider value={mockRefreshDisplayControl}>
+            <UpdateNursingTasks
+              medicationTasks={mockNonMedicationTileData}
+              groupSlotsByOrderId={mockGroupSlotsByOrderId}
+              updateNursingTasksSlider={mockUpdateEmergencyTasksSlider}
+              patientId="test_patient_uuid"
+              providerId="test_provider_uuid"
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+            />
+          </RefreshDisplayControl.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    fireEvent.click(toggleButton);
 
     const saveButton = screen.getAllByText("Save")[1];
     fireEvent.click(saveButton);
@@ -978,5 +1023,395 @@ describe("UpdateNursingTasksSlider", function () {
     expect(
       screen.queryByRole("link", { name: "Unknown System Task" })
     ).toBeNull();
+  });
+
+  it("should show Stop Task option on click of Overflow menu button for non-medication tasks", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: true },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <UpdateNursingTasks
+            medicationTasks={mockNonMedicationTileData}
+            groupSlotsByOrderId={mockGroupSlotsByOrderId}
+            updateNursingTasksSlider={jest.fn}
+            patientId="test_patient_uuid"
+            providerId="test_provider_uuid"
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Stop Task")).toBeTruthy();
+  });
+
+  it("should hide the Administer Done toggle button on click of Stop Task button", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: true },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <UpdateNursingTasks
+            medicationTasks={[mockNonMedicationTileData[0]]}
+            groupSlotsByOrderId={mockGroupSlotsByOrderId}
+            updateNursingTasksSlider={jest.fn}
+            patientId="test_patient_uuid"
+            providerId="test_provider_uuid"
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    const stopTaskButton = screen.getByText("Stop Task");
+    fireEvent.click(stopTaskButton);
+    expect(container.querySelectorAll(".bx--toggle__switch")).toHaveLength(0);
+  });
+
+  it("should enable save button when Stop Task is clicked", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: true },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <UpdateNursingTasks
+            medicationTasks={[mockNonMedicationTileData[0]]}
+            groupSlotsByOrderId={mockGroupSlotsByOrderId}
+            updateNursingTasksSlider={jest.fn}
+            patientId="test_patient_uuid"
+            providerId="test_provider_uuid"
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const saveButton = screen.getAllByText("Save")[1];
+    expect(saveButton.disabled).toBe(true);
+
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    const stopTaskButton = screen.getByText("Stop Task");
+    fireEvent.click(stopTaskButton);
+
+    expect(saveButton.disabled).toBe(false);
+  });
+
+  it("should show Un-Stop Task option when task is already stopped", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: true },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <UpdateNursingTasks
+            medicationTasks={[mockNonMedicationTileData[0]]}
+            groupSlotsByOrderId={mockGroupSlotsByOrderId}
+            updateNursingTasksSlider={jest.fn}
+            patientId="test_patient_uuid"
+            providerId="test_provider_uuid"
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    const stopTaskButton = screen.getByText("Stop Task");
+    fireEvent.click(stopTaskButton);
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Un-Stop Task")).toBeTruthy();
+    expect(screen.queryByText("Stop Task")).toBeNull();
+  });
+
+  it("should not show Stop Task option for medication tasks", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: true },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <UpdateNursingTasks
+            medicationTasks={[mockMedicationTasks[0]]}
+            groupSlotsByOrderId={mockGroupSlotsByOrderId}
+            updateNursingTasksSlider={jest.fn}
+            patientId="test_patient_uuid"
+            providerId="test_provider_uuid"
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    expect(screen.queryByText("Stop Task")).toBeNull();
+  });
+
+  it("should hide the Done toggle when Stop Task is clicked", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: true },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <UpdateNursingTasks
+            medicationTasks={[mockNonMedicationTileData[0]]}
+            groupSlotsByOrderId={mockGroupSlotsByOrderId}
+            updateNursingTasksSlider={jest.fn}
+            patientId="test_patient_uuid"
+            providerId="test_provider_uuid"
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    const stopTaskButton = screen.getByText("Stop Task");
+    fireEvent.click(stopTaskButton);
+
+    expect(container.querySelectorAll(".bx--toggle__switch")).toHaveLength(0);
+  });
+
+  it("should deactivate Stop when Skip is activated (mutual exclusivity)", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: true },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <RefreshDisplayControl.Provider value={mockRefreshDisplayControl}>
+            <UpdateNursingTasks
+              medicationTasks={[mockNonMedicationTileData[0]]}
+              groupSlotsByOrderId={mockGroupSlotsByOrderId}
+              updateNursingTasksSlider={jest.fn}
+              patientId="test_patient_uuid"
+              providerId="test_provider_uuid"
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+            />
+          </RefreshDisplayControl.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+
+    fireEvent.click(overflowMenuButton);
+    let stopTaskButton = screen.getByText("Stop Task");
+    fireEvent.click(stopTaskButton);
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Un-Stop Task")).toBeTruthy();
+    expect(screen.queryByText("Stop Task")).toBeNull();
+
+    let skipDrugButton = screen.getByText("Skip Task");
+    fireEvent.click(skipDrugButton);
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Un-Skip Task")).toBeTruthy();
+    expect(screen.queryByText("Skip Task")).toBeNull();
+    expect(screen.getByText("Stop Task")).toBeTruthy(); // Stop Task should reappear
+    expect(screen.queryByText("Un-Stop Task")).toBeNull(); // Unstop should disappear
+  });
+
+  it("should deactivate Skip when Stop is activated (mutual exclusivity)", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: true },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <RefreshDisplayControl.Provider value={mockRefreshDisplayControl}>
+            <UpdateNursingTasks
+              medicationTasks={[mockNonMedicationTileData[0]]}
+              groupSlotsByOrderId={mockGroupSlotsByOrderId}
+              updateNursingTasksSlider={jest.fn}
+              patientId="test_patient_uuid"
+              providerId="test_provider_uuid"
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+            />
+          </RefreshDisplayControl.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+
+    fireEvent.click(overflowMenuButton);
+    let skipTaskButton = screen.getByText("Skip Task");
+    fireEvent.click(skipTaskButton);
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Un-Skip Task")).toBeTruthy();
+    expect(screen.queryByText("Skip Task")).toBeNull();
+
+    let stopTaskButton = screen.getByText("Stop Task");
+    fireEvent.click(stopTaskButton);
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Un-Stop Task")).toBeTruthy();
+    expect(screen.queryByText("Stop Task")).toBeNull();
+    expect(screen.getByText("Skip Task")).toBeTruthy(); // Skip Task should reappear
+    expect(screen.queryByText("Un-Skip Task")).toBeNull(); // Un-Skip should disappear
+  });
+
+  it("should not allow both Skip and Stop to be active simultaneously", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: true },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <RefreshDisplayControl.Provider value={mockRefreshDisplayControl}>
+            <UpdateNursingTasks
+              medicationTasks={[mockNonMedicationTileData[0]]}
+              groupSlotsByOrderId={mockGroupSlotsByOrderId}
+              updateNursingTasksSlider={jest.fn}
+              patientId="test_patient_uuid"
+              providerId="test_provider_uuid"
+              setShowNotification={mockSetShowNotification}
+              setNotificationMessage={mockSetNotificationMessage}
+              setNotificationStatus={mockSetNotificationStatus}
+            />
+          </RefreshDisplayControl.Provider>
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+
+    fireEvent.click(overflowMenuButton);
+    let skipTaskButton = screen.getByText("Skip Task");
+    fireEvent.click(skipTaskButton);
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Un-Skip Task")).toBeTruthy();
+    expect(screen.queryByText("Skip Task")).toBeNull();
+    expect(screen.getByText("Stop Task")).toBeTruthy();
+    expect(screen.queryByText("Un-Stop Task")).toBeNull();
+
+    fireEvent.click(screen.getByText("Stop Task"));
+
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Un-Stop Task")).toBeTruthy();
+    expect(screen.queryByText("Stop Task")).toBeNull();
+    expect(screen.getByText("Skip Task")).toBeTruthy();
+    expect(screen.queryByText("Un-Skip Task")).toBeNull();
+  });
+
+  it("should show Stop Task option in overflow menu when enableStopTasks is true", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: true },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <UpdateNursingTasks
+            medicationTasks={[mockNonMedicationTileData[0]]}
+            groupSlotsByOrderId={mockGroupSlotsByOrderId}
+            updateNursingTasksSlider={jest.fn}
+            patientId="test_patient_uuid"
+            providerId="test_provider_uuid"
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    expect(screen.getByText("Stop Task")).toBeTruthy();
+  });
+
+  it("should not show Stop Task option in overflow menu when enableStopTasks is false", () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IPDContext.Provider
+          value={{
+            config: { ...mockConfig, enableStopTasks: false },
+            handleAuditEvent: mockHandleAuditLogEvent,
+            currentUser: mockUserWithAllRequiredPrivileges,
+          }}
+        >
+          <UpdateNursingTasks
+            medicationTasks={[mockNonMedicationTileData[0]]}
+            groupSlotsByOrderId={mockGroupSlotsByOrderId}
+            updateNursingTasksSlider={jest.fn}
+            patientId="test_patient_uuid"
+            providerId="test_provider_uuid"
+            setShowNotification={mockSetShowNotification}
+            setNotificationMessage={mockSetNotificationMessage}
+            setNotificationStatus={mockSetNotificationStatus}
+          />
+        </IPDContext.Provider>
+      </IntlProvider>
+    );
+    const overflowMenuButton =
+      container.querySelectorAll(".bx--overflow-menu")[0];
+    fireEvent.click(overflowMenuButton);
+    expect(screen.queryByText("Stop Task")).toBeNull();
   });
 });

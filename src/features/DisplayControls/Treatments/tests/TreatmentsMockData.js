@@ -23,7 +23,6 @@ export const variableDoseStopDrugOrder = {
             repeat: { duration: 3, durationUnit: "d" },
           },
           doseAndRate: [{ doseQuantity: { value: 1, unit: "Tablet(s)" } }],
-          extension: [{ url: "isLoadingDose", valueBoolean: false }],
         },
       ]),
     },

@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
+import { Calendar16 } from "@carbon/icons-react";
 import {
   getTime,
   getRelevantTaskStatus,
@@ -19,12 +20,12 @@ import {
   TASK_COLORS,
   NURSING_ACTIVITY_SYSTEM,
 } from "../../../../constants";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import {
-  getLocalizedLabel,
   getTranslationKey,
   isSystemGeneratedTask,
 } from "../../../../utils/CommonUtils";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 import TaskFormLink from "./TaskFormLink";
 
 export default function TaskTile(props) {
@@ -57,9 +58,9 @@ export default function TaskTile(props) {
     taskType,
     intradayDoseString,
   } = newMedicationNursingTask;
-  const intl = useIntl();
-
-  const more = <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more" />;
+  const moreTask = (
+    <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more task(s)" />
+  );
 
   const isRelevantTask = getRelevantTaskStatus(
     startTimeInEpochSeconds,
@@ -67,13 +68,14 @@ export default function TaskTile(props) {
   );
 
   const isSystemTask = taskType?.display === NURSING_ACTIVITY_SYSTEM;
-  const taskLabel = isSystemTask
-    ? getLocalizedLabel(
-        intl,
-        getTranslationKey(drugName, nonMedicationTaskKey),
-        drugName
-      )
-    : drugName;
+  const taskLabel = isSystemTask ? (
+    <FormattedMessage
+      id={getTranslationKey(drugName, nonMedicationTaskKey)}
+      defaultMessage={drugName}
+    />
+  ) : (
+    drugName
+  );
   const isFormLink = isSystemTask && formUuid && patientId;
   const fontWeight = !isANonMedicationTask && isRelevantTask ? 500 : 400;
   const taskTitleStyle = isFormLink
@@ -198,36 +200,51 @@ export default function TaskTile(props) {
           ) && (
             <div className="tile-content-footer">
               <div className="tile-date-time">
-                <Clock />
-                <div className="tile-content-subtext-time">
-                  &nbsp;
-                  {enable24HourTime
-                    ? getTime(
-                        administeredTimeInEpochSeconds,
-                        startTime,
-                        "hh:mm",
-                        timeFormatFor24Hr
-                      )
-                    : getTime(
-                        administeredTimeInEpochSeconds,
-                        startTime,
-                        "hh:mm",
-                        timeFormatFor12Hr
+                <div className="date-time-container">
+                  <div className="date-row">
+                    <Calendar16 />
+                    <span className="tile-content-subtext-date">
+                      &nbsp;
+                      {formatDate(
+                        new Date(startTimeInEpochSeconds * 1000),
+                        "DD MMMM YYYY"
                       )}
+                    </span>
+                  </div>
+                  <div className="time-row">
+                    <Clock />
+                    <div className="tile-content-subtext-time">
+                      &nbsp;
+                      {enable24HourTime
+                        ? getTime(
+                            administeredTimeInEpochSeconds,
+                            startTime,
+                            "hh:mm",
+                            timeFormatFor24Hr
+                          )
+                        : getTime(
+                            administeredTimeInEpochSeconds,
+                            startTime,
+                            "hh:mm",
+                            timeFormatFor12Hr
+                          )}
+                    </div>
+                  </div>
                 </div>
-                &nbsp;
+              </div>
+              <div className="footer-right-section">
                 {creator &&
                   !isSystemGeneratedTask(newMedicationNursingTask) && (
-                    <span style={{ textTransform: "capitalize" }}>
+                    <span className="creator-name">
                       {creatorName(creator.display)}
                     </span>
                   )}
+                {isGroupedTask && (
+                  <span className="grouped-task-count">
+                    ({taskCount} {moreTask})
+                  </span>
+                )}
               </div>
-              {isGroupedTask && (
-                <div>
-                  ({taskCount} {more})
-                </div>
-              )}
             </div>
           )}
         </div>

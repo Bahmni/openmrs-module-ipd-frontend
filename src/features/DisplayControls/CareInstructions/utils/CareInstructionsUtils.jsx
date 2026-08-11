@@ -34,10 +34,6 @@ export const fetchCareInstructionsObs = async (visitUuid, conceptNames) => {
 export const fetchTasksByObservationUuids = async (observationUuids) => {
   if (!observationUuids || observationUuids.length === 0) return [];
   try {
-    // No status filter: task existence (any status) indicates acknowledgement,
-    // because creating a task is the acknowledgement action in this workflow.
-    // &_count=500 avoids silent truncation at the default 10-result page size
-    // when called with all-patients observation UUIDs from the care view summary.
     const url = `${FHIR_TASK_URL}?focus=${observationUuids
       .map((uuid) => `Observation/${uuid}`)
       .join(",")}&_count=500`;
@@ -45,8 +41,9 @@ export const fetchTasksByObservationUuids = async (observationUuids) => {
     const response = await axios.get(url, { withCredentials: true });
     const entries = response.data?.entry || [];
     return entries.map((entry) => ({
-      observationUuid: entry.resource?.focus?.reference?.split("/").pop(),
       uuid: entry.resource?.id,
+      observationUuid: entry.resource?.focus?.reference?.split("/").pop(),
+      status: entry.resource?.status,
     }));
   } catch (error) {
     console.error("Failed to fetch tasks by observation UUIDs", error);
@@ -54,12 +51,30 @@ export const fetchTasksByObservationUuids = async (observationUuids) => {
   }
 };
 
-export const fetchAcknowledgedObservationUuids = async (obsUuids) => {
-  const tasks = await fetchTasksByObservationUuids(obsUuids);
-  return new Set(tasks.map((task) => task.observationUuid).filter(Boolean));
+export const getAcknowledgedObservationUuids = (allTasks) => {
+  return new Set(allTasks.map((task) => task.observationUuid).filter(Boolean));
 };
 
-export const fetchBatchObservations = async (visitUuids, concepts, filterObsWithOrders = false) => {
+export const getPendingTaskUuidsByObservation = (allTasks) => {
+  return allTasks.reduce((acc, task) => {
+    if (task.status === "requested" && task.observationUuid) {
+      acc[task.observationUuid] = acc[task.observationUuid] || [];
+      acc[task.observationUuid].push(task.uuid);
+    }
+    return acc;
+  }, {});
+};
+
+export const fetchAcknowledgedObservationUuids = async (obsUuids) => {
+  const tasks = await fetchTasksByObservationUuids(obsUuids);
+  return getAcknowledgedObservationUuids(tasks);
+};
+
+export const fetchBatchObservations = async (
+  visitUuids,
+  concepts,
+  filterObsWithOrders = false
+) => {
   try {
     const request = {
       visitUuids,
@@ -133,4 +148,17 @@ export const mapObservationsToInstructions = (observations, formConcepts) => {
 
     return result;
   }, []);
+};
+
+export const filterPreviousShiftInstructions = (
+  instructions,
+  currentShiftStartTime
+) => {
+  if (!instructions || instructions.length === 0) {
+    return [];
+  }
+
+  return instructions.filter(
+    (instruction) => instruction.encounterDateTime < currentShiftStartTime
+  );
 };
