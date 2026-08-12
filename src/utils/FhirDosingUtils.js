@@ -29,6 +29,7 @@ export const isVariableDoseOrder = (dosingInstructionType) =>
 
 export const LOADING_DOSE_DURATION_DISPLAY = "Occurrence(s)";
 export const LOADING_DOSE_FREQUENCY = "Once";
+export const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 export const MEDICATION_ADDITIVES_EXTENSION_URL = "http://fhir.bahmni.org/ext/medication-additives";
 
@@ -93,7 +94,7 @@ export const computeStageStartDates = (fhirDosages, effectiveStartDate) => {
     const startDate =
       cumulativeDays === 0
         ? effectiveStartDate
-        : startOfPrescriptionDay + cumulativeDays * 24 * 60 * 60 * 1000;
+        : startOfPrescriptionDay + cumulativeDays * MS_PER_DAY;
     const stage = fhirDosageToDisplayStage(dosage);
     cumulativeDays += stage.durationDays;
     return startDate;

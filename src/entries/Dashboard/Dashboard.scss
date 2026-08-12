@@ -48,6 +48,14 @@
     background-color: #007d79;
   }
 
+  .medication-indicators {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
   .header-bg-color {
     background: #007d79;
   }

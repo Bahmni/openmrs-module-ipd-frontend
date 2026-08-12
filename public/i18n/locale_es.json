@@ -278,5 +278,7 @@
   "VARIABLE_DOSAGE": "Dosis Variable",
   "VARIABLE_DOSE_STAGES_DAYS": "{stages} Etapas - {days} Días",
   "INSTRUCTION_LABEL": "Instrucción",
-  "REMOVE": "Eliminar"
+  "REMOVE": "Eliminar",
+  "MEDICATION_INDICATOR_REGULAR": "Regular",
+  "MEDICATION_INDICATOR_VDP": "VDP"
 }

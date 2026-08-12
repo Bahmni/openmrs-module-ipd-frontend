@@ -21,7 +21,9 @@ import {
   parseFlatAdminInstructions,
   isVariableDoseOrder,
   fromUcumDurationUnit,
+  fhirDosageToDisplayStage,
   LOADING_DOSE_DURATION_DISPLAY,
+  MS_PER_DAY,
 } from "../../../../utils/FhirDosingUtils";
 import { isIPDrugOrder } from "../../../../utils/CommonUtils";
 import moment from "moment";
@@ -627,6 +629,14 @@ export const buildStageDrugOrder = (
 };
 
 export const getActiveStageIndex = (fhirDosages, stageSchedules, startDates) => {
+  if (
+    !fhirDosages?.length ||
+    !startDates?.length ||
+    fhirDosages.length !== startDates.length
+  ) {
+    return -1;
+  }
+
   const scheduleBySequence = new Map(
     (stageSchedules || []).map((s) => [s.variableDosageSequence, s])
   );
@@ -635,6 +645,14 @@ export const getActiveStageIndex = (fhirDosages, stageSchedules, startDates) => 
   const isScheduled = (schedule) => schedule?.isScheduled === true;
   const isAttended = (schedule) => schedule?.allAttended === true;
   const isActive = (schedule) => isScheduled(schedule) && !isAttended(schedule);
+  const stageWindowEnd = (index) => {
+    const stage = fhirDosageToDisplayStage(fhirDosages[index]);
+    if (!stage || stage.durationDays == null) return Infinity;
+    return (
+      startDates[index] + Math.max(stage.durationDays, 1) * MS_PER_DAY
+    );
+  };
+  const isStageMissed = (index) => moment().valueOf() >= stageWindowEnd(index);
 
   let stageToAddToDrugChart = -1;
 
@@ -650,12 +668,35 @@ export const getActiveStageIndex = (fhirDosages, stageSchedules, startDates) => 
     if (i > 0) {
       const prevSchedule = getSchedule(i - 1);
       if (isActive(prevSchedule)) return -1;
-      if (!isScheduled(prevSchedule) && startDates[i - 1] >= startDates[i]) break;
+      if (
+        !isScheduled(prevSchedule) &&
+        !isStageMissed(i - 1) &&
+        startDates[i - 1] >= startDates[i]
+      )
+        break;
     }
     if (moment().valueOf() < startDates[i]) break;
+    if (isStageMissed(i)) {
+      stageToAddToDrugChart = -1;
+      continue;
+    }
 
     stageToAddToDrugChart = i;
   }
 
   return stageToAddToDrugChart;
+};
+
+export const getMedicationIndicators = (treatments) => {
+  const qualifyingTreatments = (treatments || []).filter(
+    (treatment) => !!treatment.addToDrugChartEnabled
+  );
+  return {
+    regularCount: qualifyingTreatments.filter(
+      (treatment) => !treatment.additionalData?.isVariableDose
+    ).length,
+    vdpCount: qualifyingTreatments.filter(
+      (treatment) => treatment.additionalData?.isVariableDose
+    ).length,
+  };
 };

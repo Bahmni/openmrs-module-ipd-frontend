@@ -244,5 +244,7 @@
   "STOP_TASKS_CONFIRM_BUTTON": "Conferma",
   "STOP_TASKS_CANCEL_BUTTON": "Annulla",
   "ALL_PENDING_TASKS_STOPPED_SUCCESSFULLY": "Tutte le attività in sospeso sono state interrotte con successo.",
-  "FAILED_TO_STOP_TASKS": "Errore nell'interruzione delle attività. Riprova."
+  "FAILED_TO_STOP_TASKS": "Errore nell'interruzione delle attività. Riprova.",
+  "MEDICATION_INDICATOR_REGULAR": "Regolare",
+  "MEDICATION_INDICATOR_VDP": "VDP"
 }

@@ -254,5 +254,7 @@
   "STOP_TASKS_CONFIRM_BUTTON": "Confirmar",
   "STOP_TASKS_CANCEL_BUTTON": "Cancelar",
   "ALL_PENDING_TASKS_STOPPED_SUCCESSFULLY": "Todas as tarefas pendentes foram paradas com sucesso.",
-  "FAILED_TO_STOP_TASKS": "Falha ao parar as tarefas. Por favor, tente novamente."
+  "FAILED_TO_STOP_TASKS": "Falha ao parar as tarefas. Por favor, tente novamente.",
+  "MEDICATION_INDICATOR_REGULAR": "Regular",
+  "MEDICATION_INDICATOR_VDP": "VDP"
 }

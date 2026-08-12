@@ -20,9 +20,7 @@ const makeDosage = ({
   additives = "",
 }) => {
   const timing = {
-    repeat: isLoadingDose
-      ? { count: 1 }
-      : { duration, durationUnit },
+    repeat: isLoadingDose ? { count: 1 } : { duration, durationUnit },
   };
   if (!isLoadingDose) {
     timing.code = { text: frequency };
@@ -45,7 +43,9 @@ const makeDosage = ({
     patientInstruction: additionalInstructions,
   };
   if (additives) {
-    dosage.extension = [{ url: MEDICATION_ADDITIVES_EXTENSION_URL, valueString: additives }];
+    dosage.extension = [
+      { url: MEDICATION_ADDITIVES_EXTENSION_URL, valueString: additives },
+    ];
   }
   return dosage;
 };
@@ -329,7 +329,7 @@ describe("stage button behaviour", () => {
     MockDate.reset();
   });
 
-  it("shows Add to Drug Chart button only for the first stage when no stage is scheduled and date is due", () => {
+  it("shows Add to Drug Chart for all unscheduled stages with only the active stage enabled when date is due", () => {
     MockDate.set(new Date("2026-04-25").getTime());
     render(
       <VariableDoseStagesTable
@@ -339,12 +339,16 @@ describe("stage button behaviour", () => {
         stageSchedules={[]}
       />
     );
-    // Only Stage 1 (the first unscheduled stage) should show the button
+    // Both unscheduled stages show Add to Drug Chart; only the active stage is enabled
     const addLinks = screen.getAllByText("Add to Drug Chart");
-    expect(addLinks).toHaveLength(1);
+    expect(addLinks).toHaveLength(2);
+    const enabledLinks = addLinks.filter(
+      (link) => link.getAttribute("aria-disabled") !== "true"
+    );
+    expect(enabledLinks).toHaveLength(1);
   });
 
-  it("shows no Add to Drug Chart button when stage start date has not arrived", () => {
+  it("shows Add to Drug Chart greyed out for all stages when stage start date has not arrived", () => {
     MockDate.set(new Date("2026-04-10").getTime());
     render(
       <VariableDoseStagesTable
@@ -354,11 +358,15 @@ describe("stage button behaviour", () => {
         stageSchedules={[]}
       />
     );
-    // Date is before effectiveStartDate — no active stage
-    expect(screen.queryByText("Add to Drug Chart")).toBeNull();
+    // Date is before effectiveStartDate — no active stage, all Add links disabled
+    const addLinks = screen.getAllByText("Add to Drug Chart");
+    expect(addLinks).toHaveLength(2);
+    addLinks.forEach((link) =>
+      expect(link).toHaveAttribute("aria-disabled", "true")
+    );
   });
 
-  it("shows Add to Drug Chart button for Stage 1 when start date is due", () => {
+  it("shows Add to Drug Chart button for the active stage when start date is due", () => {
     MockDate.set(new Date("2026-04-25").getTime());
     render(
       <VariableDoseStagesTable
@@ -368,10 +376,14 @@ describe("stage button behaviour", () => {
         stageSchedules={[]}
       />
     );
-    // Stage 1 is active — button shows without disabled state
-    const addLink = screen.getByText("Add to Drug Chart");
-    expect(addLink).toBeInTheDocument();
-    expect(addLink).not.toHaveAttribute("aria-disabled", "true");
+    // Active stage shows the button without disabled state
+    const addLinks = screen.getAllByText("Add to Drug Chart");
+    expect(addLinks).toHaveLength(2);
+    const enabledLinks = addLinks.filter(
+      (link) => link.getAttribute("aria-disabled") !== "true"
+    );
+    expect(enabledLinks).toHaveLength(1);
+    expect(enabledLinks[0]).not.toHaveAttribute("aria-disabled", "true");
   });
 
   it("shows Edit Drug Chart link when stage is scheduled and not administered", () => {
@@ -394,10 +406,10 @@ describe("stage button behaviour", () => {
     expect(screen.getByText("Edit Drug Chart")).toBeInTheDocument();
   });
 
-  it("shows no Edit or Add button when a later stage is scheduled and administration has started", () => {
+  it("shows no Edit button and greyed out Add buttons when a later stage is scheduled and administration has started", () => {
     MockDate.set(new Date("2026-04-25").getTime());
     // stage1 (seq=2) is scheduled+adminStarted; loading dose (seq=1) was never scheduled
-    // No button should show for loading dose — stage1 is already active
+    // Loading dose and stage2 are not addable — Add links shown greyed out
     render(
       <VariableDoseStagesTable
         fhirDosages={mockFhirDosages}
@@ -414,10 +426,14 @@ describe("stage button behaviour", () => {
       />
     );
     expect(screen.queryByText("Edit Drug Chart")).toBeNull();
-    expect(screen.queryByText("Add to Drug Chart")).toBeNull();
+    const addLinks = screen.getAllByText("Add to Drug Chart");
+    expect(addLinks).toHaveLength(2);
+    addLinks.forEach((link) =>
+      expect(link).toHaveAttribute("aria-disabled", "true")
+    );
   });
 
-  it("shows no Add to Drug Chart button for Stage 1 when loading dose is scheduled but not attended", () => {
+  it("shows Add to Drug Chart greyed out for Stage 1 when loading dose is scheduled but not attended", () => {
     MockDate.set(new Date("2026-04-25").getTime());
     render(
       <VariableDoseStagesTable
@@ -434,13 +450,15 @@ describe("stage button behaviour", () => {
         ]}
       />
     );
-    // Loading dose scheduled but not attended → Stage 1 button must NOT appear
-    // Loading dose itself is scheduled → no Add button for loading dose either
-    expect(screen.queryByText("Add to Drug Chart")).toBeNull();
+    // Loading dose scheduled but not attended → Stage 1 Add link shown but greyed out
+    // Loading dose itself is scheduled → Edit Drug Chart, no Add link
+    const addLink = screen.getByText("Add to Drug Chart");
+    expect(addLink).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByText("Edit Drug Chart")).toBeInTheDocument();
   });
 
-  it("shows Add to Drug Chart button for Stage 1 when loading dose is allAttended", () => {
-    MockDate.set(new Date("2026-04-25").getTime());
+  it("shows no Add to Drug Chart for a completed loading dose and an enabled Add for the next stage once the loading dose is administered", () => {
+    MockDate.set(new Date("2026-04-22").getTime());
     render(
       <VariableDoseStagesTable
         fhirDosages={withLoadingDoseFhirDosages}
@@ -456,8 +474,8 @@ describe("stage button behaviour", () => {
         ]}
       />
     );
-    // Loading dose allAttended → Stage 1 is now the active stage
-    const addLinks = screen.queryAllByText("Add to Drug Chart");
+    // Loading dose allAttended → completed (no Add link); Stage 1 is the active stage (enabled Add)
+    const addLinks = screen.getAllByText("Add to Drug Chart");
     expect(addLinks).toHaveLength(1);
     expect(addLinks[0]).not.toHaveAttribute("aria-disabled", "true");
   });
@@ -473,10 +491,12 @@ describe("stage button behaviour", () => {
         stageSchedules={[]}
       />
     );
-    // Active stage still shows button but disabled — same as regular order behaviour
-    const addLink = screen.getByText("Add to Drug Chart");
-    expect(addLink).toBeInTheDocument();
-    expect(addLink).toHaveAttribute("aria-disabled", "true");
+    // Add links show but disabled — same as regular order behaviour
+    const addLinks = screen.getAllByText("Add to Drug Chart");
+    expect(addLinks).toHaveLength(2);
+    addLinks.forEach((link) =>
+      expect(link).toHaveAttribute("aria-disabled", "true")
+    );
   });
 
   it("shows Add to Drug Chart button as disabled when hasScheduleEditPrivilege is false", () => {
@@ -490,10 +510,95 @@ describe("stage button behaviour", () => {
         stageSchedules={[]}
       />
     );
-    // No privilege → button shows but disabled (same as regular order)
+    // No privilege → buttons show but disabled (same as regular order)
+    const addLinks = screen.getAllByText("Add to Drug Chart");
+    expect(addLinks).toHaveLength(2);
+    addLinks.forEach((link) =>
+      expect(link).toHaveAttribute("aria-disabled", "true")
+    );
+  });
+
+  it("does not call onAddToDrugChart when a disabled Add to Drug Chart link is clicked", () => {
+    MockDate.set(new Date("2026-04-25").getTime());
+    const onAddToDrugChart = jest.fn();
+    render(
+      <VariableDoseStagesTable
+        fhirDosages={withLoadingDoseFhirDosages}
+        effectiveStartDate={effectiveStartDate}
+        {...defaultStageProps}
+        onAddToDrugChart={onAddToDrugChart}
+        stageSchedules={[
+          {
+            variableDosageSequence: 1,
+            isScheduled: true,
+            administrationStarted: false,
+            allAttended: false,
+          },
+        ]}
+      />
+    );
+    // Loading dose scheduled but not attended → Stage 1 Add link is greyed out
     const addLink = screen.getByText("Add to Drug Chart");
-    expect(addLink).toBeInTheDocument();
     expect(addLink).toHaveAttribute("aria-disabled", "true");
+    addLink.click();
+    expect(onAddToDrugChart).not.toHaveBeenCalled();
+  });
+
+  it("calls onAddToDrugChart with the stage index when an enabled Add to Drug Chart link is clicked", () => {
+    MockDate.set(new Date("2026-04-22").getTime());
+    const onAddToDrugChart = jest.fn();
+    render(
+      <VariableDoseStagesTable
+        fhirDosages={withLoadingDoseFhirDosages}
+        effectiveStartDate={effectiveStartDate}
+        {...defaultStageProps}
+        onAddToDrugChart={onAddToDrugChart}
+        stageSchedules={[
+          {
+            variableDosageSequence: 1,
+            isScheduled: true,
+            administrationStarted: true,
+            allAttended: true,
+          },
+        ]}
+      />
+    );
+    // Loading dose allAttended → completed (no Add link), Stage 1 is the enabled stage
+    const addLinks = screen.getAllByText("Add to Drug Chart");
+    const enabledLink = addLinks.find(
+      (link) => link.getAttribute("aria-disabled") !== "true"
+    );
+    expect(enabledLink).toBeDefined();
+    enabledLink.click();
+    expect(onAddToDrugChart).toHaveBeenCalledTimes(1);
+    expect(onAddToDrugChart).toHaveBeenCalledWith(1);
+  });
+
+  it("does not show Add to Drug Chart links when all stages are completed", () => {
+    MockDate.set(new Date("2026-04-25").getTime());
+    render(
+      <VariableDoseStagesTable
+        fhirDosages={noLoadingDoseFhirDosages}
+        effectiveStartDate={effectiveStartDate}
+        {...defaultStageProps}
+        stageSchedules={[
+          {
+            variableDosageSequence: 1,
+            isScheduled: true,
+            administrationStarted: true,
+            allAttended: true,
+          },
+          {
+            variableDosageSequence: 2,
+            isScheduled: true,
+            administrationStarted: true,
+            allAttended: true,
+          },
+        ]}
+      />
+    );
+    // Both stages completed → no Add to Drug Chart link is shown
+    expect(screen.queryByText("Add to Drug Chart")).not.toBeInTheDocument();
   });
 
   it("shows Stop drug link when stage has administrationStarted and pendingSlotsAvailable", () => {

@@ -1,4 +1,4 @@
-import React, { useState, useRef, Suspense, useEffect } from "react";
+import React, { useState, useRef, Suspense, useEffect, useContext } from "react";
 import {
   Accordion,
   AccordionItem,
@@ -37,9 +37,28 @@ import {
   RESOLUTION_VALUE,
   IPD_PAGE_TITLE,
   PRIVILEGE_CONSTANTS,
+  componentKeys,
 } from "../../constants";
 import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
 import { DraftIndicator } from "../../components/DraftIndicator/DraftIndicator";
+import MedicationIndicator from "../../components/MedicationIndicator/MedicationIndicator";
+import {
+  MedicationIndicatorsContext,
+  MedicationIndicatorsContextProvider,
+} from "../../context/MedicationIndicatorsContext";
+
+const MedicationNavIndicators = () => {
+  const { regularCount, vdpCount } = useContext(MedicationIndicatorsContext);
+  if (regularCount <= 0 && vdpCount <= 0) return null;
+  return (
+    <span className="medication-indicators">
+      {regularCount > 0 && (
+        <MedicationIndicator type="regular" count={regularCount} />
+      )}
+      {vdpCount > 0 && <MedicationIndicator type="vdp" count={vdpCount} />}
+    </span>
+  );
+};
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
@@ -258,7 +277,8 @@ export default function Dashboard(props) {
             }}
           >
             <I18nProvider>
-              <main className="ipd-page">
+              <MedicationIndicatorsContextProvider>
+                <main className="ipd-page">
                 <Header
                   className="border-bottom-0 header-bg-color ipd-header"
                   aria-label="IBM Platform Name"
@@ -304,6 +324,9 @@ export default function Dashboard(props) {
                               id={el.translationKey}
                               defaultMessage={el.title}
                             />
+                            {el.componentKey === componentKeys.TREATMENTS && (
+                              <MedicationNavIndicators />
+                            )}
                           </SideNavLink>
                         );
                       })}
@@ -371,6 +394,7 @@ export default function Dashboard(props) {
                   </Accordion>
                 </section>
               </main>
+              </MedicationIndicatorsContextProvider>
             </I18nProvider>
           </IPDContext.Provider>
         </SliderContext.Provider>

@@ -41,8 +41,13 @@ const VariableDoseStagesTable = ({
   const stages = fhirDosages.map(fhirDosageToDisplayStage);
   const hasLoadingDose = stages.some((s) => s.isLoadingDose);
 
-  const activeStageIndex = getActiveStageIndex(fhirDosages, stageSchedules, startDates);
-  const isButtonDisabled = !hasScheduleEditPrivilege || isAddToDrugChartDisabled;
+  const activeStageIndex = getActiveStageIndex(
+    fhirDosages,
+    stageSchedules,
+    startDates
+  );
+  const isButtonDisabled =
+    !hasScheduleEditPrivilege || isAddToDrugChartDisabled;
 
   return (
     <div className="vdp-section">
@@ -104,11 +109,20 @@ const VariableDoseStagesTable = ({
             const adminStarted = stageStatus?.administrationStarted;
             const pendingSlotsAvailable = stageStatus?.pendingSlotsAvailable;
             const isActiveStage = index === activeStageIndex;
+            const neverAdded = !isScheduled && !adminStarted;
+            const canEdit = isScheduled && !adminStarted;
+            const canStop =
+              adminStarted && pendingSlotsAvailable && onStopDrugChart;
 
             const stage = stages[index];
             const stageLabel = stage.isLoadingDose
               ? stage.stageName
-              : String(dosage.sequence - (hasLoadingDose ? LOADING_DOSE_SEQUENCE_OFFSET : NO_LOADING_DOSE_SEQUENCE_OFFSET));
+              : String(
+                  dosage.sequence -
+                    (hasLoadingDose
+                      ? LOADING_DOSE_SEQUENCE_OFFSET
+                      : NO_LOADING_DOSE_SEQUENCE_OFFSET)
+                );
             const hasNote =
               stage.instructions ||
               stage.additionalInstructions ||
@@ -181,11 +195,12 @@ const VariableDoseStagesTable = ({
                 <TableCell>{stage.frequency}</TableCell>
                 <TableCell>{stage.duration}</TableCell>
                 <TableCell>
-                  {isActiveStage && onAddToDrugChart && (
+                  {neverAdded && onAddToDrugChart && (
                     <Link
-                      disabled={isButtonDisabled}
+                      disabled={!isActiveStage || isButtonDisabled}
                       onClick={() => {
-                        if (!isButtonDisabled) onAddToDrugChart(index);
+                        if (isActiveStage && !isButtonDisabled)
+                          onAddToDrugChart(index);
                       }}
                     >
                       <FormattedMessage
@@ -194,11 +209,12 @@ const VariableDoseStagesTable = ({
                       />
                     </Link>
                   )}
-                  {isScheduled && !adminStarted && (
+                  {canEdit && (
                     <Link
                       disabled={isReadMode}
                       onClick={() => {
-                        if (!isReadMode && onEditDrugChart) onEditDrugChart(index);
+                        if (!isReadMode && onEditDrugChart)
+                          onEditDrugChart(index);
                       }}
                     >
                       <FormattedMessage
@@ -207,7 +223,7 @@ const VariableDoseStagesTable = ({
                       />
                     </Link>
                   )}
-                  {adminStarted && pendingSlotsAvailable && onStopDrugChart && (
+                  {canStop && (
                     <Link
                       disabled={isReadMode}
                       onClick={() => {

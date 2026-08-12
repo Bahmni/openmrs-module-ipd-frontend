@@ -28,6 +28,8 @@ import {
   buildStageDrugOrder,
   getDischargeRevisedOrderUuids,
   isSupersededByDischargeRevision,
+  getActiveStageIndex,
+  getMedicationIndicators,
 } from "../utils/TreatmentsUtils";
 import { getCookies, isUserPrivileged } from "../../../../utils/CommonUtils";
 import {
@@ -55,6 +57,7 @@ import ExpandableDataTable from "../../../../components/ExpandableDataTable/Expa
 import TreatmentExpandableRow from "./TreatmentExpandableRow";
 import Notification from "../../../../components/Notification/Notification";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
+import { MedicationIndicatorsContext } from "../../../../context/MedicationIndicatorsContext";
 import moment from "moment";
 
 const Treatments = (props) => {
@@ -84,6 +87,7 @@ const Treatments = (props) => {
   const [additionalData, setAdditionalData] = useState([]);
   const [showEditMessage, setShowEditMessage] = useState(false);
   const allMedications = useContext(AllMedicationsContext);
+  const { setMedicationIndicators } = useContext(MedicationIndicatorsContext);
   const { isReadMode } = useContext(IPDContext);
   const [showStopDrugChartModal, setShowStopDrugChartModal] = useState(false);
   const [stopReason, setStopReason] = useState("");
@@ -362,6 +366,7 @@ const Treatments = (props) => {
           </Link>
         ),
         isScheduled: drugOrder.dosingInstructions?.asNeeded,
+        isButtonDisabled,
       };
     } else if (!showStopDrugChartLink) {
       return {
@@ -400,7 +405,9 @@ const Treatments = (props) => {
     const admissionDate = visitSummary?.startDateTime;
     const dischargeRevisedUuids = getDischargeRevisedOrderUuids(drugOrders);
     drugOrders = drugOrders.filter((drugOrderObject) => {
-      if (isSupersededByDischargeRevision(drugOrderObject, dischargeRevisedUuids)) {
+      if (
+        isSupersededByDischargeRevision(drugOrderObject, dischargeRevisedUuids)
+      ) {
         return false;
       }
       if (
@@ -478,6 +485,10 @@ const Treatments = (props) => {
               drugOrderObject.drugOrderAttributes,
               drugOrderObject
             );
+          const hasScheduleEditPrivilege = isUserPrivileged(
+            currentUser,
+            PRIVILEGE_CONSTANTS.EDIT_MEDICATION_TASKS
+          );
           const totalFhirStages = isVariableDose
             ? (drugOrderObject.fhirDosages || []).length
             : 0;
@@ -490,6 +501,23 @@ const Treatments = (props) => {
             !drugOrder.dateStopped &&
             isAnyStageScheduled &&
             !isAllStagesAttended;
+          const addToDrugChartEnabled = isVariableDose
+            ? !drugOrder.dateStopped &&
+              !isAddToDrugChartDisabled &&
+              hasScheduleEditPrivilege &&
+              getActiveStageIndex(
+                drugOrderObject.fhirDosages || [],
+                stageSchedules,
+                computeStageStartDates(
+                  drugOrderObject.fhirDosages || [],
+                  drugOrder.effectiveStartDate
+                )
+              ) >= 0
+            : !showEditDrugChartLink &&
+              !showStopDrugChartLink &&
+              !!actionsObjectValue?.link &&
+              !actionsObjectValue?.isButtonDisabled &&
+              !drugOrder.dosingInstructions?.asNeeded;
           const getStatus = () => {
             if (drugOrder.dateStopped) {
               return (
@@ -542,10 +570,15 @@ const Treatments = (props) => {
             id: drugOrder.uuid,
             startDate: formatDate(drugOrder.effectiveStartDate),
             drugName: getDrugName(drugOrderObject),
-            dosageDetails: setDosingInstructions(drugOrder, drugOrderObject.intradayDose),
+            dosageDetails: setDosingInstructions(
+              drugOrder,
+              drugOrderObject.intradayDose
+            ),
             providerName: drugOrderObject.provider.name,
             status: getStatus(),
             actions: isVariableDose ? null : actionsObjectValue.link,
+            isExpanded: true,
+            addToDrugChartEnabled,
             additionalData: {
               instructions: drugOrderObject.instructions
                 ? drugOrderObject.instructions
@@ -697,6 +730,14 @@ const Treatments = (props) => {
 
     setMedicationsData();
   }, [allMedications.data, allMedications.error]);
+
+  useEffect(() => {
+    setMedicationIndicators(getMedicationIndicators(treatments));
+  }, [treatments, setMedicationIndicators]);
+
+  useEffect(() => {
+    return () => setMedicationIndicators({ regularCount: 0, vdpCount: 0 });
+  }, [setMedicationIndicators]);
 
   return (
     <>
