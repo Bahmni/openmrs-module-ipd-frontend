@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import SaveAndCloseButtons from "../../../SaveAndCloseButtons/components/SaveAndCloseButtons";
 import SideBarPanel from "../../../SideBarPanel/components/SideBarPanel";
@@ -94,6 +94,7 @@ const AddEmergencyTasks = (props) => {
   } = props;
 
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
+  const isSavingNonMedicationTaskRef = useRef(false);
   const [isLoading, setIsLoading] = useState(true);
   const [dosageConfig, setDosageConfig] = useState({});
   const [unitOptions, setUnitOptions] = useState([]);
@@ -462,37 +463,51 @@ const AddEmergencyTasks = (props) => {
       setEmergencyTask(createEmergencyMedicationPayload());
       setOpenConfirmationModal(true);
     } else {
-      const encounterUuid = await getNonMedicationEncounterUuid();
-      if (!encounterUuid) {
-        setIsSaveDisabled(false);
-        updateNonMedicationTasksNotification(
-          "error",
-          "NON_MEDICATION_TASK_SAVE_MESSAGE_FAILED"
-        );
+      if (isSavingNonMedicationTaskRef.current) {
         return;
       }
-      const nonMedicationTaskPayloads = nonMedicationTasks.map((taskDetails) =>
-        createNonMedicationTaskPayload(taskDetails, encounterUuid)
-      );
-      let response;
-      if (enableAddMultipleTask) {
-        response = await saveBulkNonMedicationTasks(nonMedicationTaskPayloads);
-      } else {
-        response = await saveNonMedicationTask(nonMedicationTaskPayloads[0]);
-      }
-      if (response.status === 200) {
-        setIsSaveDisabled(false);
-        handleAuditEvent("CREATE_NON_MEDICATION_TASK");
-        updateNonMedicationTasksNotification(
-          "success",
-          "NON_MEDICATION_TASK_SAVE_MESSAGE"
+      isSavingNonMedicationTaskRef.current = true;
+      setIsSaveDisabled(true);
+      try {
+        const encounterUuid = await getNonMedicationEncounterUuid();
+        if (!encounterUuid) {
+          setIsSaveDisabled(false);
+          updateNonMedicationTasksNotification(
+            "error",
+            "NON_MEDICATION_TASK_SAVE_MESSAGE_FAILED"
+          );
+          return;
+        }
+        const nonMedicationTaskPayloads = nonMedicationTasks.map((taskDetails) =>
+          createNonMedicationTaskPayload(taskDetails, encounterUuid)
         );
-      } else {
+        let response;
+        if (enableAddMultipleTask) {
+          response = await saveBulkNonMedicationTasks(nonMedicationTaskPayloads);
+        } else {
+          response = await saveNonMedicationTask(nonMedicationTaskPayloads[0]);
+        }
+        if (response.status === 200) {
+          handleAuditEvent("CREATE_NON_MEDICATION_TASK");
+          updateNonMedicationTasksNotification(
+            "success",
+            "NON_MEDICATION_TASK_SAVE_MESSAGE"
+          );
+        } else {
+          setIsSaveDisabled(false);
+          updateNonMedicationTasksNotification(
+            "error",
+            "NON_MEDICATION_TASK_SAVE_MESSAGE_FAILED"
+          );
+        }
+      } catch (error) {
         setIsSaveDisabled(false);
         updateNonMedicationTasksNotification(
           "error",
           "NON_MEDICATION_TASK_SAVE_MESSAGE_FAILED"
         );
+      } finally {
+        isSavingNonMedicationTaskRef.current = false;
       }
     }
   };

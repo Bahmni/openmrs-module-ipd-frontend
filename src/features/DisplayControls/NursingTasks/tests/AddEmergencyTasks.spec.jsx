@@ -24,6 +24,7 @@ const mockSetNotificationMessage = jest.fn();
 const mockSetNotificationStatus = jest.fn();
 const mockSaveEmergencyMedication = jest.fn();
 const mockSaveBulkNonMedicationTasks = jest.fn();
+const mockSaveNonMedicationTask = jest.fn();
 const mockGetEncounterUuid = jest.fn();
 const mockGetEncounterType = jest.fn();
 const mockHandleAuditEvent = jest.fn();
@@ -31,7 +32,7 @@ window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
 // Mock crypto.randomUUID for tests
 let uuidCounter = 0;
-Object.defineProperty(global.crypto, 'randomUUID', {
+Object.defineProperty(globalThis.crypto, 'randomUUID', {
   value: () => `test-uuid-${++uuidCounter}`,
   writable: true,
 });
@@ -44,6 +45,7 @@ jest.mock("../utils/EmergencyTasksUtils", () => {
     saveEmergencyMedication: () => mockSaveEmergencyMedication(),
     saveBulkNonMedicationTasks: (payload) =>
       mockSaveBulkNonMedicationTasks(payload),
+    saveNonMedicationTask: (payload) => mockSaveNonMedicationTask(payload),
     getEncounterUuid: (payload) => mockGetEncounterUuid(payload),
     getEncounterType: (type) => mockGetEncounterType(type),
   };
@@ -809,12 +811,14 @@ describe("AddEmergencyTasks", () => {
         encounterUuid: "__encounter_uuid__",
       });
       mockSaveBulkNonMedicationTasks.mockResolvedValue({ status: 200 });
+      mockSaveNonMedicationTask.mockResolvedValue({ status: 200 });
     });
 
     afterEach(() => {
       mockGetEncounterType.mockReset();
       mockGetEncounterUuid.mockReset();
       mockSaveBulkNonMedicationTasks.mockReset();
+      mockSaveNonMedicationTask.mockReset();
     });
 
     it("should include focus with FHIR-formatted Observation reference when observationUuid is provided", async () => {
@@ -852,6 +856,38 @@ describe("AddEmergencyTasks", () => {
           ])
         );
       });
+    });
+
+    it("should save non-medication task only once when save button is clicked multiple times", async () => {
+      let resolveSave;
+      mockSaveNonMedicationTask.mockReturnValue(
+        new Promise((resolve) => {
+          resolveSave = resolve;
+        })
+      );
+
+      const sliderCallCountBefore = mockUpdateEmergencyTasksSlider.mock.calls.length;
+
+      await renderNonMedicationTab({}, {}, { enableAddMultipleTask: false });
+
+      const saveButton = screen.getAllByText("Save")[1];
+      fireEvent.click(saveButton);
+      fireEvent.click(saveButton);
+      fireEvent.click(saveButton);
+      fireEvent.click(saveButton);
+
+      await waitFor(() => {
+        expect(mockSaveNonMedicationTask).toHaveBeenCalledTimes(1);
+      });
+
+      resolveSave({ status: 200 });
+
+      await waitFor(() => {
+        expect(mockUpdateEmergencyTasksSlider.mock.calls.length).toBe(
+          sliderCallCountBefore + 1
+        );
+      });
+      expect(mockSaveNonMedicationTask).toHaveBeenCalledTimes(1);
     });
 
     it("should omit basedOn from payload when orderUuid is null", async () => {
