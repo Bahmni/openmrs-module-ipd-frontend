@@ -8,7 +8,7 @@ describe("ScheduleSection", () => {
     enableSchedule: { frequencyPerDay: 3 },
     firstDaySlotsMissed: 2,
     firstDaySchedules: ["08:00", "12:00", "16:00"],
-    schedules: ["09:00", "13:00", "17:00"],
+    subsequentDaySchedules: ["09:00", "13:00", "17:00"],
     finalDaySchedules: ["10:00", "14:00"],
     handleFirstDaySchedule: jest.fn(),
     handleSubsequentDaySchedule: jest.fn(),
@@ -47,14 +47,14 @@ describe("ScheduleSection", () => {
     });
   });
 
-  it("shows next-day warning when showSubsequentDayScheduleNextDayWarning has true value", async () => {
+  it("shows next-day warning when subsequentDayMidnightCrossingSlots has true value", async () => {
     const { getByText } = render(
       <IntlProvider locale="en">
         <ScheduleSection
           {...props}
           firstDaySlotsMissed={0}
-          schedules={["09:00", "21:00", "00:00"]}
-          showSubsequentDayScheduleNextDayWarning={[false, false, true]}
+          subsequentDaySchedules={["09:00", "21:00", "00:00"]}
+          subsequentDayMidnightCrossingSlots={[false, false, true]}
         />
       </IntlProvider>
     );
@@ -133,30 +133,13 @@ describe("ScheduleSection", () => {
     });
   });
 
-  it("shows complete schedule required warning below toggle when flag is true", async () => {
-    const { getByText } = render(
-      <IntlProvider locale="en">
-        <ScheduleSection
-          {...props}
-          duration={5}
-          showApplyToAllDaysRequiredWarning={true}
-        />
-      </IntlProvider>
-    );
-    await waitFor(() => {
-      expect(
-        getByText("Please ensure complete schedule is updated to proceed.")
-      ).toBeInTheDocument();
-    });
-  });
-
-  it("shows next-day warning in firstDay section when showFirstDayScheduleNextDayWarning has true value", async () => {
+  it("shows next-day warning in firstDay section when firstDayMidnightCrossingSlots has true value", async () => {
     const { getByText } = render(
       <IntlProvider locale="en">
         <ScheduleSection
           {...props}
           firstDaySlotsMissed={1}
-          showFirstDayScheduleNextDayWarning={[false, false, true]}
+          firstDayMidnightCrossingSlots={[false, false, true]}
         />
       </IntlProvider>
     );
@@ -175,8 +158,8 @@ describe("ScheduleSection", () => {
         <ScheduleSection
           {...props}
           firstDaySlotsMissed={1}
-          showFirstDayScheduleNextDayWarning={[false, false, true]}
-          showSubsequentDayScheduleNextDayWarning={[false, false, true]}
+          firstDayMidnightCrossingSlots={[false, false, true]}
+          subsequentDayMidnightCrossingSlots={[false, false, true]}
         />
       </IntlProvider>
     );

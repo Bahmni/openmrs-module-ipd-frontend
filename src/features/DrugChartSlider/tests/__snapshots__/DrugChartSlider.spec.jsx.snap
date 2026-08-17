@@ -2730,7 +2730,6 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
             >
               <input
                 class="bx--toggle-input bx--toggle-input--small"
-                disabled=""
                 id="apply-to-all-days-toggle"
                 type="checkbox"
               />

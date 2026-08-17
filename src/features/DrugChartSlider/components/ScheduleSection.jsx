@@ -14,7 +14,7 @@ export const ScheduleSection = ({
   enableSchedule,
   firstDaySlotsMissed,
   firstDaySchedules,
-  schedules,
+  subsequentDaySchedules,
   finalDaySchedules,
   handleFirstDaySchedule,
   handleSubsequentDaySchedule,
@@ -28,26 +28,25 @@ export const ScheduleSection = ({
   showEmptyFinalDayScheduleWarning,
   showSchedulePassedWarning,
   enable24HourTimers,
-  showSubsequentDayScheduleNextDayWarning = [],
-  showFirstDayScheduleNextDayWarning = [],
-  showFinalDayScheduleNextDayWarning = [],
+  subsequentDayMidnightCrossingSlots = [],
+  firstDayMidnightCrossingSlots = [],
+  finalDayMidnightCrossingSlots = [],
   applyToAllDays = false,
   onApplyToAllDaysToggle = () => {},
   isToggleEnabled = false,
   duration,
-  showApplyToAllDaysRequiredWarning = false,
 }) => {
   const intl = useIntl();
-  const hasFirstDayNextDay = showFirstDayScheduleNextDayWarning.some(
+  const hasFirstDayNextDay = firstDayMidnightCrossingSlots.some(
     (v) => v === true
   );
   const hasSubsequentNextDay =
     !hasFirstDayNextDay &&
-    showSubsequentDayScheduleNextDayWarning.some((v) => v === true);
+    subsequentDayMidnightCrossingSlots.some((v) => v === true);
   const hasFinalDayNextDay =
     !hasFirstDayNextDay &&
     !hasSubsequentNextDay &&
-    showFinalDayScheduleNextDayWarning.some((v) => v === true);
+    finalDayMidnightCrossingSlots.some((v) => v === true);
 
   return (
     <>
@@ -89,7 +88,7 @@ export const ScheduleSection = ({
                   enable24HourTimers ? (
                     <div
                       className={`schedule-time${
-                        showFirstDayScheduleNextDayWarning[index]
+                        firstDayMidnightCrossingSlots[index]
                           ? " schedule-time-next-day"
                           : ""
                       }`}
@@ -111,7 +110,7 @@ export const ScheduleSection = ({
                   ) : (
                     <div
                       className={`schedule-time${
-                        showFirstDayScheduleNextDayWarning[index]
+                        firstDayMidnightCrossingSlots[index]
                           ? " schedule-time-next-day"
                           : ""
                       }`}
@@ -162,39 +161,26 @@ export const ScheduleSection = ({
             )}
           </div>
           {duration > 1 && (
-            <>
-              <div className="apply-to-all-days-toggle">
-                <Toggle
-                  id="apply-to-all-days-toggle"
-                  size="sm"
-                  toggled={applyToAllDays}
-                  disabled={!isToggleEnabled}
-                  onToggle={onApplyToAllDaysToggle}
-                  labelA=""
-                  labelB=""
-                  labelText=""
+            <div className="apply-to-all-days-toggle">
+              <Toggle
+                id="apply-to-all-days-toggle"
+                size="sm"
+                toggled={applyToAllDays}
+                disabled={!isToggleEnabled}
+                onToggle={onApplyToAllDaysToggle}
+                labelA=""
+                labelB=""
+                labelText=""
+              />
+              <span className="toggle-label-text">
+                <FormattedMessage
+                  id="DRUG_CHART_UPDATE_COMPLETE_SCHEDULE"
+                  defaultMessage="Update Complete Schedule"
                 />
-                <span className="toggle-label-text">
-                  <FormattedMessage
-                    id="DRUG_CHART_UPDATE_COMPLETE_SCHEDULE"
-                    defaultMessage="Update Complete Schedule"
-                  />
-                </span>
-              </div>
-              {showApplyToAllDaysRequiredWarning && (
-                <div className="schedule-info-notification schedule-next-day-notification">
-                  <Information20 />
-                  <span>
-                    <FormattedMessage
-                      id="DRUG_CHART_UPDATE_COMPLETE_SCHEDULE_REQUIRED_WARNING"
-                      defaultMessage="Please ensure complete schedule is updated to proceed."
-                    />
-                  </span>
-                </div>
-              )}
-            </>
+              </span>
+            </div>
           )}
-          {schedules.length != 0 && (
+          {subsequentDaySchedules.length !== 0 && (
             <div className="schedule-section">
               <Title
                 text={
@@ -214,7 +200,7 @@ export const ScheduleSection = ({
                     enable24HourTimers ? (
                       <div
                         className={`schedule-time${
-                          showSubsequentDayScheduleNextDayWarning[index]
+                          subsequentDayMidnightCrossingSlots[index]
                             ? " schedule-time-next-day"
                             : ""
                         }`}
@@ -223,7 +209,7 @@ export const ScheduleSection = ({
                         <TimePicker24Hour
                           key={index}
                           id={`schedule-${index}`}
-                          defaultTime={schedules[index]}
+                          defaultTime={subsequentDaySchedules[index]}
                           onChange={(time) => {
                             handleSubsequentDaySchedule(time, index);
                           }}
@@ -235,7 +221,7 @@ export const ScheduleSection = ({
                     ) : (
                       <div
                         className={`schedule-time${
-                          showSubsequentDayScheduleNextDayWarning[index]
+                          subsequentDayMidnightCrossingSlots[index]
                             ? " schedule-time-next-day"
                             : ""
                         }`}
@@ -244,7 +230,7 @@ export const ScheduleSection = ({
                         <TimePicker
                           key={index}
                           labelText=" "
-                          defaultTime={schedules[index]}
+                          defaultTime={subsequentDaySchedules[index]}
                           onChange={(time) => {
                             handleSubsequentDaySchedule(time, index);
                           }}
@@ -303,7 +289,7 @@ export const ScheduleSection = ({
                           ? "schedule-time-remainder"
                           : "schedule-time"
                       }${
-                        showFinalDayScheduleNextDayWarning[index]
+                        finalDayMidnightCrossingSlots[index]
                           ? " schedule-time-next-day"
                           : ""
                       }`}
@@ -328,7 +314,7 @@ export const ScheduleSection = ({
                           ? "schedule-time-remainder"
                           : "schedule-time"
                       }${
-                        showFinalDayScheduleNextDayWarning[index]
+                        finalDayMidnightCrossingSlots[index]
                           ? " schedule-time-next-day"
                           : ""
                       }`}
@@ -394,7 +380,7 @@ export const ScheduleSection = ({
                   enable24HourTimers ? (
                     <div
                       className={`schedule-time${
-                        showSubsequentDayScheduleNextDayWarning[index]
+                        subsequentDayMidnightCrossingSlots[index]
                           ? " schedule-time-next-day"
                           : ""
                       }`}
@@ -403,7 +389,7 @@ export const ScheduleSection = ({
                       <TimePicker24Hour
                         key={index}
                         id={`schedule-${index}`}
-                        defaultTime={schedules[index]}
+                        defaultTime={subsequentDaySchedules[index]}
                         onChange={(time) => {
                           handleSubsequentDaySchedule(time, index);
                         }}
@@ -415,7 +401,7 @@ export const ScheduleSection = ({
                   ) : (
                     <div
                       className={`schedule-time${
-                        showSubsequentDayScheduleNextDayWarning[index]
+                        subsequentDayMidnightCrossingSlots[index]
                           ? " schedule-time-next-day"
                           : ""
                       }`}
@@ -424,7 +410,7 @@ export const ScheduleSection = ({
                       <TimePicker
                         key={index}
                         labelText=" "
-                        defaultTime={schedules[index]}
+                        defaultTime={subsequentDaySchedules[index]}
                         onChange={(time) => {
                           handleSubsequentDaySchedule(time, index);
                         }}
@@ -476,7 +462,7 @@ ScheduleSection.propTypes = {
   }),
   firstDaySlotsMissed: PropTypes.number.isRequired,
   firstDaySchedules: PropTypes.array.isRequired,
-  schedules: PropTypes.array.isRequired,
+  subsequentDaySchedules: PropTypes.array.isRequired,
   finalDaySchedules: PropTypes.array.isRequired,
   handleFirstDaySchedule: PropTypes.func.isRequired,
   handleSubsequentDaySchedule: PropTypes.func.isRequired,
@@ -490,12 +476,11 @@ ScheduleSection.propTypes = {
   showEmptyFinalDayScheduleWarning: PropTypes.bool.isRequired,
   showSchedulePassedWarning: PropTypes.array.isRequired,
   enable24HourTimers: PropTypes.bool.isRequired,
-  showSubsequentDayScheduleNextDayWarning: PropTypes.array,
-  showFirstDayScheduleNextDayWarning: PropTypes.array,
-  showFinalDayScheduleNextDayWarning: PropTypes.array,
+  subsequentDayMidnightCrossingSlots: PropTypes.array,
+  firstDayMidnightCrossingSlots: PropTypes.array,
+  finalDayMidnightCrossingSlots: PropTypes.array,
   applyToAllDays: PropTypes.bool,
   onApplyToAllDaysToggle: PropTypes.func,
   isToggleEnabled: PropTypes.bool,
   duration: PropTypes.number,
-  showApplyToAllDaysRequiredWarning: PropTypes.bool,
 };

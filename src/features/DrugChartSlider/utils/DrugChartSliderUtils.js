@@ -38,14 +38,18 @@ export const isTimePassed = (
 const areSchedulesInOrder = (allSchedule, timeFormat, nextDayFlags = []) => {
   return allSchedule.every((schedule, index) => {
     if (index === 0) return true;
+    // A slot flagged as crossing midnight is expected to be numerically less
+    // than its predecessor — that is intentional, not an ordering error.
     if (nextDayFlags[index] === true) return true;
-    const currentTime = moment.isMoment(schedule)
+    const curr = moment.isMoment(schedule)
       ? schedule
       : moment(schedule, timeFormat);
-    const prevTime = moment.isMoment(allSchedule[index - 1])
+    const prev = moment.isMoment(allSchedule[index - 1])
       ? allSchedule[index - 1]
       : moment(allSchedule[index - 1], timeFormat);
-    return currentTime.isAfter(prevTime);
+    const currMinutes = curr.hours() * 60 + curr.minutes();
+    const prevMinutes = prev.hours() * 60 + prev.minutes();
+    return currMinutes > prevMinutes;
   });
 };
 
@@ -186,37 +190,23 @@ export const computeShiftedSchedules = (
   firstDoseNew,
   enable24HourTimers
 ) => {
-  const origMoment = enable24HourTimers
-    ? moment(firstDoseOriginal, "HH:mm")
-    : moment.isMoment(firstDoseOriginal)
-    ? firstDoseOriginal.clone()
-    : moment(firstDoseOriginal, timeFormatFor12Hr);
-  const newMoment = enable24HourTimers
-    ? moment(firstDoseNew, "HH:mm")
-    : moment(firstDoseNew, timeFormatFor12Hr);
-  const offsetMinutes = newMoment.diff(origMoment, "minutes");
+  const offsetMinutes = computeOffsetMinutes(
+    firstDoseOriginal,
+    firstDoseNew,
+    enable24HourTimers
+  );
 
-  return schedules.map((schedule, index) => {
-    if (index === 0) {
-      return enable24HourTimers
-        ? firstDoseNew
-        : moment(firstDoseNew, timeFormatFor12Hr);
-    }
-    const scheduleMoment = enable24HourTimers
-      ? moment(schedule, "HH:mm")
-      : moment.isMoment(schedule)
-      ? schedule.clone()
-      : moment(schedule, timeFormatFor12Hr);
-    const shifted = scheduleMoment.add(offsetMinutes, "minutes");
-    return enable24HourTimers ? shifted.format("HH:mm") : shifted;
-  });
+  return [
+    enable24HourTimers ? firstDoseNew : moment(firstDoseNew, timeFormatFor12Hr),
+    ...shiftScheduleByOffset(
+      schedules.slice(1),
+      offsetMinutes,
+      enable24HourTimers
+    ),
+  ];
 };
 
 export const isNextDayCrossing = (newTime, prevTime, enable24HourTimers) => {
-  if (typeof newTime === "number" && typeof prevTime === "number") {
-    return newTime < prevTime;
-  }
-
   const newM = enable24HourTimers
     ? moment(newTime, "HH:mm", true)
     : moment(newTime, timeFormatFor12Hr, true);
@@ -272,6 +262,24 @@ export const computeOffsetMinutes = (original, updated, enable24HourTimers) => {
   return newM.diff(origM, "minutes");
 };
 
+// Helper: shift all items by offsetMinutes
+// Returns strings for 24-hr mode or moment objects for 12-hr mode
+const shiftScheduleByOffset = (
+  schedules,
+  offsetMinutes,
+  enable24HourTimers
+) => {
+  return schedules.map((schedule) => {
+    const m = enable24HourTimers
+      ? moment(schedule, "HH:mm")
+      : moment.isMoment(schedule)
+      ? schedule.clone()
+      : moment(schedule, timeFormatFor12Hr);
+    const shifted = m.add(offsetMinutes, "minutes");
+    return enable24HourTimers ? shifted.format("HH:mm") : shifted;
+  });
+};
+
 // Shifts all scheduleTimings (24-hr strings) by offsetMinutes.
 // Returns strings for 24-hr mode or moment objects for 12-hr mode,
 // matching the format expected by the `schedules` state.
@@ -280,8 +288,89 @@ export const computeShiftedScheduleTimings = (
   offsetMinutes,
   enable24HourTimers
 ) => {
-  return scheduleTimings.map((time) => {
-    const m = moment(time, "HH:mm").add(offsetMinutes, "minutes");
-    return enable24HourTimers ? m.format("HH:mm") : m;
-  });
+  return shiftScheduleByOffset(
+    scheduleTimings,
+    offsetMinutes,
+    enable24HourTimers
+  );
+};
+
+const toDisplayTime = (absoluteMinutes, enable24HourTimers) => {
+  const minutesInDay = 24 * 60;
+  const normalized =
+    ((absoluteMinutes % minutesInDay) + minutesInDay) % minutesInDay;
+  const hour = Math.floor(normalized / 60);
+  const minute = normalized % 60;
+  const hhmm = `${String(hour).padStart(2, "0")}:${String(minute).padStart(
+    2,
+    "0"
+  )}`;
+  return enable24HourTimers ? hhmm : moment(hhmm, "HH:mm");
+};
+
+const buildFixedIntervalSeries = (startAbsoluteMinutes, count, intervalMinutes) => {
+  const slots = [];
+  const flags = [];
+  let previousAbsolute = null;
+  for (let index = 0; index < count; index += 1) {
+    const currentAbsolute = startAbsoluteMinutes + index * intervalMinutes;
+    slots.push(currentAbsolute);
+    flags.push(
+      previousAbsolute !== null &&
+        Math.floor(currentAbsolute / (24 * 60)) >
+          Math.floor(previousAbsolute / (24 * 60))
+    );
+    previousAbsolute = currentAbsolute;
+  }
+  return { slots, flags, nextStartAbsoluteMinutes: startAbsoluteMinutes + count * intervalMinutes };
+};
+
+export const regenerateByFrequencyInterval = ({
+  firstDose,
+  frequencyPerDay,
+  firstDayEditableCount,
+  subsequentCount,
+  remainderCount,
+  enable24HourTimers,
+}) => {
+  if (!frequencyPerDay || frequencyPerDay <= 0) {
+    return null;
+  }
+
+  const intervalMinutes = Math.round((24 * 60) / frequencyPerDay);
+  const firstMoment = enable24HourTimers
+    ? moment(firstDose, "HH:mm", true)
+    : moment.isMoment(firstDose)
+    ? firstDose.clone()
+    : moment(firstDose, timeFormatFor12Hr, true);
+
+  if (!firstMoment.isValid()) {
+    return null;
+  }
+
+  const startAbsoluteMinutes = firstMoment.hours() * 60 + firstMoment.minutes();
+  const firstDay = buildFixedIntervalSeries(
+    startAbsoluteMinutes,
+    firstDayEditableCount,
+    intervalMinutes
+  );
+  const subsequent = buildFixedIntervalSeries(
+    firstDay.nextStartAbsoluteMinutes,
+    subsequentCount,
+    intervalMinutes
+  );
+  const remainder = buildFixedIntervalSeries(
+    subsequent.nextStartAbsoluteMinutes,
+    remainderCount,
+    intervalMinutes
+  );
+
+  return {
+    firstDaySchedules: firstDay.slots.map((m) => toDisplayTime(m, enable24HourTimers)),
+    firstDayCrossings: firstDay.flags,
+    subsequentSchedules: subsequent.slots.map((m) => toDisplayTime(m, enable24HourTimers)),
+    subsequentCrossings: subsequent.flags,
+    finalDaySchedules: remainder.slots.map((m) => toDisplayTime(m, enable24HourTimers)),
+    finalDayCrossings: remainder.flags,
+  };
 };

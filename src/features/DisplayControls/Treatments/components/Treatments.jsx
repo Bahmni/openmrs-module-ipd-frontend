@@ -240,6 +240,7 @@ const Treatments = (props) => {
           dayWiseSlotsStartTime: stageStatus.dayWiseSlotsStartTime || null,
           remainingDaySlotsStartTime:
             stageStatus.remainingDaySlotsStartTime || null,
+          crossingSlots: stageStatus.crossingSlots || null,
           notes: stageStatus.notes,
           medicationAdministrationStarted: stageStatus.administrationStarted,
           pendingSlotsAvailable: stageStatus.pendingSlotsAvailable,

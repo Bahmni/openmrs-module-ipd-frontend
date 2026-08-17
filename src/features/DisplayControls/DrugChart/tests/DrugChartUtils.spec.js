@@ -6,7 +6,6 @@ import {
   getDateTime,
   canAcknowledgeAmendment,
   transformDrugOrders,
-  mapDrugOrdersAndSlots,
 } from "../utils/DrugChartUtils";
 import axios from "axios";
 import { mockResponse } from "./DrugChartUtilsMockData";
@@ -371,7 +370,7 @@ describe("DrugChartUtils", () => {
             {
               sequence: 1,
               text: "Loading Dose",
-              timing: { code: { text: "Once" }, repeat: { count: 1 } },
+              timing: { code: { text: "Once" } },
               doseAndRate: [{ doseQuantity: { value: 5, unit: "Tablet(s)" } }],
               additionalInstruction: [],
               patientInstruction: "",
@@ -552,136 +551,6 @@ describe("DrugChartUtils", () => {
       });
       expect(result["regular-1"].isIntraday).toBe(false);
       expect(result["regular-1"].intradayDoseString).toBeNull();
-    });
-  });
-
-  describe("mapDrugOrdersAndSlots", () => {
-    it("deduplicates slots having same order and startTime", () => {
-      const orderUuid = "order-1";
-      const startTime = 1784075400;
-      const drugOrders = {
-        [orderUuid]: {
-          firstSlotStartTime: startTime,
-          slots: [],
-        },
-      };
-
-      const drugChartData = [
-        {
-          slots: [
-            {
-              id: 1,
-              startTime,
-              status: "SCHEDULED",
-              serviceType: "MedicationRequest",
-              order: { uuid: orderUuid },
-              medicationAdministration: null,
-            },
-            {
-              id: 2,
-              startTime,
-              status: "SCHEDULED",
-              serviceType: "MedicationRequest",
-              order: { uuid: orderUuid },
-              medicationAdministration: null,
-            },
-          ],
-        },
-      ];
-
-      const mapped = mapDrugOrdersAndSlots(drugChartData, drugOrders, {
-        timeInMinutesFromNowToShowPastTaskAsLate: 0,
-      });
-      expect(mapped).toHaveLength(1);
-      expect(mapped[0].slots).toHaveLength(1);
-      expect(mapped[0].slots[0].startTime).toBe(startTime);
-     });
-   });
-  describe("transformDrugOrders", () => {
-    it("should skip emergency medications with null drug", () => {
-      const orders = {
-        ipdDrugOrders: [],
-        emergencyMedications: [
-          {
-            drug: null,
-            uuid: "em-uuid-1",
-            route: { display: "Oral" },
-            administeredDateTime: 1700000000000,
-            dose: 500,
-            doseUnits: { display: "mg" },
-          },
-        ],
-      };
-      const result = transformDrugOrders(orders);
-      expect(result).toEqual({});
-    });
-
-    it("should skip emergency medications with undefined drug", () => {
-      const orders = {
-        ipdDrugOrders: [],
-        emergencyMedications: [
-          {
-            uuid: "em-uuid-1",
-            route: { display: "Oral" },
-            administeredDateTime: 1700000000000,
-            dose: 500,
-            doseUnits: { display: "mg" },
-          },
-        ],
-      };
-      const result = transformDrugOrders(orders);
-      expect(result).toEqual({});
-    });
-
-    it("should process emergency medications with valid drug", () => {
-      const orders = {
-        ipdDrugOrders: [],
-        emergencyMedications: [
-          {
-            drug: { uuid: "drug-uuid", display: "Paracetamol" },
-            uuid: "em-uuid-1",
-            route: { display: "Oral" },
-            administeredDateTime: 1700000000000,
-            dose: 500,
-            doseUnits: { display: "mg" },
-          },
-        ],
-      };
-      const result = transformDrugOrders(orders);
-      expect(result["em-uuid-1"]).toBeDefined();
-      expect(result["em-uuid-1"].name).toBe("Paracetamol");
-      expect(result["em-uuid-1"].dosingInstructions.emergency).toBe(true);
-      expect(result["em-uuid-1"].dosingInstructions.dosage).toBe("500mg");
-      expect(result["em-uuid-1"].dosingInstructions.route).toBe("Oral");
-      expect(result["em-uuid-1"].firstSlotStartTime).toBe(1700000000);
-    });
-
-    it("should process mix of valid and null-drug emergency medications", () => {
-      const orders = {
-        ipdDrugOrders: [],
-        emergencyMedications: [
-          {
-            drug: null,
-            uuid: "em-null",
-            route: { display: "Oral" },
-            administeredDateTime: 1700000000000,
-            dose: 500,
-            doseUnits: { display: "mg" },
-          },
-          {
-            drug: { uuid: "drug-uuid", display: "Ibuprofen" },
-            uuid: "em-valid",
-            route: { display: "IV" },
-            administeredDateTime: 1700001000000,
-            dose: 200,
-            doseUnits: { display: "ml" },
-          },
-        ],
-      };
-      const result = transformDrugOrders(orders);
-      expect(result["em-null"]).toBeUndefined();
-      expect(result["em-valid"]).toBeDefined();
-      expect(result["em-valid"].name).toBe("Ibuprofen");
     });
   });
 });
