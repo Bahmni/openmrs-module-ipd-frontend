@@ -34,17 +34,21 @@ export default function TimeCell(props) {
   slotInfo.forEach((slot) => {
     const { time } = slot;
     const momentTime = moment(time, timeFormatFor24Hr);
-    let diffStartTime = momentTime.diff(startTime);
-    let diffEndTime = endTime.diff(momentTime);
+    const normalizedStartTime = startTime.clone();
+    const normalizedEndTime = endTime.clone();
+    const normalizedMomentTime = momentTime.clone();
 
-    if (endTime.isBefore(startTime)) {
-      const midnight = moment("00:00", timeFormatFor24Hr);
-      if (momentTime.isAfter(midnight)) {
-        diffStartTime = midnight.diff(startTime) + momentTime.diff(midnight);
-      } else {
-        diffEndTime = momentTime.diff(midnight) + midnight.diff(endTime);
-      }
+    if (!normalizedEndTime.isAfter(normalizedStartTime)) {
+      normalizedEndTime.add(1, "day");
     }
+
+    if (normalizedMomentTime.isBefore(normalizedStartTime)) {
+      normalizedMomentTime.add(1, "day");
+    }
+
+    const diffStartTime = normalizedMomentTime.diff(normalizedStartTime);
+    const diffEndTime = normalizedEndTime.diff(normalizedMomentTime);
+
     if (diffStartTime < diffEndTime) {
       left.push(slot);
     } else {

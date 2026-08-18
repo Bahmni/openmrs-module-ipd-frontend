@@ -124,6 +124,50 @@ describe("TimeCell", () => {
     });
   });
 
+  it("should render icon on left for pre-midnight slot in midnight crossing window", () => {
+    const startTime = moment("23:30", timeFormatFor24Hr);
+    const endTime = moment("00:30", timeFormatFor24Hr);
+    const midnightCrossingSlotInfo = [
+      {
+        time: "23:40",
+        status: "Pending",
+        administrationInfo: "",
+      },
+    ];
+
+    const component = render(
+      <TimeCell
+        slotInfo={midnightCrossingSlotInfo}
+        startTime={startTime}
+        endTime={endTime}
+      />
+    );
+
+    expect(component.getByTestId("left-icon")).toBeTruthy();
+  });
+
+  it("should render icon on right for post-midnight slot in midnight crossing window", () => {
+    const startTime = moment("23:30", timeFormatFor24Hr);
+    const endTime = moment("00:30", timeFormatFor24Hr);
+    const midnightCrossingSlotInfo = [
+      {
+        time: "00:20",
+        status: "Pending",
+        administrationInfo: "",
+      },
+    ];
+
+    const component = render(
+      <TimeCell
+        slotInfo={midnightCrossingSlotInfo}
+        startTime={startTime}
+        endTime={endTime}
+      />
+    );
+
+    expect(component.getByTestId("right-icon")).toBeTruthy();
+  });
+
   it("should show notes icon when notes is present", () => {
     const startTime = moment("10:00", timeFormatFor24Hr);
     const endTime = moment("11:00", timeFormatFor24Hr);
