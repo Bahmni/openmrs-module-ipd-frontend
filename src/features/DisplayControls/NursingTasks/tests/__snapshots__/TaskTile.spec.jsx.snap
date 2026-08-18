@@ -45,6 +45,38 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
                   id="definition-tooltip-2"
                   role="tooltip"
                 />
+          class="tile-title undefined"
+        >
+          <div>
+            <div
+              class="nursing-task-icon-container"
+              data-testid="Late"
+            >
+              <div>
+                <test-file-stub />
+              </div>
+            </div>
+            <span
+              class="bx--tooltip--definition bx--tooltip--a11y cursor-pointer"
+            >
+              <button
+                aria-describedby="definition-tooltip-2"
+                class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
+                type="button"
+              >
+                <span
+                  class="drug-title"
+                  style="color: rgb(82, 82, 82); font-weight: 400;"
+                >
+                  Paracetamol 120 mg/5 mL Suspension (Liquid)
+                </span>
+              </button>
+              <span
+                class="bx--assistive-text"
+                id="definition-tooltip-2"
+                role="tooltip"
+              >
+                Paracetamol 120 mg/5 mL Suspension (Liquid)
               </span>
             </div>
           </div>
@@ -129,12 +161,12 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
                   class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
                   type="button"
                 >
-                  <div
+                  <span
                     class="drug-title"
                     style="color: rgb(82, 82, 82); font-weight: 400;"
                   >
                     Halothane/Fluothane 250 mL Inhalation Anesthetic Liquid
-                  </div>
+                  </span>
                 </button>
                 <span
                   class="bx--assistive-text"

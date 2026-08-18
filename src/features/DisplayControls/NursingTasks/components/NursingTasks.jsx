@@ -10,6 +10,7 @@ import {
   ExtractNonMedicationTasks,
   sortNursingTasks,
   fetchNonMedicationTasks,
+  getLatestFormUuid,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
 import {
@@ -30,6 +31,7 @@ import {
   asNeededPlaceholderConceptName,
   timeFormatFor12Hr,
   PRIVILEGE_CONSTANTS,
+  NURSING_ACTIVITY_SYSTEM,
 } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -48,8 +50,14 @@ import WarningIcon from "../../../../icons/warning.svg";
 import { isUserPrivileged } from "../../../../utils/CommonUtils";
 export default function NursingTasks(props) {
   const { patientId } = props;
-  const { config, isReadMode, visitSummary, visit, currentUser } =
-    useContext(IPDContext);
+  const {
+    config,
+    isReadMode,
+    visitSummary,
+    visit,
+    currentUser,
+    allFormsSummary,
+  } = useContext(IPDContext);
   const [medicationNursingTasks, setMedicationNursingTasks] = useState([]);
   const [nursingTasks, setNursingTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -375,29 +383,38 @@ export default function NursingTasks(props) {
   }, [filterValue, nursingTasks, nonMedicationTasks]);
 
   const showTaskTiles = () => {
-    return medicationNursingTasks.map(
-      (medicationNursingTask, index) => {
-        return (
-          <div key={index}>
-            <div
-              onClick={() => {
-                const isStoppedSlot = medicationNursingTask[0]?.stopTime;
-                if (
-                  !isSliderOpen.nursingTasks &&
-                  !medicationNursingTask[0].isDisabled &&
-                  !isStoppedSlot
-                ) {
-                  setSelectedMedicationTask(medicationNursingTask);
-                  updateNursingTasksSlider(true);
-                }
-              }}
-            >
-              <TaskTile medicationNursingTask={medicationNursingTask} />
-            </div>
+    const taskToFormMapping = config?.taskToFormMapping || {};
+    return medicationNursingTasks.map((medicationNursingTask, index) => {
+      const task = medicationNursingTask[0];
+      const formUuid =
+        task?.isANonMedicationTask &&
+        task?.taskType?.display === NURSING_ACTIVITY_SYSTEM
+          ? getLatestFormUuid(taskToFormMapping[task.drugName], allFormsSummary)
+          : null;
+      return (
+        <div key={index}>
+          <div
+            onClick={() => {
+              const isStoppedSlot = task?.stopTime;
+              if (
+                !isSliderOpen.nursingTasks &&
+                !task.isDisabled &&
+                !isStoppedSlot
+              ) {
+                setSelectedMedicationTask(medicationNursingTask);
+                updateNursingTasksSlider(true);
+              }
+            }}
+          >
+            <TaskTile
+              medicationNursingTask={medicationNursingTask}
+              formUuid={formUuid}
+              patientId={patientId}
+            />
           </div>
-        );
-      }
-    );
+        </div>
+      );
+    });
   };
 
   const getNoTaskMessage = () => {
@@ -533,21 +550,25 @@ export default function NursingTasks(props) {
                 : setFilterValue(items[2]);
             }}
           />
-          {(isUserPrivileged(currentUser,PRIVILEGE_CONSTANTS.ADD_TASKS) || isUserPrivileged(currentUser,PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS)) && (
-          <Button
-            kind={"tertiary"}
-            isExpressive
-            size="default"
-            renderIcon={Add16}
-            onClick={() => {
-              if (!isSliderOpen.emergencyTasks) {
-                updateEmergencyTasksSlider(true);
-              }
-            }}
-            disabled={isReadMode}
-          >
-            <FormattedMessage id={"ADD_TASK"} defaultMessage={"Add Task"} />
-          </Button>
+          {(isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.ADD_TASKS) ||
+            isUserPrivileged(
+              currentUser,
+              PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS
+            )) && (
+            <Button
+              kind={"tertiary"}
+              isExpressive
+              size="default"
+              renderIcon={Add16}
+              onClick={() => {
+                if (!isSliderOpen.emergencyTasks) {
+                  updateEmergencyTasksSlider(true);
+                }
+              }}
+              disabled={isReadMode}
+            >
+              <FormattedMessage id={"ADD_TASK"} defaultMessage={"Add Task"} />
+            </Button>
           )}
         </div>
       </div>

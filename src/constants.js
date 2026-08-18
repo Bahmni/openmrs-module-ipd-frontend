@@ -166,3 +166,14 @@ export const DOSE_UNITS = ["ml", "mg", "mcg"];
 
 export const LOADING_DOSE_SEQUENCE_OFFSET = 1;
 export const NO_LOADING_DOSE_SEQUENCE_OFFSET = 0;
+export const CLINICAL_FORM_URL = (patientUuid, formUuid) =>
+  `/bahmni/clinical/index.html#/default/patient/${patientUuid}/dashboard/concept-set-group/observations/form/${formUuid}`;
+
+export const TASK_COLORS = {
+  LINK_BLUE: "#0f62fe",
+  STOP_RED: "#FF0000",
+  RELEVANT_DARK: "#393939",
+  NON_RELEVANT_GRAY: "#525252",
+};
+
+export const NURSING_ACTIVITY_SYSTEM = "nursing_activity_system";
