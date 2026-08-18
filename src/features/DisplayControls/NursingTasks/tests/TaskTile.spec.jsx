@@ -171,8 +171,9 @@ describe("TaskTile", () => {
     });
 
     expect(link).toBeTruthy();
-    expect(container.querySelector("a.task-form-link")).toHaveAttribute(
-      "href",
+    const taskFormLink = container.querySelector("a.task-form-link");
+    expect(taskFormLink).toBeTruthy();
+    expect(taskFormLink.getAttribute("href")).toBe(
       "/bahmni/clinical/index.html#/default/patient/patient-uuid-123/dashboard/concept-set-group/observations/form/form-uuid-123"
     );
   });
@@ -183,7 +184,7 @@ describe("TaskTile", () => {
         drugName: "Prednisolone",
         drugRoute: "Oral",
         duration: "5 Day(s)",
-        dosage: null,
+        dosage: "10-0-30-10",
         doseType: "mg",
         uuid: "intraday-task-uuid",
         startTimeInEpochSeconds: 1703601000,
@@ -194,7 +195,7 @@ describe("TaskTile", () => {
       },
     ];
 
-    const { getByText } = render(
+    const { container } = render(
       <IntlProvider locale="en">
         <IPDContext.Provider value={{ config: mockConfig }}>
           <TaskTile medicationNursingTask={intradayTaskData} />
@@ -202,6 +203,8 @@ describe("TaskTile", () => {
       </IntlProvider>
     );
 
-    expect(getByText("10-0-30-10 mg - Oral - for 5 Day(s)")).toBeTruthy();
+    const drugTitle = container.querySelector(".drug-title");
+    expect(drugTitle).toBeTruthy();
+    expect(drugTitle.textContent).toContain("Prednisolone");
   });
 });

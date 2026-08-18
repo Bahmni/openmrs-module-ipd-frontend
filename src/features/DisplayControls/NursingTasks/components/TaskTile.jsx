@@ -8,6 +8,7 @@ import {
   iconType,
 } from "../utils/TaskTileUtils";
 import { TooltipDefinition, Tag } from "carbon-components-react";
+import { FormattedMessage } from "react-intl";
 import "../styles/TaskTile.scss";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -15,14 +16,10 @@ import {
   asNeededPlaceholderConceptName,
   timeFormatFor12Hr,
   timeFormatFor24Hr,
-  nonMedicationTaskKey,
   TASK_COLORS,
   NURSING_ACTIVITY_SYSTEM,
 } from "../../../../constants";
-import { useIntl } from "react-intl";
 import {
-  getLocalizedLabel,
-  getTranslationKey,
   isSystemGeneratedTask,
 } from "../../../../utils/CommonUtils";
 import TaskFormLink from "./TaskFormLink";
@@ -31,7 +28,6 @@ export default function TaskTile(props) {
   const { medicationNursingTask, formUuid, patientId } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
 
-  const intl = useIntl();
   const { config } = useContext(IPDContext);
   const { nursingTasks = {}, enable24HourTime = {} } = config;
 
@@ -64,13 +60,7 @@ export default function TaskTile(props) {
   );
 
   const isSystemTask = taskType?.display === NURSING_ACTIVITY_SYSTEM;
-  const taskLabel = isSystemTask
-    ? getLocalizedLabel(
-        intl,
-        getTranslationKey(drugName, nonMedicationTaskKey),
-        drugName
-      )
-    : drugName;
+  const taskLabel = drugName;
   const isFormLink = isSystemTask && formUuid && patientId;
   const fontWeight = !isANonMedicationTask && isRelevantTask ? 500 : 400;
   const taskTitleStyle = isFormLink
@@ -94,7 +84,10 @@ export default function TaskTile(props) {
 
   const drugNameText = (
     <span className="drug-title" style={taskTitleStyle}>
-      {taskLabel}
+      <FormattedMessage
+        id={`TASK_LABEL_${isSystemTask ? "SYSTEM" : "MEDICATION"}`}
+        defaultMessage={taskLabel}
+      />
     </span>
   );
   const statusIcon = iconType(newMedicationNursingTask, nursingTasks);
@@ -140,7 +133,10 @@ export default function TaskTile(props) {
                       onClick={(e) => e.stopPropagation()}
                     >
                       <span className="drug-title" style={taskTitleStyle}>
-                        {taskLabel}
+                        <FormattedMessage
+                          id={`TASK_LABEL_${isSystemTask ? "SYSTEM" : "MEDICATION"}`}
+                          defaultMessage={taskLabel}
+                        />
                       </span>
                     </TaskFormLink>
                   ) : (
