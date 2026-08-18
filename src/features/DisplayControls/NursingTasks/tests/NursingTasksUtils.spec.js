@@ -3,6 +3,7 @@ import {
   GetUTCEpochForDate,
   ExtractMedicationNursingTasksData,
   saveAdministeredMedication,
+  getLatestFormUuid,
 } from "../utils/NursingTasksUtils";
 import axios from "axios";
 import {
@@ -300,6 +301,151 @@ describe("NursingTasksUtils", () => {
         status: 500,
         data: { error: "Internal Server Error" },
       });
+    });
+  });
+
+  describe("ExtractMedicationNursingTasksData - intraday orders", () => {
+    it("sets intradayDoseString on slotInfo for a slot with intraday dosingInstructions", () => {
+      const intradayTaskData = [
+        {
+          slots: [
+            {
+              id: 1,
+              uuid: "intraday-slot-uuid",
+              serviceType: "MedicationRequest",
+              status: "SCHEDULED",
+              startTime: 1690906550,
+              order: {
+                uuid: "intraday-order-uuid",
+                drug: { display: "Prednisolone" },
+                route: { display: "Oral" },
+                dose: null,
+                doseUnits: { display: "mg" },
+                duration: 5,
+                durationUnits: { display: "Day(s)" },
+                autoExpireDate: 1691791200000,
+                asNeeded: false,
+                frequency: null,
+                dosingInstructions: JSON.stringify({
+                  morningDose: 10,
+                  afternoonDose: 0,
+                  eveningDose: 30,
+                  nightDose: 10,
+                }),
+              },
+            },
+          ],
+        },
+      ];
+
+      const filterValue = { id: "pending" };
+      const result = ExtractMedicationNursingTasksData(
+        intradayTaskData,
+        filterValue,
+        false
+      );
+      const slotInfo = result[0][0];
+      expect(slotInfo.intradayDoseString).toBe(
+        "10-0-30-10 mg - Oral - for 5 Day(s)"
+      );
+    });
+
+    it("sets intradayDoseString to null for non-intraday orders", () => {
+      const regularTaskData = [
+        {
+          slots: [
+            {
+              id: 1,
+              uuid: "regular-slot-uuid",
+              serviceType: "MedicationRequest",
+              status: "SCHEDULED",
+              startTime: 1690906550,
+              order: {
+                uuid: "regular-order-uuid",
+                drug: { display: "Paracetamol" },
+                route: { display: "Oral" },
+                dose: 25,
+                doseUnits: { display: "mg" },
+                duration: 3,
+                durationUnits: { display: "Day(s)" },
+                autoExpireDate: 1691791200000,
+                asNeeded: false,
+                frequency: { display: "Once a day" },
+                dosingInstructions: JSON.stringify({
+                  instructions: "After meals",
+                }),
+              },
+            },
+          ],
+        },
+      ];
+
+      const filterValue = { id: "pending" };
+      const result = ExtractMedicationNursingTasksData(
+        regularTaskData,
+        filterValue,
+        false
+      );
+      const slotInfo = result[0][0];
+      expect(slotInfo.intradayDoseString).toBeNull();
+    });
+  });
+
+  describe("getLatestFormUuid", () => {
+    it("should return latest uuid when multiple versions exist", () => {
+      const allFormsSummary = [
+        { name: "Nursing Initial Assessment", version: "1", uuid: "uuid-v1" },
+        { name: "Nursing Initial Assessment", version: "3", uuid: "uuid-v3" },
+        { name: "Nursing Initial Assessment", version: "2", uuid: "uuid-v2" },
+      ];
+
+      expect(
+        getLatestFormUuid("Nursing Initial Assessment", allFormsSummary)
+      ).toBe("uuid-v3");
+    });
+
+    it("should return null when form is not found", () => {
+      const allFormsSummary = [
+        { name: "Vitals", version: "1", uuid: "uuid-1" },
+      ];
+      expect(
+        getLatestFormUuid("Nursing Initial Assessment", allFormsSummary)
+      ).toBeNull();
+    });
+
+    it("should return null for null or undefined inputs", () => {
+      expect(getLatestFormUuid(null, [])).toBeNull();
+      expect(getLatestFormUuid("Form A", null)).toBeNull();
+      expect(getLatestFormUuid("Form A", undefined)).toBeNull();
+      expect(
+        getLatestFormUuid(undefined, [
+          { name: "Form A", version: "1", uuid: "uuid-a" },
+        ])
+      ).toBeNull();
+    });
+
+    it("should handle decimal version strings and return the highest version", () => {
+      const allFormsSummary = [
+        {
+          name: "Nursing Initial Assessment",
+          version: "1.5",
+          uuid: "uuid-v1-5",
+        },
+        {
+          name: "Nursing Initial Assessment",
+          version: "1.9",
+          uuid: "uuid-v1-9",
+        },
+        {
+          name: "Nursing Initial Assessment",
+          version: "1.7",
+          uuid: "uuid-v1-7",
+        },
+      ];
+
+      expect(
+        getLatestFormUuid("Nursing Initial Assessment", allFormsSummary)
+      ).toBe("uuid-v1-9");
     });
   });
 });
