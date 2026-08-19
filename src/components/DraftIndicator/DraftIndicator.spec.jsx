@@ -31,7 +31,6 @@ const mockDrafts = [
     patientName: "John Doe",
     patientUuid: "patient-uuid-1",
     patientIdentifier: "IQ000001",
-    encounterUuid: "encounter-uuid-1",
     formName: "Form One",
     timestamp: 1705313400000,
   },

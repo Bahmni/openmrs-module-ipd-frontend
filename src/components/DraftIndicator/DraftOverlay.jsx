@@ -36,7 +36,6 @@ DraftRow.propTypes = {
     patientName: PropTypes.string.isRequired,
     patientUuid: PropTypes.string.isRequired,
     patientIdentifier: PropTypes.string,
-    encounterUuid: PropTypes.string,
     formName: PropTypes.string,
     timestamp: PropTypes.number.isRequired,
   }).isRequired,
@@ -100,7 +99,6 @@ DraftOverlay.propTypes = {
       patientName: PropTypes.string.isRequired,
       patientUuid: PropTypes.string.isRequired,
       patientIdentifier: PropTypes.string,
-      encounterUuid: PropTypes.string,
       formName: PropTypes.string,
       timestamp: PropTypes.number.isRequired,
     })
