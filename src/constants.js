@@ -153,6 +153,13 @@ export const DAEMON_USER = {
   uuid: "A4F30A1B-5EB9-11DF-A648-37A07F9C90FB",
 };
 
+export const FORM_DRAFT_LIST_URL = RESTWS_V1 + "/bahmnicore/formdraft/list";
+export const DRAFT_UPDATES_CHANNEL = "bahmni-draft-indicator-update";
+export const USER_URL = RESTWS_V1 + "/user";
+export const PROVIDER_URL = RESTWS_V1 + "/provider";
+export const CLINICAL_OBSERVATION_URL = (patientUuid) =>
+  `/bahmni/clinical/#/default/patient/${patientUuid}/dashboard/concept-set-group/All%20Observation%20Templates`;
+
 export const PRIVILEGE_CONSTANTS = {
   ADT: "Assign Beds",
   EDIT_MEDICATION_TASKS: "Edit Medication Tasks",
@@ -160,6 +167,8 @@ export const PRIVILEGE_CONSTANTS = {
   ADD_TASKS: "Add Tasks",
   EDIT_TASKS: "Edit Tasks",
   EDIT_MEDICATION_ADMINISTRATION: "Edit Medication Administration",
+  ADT_APPROVE_AMEND_NOTE: "app:adt:approveAmendNote",
+  OBSERVATION_TAB: "app:clinical:observationTab",
 };
 
 export const DOSE_UNITS = ["ml", "mg", "mcg"];
