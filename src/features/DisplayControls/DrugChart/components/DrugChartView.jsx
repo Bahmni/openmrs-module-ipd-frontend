@@ -127,6 +127,9 @@ export default function DrugChartWrapper(props) {
   };
 
   const updateAcknowledgementSlider = (value) => {
+    if (!value) {
+      clearDeepLinkParams();
+    }
     updateSliderOpen((prev) => {
       return {
         ...prev,
@@ -414,8 +417,6 @@ export default function DrugChartWrapper(props) {
             scrollToSection(componentKeys.DRUG_CHART);
           }, SCROLL_TO_SECTION_DELAY_MS);
         }
-
-        clearDeepLinkParams();
       } catch (e) {
         console.error("Error handling deep link:", e);
       }

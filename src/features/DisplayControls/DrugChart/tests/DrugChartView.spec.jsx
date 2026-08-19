@@ -674,7 +674,7 @@ describe("DrugChartWrapper - handleDeepLink for acknowledgement flow", () => {
     );
   });
 
-  it("should call clearDeepLinkParams when deep link is processed successfully", async () => {
+  it("should not clear deep link params when the acknowledgement slider opens successfully", async () => {
     MockDate.set("2024-01-05 10:00");
     delete window.__processedDeepLink;
 
@@ -712,13 +712,10 @@ describe("DrugChartWrapper - handleDeepLink for acknowledgement flow", () => {
       expect(mockSliderContext.updateSliderOpen).toHaveBeenCalled();
     });
 
-    // Verify URL params were cleared
-    await waitFor(() => {
-      expect(replaceStateSpy).toHaveBeenCalled();
-    });
-
     // Verify deep link was marked as processed
     expect(window.__processedDeepLink).toBeDefined();
+
+    expect(replaceStateSpy).not.toHaveBeenCalled();
 
     replaceStateSpy.mockRestore();
   });
