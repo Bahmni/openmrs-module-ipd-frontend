@@ -44,6 +44,7 @@ export const fetchNonMedicationTasks = async (
     return response.data;
   } catch (error) {
     console.log(error);
+    return [];
   }
 };
 
@@ -398,11 +399,18 @@ export const ExtractNonMedicationTasks = (
       partOf,
       isDisabled: isReadMode
         ? true
-        : status === "COMPLETED" || status === "REJECTED" || status === "CANCELLED",
+        : status === "COMPLETED" ||
+          status === "REJECTED" ||
+          status === "CANCELLED",
       executionEndTime: executionEndTime,
-      administeredTime: (status === "REJECTED" || status === "CANCELLED") ? null : executionEndTime,
+      administeredTime:
+        status === "REJECTED" || status === "CANCELLED"
+          ? null
+          : executionEndTime,
       administeredTimeInEpochSeconds:
-        (status === "REJECTED" || status === "CANCELLED") ? null : executionEndTime,
+        status === "REJECTED" || status === "CANCELLED"
+          ? null
+          : executionEndTime,
       status,
       isANonMedicationTask: true,
       token,

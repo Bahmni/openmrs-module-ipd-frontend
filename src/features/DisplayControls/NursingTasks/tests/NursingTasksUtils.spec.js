@@ -1,5 +1,6 @@
 import {
   fetchMedicationNursingTasks,
+  fetchNonMedicationTasks,
   GetUTCEpochForDate,
   ExtractMedicationNursingTasksData,
   saveAdministeredMedication,
@@ -62,6 +63,31 @@ describe("NursingTasksUtils", () => {
         // eslint-disable-next-line jest/no-conditional-expect
         expect(e).toEqual(error);
       }
+    });
+  });
+
+  describe("fetchNonMedicationTasks", () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+    it("should return response data on success", async () => {
+      const mockData = [{ uuid: "task-1", name: "Task 1" }];
+      axios.get.mockResolvedValue({ data: mockData });
+      const result = await fetchNonMedicationTasks(
+        "visit-uuid",
+        1690906550000,
+        1690910150000
+      );
+      expect(result).toEqual(mockData);
+    });
+    it("should return empty array when request fails", async () => {
+      axios.get.mockRejectedValue(new Error("Network error"));
+      const result = await fetchNonMedicationTasks(
+        "visit-uuid",
+        1690906550000,
+        1690910150000
+      );
+      expect(result).toEqual([]);
     });
   });
 
