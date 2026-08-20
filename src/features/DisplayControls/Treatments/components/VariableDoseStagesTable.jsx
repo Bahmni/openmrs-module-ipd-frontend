@@ -34,6 +34,7 @@ const VariableDoseStagesTable = ({
   isAddToDrugChartDisabled,
   isReadMode,
   hasScheduleEditPrivilege,
+  dateStopped,
 }) => {
   if (!fhirDosages || fhirDosages.length === 0) return null;
 
@@ -109,10 +110,10 @@ const VariableDoseStagesTable = ({
             const adminStarted = stageStatus?.administrationStarted;
             const pendingSlotsAvailable = stageStatus?.pendingSlotsAvailable;
             const isActiveStage = index === activeStageIndex;
-            const neverAdded = !isScheduled && !adminStarted;
-            const canEdit = isScheduled && !adminStarted;
+            const neverAdded = !isScheduled && !adminStarted && !dateStopped;
+            const canEdit = isScheduled && !adminStarted && !dateStopped;
             const canStop =
-              adminStarted && pendingSlotsAvailable && onStopDrugChart;
+              adminStarted && pendingSlotsAvailable && onStopDrugChart && !dateStopped;
 
             const stage = stages[index];
             const stageLabel = stage.isLoadingDose
@@ -256,6 +257,7 @@ VariableDoseStagesTable.propTypes = {
   isAddToDrugChartDisabled: PropTypes.bool,
   isReadMode: PropTypes.bool,
   hasScheduleEditPrivilege: PropTypes.bool,
+  dateStopped: PropTypes.bool,
 };
 
 export default VariableDoseStagesTable;

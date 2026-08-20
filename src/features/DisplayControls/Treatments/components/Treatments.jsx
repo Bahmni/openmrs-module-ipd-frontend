@@ -19,7 +19,6 @@ import {
   getEncounterType,
   modifyEmergencyTreatmentData,
   mapAdditionalDataForEmergencyTreatments,
-  isDrugOrderStoppedWithoutAdministration,
   getStopReason,
   getSlotsForAnOrderAndServiceType,
   isPRNEligibleForNextDose,
@@ -426,10 +425,6 @@ const Treatments = (props) => {
     });
     const prescribedTreatments = await Promise.all(
       drugOrders
-        .filter(
-          (drugOrderObject) =>
-            !isDrugOrderStoppedWithoutAdministration(drugOrderObject)
-        )
         .map(async (drugOrderObject) => {
           let showEditDrugChartLink;
           let showStopDrugChartLink;
@@ -619,12 +614,13 @@ const Treatments = (props) => {
                   ? (stageIndex) =>
                       handleStageAddToDrugChart(drugOrder.uuid, stageIndex)
                   : undefined,
-              onEditDrugChart: isVariableDose
+              onEditDrugChart: isVariableDose && !drugOrder.dateStopped
                 ? (stageIndex) =>
                     handleStageEditDrugChart(drugOrder.uuid, stageIndex)
                 : undefined,
               onStopDrugChart:
                 isVariableDose &&
+                !drugOrder.dateStopped &&
                 showStopDrugChartLink &&
                 stageSchedules.some((s) => s.pendingSlotsAvailable)
                   ? () => handleStopDrugChartClick(drugOrder.uuid)

@@ -2148,4 +2148,110 @@ describe("Medication indicators", () => {
       });
     });
   });
+
+  it("should display stopped drug with administration in Medication section", async () => {
+    const stoppedWithAdmin = {
+      drugOrder: {
+        uuid: "stopped-with-admin",
+        effectiveStartDate: 1704785404,
+        dateStopped: 1704785404,
+        dateActivated: 1704785404,
+        scheduledDate: 1704785404,
+        drug: { name: "Stopped Admin Drug" },
+        dosingInstructions: {
+          dose: 1,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Once a day",
+          administrationInstructions: '{"instructions":"As directed"}',
+        },
+        duration: 7,
+        durationUnits: "Day(s)",
+        careSetting: "INPATIENT",
+      },
+      drugOrderSchedule: {
+        firstDaySlotsStartTime: [1704798900],
+        dayWiseSlotsStartTime: [1704853800],
+        remainingDaySlotsStartTime: [1704940200],
+        slotStartTime: null,
+        medicationAdministrationStarted: true,
+      },
+      provider: { name: "Dr. John Doe" },
+    };
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
+        emergencyMedications: [],
+        ipdDrugOrders: [stoppedWithAdmin],
+      },
+    };
+    const { getByText, queryByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            {withMedicationIndicators(
+              <Treatments patientId="test-patient" />
+            )}
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
+    );
+    await waitFor(() => {
+      expect(getByText("Stopped Admin Drug")).toBeTruthy();
+      expect(getByText("Stopped")).toBeTruthy();
+      expect(queryByText("Edit Drug Chart")).not.toBeInTheDocument();
+      expect(queryByText("Add to Drug Chart")).not.toBeInTheDocument();
+      expect(queryByText("Stop Drug")).not.toBeInTheDocument();
+    });
+  });
+
+  it("should display stopped drug without administration in Medication section", async () => {
+    const stoppedWithoutAdmin = {
+      drugOrder: {
+        uuid: "stopped-no-admin",
+        effectiveStartDate: 1704785404,
+        dateStopped: 1704785404,
+        dateActivated: 1704785404,
+        scheduledDate: 1704785404,
+        drug: { name: "Stopped Drug" },
+        dosingInstructions: {
+          dose: 1,
+          doseUnits: "mg",
+          route: "Oral",
+          frequency: "Once a day",
+          administrationInstructions: '{"instructions":"As directed"}',
+        },
+        duration: 7,
+        durationUnits: "Day(s)",
+        careSetting: "INPATIENT",
+      },
+      drugOrderSchedule: null,
+      provider: { name: "Dr. John Doe" },
+    };
+    const updatedAllMedications = {
+      ...mockAllMedicationsProviderValue,
+      data: {
+        emergencyMedications: [],
+        ipdDrugOrders: [stoppedWithoutAdmin],
+      },
+    };
+    const { getByText, queryByText } = render(
+      <IPDContext.Provider value={{ config: mockConfig, isReadMode: false }}>
+        <SliderContext.Provider value={mockProviderValue}>
+          <AllMedicationsContext.Provider value={updatedAllMedications}>
+            {withMedicationIndicators(
+              <Treatments patientId="test-patient" />
+            )}
+          </AllMedicationsContext.Provider>
+        </SliderContext.Provider>
+      </IPDContext.Provider>
+    );
+    await waitFor(() => {
+      expect(getByText("Stopped Drug")).toBeTruthy();
+      expect(getByText("Stopped")).toBeTruthy();
+      expect(queryByText("Edit Drug Chart")).not.toBeInTheDocument();
+      expect(queryByText("Add to Drug Chart")).not.toBeInTheDocument();
+      expect(queryByText("Stop Drug")).not.toBeInTheDocument();
+    });
+  });
 });
