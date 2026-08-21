@@ -30,8 +30,6 @@ import {
   timeFormatFor12Hr,
   timeFormatFor24Hr,
   PRIVILEGE_CONSTANTS,
-  nonMedicationTaskKey,
-  NURSING_ACTIVITY_SYSTEM,
 } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -41,8 +39,6 @@ import {
   isTimeInFuture,
 } from "../../../../utils/DateTimeUtils";
 import {
-  getLocalizedLabel,
-  getTranslationKey,
   isSystemGeneratedTask,
   isUserPrivileged,
 } from "../../../../utils/CommonUtils";
@@ -101,7 +97,6 @@ const UpdateNursingTasks = (props) => {
   const {
     nursingTasks = {},
     enable24HourTime = {},
-    taskToFormMapping = {},
   } = config;
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
@@ -198,21 +193,13 @@ const UpdateNursingTasks = (props) => {
   };
 
   const getTaskNameElement = (medicationTask) => {
-    const isSystemTask =
-      medicationTask?.taskType?.display === NURSING_ACTIVITY_SYSTEM;
-    const taskLabel = isSystemTask
-      ? getLocalizedLabel(
-          intl,
-          getTranslationKey(medicationTask.drugName, nonMedicationTaskKey),
-          medicationTask.drugName
-        )
-      : medicationTask.drugName;
+    const taskLabel = medicationTask.drugName;
 
-    if (isSystemTask && allFormsSummary && taskToFormMapping) {
-      const mappedFormName = taskToFormMapping[medicationTask.drugName];
-      const formUuid = mappedFormName
-        ? getLatestFormUuid(mappedFormName, allFormsSummary)
-        : null;
+    if (medicationTask?.isANonMedicationTask && allFormsSummary) {
+      const formName = medicationTask.input?.find(
+        (input) => input?.valueText
+      )?.valueText;
+      const formUuid = getLatestFormUuid(formName, allFormsSummary);
 
       if (formUuid && patientId) {
         return (

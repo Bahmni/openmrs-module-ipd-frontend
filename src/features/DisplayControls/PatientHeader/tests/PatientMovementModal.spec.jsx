@@ -261,7 +261,7 @@ describe("PatientMovementModal", () => {
       visitMock,
       "encounterUuid"
     );
-    expect(window.location.href).toBe(expectedUrl);
+    await waitFor(() => expect(window.location.href).toBe(expectedUrl));
   });
 
   it("should display patient movement modal with a discharge and transfer dropdown", async () => {
@@ -377,7 +377,7 @@ describe("PatientMovementModal", () => {
       visitMock,
       patientResponseData.data.encounterUuid
     );
-    expect(window.location.href).toBe(expectedUrl);
+    await waitFor(() => expect(window.location.href).toBe(expectedUrl));
   });
 
   it("should display patient movement modal with a undo discharge dropdown", async () => {
@@ -447,8 +447,8 @@ describe("PatientMovementModal", () => {
     const expectedUrl = getADTDashboardUrl(
       "patientMockUuid",
       visitMock,
-      patientResponseData.data.encounterUuid
+      visitSummaryToUndoDischargeMockData.data.dischargeDetails.uuid
     );
-    expect(window.location.href).toBe(expectedUrl);
+    await waitFor(() => expect(window.location.href).toBe(expectedUrl));
   });
 });

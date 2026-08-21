@@ -31,7 +31,6 @@ import {
   asNeededPlaceholderConceptName,
   timeFormatFor12Hr,
   PRIVILEGE_CONSTANTS,
-  NURSING_ACTIVITY_SYSTEM,
 } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -383,14 +382,12 @@ export default function NursingTasks(props) {
   }, [filterValue, nursingTasks, nonMedicationTasks]);
 
   const showTaskTiles = () => {
-    const taskToFormMapping = config?.taskToFormMapping || {};
     return medicationNursingTasks.map((medicationNursingTask, index) => {
       const task = medicationNursingTask[0];
-      const formUuid =
-        task?.isANonMedicationTask &&
-        task?.taskType?.display === NURSING_ACTIVITY_SYSTEM
-          ? getLatestFormUuid(taskToFormMapping[task.drugName], allFormsSummary)
-          : null;
+      const formName = task?.isANonMedicationTask
+        ? task.input?.find((input) => input?.valueText)?.valueText
+        : null;
+      const formUuid = getLatestFormUuid(formName, allFormsSummary);
       return (
         <div key={index}>
           <div

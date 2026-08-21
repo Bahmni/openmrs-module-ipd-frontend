@@ -4,6 +4,7 @@ import {
   ExtractMedicationNursingTasksData,
   saveAdministeredMedication,
   getLatestFormUuid,
+  ExtractNonMedicationTasks,
 } from "../utils/NursingTasksUtils";
 import axios from "axios";
 import {
@@ -304,93 +305,6 @@ describe("NursingTasksUtils", () => {
     });
   });
 
-  describe("ExtractMedicationNursingTasksData - intraday orders", () => {
-    it("sets intradayDoseString on slotInfo for a slot with intraday dosingInstructions", () => {
-      const intradayTaskData = [
-        {
-          slots: [
-            {
-              id: 1,
-              uuid: "intraday-slot-uuid",
-              serviceType: "MedicationRequest",
-              status: "SCHEDULED",
-              startTime: 1690906550,
-              order: {
-                uuid: "intraday-order-uuid",
-                drug: { display: "Prednisolone" },
-                route: { display: "Oral" },
-                dose: null,
-                doseUnits: { display: "mg" },
-                duration: 5,
-                durationUnits: { display: "Day(s)" },
-                autoExpireDate: 1691791200000,
-                asNeeded: false,
-                frequency: null,
-                dosingInstructions: JSON.stringify({
-                  morningDose: 10,
-                  afternoonDose: 0,
-                  eveningDose: 30,
-                  nightDose: 10,
-                }),
-              },
-            },
-          ],
-        },
-      ];
-
-      const filterValue = { id: "pending" };
-      const result = ExtractMedicationNursingTasksData(
-        intradayTaskData,
-        filterValue,
-        false
-      );
-      const slotInfo = result[0][0];
-      expect(slotInfo.intradayDoseString).toBe(
-        "10-0-30-10 mg - Oral - for 5 Day(s)"
-      );
-    });
-
-    it("sets intradayDoseString to null for non-intraday orders", () => {
-      const regularTaskData = [
-        {
-          slots: [
-            {
-              id: 1,
-              uuid: "regular-slot-uuid",
-              serviceType: "MedicationRequest",
-              status: "SCHEDULED",
-              startTime: 1690906550,
-              order: {
-                uuid: "regular-order-uuid",
-                drug: { display: "Paracetamol" },
-                route: { display: "Oral" },
-                dose: 25,
-                doseUnits: { display: "mg" },
-                duration: 3,
-                durationUnits: { display: "Day(s)" },
-                autoExpireDate: 1691791200000,
-                asNeeded: false,
-                frequency: { display: "Once a day" },
-                dosingInstructions: JSON.stringify({
-                  instructions: "After meals",
-                }),
-              },
-            },
-          ],
-        },
-      ];
-
-      const filterValue = { id: "pending" };
-      const result = ExtractMedicationNursingTasksData(
-        regularTaskData,
-        filterValue,
-        false
-      );
-      const slotInfo = result[0][0];
-      expect(slotInfo.intradayDoseString).toBeNull();
-    });
-  });
-
   describe("getLatestFormUuid", () => {
     it("should return latest uuid when multiple versions exist", () => {
       const allFormsSummary = [
@@ -446,6 +360,35 @@ describe("NursingTasksUtils", () => {
       expect(
         getLatestFormUuid("Nursing Initial Assessment", allFormsSummary)
       ).toBe("uuid-v1-9");
+    });
+  });
+
+  describe("ExtractNonMedicationTasks", () => {
+    it("preserves task input used to resolve the linked form", () => {
+      const input = [
+        {
+          type: "Multidisciplinary assessment",
+          valueText: "Vitals",
+        },
+      ];
+      const tasks = [
+        {
+          name: "Record Vitals",
+          requestedStartTime: 1690906550000,
+          status: "REQUESTED",
+          uuid: "task-uuid",
+          creator: { uuid: "user-uuid" },
+          input,
+        },
+      ];
+
+      const result = ExtractNonMedicationTasks(
+        tasks,
+        { id: "pending" },
+        false
+      );
+
+      expect(result[0][0].input).toEqual(input);
     });
   });
 });

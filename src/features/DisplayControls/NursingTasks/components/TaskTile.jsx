@@ -17,11 +17,8 @@ import {
   timeFormatFor12Hr,
   timeFormatFor24Hr,
   TASK_COLORS,
-  NURSING_ACTIVITY_SYSTEM,
 } from "../../../../constants";
-import {
-  isSystemGeneratedTask,
-} from "../../../../utils/CommonUtils";
+import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
 import TaskFormLink from "./TaskFormLink";
 
 export default function TaskTile(props) {
@@ -59,9 +56,8 @@ export default function TaskTile(props) {
     nursingTasks
   );
 
-  const isSystemTask = taskType?.display === NURSING_ACTIVITY_SYSTEM;
   const taskLabel = drugName;
-  const isFormLink = isSystemTask && formUuid && patientId;
+  const isFormLink = formUuid && patientId;
   const fontWeight = !isANonMedicationTask && isRelevantTask ? 500 : 400;
   const taskTitleStyle = isFormLink
     ? {
@@ -85,7 +81,7 @@ export default function TaskTile(props) {
   const drugNameText = (
     <span className="drug-title" style={taskTitleStyle}>
       <FormattedMessage
-        id={`TASK_LABEL_${isSystemTask ? "SYSTEM" : "MEDICATION"}`}
+        id={`TASK_LABEL_${isANonMedicationTask ? "SYSTEM" : "MEDICATION"}`}
         defaultMessage={taskLabel}
       />
     </span>
@@ -134,7 +130,9 @@ export default function TaskTile(props) {
                     >
                       <span className="drug-title" style={taskTitleStyle}>
                         <FormattedMessage
-                          id={`TASK_LABEL_${isSystemTask ? "SYSTEM" : "MEDICATION"}`}
+                          id={`TASK_LABEL_${
+                            isANonMedicationTask ? "SYSTEM" : "MEDICATION"
+                          }`}
                           defaultMessage={taskLabel}
                         />
                       </span>
