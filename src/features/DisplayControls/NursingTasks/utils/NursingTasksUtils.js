@@ -335,6 +335,7 @@ export const ExtractNonMedicationTasks = (
       taskType,
       creator,
       executionEndTime,
+      input,
     } = nonMedicationTask;
     const startTimeInDate = new Date(requestedStartTime);
     const taskInfo = {
@@ -359,6 +360,7 @@ export const ExtractNonMedicationTasks = (
       token,
       taskType,
       creator,
+      input,
     };
 
     if (
