@@ -522,7 +522,7 @@ describe("NursingTasksUtils", () => {
       );
       const slotInfo = result[0][0];
       expect(slotInfo.intradayDoseString).toBe(
-        "10-0-30-10 mg - Oral - for 5 Day(s)"
+        "10 mg Morning | 0 mg Afternoon | 30 mg Evening | 10 mg Night - Oral - for 5 Day(s)"
       );
     });
 

@@ -12,7 +12,7 @@ import {
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import { formatDate } from "../../../utils/DateTimeUtils";
-import { INTRADAY_SLOTS } from "../../DisplayControls/Treatments/utils/TreatmentsUtils";
+import { INTRADAY_SLOTS } from "../../../constants";
 
 const RouteField = ({ hostData, intl }) => (
   <div className="route">

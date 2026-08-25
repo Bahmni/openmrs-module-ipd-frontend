@@ -522,7 +522,7 @@ describe("DrugChartUtils", () => {
         emergencyMedications: [],
       });
       expect(result["intraday-order-1"].intradayDoseString).toBe(
-        "10-0-30-10 mg - Oral - for 5 Day(s)"
+        "10 mg Morning | 0 mg Afternoon | 30 mg Evening | 10 mg Night - Oral - for 5 Day(s)"
       );
     });
 

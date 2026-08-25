@@ -470,7 +470,7 @@ describe("TreatmentsUtils", () => {
         setDosingInstructions(drugOrder, intradayDose)
       );
       expect(
-        getByText("10-0-20-10 mg - Oral - Four times a day - for 5 Day(s)")
+        getByText("10 mg Morning | 0 mg Afternoon | 20 mg Evening | 10 mg Night - Oral - Four times a day - for 5 Day(s)")
       ).toBeInTheDocument();
     });
 
@@ -495,11 +495,11 @@ describe("TreatmentsUtils", () => {
         setDosingInstructions(drugOrder, intradayDose)
       );
       expect(
-        getByText("10-0-20-10 mg - Oral - Four times a day")
+        getByText("10 mg Morning | 0 mg Afternoon | 20 mg Evening | 10 mg Night - Oral - Four times a day")
       ).toBeInTheDocument();
     });
 
-    it("should render legacy 3-box intra-day dose (no nightDose) with night defaulting to 0", () => {
+    it("should render legacy 3-box intra-day dose (no nightDose) omitting night slot", () => {
       const drugOrder = {
         dosingInstructionType: "FlexibleDosingInstructions",
         dosingInstructions: {
@@ -519,7 +519,7 @@ describe("TreatmentsUtils", () => {
       const { getByText } = render(
         setDosingInstructions(drugOrder, intradayDose)
       );
-      expect(getByText("5-5-5-0 mg - Oral")).toBeInTheDocument();
+      expect(getByText("5 mg Morning | 5 mg Afternoon | 5 mg Evening - Oral")).toBeInTheDocument();
     });
 
     it("should render uniform-dose order unchanged when no intradayDose provided", () => {
@@ -724,10 +724,10 @@ describe("TreatmentsUtils", () => {
         5,
         "Day(s)"
       );
-      expect(result).toBe("10-5-10-5 mg - Oral - for 5 Day(s)");
+      expect(result).toBe("10 mg Morning | 5 mg Afternoon | 10 mg Evening | 5 mg Night - Oral - for 5 Day(s)");
     });
 
-    it("should display 0 for null slot values", () => {
+    it("should omit null slot values", () => {
       const result = formatIntradayDoseString(
         { morning: 10, afternoon: null, evening: 30, night: null },
         "mg",
@@ -736,22 +736,22 @@ describe("TreatmentsUtils", () => {
         null,
         null
       );
-      expect(result).toBe("10-0-30-0 mg");
+      expect(result).toBe("10 mg Morning | 30 mg Evening");
     });
 
     it("should omit route/frequency/duration when not provided", () => {
       const result = formatIntradayDoseString(
-        { morning: 1, afternoon: 0, evening: 1, night: 0 },
+        { morning: 1, afternoon: 1, evening: 1, night: 1 },
         "Tablet",
         null,
         null,
         null,
         null
       );
-      expect(result).toBe("1-0-1-0 Tablet");
+      expect(result).toBe("1 Tablet Morning | 1 Tablet Afternoon | 1 Tablet Evening | 1 Tablet Night");
     });
 
-    it("should not append a trailing space when doseUnits is missing", () => {
+    it("should not append doseUnits when doseUnits is null", () => {
       const result = formatIntradayDoseString(
         { morning: 10, afternoon: 0, evening: 5, night: 0 },
         null,
@@ -760,7 +760,7 @@ describe("TreatmentsUtils", () => {
         null,
         null
       );
-      expect(result).toBe("10-0-5-0");
+      expect(result).toBe("10 Morning | 0 Afternoon | 5 Evening | 0 Night");
     });
   });
   describe("modifyEmergencyTreatmentData", () => {

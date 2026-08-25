@@ -8,6 +8,7 @@ import {
   verifierFunction,
   defaultDateTimeFormat,
   defaultDateFormat,
+  INTRADAY_SLOT_CONFIG,
 } from "../../../../constants";
 import axios from "axios";
 import { FormattedMessage } from "react-intl";
@@ -274,8 +275,6 @@ export const isDrugOrderStoppedWithoutAdministration = (drugOrderObject) => {
   );
 };
 
-export const INTRADAY_SLOTS = ["morning", "afternoon", "evening", "night"];
-
 export const isIntradayDosingInstruction = (parsed) =>
   parsed?.morningDose != null ||
   parsed?.afternoonDose != null ||
@@ -283,15 +282,15 @@ export const isIntradayDosingInstruction = (parsed) =>
   parsed?.nightDose != null;
 
 export const formatIntradayDoseString = (intradayDose, doseUnits, route, frequency, duration, durationUnits) => {
-  const toDisplay = (val) => (val != null ? val : 0);
-  const doseString = [
-    toDisplay(intradayDose.morning),
-    toDisplay(intradayDose.afternoon),
-    toDisplay(intradayDose.evening),
-    toDisplay(intradayDose.night),
-  ].join("-");
+  const doseString = INTRADAY_SLOT_CONFIG
+    .filter((slot) => intradayDose[slot.key] != null)
+    .map((slot) => {
+      const dose = intradayDose[slot.key];
+      const doseWithUnit = doseUnits ? `${dose} ${doseUnits}` : dose;
+      return `${doseWithUnit} ${slot.label}`;
+    }).join(" | ");
 
-  let result = doseUnits ? doseString + " " + doseUnits : doseString;
+  let result = doseString;
   if (route) result += " - " + route;
   if (frequency) result += " - " + frequency;
   if (duration) result += " - for " + duration + " " + (durationUnits || "");

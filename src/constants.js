@@ -198,6 +198,15 @@ export const sliderTypes = {
 
 export const DOSE_UNITS = ["ml", "mg", "mcg"];
 
+export const INTRADAY_SLOT_CONFIG = [
+  { key: "morning", label: "Morning" },
+  { key: "afternoon", label: "Afternoon" },
+  { key: "evening", label: "Evening" },
+  { key: "night", label: "Night" },
+];
+export const INTRADAY_SLOTS = INTRADAY_SLOT_CONFIG.map((s) => s.key);
+export const INTRADAY_SLOT_LABELS = INTRADAY_SLOT_CONFIG.map((s) => s.label);
+
 export const LOADING_DOSE_SEQUENCE_OFFSET = 1;
 export const NO_LOADING_DOSE_SEQUENCE_OFFSET = 0;
 export const ATTR_NAME = "Can acknowledge emergency medication";
