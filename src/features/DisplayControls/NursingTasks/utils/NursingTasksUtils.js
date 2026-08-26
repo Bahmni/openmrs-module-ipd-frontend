@@ -451,3 +451,11 @@ export const getLatestFormUuid = (formName, allFormsSummary) => {
     (a, b) => parseFloat(b.version) - parseFloat(a.version)
   )[0].uuid;
 };
+
+export const getFormNameFromTaskInput = (input, formTaskInputConceptUuid) => {
+  if (!Array.isArray(input) || !formTaskInputConceptUuid) return null;
+  const formInput = input.find(
+    (taskInput) => taskInput?.type?.uuid === formTaskInputConceptUuid
+  );
+  return formInput?.valueText || null;
+};

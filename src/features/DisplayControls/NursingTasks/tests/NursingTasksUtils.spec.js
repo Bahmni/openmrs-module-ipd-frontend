@@ -4,6 +4,7 @@ import {
   ExtractMedicationNursingTasksData,
   saveAdministeredMedication,
   getLatestFormUuid,
+  getFormNameFromTaskInput,
   ExtractNonMedicationTasks,
 } from "../utils/NursingTasksUtils";
 import axios from "axios";
@@ -360,6 +361,41 @@ describe("NursingTasksUtils", () => {
       expect(
         getLatestFormUuid("Nursing Initial Assessment", allFormsSummary)
       ).toBe("uuid-v1-9");
+    });
+  });
+
+  describe("getFormNameFromTaskInput", () => {
+    const formConceptUuid = "form-resource-uuid";
+
+    it("returns the value of the input matching the configured concept uuid", () => {
+      const input = [
+        {
+          type: { uuid: "another-input-uuid", display: "Another Input" },
+          valueText: "Not a form",
+        },
+        {
+          type: { uuid: formConceptUuid, display: "form-resource" },
+          valueText: "Vitals",
+        },
+      ];
+
+      expect(getFormNameFromTaskInput(input, formConceptUuid)).toBe("Vitals");
+    });
+
+    it("returns null when the configured concept uuid does not match", () => {
+      const input = [
+        {
+          type: { uuid: "another-input-uuid", display: "form-resource" },
+          valueText: "Vitals",
+        },
+      ];
+
+      expect(getFormNameFromTaskInput(input, formConceptUuid)).toBeNull();
+    });
+
+    it("returns null when input or configuration is missing", () => {
+      expect(getFormNameFromTaskInput(undefined, formConceptUuid)).toBeNull();
+      expect(getFormNameFromTaskInput([], undefined)).toBeNull();
     });
   });
 
