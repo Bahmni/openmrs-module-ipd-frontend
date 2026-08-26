@@ -87,6 +87,7 @@ describe("Vitals", () => {
 
   it("renders without crashing", () => {
     getPatientVitals.mockResolvedValueOnce(mockVitalsData);
+    getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
     render(
       <IPDContext.Provider value={{ config: mockConfig }}>
         <Vitals patientId="123" />
@@ -96,6 +97,7 @@ describe("Vitals", () => {
 
   it("calls getPatientVitals on mount", () => {
     getPatientVitals.mockResolvedValueOnce(mockVitalsData);
+    getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
     render(
       <IPDContext.Provider value={{ config: mockConfig }}>
         <Vitals patientId="123" />
