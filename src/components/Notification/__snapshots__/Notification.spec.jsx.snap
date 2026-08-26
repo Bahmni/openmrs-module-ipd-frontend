@@ -43,7 +43,9 @@ exports[`Notification should show success notification 1`] = `
           >
             <p
               class="bx--inline-notification__title"
-            />
+            >
+              <div />
+            </p>
             <div
               class="bx--inline-notification__subtitle"
             />
@@ -97,7 +99,9 @@ exports[`Notification should show warning notification 1`] = `
           >
             <p
               class="bx--inline-notification__title"
-            />
+            >
+              <div />
+            </p>
             <div
               class="bx--inline-notification__subtitle"
             />
