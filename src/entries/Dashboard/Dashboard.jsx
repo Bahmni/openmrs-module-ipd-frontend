@@ -8,7 +8,7 @@ import {
   Loading,
   SideNav,
   SideNavItems,
-  SideNavLink
+  SideNavLink,
 } from "carbon-components-react";
 import { Application24, Home24, UserActivity24 } from "@carbon/icons-react";
 import { componentMapping } from "./componentMapping";
@@ -21,7 +21,6 @@ import {
   getAppLandingPageUrl,
   getDashboardConfig,
   getPatientDashboardUrl,
-  getShiftDetailsFromGlobalProperty
 } from "../../utils/CommonUtils";
 import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
 import RefreshDisplayControl from "../../context/RefreshDisplayControl";
@@ -42,7 +41,7 @@ export default function Dashboard(props) {
     isReadMode = false,
     visitSummary,
     source,
-    currentUser
+    currentUser,
   } = hostData;
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
@@ -79,8 +78,7 @@ export default function Dashboard(props) {
 
   const fetchConfig = async () => {
     const configData = await getDashboardConfig();
-    let config = configData.data || {};
-    config.shiftDetails = await getShiftDetailsFromGlobalProperty();
+    const config = configData.data || {};
     setDashboardConfig(config);
     setIsConfigLoaded(true);
     const { sections = [] } = config;
@@ -164,9 +162,17 @@ export default function Dashboard(props) {
     }
   };
 
-  const handleAuditEvent = ( eventType ) => {
-    var messageParams = {visitUuid: hostData.visitSummary.uuid, visitType: hostData.visitSummary.visitType};
-    hostApi.handleAuditEvent(patient.uuid, eventType, messageParams, "MODULE_LABEL_CLINICAL_KEY");
+  const handleAuditEvent = (eventType) => {
+    var messageParams = {
+      visitUuid: hostData.visitSummary.uuid,
+      visitType: hostData.visitSummary.visitType,
+    };
+    hostApi.handleAuditEvent(
+      patient.uuid,
+      eventType,
+      messageParams,
+      "MODULE_LABEL_CLINICAL_KEY"
+    );
   };
 
   const updateWindowWidth = () => {

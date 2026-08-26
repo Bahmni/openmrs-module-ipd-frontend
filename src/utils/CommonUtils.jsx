@@ -140,7 +140,12 @@ export const getDashboardConfig = async () => {
       withCredentials: true,
     });
     if (response.status !== 200) throw new Error(response.statusText);
-    return response;
+
+    // Enrich config with shift details from global property
+    const config = response.data || {};
+    config.shiftDetails = await getShiftDetailsFromGlobalProperty();
+
+    return { ...response, data: config };
   } catch (error) {
     return error;
   }

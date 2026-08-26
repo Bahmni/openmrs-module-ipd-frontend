@@ -10,7 +10,7 @@ import { I18nProvider } from "../../features/i18n/I18nProvider";
 import { homePageUrl, WARD_SUMMARY_HEADER } from "../../constants";
 import { CareViewContext } from "../../context/CareViewContext";
 import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
-import { getDashboardConfig, getShiftDetailsFromGlobalProperty } from "../../utils/CommonUtils";
+import { getDashboardConfig } from "../../utils/CommonUtils";
 import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
 
 const CareViewDashboard = (props) => {
@@ -31,9 +31,14 @@ const CareViewDashboard = (props) => {
     setCareViewConfig(config);
   };
 
-    const handleAuditEvent = ( eventType ) => {
-        hostApi.handleAuditEvent(undefined, eventType, undefined, "MODULE_LABEL_INPATIENT_KEY");
-    };
+  const handleAuditEvent = (eventType) => {
+    hostApi.handleAuditEvent(
+      undefined,
+      eventType,
+      undefined,
+      "MODULE_LABEL_INPATIENT_KEY"
+    );
+  };
 
   const handleRefreshPatientList = () => {
     setRefreshPatientList(!refreshPatientList);
@@ -45,8 +50,7 @@ const CareViewDashboard = (props) => {
 
   const getIpdConfig = async () => {
     const configData = await getDashboardConfig();
-    let config = configData.data || {};
-    config.shiftDetails = await getShiftDetailsFromGlobalProperty();
+    const config = configData.data || {};
     setIpdConfig(config);
   };
 
@@ -86,7 +90,7 @@ const CareViewDashboard = (props) => {
               setHeaderSelected,
               refreshSummary,
               handleRefreshSummary,
-              handleAuditEvent
+              handleAuditEvent,
             }}
           >
             <CareViewSummary callbacks={{ setIsLoading }} onHome={onHome} />
