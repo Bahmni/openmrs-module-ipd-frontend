@@ -20,6 +20,7 @@ import {
   isTimeWithinAdministeredWindow,
   disableDoneTogglePostNextTaskTime,
   updateNonMedicationTask,
+  getFormNameFromTaskInput,
 } from "../utils/NursingTasksUtils";
 import { saveEmergencyMedication } from "../utils/EmergencyTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
@@ -196,9 +197,10 @@ const UpdateNursingTasks = (props) => {
     const taskLabel = medicationTask.drugName;
 
     if (medicationTask?.isANonMedicationTask && allFormsSummary) {
-      const formName = medicationTask.input?.find(
-        (input) => input?.valueText
-      )?.valueText;
+      const formName = getFormNameFromTaskInput(
+        medicationTask.input,
+        config?.formTaskInputConceptUuid
+      );
       const formUuid = getLatestFormUuid(formName, allFormsSummary);
 
       if (formUuid && patientId) {

@@ -11,6 +11,7 @@ import {
   sortNursingTasks,
   fetchNonMedicationTasks,
   getLatestFormUuid,
+  getFormNameFromTaskInput,
 } from "../utils/NursingTasksUtils";
 import TaskTile from "./TaskTile";
 import {
@@ -385,7 +386,10 @@ export default function NursingTasks(props) {
     return medicationNursingTasks.map((medicationNursingTask, index) => {
       const task = medicationNursingTask[0];
       const formName = task?.isANonMedicationTask
-        ? task.input?.find((input) => input?.valueText)?.valueText
+        ? getFormNameFromTaskInput(
+            task.input,
+            config?.formTaskInputConceptUuid
+          )
         : null;
       const formUuid = getLatestFormUuid(formName, allFormsSummary);
       return (
