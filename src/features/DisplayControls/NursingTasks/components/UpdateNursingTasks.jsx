@@ -20,6 +20,7 @@ import {
   isTimeWithinAdministeredWindow,
   disableDoneTogglePostNextTaskTime,
   updateNonMedicationTask,
+  getFormNameFromTaskInput,
 } from "../utils/NursingTasksUtils";
 import { saveEmergencyMedication } from "../utils/EmergencyTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
@@ -38,7 +39,12 @@ import {
   formatTime,
   isTimeInFuture,
 } from "../../../../utils/DateTimeUtils";
-import { isSystemGeneratedTask, isUserPrivileged } from "../../../../utils/CommonUtils";
+import {
+  isSystemGeneratedTask,
+  isUserPrivileged,
+} from "../../../../utils/CommonUtils";
+import { getLatestFormUuid } from "../utils/NursingTasksUtils";
+import TaskFormLink from "./TaskFormLink";
 
 const UpdateNursingTasks = (props) => {
   const {
@@ -87,8 +93,12 @@ const UpdateNursingTasks = (props) => {
     setOpenConfirmationModal(false);
   };
 
-  const { config, handleAuditEvent, currentUser } = useContext(IPDContext);
-  const { nursingTasks = {}, enable24HourTime = {} } = config;
+  const { config, handleAuditEvent, currentUser, allFormsSummary } =
+    useContext(IPDContext);
+  const {
+    nursingTasks = {},
+    enable24HourTime = {},
+  } = config;
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
   const saveAdministeredMedicationTasks = (status, messageId) => {
@@ -181,6 +191,32 @@ const UpdateNursingTasks = (props) => {
         )}
       </div>
     );
+  };
+
+  const getTaskNameElement = (medicationTask) => {
+    const taskLabel = medicationTask.drugName;
+
+    if (medicationTask?.isANonMedicationTask && allFormsSummary) {
+      const formName = getFormNameFromTaskInput(
+        medicationTask.input,
+        config?.formTaskInputConceptUuid
+      );
+      const formUuid = getLatestFormUuid(formName, allFormsSummary);
+
+      if (formUuid && patientId) {
+        return (
+          <TaskFormLink
+            patientId={patientId}
+            formUuid={formUuid}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {taskLabel}
+          </TaskFormLink>
+        );
+      }
+    }
+
+    return taskLabel;
   };
   useEffect(() => {
     medicationTasks.map((medicationTask) => {
@@ -552,7 +588,7 @@ const UpdateNursingTasks = (props) => {
                         tasks[medicationTask.uuid]?.skipped && "red-text"
                       }`}
                     >
-                      {medicationTask.drugName}
+                      {getTaskNameElement(medicationTask)}
                     </div>
                   ) : (
                     <div
@@ -560,7 +596,7 @@ const UpdateNursingTasks = (props) => {
                         tasks[medicationTask.uuid]?.skipped && "red-text"
                       }`}
                     >
-                      {medicationTask.drugName}
+                      {getTaskNameElement(medicationTask)}
                       {!isNonMedication ? (
                         <>
                           <FormattedMessage id={"AT"} defaultMessage={" at "} />

@@ -10,7 +10,6 @@ import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
 import {
   parseFhirDosages,
   getDosageBySequence,
-  fromUcumDurationUnit,
   fhirDosageToDisplayStage,
 } from "../../../../utils/FhirDosingUtils";
 import moment from "moment";
@@ -336,6 +335,7 @@ export const ExtractNonMedicationTasks = (
       taskType,
       creator,
       executionEndTime,
+      input,
     } = nonMedicationTask;
     const startTimeInDate = new Date(requestedStartTime);
     const taskInfo = {
@@ -360,6 +360,7 @@ export const ExtractNonMedicationTasks = (
       token,
       taskType,
       creator,
+      input,
     };
 
     if (
@@ -440,4 +441,21 @@ export const disableDoneTogglePostNextTaskTime = (
     taskWithJustGreaterTime &&
     currentTimeInEpoch >= taskWithJustGreaterTime.startTimeInEpochSeconds
   );
+};
+
+export const getLatestFormUuid = (formName, allFormsSummary) => {
+  if (!formName || !allFormsSummary || !allFormsSummary.length) return null;
+  const matches = allFormsSummary.filter((f) => f.name === formName);
+  if (!matches.length) return null;
+  return matches.sort(
+    (a, b) => parseFloat(b.version) - parseFloat(a.version)
+  )[0].uuid;
+};
+
+export const getFormNameFromTaskInput = (input, formTaskInputConceptUuid) => {
+  if (!Array.isArray(input) || !formTaskInputConceptUuid) return null;
+  const formInput = input.find(
+    (taskInput) => taskInput?.type?.uuid === formTaskInputConceptUuid
+  );
+  return formInput?.valueText || null;
 };
