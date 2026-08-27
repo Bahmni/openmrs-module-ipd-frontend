@@ -31,9 +31,14 @@ const CareViewDashboard = (props) => {
     setCareViewConfig(config);
   };
 
-    const handleAuditEvent = ( eventType ) => {
-        hostApi.handleAuditEvent(undefined, eventType, undefined, "MODULE_LABEL_INPATIENT_KEY");
-    };
+  const handleAuditEvent = (eventType) => {
+    hostApi.handleAuditEvent(
+      undefined,
+      eventType,
+      undefined,
+      "MODULE_LABEL_INPATIENT_KEY"
+    );
+  };
 
   const handleRefreshPatientList = () => {
     setRefreshPatientList(!refreshPatientList);
@@ -85,7 +90,7 @@ const CareViewDashboard = (props) => {
               setHeaderSelected,
               refreshSummary,
               handleRefreshSummary,
-              handleAuditEvent
+              handleAuditEvent,
             }}
           >
             <CareViewSummary callbacks={{ setIsLoading }} onHome={onHome} />

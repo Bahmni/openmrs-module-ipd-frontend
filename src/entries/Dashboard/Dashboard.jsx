@@ -1,4 +1,4 @@
-import React, { useState, useRef, Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import {
   Accordion,
   AccordionItem,
@@ -28,7 +28,7 @@ import { SliderContext } from "../../context/SliderContext";
 import { IPDContext } from "../../context/IPDContext";
 import { AllMedicationsContextProvider } from "../../context/AllMedications";
 import { FormattedMessage } from "react-intl";
-import { homePageUrl, RESOLUTION_VALUE, IPD_PAGE_TITLE } from "../../constants";
+import { homePageUrl, IPD_PAGE_TITLE, RESOLUTION_VALUE } from "../../constants";
 import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
 
 export default function Dashboard(props) {
