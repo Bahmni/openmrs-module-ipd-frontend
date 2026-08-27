@@ -1,4 +1,4 @@
-import React, { useState, useRef, Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import {
   Accordion,
   AccordionItem,
@@ -28,7 +28,7 @@ import { SliderContext } from "../../context/SliderContext";
 import { IPDContext } from "../../context/IPDContext";
 import { AllMedicationsContextProvider } from "../../context/AllMedications";
 import { FormattedMessage } from "react-intl";
-import { homePageUrl, RESOLUTION_VALUE, IPD_PAGE_TITLE } from "../../constants";
+import { homePageUrl, IPD_PAGE_TITLE, RESOLUTION_VALUE } from "../../constants";
 import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
 
 export default function Dashboard(props) {
@@ -41,7 +41,7 @@ export default function Dashboard(props) {
     isReadMode = false,
     visitSummary,
     source,
-    currentUser
+    currentUser,
   } = hostData;
   const [sliderContentModified, setSliderContentModified] = useState({
     treatments: false,
@@ -162,9 +162,17 @@ export default function Dashboard(props) {
     }
   };
 
-  const handleAuditEvent = ( eventType ) => {
-    var messageParams = {visitUuid: hostData.visitSummary.uuid, visitType: hostData.visitSummary.visitType};
-    hostApi.handleAuditEvent(patient.uuid, eventType, messageParams, "MODULE_LABEL_CLINICAL_KEY");
+  const handleAuditEvent = (eventType) => {
+    var messageParams = {
+      visitUuid: hostData.visitSummary.uuid,
+      visitType: hostData.visitSummary.visitType,
+    };
+    hostApi.handleAuditEvent(
+      patient.uuid,
+      eventType,
+      messageParams,
+      "MODULE_LABEL_CLINICAL_KEY"
+    );
   };
 
   const updateWindowWidth = () => {
