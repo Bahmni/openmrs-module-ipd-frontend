@@ -77,10 +77,6 @@ const UpdateNursingTasks = (props) => {
   const [invalidText, setInvalidText] = useState();
   const [isSavingConfirmation, setIsSavingConfirmation] = useState(false);
 
-  const isTouchDevice =
-    typeof window !== "undefined" &&
-    (navigator.maxTouchPoints > 0 || "ontouchstart" in window);
-
   const invalidTimeText = (
     <FormattedMessage
       id={"INVALID_TIME"}
@@ -647,51 +643,21 @@ const UpdateNursingTasks = (props) => {
                   groupSlotsByOrderId
                 ));
 
-            const onDoneToggleClick = () => {
-              if (isToggleDisabled) return;
-              handleToggle(
-                !tasks[medicationTask.uuid]?.isSelected,
-                medicationTask.uuid
-              );
-            };
-
             return (
               <div key={index} className={"nursing-task-section"}>
                 {!tasks[medicationTask.uuid]?.skipped &&
-                  !tasks[medicationTask.uuid]?.stopped &&
-                  (isTouchDevice ? (
-                    <div
-                      style={{ display: "contents" }}
-                      onClick={onDoneToggleClick}
-                    >
-                      <Toggle
-                        data-testId="done-toggle"
-                        id={medicationTask.uuid}
-                        size={"sm"}
-                        toggled={
-                          tasks[medicationTask.uuid]?.isSelected || false
-                        }
-                        labelA={getLabel(
-                          tasks[medicationTask.uuid]?.actualTime
-                        )}
-                        labelB={getLabel(
-                          tasks[medicationTask.uuid]?.actualTime
-                        )}
-                        onToggle={() => {}}
-                        disabled={isToggleDisabled}
-                      />
-                    </div>
-                  ) : (
+                  !tasks[medicationTask.uuid]?.stopped && (
                     <Toggle
                       data-testId="done-toggle"
                       id={medicationTask.uuid}
                       size={"sm"}
+                      toggled={tasks[medicationTask.uuid]?.isSelected || false}
                       labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
                       labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
                       onToggle={handleToggle}
                       disabled={isToggleDisabled}
                     />
-                  ))}
+                  )}
                 <div className={"medication-name"}>
                   {!isNonMedication ? (
                     <div
