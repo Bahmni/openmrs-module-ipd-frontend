@@ -10,7 +10,6 @@ import {
   OverflowMenu,
   OverflowMenuItem,
   TextArea,
-  Toggle,
 } from "carbon-components-react";
 import moment from "moment";
 import { TimePicker24Hour, Title, TimePicker } from "bahmni-carbon-ui";
@@ -643,20 +642,40 @@ const UpdateNursingTasks = (props) => {
                   groupSlotsByOrderId
                 ));
 
+            const onDoneToggleClick = () => {
+              if (isToggleDisabled) return;
+              handleToggle(
+                !tasks[medicationTask.uuid]?.isSelected,
+                medicationTask.uuid
+              );
+            };
+
             return (
               <div key={index} className={"nursing-task-section"}>
                 {!tasks[medicationTask.uuid]?.skipped &&
                   !tasks[medicationTask.uuid]?.stopped && (
-                    <Toggle
+                    <button
+                      type="button"
                       data-testId="done-toggle"
-                      id={medicationTask.uuid}
-                      size={"sm"}
-                      toggled={tasks[medicationTask.uuid]?.isSelected || false}
-                      labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
-                      labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
-                      onToggle={handleToggle}
+                      className={
+                        tasks[medicationTask.uuid]?.isSelected
+                          ? "done-toggle__control done-toggle__on"
+                          : "done-toggle__control"
+                      }
+                      role="switch"
+                      aria-checked={
+                        tasks[medicationTask.uuid]?.isSelected || false
+                      }
                       disabled={isToggleDisabled}
-                    />
+                      onClick={onDoneToggleClick}
+                    >
+                      <span className="done-toggle__track">
+                        <span className="done-toggle__thumb" />
+                      </span>
+                      <span className="done-toggle__label">
+                        {getLabel(tasks[medicationTask.uuid]?.actualTime)}
+                      </span>
+                    </button>
                   )}
                 <div className={"medication-name"}>
                   {!isNonMedication ? (

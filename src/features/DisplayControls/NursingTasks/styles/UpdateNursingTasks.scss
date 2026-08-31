@@ -46,6 +46,74 @@
   .bx--toggle-input--small + .bx--toggle-input__label > .bx--toggle__switch {
     margin-top: 0;
   }
+  .done-toggle__control {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    align-self: flex-start;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+
+    &[disabled] {
+      cursor: not-allowed;
+      .done-toggle__track {
+        opacity: 0.4;
+      }
+    }
+
+    &:focus,
+    &:focus-visible {
+      .done-toggle__track {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1062fe;
+      }
+    }
+  }
+
+  .done-toggle__track {
+    position: relative;
+    width: 34px;
+    height: 17px;
+    border-radius: 10px;
+    background: #8d8d8d;
+    transition: background 0.1s;
+  }
+
+  .done-toggle__thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #ffffff;
+    transition: transform 0.1s;
+  }
+
+  .done-toggle__control.done-toggle__on .done-toggle__track {
+    background: #1a8039;
+  }
+
+  .done-toggle__control.done-toggle__on .done-toggle__thumb {
+    transform: translateX(17px);
+  }
+
+  .done-toggle__control:hover .done-toggle__track,
+  .done-toggle__control:active .done-toggle__track {
+    background: #8d8d8d;
+  }
+
+  .done-toggle__control.done-toggle__on:hover .done-toggle__track,
+  .done-toggle__control.done-toggle__on:active .done-toggle__track {
+    background: #1a8039;
+  }
+
+  .done-toggle__label {
+    font-size: 13px;
+    line-height: 1.3;
+  }
   .error {
     color: #ff0000;
     font-size: 12px;

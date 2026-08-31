@@ -60,54 +60,29 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
         <div
           class="nursing-task-section"
         >
-          <div
-            class="bx--form-item"
+          <button
+            aria-checked="false"
+            class="done-toggle__control"
+            data-testid="done-toggle"
+            role="switch"
+            type="button"
           >
-            <input
-              class="bx--toggle-input bx--toggle-input--small"
-              data-testid="done-toggle"
-              id="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
-              type="checkbox"
-            />
-            <label
-              aria-label="Toggle"
-              class="bx--toggle-input__label"
-              for="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
+            <span
+              class="done-toggle__track"
             >
               <span
-                class="bx--toggle__switch"
-              >
-                <svg
-                  class="bx--toggle__check"
-                  height="5px"
-                  viewBox="0 0 6 5"
-                  width="6px"
-                >
-                  <path
-                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
-                  />
-                </svg>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--off"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--on"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-              </span>
-            </label>
-          </div>
+                class="done-toggle__thumb"
+              />
+            </span>
+            <span
+              class="done-toggle__label"
+            >
+              <div>
+                Done
+                 
+              </div>
+            </span>
+          </button>
           <div
             class="medication-name"
           >
@@ -118,7 +93,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </div>
             <div
               class="bx--tag bx--tag--sm bx--tag--blue"
-              id="tag-80"
+              id="tag-88"
             >
               
               <span
@@ -182,55 +157,30 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
         <div
           class="nursing-task-section"
         >
-          <div
-            class="bx--form-item"
+          <button
+            aria-checked="false"
+            class="done-toggle__control"
+            data-testid="done-toggle"
+            disabled=""
+            role="switch"
+            type="button"
           >
-            <input
-              class="bx--toggle-input bx--toggle-input--small"
-              data-testid="done-toggle"
-              disabled=""
-              id="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
-              type="checkbox"
-            />
-            <label
-              aria-label="Toggle"
-              class="bx--toggle-input__label"
-              for="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
+            <span
+              class="done-toggle__track"
             >
               <span
-                class="bx--toggle__switch"
-              >
-                <svg
-                  class="bx--toggle__check"
-                  height="5px"
-                  viewBox="0 0 6 5"
-                  width="6px"
-                >
-                  <path
-                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
-                  />
-                </svg>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--off"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--on"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-              </span>
-            </label>
-          </div>
+                class="done-toggle__thumb"
+              />
+            </span>
+            <span
+              class="done-toggle__label"
+            >
+              <div>
+                Done
+                 
+              </div>
+            </span>
+          </button>
           <div
             class="medication-name"
           >
@@ -241,7 +191,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </div>
             <div
               class="bx--tag bx--tag--sm bx--tag--blue"
-              id="tag-81"
+              id="tag-89"
             >
               
               <span
@@ -327,7 +277,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             
             <h3
               class="bx--modal-header__heading"
-              id="bx--modal-header__heading--modal-11"
+              id="bx--modal-header__heading--modal-12"
             >
               Please confirm your nursing tasks
             </h3>
@@ -354,9 +304,9 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </button>
           </div>
           <div
-            aria-labelledby="bx--modal-header__heading--modal-11"
+            aria-labelledby="bx--modal-header__heading--modal-12"
             class="bx--modal-content"
-            id="bx--modal-body--modal-11"
+            id="bx--modal-body--modal-12"
           >
             <hr />
             <div
@@ -484,54 +434,29 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
         <div
           class="nursing-task-section"
         >
-          <div
-            class="bx--form-item"
+          <button
+            aria-checked="false"
+            class="done-toggle__control"
+            data-testid="done-toggle"
+            role="switch"
+            type="button"
           >
-            <input
-              class="bx--toggle-input bx--toggle-input--small"
-              data-testid="done-toggle"
-              id="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
-              type="checkbox"
-            />
-            <label
-              aria-label="Toggle"
-              class="bx--toggle-input__label"
-              for="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
+            <span
+              class="done-toggle__track"
             >
               <span
-                class="bx--toggle__switch"
-              >
-                <svg
-                  class="bx--toggle__check"
-                  height="5px"
-                  viewBox="0 0 6 5"
-                  width="6px"
-                >
-                  <path
-                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
-                  />
-                </svg>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--off"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--on"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-              </span>
-            </label>
-          </div>
+                class="done-toggle__thumb"
+              />
+            </span>
+            <span
+              class="done-toggle__label"
+            >
+              <div>
+                Done
+                 
+              </div>
+            </span>
+          </button>
           <div
             class="medication-name"
           >
@@ -606,55 +531,30 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
         <div
           class="nursing-task-section"
         >
-          <div
-            class="bx--form-item"
+          <button
+            aria-checked="false"
+            class="done-toggle__control"
+            data-testid="done-toggle"
+            disabled=""
+            role="switch"
+            type="button"
           >
-            <input
-              class="bx--toggle-input bx--toggle-input--small"
-              data-testid="done-toggle"
-              disabled=""
-              id="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
-              type="checkbox"
-            />
-            <label
-              aria-label="Toggle"
-              class="bx--toggle-input__label"
-              for="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
+            <span
+              class="done-toggle__track"
             >
               <span
-                class="bx--toggle__switch"
-              >
-                <svg
-                  class="bx--toggle__check"
-                  height="5px"
-                  viewBox="0 0 6 5"
-                  width="6px"
-                >
-                  <path
-                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
-                  />
-                </svg>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--off"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--on"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-              </span>
-            </label>
-          </div>
+                class="done-toggle__thumb"
+              />
+            </span>
+            <span
+              class="done-toggle__label"
+            >
+              <div>
+                Done
+                 
+              </div>
+            </span>
+          </button>
           <div
             class="medication-name"
           >
