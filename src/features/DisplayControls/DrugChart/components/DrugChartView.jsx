@@ -15,6 +15,8 @@ import {
   isCurrentShift,
   NotCurrentShiftMessage,
   setCurrentShiftTimes,
+  canAcknowledgeAmendment,
+  prepareSlotData,
 } from "../utils/DrugChartUtils";
 import {
   convertDaystoSeconds,
@@ -24,14 +26,22 @@ import { FormattedMessage } from "react-intl";
 import { AllMedicationsContext } from "../../../../context/AllMedications";
 import "../styles/DrugChartView.scss";
 import { IPDContext } from "../../../../context/IPDContext";
+import { SliderContext } from "../../../../context/SliderContext";
+import { DrugChartSlotContext } from "../../../../context/DrugChartSlotContext";
 import {
   ForbiddenErrorMessage,
   GenericErrorMessage,
   displayShiftTimingsFormat,
   errorCodes,
   timeFormatFor12Hr,
+  componentKeys,
+  sliderTypes,
 } from "../../../../constants";
 import WarningIcon from "../../../../icons/warning.svg";
+import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
+import Notification from "../../../../components/Notification/Notification";
+import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
+import DrugChartSlider from "./DrugChartSlider";
 
 const NoMedicationTaskMessage = (
   <FormattedMessage
@@ -40,9 +50,27 @@ const NoMedicationTaskMessage = (
   />
 );
 
+const SCROLL_TO_SECTION_DELAY_MS = 700;
+const DEEP_LINK_BUFFER_MILLISECONDS = 5;
+
 export default function DrugChartWrapper(props) {
   const { patientId } = props;
-  const { config, isReadMode, visitSummary, visit } = useContext(IPDContext);
+  const {
+    config,
+    isReadMode,
+    visitSummary,
+    visit,
+    deepLinkParams,
+    privileges,
+    scrollToSection,
+    provider,
+  } = useContext(IPDContext);
+  const {
+    isSliderOpen,
+    updateSliderOpen,
+    sliderContentModified,
+    setSliderContentModified,
+  } = useContext(SliderContext);
   const {
     shiftDetails: shiftConfig = {},
     drugChart = {},
@@ -80,6 +108,157 @@ export default function DrugChartWrapper(props) {
   const shiftRangeArray = shiftDetails.rangeArray;
   const [shiftIndex, updateShiftIndex] = useState(shiftDetails.shiftIndex);
   const [notCurrentShift, setNotCurrentShift] = useState(false);
+  const [selectedSlotData, setSelectedSlotData] = useState(null);
+  const [showAmendmentWarning, setShowAmendmentWarning] = useState(false);
+  const [showAcknowledgementWarning, setShowAcknowledgementWarning] =
+    useState(false);
+  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showPrivilegeWarning, setShowPrivilegeWarning] = useState(false);
+  const refreshDisplayControl = useContext(RefreshDisplayControl);
+
+  const updateAmendmentSlider = (value) => {
+    updateSliderOpen((prev) => {
+      return {
+        ...prev,
+        drugChartNoteAmendment: value,
+      };
+    });
+  };
+
+  const updateAcknowledgementSlider = (value) => {
+    updateSliderOpen((prev) => {
+      return {
+        ...prev,
+        drugChartNoteAcknowledgement: value,
+      };
+    });
+  };
+
+  const updateHistoryViewer = (value) => {
+    updateSliderOpen((prev) => {
+      return {
+        ...prev,
+        drugChartNoteHistory: value,
+      };
+    });
+  };
+
+  const sliderCloseActions = {
+    onCancel: () => {
+      setShowAmendmentWarning(false);
+      updateAmendmentSlider(false);
+    },
+    onClose: () => {
+      setShowAmendmentWarning(false);
+    },
+  };
+
+  const amendmentSliderActions = {
+    onModalClose: () => {
+      sliderContentModified.drugChartNoteAmendment
+        ? setShowAmendmentWarning(true)
+        : updateAmendmentSlider(false);
+    },
+    onModalCancel: () => {
+      sliderContentModified.drugChartNoteAmendment
+        ? setShowAmendmentWarning(true)
+        : updateAmendmentSlider(false);
+    },
+    onModalSave: () => {
+      updateAmendmentSlider(false);
+      setSuccessMessage("NOTE_AMENDMENT_SAVED_SUCCESS");
+      setShowSuccessNotification(true);
+      callFetchMedications(startEndDates.startDate, startEndDates.endDate);
+    },
+  };
+
+  const acknowledgementSliderCloseActions = {
+    onCancel: () => {
+      setShowAcknowledgementWarning(false);
+      updateAcknowledgementSlider(false);
+    },
+    onClose: () => {
+      setShowAcknowledgementWarning(false);
+    },
+  };
+
+  const acknowledgementSliderActions = {
+    onModalClose: () => {
+      sliderContentModified.drugChartNoteAcknowledgement
+        ? setShowAcknowledgementWarning(true)
+        : updateAcknowledgementSlider(false);
+    },
+    onModalCancel: () => {
+      sliderContentModified.drugChartNoteAcknowledgement
+        ? setShowAcknowledgementWarning(true)
+        : updateAcknowledgementSlider(false);
+    },
+    onModalSave: () => {
+      updateAcknowledgementSlider(false);
+      setSuccessMessage("NOTE_ACKNOWLEDGEMENT_SAVED_SUCCESS");
+      setShowSuccessNotification(true);
+      callFetchMedications(startEndDates.startDate, startEndDates.endDate);
+    },
+  };
+
+  const notesHistorySliderActions = {
+    onModalClose: () => {
+      updateHistoryViewer(false);
+    },
+  };
+
+  const clearDeepLinkParams = () => {
+    const url = new URL(window.location.href);
+    const hash = url.hash.split("?")[0];
+    window.history.replaceState(null, "", url.origin + url.pathname + hash);
+  };
+
+  const handleSlotClick = (slot, rowData) => {
+    const action = slot.clickAction || slot.originalSlot?.clickAction;
+    let preparedSelectedSlotData = prepareSlotData(
+      slot,
+      rowData,
+      enable24HourTime
+    );
+    setSelectedSlotData(preparedSelectedSlotData);
+
+    if (action === "acknowledge") {
+      setSliderContentModified((prevState) => ({
+        ...prevState,
+        drugChartNoteAcknowledgement: false,
+      }));
+      updateAcknowledgementSlider(true);
+    } else if (action === "amend") {
+      setSliderContentModified((prevState) => ({
+        ...prevState,
+        drugChartNoteAmendment: false,
+      }));
+      updateAmendmentSlider(true);
+    } else if (action === "viewHistory") {
+      updateHistoryViewer(true);
+    } else {
+      const hasAmendment =
+        preparedSelectedSlotData.noteInfo.amendedNotes.length > 0;
+
+      if (hasAmendment) {
+        setSliderContentModified((prevState) => ({
+          ...prevState,
+          drugChartNoteAcknowledgement: false,
+        }));
+        updateAcknowledgementSlider(true);
+      } else {
+        setSliderContentModified((prevState) => ({
+          ...prevState,
+          drugChartNoteAmendment: false,
+        }));
+        updateAmendmentSlider(true);
+      }
+    }
+
+    if (slot.clickAction) delete slot.clickAction;
+    if (slot.originalSlot?.clickAction) delete slot.originalSlot.clickAction;
+  };
 
   const callFetchMedications = async (startDateTime, endDateTime) => {
     const startDateTimeInSeconds = startDateTime / 1000;
@@ -136,6 +315,114 @@ export default function DrugChartWrapper(props) {
     updatedStartEndDates({ startDate: startDateTime, endDate: endDateTime });
     callFetchMedications(startDateTime, endDateTime);
   }, []);
+
+  // Handle deep link to open acknowledgement slider
+  useEffect(() => {
+    const handleDeepLink = async () => {
+      if (
+        !deepLinkParams?.openAcknowledge ||
+        !deepLinkParams?.medicationAdministrationUUID ||
+        !deepLinkParams?.medicationAdministrationEpoch
+      ) {
+        return;
+      }
+
+      const deepLinkKey =
+        deepLinkParams.medicationAdministrationUUID +
+        "-" +
+        deepLinkParams.medicationAdministrationEpoch;
+      if (window.__processedDeepLink === deepLinkKey) {
+        return;
+      }
+
+      try {
+        const epochTime =
+          Number(deepLinkParams.medicationAdministrationEpoch) / 1000;
+        const response = await fetchMedications(
+          patientId,
+          epochTime - DEEP_LINK_BUFFER_MILLISECONDS,
+          epochTime + DEEP_LINK_BUFFER_MILLISECONDS,
+          visit
+        );
+
+        if (response?.error) {
+          if (response.error.response?.status === errorCodes.FORBIDDEN) {
+            setErrorMessage(ForbiddenErrorMessage);
+          } else {
+            setErrorMessage(GenericErrorMessage);
+          }
+          return;
+        }
+
+        const medicationData = response.data;
+        if (!medicationData || medicationData.length === 0) {
+          return;
+        }
+
+        const transformedMedications = mapDrugOrdersAndSlots(
+          medicationData,
+          drugOrders,
+          drugChart
+        );
+
+        let foundSlot = null;
+        let foundRowData = null;
+        for (const medication of transformedMedications) {
+          const slot = medication.slots?.find(
+            (s) =>
+              s.medicationAdministration?.uuid ===
+              deepLinkParams.medicationAdministrationUUID
+          );
+          if (slot) {
+            foundSlot = slot;
+            foundRowData = medication;
+            break;
+          }
+        }
+
+        if (!foundSlot || !foundRowData) {
+          return;
+        }
+
+        window.__processedDeepLink = deepLinkKey;
+        if (!canAcknowledgeAmendment(privileges)) {
+          setShowPrivilegeWarning(true);
+          clearDeepLinkParams();
+          return;
+        }
+        let preparedSelectedSlotData = prepareSlotData(
+          foundSlot,
+          foundRowData,
+          enable24HourTime
+        );
+        const amendedByUuid =
+          preparedSelectedSlotData.noteInfo.amendedNotes?.[0]?.amendedBy?.uuid;
+        if (amendedByUuid && amendedByUuid === provider?.uuid) {
+          clearDeepLinkParams();
+          return;
+        }
+        setSelectedSlotData(preparedSelectedSlotData);
+
+        setSliderContentModified((prevState) => ({
+          ...prevState,
+          drugChartNoteAcknowledgement: false,
+        }));
+        updateAcknowledgementSlider(true);
+
+        if (scrollToSection) {
+          setTimeout(() => {
+            scrollToSection(componentKeys.DRUG_CHART);
+          }, SCROLL_TO_SECTION_DELAY_MS);
+        }
+
+        clearDeepLinkParams();
+      } catch (e) {
+        console.error("Error handling deep link:", e);
+      }
+    };
+
+    handleDeepLink();
+  }, [deepLinkParams, drugOrders]);
 
   const handlePrevious = () => {
     const { startDateTime, endDateTime, previousShiftIndex } =
@@ -320,11 +607,124 @@ export default function DrugChartWrapper(props) {
           {errorMessage ? errorMessage : NoMedicationTaskMessage}
         </div>
       ) : (
-        <DrugChart
-          drugChartData={transformedData}
-          currentShiftArray={currentShiftArray}
-          selectedDate={startEndDates.startDate}
-          shiftIndex={shiftIndex}
+        <DrugChartSlotContext.Provider value={{ onSlotClick: handleSlotClick }}>
+          <DrugChart
+            drugChartData={transformedData}
+            currentShiftArray={currentShiftArray}
+            selectedDate={startEndDates.startDate}
+            shiftIndex={shiftIndex}
+          />
+        </DrugChartSlotContext.Provider>
+      )}
+      {isSliderOpen?.drugChartNoteAmendment && (
+        <DrugChartSlider
+          hostData={selectedSlotData}
+          hostApi={amendmentSliderActions}
+          sliderType={sliderTypes.AMENDMENT}
+        />
+      )}
+      {showAmendmentWarning && (
+        <SideBarPanelClose
+          className="warning-notification"
+          open={true}
+          message={
+            <FormattedMessage
+              id="AMENDMENT_WARNING_TEXT"
+              defaultMessage="You will lose the details entered. Do you want to continue?"
+            />
+          }
+          label={""}
+          primaryButtonText={<FormattedMessage id="NO" defaultMessage="No" />}
+          secondaryButtonText={
+            <FormattedMessage id="YES" defaultMessage="Yes" />
+          }
+          onSubmit={sliderCloseActions.onClose}
+          onSecondarySubmit={sliderCloseActions.onCancel}
+          onClose={sliderCloseActions.onClose}
+        />
+      )}
+      {showSuccessNotification && (
+        <Notification
+          hostData={{
+            notificationKind: "success",
+            messageId: successMessage,
+          }}
+          hostApi={{
+            onClose: () => {
+              setShowSuccessNotification(false);
+              refreshDisplayControl([
+                componentKeys.NURSING_TASKS,
+                componentKeys.DRUG_CHART,
+              ]);
+            },
+          }}
+        />
+      )}
+
+      {isSliderOpen?.drugChartNoteAcknowledgement && (
+        <DrugChartSlider
+          hostData={selectedSlotData}
+          hostApi={acknowledgementSliderActions}
+          sliderType={sliderTypes.ACKNOWLEDGEMENT}
+        />
+      )}
+      {showAcknowledgementWarning && (
+        <SideBarPanelClose
+          className="warning-notification"
+          open={true}
+          message={
+            <FormattedMessage
+              id="ACKNOWLEDGEMENT_WARNING_TEXT"
+              defaultMessage="You will lose the details entered. Do you want to continue?"
+            />
+          }
+          label={""}
+          primaryButtonText={<FormattedMessage id="NO" defaultMessage="No" />}
+          secondaryButtonText={
+            <FormattedMessage id="YES" defaultMessage="Yes" />
+          }
+          onSubmit={acknowledgementSliderCloseActions.onClose}
+          onSecondarySubmit={acknowledgementSliderCloseActions.onCancel}
+          onClose={acknowledgementSliderCloseActions.onClose}
+        />
+      )}
+      {showSuccessNotification && (
+        <Notification
+          hostData={{
+            notificationKind: "success",
+            messageId: successMessage,
+          }}
+          hostApi={{
+            onClose: () => {
+              setShowSuccessNotification(false);
+              refreshDisplayControl([
+                componentKeys.NURSING_TASKS,
+                componentKeys.DRUG_CHART,
+              ]);
+            },
+          }}
+        />
+      )}
+      {isSliderOpen?.drugChartNoteHistory && (
+        <DrugChartSlider
+          hostData={selectedSlotData}
+          hostApi={notesHistorySliderActions}
+          sliderType={sliderTypes.HISTORY}
+        />
+      )}
+      {showPrivilegeWarning && (
+        <Notification
+          hostData={{
+            notificationKind: "warning",
+            messageId: "INSUFFICIENT_PRIVILEGE_TO_ACKNOWLEDGE",
+            defaultMessage:
+              "You do not have sufficient privileges to acknowledge medication notes",
+          }}
+          hostApi={{
+            onClose: () => {
+              setShowPrivilegeWarning(false);
+            },
+          }}
         />
       )}
     </div>

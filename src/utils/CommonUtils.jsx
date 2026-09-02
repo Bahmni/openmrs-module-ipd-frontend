@@ -6,12 +6,12 @@ import {
   FETCH_ALL_FORM_DETAILS_URL,
   FORM_BASE_URL,
   PROVIDER_URL,
+  GLOBAL_PROPERTY_URL,
   SEARCH_CONCEPT_URL,
   SEARCH_DRUG_URL,
   USER_URL,
   DAEMON_USER,
   HOME_CONFIG_URL,
-  GLOBAL_PROPERTY_URL,
 } from "../constants";
 import { FormattedMessage } from "react-intl";
 export const getPatientDashboardUrl = (patientUuid) =>
@@ -26,6 +26,8 @@ export const getIPDPatientDashboardUrl = (
 
 export const getADTDashboardUrl = (patientUuid, visitUuid, encounterUuid) =>
   `/bahmni/adt/#/patient/${patientUuid}/visit/${visitUuid}/encounter/${encounterUuid}/bed`;
+
+export const getAdtHomeUrl = () => `/bahmni/adt/#/home`;
 
 export const searchDrugsByName = async (query) => {
   try {
@@ -43,6 +45,8 @@ export const getAppLandingPageUrl = (source) => {
   switch (source) {
     case "adt":
       return adtHomePageUrl;
+    case "adtHome":
+      return getAdtHomeUrl();
     case "clinical":
       return clinicalHomePageUrl;
     case "careViewDashboard":
@@ -143,7 +147,12 @@ export const getDashboardConfig = async () => {
       withCredentials: true,
     });
     if (response.status !== 200) throw new Error(response.statusText);
-    return response;
+
+    // Enrich config with shift details from global property
+    const config = response.data || {};
+    config.shiftDetails = await getShiftDetailsFromGlobalProperty();
+
+    return { ...response, data: config };
   } catch (error) {
     return error;
   }

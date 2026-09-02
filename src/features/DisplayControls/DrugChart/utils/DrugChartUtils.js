@@ -3,11 +3,16 @@ import moment from "moment";
 import React from "react";
 import {
   MEDICATIONS_BASE_URL,
+  MEDICATION_ADMINISTRATION_URL,
   performerFunction,
   asNeededPlaceholderConceptName,
   timeFormatFor24Hr,
   DOSE_UNITS,
+  PRIVILEGE_CONSTANTS,
+  displayShiftTimingsFormat,
+  displayShiftTimings12HourFormat,
 } from "../../../../constants";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 import _ from "lodash";
 import { FormattedMessage } from "react-intl";
 import { getAdministrationStatus } from "../../../../utils/CommonUtils";
@@ -32,6 +37,27 @@ export const fetchMedications = async (
   }
 };
 
+export const fetchAmendmentReasons = async (amendmentReasonConceptSetUuid) => {
+  const FHIR_VALUESET_URL = `/openmrs/ws/fhir2/R4/ValueSet/${amendmentReasonConceptSetUuid}/$expand`;
+  try {
+    const response = await axios.get(FHIR_VALUESET_URL);
+    if (
+      response.data &&
+      response.data.expansion &&
+      response.data.expansion.contains
+    ) {
+      return response.data.expansion.contains.map((item) => ({
+        uuid: item.code,
+        display: item.display,
+      }));
+    }
+    return [];
+  } catch (error) {
+    console.error("Error fetching amendment reasons:", error);
+    return [];
+  }
+};
+
 export const transformDrugOrders = (orders) => {
   const { ipdDrugOrders, emergencyMedications } = orders;
   const medicationData = {};
@@ -51,14 +77,20 @@ export const transformDrugOrders = (orders) => {
       const isVariableDose = fhirDosagesParsed !== null;
       const parsedInstructions = isVariableDose
         ? fhirDosagesParsed
-        : parseFlatAdminInstructions(dosingInstructions.administrationInstructions);
+        : parseFlatAdminInstructions(
+            dosingInstructions.administrationInstructions
+          );
       let dosage = "",
         doseUnits;
       if (isVariableDose) {
         dosage = dosingInstructions.quantity || "";
         doseUnits =
-          dosingInstructions.quantityUnits || dosingInstructions.doseUnits || "";
-      } else if (DOSE_UNITS.includes(dosingInstructions.doseUnits?.toLowerCase())) {
+          dosingInstructions.quantityUnits ||
+          dosingInstructions.doseUnits ||
+          "";
+      } else if (
+        DOSE_UNITS.includes(dosingInstructions.doseUnits?.toLowerCase())
+      ) {
         dosage = dosingInstructions.dose + dosingInstructions.doseUnits;
       } else {
         dosage = dosingInstructions.dose;
@@ -123,6 +155,57 @@ export const transformDrugOrders = (orders) => {
   return medicationData;
 };
 
+export const saveMedicationAmendmentNote = async (amendmentData) => {
+  const {
+    medicationAdministrationUuid,
+    amendedReason,
+    amendedText,
+    amendedByUuid,
+  } = amendmentData;
+
+  const payload = {
+    authorUuid: amendedByUuid,
+    recordedTime: Math.floor(Date.now() / 1000),
+    text: amendedText,
+    statusReasonUuid: amendedReason,
+  };
+
+  try {
+    return await axios.post(
+      `${MEDICATION_ADMINISTRATION_URL}/${medicationAdministrationUuid}/note`,
+      payload
+    );
+  } catch (error) {
+    console.error("Error saving medication amendment note:", error);
+    throw error;
+  }
+};
+
+export const saveMedicationAcknowledgementNote = async (
+  acknowledgementData
+) => {
+  const {
+    medicationAdministrationUuid,
+    acknowledgementNotes,
+    acknowledgedByUuid,
+  } = acknowledgementData;
+
+  const payload = {
+    remarks: acknowledgementNotes,
+    approvedByUuid: acknowledgedByUuid,
+  };
+
+  try {
+    return await axios.post(
+      `${MEDICATION_ADMINISTRATION_URL}/${medicationAdministrationUuid}/acknowledgement`,
+      payload
+    );
+  } catch (error) {
+    console.error("Error saving medication acknowledgement note:", error);
+    throw error;
+  }
+};
+
 export const resetDrugOrdersSlots = (drugOrders) => {
   Object.keys(drugOrders).forEach((order) => {
     drugOrders[order].slots = [];
@@ -156,10 +239,17 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
           slot
         );
         let performerName = "",
-          notes = "";
+          notes = "",
+          hasAmendedNotes = false,
+          approvalStatus = "",
+          noteInfo = {
+            acknowledgementNotes: [],
+            amendedNotes: [],
+          };
         if (medicationAdministration) {
           const { providers, notes: administeredNotes } =
             medicationAdministration;
+          noteInfo = extractNotesSummary(administeredNotes);
           let performer = providers.find(
             (provider) => provider.function === performerFunction
           );
@@ -169,12 +259,18 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
               ? performer.display.split(" - ")[1]
               : performer.display
             : "";
-          notes =
-            administeredNotes && administeredNotes.length > 0 && performer
-              ? administeredNotes?.find(
-                  (note) => note.author.uuid === performer.uuid
-                ).text
-              : "";
+          if (noteInfo.acknowledgementNotes.length > 0) {
+            notes = noteInfo.acknowledgementNotes[0].text;
+          } else if (noteInfo.amendedNotes.length > 0) {
+            notes = noteInfo.amendedNotes[0].text;
+          } else if (noteInfo.newNote) {
+            notes = noteInfo.newNote?.text;
+          } else {
+            notes = noteInfo.original?.text;
+          }
+          hasAmendedNotes = noteInfo.amendedNotes.length > 0;
+          approvalStatus =
+            noteInfo.acknowledgementNotes.length > 0 ? "APPROVED" : "PENDING";
         }
         orders[uuid].slots.push({
           ...slot,
@@ -182,6 +278,10 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
             performerName,
             notes: status === "MISSED" ? "Missed" : notes,
             status: administrationStatus,
+            hasAmendedNotes,
+            approvalStatus,
+            noteInfo,
+            isMissed: status === "MISSED",
           },
         });
       }
@@ -198,6 +298,7 @@ export const mapDrugOrdersAndSlots = (drugChartData, drugOrders, drugChart) => {
     return [];
   }
 };
+
 export const ifMedicationNotesPresent = (medicationNotes, side) =>
   (side === "Administered-Late" ||
     side === "Administered" ||
@@ -443,6 +544,57 @@ export const setCurrentShiftTimes = (
   return [startDateTime, endDateTime];
 };
 
+export const canAcknowledgeAmendment = (privileges = []) => {
+  if (!Array.isArray(privileges)) return false;
+  return privileges.some(
+    (privilege) => PRIVILEGE_CONSTANTS.ADT_APPROVE_AMEND_NOTE === privilege.name
+  );
+};
+
+export const extractNotesSummary = (notes) => {
+  let ack = [],
+    fil = [],
+    amended = [];
+  if (notes) {
+    const data = notes.reduce(
+      (acc, note) => {
+        if (note.acknowledgement) {
+          acc.ack.push({
+            text: note.acknowledgement.remarks,
+            recordedTime: note.acknowledgement.acknowledgedTime,
+            author: note.acknowledgement.approvedBy,
+          });
+          if (notes.length === 1) {
+            acc.fil.push(note);
+          } else acc.amended.push(note);
+        } else if (note.previousNoteUuid == null) {
+          acc.fil.push(note);
+        } else {
+          acc.amended.push(note);
+        }
+        return acc;
+      },
+      { ack: [], fil: [], amended: [] }
+    );
+    ack = data.ack;
+    fil = data.fil;
+    amended = data.amended;
+  }
+  amended.sort((a, b) => b.recordedTime - a.recordedTime);
+  let original = null;
+  let newNote = null;
+  const first = fil[0];
+  if (first) {
+    first.amendmentReason === null ? (original = first) : (newNote = first);
+  }
+  return {
+    acknowledgementNotes: ack,
+    original,
+    newNote,
+    amendedNotes: amended,
+  };
+};
+
 export const prepareSlotData = (slot, rowData, enable24HourTime) => {
   let dosageInfo = "";
 
@@ -518,3 +670,7 @@ export const prepareSlotData = (slot, rowData, enable24HourTime) => {
   };
 };
 
+export const extractNameFromDisplay = (display) => {
+  if (!display) return "";
+  return display.includes(" - ") ? display.split(" - ")[1] : display;
+};

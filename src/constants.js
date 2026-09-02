@@ -6,6 +6,8 @@ export const BASE_URL =
     ? __webpack_public_path__
     : "/";
 export const LS_LANG_KEY = "NG_TRANSLATE_LANG_KEY";
+export const CONFIG_TRANSLATIONS_BASE = "/bahmni_config/openmrs/i18n/ipd/";
+export const BUNDLED_TRANSLATIONS_BASE = "i18n";
 
 const hostUrl = localStorage.getItem("host")
   ? "https://" + localStorage.getItem("host")
@@ -25,6 +27,8 @@ export const ADMINISTERED_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/scheduledMedicationAdministrations";
 export const EMERGENCY_MEDICATIONS_BASE_URL =
   RESTWS_V1 + "/ipd/adhocMedicationAdministrations";
+export const MEDICATION_ADMINISTRATION_URL =
+  RESTWS_V1 + "/ipd/medicationAdministration";
 export const BOOKMARK_PATIENT_BASE_URL =
   RESTWS_V1 + "/ipd/careteam/participants";
 export const PATIENT_URL = RESTWS_V1 + "/patient";
@@ -35,6 +39,8 @@ export const ALL_DRUG_ORDERS_URL = (visitUuid) =>
   RESTWS_V1 + `/ipdVisit/${visitUuid}/medication?includes=emergencyMedications`;
 export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
+export const CLINICAL_CONFIG_URL =
+  hostUrl + "/bahmni_config/openmrs/apps/clinical/app.json";
 export const DASHBORAD_CONFIG_URL =
   hostUrl + "/bahmni_config/openmrs/apps/ipdDashboard/app.json";
 export const HOME_CONFIG_URL =
@@ -177,3 +183,9 @@ export const DOSE_UNITS = ["ml", "mg", "mcg"];
 
 export const LOADING_DOSE_SEQUENCE_OFFSET = 1;
 export const NO_LOADING_DOSE_SEQUENCE_OFFSET = 0;
+
+export const sliderTypes = {
+  AMENDMENT: "amendment",
+  ACKNOWLEDGEMENT: "acknowledgement",
+  HISTORY: "history",
+};

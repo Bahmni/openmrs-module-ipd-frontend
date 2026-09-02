@@ -115,7 +115,7 @@ const CareViewDashboard = (props) => {
               setHeaderSelected,
               refreshSummary,
               handleRefreshSummary,
-              handleAuditEvent
+              handleAuditEvent,
             }}
           >
             <CareViewSummary callbacks={{ setIsLoading }} onHome={onHome} />
