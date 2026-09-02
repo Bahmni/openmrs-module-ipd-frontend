@@ -166,8 +166,9 @@ export const DOSE_UNITS = ["ml", "mg", "mcg"];
 
 export const LOADING_DOSE_SEQUENCE_OFFSET = 1;
 export const NO_LOADING_DOSE_SEQUENCE_OFFSET = 0;
-export const CLINICAL_FORM_URL = (patientUuid, formUuid) =>
-  `/bahmni/clinical/index.html#/default/patient/${patientUuid}/dashboard/concept-set-group/observations/form/${formUuid}`;
+export const CONCEPT_SET_GROUP_NAME = "observations"; // Configurable group name for deeplinks
+export const CLINICAL_FORM_URL = (patientUuid, formUuid, conceptSetGroupName = CONCEPT_SET_GROUP_NAME) =>
+  `/bahmni/clinical/index.html#/default/patient/${patientUuid}/dashboard/concept-set-group/${conceptSetGroupName}/form/${formUuid}`;
 
 export const TASK_COLORS = {
   LINK_BLUE: "#0f62fe",

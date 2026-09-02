@@ -447,9 +447,19 @@ export const getLatestFormUuid = (formName, allFormsSummary) => {
   if (!formName || !allFormsSummary || !allFormsSummary.length) return null;
   const matches = allFormsSummary.filter((f) => f.name === formName);
   if (!matches.length) return null;
-  return matches.sort(
-    (a, b) => parseFloat(b.version) - parseFloat(a.version)
-  )[0].uuid;
+  // Compare version segments numerically to handle multi-digit minors correctly
+  // e.g., "1.10" > "1.9" (not 1.1 < 1.9 as parseFloat would give)
+  const compareVersions = (a, b) => {
+    const aParts = a.version.split('.').map(Number);
+    const bParts = b.version.split('.').map(Number);
+    for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+      const aPart = aParts[i] || 0;
+      const bPart = bParts[i] || 0;
+      if (bPart !== aPart) return bPart - aPart; // Descending order (latest first)
+    }
+    return 0;
+  };
+  return matches.sort(compareVersions)[0].uuid;
 };
 
 export const getFormNameFromTaskInput = (input, formTaskInputConceptUuid) => {

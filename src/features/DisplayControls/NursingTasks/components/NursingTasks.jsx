@@ -388,7 +388,7 @@ export default function NursingTasks(props) {
       const formName = task?.isANonMedicationTask
         ? getFormNameFromTaskInput(
             task.input,
-            config?.formTaskInputConceptUuid
+            config?.config?.formTaskInputConceptUuid
           )
         : null;
       const formUuid = getLatestFormUuid(formName, allFormsSummary);
