@@ -21,6 +21,7 @@ import {
   disableDoneTogglePostNextTaskTime,
   updateNonMedicationTask,
   getFormNameFromTaskInput,
+  getLatestFormUuid,
 } from "../utils/NursingTasksUtils";
 import { saveEmergencyMedication } from "../utils/EmergencyTasksUtils";
 import { SideBarPanelClose } from "../../../SideBarPanel/components/SideBarPanelClose";
@@ -43,7 +44,6 @@ import {
   isSystemGeneratedTask,
   isUserPrivileged,
 } from "../../../../utils/CommonUtils";
-import { getLatestFormUuid } from "../utils/NursingTasksUtils";
 import TaskFormLink from "./TaskFormLink";
 
 const UpdateNursingTasks = (props) => {
@@ -199,7 +199,7 @@ const UpdateNursingTasks = (props) => {
     if (medicationTask?.isANonMedicationTask && allFormsSummary) {
       const formName = getFormNameFromTaskInput(
         medicationTask.input,
-        config?.formTaskInputConceptUuid
+        config?.config?.formTaskInputConceptUuid
       );
       const formUuid = getLatestFormUuid(formName, allFormsSummary);
 
