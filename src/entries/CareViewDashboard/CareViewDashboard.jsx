@@ -7,15 +7,26 @@ import "./CareViewDashboard.scss";
 import { CareViewSummary } from "../../features/CareViewSummary/components/CareViewSummary";
 import { CareViewPatients } from "../../features/CareViewPatients/components/CareViewPatients";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
-import { homePageUrl, WARD_SUMMARY_HEADER } from "../../constants";
+import {
+  homePageUrl,
+  WARD_SUMMARY_HEADER,
+  PRIVILEGE_CONSTANTS,
+} from "../../constants";
 import { CareViewContext } from "../../context/CareViewContext";
 import { getConfigForCareViewDashboard } from "./CareViewDashboardUtils";
-import { getDashboardConfig } from "../../utils/CommonUtils";
+import {
+  getDashboardConfig,
+  getFormDraftFeatureEnabled,
+  getShiftDetailsFromGlobalProperty,
+  isUserPrivileged,
+} from "../../utils/CommonUtils";
 import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
+import { DraftIndicator } from "../../components/DraftIndicator/DraftIndicator";
 
 const CareViewDashboard = (props) => {
   const { hostApi, hostData } = props;
   const { onHome, onLogOut } = hostApi;
+  const { currentUser } = hostData;
   const [selectedWard, setSelectedWard] = useState({});
   const [headerSelected, setHeaderSelected] = useState(
     WARD_SUMMARY_HEADER.TOTAL_PATIENTS
@@ -50,7 +61,11 @@ const CareViewDashboard = (props) => {
 
   const getIpdConfig = async () => {
     const configData = await getDashboardConfig();
-    const config = configData.data || {};
+    let config = configData.data || {};
+    const shiftDetails = await getShiftDetailsFromGlobalProperty();
+    config.shiftDetails = shiftDetails;
+    config.config = config.config || {};
+    config.config.enableFormDraftFeature = await getFormDraftFeatureEnabled();
     setIpdConfig(config);
   };
 
@@ -70,7 +85,17 @@ const CareViewDashboard = (props) => {
           <Link href={homePageUrl} className={"home"}>
             <Home24 aria-label="home-button" />
           </Link>
-          <ProviderActions onLogOut={onLogOut} />
+          <div className="care-view-right-actions">
+            {isUserPrivileged(
+              currentUser,
+              PRIVILEGE_CONSTANTS.OBSERVATION_TAB
+            ) &&
+              ipdConfig?.config &&
+              ipdConfig.config.enableFormDraftFeature && (
+                <DraftIndicator providerUuid={hostData.provider?.uuid} />
+              )}
+            <ProviderActions onLogOut={onLogOut} />
+          </div>
         </Header>
 
         <section className="main">

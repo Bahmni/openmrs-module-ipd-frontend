@@ -3,6 +3,7 @@ import {
   Accordion,
   AccordionItem,
   Header,
+  HeaderGlobalBar,
   HeaderMenuButton,
   Link,
   Loading,
@@ -20,7 +21,10 @@ import {
   getAllFormsInfo,
   getAppLandingPageUrl,
   getDashboardConfig,
+  getFormDraftFeatureEnabled,
   getPatientDashboardUrl,
+  getShiftDetailsFromGlobalProperty,
+  isUserPrivileged,
 } from "../../utils/CommonUtils";
 import { PatientHeader } from "../../features/DisplayControls/PatientHeader/components/PatientHeader";
 import RefreshDisplayControl from "../../context/RefreshDisplayControl";
@@ -28,8 +32,14 @@ import { SliderContext } from "../../context/SliderContext";
 import { IPDContext } from "../../context/IPDContext";
 import { AllMedicationsContextProvider } from "../../context/AllMedications";
 import { FormattedMessage } from "react-intl";
-import { homePageUrl, IPD_PAGE_TITLE, RESOLUTION_VALUE } from "../../constants";
+import {
+  homePageUrl,
+  RESOLUTION_VALUE,
+  IPD_PAGE_TITLE,
+  PRIVILEGE_CONSTANTS,
+} from "../../constants";
 import { ProviderActions } from "../../components/ProvideActions/ProviderActions";
+import { DraftIndicator } from "../../components/DraftIndicator/DraftIndicator";
 
 export default function Dashboard(props) {
   const { hostData, hostApi } = props;
@@ -95,7 +105,15 @@ export default function Dashboard(props) {
 
   const fetchConfig = async () => {
     const configData = await getDashboardConfig();
-    const config = configData.data || {};
+    let config = configData.data || {};
+
+    // Always fetch shift details from Global Property
+    const shiftDetails = await getShiftDetailsFromGlobalProperty();
+    config.shiftDetails = shiftDetails;
+
+    config.config = config.config || {};
+    config.config.enableFormDraftFeature = await getFormDraftFeatureEnabled();
+
     setDashboardConfig(config);
     setIsConfigLoaded(true);
     const { sections = [] } = config;
@@ -294,7 +312,17 @@ export default function Dashboard(props) {
                       })}
                     </SideNavItems>
                   </SideNav>
-                  <ProviderActions onLogOut={hostApi.onLogOut} />
+                    <HeaderGlobalBar>
+                    {isUserPrivileged(
+                      currentUser,
+                      PRIVILEGE_CONSTANTS.OBSERVATION_TAB
+                    ) &&
+                      dashboardConfig?.config &&
+                      dashboardConfig.config.enableFormDraftFeature && (
+                        <DraftIndicator providerUuid={provider?.uuid} />
+                      )}
+                    <ProviderActions onLogOut={hostApi.onLogOut} />
+                    </HeaderGlobalBar>
                 </Header>
 
                 <section
