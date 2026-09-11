@@ -9,12 +9,12 @@ describe('CareInstructionsUtils - filterPreviousShiftInstructions', () => {
                 {
                     observationUuid: 'instruction-1',
                     instruction: 'NPO',
-                    encounterDateTime: 1704060000000, // 2024-01-01 06:00:00 UTC (before shift)
+                    observationDateTime: 1704060000000, // 2024-01-01 06:00:00 UTC (before shift)
                 },
                 {
                     observationUuid: 'instruction-2',
                     instruction: 'Bed rest',
-                    encounterDateTime: 1704070000000, // 2024-01-01 10:00:00 UTC (after shift start)
+                    observationDateTime: 1704070000000, // 2024-01-01 10:00:00 UTC (after shift start)
                 },
             ];
 
@@ -30,12 +30,12 @@ describe('CareInstructionsUtils - filterPreviousShiftInstructions', () => {
                 {
                     observationUuid: 'instruction-1',
                     instruction: 'NPO',
-                    encounterDateTime: 1704070000000, // after shift start
+                    observationDateTime: 1704070000000, // after shift start
                 },
                 {
                     observationUuid: 'instruction-2',
                     instruction: 'Bed rest',
-                    encounterDateTime: 1704080000000, // after shift start
+                    observationDateTime: 1704080000000, // after shift start
                 },
             ];
 
@@ -49,12 +49,12 @@ describe('CareInstructionsUtils - filterPreviousShiftInstructions', () => {
                 {
                     observationUuid: 'instruction-1',
                     instruction: 'NPO',
-                    encounterDateTime: 1704050000000, // before shift start
+                    observationDateTime: 1704050000000, // before shift start
                 },
                 {
                     observationUuid: 'instruction-2',
                     instruction: 'Bed rest',
-                    encounterDateTime: 1704060000000, // before shift start
+                    observationDateTime: 1704060000000, // before shift start
                 },
             ];
 
@@ -69,22 +69,22 @@ describe('CareInstructionsUtils - filterPreviousShiftInstructions', () => {
                 {
                     observationUuid: 'instruction-1',
                     instruction: 'NPO',
-                    encounterDateTime: 1704050000000, // before shift
+                    observationDateTime: 1704050000000, // before shift
                 },
                 {
                     observationUuid: 'instruction-2',
                     instruction: 'Bed rest',
-                    encounterDateTime: 1704070000000, // after shift start
+                    observationDateTime: 1704070000000, // after shift start
                 },
                 {
                     observationUuid: 'instruction-3',
                     instruction: 'Medication at 8am',
-                    encounterDateTime: 1704045000000, // before shift
+                    observationDateTime: 1704045000000, // before shift
                 },
                 {
                     observationUuid: 'instruction-4',
                     instruction: 'Wound dressing',
-                    encounterDateTime: 1704090000000, // after shift start
+                    observationDateTime: 1704090000000, // after shift start
                 },
             ];
 
@@ -99,7 +99,7 @@ describe('CareInstructionsUtils - filterPreviousShiftInstructions', () => {
                 {
                     observationUuid: 'instruction-boundary',
                     instruction: 'At boundary',
-                    encounterDateTime: currentShiftStartTime, // exactly at shift start
+                    observationDateTime: currentShiftStartTime, // exactly at shift start
                 },
             ];
 
@@ -130,7 +130,7 @@ describe('CareInstructionsUtils - filterPreviousShiftInstructions', () => {
                     observationUuid: 'instruction-1',
                     orderUuid: 'order-123',
                     encounterUuid: 'encounter-456',
-                    encounterDateTime: 1704050000000,
+                    observationDateTime: 1704050000000,
                     form: 'Care Instructions Form',
                     instructionType: 'Nursing Instructions',
                     instruction: 'NPO after midnight',
@@ -159,13 +159,13 @@ describe('CareInstructionsUtils - filterPreviousShiftInstructions', () => {
                 {
                     observationUuid: 'instruction-1',
                     instruction: 'NPO',
-                    encounterDateTime: 1704050000000,
+                    observationDateTime: 1704050000000,
                     previousVersionUuid: 'previous-uuid-123', // indicates this instruction was edited
                 },
                 {
                     observationUuid: 'instruction-2',
                     instruction: 'Bed rest',
-                    encounterDateTime: 1704050000000,
+                    observationDateTime: 1704050000000,
                     previousVersionUuid: null, // original, not edited
                 },
             ];
@@ -184,7 +184,7 @@ describe('CareInstructionsUtils - filterPreviousShiftInstructions', () => {
                 instructions.push({
                     observationUuid: `instruction-${i}`,
                     instruction: `Instruction ${i}`,
-                    encounterDateTime: i % 2 === 0 ? 1704050000000 : 1704070000000,
+                    observationDateTime: i % 2 === 0 ? 1704050000000 : 1704070000000,
                 });
             }
 
@@ -199,12 +199,12 @@ describe('CareInstructionsUtils - filterPreviousShiftInstructions', () => {
                 {
                     observationUuid: 'instruction-1',
                     instruction: 'NPO',
-                    encounterDateTime: 1704050000000,
+                    observationDateTime: 1704050000000,
                 },
                 {
                     observationUuid: 'instruction-2',
                     instruction: 'Bed rest',
-                    encounterDateTime: 1704070000000,
+                    observationDateTime: 1704070000000,
                 },
             ];
             const originalLength = instructions.length;
@@ -214,10 +214,10 @@ describe('CareInstructionsUtils - filterPreviousShiftInstructions', () => {
             expect(instructions).toHaveLength(originalLength);
         });
 
-        test('should exclude instruction edited in current shift (previousVersionUuid + current-shift encounterDateTime)', () => {
+        test('should exclude instruction edited in current shift (previousVersionUuid + current-shift observationDateTime)', () => {
             const instructions = [{
                 observationUuid: 'edited-in-current-shift',
-                encounterDateTime: 1704070000000, // after shift start — edited in current shift
+                observationDateTime: 1704070000000, // after shift start — edited in current shift
                 previousVersionUuid: 'original-prev-uuid',
             }];
             expect(filterPreviousShiftInstructions(instructions, currentShiftStartTime)).toHaveLength(0);

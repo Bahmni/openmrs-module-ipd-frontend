@@ -165,7 +165,7 @@ const CareInstructions = (props) => {
           }))
           .sort(
             (instructionA, instructionB) =>
-              instructionB.encounterDateTime - instructionA.encounterDateTime
+              instructionB.observationDateTime - instructionA.observationDateTime
           );
 
         setInstructions(allInstructions);
@@ -253,7 +253,7 @@ const CareInstructions = (props) => {
           >
             <TableCell>
               {getDateTimeFromEpochTime(
-                row.encounterDateTime,
+                row.observationDateTime,
                 enable24HourTime
               )}
             </TableCell>

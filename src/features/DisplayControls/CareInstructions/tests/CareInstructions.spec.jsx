@@ -81,7 +81,7 @@ const mockFormConcepts = [
 const mockObservationsApiResponse = [
   {
     uuid: "obs-uuid-1",
-    encounterDateTime: 1713955252000,
+    observationDateTime: 1713955252000,
     encounterUuid: "encounter-uuid-1",
     formFieldPath: "Doctor Patient Progress Notes.1/5-0",
     concept: { name: "Instruction for the Ward" },
@@ -91,7 +91,7 @@ const mockObservationsApiResponse = [
   },
   {
     uuid: "obs-uuid-2",
-    encounterDateTime: 1713941600000,
+    observationDateTime: 1713941600000,
     encounterUuid: "encounter-uuid-2",
     formFieldPath: "Patient Progress Notes and Orders.2/11-0",
     concept: { name: "Physician Orders Comments (ET only)" },
@@ -364,7 +364,7 @@ describe("CareInstructions", () => {
       .spyOn(CareInstructionsUtils, "fetchCareInstructionsObs")
       .mockResolvedValue([
         {
-          encounterDateTime: 1713955252000,
+          observationDateTime: 1713955252000,
           encounterUuid: "encounter-uuid-1",
           formFieldPath: "Doctor Patient Progress Notes.1/5-0",
           concept: { name: "Instruction for the Ward" },
@@ -384,7 +384,7 @@ describe("CareInstructions", () => {
     expect(rows.length).toBeGreaterThan(1);
   });
 
-  it("should sort instructions newest first by encounterDateTime", async () => {
+  it("should sort instructions newest first by observationDateTime", async () => {
     const { getAllByRole } = renderWithProviders(
       <CareInstructions config={{ formConcepts: mockFormConcepts }} />,
       mockIPDContextWithData
@@ -571,7 +571,7 @@ describe("CareInstructions", () => {
       .mockResolvedValue([
         {
           uuid: "obs-uuid-with-order",
-          encounterDateTime: 1713955252000,
+          observationDateTime: 1713955252000,
           encounterUuid: "encounter-uuid-1",
           formFieldPath: "Doctor Patient Progress Notes.1/5-0",
           concept: { name: "Instruction for the Ward" },
@@ -621,7 +621,7 @@ describe("CareInstructions", () => {
       .mockResolvedValue([
         {
           uuid: "obs-uuid-edited",
-          encounterDateTime: 1713955252000,
+          observationDateTime: 1713955252000,
           encounterUuid: "encounter-uuid-1",
           formFieldPath: "Doctor Patient Progress Notes.1/5-0",
           concept: { name: "Instruction for the Ward" },
@@ -650,7 +650,7 @@ describe("CareInstructions", () => {
       .mockResolvedValue([
         {
           uuid: "obs-uuid-normal",
-          encounterDateTime: 1713955252000,
+          observationDateTime: 1713955252000,
           encounterUuid: "encounter-uuid-1",
           formFieldPath: "Doctor Patient Progress Notes.1/5-0",
           concept: { name: "Instruction for the Ward" },
@@ -677,7 +677,7 @@ describe("CareInstructions", () => {
       .mockResolvedValue([
         {
           uuid: "obs-uuid-3",
-          encounterDateTime: 1713955252000,
+          observationDateTime: 1713955252000,
           encounterUuid: "encounter-uuid-1",
           formFieldPath: "Doctor Patient Progress Notes.1/5-0",
           concept: { name: "Instruction for the Ward" },
@@ -687,7 +687,7 @@ describe("CareInstructions", () => {
         },
         {
           uuid: "obs-uuid-4",
-          encounterDateTime: 1713941600000,
+          observationDateTime: 1713941600000,
           encounterUuid: "encounter-uuid-3",
           formFieldPath: "Doctor Patient Progress Notes.1/5-0",
           concept: { name: "Instruction for the Ward" },
@@ -715,7 +715,7 @@ describe("mapObservationsToInstructions", () => {
   it("should map observations with valid formFieldPath to instructions", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Instruction for the Ward" },
@@ -739,7 +739,7 @@ describe("mapObservationsToInstructions", () => {
   it("should filter out observations with null formFieldPath", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: null,
         concept: { name: "Instruction for the Ward" },
@@ -757,7 +757,7 @@ describe("mapObservationsToInstructions", () => {
   it("should filter out observations from forms not in config", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Unknown Form.1/5-0",
         concept: { name: "Instruction for the Ward" },
@@ -775,7 +775,7 @@ describe("mapObservationsToInstructions", () => {
   it("should filter out observations with concepts not configured for their form", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Physician Orders Comments (ET only)" },
@@ -801,7 +801,7 @@ describe("mapObservationsToInstructions", () => {
   it("should return empty array when formConcepts is empty", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Instruction for the Ward" },
@@ -819,7 +819,7 @@ describe("mapObservationsToInstructions", () => {
   it("should extract display name when obs value is a coded object", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Instruction for the Ward" },
@@ -843,7 +843,7 @@ describe("mapObservationsToInstructions", () => {
   it("should return empty string for instruction when obs value is null", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Instruction for the Ward" },
@@ -870,7 +870,7 @@ describe("mapObservationsToInstructions", () => {
   it("should handle empty provider name when providers array is empty", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Instruction for the Ward" },
@@ -889,7 +889,7 @@ describe("mapObservationsToInstructions", () => {
   it("should map previousVersionUuid from obs to instruction", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Instruction for the Ward" },
@@ -909,7 +909,7 @@ describe("mapObservationsToInstructions", () => {
   it("should set previousVersionUuid to null when obs has no previousVersionUuid", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Instruction for the Ward" },
@@ -928,7 +928,7 @@ describe("mapObservationsToInstructions", () => {
   it("should map orderUuid from obs to instruction", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Instruction for the Ward" },
@@ -948,7 +948,7 @@ describe("mapObservationsToInstructions", () => {
   it("should set orderUuid to null when obs has no orderUuid", () => {
     const observations = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Instruction for the Ward" },
@@ -1096,7 +1096,7 @@ describe("fetchCareInstructionsObs", () => {
   it("should call the observations URL with visitUuid and concept params and return response data", async () => {
     const mockResponse = [
       {
-        encounterDateTime: 1713955252000,
+        observationDateTime: 1713955252000,
         encounterUuid: "encounter-uuid-1",
         formFieldPath: "Doctor Patient Progress Notes.1/5-0",
         concept: { name: "Instruction for the Ward" },

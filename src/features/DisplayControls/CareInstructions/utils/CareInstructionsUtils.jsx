@@ -137,7 +137,7 @@ export const mapObservationsToInstructions = (observations, formConcepts) => {
       observationUuid: obs.uuid,
       orderUuid: obs.orderUuid ?? null,
       encounterUuid: obs.encounterUuid,
-      encounterDateTime: obs.encounterDateTime,
+      observationDateTime: obs.observationDateTime,
       form: formName,
       instructionType: obs.concept.name,
       instruction,
@@ -159,6 +159,6 @@ export const filterPreviousShiftInstructions = (
   }
 
   return instructions.filter(
-    (instruction) => instruction.encounterDateTime < currentShiftStartTime
+    (instruction) => instruction.observationDateTime < currentShiftStartTime
   );
 };
