@@ -111,6 +111,7 @@ describe("Vitals", () => {
 
   it("displays loading skeleton while fetching data", () => {
     getPatientVitals.mockResolvedValueOnce(mockVitalsData);
+    getPatientVitalsHistory.mockResolvedValueOnce(mockVitalsHistoryData);
     render(
       <IPDContext.Provider value={{ config: mockConfig }}>
         <Vitals patientId="123" />
