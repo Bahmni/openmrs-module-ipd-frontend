@@ -118,8 +118,8 @@ export const mapObservationsToInstructions = (observations, formConcepts) => {
 
     if (
       !allowedConcepts ||
-      !obs.concept?.name ||
-      !allowedConcepts.includes(obs.concept.name)
+      !obs.conceptFSN ||
+      !allowedConcepts.includes(obs.conceptFSN)
     ) {
       return result;
     }
