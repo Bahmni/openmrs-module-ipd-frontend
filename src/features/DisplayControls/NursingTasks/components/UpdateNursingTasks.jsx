@@ -30,7 +30,7 @@ import {
   timeText24,
   timeFormatFor12Hr,
   timeFormatFor24Hr,
-  PRIVILEGE_CONSTANTS
+  PRIVILEGE_CONSTANTS,
 } from "../../../../constants";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -97,9 +97,9 @@ const UpdateNursingTasks = (props) => {
   const {
     nursingTasks = {},
     enable24HourTime = {},
+    enableStopTasks = false,
+    taskToFormMapping = {},
   } = config;
-  const intl = useIntl();
-  const refreshDisplayControl = useContext(RefreshDisplayControl);
   const relevantTaskStatusWindowInSeconds =
     nursingTasks && nursingTasks.timeInMinutesFromNowToShowTaskAsRelevant * 60;
   const saveAdministeredMedicationTasks = (status, messageId) => {
@@ -196,10 +196,12 @@ const UpdateNursingTasks = (props) => {
     const taskLabel = medicationTask.drugName;
 
     if (medicationTask?.isANonMedicationTask && allFormsSummary) {
-      const formName = getFormNameFromTaskInput(
-        medicationTask.input,
-        config?.config?.formTaskInputConceptUuid
-      );
+      const formName =
+        taskToFormMapping?.[taskLabel] ||
+        getFormNameFromTaskInput(
+          medicationTask.input,
+          config?.config?.formTaskInputConceptUuid
+        );
       const formUuid = getLatestFormUuid(formName, allFormsSummary);
 
       if (formUuid && patientId) {
