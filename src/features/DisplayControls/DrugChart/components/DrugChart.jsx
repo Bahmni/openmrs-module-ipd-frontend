@@ -9,6 +9,7 @@ import DrugChartLegend from "../../../../components/AdministrationLegend/Adminis
 import { Button } from "carbon-components-react";
 import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
 import { throttle } from "lodash";
+import NoteLegend from "../../../../components/NoteLegend/NoteLegend";
 
 export default function DrugChart(props) {
   const { drugChartData, currentShiftArray, selectedDate, shiftIndex } = props;
@@ -144,7 +145,9 @@ export default function DrugChart(props) {
           disabled={isNextDisabled}
         />
       </div>
-      <DrugChartLegend />
+      <div className="legends-wrapper">
+        <DrugChartLegend />|<NoteLegend />
+      </div>
     </div>
   );
 }
