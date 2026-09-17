@@ -43,6 +43,23 @@ DraftRow.propTypes = {
   onSelect: PropTypes.func.isRequired,
 };
 
+const ErrorState = () => (
+  <div className="ipd-draft-overlay__error-state">
+    <p className="ipd-draft-overlay__error-title">
+      <FormattedMessage
+        id="DRAFTS_FETCH_ERROR_TITLE"
+        defaultMessage="Could not load drafts"
+      />
+    </p>
+    <p className="ipd-draft-overlay__error-message">
+      <FormattedMessage
+        id="DRAFTS_FETCH_ERROR_MESSAGE"
+        defaultMessage="An error occurred while loading your drafts. Please try again."
+      />
+    </p>
+  </div>
+);
+
 const EmptyState = () => (
   <div className="ipd-draft-overlay__empty-state">
     <p className="ipd-draft-overlay__empty-title">
@@ -57,7 +74,7 @@ const EmptyState = () => (
   </div>
 );
 
-const DraftOverlay = ({ formDrafts, onClose, onSelect }) => (
+const DraftOverlay = ({ formDrafts, fetchError, onClose, onSelect }) => (
   <div className="ipd-draft-overlay">
     <div className="ipd-draft-overlay__header">
       <span className="ipd-draft-overlay__title">
@@ -76,7 +93,9 @@ const DraftOverlay = ({ formDrafts, onClose, onSelect }) => (
       </button>
     </div>
     <div className="ipd-draft-overlay__content">
-      {formDrafts.length === 0 ? (
+      {fetchError ? (
+        <ErrorState />
+      ) : formDrafts.length === 0 ? (
         <EmptyState />
       ) : (
         formDrafts.map((draft, index) => (
@@ -93,6 +112,7 @@ const DraftOverlay = ({ formDrafts, onClose, onSelect }) => (
 );
 
 DraftOverlay.propTypes = {
+  fetchError: PropTypes.bool,
   formDrafts: PropTypes.arrayOf(
     PropTypes.shape({
       draftUuid: PropTypes.string.isRequired,

@@ -1,14 +1,19 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 import { AlignBoxMiddleLeft24 } from "@carbon/icons-react";
 import "./DraftIndicator.scss";
 import DraftOverlay from "./DraftOverlay";
 import { fetchDraftsForProvider } from "../../services/draftService";
-import { CLINICAL_OBSERVATION_URL, DRAFT_UPDATES_CHANNEL } from "../../constants";
+import {
+  CLINICAL_OBSERVATION_URL,
+  DRAFT_UPDATES_CHANNEL,
+} from "../../constants";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 
 export const DraftIndicator = ({ providerUuid }) => {
   const [formDrafts, setFormDrafts] = useState([]);
+  const [fetchError, setFetchError] = useState(false);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [overlayPosition, setOverlayPosition] = useState({ top: 0, right: 0 });
   const buttonRef = useRef(null);
@@ -19,8 +24,10 @@ export const DraftIndicator = ({ providerUuid }) => {
       if (!providerUuid) return;
       const drafts = await fetchDraftsForProvider(providerUuid);
       setFormDrafts(drafts);
+      setFetchError(false);
     } catch (error) {
       console.error("Failed to refresh drafts", error);
+      setFetchError(true);
     }
   }, [providerUuid]);
 
@@ -99,6 +106,7 @@ export const DraftIndicator = ({ providerUuid }) => {
             >
               <DraftOverlay
                 formDrafts={formDrafts}
+                fetchError={fetchError}
                 onClose={closeOverlay}
                 onSelect={handleDraftClick}
               />
@@ -108,6 +116,10 @@ export const DraftIndicator = ({ providerUuid }) => {
       </div>
     </I18nProvider>
   );
+};
+
+DraftIndicator.propTypes = {
+  providerUuid: PropTypes.string,
 };
 
 export default DraftIndicator;

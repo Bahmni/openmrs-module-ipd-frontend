@@ -91,9 +91,7 @@ describe("DraftIndicator", () => {
       ({ container } = render(<DraftIndicator providerUuid={null} />));
     });
     expect(fetchDraftsForProvider).not.toHaveBeenCalled();
-    expect(
-      container.querySelector(".ipd-draft-indicator__red-dot")
-    ).toBeNull();
+    expect(container.querySelector(".ipd-draft-indicator__red-dot")).toBeNull();
   });
 
   it("should not show overlay by default", async () => {
@@ -109,7 +107,9 @@ describe("DraftIndicator", () => {
   it("should toggle overlay open when button is clicked", async () => {
     let container, getByLabelText;
     await act(async () => {
-      ({ container, getByLabelText } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ container, getByLabelText } = render(
+        <DraftIndicator providerUuid={PROVIDER_UUID} />
+      ));
     });
     expect(
       container.querySelector(".ipd-draft-indicator__overlay-wrapper")
@@ -126,7 +126,9 @@ describe("DraftIndicator", () => {
   it("should close overlay when button is clicked again", async () => {
     let container, getByLabelText;
     await act(async () => {
-      ({ container, getByLabelText } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ container, getByLabelText } = render(
+        <DraftIndicator providerUuid={PROVIDER_UUID} />
+      ));
     });
     const button = getByLabelText("View observation drafts");
 
@@ -148,7 +150,9 @@ describe("DraftIndicator", () => {
   it("should close overlay when clicking outside", async () => {
     let container, getByLabelText;
     await act(async () => {
-      ({ container, getByLabelText } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ container, getByLabelText } = render(
+        <DraftIndicator providerUuid={PROVIDER_UUID} />
+      ));
     });
 
     await act(async () => {
@@ -169,7 +173,9 @@ describe("DraftIndicator", () => {
   it("should set aria-expanded to true when overlay is open", async () => {
     let getByLabelText;
     await act(async () => {
-      ({ getByLabelText } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ getByLabelText } = render(
+        <DraftIndicator providerUuid={PROVIDER_UUID} />
+      ));
     });
     const button = getByLabelText("View observation drafts");
     expect(button).toHaveAttribute("aria-expanded", "false");
@@ -183,7 +189,9 @@ describe("DraftIndicator", () => {
   it("should render draft rows in overlay when open", async () => {
     let getByLabelText, getByText;
     await act(async () => {
-      ({ getByLabelText, getByText } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ getByLabelText, getByText } = render(
+        <DraftIndicator providerUuid={PROVIDER_UUID} />
+      ));
     });
 
     await act(async () => {
@@ -195,7 +203,9 @@ describe("DraftIndicator", () => {
   it("should close overlay when close button in overlay is clicked", async () => {
     let container, getByLabelText;
     await act(async () => {
-      ({ container, getByLabelText } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ container, getByLabelText } = render(
+        <DraftIndicator providerUuid={PROVIDER_UUID} />
+      ));
     });
 
     await act(async () => {
@@ -216,7 +226,9 @@ describe("DraftIndicator", () => {
   it("should refresh drafts when the overlay is opened", async () => {
     let getByLabelText;
     await act(async () => {
-      ({ getByLabelText } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ getByLabelText } = render(
+        <DraftIndicator providerUuid={PROVIDER_UUID} />
+      ));
     });
 
     fetchDraftsForProvider.mockClear();
@@ -255,17 +267,37 @@ describe("DraftIndicator", () => {
     expect(mockChannelInstance.close).toHaveBeenCalled();
   });
 
+  it("should show error state in overlay when fetchDraftsForProvider fails", async () => {
+    fetchDraftsForProvider.mockRejectedValue(new Error("Network error"));
+    let getByLabelText, getByText;
+    await act(async () => {
+      ({ getByLabelText, getByText } = render(
+        <DraftIndicator providerUuid={PROVIDER_UUID} />
+      ));
+    });
+
+    await act(async () => {
+      fireEvent.click(getByLabelText("View observation drafts"));
+    });
+
+    expect(getByText("Could not load drafts")).toBeTruthy();
+  });
+
   it("should not throw when BroadcastChannel is unavailable", async () => {
     delete global.BroadcastChannel;
     await act(async () => {
-      expect(() => render(<DraftIndicator providerUuid={PROVIDER_UUID} />)).not.toThrow();
+      expect(() =>
+        render(<DraftIndicator providerUuid={PROVIDER_UUID} />)
+      ).not.toThrow();
     });
   });
 
   it("should not refresh drafts when the overlay is closed", async () => {
     let getByLabelText;
     await act(async () => {
-      ({ getByLabelText } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ getByLabelText } = render(
+        <DraftIndicator providerUuid={PROVIDER_UUID} />
+      ));
     });
 
     await act(async () => {
@@ -290,7 +322,9 @@ describe("DraftIndicator", () => {
 
     let container, getByLabelText;
     await act(async () => {
-      ({ container, getByLabelText } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ container, getByLabelText } = render(
+        <DraftIndicator providerUuid={PROVIDER_UUID} />
+      ));
     });
 
     await act(async () => {
