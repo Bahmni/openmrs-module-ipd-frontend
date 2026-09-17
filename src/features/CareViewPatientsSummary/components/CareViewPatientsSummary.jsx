@@ -200,7 +200,8 @@ export const CareViewPatientsSummary = ({
             if (enableNurseAcknowledgement) {
               if (
                 taskFilterType === TASK_FILTER_HEADER.NEW &&
-                newTreatments === 0
+                newTreatments === 0 &&
+                (careInstructionsMap[visitDetails?.uuid]?.length ?? 0) === 0
               )
                 return rows;
               if (

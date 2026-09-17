@@ -54,7 +54,9 @@ jest.mock(
       fetchAcknowledgedObservationUuids: (...args) =>
         mockFetchAcknowledgedObsUuids(...args),
       filterPreviousShiftInstructions: (instructions, shiftStartTime) => {
-        return instructions.filter((instr) => instr.observationDateTime < shiftStartTime);
+        return instructions.filter(
+          (instr) => instr.observationDateTime < shiftStartTime
+        );
       },
     };
   }
@@ -240,10 +242,50 @@ describe("CareViewPatientsSummary", function () {
     );
 
     await waitFor(() => {
-      // PT49722 has newTreatments: 1 — should be visible
       expect(queryByText("C-1")).toBeTruthy();
-      // PT51140 has newTreatments: 0 — should be hidden
       expect(queryByText("A-6")).toBeFalsy();
+    });
+  });
+
+  it("should show patient in NEW tab when they have care instructions but no new medications", async () => {
+    const pt51140VisitUuid = "626b822d-741e-4a86-95ff-626eea753c4c";
+    mockFetchBatchObservations.mockResolvedValue([
+      { visitUuid: pt51140VisitUuid, observations: [{ uuid: "obs-1" }] },
+    ]);
+    mockMapObservationsToInstructions.mockReturnValue([
+      { observationUuid: "obs-1", instruction: "Check vitals" },
+    ]);
+    mockFetchAcknowledgedObsUuids.mockResolvedValue(new Set());
+
+    const contextWithCI = {
+      ...mockContext,
+      taskFilterType: "NEW",
+      ipdConfig: {
+        ...mockConfig,
+        sections: [
+          ...mockConfig.sections,
+          {
+            componentKey: "CI",
+            config: { formConcepts: [{ concepts: ["Care Instructions"] }] },
+          },
+        ],
+      },
+    };
+
+    const { queryByText } = render(
+      <IntlProvider locale="en">
+        <CareViewContext.Provider value={contextWithCI}>
+          <CareViewPatientsSummary
+            patientsSummary={mockPatientsList.admittedPatients}
+            navHourEpoch={mockNavHourEpoch}
+            filterValue={mockFilterValue}
+          />
+        </CareViewContext.Provider>
+      </IntlProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryByText("A-6")).toBeTruthy();
     });
   });
 
@@ -763,7 +805,10 @@ describe("CareViewPatientsSummary", function () {
       ]);
 
       mockFetchAcknowledgedObsUuids.mockResolvedValue(new Set());
-      mockSetCurrentShiftTimes.mockReturnValue([currentShiftStartTime, 1713274200000]);
+      mockSetCurrentShiftTimes.mockReturnValue([
+        currentShiftStartTime,
+        1713274200000,
+      ]);
 
       render(
         <IntlProvider locale="en">
@@ -810,7 +855,10 @@ describe("CareViewPatientsSummary", function () {
       ]);
 
       mockFetchAcknowledgedObsUuids.mockResolvedValue(new Set());
-      mockSetCurrentShiftTimes.mockReturnValue([currentShiftStartTime, 1713274200000]);
+      mockSetCurrentShiftTimes.mockReturnValue([
+        currentShiftStartTime,
+        1713274200000,
+      ]);
 
       render(
         <IntlProvider locale="en">
@@ -841,7 +889,10 @@ describe("CareViewPatientsSummary", function () {
           visitUuid: visitUuid1,
           observations: [
             { uuid: "obs-prev-1", observationDateTime: previousShiftTime },
-            { uuid: "obs-prev-2", observationDateTime: previousShiftTime + 3600000 },
+            {
+              uuid: "obs-prev-2",
+              observationDateTime: previousShiftTime + 3600000,
+            },
             { uuid: "obs-curr", observationDateTime: 1713270000000 },
           ],
         },
@@ -866,7 +917,10 @@ describe("CareViewPatientsSummary", function () {
       ]);
 
       mockFetchAcknowledgedObsUuids.mockResolvedValue(new Set());
-      mockSetCurrentShiftTimes.mockReturnValue([currentShiftStartTime, 1713274200000]);
+      mockSetCurrentShiftTimes.mockReturnValue([
+        currentShiftStartTime,
+        1713274200000,
+      ]);
 
       render(
         <IntlProvider locale="en">
@@ -885,7 +939,9 @@ describe("CareViewPatientsSummary", function () {
           "previous-shift-care-instructions-notification"
         );
         expect(notification).toBeTruthy();
-        expect(notification).toHaveTextContent(/(Includes 2 from Previous Shift)/);
+        expect(notification).toHaveTextContent(
+          /(Includes 2 from Previous Shift)/
+        );
       });
     });
 
@@ -906,8 +962,14 @@ describe("CareViewPatientsSummary", function () {
           visitUuid: visitUuid2,
           observations: [
             { uuid: "obs-p2-prev-1", observationDateTime: previousShiftTime },
-            { uuid: "obs-p2-prev-2", observationDateTime: previousShiftTime + 3600000 },
-            { uuid: "obs-p2-prev-3", observationDateTime: previousShiftTime + 7200000 },
+            {
+              uuid: "obs-p2-prev-2",
+              observationDateTime: previousShiftTime + 3600000,
+            },
+            {
+              uuid: "obs-p2-prev-3",
+              observationDateTime: previousShiftTime + 7200000,
+            },
           ],
         },
       ]);
@@ -939,7 +1001,10 @@ describe("CareViewPatientsSummary", function () {
         ]);
 
       mockFetchAcknowledgedObsUuids.mockResolvedValue(new Set());
-      mockSetCurrentShiftTimes.mockReturnValue([currentShiftStartTime, 1713274200000]);
+      mockSetCurrentShiftTimes.mockReturnValue([
+        currentShiftStartTime,
+        1713274200000,
+      ]);
 
       render(
         <IntlProvider locale="en">
@@ -999,7 +1064,10 @@ describe("CareViewPatientsSummary", function () {
         ]);
 
       mockFetchAcknowledgedObsUuids.mockResolvedValue(new Set());
-      mockSetCurrentShiftTimes.mockReturnValue([currentShiftStartTime, 1713274200000]);
+      mockSetCurrentShiftTimes.mockReturnValue([
+        currentShiftStartTime,
+        1713274200000,
+      ]);
 
       render(
         <IntlProvider locale="en">
