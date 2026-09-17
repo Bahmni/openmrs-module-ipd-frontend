@@ -3,6 +3,9 @@ import {
   GetUTCEpochForDate,
   ExtractMedicationNursingTasksData,
   saveAdministeredMedication,
+  getLatestFormUuid,
+  getFormNameFromTaskInput,
+  ExtractNonMedicationTasks,
 } from "../utils/NursingTasksUtils";
 import axios from "axios";
 import {
@@ -300,6 +303,128 @@ describe("NursingTasksUtils", () => {
         status: 500,
         data: { error: "Internal Server Error" },
       });
+    });
+  });
+
+  describe("getLatestFormUuid", () => {
+    it("should return latest uuid when multiple versions exist", () => {
+      const allFormsSummary = [
+        { name: "Nursing Initial Assessment", version: "1", uuid: "uuid-v1" },
+        { name: "Nursing Initial Assessment", version: "3", uuid: "uuid-v3" },
+        { name: "Nursing Initial Assessment", version: "2", uuid: "uuid-v2" },
+      ];
+
+      expect(
+        getLatestFormUuid("Nursing Initial Assessment", allFormsSummary)
+      ).toBe("uuid-v3");
+    });
+
+    it("should return null when form is not found", () => {
+      const allFormsSummary = [
+        { name: "Vitals", version: "1", uuid: "uuid-1" },
+      ];
+      expect(
+        getLatestFormUuid("Nursing Initial Assessment", allFormsSummary)
+      ).toBeNull();
+    });
+
+    it("should return null for null or undefined inputs", () => {
+      expect(getLatestFormUuid(null, [])).toBeNull();
+      expect(getLatestFormUuid("Form A", null)).toBeNull();
+      expect(getLatestFormUuid("Form A", undefined)).toBeNull();
+      expect(
+        getLatestFormUuid(undefined, [
+          { name: "Form A", version: "1", uuid: "uuid-a" },
+        ])
+      ).toBeNull();
+    });
+
+    it("should handle decimal version strings and return the highest version", () => {
+      const allFormsSummary = [
+        {
+          name: "Nursing Initial Assessment",
+          version: "1.5",
+          uuid: "uuid-v1-5",
+        },
+        {
+          name: "Nursing Initial Assessment",
+          version: "1.9",
+          uuid: "uuid-v1-9",
+        },
+        {
+          name: "Nursing Initial Assessment",
+          version: "1.7",
+          uuid: "uuid-v1-7",
+        },
+      ];
+
+      expect(
+        getLatestFormUuid("Nursing Initial Assessment", allFormsSummary)
+      ).toBe("uuid-v1-9");
+    });
+  });
+
+  describe("getFormNameFromTaskInput", () => {
+    const formConceptUuid = "form-resource-uuid";
+
+    it("returns the value of the input matching the configured concept uuid", () => {
+      const input = [
+        {
+          type: { uuid: "another-input-uuid", display: "Another Input" },
+          valueText: "Not a form",
+        },
+        {
+          type: { uuid: formConceptUuid, display: "form-resource" },
+          valueText: "Vitals",
+        },
+      ];
+
+      expect(getFormNameFromTaskInput(input, formConceptUuid)).toBe("Vitals");
+    });
+
+    it("returns null when the configured concept uuid does not match", () => {
+      const input = [
+        {
+          type: { uuid: "another-input-uuid", display: "form-resource" },
+          valueText: "Vitals",
+        },
+      ];
+
+      expect(getFormNameFromTaskInput(input, formConceptUuid)).toBeNull();
+    });
+
+    it("returns null when input or configuration is missing", () => {
+      expect(getFormNameFromTaskInput(undefined, formConceptUuid)).toBeNull();
+      expect(getFormNameFromTaskInput([], undefined)).toBeNull();
+    });
+  });
+
+  describe("ExtractNonMedicationTasks", () => {
+    it("preserves task input used to resolve the linked form", () => {
+      const input = [
+        {
+          type: "Multidisciplinary assessment",
+          valueText: "Vitals",
+        },
+      ];
+      const tasks = [
+        {
+          name: "Record Vitals",
+          requestedStartTime: 1690906550000,
+          status: "REQUESTED",
+          uuid: "task-uuid",
+          creator: { uuid: "user-uuid" },
+          input,
+        },
+      ];
+
+      const result = ExtractNonMedicationTasks(
+        tasks,
+        { id: "pending" },
+        false
+      );
+
+      expect(result[0][0].input).toEqual(input);
     });
   });
 });

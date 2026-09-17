@@ -8,6 +8,7 @@ import {
   iconType,
 } from "../utils/TaskTileUtils";
 import { TooltipDefinition, Tag } from "carbon-components-react";
+import { FormattedMessage } from "react-intl";
 import "../styles/TaskTile.scss";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -15,11 +16,13 @@ import {
   asNeededPlaceholderConceptName,
   timeFormatFor12Hr,
   timeFormatFor24Hr,
+  TASK_COLORS,
 } from "../../../../constants";
 import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
+import TaskFormLink from "./TaskFormLink";
 
 export default function TaskTile(props) {
-  const { medicationNursingTask } = props;
+  const { medicationNursingTask, formUuid, patientId } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
 
   const { config } = useContext(IPDContext);
@@ -53,21 +56,35 @@ export default function TaskTile(props) {
     nursingTasks
   );
 
+  const taskLabel = drugName;
+  const isFormLink = formUuid && patientId;
+  const fontWeight = !isANonMedicationTask && isRelevantTask ? 500 : 400;
+  const taskTitleStyle = isFormLink
+    ? {
+        color: TASK_COLORS.LINK_BLUE,
+        fontWeight,
+      }
+    : {
+        color: stopTime
+          ? TASK_COLORS.STOP_RED
+          : isRelevantTask
+          ? TASK_COLORS.RELEVANT_DARK
+          : TASK_COLORS.NON_RELEVANT_GRAY,
+        fontWeight,
+      };
+
   const creatorName = (creator) => {
     var formattedName = creator.split(".").join(" ");
     return formattedName;
   };
 
   const drugNameText = (
-    <div
-      className="drug-title"
-      style={{
-        color: stopTime ? "#FF0000" : isRelevantTask ? "#393939" : "#525252",
-        fontWeight: !isANonMedicationTask && isRelevantTask ? 500 : 400,
-      }}
-    >
-      {drugName}
-    </div>
+    <span className="drug-title" style={taskTitleStyle}>
+      <FormattedMessage
+        id={`TASK_LABEL_${isANonMedicationTask ? "SYSTEM" : "MEDICATION"}`}
+        defaultMessage={taskLabel}
+      />
+    </span>
   );
   const statusIcon = iconType(newMedicationNursingTask, nursingTasks);
   return (
@@ -100,12 +117,29 @@ export default function TaskTile(props) {
                   <SVGIcon iconType={statusIcon} />
                 </div>
                 <TooltipDefinition
-                  tooltipText={drugName}
+                  tooltipText={taskLabel}
                   className={
                     isDisabled ? "cursor-not-allowed" : "cursor-pointer"
                   }
                 >
-                  {drugNameText}
+                  {isFormLink ? (
+                    <TaskFormLink
+                      patientId={patientId}
+                      formUuid={formUuid}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <span className="drug-title" style={taskTitleStyle}>
+                        <FormattedMessage
+                          id={`TASK_LABEL_${
+                            isANonMedicationTask ? "SYSTEM" : "MEDICATION"
+                          }`}
+                          defaultMessage={taskLabel}
+                        />
+                      </span>
+                    </TaskFormLink>
+                  ) : (
+                    drugNameText
+                  )}
                 </TooltipDefinition>
               </div>
             </div>
@@ -184,4 +218,6 @@ export default function TaskTile(props) {
 }
 TaskTile.propTypes = {
   medicationNursingTask: PropTypes.array.isRequired,
+  formUuid: PropTypes.string,
+  patientId: PropTypes.string,
 };
