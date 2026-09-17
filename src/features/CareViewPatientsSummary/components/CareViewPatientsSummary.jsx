@@ -35,7 +35,10 @@ export const CareViewPatientsSummary = ({
     setPreviousShiftNonMedicationDetails,
   ] = useState([]);
   const [careInstructionsMap, setCareInstructionsMap] = useState({});
-  const [previousShiftCareInstructionsMap, setPreviousShiftCareInstructionsMap] = useState({});
+  const [
+    previousShiftCareInstructionsMap,
+    setPreviousShiftCareInstructionsMap,
+  ] = useState({});
   const {
     careViewConfig,
     ipdConfig,
@@ -112,7 +115,7 @@ export const CareViewPatientsSummary = ({
     const concepts = [
       ...new Set(formConcepts.flatMap((formConcept) => formConcept.concepts)),
     ];
-    const visitUuids = patients.map((patient) => patient.visitDetails.uuid);
+    const visitUuids = patients.map((patient) => patient.visitDetails?.uuid);
 
     const batchResult = await fetchBatchObservations(visitUuids, concepts);
 

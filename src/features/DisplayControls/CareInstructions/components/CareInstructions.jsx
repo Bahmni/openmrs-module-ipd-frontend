@@ -165,7 +165,8 @@ const CareInstructions = (props) => {
           }))
           .sort(
             (instructionA, instructionB) =>
-              instructionB.observationDateTime - instructionA.observationDateTime
+              instructionB.observationDateTime -
+              instructionA.observationDateTime
           );
 
         setInstructions(allInstructions);
@@ -269,7 +270,7 @@ const CareInstructions = (props) => {
                   onClick={() => {
                     if (!providerUuid) {
                       setNotificationStatus("error");
-                      setNotificationMessage("UNKNOWN_ERROR");
+                      handleSetNotificationMessage("UNKNOWN_ERROR");
                       setShowNotification(true);
                       return;
                     }
@@ -418,85 +419,87 @@ const CareInstructions = (props) => {
           }}
         />
       )}
-      {enableStopTasks && <Modal
-        open={isStoppingTasks}
-        modalHeading={intl.formatMessage({
-          id: "STOP_TASKS_CONFIRMATION_TITLE",
-          defaultMessage: "Stop Pending Tasks",
-        })}
-        onRequestClose={() => {
-          setIsStoppingTasks(false);
-        }}
-        primaryButtonText={intl.formatMessage({
-          id: "STOP_TASKS_CONFIRM_BUTTON",
-          defaultMessage: "Confirm",
-        })}
-        secondaryButtonText={intl.formatMessage({
-          id: "STOP_TASKS_CANCEL_BUTTON",
-          defaultMessage: "Cancel",
-        })}
-        onRequestSubmit={async () => {
-          setIsSubmittingStop(true);
-          try {
-            const { observationUuid, previousVersionUuid } =
-              selectedInstruction;
+      {enableStopTasks && (
+        <Modal
+          open={isStoppingTasks}
+          modalHeading={intl.formatMessage({
+            id: "STOP_TASKS_CONFIRMATION_TITLE",
+            defaultMessage: "Stop Pending Tasks",
+          })}
+          onRequestClose={() => {
+            setIsStoppingTasks(false);
+          }}
+          primaryButtonText={intl.formatMessage({
+            id: "STOP_TASKS_CONFIRM_BUTTON",
+            defaultMessage: "Confirm",
+          })}
+          secondaryButtonText={intl.formatMessage({
+            id: "STOP_TASKS_CANCEL_BUTTON",
+            defaultMessage: "Cancel",
+          })}
+          onRequestSubmit={async () => {
+            setIsSubmittingStop(true);
+            try {
+              const { observationUuid, previousVersionUuid } =
+                selectedInstruction;
 
-            const taskUuidsToStop = [observationUuid, previousVersionUuid]
-              .filter(Boolean)
-              .flatMap((uuid) => pendingTaskUuidsByObservation[uuid] ?? []);
+              const taskUuidsToStop = [observationUuid, previousVersionUuid]
+                .filter(Boolean)
+                .flatMap((uuid) => pendingTaskUuidsByObservation[uuid] ?? []);
 
-            if (taskUuidsToStop.length === 0) {
+              if (taskUuidsToStop.length === 0) {
+                setIsStoppingTasks(false);
+                setIsSubmittingStop(false);
+                return;
+              }
+
+              const updatePayload = taskUuidsToStop.map((taskUuid) => ({
+                uuid: taskUuid,
+                executionEndTime: Date.now(),
+                status: "CANCELLED",
+              }));
+
+              const response = await updateNonMedicationTask(updatePayload);
+
+              if (response?.status === 200) {
+                setNotificationMessage(
+                  intl.formatMessage({
+                    id: "ALL_PENDING_TASKS_STOPPED_SUCCESSFULLY",
+                    defaultMessage: "All pending tasks stopped successfully.",
+                  })
+                );
+                setNotificationStatus("success");
+                setShowNotification(true);
+              } else {
+                throw new Error("Failed to update tasks");
+              }
+
               setIsStoppingTasks(false);
               setIsSubmittingStop(false);
-              return;
-            }
-
-            const updatePayload = taskUuidsToStop.map((taskUuid) => ({
-              uuid: taskUuid,
-              executionEndTime: Date.now(),
-              status: "CANCELLED",
-            }));
-
-            const response = await updateNonMedicationTask(updatePayload);
-
-            if (response?.status === 200) {
+            } catch (error) {
+              setIsStoppingTasks(false);
+              setIsSubmittingStop(false);
               setNotificationMessage(
                 intl.formatMessage({
-                  id: "ALL_PENDING_TASKS_STOPPED_SUCCESSFULLY",
-                  defaultMessage: "All pending tasks stopped successfully.",
+                  id: "FAILED_TO_STOP_TASKS",
+                  defaultMessage: "Failed to stop tasks. Please try again.",
                 })
               );
-              setNotificationStatus("success");
+              setNotificationStatus("error");
               setShowNotification(true);
-            } else {
-              throw new Error("Failed to update tasks");
             }
-
-            setIsStoppingTasks(false);
-            setIsSubmittingStop(false);
-          } catch (error) {
-            setIsStoppingTasks(false);
-            setIsSubmittingStop(false);
-            setNotificationMessage(
-              intl.formatMessage({
-                id: "FAILED_TO_STOP_TASKS",
-                defaultMessage: "Failed to stop tasks. Please try again.",
-              })
-            );
-            setNotificationStatus("error");
-            setShowNotification(true);
-          }
-        }}
-        primaryButtonDisabled={isSubmittingStop}
-        danger={true}
-      >
-        <p>
-          <FormattedMessage
-            id="STOP_TASKS_CONFIRMATION_MESSAGE"
-            defaultMessage="Are you sure you want to stop all pending tasks for this instruction?"
-          />
-        </p>
-      </Modal>}
+          }}
+          primaryButtonDisabled={isSubmittingStop}
+          danger={true}
+        >
+          <p>
+            <FormattedMessage
+              id="STOP_TASKS_CONFIRMATION_MESSAGE"
+              defaultMessage="Are you sure you want to stop all pending tasks for this instruction?"
+            />
+          </p>
+        </Modal>
+      )}
     </div>
   );
 };

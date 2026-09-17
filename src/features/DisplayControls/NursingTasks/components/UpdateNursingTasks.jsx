@@ -846,7 +846,7 @@ const UpdateNursingTasks = (props) => {
                             itemText={
                               <FormattedMessage
                                 id="IPD_UNSTOP_TASK"
-                                defaultMessage="Un-Stop Task"
+                                defaultMessage="Unstop Task"
                               />
                             }
                             onClick={() => {
