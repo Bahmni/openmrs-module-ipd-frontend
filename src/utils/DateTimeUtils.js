@@ -16,6 +16,10 @@ export const formatDate = (value, format = defaultDateFormat) => {
   return value ? moment(value).format(format) : value;
 };
 
+export const getStartOfToday = () => moment().startOf("day").toDate();
+
+export const getEndOfDay = (date) => moment(date).endOf("day").toDate();
+
 export const formatTime = (time, inputFormat, outputFormat) => {
   return moment(time, inputFormat).format(outputFormat);
 };

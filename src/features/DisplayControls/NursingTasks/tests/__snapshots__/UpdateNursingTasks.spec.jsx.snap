@@ -118,7 +118,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </div>
             <div
               class="bx--tag bx--tag--sm bx--tag--blue"
-              id="tag-79"
+              id="tag-80"
             >
               
               <span
@@ -241,7 +241,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </div>
             <div
               class="bx--tag bx--tag--sm bx--tag--blue"
-              id="tag-80"
+              id="tag-81"
             >
               
               <span
@@ -327,7 +327,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             
             <h3
               class="bx--modal-header__heading"
-              id="bx--modal-header__heading--modal-10"
+              id="bx--modal-header__heading--modal-11"
             >
               Please confirm your nursing tasks
             </h3>
@@ -354,9 +354,9 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </button>
           </div>
           <div
-            aria-labelledby="bx--modal-header__heading--modal-10"
+            aria-labelledby="bx--modal-header__heading--modal-11"
             class="bx--modal-content"
-            id="bx--modal-body--modal-10"
+            id="bx--modal-body--modal-11"
           >
             <hr />
             <div
