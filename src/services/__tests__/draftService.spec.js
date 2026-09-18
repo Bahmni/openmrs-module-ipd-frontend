@@ -25,24 +25,22 @@ describe("draftService", () => {
           timestamp: 1705313400000,
         },
       ];
-      mockAxios
-        .onGet(FORM_DRAFT_LIST_URL, { params: { providerUuid: "provider-uuid-1" } })
-        .reply(200, drafts);
+      mockAxios.onGet(FORM_DRAFT_LIST_URL).reply(200, drafts);
 
-      const result = await fetchDraftsForProvider("provider-uuid-1");
+      const result = await fetchDraftsForProvider();
       expect(result).toEqual(drafts);
     });
 
     it("should propagate error on network failure", async () => {
       mockAxios.onGet(FORM_DRAFT_LIST_URL).networkError();
 
-      await expect(fetchDraftsForProvider("provider-uuid-1")).rejects.toThrow();
+      await expect(fetchDraftsForProvider()).rejects.toThrow();
     });
 
     it("should propagate error on server error response", async () => {
       mockAxios.onGet(FORM_DRAFT_LIST_URL).reply(500, { error: "Server error" });
 
-      await expect(fetchDraftsForProvider("provider-uuid-1")).rejects.toThrow();
+      await expect(fetchDraftsForProvider()).rejects.toThrow();
     });
   });
 });

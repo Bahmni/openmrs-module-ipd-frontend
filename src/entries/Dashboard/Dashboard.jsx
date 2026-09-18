@@ -319,7 +319,7 @@ export default function Dashboard(props) {
                     ) &&
                       dashboardConfig?.config &&
                       dashboardConfig.config.enableFormDraftFeature && (
-                        <DraftIndicator providerUuid={provider?.uuid} />
+                        <DraftIndicator />
                       )}
                     <ProviderActions onLogOut={hostApi.onLogOut} />
                     </HeaderGlobalBar>

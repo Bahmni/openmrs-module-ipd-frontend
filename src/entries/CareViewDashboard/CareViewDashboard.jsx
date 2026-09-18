@@ -92,7 +92,7 @@ const CareViewDashboard = (props) => {
             ) &&
               ipdConfig?.config &&
               ipdConfig.config.enableFormDraftFeature && (
-                <DraftIndicator providerUuid={hostData.provider?.uuid} />
+                <DraftIndicator />
               )}
             <ProviderActions onLogOut={onLogOut} />
           </div>

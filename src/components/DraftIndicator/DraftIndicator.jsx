@@ -11,7 +11,7 @@ import {
 } from "../../constants";
 import { I18nProvider } from "../../features/i18n/I18nProvider";
 
-export const DraftIndicator = ({ providerUuid }) => {
+export const DraftIndicator = () => {
   const [formDrafts, setFormDrafts] = useState([]);
   const [fetchError, setFetchError] = useState(false);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
@@ -21,15 +21,14 @@ export const DraftIndicator = ({ providerUuid }) => {
 
   const refreshDrafts = useCallback(async () => {
     try {
-      if (!providerUuid) return;
-      const drafts = await fetchDraftsForProvider(providerUuid);
+      const drafts = await fetchDraftsForProvider();
       setFormDrafts(drafts);
       setFetchError(false);
     } catch (error) {
       console.error("Failed to refresh drafts", error);
       setFetchError(true);
     }
-  }, [providerUuid]);
+  }, []);
 
   useEffect(() => {
     refreshDrafts();
@@ -118,8 +117,5 @@ export const DraftIndicator = ({ providerUuid }) => {
   );
 };
 
-DraftIndicator.propTypes = {
-  providerUuid: PropTypes.string,
-};
 
 export default DraftIndicator;

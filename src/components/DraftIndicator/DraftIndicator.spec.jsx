@@ -36,8 +36,6 @@ const mockDrafts = [
   },
 ];
 
-const PROVIDER_UUID = "provider-uuid-456";
-
 describe("DraftIndicator", () => {
   let fetchDraftsForProvider;
   let mockChannelInstance;
@@ -60,7 +58,7 @@ describe("DraftIndicator", () => {
   it("should render the draft indicator button", async () => {
     let container;
     await act(async () => {
-      ({ container } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ container } = render(<DraftIndicator  />));
     });
     expect(
       container.querySelector(".ipd-draft-indicator__button")
@@ -69,35 +67,26 @@ describe("DraftIndicator", () => {
 
   it("should fetch drafts with the correct providerUuid on mount", async () => {
     await act(async () => {
-      render(<DraftIndicator providerUuid={PROVIDER_UUID} />);
+      render(<DraftIndicator  />);
     });
     expect(fetchDraftsForProvider).toHaveBeenCalledTimes(1);
-    expect(fetchDraftsForProvider).toHaveBeenCalledWith("provider-uuid-456");
+    expect(fetchDraftsForProvider).toHaveBeenCalledWith();
   });
 
   it("should show red dot when there are drafts", async () => {
     let container;
     await act(async () => {
-      ({ container } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ container } = render(<DraftIndicator  />));
     });
     expect(
       container.querySelector(".ipd-draft-indicator__red-dot")
     ).toBeTruthy();
   });
 
-  it("should not show red dot and not fetch when providerUuid is unavailable", async () => {
-    let container;
-    await act(async () => {
-      ({ container } = render(<DraftIndicator providerUuid={null} />));
-    });
-    expect(fetchDraftsForProvider).not.toHaveBeenCalled();
-    expect(container.querySelector(".ipd-draft-indicator__red-dot")).toBeNull();
-  });
-
   it("should not show overlay by default", async () => {
     let container;
     await act(async () => {
-      ({ container } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ container } = render(<DraftIndicator  />));
     });
     expect(
       container.querySelector(".ipd-draft-indicator__overlay-wrapper")
@@ -108,7 +97,7 @@ describe("DraftIndicator", () => {
     let container, getByLabelText;
     await act(async () => {
       ({ container, getByLabelText } = render(
-        <DraftIndicator providerUuid={PROVIDER_UUID} />
+        <DraftIndicator  />
       ));
     });
     expect(
@@ -127,7 +116,7 @@ describe("DraftIndicator", () => {
     let container, getByLabelText;
     await act(async () => {
       ({ container, getByLabelText } = render(
-        <DraftIndicator providerUuid={PROVIDER_UUID} />
+        <DraftIndicator  />
       ));
     });
     const button = getByLabelText("View observation drafts");
@@ -151,7 +140,7 @@ describe("DraftIndicator", () => {
     let container, getByLabelText;
     await act(async () => {
       ({ container, getByLabelText } = render(
-        <DraftIndicator providerUuid={PROVIDER_UUID} />
+        <DraftIndicator  />
       ));
     });
 
@@ -174,7 +163,7 @@ describe("DraftIndicator", () => {
     let getByLabelText;
     await act(async () => {
       ({ getByLabelText } = render(
-        <DraftIndicator providerUuid={PROVIDER_UUID} />
+        <DraftIndicator  />
       ));
     });
     const button = getByLabelText("View observation drafts");
@@ -190,7 +179,7 @@ describe("DraftIndicator", () => {
     let getByLabelText, getByText;
     await act(async () => {
       ({ getByLabelText, getByText } = render(
-        <DraftIndicator providerUuid={PROVIDER_UUID} />
+        <DraftIndicator  />
       ));
     });
 
@@ -204,7 +193,7 @@ describe("DraftIndicator", () => {
     let container, getByLabelText;
     await act(async () => {
       ({ container, getByLabelText } = render(
-        <DraftIndicator providerUuid={PROVIDER_UUID} />
+        <DraftIndicator  />
       ));
     });
 
@@ -227,7 +216,7 @@ describe("DraftIndicator", () => {
     let getByLabelText;
     await act(async () => {
       ({ getByLabelText } = render(
-        <DraftIndicator providerUuid={PROVIDER_UUID} />
+        <DraftIndicator  />
       ));
     });
 
@@ -238,12 +227,12 @@ describe("DraftIndicator", () => {
     });
 
     expect(fetchDraftsForProvider).toHaveBeenCalledTimes(1);
-    expect(fetchDraftsForProvider).toHaveBeenCalledWith("provider-uuid-456");
+    expect(fetchDraftsForProvider).toHaveBeenCalledWith();
   });
 
   it("should refresh drafts when a BroadcastChannel message is received", async () => {
     await act(async () => {
-      render(<DraftIndicator providerUuid={PROVIDER_UUID} />);
+      render(<DraftIndicator  />);
     });
 
     fetchDraftsForProvider.mockClear();
@@ -253,13 +242,13 @@ describe("DraftIndicator", () => {
     });
 
     expect(fetchDraftsForProvider).toHaveBeenCalledTimes(1);
-    expect(fetchDraftsForProvider).toHaveBeenCalledWith("provider-uuid-456");
+    expect(fetchDraftsForProvider).toHaveBeenCalledWith();
   });
 
   it("should close the BroadcastChannel on unmount", async () => {
     let unmount;
     await act(async () => {
-      ({ unmount } = render(<DraftIndicator providerUuid={PROVIDER_UUID} />));
+      ({ unmount } = render(<DraftIndicator  />));
     });
     await act(async () => {
       unmount();
@@ -272,7 +261,7 @@ describe("DraftIndicator", () => {
     let getByLabelText, getByText;
     await act(async () => {
       ({ getByLabelText, getByText } = render(
-        <DraftIndicator providerUuid={PROVIDER_UUID} />
+        <DraftIndicator  />
       ));
     });
 
@@ -287,7 +276,7 @@ describe("DraftIndicator", () => {
     delete global.BroadcastChannel;
     await act(async () => {
       expect(() =>
-        render(<DraftIndicator providerUuid={PROVIDER_UUID} />)
+        render(<DraftIndicator  />)
       ).not.toThrow();
     });
   });
@@ -296,7 +285,7 @@ describe("DraftIndicator", () => {
     let getByLabelText;
     await act(async () => {
       ({ getByLabelText } = render(
-        <DraftIndicator providerUuid={PROVIDER_UUID} />
+        <DraftIndicator  />
       ));
     });
 
@@ -323,7 +312,7 @@ describe("DraftIndicator", () => {
     let container, getByLabelText;
     await act(async () => {
       ({ container, getByLabelText } = render(
-        <DraftIndicator providerUuid={PROVIDER_UUID} />
+        <DraftIndicator  />
       ));
     });
 
