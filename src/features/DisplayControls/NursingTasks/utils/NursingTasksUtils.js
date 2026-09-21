@@ -10,7 +10,6 @@ import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
 import {
   parseFhirDosages,
   getDosageBySequence,
-  fromUcumDurationUnit,
   fhirDosageToDisplayStage,
 } from "../../../../utils/FhirDosingUtils";
 import moment from "moment";
@@ -167,7 +166,7 @@ export const ExtractMedicationNursingTasksData = (
 
       if (
         (filterValue.id === "stopped" || filterValue.id === "allTasks") &&
-        slot.status === "STOPPED"
+        (slot.status === "STOPPED" || slot.status === "CANCELLED")
       ) {
         stoppedExtractedData.push({
           ...slotInfo,
@@ -324,7 +323,8 @@ export const ExtractNonMedicationTasks = (
   const groupedData = [],
     completedExtractedData = [],
     pendingExtractedData = [],
-    skippedExtractedData = [];
+    skippedExtractedData = [],
+    stoppedExtractedData = [];
   nonMedicationTasks?.forEach((nonMedicationTask) => {
     const {
       name,
@@ -336,6 +336,7 @@ export const ExtractNonMedicationTasks = (
       taskType,
       creator,
       executionEndTime,
+      input,
     } = nonMedicationTask;
     const startTimeInDate = new Date(requestedStartTime);
     const taskInfo = {
@@ -347,19 +348,21 @@ export const ExtractNonMedicationTasks = (
         minute: "2-digit",
         hourCycle: "h23",
       }),
+      requestedStartTime,
       partOf,
       isDisabled: isReadMode
         ? true
-        : status === "COMPLETED" || status === "REJECTED",
+        : status === "COMPLETED" || status === "REJECTED" || status === "CANCELLED",
       executionEndTime: executionEndTime,
-      administeredTime: status === "REJECTED" ? null : executionEndTime,
+      administeredTime: (status === "REJECTED" || status === "CANCELLED") ? null : executionEndTime,
       administeredTimeInEpochSeconds:
-        status === "REJECTED" ? null : executionEndTime,
+        (status === "REJECTED" || status === "CANCELLED") ? null : executionEndTime,
       status,
       isANonMedicationTask: true,
       token,
       taskType,
       creator,
+      input,
     };
 
     if (
@@ -367,6 +370,14 @@ export const ExtractNonMedicationTasks = (
       taskInfo.status === "REQUESTED"
     ) {
       pendingExtractedData.push(taskInfo);
+    } else if (
+      (filterValue.id === "stopped" || filterValue.id === "allTasks") &&
+      taskInfo.status === "CANCELLED"
+    ) {
+      stoppedExtractedData.push({
+        ...taskInfo,
+        status: "Stopped",
+      });
     } else if (
       (filterValue.id === "skipped" || filterValue.id === "allTasks") &&
       taskInfo.status === "REJECTED"
@@ -403,6 +414,7 @@ export const ExtractNonMedicationTasks = (
   }
 
   groupedData.push(...completedExtractedData.map((item) => [item]));
+  groupedData.push(...stoppedExtractedData.map((item) => [item]));
   groupedData.push(...skippedExtractedData.map((item) => [item]));
   return groupedData;
 };
@@ -440,4 +452,31 @@ export const disableDoneTogglePostNextTaskTime = (
     taskWithJustGreaterTime &&
     currentTimeInEpoch >= taskWithJustGreaterTime.startTimeInEpochSeconds
   );
+};
+
+export const getLatestFormUuid = (formName, allFormsSummary) => {
+  if (!formName || !allFormsSummary || !allFormsSummary.length) return null;
+  const matches = allFormsSummary.filter((f) => f.name === formName);
+  if (!matches.length) return null;
+  // Compare version segments numerically to handle multi-digit minors correctly
+  // e.g., "1.10" > "1.9" (not 1.1 < 1.9 as parseFloat would give)
+  const compareVersions = (a, b) => {
+    const aParts = a.version.split('.').map(Number);
+    const bParts = b.version.split('.').map(Number);
+    for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+      const aPart = aParts[i] || 0;
+      const bPart = bParts[i] || 0;
+      if (bPart !== aPart) return bPart - aPart; // Descending order (latest first)
+    }
+    return 0;
+  };
+  return matches.sort(compareVersions)[0].uuid;
+};
+
+export const getFormNameFromTaskInput = (input, formTaskInputConceptUuid) => {
+  if (!Array.isArray(input) || !formTaskInputConceptUuid) return null;
+  const formInput = input.find(
+    (taskInput) => taskInput?.type?.uuid === formTaskInputConceptUuid
+  );
+  return formInput?.valueText || null;
 };

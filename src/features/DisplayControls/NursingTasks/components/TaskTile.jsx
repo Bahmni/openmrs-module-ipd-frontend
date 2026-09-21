@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
+import { Calendar16 } from "@carbon/icons-react";
 import {
   getTime,
   getRelevantTaskStatus,
@@ -15,11 +16,18 @@ import {
   asNeededPlaceholderConceptName,
   timeFormatFor12Hr,
   timeFormatFor24Hr,
+  TASK_COLORS,
 } from "../../../../constants";
-import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
+import TaskFormLink from "./TaskFormLink";
+import { FormattedMessage, useIntl } from "react-intl";
+import {
+  getTranslationKey,
+  isSystemGeneratedTask,
+} from "../../../../utils/CommonUtils";
+import { formatDate } from "../../../../utils/DateTimeUtils";
 
 export default function TaskTile(props) {
-  const { medicationNursingTask } = props;
+  const { medicationNursingTask, formUuid, patientId } = props;
   const newMedicationNursingTask = medicationNursingTask[0];
 
   const { config } = useContext(IPDContext);
@@ -46,28 +54,45 @@ export default function TaskTile(props) {
     isANonMedicationTask,
     creator,
     taskType,
+    requestedStartTime
   } = newMedicationNursingTask;
+  const moreTask = (
+    <FormattedMessage id="TASK_TILE_MORE" defaultMessage="more task(s)" />
+  );
 
   const isRelevantTask = getRelevantTaskStatus(
     startTimeInEpochSeconds,
     nursingTasks
   );
 
+  const taskLabel = drugName;
+  const isFormLink = formUuid && patientId;
+  const fontWeight = !isANonMedicationTask && isRelevantTask ? 500 : 400;
+  const taskTitleStyle = isFormLink
+    ? {
+        color: TASK_COLORS.LINK_BLUE,
+        fontWeight,
+      }
+    : {
+        color: stopTime
+          ? TASK_COLORS.STOP_RED
+          : isRelevantTask
+          ? TASK_COLORS.RELEVANT_DARK
+          : TASK_COLORS.NON_RELEVANT_GRAY,
+        fontWeight,
+      };
+
   const creatorName = (creator) => {
-    var formattedName = creator.split(".").join(" ");
-    return formattedName;
+    return creator.split(".").join(" ");
   };
 
   const drugNameText = (
-    <div
-      className="drug-title"
-      style={{
-        color: stopTime ? "#FF0000" : isRelevantTask ? "#393939" : "#525252",
-        fontWeight: !isANonMedicationTask && isRelevantTask ? 500 : 400,
-      }}
-    >
-      {drugName}
-    </div>
+    <span className="drug-title" style={taskTitleStyle}>
+      <FormattedMessage
+        id={`TASK_LABEL_${isANonMedicationTask ? "SYSTEM" : "MEDICATION"}`}
+        defaultMessage={taskLabel}
+      />
+    </span>
   );
   const statusIcon = iconType(newMedicationNursingTask, nursingTasks);
   return (
@@ -100,12 +125,29 @@ export default function TaskTile(props) {
                   <SVGIcon iconType={statusIcon} />
                 </div>
                 <TooltipDefinition
-                  tooltipText={drugName}
+                  tooltipText={taskLabel}
                   className={
                     isDisabled ? "cursor-not-allowed" : "cursor-pointer"
                   }
                 >
-                  {drugNameText}
+                  {isFormLink ? (
+                    <TaskFormLink
+                      patientId={patientId}
+                      formUuid={formUuid}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <span className="drug-title" style={taskTitleStyle}>
+                        <FormattedMessage
+                          id={`TASK_LABEL_${
+                            isANonMedicationTask ? "SYSTEM" : "MEDICATION"
+                          }`}
+                          defaultMessage={taskLabel}
+                        />
+                      </span>
+                    </TaskFormLink>
+                  ) : (
+                    drugNameText
+                  )}
                 </TooltipDefinition>
               </div>
             </div>
@@ -122,7 +164,6 @@ export default function TaskTile(props) {
               )
             )}
           </div>
-          <div>
             <div
               className="tile-content-subtext"
               style={{
@@ -139,7 +180,19 @@ export default function TaskTile(props) {
             ) && (
               <div className="tile-content-footer">
                 <div className="tile-date-time">
-                  <Clock />
+                  <div className="date-time-container">
+                    <div className="date-row">
+                      <Calendar16 />
+                      <span className="tile-content-subtext-date">
+                      &nbsp;
+                      {formatDate(
+                        new Date(startTimeInEpochSeconds * 1000),
+                        "DD MMMM YYYY"
+                      )}
+                    </span>
+                    </div>
+                    <div className="time-row">
+                      <Clock />
                   <div className="tile-content-subtext-time">
                     &nbsp;
                     {enable24HourTime
@@ -156,18 +209,24 @@ export default function TaskTile(props) {
                           timeFormatFor12Hr
                         )}
                   </div>
-                  &nbsp;
+                    </div>
+                  </div>
+                </div>
+                <div className="footer-right-section">
                   {creator &&
                     !isSystemGeneratedTask(newMedicationNursingTask) && (
-                      <span style={{ textTransform: "capitalize" }}>
+                      <span className="creator-name">
                         {creatorName(creator.display)}
                       </span>
                     )}
-                </div>
-                {isGroupedTask && <div>({taskCount} more)</div>}
+                {isGroupedTask && (
+                  <span className="grouped-task-count">
+                    ({taskCount} {moreTask})
+                  </span>
+                )}
               </div>
-            )}
           </div>
+            )}
         </div>
       </div>
       {isGroupedTask && (
@@ -183,5 +242,7 @@ export default function TaskTile(props) {
   );
 }
 TaskTile.propTypes = {
-  medicationNursingTask: PropTypes.array.isRequired,
+  medicationNursingTask: PropTypes.arrayOf(PropTypes.object).isRequired,
+  formUuid: PropTypes.string,
+  patientId: PropTypes.string,
 };

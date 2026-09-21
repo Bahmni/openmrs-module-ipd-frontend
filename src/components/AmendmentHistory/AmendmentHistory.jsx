@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useLayoutEffect, useRef, useState } from "react";
 import "./AmendmentHistory.scss";
 import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
 import { NoteTile } from "../../features/DisplayControls/DrugChart/components/NoteTile";
@@ -7,7 +7,22 @@ import { useIntl } from "react-intl";
 
 const AmendmentHistory = ({ amendments = [] }) => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [containerHeight, setContainerHeight] = useState(0);
+  const containerRef = useRef(null);
   const intl = useIntl();
+
+  const totalAmendments = amendments?.length || 0;
+  const displayAmendments = !totalAmendments
+    ? []
+    : isExpanded
+    ? amendments
+    : [amendments[0]];
+
+  useLayoutEffect(() => {
+    if (containerRef.current) {
+      setContainerHeight(isExpanded ? containerRef.current.scrollHeight : 0);
+    }
+  }, [isExpanded, displayAmendments.length]);
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -16,9 +31,6 @@ const AmendmentHistory = ({ amendments = [] }) => {
   if (!amendments || amendments.length === 0) {
     return null;
   }
-
-  const totalAmendments = amendments.length;
-  const displayAmendments = isExpanded ? amendments : [amendments[0]];
 
   const ParentTile = () => {
     let icon,
@@ -60,7 +72,11 @@ const AmendmentHistory = ({ amendments = [] }) => {
   return (
     <div className={`amendment-history ${isExpanded ? "expanded" : ""}`}>
       <ParentTile />
-      <div className="amendments-container">
+      <div
+        className="amendments-container"
+        ref={containerRef}
+        style={{ maxHeight: `${containerHeight}px` }}
+      >
         {displayAmendments.slice(1).map((amendment, index) => (
           <Fragment key={index}>
             <div className="connector" />

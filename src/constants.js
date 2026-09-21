@@ -101,9 +101,11 @@ export const GET_SEARCH_PATIENT_LIST_URL =
 export const GET_SLOTS_FOR_PATIENTS_URL =
   RESTWS_V1 + "/ipd/schedule/type/medication/patientsMedicationSummary";
 export const BAHMNI_CORE_OBSERVATIONS_BASE_URL = BAHMNI_CORE + "/observations?";
+export const OBSERVATIONS_BATCH_URL = BAHMNI_CORE + "/observations/batch";
 export const NON_MEDICATION_BASE_URL = RESTWS_V1 + "/tasks";
 
 export const GET_TASKS_FOR_PATIENTS_URL = RESTWS_V1 + "/tasks";
+export const FHIR_TASK_URL = FHIR2_R4 + "/Task";
 
 export const defaultDateFormat = "DD MMM YYYY";
 export const defaultDateTimeFormat = "DD MMM YYYY hh:mm a";
@@ -125,6 +127,7 @@ export const componentKeys = {
   INTAKE_OUTPUT: "IO",
   NUTRITION_ADVICE_FORM: "NAF",
   PATIENT_FEEDING_RECORD: "PFR",
+  CARE_INSTRUCTIONS: "CI",
 };
 
 export const performerFunction = "Performer";
@@ -148,6 +151,13 @@ export const WARD_SUMMARY_HEADER = {
   TOTAL_PATIENTS: "TOTAL_PATIENTS",
   MY_PATIENTS: "MY_PATIENTS",
 };
+
+export const TASK_FILTER_HEADER = {
+  ALL: "ALL",
+  NEW: "NEW",
+  PENDING: "PENDING",
+};
+export const nonMedicationTaskKey = "NON_MEDICATION_TASK";
 
 export const ForbiddenErrorMessage = "User doesn't have required privilege(s)";
 
@@ -183,6 +193,18 @@ export const DOSE_UNITS = ["ml", "mg", "mcg"];
 
 export const LOADING_DOSE_SEQUENCE_OFFSET = 1;
 export const NO_LOADING_DOSE_SEQUENCE_OFFSET = 0;
+export const CONCEPT_SET_GROUP_NAME = "observations"; // Configurable group name for deeplinks
+export const CLINICAL_FORM_URL = (patientUuid, formUuid, conceptSetGroupName = CONCEPT_SET_GROUP_NAME) =>
+  `/bahmni/clinical/index.html#/default/patient/${patientUuid}/dashboard/concept-set-group/${conceptSetGroupName}/form/${formUuid}`;
+
+export const TASK_COLORS = {
+  LINK_BLUE: "#0f62fe",
+  STOP_RED: "#FF0000",
+  RELEVANT_DARK: "#393939",
+  NON_RELEVANT_GRAY: "#525252",
+};
+
+export const NURSING_ACTIVITY_SYSTEM = "nursing_activity_system";
 
 export const sliderTypes = {
   AMENDMENT: "amendment",
