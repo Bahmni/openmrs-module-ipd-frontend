@@ -4,6 +4,7 @@ import {
   CONFIG_BAHMNIENCOUNTER_URL,
   DASHBORAD_CONFIG_URL,
   FETCH_ALL_FORM_DETAILS_URL,
+  FETCH_ALL_OBSERVATIONS_IN_ENCOUNTER_URL,
   FORM_BASE_URL,
   GLOBAL_PROPERTY_URL,
   SEARCH_CONCEPT_URL,
@@ -191,6 +192,20 @@ export const getAllFormsInfo = async () => {
   }
 };
 
+export const fetchObservationsForEncounter = async (encounterUuid) => {
+  try {
+    const url = FETCH_ALL_OBSERVATIONS_IN_ENCOUNTER_URL.replace(
+      "{encounterUuid}",
+      encounterUuid
+    );
+    const response = await axios.get(url, { withCredentials: true });
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
 export const fetchFormData = async (patientUuid, visitUuid) => {
   try {
     return await axios.get(
@@ -213,6 +228,22 @@ export const getFetchFormTranslationsUrl = (formName, formUuid) => {
     "/openmrs/ws/rest/v1" +
     `/bahmniie/form/translate?formName=${formName}&formUuid=${formUuid}&formVersion=1&locale=en`
   );
+};
+
+export const getTranslationKey = (attribute, moduleName) => {
+  if (typeof attribute !== "undefined") {
+    let keyPrefix = moduleName ? moduleName : "IPD";
+
+    let keyName = attribute
+      .toUpperCase()
+      .replace(/\s\s+/g, " ")
+      .replace(/[^a-zA-Z0-9 _]/g, "")
+      .trim()
+      .replace(/ /g, "_");
+
+    let translationKey = `${keyPrefix}_${keyName}`;
+    return translationKey;
+  }
 };
 
 export const getNoDataCapturedMessage = (formName) => {
@@ -277,6 +308,11 @@ export const mockConfig = {
     timeInMinutesToDisableSlotPostScheduledTime: 60,
   },
   enable24HourTime: true,
+  enableAddMultipleTask: true,
+  nursingTaskScheduling: {
+    enableDateSelection: true,
+    maxFutureDaysAllowed: 60,
+  },
   medicationTags: {
     asNeeded: "Rx-PRN",
     "STAT (Immediately)": "Rx-STAT",
@@ -382,6 +418,11 @@ export const mockConfigFor12HourFormat = {
     timeInMinutesToDisableSlotPostScheduledTime: 60,
   },
   enable24HourTime: false,
+  enableAddMultipleTask: true,
+  nursingTaskScheduling: {
+    enableDateSelection: true,
+    maxFutureDaysAllowed: 60,
+  },
   medicationTags: {
     asNeeded: "Rx-PRN",
     "STAT (Immediately)": "Rx-STAT",

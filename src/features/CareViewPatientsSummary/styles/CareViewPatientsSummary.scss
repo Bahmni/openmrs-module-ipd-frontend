@@ -2,6 +2,10 @@
 .patient-row-container {
   display: flex;
 
+  .task-filter-switcher .bx--content-switcher-btn {
+    justify-content: center;
+  }
+
   .patient-details-container {
     box-sizing: border-box;
     width: 420px;
@@ -36,7 +40,11 @@
       margin-top: 4px;
     }
     .warning-icon-20 {
-      fill: #da1e28;
+      fill: $red;
+    }
+
+    .result-new-icon-20 {
+      fill: #198038;
     }
   }
 
@@ -168,9 +176,15 @@
   display: flex;
   padding: 10px 10px 10px 20px;
   background-color: #d0e2ff73;
+  margin-top: 8px;
 
   .treatments-notification-span {
     padding: 5px;
     letter-spacing: 0.24px;
   }
+}
+.care-instructions-previous-shift {
+  margin-left: 25px;
+  color: $red;
+  font-style: italic;
 }
