@@ -31,6 +31,7 @@ module.exports = {
       files: ["*.spec.js", "*.spec.jsx"],
       plugins: ["jest"],
       extends: ["plugin:jest/recommended"],
+      env: { node: true },
       rules: {},
     },
   ],
