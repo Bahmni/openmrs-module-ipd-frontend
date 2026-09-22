@@ -37,6 +37,11 @@ export const PATIENT_IMAGE_URL = RESTWS_V1 + "/patientImage?";
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
 export const ALL_DRUG_ORDERS_URL = (visitUuid) =>
   RESTWS_V1 + `/ipdVisit/${visitUuid}/medication?includes=emergencyMedications`;
+export const FHIR_MEDICATION_REQUEST_URL = (visitUuid) =>
+  FHIR2_R4 + `/MedicationRequest?visit=${visitUuid}`;
+export const FHIR_MEDICATION_ADMIN_EMERGENCY_URL = (visitUuid) =>
+  FHIR2_R4 +
+  `/MedicationAdministration?context=${visitUuid}&category=emergency`;
 export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
 export const CLINICAL_CONFIG_URL =
@@ -194,7 +199,11 @@ export const DOSE_UNITS = ["ml", "mg", "mcg"];
 export const LOADING_DOSE_SEQUENCE_OFFSET = 1;
 export const NO_LOADING_DOSE_SEQUENCE_OFFSET = 0;
 export const CONCEPT_SET_GROUP_NAME = "observations"; // Configurable group name for deeplinks
-export const CLINICAL_FORM_URL = (patientUuid, formUuid, conceptSetGroupName = CONCEPT_SET_GROUP_NAME) =>
+export const CLINICAL_FORM_URL = (
+  patientUuid,
+  formUuid,
+  conceptSetGroupName = CONCEPT_SET_GROUP_NAME
+) =>
   `/bahmni/clinical/index.html#/default/patient/${patientUuid}/dashboard/concept-set-group/${conceptSetGroupName}/form/${formUuid}`;
 
 export const TASK_COLORS = {
