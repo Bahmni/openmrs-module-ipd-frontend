@@ -46,6 +46,9 @@ export const GET_ALL_PROVIDERS_URL =
 export const SEARCH_DRUG_URL =
   RESTWS_V1 +
   "/drug?q={queryString}&s=ordered&v=custom:(uuid,strength,name,dosageForm)";
+export const ORDER_FREQUENCY_URL =
+  RESTWS_V1 + "/orderfrequency?v=custom:(uuid,display,frequencyPerDay)";
+export const DEFAULT_PRN_BUFFER_IN_MINUTES = 30;
 export const FETCH_ALL_FORM_DETAILS_URL =
   RESTWS_V1 + "/bahmniie/form/allForms?v=custom:(version,name,uuid)";
 export const FETCH_FORM_DETAILS_URL =
