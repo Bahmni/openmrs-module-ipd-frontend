@@ -14,34 +14,49 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
       <div
         class="close-icon"
       >
-        <button
-          class="bx--btn bx--btn--ghost bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
-          tabindex="0"
-          type="button"
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
         >
           <div
-            class="bx--assistive-text"
+            class="cds--tooltip-trigger__wrapper"
           >
-            Close
+            <button
+              aria-labelledby="tooltip-_r_7t_"
+              class="cds--btn cds--btn--ghost cds--btn--icon-only"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                />
+              </svg>
+            </button>
           </div>
-          <svg
+          <span
             aria-hidden="true"
-            aria-label="Close"
-            class="bx--btn__icon"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            role="img"
-            viewBox="0 0 32 32"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
+            class="cds--popover"
+            id="tooltip-_r_7t_"
+            role="tooltip"
           >
-            <path
-              d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Close
+            </span>
+            <span
+              class="cds--popover-caret"
             />
-          </svg>
-        </button>
+          </span>
+        </span>
       </div>
     </div>
     <div
@@ -51,26 +66,37 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
         style="padding: 20px 20px 120px 20px;"
       >
         <div
-          class="bx--form-item bx--text-input-wrapper"
+          class="cds--form-item drug-name cds--text-input-wrapper"
         >
-          <label
-            class="bx--label bx--label--disabled"
-            for="drug-name"
-          >
-            Drug Name
-          </label>
           <div
-            class="bx--text-input__field-outer-wrapper"
+            class="cds--text-input__label-wrapper"
+          >
+            <label
+              class="cds--label cds--label--disabled"
+              dir="auto"
+              for="drug-name"
+            >
+              Drug Name
+            </label>
+          </div>
+          <div
+            class="cds--text-input__field-outer-wrapper"
           >
             <div
-              class="bx--text-input__field-wrapper"
+              class="cds--text-input__field-wrapper"
             >
               <input
-                class="bx--text-input drug-name bx--text-input--md"
+                class="cds--text-input"
                 disabled=""
                 id="drug-name"
                 type="text"
                 value="Aspirin"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-input__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -82,16 +108,17 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
             class="dose-field-with-units"
           >
             <div
-              class="-TaKcdG2c0NUzkYaFWOzlQ=="
+              class="NW023la29jMKwMarLfBe"
             >
               <div
-                class="bx--form-item"
+                class="cds--form-item"
               >
                 <div
-                  class="bx--number bx--number--helpertext"
+                  class="cds--number cds--number--helpertext cds--number--md"
                 >
                   <label
-                    class="bx--label bx--label--disabled"
+                    class="cds--label cds--label--disabled"
+                    dir="auto"
                     for="Dropdown"
                   >
                     <div
@@ -103,22 +130,24 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                     </div>
                   </label>
                   <div
-                    class="bx--number__input-wrapper"
+                    class="cds--number__input-wrapper"
                   >
                     <input
+                      aria-invalid="false"
                       disabled=""
                       id="Dropdown"
+                      inputmode="decimal"
                       pattern="[0-9]*"
                       step="1"
                       type="number"
                       value="10"
                     />
                     <div
-                      class="bx--number__controls"
+                      class="cds--number__controls"
                     >
                       <button
                         aria-label="Decrement number"
-                        class="bx--number__control-btn down-icon"
+                        class="cds--number__control-btn down-icon"
                         disabled=""
                         tabindex="-1"
                         title="Decrement number"
@@ -141,11 +170,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                       <button
                         aria-label="Increment number"
-                        class="bx--number__control-btn up-icon"
+                        class="cds--number__control-btn up-icon"
                         disabled=""
                         tabindex="-1"
                         title="Increment number"
@@ -163,12 +192,12 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+                            d="M17 15 17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
                           />
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                     </div>
                   </div>
@@ -181,12 +210,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
               style="margin-right: 5px;"
             >
               <div
-                class="bx--dropdown__wrapper bx--list-box__wrapper"
+                class="cds--dropdown__wrapper cds--list-box__wrapper"
               >
                 <label
-                  class="bx--label bx--label--disabled"
-                  for="downshift-68-toggle-button"
-                  id="downshift-68-label"
+                  class="cds--label cds--label--disabled"
+                  id="downshift-_r_81_-label"
                 >
                   <div
                     class="titleText"
@@ -197,27 +225,30 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                   </div>
                 </label>
                 <div
-                  class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                  class="cds--dropdown cds--dropdown--disabled cds--list-box"
                   id="Dropdown"
                 >
                   <button
-                    aria-disabled="true"
+                    aria-activedescendant=""
+                    aria-controls="downshift-_r_81_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-68-label downshift-68-toggle-button"
-                    class="bx--list-box__field"
+                    aria-labelledby="downshift-_r_81_-label"
+                    class="cds--list-box__field"
                     disabled=""
-                    id="downshift-68-toggle-button"
+                    id="downshift-_r_81_-toggle-button"
+                    role="combobox"
+                    tabindex="0"
                     title="Tablet"
                     type="button"
                   >
                     <span
-                      class="bx--list-box__label"
+                      class="cds--list-box__label"
                     >
                       Tablet
                     </span>
                     <div
-                      class="bx--list-box__menu-icon"
+                      class="cds--list-box__menu-icon"
                     >
                       <svg
                         aria-label="Open menu"
@@ -232,7 +263,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                         />
                         <title>
                           Open menu
@@ -240,12 +271,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                       </svg>
                     </div>
                   </button>
-                  <div
-                    aria-labelledby="downshift-68-label"
-                    class="bx--list-box__menu"
-                    id="downshift-68-menu"
+                  <ul
+                    aria-labelledby="downshift-_r_81_-label"
+                    class="cds--list-box__menu"
+                    id="downshift-_r_81_-menu"
                     role="listbox"
-                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -260,12 +290,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
               style="margin-right: 5px;"
             >
               <div
-                class="bx--dropdown__wrapper bx--list-box__wrapper"
+                class="cds--dropdown__wrapper cds--list-box__wrapper"
               >
                 <label
-                  class="bx--label bx--label--disabled"
-                  for="downshift-69-toggle-button"
-                  id="downshift-69-label"
+                  class="cds--label cds--label--disabled"
+                  id="downshift-_r_83_-label"
                 >
                   <div
                     class="titleText"
@@ -276,24 +305,28 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                   </div>
                 </label>
                 <div
-                  class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                  class="cds--dropdown cds--dropdown--disabled cds--list-box"
                   id="Dropdown"
                 >
                   <button
-                    aria-disabled="true"
+                    aria-activedescendant=""
+                    aria-controls="downshift-_r_83_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-69-label downshift-69-toggle-button"
-                    class="bx--list-box__field"
+                    aria-labelledby="downshift-_r_83_-label"
+                    class="cds--list-box__field"
                     disabled=""
-                    id="downshift-69-toggle-button"
+                    id="downshift-_r_83_-toggle-button"
+                    role="combobox"
+                    tabindex="0"
+                    title=""
                     type="button"
                   >
                     <span
-                      class="bx--list-box__label"
+                      class="cds--list-box__label"
                     />
                     <div
-                      class="bx--list-box__menu-icon"
+                      class="cds--list-box__menu-icon"
                     >
                       <svg
                         aria-label="Open menu"
@@ -308,7 +341,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                         />
                         <title>
                           Open menu
@@ -316,12 +349,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                       </svg>
                     </div>
                   </button>
-                  <div
-                    aria-labelledby="downshift-69-label"
-                    class="bx--list-box__menu"
-                    id="downshift-69-menu"
+                  <ul
+                    aria-labelledby="downshift-_r_83_-label"
+                    class="cds--list-box__menu"
+                    id="downshift-_r_83_-menu"
                     role="listbox"
-                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -335,16 +367,17 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
             class="duration-field-with-units"
           >
             <div
-              class="-TaKcdG2c0NUzkYaFWOzlQ=="
+              class="NW023la29jMKwMarLfBe"
             >
               <div
-                class="bx--form-item"
+                class="cds--form-item"
               >
                 <div
-                  class="bx--number bx--number--helpertext"
+                  class="cds--number cds--number--helpertext cds--number--md"
                 >
                   <label
-                    class="bx--label bx--label--disabled"
+                    class="cds--label cds--label--disabled"
+                    dir="auto"
                     for="Dropdown"
                   >
                     <div
@@ -356,22 +389,24 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                     </div>
                   </label>
                   <div
-                    class="bx--number__input-wrapper"
+                    class="cds--number__input-wrapper"
                   >
                     <input
+                      aria-invalid="false"
                       disabled=""
                       id="Dropdown"
+                      inputmode="decimal"
                       pattern="[0-9]*"
                       step="1"
                       type="number"
                       value="10"
                     />
                     <div
-                      class="bx--number__controls"
+                      class="cds--number__controls"
                     >
                       <button
                         aria-label="Decrement number"
-                        class="bx--number__control-btn down-icon"
+                        class="cds--number__control-btn down-icon"
                         disabled=""
                         tabindex="-1"
                         title="Decrement number"
@@ -394,11 +429,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                       <button
                         aria-label="Increment number"
-                        class="bx--number__control-btn up-icon"
+                        class="cds--number__control-btn up-icon"
                         disabled=""
                         tabindex="-1"
                         title="Increment number"
@@ -416,12 +451,12 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+                            d="M17 15 17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
                           />
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                     </div>
                   </div>
@@ -434,12 +469,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
               style="margin-right: 5px;"
             >
               <div
-                class="bx--dropdown__wrapper bx--list-box__wrapper"
+                class="cds--dropdown__wrapper cds--list-box__wrapper"
               >
                 <label
-                  class="bx--label bx--label--disabled"
-                  for="downshift-70-toggle-button"
-                  id="downshift-70-label"
+                  class="cds--label cds--label--disabled"
+                  id="downshift-_r_85_-label"
                 >
                   <div
                     class="titleText"
@@ -450,24 +484,28 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                   </div>
                 </label>
                 <div
-                  class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                  class="cds--dropdown cds--dropdown--disabled cds--list-box"
                   id="Dropdown"
                 >
                   <button
-                    aria-disabled="true"
+                    aria-activedescendant=""
+                    aria-controls="downshift-_r_85_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-70-label downshift-70-toggle-button"
-                    class="bx--list-box__field"
+                    aria-labelledby="downshift-_r_85_-label"
+                    class="cds--list-box__field"
                     disabled=""
-                    id="downshift-70-toggle-button"
+                    id="downshift-_r_85_-toggle-button"
+                    role="combobox"
+                    tabindex="0"
+                    title=""
                     type="button"
                   >
                     <span
-                      class="bx--list-box__label"
+                      class="cds--list-box__label"
                     />
                     <div
-                      class="bx--list-box__menu-icon"
+                      class="cds--list-box__menu-icon"
                     >
                       <svg
                         aria-label="Open menu"
@@ -482,7 +520,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                         />
                         <title>
                           Open menu
@@ -490,12 +528,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                       </svg>
                     </div>
                   </button>
-                  <div
-                    aria-labelledby="downshift-70-label"
-                    class="bx--list-box__menu"
-                    id="downshift-70-menu"
+                  <ul
+                    aria-labelledby="downshift-_r_85_-label"
+                    class="cds--list-box__menu"
+                    id="downshift-_r_85_-menu"
                     role="listbox"
-                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -506,17 +543,18 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
             data-testid="datePicker"
           >
             <div
-              class="bx--form-item"
+              class="cds--form-item"
+              disabled=""
             >
               <div
-                class="bx--date-picker bx--date-picker--single"
-                disabled=""
+                class="cds--date-picker cds--date-picker--single"
               >
                 <div
-                  class="bx--date-picker-container"
+                  class="cds--date-picker-container"
                 >
                   <label
-                    class="bx--label bx--label--disabled"
+                    class="cds--label cds--label--disabled"
+                    dir="auto"
                     for="Dropdown"
                   >
                     <div
@@ -528,34 +566,36 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                     </div>
                   </label>
                   <div
-                    class="bx--date-picker-input__wrapper"
+                    class="cds--date-picker-input__wrapper"
                   >
-                    <input
-                      autocomplete="off"
-                      class="bx--date-picker__input bx--date-picker__input--md flatpickr-input"
-                      disabled=""
-                      id="Dropdown"
-                      pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
-                      placeholder="DD MM YYYY"
-                      style="width: 250px;"
-                      type="text"
-                    />
-                    <svg
-                      aria-hidden="true"
-                      class="bx--date-picker__icon"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      role="img"
-                      viewBox="0 0 32 32"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20	V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
+                    <span>
+                      <input
+                        autocomplete="off"
+                        class="cds--date-picker__input cds--date-picker__input--md flatpickr-input"
+                        disabled=""
+                        id="Dropdown"
+                        pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
+                        placeholder="DD MM YYYY"
+                        style="width: 250px;"
+                        type="text"
                       />
-                    </svg>
+                      <svg
+                        aria-hidden="true"
+                        class="cds--date-picker__icon"
+                        fill="currentColor"
+                        focusable="false"
+                        height="16"
+                        preserveAspectRatio="xMidYMid meet"
+                        role="img"
+                        viewBox="0 0 32 32"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20 V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
+                        />
+                      </svg>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -571,12 +611,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
             style="margin-right: 5px;"
           >
             <div
-              class="bx--dropdown__wrapper bx--list-box__wrapper"
+              class="cds--dropdown__wrapper cds--list-box__wrapper"
             >
               <label
-                class="bx--label bx--label--disabled"
-                for="downshift-71-toggle-button"
-                id="downshift-71-label"
+                class="cds--label cds--label--disabled"
+                id="downshift-_r_88_-label"
               >
                 <div
                   class="titleText"
@@ -587,27 +626,30 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                 </div>
               </label>
               <div
-                class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                class="cds--dropdown cds--dropdown--disabled cds--list-box"
                 id="DropdownFrequency"
               >
                 <button
-                  aria-disabled="true"
+                  aria-activedescendant=""
+                  aria-controls="downshift-_r_88_-menu"
                   aria-expanded="false"
                   aria-haspopup="listbox"
-                  aria-labelledby="downshift-71-label downshift-71-toggle-button"
-                  class="bx--list-box__field"
+                  aria-labelledby="downshift-_r_88_-label"
+                  class="cds--list-box__field"
                   disabled=""
-                  id="downshift-71-toggle-button"
+                  id="downshift-_r_88_-toggle-button"
+                  role="combobox"
+                  tabindex="0"
                   title="Twice a day"
                   type="button"
                 >
                   <span
-                    class="bx--list-box__label"
+                    class="cds--list-box__label"
                   >
                     Twice a day
                   </span>
                   <div
-                    class="bx--list-box__menu-icon"
+                    class="cds--list-box__menu-icon"
                   >
                     <svg
                       aria-label="Open menu"
@@ -622,7 +664,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                       <title>
                         Open menu
@@ -630,12 +672,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                     </svg>
                   </div>
                 </button>
-                <div
-                  aria-labelledby="downshift-71-label"
-                  class="bx--list-box__menu"
-                  id="downshift-71-menu"
+                <ul
+                  aria-labelledby="downshift-_r_88_-label"
+                  class="cds--list-box__menu"
+                  id="downshift-_r_88_-menu"
                   role="listbox"
-                  tabindex="-1"
                 />
               </div>
             </div>
@@ -665,10 +706,10 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label"
+                    class="cds--label"
                     for="time-selector"
                   >
                     <div
@@ -680,14 +721,14 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         id="time-selector"
                         maxlength="5"
                         pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -704,10 +745,10 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label"
+                    class="cds--label"
                     for="time-selector"
                   >
                     <div
@@ -719,14 +760,14 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         id="time-selector"
                         maxlength="5"
                         pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -746,27 +787,37 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
           class="instructions"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item instruction"
           >
             <div
-              class="bx--text-area__label-wrapper"
+              class="cds--text-area__label-wrapper"
             >
               <label
-                class="bx--label bx--label--disabled"
+                class="cds--label cds--label--disabled"
+                dir="auto"
               >
                 Instruction
               </label>
             </div>
             <div
-              class="bx--text-area__wrapper"
+              class="cds--text-area__wrapper cds--text-area__wrapper--readonly"
             >
               <textarea
-                class="bx--text-area instruction"
-                cols="50"
+                aria-invalid="false"
+                aria-readonly="true"
+                class="cds--text-area"
                 disabled=""
+                placeholder=""
                 readonly=""
                 rows="1"
+                style="width: 100%;"
                 type="text"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-area__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -775,27 +826,37 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
           class="additional-instructions"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item additional-instruction"
           >
             <div
-              class="bx--text-area__label-wrapper"
+              class="cds--text-area__label-wrapper"
             >
               <label
-                class="bx--label bx--label--disabled"
+                class="cds--label cds--label--disabled"
+                dir="auto"
               >
                 Additional Instruction
               </label>
             </div>
             <div
-              class="bx--text-area__wrapper"
+              class="cds--text-area__wrapper cds--text-area__wrapper--readonly"
             >
               <textarea
-                class="bx--text-area additional-instruction"
-                cols="50"
+                aria-invalid="false"
+                aria-readonly="true"
+                class="cds--text-area"
                 disabled=""
+                placeholder=""
                 readonly=""
                 rows="1"
+                style="width: 100%;"
                 type="text"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-area__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -804,26 +865,35 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
           class="notes-sections"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item notes-section"
           >
             <div
-              class="bx--text-area__label-wrapper"
+              class="cds--text-area__label-wrapper"
             >
               <label
-                class="bx--label"
+                class="cds--label"
+                dir="auto"
               >
                 Notes
               </label>
             </div>
             <div
-              class="bx--text-area__wrapper"
+              class="cds--text-area__wrapper"
             >
               <textarea
-                class="bx--text-area notes-section"
-                cols="50"
+                aria-invalid="false"
+                class="cds--text-area"
                 data-testid="notes-section"
+                placeholder=""
                 rows="3"
+                style="width: 100%;"
                 type="text"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-area__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -833,9 +903,8 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
         class="footer"
       >
         <button
-          class="cancel-button-slider bx--btn bx--btn--secondary"
+          class="cancel-button-slider cds--btn cds--btn--secondary"
           data-testid="cancel"
-          tabindex="0"
           type="button"
         >
           <span>
@@ -843,8 +912,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
           </span>
         </button>
         <button
-          class="save-button-slider bx--btn bx--btn--primary"
-          tabindex="0"
+          class="save-button-slider cds--btn cds--btn--primary"
           type="button"
         >
           Save
@@ -869,34 +937,49 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
       <div
         class="close-icon"
       >
-        <button
-          class="bx--btn bx--btn--ghost bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
-          tabindex="0"
-          type="button"
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
         >
           <div
-            class="bx--assistive-text"
+            class="cds--tooltip-trigger__wrapper"
           >
-            Close
+            <button
+              aria-labelledby="tooltip-_r_7b_"
+              class="cds--btn cds--btn--ghost cds--btn--icon-only"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                />
+              </svg>
+            </button>
           </div>
-          <svg
+          <span
             aria-hidden="true"
-            aria-label="Close"
-            class="bx--btn__icon"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            role="img"
-            viewBox="0 0 32 32"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
+            class="cds--popover"
+            id="tooltip-_r_7b_"
+            role="tooltip"
           >
-            <path
-              d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Close
+            </span>
+            <span
+              class="cds--popover-caret"
             />
-          </svg>
-        </button>
+          </span>
+        </span>
       </div>
     </div>
     <div
@@ -906,26 +989,37 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
         style="padding: 20px 20px 120px 20px;"
       >
         <div
-          class="bx--form-item bx--text-input-wrapper"
+          class="cds--form-item drug-name cds--text-input-wrapper"
         >
-          <label
-            class="bx--label bx--label--disabled"
-            for="drug-name"
-          >
-            Drug Name
-          </label>
           <div
-            class="bx--text-input__field-outer-wrapper"
+            class="cds--text-input__label-wrapper"
+          >
+            <label
+              class="cds--label cds--label--disabled"
+              dir="auto"
+              for="drug-name"
+            >
+              Drug Name
+            </label>
+          </div>
+          <div
+            class="cds--text-input__field-outer-wrapper"
           >
             <div
-              class="bx--text-input__field-wrapper"
+              class="cds--text-input__field-wrapper"
             >
               <input
-                class="bx--text-input drug-name bx--text-input--md"
+                class="cds--text-input"
                 disabled=""
                 id="drug-name"
                 type="text"
                 value="Aspirin"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-input__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -937,16 +1031,17 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
             class="dose-field-with-units"
           >
             <div
-              class="-TaKcdG2c0NUzkYaFWOzlQ=="
+              class="NW023la29jMKwMarLfBe"
             >
               <div
-                class="bx--form-item"
+                class="cds--form-item"
               >
                 <div
-                  class="bx--number bx--number--helpertext"
+                  class="cds--number cds--number--helpertext cds--number--md"
                 >
                   <label
-                    class="bx--label bx--label--disabled"
+                    class="cds--label cds--label--disabled"
+                    dir="auto"
                     for="Dropdown"
                   >
                     <div
@@ -958,22 +1053,24 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </div>
                   </label>
                   <div
-                    class="bx--number__input-wrapper"
+                    class="cds--number__input-wrapper"
                   >
                     <input
+                      aria-invalid="false"
                       disabled=""
                       id="Dropdown"
+                      inputmode="decimal"
                       pattern="[0-9]*"
                       step="1"
                       type="number"
                       value="10"
                     />
                     <div
-                      class="bx--number__controls"
+                      class="cds--number__controls"
                     >
                       <button
                         aria-label="Decrement number"
-                        class="bx--number__control-btn down-icon"
+                        class="cds--number__control-btn down-icon"
                         disabled=""
                         tabindex="-1"
                         title="Decrement number"
@@ -996,11 +1093,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                       <button
                         aria-label="Increment number"
-                        class="bx--number__control-btn up-icon"
+                        class="cds--number__control-btn up-icon"
                         disabled=""
                         tabindex="-1"
                         title="Increment number"
@@ -1018,12 +1115,12 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+                            d="M17 15 17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
                           />
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                     </div>
                   </div>
@@ -1036,12 +1133,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
               style="margin-right: 5px;"
             >
               <div
-                class="bx--dropdown__wrapper bx--list-box__wrapper"
+                class="cds--dropdown__wrapper cds--list-box__wrapper"
               >
                 <label
-                  class="bx--label bx--label--disabled"
-                  for="downshift-64-toggle-button"
-                  id="downshift-64-label"
+                  class="cds--label cds--label--disabled"
+                  id="downshift-_r_7f_-label"
                 >
                   <div
                     class="titleText"
@@ -1052,27 +1148,30 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                   </div>
                 </label>
                 <div
-                  class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                  class="cds--dropdown cds--dropdown--disabled cds--list-box"
                   id="Dropdown"
                 >
                   <button
-                    aria-disabled="true"
+                    aria-activedescendant=""
+                    aria-controls="downshift-_r_7f_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-64-label downshift-64-toggle-button"
-                    class="bx--list-box__field"
+                    aria-labelledby="downshift-_r_7f_-label"
+                    class="cds--list-box__field"
                     disabled=""
-                    id="downshift-64-toggle-button"
+                    id="downshift-_r_7f_-toggle-button"
+                    role="combobox"
+                    tabindex="0"
                     title="Tablet"
                     type="button"
                   >
                     <span
-                      class="bx--list-box__label"
+                      class="cds--list-box__label"
                     >
                       Tablet
                     </span>
                     <div
-                      class="bx--list-box__menu-icon"
+                      class="cds--list-box__menu-icon"
                     >
                       <svg
                         aria-label="Open menu"
@@ -1087,7 +1186,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                         />
                         <title>
                           Open menu
@@ -1095,12 +1194,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                       </svg>
                     </div>
                   </button>
-                  <div
-                    aria-labelledby="downshift-64-label"
-                    class="bx--list-box__menu"
-                    id="downshift-64-menu"
+                  <ul
+                    aria-labelledby="downshift-_r_7f_-label"
+                    class="cds--list-box__menu"
+                    id="downshift-_r_7f_-menu"
                     role="listbox"
-                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -1115,12 +1213,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
               style="margin-right: 5px;"
             >
               <div
-                class="bx--dropdown__wrapper bx--list-box__wrapper"
+                class="cds--dropdown__wrapper cds--list-box__wrapper"
               >
                 <label
-                  class="bx--label bx--label--disabled"
-                  for="downshift-65-toggle-button"
-                  id="downshift-65-label"
+                  class="cds--label cds--label--disabled"
+                  id="downshift-_r_7h_-label"
                 >
                   <div
                     class="titleText"
@@ -1131,24 +1228,28 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                   </div>
                 </label>
                 <div
-                  class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                  class="cds--dropdown cds--dropdown--disabled cds--list-box"
                   id="Dropdown"
                 >
                   <button
-                    aria-disabled="true"
+                    aria-activedescendant=""
+                    aria-controls="downshift-_r_7h_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-65-label downshift-65-toggle-button"
-                    class="bx--list-box__field"
+                    aria-labelledby="downshift-_r_7h_-label"
+                    class="cds--list-box__field"
                     disabled=""
-                    id="downshift-65-toggle-button"
+                    id="downshift-_r_7h_-toggle-button"
+                    role="combobox"
+                    tabindex="0"
+                    title=""
                     type="button"
                   >
                     <span
-                      class="bx--list-box__label"
+                      class="cds--list-box__label"
                     />
                     <div
-                      class="bx--list-box__menu-icon"
+                      class="cds--list-box__menu-icon"
                     >
                       <svg
                         aria-label="Open menu"
@@ -1163,7 +1264,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                         />
                         <title>
                           Open menu
@@ -1171,12 +1272,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                       </svg>
                     </div>
                   </button>
-                  <div
-                    aria-labelledby="downshift-65-label"
-                    class="bx--list-box__menu"
-                    id="downshift-65-menu"
+                  <ul
+                    aria-labelledby="downshift-_r_7h_-label"
+                    class="cds--list-box__menu"
+                    id="downshift-_r_7h_-menu"
                     role="listbox"
-                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -1190,16 +1290,17 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
             class="duration-field-with-units"
           >
             <div
-              class="-TaKcdG2c0NUzkYaFWOzlQ=="
+              class="NW023la29jMKwMarLfBe"
             >
               <div
-                class="bx--form-item"
+                class="cds--form-item"
               >
                 <div
-                  class="bx--number bx--number--helpertext"
+                  class="cds--number cds--number--helpertext cds--number--md"
                 >
                   <label
-                    class="bx--label bx--label--disabled"
+                    class="cds--label cds--label--disabled"
+                    dir="auto"
                     for="Dropdown"
                   >
                     <div
@@ -1211,22 +1312,24 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </div>
                   </label>
                   <div
-                    class="bx--number__input-wrapper"
+                    class="cds--number__input-wrapper"
                   >
                     <input
+                      aria-invalid="false"
                       disabled=""
                       id="Dropdown"
+                      inputmode="decimal"
                       pattern="[0-9]*"
                       step="1"
                       type="number"
                       value="10"
                     />
                     <div
-                      class="bx--number__controls"
+                      class="cds--number__controls"
                     >
                       <button
                         aria-label="Decrement number"
-                        class="bx--number__control-btn down-icon"
+                        class="cds--number__control-btn down-icon"
                         disabled=""
                         tabindex="-1"
                         title="Decrement number"
@@ -1249,11 +1352,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                       <button
                         aria-label="Increment number"
-                        class="bx--number__control-btn up-icon"
+                        class="cds--number__control-btn up-icon"
                         disabled=""
                         tabindex="-1"
                         title="Increment number"
@@ -1271,12 +1374,12 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+                            d="M17 15 17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
                           />
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                     </div>
                   </div>
@@ -1289,12 +1392,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
               style="margin-right: 5px;"
             >
               <div
-                class="bx--dropdown__wrapper bx--list-box__wrapper"
+                class="cds--dropdown__wrapper cds--list-box__wrapper"
               >
                 <label
-                  class="bx--label bx--label--disabled"
-                  for="downshift-66-toggle-button"
-                  id="downshift-66-label"
+                  class="cds--label cds--label--disabled"
+                  id="downshift-_r_7j_-label"
                 >
                   <div
                     class="titleText"
@@ -1305,24 +1407,28 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                   </div>
                 </label>
                 <div
-                  class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                  class="cds--dropdown cds--dropdown--disabled cds--list-box"
                   id="Dropdown"
                 >
                   <button
-                    aria-disabled="true"
+                    aria-activedescendant=""
+                    aria-controls="downshift-_r_7j_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-66-label downshift-66-toggle-button"
-                    class="bx--list-box__field"
+                    aria-labelledby="downshift-_r_7j_-label"
+                    class="cds--list-box__field"
                     disabled=""
-                    id="downshift-66-toggle-button"
+                    id="downshift-_r_7j_-toggle-button"
+                    role="combobox"
+                    tabindex="0"
+                    title=""
                     type="button"
                   >
                     <span
-                      class="bx--list-box__label"
+                      class="cds--list-box__label"
                     />
                     <div
-                      class="bx--list-box__menu-icon"
+                      class="cds--list-box__menu-icon"
                     >
                       <svg
                         aria-label="Open menu"
@@ -1337,7 +1443,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                         />
                         <title>
                           Open menu
@@ -1345,12 +1451,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                       </svg>
                     </div>
                   </button>
-                  <div
-                    aria-labelledby="downshift-66-label"
-                    class="bx--list-box__menu"
-                    id="downshift-66-menu"
+                  <ul
+                    aria-labelledby="downshift-_r_7j_-label"
+                    class="cds--list-box__menu"
+                    id="downshift-_r_7j_-menu"
                     role="listbox"
-                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -1361,17 +1466,18 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
             data-testid="datePicker"
           >
             <div
-              class="bx--form-item"
+              class="cds--form-item"
+              disabled=""
             >
               <div
-                class="bx--date-picker bx--date-picker--single"
-                disabled=""
+                class="cds--date-picker cds--date-picker--single"
               >
                 <div
-                  class="bx--date-picker-container"
+                  class="cds--date-picker-container"
                 >
                   <label
-                    class="bx--label bx--label--disabled"
+                    class="cds--label cds--label--disabled"
+                    dir="auto"
                     for="Dropdown"
                   >
                     <div
@@ -1383,34 +1489,36 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </div>
                   </label>
                   <div
-                    class="bx--date-picker-input__wrapper"
+                    class="cds--date-picker-input__wrapper"
                   >
-                    <input
-                      autocomplete="off"
-                      class="bx--date-picker__input bx--date-picker__input--md flatpickr-input"
-                      disabled=""
-                      id="Dropdown"
-                      pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
-                      placeholder="DD MM YYYY"
-                      style="width: 250px;"
-                      type="text"
-                    />
-                    <svg
-                      aria-hidden="true"
-                      class="bx--date-picker__icon"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      role="img"
-                      viewBox="0 0 32 32"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20	V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
+                    <span>
+                      <input
+                        autocomplete="off"
+                        class="cds--date-picker__input cds--date-picker__input--md flatpickr-input"
+                        disabled=""
+                        id="Dropdown"
+                        pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
+                        placeholder="DD MM YYYY"
+                        style="width: 250px;"
+                        type="text"
                       />
-                    </svg>
+                      <svg
+                        aria-hidden="true"
+                        class="cds--date-picker__icon"
+                        fill="currentColor"
+                        focusable="false"
+                        height="16"
+                        preserveAspectRatio="xMidYMid meet"
+                        role="img"
+                        viewBox="0 0 32 32"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20 V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
+                        />
+                      </svg>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1426,12 +1534,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
             style="margin-right: 5px;"
           >
             <div
-              class="bx--dropdown__wrapper bx--list-box__wrapper"
+              class="cds--dropdown__wrapper cds--list-box__wrapper"
             >
               <label
-                class="bx--label bx--label--disabled"
-                for="downshift-67-toggle-button"
-                id="downshift-67-label"
+                class="cds--label cds--label--disabled"
+                id="downshift-_r_7m_-label"
               >
                 <div
                   class="titleText"
@@ -1442,27 +1549,30 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                 </div>
               </label>
               <div
-                class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                class="cds--dropdown cds--dropdown--disabled cds--list-box"
                 id="DropdownFrequency"
               >
                 <button
-                  aria-disabled="true"
+                  aria-activedescendant=""
+                  aria-controls="downshift-_r_7m_-menu"
                   aria-expanded="false"
                   aria-haspopup="listbox"
-                  aria-labelledby="downshift-67-label downshift-67-toggle-button"
-                  class="bx--list-box__field"
+                  aria-labelledby="downshift-_r_7m_-label"
+                  class="cds--list-box__field"
                   disabled=""
-                  id="downshift-67-toggle-button"
+                  id="downshift-_r_7m_-toggle-button"
+                  role="combobox"
+                  tabindex="0"
                   title="Twice a day"
                   type="button"
                 >
                   <span
-                    class="bx--list-box__label"
+                    class="cds--list-box__label"
                   >
                     Twice a day
                   </span>
                   <div
-                    class="bx--list-box__menu-icon"
+                    class="cds--list-box__menu-icon"
                   >
                     <svg
                       aria-label="Open menu"
@@ -1477,7 +1587,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                       <title>
                         Open menu
@@ -1485,12 +1595,11 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </svg>
                   </div>
                 </button>
-                <div
-                  aria-labelledby="downshift-67-label"
-                  class="bx--list-box__menu"
-                  id="downshift-67-menu"
+                <ul
+                  aria-labelledby="downshift-_r_7m_-label"
+                  class="cds--list-box__menu"
+                  id="downshift-_r_7m_-menu"
                   role="listbox"
-                  tabindex="-1"
                 />
               </div>
             </div>
@@ -1520,10 +1629,10 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label bx--label--disabled"
+                    class="cds--label cds--label--disabled"
                     for="time-selector"
                   >
                     <div
@@ -1535,14 +1644,14 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         disabled=""
                         id="time-selector"
                         maxlength="5"
@@ -1560,10 +1669,10 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label"
+                    class="cds--label"
                     for="time-selector"
                   >
                     <div
@@ -1575,14 +1684,14 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         id="time-selector"
                         maxlength="5"
                         pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -1620,10 +1729,10 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label"
+                    class="cds--label"
                     for="time-selector"
                   >
                     <div
@@ -1635,14 +1744,14 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         id="time-selector"
                         maxlength="5"
                         pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -1659,10 +1768,10 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label"
+                    class="cds--label"
                     for="time-selector"
                   >
                     <div
@@ -1674,14 +1783,14 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         id="time-selector"
                         maxlength="5"
                         pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -1719,10 +1828,10 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label"
+                    class="cds--label"
                     for="time-selector"
                   >
                     <div
@@ -1734,14 +1843,14 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         id="time-selector"
                         maxlength="5"
                         pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -1761,27 +1870,37 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
           class="instructions"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item instruction"
           >
             <div
-              class="bx--text-area__label-wrapper"
+              class="cds--text-area__label-wrapper"
             >
               <label
-                class="bx--label bx--label--disabled"
+                class="cds--label cds--label--disabled"
+                dir="auto"
               >
                 Instruction
               </label>
             </div>
             <div
-              class="bx--text-area__wrapper"
+              class="cds--text-area__wrapper cds--text-area__wrapper--readonly"
             >
               <textarea
-                class="bx--text-area instruction"
-                cols="50"
+                aria-invalid="false"
+                aria-readonly="true"
+                class="cds--text-area"
                 disabled=""
+                placeholder=""
                 readonly=""
                 rows="1"
+                style="width: 100%;"
                 type="text"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-area__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -1790,27 +1909,37 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
           class="additional-instructions"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item additional-instruction"
           >
             <div
-              class="bx--text-area__label-wrapper"
+              class="cds--text-area__label-wrapper"
             >
               <label
-                class="bx--label bx--label--disabled"
+                class="cds--label cds--label--disabled"
+                dir="auto"
               >
                 Additional Instruction
               </label>
             </div>
             <div
-              class="bx--text-area__wrapper"
+              class="cds--text-area__wrapper cds--text-area__wrapper--readonly"
             >
               <textarea
-                class="bx--text-area additional-instruction"
-                cols="50"
+                aria-invalid="false"
+                aria-readonly="true"
+                class="cds--text-area"
                 disabled=""
+                placeholder=""
                 readonly=""
                 rows="1"
+                style="width: 100%;"
                 type="text"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-area__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -1819,26 +1948,35 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
           class="notes-sections"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item notes-section"
           >
             <div
-              class="bx--text-area__label-wrapper"
+              class="cds--text-area__label-wrapper"
             >
               <label
-                class="bx--label"
+                class="cds--label"
+                dir="auto"
               >
                 Notes
               </label>
             </div>
             <div
-              class="bx--text-area__wrapper"
+              class="cds--text-area__wrapper"
             >
               <textarea
-                class="bx--text-area notes-section"
-                cols="50"
+                aria-invalid="false"
+                class="cds--text-area"
                 data-testid="notes-section"
+                placeholder=""
                 rows="3"
+                style="width: 100%;"
                 type="text"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-area__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -1848,9 +1986,8 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
         class="footer"
       >
         <button
-          class="cancel-button-slider bx--btn bx--btn--secondary"
+          class="cancel-button-slider cds--btn cds--btn--secondary"
           data-testid="cancel"
-          tabindex="0"
           type="button"
         >
           <span>
@@ -1858,8 +1995,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
           </span>
         </button>
         <button
-          class="save-button-slider bx--btn bx--btn--primary"
-          tabindex="0"
+          class="save-button-slider cds--btn cds--btn--primary"
           type="button"
         >
           Save
@@ -1884,34 +2020,49 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
       <div
         class="close-icon"
       >
-        <button
-          class="bx--btn bx--btn--ghost bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
-          tabindex="0"
-          type="button"
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
         >
           <div
-            class="bx--assistive-text"
+            class="cds--tooltip-trigger__wrapper"
           >
-            Close
+            <button
+              aria-labelledby="tooltip-_r_91_"
+              class="cds--btn cds--btn--ghost cds--btn--icon-only"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                />
+              </svg>
+            </button>
           </div>
-          <svg
+          <span
             aria-hidden="true"
-            aria-label="Close"
-            class="bx--btn__icon"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            role="img"
-            viewBox="0 0 32 32"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
+            class="cds--popover"
+            id="tooltip-_r_91_"
+            role="tooltip"
           >
-            <path
-              d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Close
+            </span>
+            <span
+              class="cds--popover-caret"
             />
-          </svg>
-        </button>
+          </span>
+        </span>
       </div>
     </div>
     <div
@@ -1921,26 +2072,37 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
         style="padding: 20px 20px 120px 20px;"
       >
         <div
-          class="bx--form-item bx--text-input-wrapper"
+          class="cds--form-item drug-name cds--text-input-wrapper"
         >
-          <label
-            class="bx--label bx--label--disabled"
-            for="drug-name"
-          >
-            Drug Name
-          </label>
           <div
-            class="bx--text-input__field-outer-wrapper"
+            class="cds--text-input__label-wrapper"
+          >
+            <label
+              class="cds--label cds--label--disabled"
+              dir="auto"
+              for="drug-name"
+            >
+              Drug Name
+            </label>
+          </div>
+          <div
+            class="cds--text-input__field-outer-wrapper"
           >
             <div
-              class="bx--text-input__field-wrapper"
+              class="cds--text-input__field-wrapper"
             >
               <input
-                class="bx--text-input drug-name bx--text-input--md"
+                class="cds--text-input"
                 disabled=""
                 id="drug-name"
                 type="text"
                 value="Aspirin"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-input__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -1952,16 +2114,17 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
             class="dose-field-with-units"
           >
             <div
-              class="-TaKcdG2c0NUzkYaFWOzlQ=="
+              class="NW023la29jMKwMarLfBe"
             >
               <div
-                class="bx--form-item"
+                class="cds--form-item"
               >
                 <div
-                  class="bx--number bx--number--helpertext"
+                  class="cds--number cds--number--helpertext cds--number--md"
                 >
                   <label
-                    class="bx--label bx--label--disabled"
+                    class="cds--label cds--label--disabled"
+                    dir="auto"
                     for="Dropdown"
                   >
                     <div
@@ -1973,22 +2136,24 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </label>
                   <div
-                    class="bx--number__input-wrapper"
+                    class="cds--number__input-wrapper"
                   >
                     <input
+                      aria-invalid="false"
                       disabled=""
                       id="Dropdown"
+                      inputmode="decimal"
                       pattern="[0-9]*"
                       step="1"
                       type="number"
                       value="10"
                     />
                     <div
-                      class="bx--number__controls"
+                      class="cds--number__controls"
                     >
                       <button
                         aria-label="Decrement number"
-                        class="bx--number__control-btn down-icon"
+                        class="cds--number__control-btn down-icon"
                         disabled=""
                         tabindex="-1"
                         title="Decrement number"
@@ -2011,11 +2176,11 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                       <button
                         aria-label="Increment number"
-                        class="bx--number__control-btn up-icon"
+                        class="cds--number__control-btn up-icon"
                         disabled=""
                         tabindex="-1"
                         title="Increment number"
@@ -2033,12 +2198,12 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+                            d="M17 15 17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
                           />
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                     </div>
                   </div>
@@ -2051,12 +2216,11 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               style="margin-right: 5px;"
             >
               <div
-                class="bx--dropdown__wrapper bx--list-box__wrapper"
+                class="cds--dropdown__wrapper cds--list-box__wrapper"
               >
                 <label
-                  class="bx--label bx--label--disabled"
-                  for="downshift-92-toggle-button"
-                  id="downshift-92-label"
+                  class="cds--label cds--label--disabled"
+                  id="downshift-_r_95_-label"
                 >
                   <div
                     class="titleText"
@@ -2067,27 +2231,30 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                   </div>
                 </label>
                 <div
-                  class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                  class="cds--dropdown cds--dropdown--disabled cds--list-box"
                   id="Dropdown"
                 >
                   <button
-                    aria-disabled="true"
+                    aria-activedescendant=""
+                    aria-controls="downshift-_r_95_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-92-label downshift-92-toggle-button"
-                    class="bx--list-box__field"
+                    aria-labelledby="downshift-_r_95_-label"
+                    class="cds--list-box__field"
                     disabled=""
-                    id="downshift-92-toggle-button"
+                    id="downshift-_r_95_-toggle-button"
+                    role="combobox"
+                    tabindex="0"
                     title="Tablet"
                     type="button"
                   >
                     <span
-                      class="bx--list-box__label"
+                      class="cds--list-box__label"
                     >
                       Tablet
                     </span>
                     <div
-                      class="bx--list-box__menu-icon"
+                      class="cds--list-box__menu-icon"
                     >
                       <svg
                         aria-label="Open menu"
@@ -2102,7 +2269,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                         />
                         <title>
                           Open menu
@@ -2110,12 +2277,11 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                       </svg>
                     </div>
                   </button>
-                  <div
-                    aria-labelledby="downshift-92-label"
-                    class="bx--list-box__menu"
-                    id="downshift-92-menu"
+                  <ul
+                    aria-labelledby="downshift-_r_95_-label"
+                    class="cds--list-box__menu"
+                    id="downshift-_r_95_-menu"
                     role="listbox"
-                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -2130,12 +2296,11 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               style="margin-right: 5px;"
             >
               <div
-                class="bx--dropdown__wrapper bx--list-box__wrapper"
+                class="cds--dropdown__wrapper cds--list-box__wrapper"
               >
                 <label
-                  class="bx--label bx--label--disabled"
-                  for="downshift-93-toggle-button"
-                  id="downshift-93-label"
+                  class="cds--label cds--label--disabled"
+                  id="downshift-_r_97_-label"
                 >
                   <div
                     class="titleText"
@@ -2146,24 +2311,28 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                   </div>
                 </label>
                 <div
-                  class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                  class="cds--dropdown cds--dropdown--disabled cds--list-box"
                   id="Dropdown"
                 >
                   <button
-                    aria-disabled="true"
+                    aria-activedescendant=""
+                    aria-controls="downshift-_r_97_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-93-label downshift-93-toggle-button"
-                    class="bx--list-box__field"
+                    aria-labelledby="downshift-_r_97_-label"
+                    class="cds--list-box__field"
                     disabled=""
-                    id="downshift-93-toggle-button"
+                    id="downshift-_r_97_-toggle-button"
+                    role="combobox"
+                    tabindex="0"
+                    title=""
                     type="button"
                   >
                     <span
-                      class="bx--list-box__label"
+                      class="cds--list-box__label"
                     />
                     <div
-                      class="bx--list-box__menu-icon"
+                      class="cds--list-box__menu-icon"
                     >
                       <svg
                         aria-label="Open menu"
@@ -2178,7 +2347,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                         />
                         <title>
                           Open menu
@@ -2186,12 +2355,11 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                       </svg>
                     </div>
                   </button>
-                  <div
-                    aria-labelledby="downshift-93-label"
-                    class="bx--list-box__menu"
-                    id="downshift-93-menu"
+                  <ul
+                    aria-labelledby="downshift-_r_97_-label"
+                    class="cds--list-box__menu"
+                    id="downshift-_r_97_-menu"
                     role="listbox"
-                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -2205,16 +2373,17 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
             class="duration-field-with-units"
           >
             <div
-              class="-TaKcdG2c0NUzkYaFWOzlQ=="
+              class="NW023la29jMKwMarLfBe"
             >
               <div
-                class="bx--form-item"
+                class="cds--form-item"
               >
                 <div
-                  class="bx--number bx--number--helpertext"
+                  class="cds--number cds--number--helpertext cds--number--md"
                 >
                   <label
-                    class="bx--label bx--label--disabled"
+                    class="cds--label cds--label--disabled"
+                    dir="auto"
                     for="Dropdown"
                   >
                     <div
@@ -2226,22 +2395,24 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </label>
                   <div
-                    class="bx--number__input-wrapper"
+                    class="cds--number__input-wrapper"
                   >
                     <input
+                      aria-invalid="false"
                       disabled=""
                       id="Dropdown"
+                      inputmode="decimal"
                       pattern="[0-9]*"
                       step="1"
                       type="number"
                       value="10"
                     />
                     <div
-                      class="bx--number__controls"
+                      class="cds--number__controls"
                     >
                       <button
                         aria-label="Decrement number"
-                        class="bx--number__control-btn down-icon"
+                        class="cds--number__control-btn down-icon"
                         disabled=""
                         tabindex="-1"
                         title="Decrement number"
@@ -2264,11 +2435,11 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                       <button
                         aria-label="Increment number"
-                        class="bx--number__control-btn up-icon"
+                        class="cds--number__control-btn up-icon"
                         disabled=""
                         tabindex="-1"
                         title="Increment number"
@@ -2286,12 +2457,12 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+                            d="M17 15 17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
                           />
                         </svg>
                       </button>
                       <div
-                        class="bx--number__rule-divider"
+                        class="cds--number__rule-divider"
                       />
                     </div>
                   </div>
@@ -2304,12 +2475,11 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               style="margin-right: 5px;"
             >
               <div
-                class="bx--dropdown__wrapper bx--list-box__wrapper"
+                class="cds--dropdown__wrapper cds--list-box__wrapper"
               >
                 <label
-                  class="bx--label bx--label--disabled"
-                  for="downshift-94-toggle-button"
-                  id="downshift-94-label"
+                  class="cds--label cds--label--disabled"
+                  id="downshift-_r_99_-label"
                 >
                   <div
                     class="titleText"
@@ -2320,24 +2490,28 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                   </div>
                 </label>
                 <div
-                  class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                  class="cds--dropdown cds--dropdown--disabled cds--list-box"
                   id="Dropdown"
                 >
                   <button
-                    aria-disabled="true"
+                    aria-activedescendant=""
+                    aria-controls="downshift-_r_99_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-94-label downshift-94-toggle-button"
-                    class="bx--list-box__field"
+                    aria-labelledby="downshift-_r_99_-label"
+                    class="cds--list-box__field"
                     disabled=""
-                    id="downshift-94-toggle-button"
+                    id="downshift-_r_99_-toggle-button"
+                    role="combobox"
+                    tabindex="0"
+                    title=""
                     type="button"
                   >
                     <span
-                      class="bx--list-box__label"
+                      class="cds--list-box__label"
                     />
                     <div
-                      class="bx--list-box__menu-icon"
+                      class="cds--list-box__menu-icon"
                     >
                       <svg
                         aria-label="Open menu"
@@ -2352,7 +2526,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                         />
                         <title>
                           Open menu
@@ -2360,12 +2534,11 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                       </svg>
                     </div>
                   </button>
-                  <div
-                    aria-labelledby="downshift-94-label"
-                    class="bx--list-box__menu"
-                    id="downshift-94-menu"
+                  <ul
+                    aria-labelledby="downshift-_r_99_-label"
+                    class="cds--list-box__menu"
+                    id="downshift-_r_99_-menu"
                     role="listbox"
-                    tabindex="-1"
                   />
                 </div>
               </div>
@@ -2376,17 +2549,18 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
             data-testid="datePicker"
           >
             <div
-              class="bx--form-item"
+              class="cds--form-item"
+              disabled=""
             >
               <div
-                class="bx--date-picker bx--date-picker--single"
-                disabled=""
+                class="cds--date-picker cds--date-picker--single"
               >
                 <div
-                  class="bx--date-picker-container"
+                  class="cds--date-picker-container"
                 >
                   <label
-                    class="bx--label bx--label--disabled"
+                    class="cds--label cds--label--disabled"
+                    dir="auto"
                     for="Dropdown"
                   >
                     <div
@@ -2398,34 +2572,36 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </label>
                   <div
-                    class="bx--date-picker-input__wrapper"
+                    class="cds--date-picker-input__wrapper"
                   >
-                    <input
-                      autocomplete="off"
-                      class="bx--date-picker__input bx--date-picker__input--md flatpickr-input"
-                      disabled=""
-                      id="Dropdown"
-                      pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
-                      placeholder="DD MM YYYY"
-                      style="width: 250px;"
-                      type="text"
-                    />
-                    <svg
-                      aria-hidden="true"
-                      class="bx--date-picker__icon"
-                      fill="currentColor"
-                      focusable="false"
-                      height="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      role="img"
-                      viewBox="0 0 32 32"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20	V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
+                    <span>
+                      <input
+                        autocomplete="off"
+                        class="cds--date-picker__input cds--date-picker__input--md flatpickr-input"
+                        disabled=""
+                        id="Dropdown"
+                        pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
+                        placeholder="DD MM YYYY"
+                        style="width: 250px;"
+                        type="text"
                       />
-                    </svg>
+                      <svg
+                        aria-hidden="true"
+                        class="cds--date-picker__icon"
+                        fill="currentColor"
+                        focusable="false"
+                        height="16"
+                        preserveAspectRatio="xMidYMid meet"
+                        role="img"
+                        viewBox="0 0 32 32"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20 V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
+                        />
+                      </svg>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -2441,12 +2617,11 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
             style="margin-right: 5px;"
           >
             <div
-              class="bx--dropdown__wrapper bx--list-box__wrapper"
+              class="cds--dropdown__wrapper cds--list-box__wrapper"
             >
               <label
-                class="bx--label bx--label--disabled"
-                for="downshift-95-toggle-button"
-                id="downshift-95-label"
+                class="cds--label cds--label--disabled"
+                id="downshift-_r_9c_-label"
               >
                 <div
                   class="titleText"
@@ -2457,27 +2632,30 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                 </div>
               </label>
               <div
-                class="bx--dropdown bx--dropdown--disabled bx--list-box"
+                class="cds--dropdown cds--dropdown--disabled cds--list-box"
                 id="DropdownFrequency"
               >
                 <button
-                  aria-disabled="true"
+                  aria-activedescendant=""
+                  aria-controls="downshift-_r_9c_-menu"
                   aria-expanded="false"
                   aria-haspopup="listbox"
-                  aria-labelledby="downshift-95-label downshift-95-toggle-button"
-                  class="bx--list-box__field"
+                  aria-labelledby="downshift-_r_9c_-label"
+                  class="cds--list-box__field"
                   disabled=""
-                  id="downshift-95-toggle-button"
+                  id="downshift-_r_9c_-toggle-button"
+                  role="combobox"
+                  tabindex="0"
                   title="Twice a day"
                   type="button"
                 >
                   <span
-                    class="bx--list-box__label"
+                    class="cds--list-box__label"
                   >
                     Twice a day
                   </span>
                   <div
-                    class="bx--list-box__menu-icon"
+                    class="cds--list-box__menu-icon"
                   >
                     <svg
                       aria-label="Open menu"
@@ -2492,7 +2670,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                       <title>
                         Open menu
@@ -2500,12 +2678,11 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </svg>
                   </div>
                 </button>
-                <div
-                  aria-labelledby="downshift-95-label"
-                  class="bx--list-box__menu"
-                  id="downshift-95-menu"
+                <ul
+                  aria-labelledby="downshift-_r_9c_-label"
+                  class="cds--list-box__menu"
+                  id="downshift-_r_9c_-menu"
                   role="listbox"
-                  tabindex="-1"
                 />
               </div>
             </div>
@@ -2535,10 +2712,10 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label bx--label--disabled"
+                    class="cds--label cds--label--disabled"
                     for="time-selector"
                   >
                     <div
@@ -2550,14 +2727,14 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         disabled=""
                         id="time-selector"
                         maxlength="5"
@@ -2575,10 +2752,10 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label"
+                    class="cds--label"
                     for="time-selector"
                   >
                     <div
@@ -2590,14 +2767,14 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         id="time-selector"
                         maxlength="5"
                         pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -2635,10 +2812,10 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label"
+                    class="cds--label"
                     for="time-selector"
                   >
                     <div
@@ -2650,14 +2827,14 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         id="time-selector"
                         maxlength="5"
                         pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -2674,10 +2851,10 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label"
+                    class="cds--label"
                     for="time-selector"
                   >
                     <div
@@ -2689,14 +2866,14 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         id="time-selector"
                         maxlength="5"
                         pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -2734,10 +2911,10 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                 class="schedule-time"
               >
                 <div
-                  class="bx--form-item"
+                  class="cds--form-item"
                 >
                   <label
-                    class="bx--label"
+                    class="cds--label"
                     for="time-selector"
                   >
                     <div
@@ -2749,14 +2926,14 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </label>
                   <div
-                    class="bx--time-picker"
+                    class="cds--time-picker cds--time-picker--md"
                   >
                     <div
-                      class="bx--time-picker__input"
+                      class="cds--time-picker__input"
                     >
                       <input
                         autocomplete="off"
-                        class="bx--time-picker__input-field bx--text-input"
+                        class="cds--time-picker__input-field cds--text-input"
                         id="time-selector"
                         maxlength="5"
                         pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -2776,27 +2953,37 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
           class="instructions"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item instruction"
           >
             <div
-              class="bx--text-area__label-wrapper"
+              class="cds--text-area__label-wrapper"
             >
               <label
-                class="bx--label bx--label--disabled"
+                class="cds--label cds--label--disabled"
+                dir="auto"
               >
                 Instruction
               </label>
             </div>
             <div
-              class="bx--text-area__wrapper"
+              class="cds--text-area__wrapper cds--text-area__wrapper--readonly"
             >
               <textarea
-                class="bx--text-area instruction"
-                cols="50"
+                aria-invalid="false"
+                aria-readonly="true"
+                class="cds--text-area"
                 disabled=""
+                placeholder=""
                 readonly=""
                 rows="1"
+                style="width: 100%;"
                 type="text"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-area__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -2805,27 +2992,37 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
           class="additional-instructions"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item additional-instruction"
           >
             <div
-              class="bx--text-area__label-wrapper"
+              class="cds--text-area__label-wrapper"
             >
               <label
-                class="bx--label bx--label--disabled"
+                class="cds--label cds--label--disabled"
+                dir="auto"
               >
                 Additional Instruction
               </label>
             </div>
             <div
-              class="bx--text-area__wrapper"
+              class="cds--text-area__wrapper cds--text-area__wrapper--readonly"
             >
               <textarea
-                class="bx--text-area additional-instruction"
-                cols="50"
+                aria-invalid="false"
+                aria-readonly="true"
+                class="cds--text-area"
                 disabled=""
+                placeholder=""
                 readonly=""
                 rows="1"
+                style="width: 100%;"
                 type="text"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-area__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -2834,26 +3031,35 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
           class="notes-sections"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item notes-section"
           >
             <div
-              class="bx--text-area__label-wrapper"
+              class="cds--text-area__label-wrapper"
             >
               <label
-                class="bx--label"
+                class="cds--label"
+                dir="auto"
               >
                 Notes
               </label>
             </div>
             <div
-              class="bx--text-area__wrapper"
+              class="cds--text-area__wrapper"
             >
               <textarea
-                class="bx--text-area notes-section"
-                cols="50"
+                aria-invalid="false"
+                class="cds--text-area"
                 data-testid="notes-section"
+                placeholder=""
                 rows="3"
+                style="width: 100%;"
                 type="text"
+              />
+              <span
+                aria-atomic="true"
+                aria-live="assertive"
+                class="cds--text-area__counter-alert"
+                role="alert"
               />
             </div>
           </div>
@@ -2863,9 +3069,8 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
         class="footer"
       >
         <button
-          class="cancel-button-slider bx--btn bx--btn--secondary"
+          class="cancel-button-slider cds--btn cds--btn--secondary"
           data-testid="cancel"
-          tabindex="0"
           type="button"
         >
           <span>
@@ -2873,8 +3078,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
           </span>
         </button>
         <button
-          class="save-button-slider bx--btn bx--btn--primary"
-          tabindex="0"
+          class="save-button-slider cds--btn cds--btn--primary"
           type="button"
         >
           Save

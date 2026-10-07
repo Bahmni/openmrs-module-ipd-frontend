@@ -26,10 +26,10 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots  
           class="schedule-time"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item"
           >
             <label
-              class="bx--label"
+              class="cds--label"
               for="time-selector"
             >
               <div
@@ -41,14 +41,14 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots  
               </div>
             </label>
             <div
-              class="bx--time-picker"
+              class="cds--time-picker cds--time-picker--md"
             >
               <div
-                class="bx--time-picker__input"
+                class="cds--time-picker__input"
               >
                 <input
                   autocomplete="off"
-                  class="bx--time-picker__input-field bx--text-input"
+                  class="cds--time-picker__input-field cds--text-input"
                   id="time-selector"
                   maxlength="5"
                   pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -65,10 +65,10 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots  
           class="schedule-time"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item"
           >
             <label
-              class="bx--label"
+              class="cds--label"
               for="time-selector"
             >
               <div
@@ -80,14 +80,14 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots  
               </div>
             </label>
             <div
-              class="bx--time-picker"
+              class="cds--time-picker cds--time-picker--md"
             >
               <div
-                class="bx--time-picker__input"
+                class="cds--time-picker__input"
               >
                 <input
                   autocomplete="off"
-                  class="bx--time-picker__input-field bx--text-input"
+                  class="cds--time-picker__input-field cds--text-input"
                   id="time-selector"
                   maxlength="5"
                   pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -104,10 +104,10 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots  
           class="schedule-time"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item"
           >
             <label
-              class="bx--label"
+              class="cds--label"
               for="time-selector"
             >
               <div
@@ -119,14 +119,14 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots  
               </div>
             </label>
             <div
-              class="bx--time-picker"
+              class="cds--time-picker cds--time-picker--md"
             >
               <div
-                class="bx--time-picker__input"
+                class="cds--time-picker__input"
               >
                 <input
                   autocomplete="off"
-                  class="bx--time-picker__input-field bx--text-input"
+                  class="cds--time-picker__input-field cds--text-input"
                   id="time-selector"
                   maxlength="5"
                   pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -171,10 +171,10 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
           class="schedule-time"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item"
           >
             <label
-              class="bx--label"
+              class="cds--label"
               for="time-selector"
             >
               <div
@@ -186,14 +186,14 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
               </div>
             </label>
             <div
-              class="bx--time-picker"
+              class="cds--time-picker cds--time-picker--md"
             >
               <div
-                class="bx--time-picker__input"
+                class="cds--time-picker__input"
               >
                 <input
                   autocomplete="off"
-                  class="bx--time-picker__input-field bx--text-input"
+                  class="cds--time-picker__input-field cds--text-input"
                   id="time-selector"
                   maxlength="5"
                   pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -210,10 +210,10 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
           class="schedule-time"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item"
           >
             <label
-              class="bx--label"
+              class="cds--label"
               for="time-selector"
             >
               <div
@@ -225,14 +225,14 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
               </div>
             </label>
             <div
-              class="bx--time-picker"
+              class="cds--time-picker cds--time-picker--md"
             >
               <div
-                class="bx--time-picker__input"
+                class="cds--time-picker__input"
               >
                 <input
                   autocomplete="off"
-                  class="bx--time-picker__input-field bx--text-input"
+                  class="cds--time-picker__input-field cds--text-input"
                   id="time-selector"
                   maxlength="5"
                   pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -249,10 +249,10 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
           class="schedule-time"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item"
           >
             <label
-              class="bx--label"
+              class="cds--label"
               for="time-selector"
             >
               <div
@@ -264,14 +264,14 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
               </div>
             </label>
             <div
-              class="bx--time-picker"
+              class="cds--time-picker cds--time-picker--md"
             >
               <div
-                class="bx--time-picker__input"
+                class="cds--time-picker__input"
               >
                 <input
                   autocomplete="off"
-                  class="bx--time-picker__input-field bx--text-input"
+                  class="cds--time-picker__input-field cds--text-input"
                   id="time-selector"
                   maxlength="5"
                   pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -309,10 +309,10 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
           class="schedule-time"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item"
           >
             <label
-              class="bx--label"
+              class="cds--label"
               for="time-selector"
             >
               <div
@@ -324,14 +324,14 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
               </div>
             </label>
             <div
-              class="bx--time-picker"
+              class="cds--time-picker cds--time-picker--md"
             >
               <div
-                class="bx--time-picker__input"
+                class="cds--time-picker__input"
               >
                 <input
                   autocomplete="off"
-                  class="bx--time-picker__input-field bx--text-input"
+                  class="cds--time-picker__input-field cds--text-input"
                   id="time-selector"
                   maxlength="5"
                   pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -348,10 +348,10 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
           class="schedule-time"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item"
           >
             <label
-              class="bx--label"
+              class="cds--label"
               for="time-selector"
             >
               <div
@@ -363,14 +363,14 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
               </div>
             </label>
             <div
-              class="bx--time-picker"
+              class="cds--time-picker cds--time-picker--md"
             >
               <div
-                class="bx--time-picker__input"
+                class="cds--time-picker__input"
               >
                 <input
                   autocomplete="off"
-                  class="bx--time-picker__input-field bx--text-input"
+                  class="cds--time-picker__input-field cds--text-input"
                   id="time-selector"
                   maxlength="5"
                   pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -387,10 +387,10 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
           class="schedule-time"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item"
           >
             <label
-              class="bx--label"
+              class="cds--label"
               for="time-selector"
             >
               <div
@@ -402,14 +402,14 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
               </div>
             </label>
             <div
-              class="bx--time-picker"
+              class="cds--time-picker cds--time-picker--md"
             >
               <div
-                class="bx--time-picker__input"
+                class="cds--time-picker__input"
               >
                 <input
                   autocomplete="off"
-                  class="bx--time-picker__input-field bx--text-input"
+                  class="cds--time-picker__input-field cds--text-input"
                   id="time-selector"
                   maxlength="5"
                   pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -447,10 +447,10 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
           class="schedule-time"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item"
           >
             <label
-              class="bx--label"
+              class="cds--label"
               for="time-selector"
             >
               <div
@@ -462,14 +462,14 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
               </div>
             </label>
             <div
-              class="bx--time-picker"
+              class="cds--time-picker cds--time-picker--md"
             >
               <div
-                class="bx--time-picker__input"
+                class="cds--time-picker__input"
               >
                 <input
                   autocomplete="off"
-                  class="bx--time-picker__input-field bx--text-input"
+                  class="cds--time-picker__input-field cds--text-input"
                   id="time-selector"
                   maxlength="5"
                   pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -486,10 +486,10 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
           class="schedule-time"
         >
           <div
-            class="bx--form-item"
+            class="cds--form-item"
           >
             <label
-              class="bx--label"
+              class="cds--label"
               for="time-selector"
             >
               <div
@@ -501,14 +501,14 @@ exports[`ScheduleSection renders ScheduleSection component when firstday slots a
               </div>
             </label>
             <div
-              class="bx--time-picker"
+              class="cds--time-picker cds--time-picker--md"
             >
               <div
-                class="bx--time-picker__input"
+                class="cds--time-picker__input"
               >
                 <input
                   autocomplete="off"
-                  class="bx--time-picker__input-field bx--text-input"
+                  class="cds--time-picker__input-field cds--text-input"
                   id="time-selector"
                   maxlength="5"
                   pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"

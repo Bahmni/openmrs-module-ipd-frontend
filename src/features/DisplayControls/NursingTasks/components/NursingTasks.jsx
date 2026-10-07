@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import "../styles/NursingTasks.scss";
-import { Add16 } from "@carbon/icons-react";
+import { Add } from "@carbon/icons-react";
 import { items } from "../utils/constants";
 import {
   fetchMedicationNursingTasks,
@@ -20,7 +20,7 @@ import {
 } from "../../../../utils/DateTimeUtils";
 import { SliderContext } from "../../../../context/SliderContext";
 import UpdateNursingTasks from "./UpdateNursingTasks";
-import { Button, Dropdown, Loading } from "carbon-components-react";
+import { Button, Dropdown, Loading } from "@carbon/react";
 import AddEmergencyTasks from "./AddEmergencyTasks";
 import Notification from "../../../../components/Notification/Notification";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
@@ -35,7 +35,7 @@ import {
 } from "../../../../constants";
 import AdministrationLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
 import { IPDContext } from "../../../../context/IPDContext";
-import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
+import { ChevronLeft, ChevronRight, Time } from "@carbon/icons-react";
 import {
   currentShiftHoursArray,
   getDateTime,
@@ -467,9 +467,9 @@ export default function NursingTasks(props) {
             </div>
           )}
           <div className="shift-time">
-            {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {shiftStartDate} <span className="mr-5">|</span> <Time size={16} />{" "}
             {formattedShiftStartTime} <span className="to-text">to</span>{" "}
-            <Time16 /> {formattedShiftEndTime}
+            <Time size={16} /> {formattedShiftEndTime}
           </div>
         </div>
       );
@@ -485,9 +485,9 @@ export default function NursingTasks(props) {
             </div>
           )}
           <div className="shift-time">
-            {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {shiftStartDate} <span className="mr-5">|</span> <Time size={16} />{" "}
             {formattedShiftStartTime} <span className="to-text">to</span>{" "}
-            {shiftEndDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {shiftEndDate} <span className="mr-5">|</span> <Time size={16} />{" "}
             {formattedShiftEndTime}
           </div>
         </div>
@@ -515,7 +515,7 @@ export default function NursingTasks(props) {
           </Button>
           <Button
             disabled={isShiftsButtonsDisabled.previous}
-            renderIcon={ChevronLeft16}
+            renderIcon={ChevronLeft}
             kind="tertiary"
             isExpressive
             hasIconOnly
@@ -526,7 +526,7 @@ export default function NursingTasks(props) {
           />
           <Button
             disabled={isShiftsButtonsDisabled.next}
-            renderIcon={ChevronRight16}
+            renderIcon={ChevronRight}
             kind="tertiary"
             isExpressive
             hasIconOnly
@@ -560,7 +560,7 @@ export default function NursingTasks(props) {
               kind={"tertiary"}
               isExpressive
               size="default"
-              renderIcon={Add16}
+              renderIcon={Add}
               onClick={() => {
                 if (!isSliderOpen.emergencyTasks) {
                   updateEmergencyTasksSlider(true);

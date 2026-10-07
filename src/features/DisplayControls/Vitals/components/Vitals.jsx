@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { Column, Row, Tile, SkeletonText, Link } from "carbon-components-react";
+import { Column, Row, Tile, SkeletonText, Link } from "@carbon/react";
 import {
   getPatientVitals,
   getPatientVitalsHistory,
@@ -16,7 +16,7 @@ import { FormattedMessage } from "react-intl";
 import VitalsHistory from "./VitalsHistory";
 import BiometricsHistory from "./BiometricsHistory";
 import { vitalsHeaders } from "../utils/VitalsUtils";
-import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
+import { ChevronDown, ChevronUp } from "@carbon/icons-react";
 import { IPDContext } from "../../../../context/IPDContext";
 
 const Vitals = (props) => {
@@ -130,7 +130,7 @@ const Vitals = (props) => {
                 onClick={handleShowMore}
               >
                 {vitalsHistoryMessage}
-                <ChevronUp20 />
+                <ChevronUp size={20} />
               </Link>
             ) : (
               <Link
@@ -139,7 +139,7 @@ const Vitals = (props) => {
                 onClick={handleShowMore}
               >
                 {vitalsHistoryMessage}
-                <ChevronDown20 />
+                <ChevronDown size={20} />
               </Link>
             )}
           </div>

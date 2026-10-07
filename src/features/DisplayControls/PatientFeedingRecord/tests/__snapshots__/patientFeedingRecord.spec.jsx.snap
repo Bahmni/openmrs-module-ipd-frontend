@@ -12,63 +12,96 @@ exports[`PatientFeedingRecord should render PatientFeedingRecord 1`] = `
         class="period-header"
       >
         <button
-          class="margin-right-10 bx--btn bx--btn--tertiary bx--btn--expressive"
+          class="margin-right-10 cds--btn cds--layout--size-small cds--btn--tertiary cds--btn--expressive"
           data-testid="current-period"
-          tabindex="0"
           type="button"
         >
           Current Period
         </button>
-        <button
-          class="margin-right-6 bx--btn bx--btn--tertiary bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
-          data-testid="previous-shift"
-          tabindex="0"
-          type="button"
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
         >
           <div
-            class="bx--assistive-text"
-          />
-          <svg
-            aria-hidden="true"
-            class="bx--btn__icon"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
+            class="cds--tooltip-trigger__wrapper"
           >
-            <path
-              d="M5 8L10 3 10.7 3.7 6.4 8 10.7 12.3 10 13z"
+            <button
+              aria-describedby="tooltip-_r_c_"
+              class="margin-right-6 cds--btn cds--layout--size-sm cds--btn--tertiary cds--btn--expressive cds--btn--icon-only"
+              data-testid="previous-shift"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 8 10 3 10.7 3.7 6.4 8 10.7 12.3 10 13z"
+                />
+              </svg>
+            </button>
+          </div>
+          <span
+            aria-hidden="true"
+            class="cds--popover"
+            id="tooltip-_r_c_"
+            role="tooltip"
+          >
+            <span
+              class="cds--popover-content cds--tooltip-content"
             />
-          </svg>
-        </button>
-        <button
-          class="margin-right-10 bx--btn bx--btn--tertiary bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
-          data-testid="next-shift"
-          tabindex="0"
-          type="button"
+            <span
+              class="cds--popover-caret"
+            />
+          </span>
+        </span>
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
         >
           <div
-            class="bx--assistive-text"
-          />
-          <svg
-            aria-hidden="true"
-            class="bx--btn__icon"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 16 16"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
+            class="cds--tooltip-trigger__wrapper"
           >
-            <path
-              d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+            <button
+              aria-describedby="tooltip-_r_g_"
+              class="margin-right-10 cds--btn cds--layout--size-sm cds--btn--tertiary cds--btn--expressive cds--btn--icon-only"
+              data-testid="next-shift"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 16 16"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+                />
+              </svg>
+            </button>
+          </div>
+          <span
+            aria-hidden="true"
+            class="cds--popover"
+            id="tooltip-_r_g_"
+            role="tooltip"
+          >
+            <span
+              class="cds--popover-content cds--tooltip-content"
             />
-          </svg>
-        </button>
+            <span
+              class="cds--popover-caret"
+            />
+          </span>
+        </span>
         <div
           class="period-timing"
         >
@@ -97,7 +130,7 @@ exports[`PatientFeedingRecord should render PatientFeedingRecord 1`] = `
                 d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
               />
               <path
-                d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
+                d="M20.59 22 15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
               />
             </svg>
              
@@ -131,7 +164,7 @@ exports[`PatientFeedingRecord should render PatientFeedingRecord 1`] = `
                 d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
               />
               <path
-                d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
+                d="M20.59 22 15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
               />
             </svg>
              
@@ -154,56 +187,76 @@ exports[`PatientFeedingRecord should render PatientFeedingRecord 1`] = `
 exports[`PatientFeedingRecordTable should render PatientFeedingRecordTable 1`] = `
 <div>
   <div
-    class="bx--data-table-content"
+    class="cds--data-table-content"
   >
     <table
-      class="bx--data-table bx--data-table--normal bx--data-table--zebra bx--data-table--no-border"
+      class="cds--data-table cds--data-table--lg cds--data-table--zebra cds--data-table--visible-overflow-menu"
     >
       <thead>
         <tr>
           <th
+            id="data-table-1__header-dateAndTime"
             scope="col"
           >
             <div
-              class="bx--table-header-label"
+              class="cds--table-header-label"
             >
               Date and Time
+              <div
+                class="cds--table-header-label--decorator-inner"
+              />
             </div>
           </th>
           <th
+            id="data-table-1__header-shift"
             scope="col"
           >
             <div
-              class="bx--table-header-label"
+              class="cds--table-header-label"
             >
               Shift
+              <div
+                class="cds--table-header-label--decorator-inner"
+              />
             </div>
           </th>
           <th
+            id="data-table-1__header-route"
             scope="col"
           >
             <div
-              class="bx--table-header-label"
+              class="cds--table-header-label"
             >
               Route
+              <div
+                class="cds--table-header-label--decorator-inner"
+              />
             </div>
           </th>
           <th
+            id="data-table-1__header-feedType"
             scope="col"
           >
             <div
-              class="bx--table-header-label"
+              class="cds--table-header-label"
             >
               Feed Type
+              <div
+                class="cds--table-header-label--decorator-inner"
+              />
             </div>
           </th>
           <th
+            id="data-table-1__header-amount"
             scope="col"
           >
             <div
-              class="bx--table-header-label"
+              class="cds--table-header-label"
             >
               Amount
+              <div
+                class="cds--table-header-label--decorator-inner"
+              />
             </div>
           </th>
         </tr>

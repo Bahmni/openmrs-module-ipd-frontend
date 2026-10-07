@@ -9,63 +9,96 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
       class="drugchart-shift-header"
     >
       <button
-        class="margin-right-10 bx--btn bx--btn--tertiary bx--btn--expressive"
+        class="margin-right-10 cds--btn cds--layout--size-small cds--btn--tertiary cds--btn--expressive"
         data-testid="currentShift"
-        tabindex="0"
         type="button"
       >
         Current Shift
       </button>
-      <button
-        class="margin-right-6 bx--btn bx--btn--tertiary bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
-        data-testid="previousButton"
-        tabindex="0"
-        type="button"
+      <span
+        class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
       >
         <div
-          class="bx--assistive-text"
-        />
-        <svg
-          aria-hidden="true"
-          class="bx--btn__icon"
-          fill="currentColor"
-          focusable="false"
-          height="16"
-          preserveAspectRatio="xMidYMid meet"
-          viewBox="0 0 16 16"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
+          class="cds--tooltip-trigger__wrapper"
         >
-          <path
-            d="M5 8L10 3 10.7 3.7 6.4 8 10.7 12.3 10 13z"
+          <button
+            aria-describedby="tooltip-_r_i_"
+            class="margin-right-6 cds--btn cds--layout--size-sm cds--btn--tertiary cds--btn--expressive cds--btn--icon-only"
+            data-testid="previousButton"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 8 10 3 10.7 3.7 6.4 8 10.7 12.3 10 13z"
+              />
+            </svg>
+          </button>
+        </div>
+        <span
+          aria-hidden="true"
+          class="cds--popover"
+          id="tooltip-_r_i_"
+          role="tooltip"
+        >
+          <span
+            class="cds--popover-content cds--tooltip-content"
           />
-        </svg>
-      </button>
-      <button
-        class="margin-right-10 bx--btn bx--btn--tertiary bx--btn--expressive bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
-        data-testid="nextButton"
-        tabindex="0"
-        type="button"
+          <span
+            class="cds--popover-caret"
+          />
+        </span>
+      </span>
+      <span
+        class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
       >
         <div
-          class="bx--assistive-text"
-        />
-        <svg
-          aria-hidden="true"
-          class="bx--btn__icon"
-          fill="currentColor"
-          focusable="false"
-          height="16"
-          preserveAspectRatio="xMidYMid meet"
-          viewBox="0 0 16 16"
-          width="16"
-          xmlns="http://www.w3.org/2000/svg"
+          class="cds--tooltip-trigger__wrapper"
         >
-          <path
-            d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+          <button
+            aria-describedby="tooltip-_r_m_"
+            class="margin-right-10 cds--btn cds--layout--size-sm cds--btn--tertiary cds--btn--expressive cds--btn--icon-only"
+            data-testid="nextButton"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              focusable="false"
+              height="16"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 16 16"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11 8 6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+              />
+            </svg>
+          </button>
+        </div>
+        <span
+          aria-hidden="true"
+          class="cds--popover"
+          id="tooltip-_r_m_"
+          role="tooltip"
+        >
+          <span
+            class="cds--popover-content cds--tooltip-content"
           />
-        </svg>
-      </button>
+          <span
+            class="cds--popover-caret"
+          />
+        </span>
+      </span>
       <div
         class="shift-timing"
       >
@@ -94,7 +127,7 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
               d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
             />
             <path
-              d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
+              d="M20.59 22 15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
             />
           </svg>
            
@@ -120,7 +153,7 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
               d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"
             />
             <path
-              d="M20.59 22L15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
+              d="M20.59 22 15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"
             />
           </svg>
            
@@ -135,23 +168,19 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
       <div
         aria-atomic="true"
         aria-live="assertive"
-        class="bx--loading"
+        class="cds--loading"
       >
-        <label
-          class="bx--visually-hidden"
-          id="loading-id-6"
-        >
-          Active loading indicator
-        </label>
         <svg
-          class="bx--loading__svg"
+          aria-label="loading"
+          class="cds--loading__svg"
+          role="img"
           viewBox="0 0 100 100"
         >
           <title>
-            Active loading indicator
+            loading
           </title>
           <circle
-            class="bx--loading__stroke"
+            class="cds--loading__stroke"
             cx="50%"
             cy="50%"
             r="44"

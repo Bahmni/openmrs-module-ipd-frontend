@@ -6,10 +6,10 @@ exports[`StartTimeSection should match snapshot 1`] = `
     class="start-time"
   >
     <div
-      class="bx--form-item"
+      class="cds--form-item"
     >
       <label
-        class="bx--label"
+        class="cds--label"
         for="time-selector"
       >
         <div
@@ -26,14 +26,14 @@ exports[`StartTimeSection should match snapshot 1`] = `
         </div>
       </label>
       <div
-        class="bx--time-picker"
+        class="cds--time-picker cds--time-picker--md"
       >
         <div
-          class="bx--time-picker__input"
+          class="cds--time-picker__input"
         >
           <input
             autocomplete="off"
-            class="bx--time-picker__input-field bx--text-input"
+            class="cds--time-picker__input-field cds--text-input"
             id="time-selector"
             maxlength="5"
             pattern="(1[012]|[1-9]):[0-5][0-9](\\s)?"
@@ -44,46 +44,39 @@ exports[`StartTimeSection should match snapshot 1`] = `
           />
         </div>
         <div
-          class="bx--select bx--time-picker__select"
+          class="cds--select cds--time-picker__select"
         >
-          <label
-            class="bx--label bx--visually-hidden"
-            for="time-picker-select-1"
-          >
-            Choose a time
-          </label>
           <select
-            aria-label="open list of options"
-            class="bx--select-input"
+            aria-label="Choose a time"
+            class="cds--select-input"
             id="time-picker-select-1"
           >
             <option
-              class="bx--select-option"
+              class="cds--select-option"
               value="AM"
             >
               AM
             </option>
             <option
-              class="bx--select-option"
+              class="cds--select-option"
               value="PM"
             >
               PM
             </option>
           </select>
           <svg
-            aria-label="open list of options"
-            class="bx--select__arrow"
+            aria-hidden="true"
+            class="cds--select__arrow"
             fill="currentColor"
             focusable="false"
             height="16"
             preserveAspectRatio="xMidYMid meet"
-            role="img"
             viewBox="0 0 16 16"
             width="16"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+              d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
             />
           </svg>
         </div>

@@ -5,7 +5,7 @@ import {
   mockVisitSummaryData,
 } from "./AllergiesTestUtils";
 import Allergies from "./Allergies";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import { IPDContext } from "../../../../context/IPDContext";
 
 const mockData1 = { ...mockAllergiesIntolerenceResponse.data };
@@ -57,7 +57,7 @@ describe("Allergies", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole(/table/i)).toBeInTheDocument();
+      expect(screen.getByRole("table")).toBeInTheDocument();
     });
     expect(screen.getByText("Beef")).toBeInTheDocument();
     expect(screen.getAllByText("Bailly RURANGIRWA")).toBeTruthy();
@@ -76,7 +76,7 @@ describe("Allergies", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole(/table/i)).toBeInTheDocument();
+      expect(screen.getByRole("table")).toBeInTheDocument();
     });
 
     // Check that rows with Severe allergies have high-severity-color class
@@ -97,7 +97,7 @@ describe("Allergies", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole(/table/i)).toBeInTheDocument();
+      expect(screen.getByRole("table")).toBeInTheDocument();
     });
 
     // Check that "No Known Allergy" row has no-known-allergy class when there are multiple allergies
@@ -118,7 +118,7 @@ describe("Allergies", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole(/table/i)).toBeInTheDocument();
+      expect(screen.getByRole("table")).toBeInTheDocument();
     });
 
     // Check Severe severity (weight -1) - appears first

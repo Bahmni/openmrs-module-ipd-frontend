@@ -8,10 +8,13 @@ import {
   Button,
   Loading,
   Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
   Tabs,
   TextArea,
   Modal,
-} from "carbon-components-react";
+} from "@carbon/react";
 import "../styles/EmergencyTasks.scss";
 import {
   fetchMedicationConfig,
@@ -730,368 +733,381 @@ const AddEmergencyTasks = (props) => {
       >
         <div className={"emergency-task-slider"}>
           <Tabs>
-            {!hideMedicationTab && isUserPrivileged(
-              currentUser,
-              PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS
-            ) && (
-              <Tab
-                id="Medication"
-                onClick={() => {
-                  setActiveTab("Medication");
-                  handleMedicationSaveButton();
-                }}
-                label={
-                  <FormattedMessage
-                    id={"MEDICATION"}
-                    defaultMessage={"Medication"}
-                  />
-                }
-              >
-                {isLoading && (
-                  <div>
-                    <Loading />
-                  </div>
-                )}
-                <div className={"emergency-task-slider-content"}>
-                  <SearchDrug onChange={drugSearchHandler} />
-                  <div className="inline-field">
-                    <div className="dosage-section-container">
-                      <NumberInputCarbon
-                        id={"Dropdown"}
-                        onChange={setDosage}
-                        style={{ width: "50%" }}
-                        value={dosage}
-                        label={"Dose"}
-                        isRequired={true}
-                        min={0}
-                      />
-                      <Dropdown
-                        id={"Dosage Dropdown"}
-                        onChange={(e) => {
-                          setDoseUnits(e);
-                        }}
-                        placeholder={"Select Unit"}
-                        titleText={""}
-                        width={window.innerWidth > 480 ? "170px" : "100%"}
-                        style={{ paddingLeft: "10px", marginRight: 0 }}
-                        options={unitOptions}
-                        selectedValue={doseUnits}
-                      />
-                    </div>
-                    <Dropdown
-                      id={"Route-Dropdown"}
-                      onChange={(e) => {
-                        setRoutes(e);
-                      }}
-                      placeholder={"Select Route"}
-                      titleText={"Route"}
-                      isRequired={true}
-                      options={routeOptions}
-                      width={"100%"}
-                      selectedValue={routes}
-                    />
-                  </div>
-                  <div
-                    className={"administration-info"}
-                    style={{ display: "flex", gap: "10px" }}
+            <TabList aria-label="Nursing task type">
+              {!hideMedicationTab &&
+                isUserPrivileged(
+                  currentUser,
+                  PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS
+                ) && (
+                  <Tab
+                    id="Medication"
+                    onClick={() => {
+                      setActiveTab("Medication");
+                      handleMedicationSaveButton();
+                    }}
                   >
-                    <DatePickerCarbon
-                      id={"Administration-Date"}
-                      onChange={(e) => {
-                        setAdministrationDate(new Date(e[0]));
-                        setIsDateChanged(true);
-                      }}
-                      title={"Administration Date"}
-                      isRequired={true}
-                      value={administrationDate}
-                      dateFormat={"d M Y"}
-                      placeholder={"DD MMM YYYY"}
-                      maxDate={new Date()}
+                    <FormattedMessage
+                      id={"MEDICATION"}
+                      defaultMessage={"Medication"}
                     />
-                    {enable24HourTime ? (
-                      <TimePicker24Hour
-                        defaultTime={administrationTime}
-                        onChange={(e) => {
-                          e != "" && setAdministrationTime(e);
-                          setIsTimeChanged(true);
-                        }}
-                        labelText={`Administration Time (${timeText24})`}
-                        width={"250px"}
-                        isRequired={true}
-                        customValidation={customValidation}
-                        actionForInvalidTime={actionForInvalidTime}
-                        invalid={isInvalidTime}
-                        invalidText={invalidText}
-                      />
-                    ) : (
-                      <TimePicker
-                        defaultTime={administrationTime}
-                        onChange={(e) => {
-                          e != "" && setAdministrationTime(e);
-                          setIsTimeChanged(true);
-                        }}
-                        labelText={`Administration Time (${timeText12})`}
-                        width={"155px"}
-                        isRequired={true}
-                        customValidation={customValidation}
-                        actionForInvalidTime={actionForInvalidTime}
-                        invalid={isInvalidTime}
-                        invalidText={invalidText}
-                      />
-                    )}
-                  </div>
-                  <Dropdown
-                    id={"Provider-info"}
-                    onChange={(selectedItem) => {
-                      setRequestedProvider(selectedItem?.value);
-                    }}
-                    placeholder={"Select Provider"}
-                    titleText={"Acknowledgement Requested From"}
-                    isRequired={true}
-                    options={providerOptions}
-                    width={"100%"}
-                  />
-                  <TextArea
-                    labelText={<Title text={"Notes"} isRequired={true} />}
-                    onChange={(e) => {
-                      setNotes(e.target.value);
-                    }}
-                    placeholder={"Enter a maximum of 250 characters"}
-                    maxCount={250}
-                    rows={4}
-                  />
-                </div>
-              </Tab>
-            )}
-            {isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.ADD_TASKS) && (
-              <Tab
-                id="Non - Medication"
-                onClick={() => {
-                  setActiveTab("Non-Medication");
-                  handleNonMedicationSaveButton();
-                }}
-                label={
+                  </Tab>
+                )}
+              {isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.ADD_TASKS) && (
+                <Tab
+                  id="Non - Medication"
+                  onClick={() => {
+                    setActiveTab("Non-Medication");
+                    handleNonMedicationSaveButton();
+                  }}
+                >
                   <FormattedMessage
                     id={"NON_MEDICATION"}
                     defaultMessage={"Non - Medication"}
                   />
-                }
-              >
-                {isLoading && (
-                  <div>
-                    <Loading />
-                  </div>
-                )}
-                <div className="emergency-task-slider-content">
-                  {instruction ? (
-                    <div className="instruction-header-container">
+                </Tab>
+              )}
+            </TabList>
+            <TabPanels>
+              {!hideMedicationTab &&
+                isUserPrivileged(
+                  currentUser,
+                  PRIVILEGE_CONSTANTS.EDIT_ADHOC_MEDICATION_TASKS
+                ) && (
+                  <TabPanel>
+                    {isLoading && (
                       <div>
-                        <p className="instruction-label">
-                          {intl.formatMessage({
-                            id: "INSTRUCTION_LABEL",
-                            defaultMessage: "Instruction",
-                          })}
-                        </p>
-                        <p className="instruction-value">{instruction}</p>
+                        <Loading />
                       </div>
-                      {enableAddMultipleTask && (
-                        <Button
-                          kind={"tertiary"}
-                          size="sm"
-                          className="add-non-medication-task-button"
-                          onClick={appendNonMedicationTask}
-                        >
-                          <FormattedMessage
-                            id={"ADD_MORE_TASK"}
-                            defaultMessage={"Add Task"}
-                          />
-                          {" +"}
-                        </Button>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="add-more-task-button-container">
-                      {enableAddMultipleTask && (
-                        <Button
-                          kind={"tertiary"}
-                          size="sm"
-                          className="add-non-medication-task-button"
-                          onClick={appendNonMedicationTask}
-                        >
-                          <FormattedMessage
-                            id={"ADD_MORE_TASK"}
-                            defaultMessage={"Add Task"}
-                          />
-                          {" +"}
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                  {nonMedicationTasks.map((taskDetails, index) => (
-                    <div
-                      key={taskDetails.id}
-                      className={`non-medication-task-section ${
-                        index > 0 ? "replicated-task-section" : ""
-                      }`}
-                    >
-                      <TextArea
-                        labelText={
-                          <Title text={TASK_NAME_LABEL} isRequired={true} />
-                        }
-                        onChange={(e) => {
-                          const newValue = e.target.value;
-                          updateNonMedicationTask(taskDetails.id, {
-                            taskName: newValue,
-                          });
-                          validateTaskName(taskDetails.id, newValue);
-                        }}
-                        value={taskDetails.taskName}
-                        placeholder={TASK_NAME_PLACEHOLDER}
-                        maxCount={MAX_TASK_NAME_LENGTH}
-                        rows={1}
-                        invalid={Boolean(
-                          nonMedicationInvalidTaskNames[taskDetails.id]
-                        )}
-                        invalidText={
-                          nonMedicationInvalidTaskNames[taskDetails.id]
-                        }
-                      />
-                      {nonMedicationTaskTypeOptions &&
-                        nonMedicationTaskTypeOptions.length > 0 && (
-                          <Dropdown
-                            id={`non-medication-task-type-dropdown-${taskDetails.id}`}
-                            onChange={(selectedItem) => {
-                              setNonMedicationTaskType(
-                                taskDetails.id,
-                                selectedItem
-                              );
-                            }}
-                            placeholder={"Select Task Type"}
-                            titleText={"Task Type"}
-                            isRequired={false}
-                            options={nonMedicationTaskTypeOptions}
-                            width={"100%"}
-                            selectedValue={
-                              taskDetails.taskType
-                                ? {
-                                    label: taskDetails.taskType,
-                                    value: taskDetails.taskType,
-                                  }
-                                : null
-                            }
-                          />
-                        )}
-                      <div className="date-time-container">
-                        {nursingTaskScheduling?.enableDateSelection !==
-                          false && (
-                          <DatePickerCarbon
-                            id={`date-picker-${index}`}
-                            title={intl.formatMessage({
-                              id: "SCHEDULED_DATE",
-                              defaultMessage: "Scheduled Date",
-                            })}
-                            dateFormat="d M Y"
-                            value={toValidDate(taskDetails.scheduleDate)}
-                            onChange={(e) =>
-                              handleDateChange(taskDetails.id, e)
-                            }
+                    )}
+                    <div className={"emergency-task-slider-content"}>
+                      <SearchDrug onChange={drugSearchHandler} />
+                      <div className="inline-field">
+                        <div className="dosage-section-container">
+                          <NumberInputCarbon
+                            id={"Dropdown"}
+                            onChange={setDosage}
+                            style={{ width: "50%" }}
+                            value={dosage}
+                            label={"Dose"}
                             isRequired={true}
-                            className="date-picker-carbon"
-                            placeholder="DD MMM YYYY"
-                            minDate={getStartOfToday()}
-                            maxDate={maxScheduleDate}
+                            min={0}
                           />
-                        )}
+                          <Dropdown
+                            id={"Dosage Dropdown"}
+                            onChange={(e) => {
+                              setDoseUnits(e);
+                            }}
+                            placeholder={"Select Unit"}
+                            titleText={""}
+                            width={window.innerWidth > 480 ? "170px" : "100%"}
+                            style={{ paddingLeft: "10px", marginRight: 0 }}
+                            options={unitOptions}
+                            selectedValue={doseUnits}
+                          />
+                        </div>
+                        <Dropdown
+                          id={"Route-Dropdown"}
+                          onChange={(e) => {
+                            setRoutes(e);
+                          }}
+                          placeholder={"Select Route"}
+                          titleText={"Route"}
+                          isRequired={true}
+                          options={routeOptions}
+                          width={"100%"}
+                          selectedValue={routes}
+                        />
+                      </div>
+                      <div
+                        className={"administration-info"}
+                        style={{ display: "flex", gap: "10px" }}
+                      >
+                        <DatePickerCarbon
+                          id={"Administration-Date"}
+                          onChange={(e) => {
+                            setAdministrationDate(new Date(e[0]));
+                            setIsDateChanged(true);
+                          }}
+                          title={"Administration Date"}
+                          isRequired={true}
+                          value={administrationDate}
+                          dateFormat={"d M Y"}
+                          placeholder={"DD MMM YYYY"}
+                          maxDate={new Date()}
+                        />
                         {enable24HourTime ? (
                           <TimePicker24Hour
-                            defaultTime={taskDetails.scheduleTime}
-                            onChange={(time) => {
-                              if (time !== "") {
-                                updateNonMedicationTask(taskDetails.id, {
-                                  scheduleTime: time,
-                                });
-                              }
+                            defaultTime={administrationTime}
+                            onChange={(e) => {
+                              e != "" && setAdministrationTime(e);
                               setIsTimeChanged(true);
                             }}
-                            labelText={SCHEDULE_TIME_LABEL_24}
+                            labelText={`Administration Time (${timeText24})`}
                             width={"250px"}
                             isRequired={true}
-                            customValidation={(time) =>
-                              customNonMedicationTaskValidation(
-                                taskDetails.id,
-                                time
-                              )
-                            }
-                            actionForInvalidTime={(invalid) =>
-                              actionForNonMedicationInvalidTime(
-                                taskDetails.id,
-                                invalid
-                              )
-                            }
-                            invalid={Boolean(
-                              nonMedicationInvalidTimes[taskDetails.id]
-                            )}
-                            invalidText={
-                              nonMedicationInvalidTexts[taskDetails.id]
-                            }
+                            customValidation={customValidation}
+                            actionForInvalidTime={actionForInvalidTime}
+                            invalid={isInvalidTime}
+                            invalidText={invalidText}
                           />
                         ) : (
                           <TimePicker
-                            defaultTime={taskDetails.scheduleTime}
-                            onChange={(time) => {
-                              if (time !== "") {
-                                updateNonMedicationTask(taskDetails.id, {
-                                  scheduleTime: time,
-                                });
-                              }
+                            defaultTime={administrationTime}
+                            onChange={(e) => {
+                              e != "" && setAdministrationTime(e);
                               setIsTimeChanged(true);
                             }}
-                            labelText={SCHEDULE_TIME_LABEL_12}
+                            labelText={`Administration Time (${timeText12})`}
                             width={"155px"}
                             isRequired={true}
-                            customValidation={(time) =>
-                              customNonMedicationTaskValidation(
-                                taskDetails.id,
-                                time
-                              )
-                            }
-                            actionForInvalidTime={(invalid) =>
-                              actionForNonMedicationInvalidTime(
-                                taskDetails.id,
-                                invalid
-                              )
-                            }
-                            invalid={Boolean(
-                              nonMedicationInvalidTimes[taskDetails.id]
-                            )}
-                            invalidText={
-                              nonMedicationInvalidTexts[taskDetails.id]
-                            }
+                            customValidation={customValidation}
+                            actionForInvalidTime={actionForInvalidTime}
+                            invalid={isInvalidTime}
+                            invalidText={invalidText}
                           />
                         )}
                       </div>
-                      {index > 0 && enableAddMultipleTask && (
-                        <>
-                          <button
-                            type="button"
-                            className="replicated-task-remove-button"
-                            onClick={() =>
-                              removeNonMedicationTask(taskDetails.id)
-                            }
+                      <Dropdown
+                        id={"Provider-info"}
+                        onChange={(selectedItem) => {
+                          setRequestedProvider(selectedItem?.value);
+                        }}
+                        placeholder={"Select Provider"}
+                        titleText={"Acknowledgement Requested From"}
+                        isRequired={true}
+                        options={providerOptions}
+                        width={"100%"}
+                      />
+                      <TextArea
+                        labelText={<Title text={"Notes"} isRequired={true} />}
+                        onChange={(e) => {
+                          setNotes(e.target.value);
+                        }}
+                        placeholder={"Enter a maximum of 250 characters"}
+                        maxCount={250}
+                        rows={4}
+                      />
+                    </div>
+                  </TabPanel>
+                )}
+              {isUserPrivileged(currentUser, PRIVILEGE_CONSTANTS.ADD_TASKS) && (
+                <TabPanel>
+                  {isLoading && (
+                    <div>
+                      <Loading />
+                    </div>
+                  )}
+                  <div className="emergency-task-slider-content">
+                    {instruction ? (
+                      <div className="instruction-header-container">
+                        <div>
+                          <p className="instruction-label">
+                            {intl.formatMessage({
+                              id: "INSTRUCTION_LABEL",
+                              defaultMessage: "Instruction",
+                            })}
+                          </p>
+                          <p className="instruction-value">{instruction}</p>
+                        </div>
+                        {enableAddMultipleTask && (
+                          <Button
+                            kind={"tertiary"}
+                            size="sm"
+                            className="add-non-medication-task-button"
+                            onClick={appendNonMedicationTask}
                           >
                             <FormattedMessage
-                              id={"REMOVE"}
-                              defaultMessage={"Remove"}
+                              id={"ADD_MORE_TASK"}
+                              defaultMessage={"Add Task"}
                             />
-                          </button>
-                          <div className="replicated-task-separator" />
-                        </>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </Tab>
-            )}
+                            {" +"}
+                          </Button>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="add-more-task-button-container">
+                        {enableAddMultipleTask && (
+                          <Button
+                            kind={"tertiary"}
+                            size="sm"
+                            className="add-non-medication-task-button"
+                            onClick={appendNonMedicationTask}
+                          >
+                            <FormattedMessage
+                              id={"ADD_MORE_TASK"}
+                              defaultMessage={"Add Task"}
+                            />
+                            {" +"}
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                    {nonMedicationTasks.map((taskDetails, index) => (
+                      <div
+                        key={taskDetails.id}
+                        className={`non-medication-task-section ${
+                          index > 0 ? "replicated-task-section" : ""
+                        }`}
+                      >
+                        <TextArea
+                          labelText={
+                            <Title text={TASK_NAME_LABEL} isRequired={true} />
+                          }
+                          onChange={(e) => {
+                            const newValue = e.target.value;
+                            updateNonMedicationTask(taskDetails.id, {
+                              taskName: newValue,
+                            });
+                            validateTaskName(taskDetails.id, newValue);
+                          }}
+                          value={taskDetails.taskName}
+                          placeholder={TASK_NAME_PLACEHOLDER}
+                          maxCount={MAX_TASK_NAME_LENGTH}
+                          rows={1}
+                          invalid={Boolean(
+                            nonMedicationInvalidTaskNames[taskDetails.id]
+                          )}
+                          invalidText={
+                            nonMedicationInvalidTaskNames[taskDetails.id]
+                          }
+                        />
+                        {nonMedicationTaskTypeOptions &&
+                          nonMedicationTaskTypeOptions.length > 0 && (
+                            <Dropdown
+                              id={`non-medication-task-type-dropdown-${taskDetails.id}`}
+                              onChange={(selectedItem) => {
+                                setNonMedicationTaskType(
+                                  taskDetails.id,
+                                  selectedItem
+                                );
+                              }}
+                              placeholder={"Select Task Type"}
+                              titleText={"Task Type"}
+                              isRequired={false}
+                              options={nonMedicationTaskTypeOptions}
+                              width={"100%"}
+                              selectedValue={
+                                taskDetails.taskType
+                                  ? {
+                                      label: taskDetails.taskType,
+                                      value: taskDetails.taskType,
+                                    }
+                                  : null
+                              }
+                            />
+                          )}
+                        <div className="date-time-container">
+                          {nursingTaskScheduling?.enableDateSelection !==
+                            false && (
+                            <DatePickerCarbon
+                              id={`date-picker-${index}`}
+                              title={intl.formatMessage({
+                                id: "SCHEDULED_DATE",
+                                defaultMessage: "Scheduled Date",
+                              })}
+                              dateFormat="d M Y"
+                              value={toValidDate(taskDetails.scheduleDate)}
+                              onChange={(e) =>
+                                handleDateChange(taskDetails.id, e)
+                              }
+                              isRequired={true}
+                              className="date-picker-carbon"
+                              placeholder="DD MMM YYYY"
+                              minDate={getStartOfToday()}
+                              maxDate={maxScheduleDate}
+                            />
+                          )}
+                          {enable24HourTime ? (
+                            <TimePicker24Hour
+                              defaultTime={taskDetails.scheduleTime}
+                              onChange={(time) => {
+                                if (time !== "") {
+                                  updateNonMedicationTask(taskDetails.id, {
+                                    scheduleTime: time,
+                                  });
+                                }
+                                setIsTimeChanged(true);
+                              }}
+                              labelText={SCHEDULE_TIME_LABEL_24}
+                              width={"250px"}
+                              isRequired={true}
+                              customValidation={(time) =>
+                                customNonMedicationTaskValidation(
+                                  taskDetails.id,
+                                  time
+                                )
+                              }
+                              actionForInvalidTime={(invalid) =>
+                                actionForNonMedicationInvalidTime(
+                                  taskDetails.id,
+                                  invalid
+                                )
+                              }
+                              invalid={Boolean(
+                                nonMedicationInvalidTimes[taskDetails.id]
+                              )}
+                              invalidText={
+                                nonMedicationInvalidTexts[taskDetails.id]
+                              }
+                            />
+                          ) : (
+                            <TimePicker
+                              defaultTime={taskDetails.scheduleTime}
+                              onChange={(time) => {
+                                if (time !== "") {
+                                  updateNonMedicationTask(taskDetails.id, {
+                                    scheduleTime: time,
+                                  });
+                                }
+                                setIsTimeChanged(true);
+                              }}
+                              labelText={SCHEDULE_TIME_LABEL_12}
+                              width={"155px"}
+                              isRequired={true}
+                              customValidation={(time) =>
+                                customNonMedicationTaskValidation(
+                                  taskDetails.id,
+                                  time
+                                )
+                              }
+                              actionForInvalidTime={(invalid) =>
+                                actionForNonMedicationInvalidTime(
+                                  taskDetails.id,
+                                  invalid
+                                )
+                              }
+                              invalid={Boolean(
+                                nonMedicationInvalidTimes[taskDetails.id]
+                              )}
+                              invalidText={
+                                nonMedicationInvalidTexts[taskDetails.id]
+                              }
+                            />
+                          )}
+                        </div>
+                        {index > 0 && enableAddMultipleTask && (
+                          <>
+                            <button
+                              type="button"
+                              className="replicated-task-remove-button"
+                              onClick={() =>
+                                removeNonMedicationTask(taskDetails.id)
+                              }
+                            >
+                              <FormattedMessage
+                                id={"REMOVE"}
+                                defaultMessage={"Remove"}
+                              />
+                            </button>
+                            <div className="replicated-task-separator" />
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </TabPanel>
+              )}
+            </TabPanels>
           </Tabs>
         </div>
         <Modal

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Header, Link, Loading } from "carbon-components-react";
-import { Home24 } from "@carbon/icons-react";
+import { Header, Link, Loading } from "@carbon/react";
+import { Home } from "@carbon/icons-react";
 import _ from "lodash";
 import "./CareViewDashboard.scss";
 import { CareViewSummary } from "../../features/CareViewSummary/components/CareViewSummary";
@@ -85,7 +85,7 @@ const CareViewDashboard = (props) => {
           aria-label="IBM Platform Name"
         >
           <Link href={homePageUrl} className={"home"}>
-            <Home24 aria-label="home-button" />
+            <Home size={24} aria-label="home-button" />
           </Link>
           <div className="care-view-right-actions">
             {isUserPrivileged(

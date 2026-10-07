@@ -1,5 +1,5 @@
-import { Close } from "@carbon/icons-react/next";
-import { Button } from "carbon-components-react";
+import { Close } from "@carbon/icons-react";
+import { Button } from "@carbon/react";
 import PropTypes from "prop-types";
 import React from "react";
 

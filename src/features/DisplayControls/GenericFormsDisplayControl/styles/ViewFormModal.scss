@@ -17,11 +17,11 @@
     border-bottom: 1px solid #e0e0e0;
   }
 
-  .bx--modal-container {
+  .cds--modal-container {
     width: 50%;
   }
 
-  .bx--modal-close {
+  .cds--modal-close {
     top: 0;
     right: 0;
   }
@@ -31,7 +31,7 @@
     align-items: center;
   }
 
-  .bx--tooltip__trigger {
+  .cds--tooltip__trigger {
     margin-left: 0;
     svg {
       fill: #0f62fe;
@@ -50,7 +50,7 @@
   }
 
   @media screen and (max-width: $tablet-breakpoint) {
-    .bx--modal-container {
+    .cds--modal-container {
       width: 65%;
     }
     .observation-name {
@@ -58,6 +58,6 @@
     }
   }
 }
-.bx--tooltip__content {
+.cds--tooltip__content {
   color: #fff;
 }
