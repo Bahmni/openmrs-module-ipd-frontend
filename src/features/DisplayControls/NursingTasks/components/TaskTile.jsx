@@ -2,13 +2,13 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import SVGIcon from "../../../SVGIcon/SVGIcon";
 import Clock from "../../../../icons/clock.svg";
-import { Calendar16 } from "@carbon/icons-react";
+import { Calendar } from "@carbon/icons-react";
 import {
   getTime,
   getRelevantTaskStatus,
   iconType,
 } from "../utils/TaskTileUtils";
-import { TooltipDefinition, Tag } from "carbon-components-react";
+import { DefinitionTooltip, Tag } from "@carbon/react";
 import "../styles/TaskTile.scss";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
 import { IPDContext } from "../../../../context/IPDContext";
@@ -124,8 +124,8 @@ export default function TaskTile(props) {
                 >
                   <SVGIcon iconType={statusIcon} />
                 </div>
-                <TooltipDefinition
-                  tooltipText={taskLabel}
+                <DefinitionTooltip
+                  definition={taskLabel}
                   className={
                     isDisabled ? "cursor-not-allowed" : "cursor-pointer"
                   }
@@ -148,7 +148,7 @@ export default function TaskTile(props) {
                   ) : (
                     drugNameText
                   )}
-                </TooltipDefinition>
+                </DefinitionTooltip>
               </div>
             </div>
             {!isANonMedicationTask && (
@@ -182,7 +182,7 @@ export default function TaskTile(props) {
                 <div className="tile-date-time">
                   <div className="date-time-container">
                     <div className="date-row">
-                      <Calendar16 />
+                      <Calendar size={16} />
                       <span className="tile-content-subtext-date">
                       &nbsp;
                       {formatDate(

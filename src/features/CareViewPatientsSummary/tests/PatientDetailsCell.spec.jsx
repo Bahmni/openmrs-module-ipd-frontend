@@ -3,7 +3,7 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import { IntlProvider } from "react-intl";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { mockConfig } from "../../../utils/CommonUtils";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import { PatientDetailsCell } from "../components/PatientDetailsCell";
 import {
   mockParticipantData,

@@ -43,7 +43,7 @@
     flex-direction: column;
     gap: 6px;
   }
-  .bx--toggle-input--small + .bx--toggle-input__label > .bx--toggle__switch {
+  .cds--toggle-input--small + .cds--toggle-input__label > .cds--toggle__switch {
     margin-top: 0;
   }
   .error {
@@ -69,6 +69,6 @@
     margin: 0;
   }
 }
-.bx--overflow-menu-options {
+.cds--overflow-menu-options {
   z-index: 10000;
 }

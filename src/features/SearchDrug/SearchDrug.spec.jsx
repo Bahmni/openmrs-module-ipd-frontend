@@ -15,13 +15,13 @@ describe("Search Drug", function () {
     const { getByText, container } = render(
       <SearchDrug onChange={jest.fn()} />
     );
-    const drugNameSearch = container.querySelector(".bx--text-input");
+    const drugNameSearch = container.querySelector(".cds--text-input");
     const targetDrug = "Paracetamol 250 mg Suppository";
     fireEvent.change(drugNameSearch, { target: { value: "Para" } });
 
     await waitFor(() => {
       expect(
-        container.querySelector(".bx--list-box__menu-item__option")
+        container.querySelector(".cds--list-box__menu-item__option")
       ).toBeTruthy();
       expect(container).toMatchSnapshot();
     });

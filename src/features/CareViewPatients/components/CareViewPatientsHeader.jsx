@@ -7,8 +7,8 @@ import {
   displayShiftTimings12HourFormat,
   displayShiftTimingsFormat,
 } from "../../../constants";
-import { Dropdown, Search, Button } from "carbon-components-react";
-import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
+import { Dropdown, Search, Button } from "@carbon/react";
+import { ChevronLeft, ChevronRight, Time } from "@carbon/icons-react";
 import { formatDate } from "../../../utils/DateTimeUtils";
 import { items } from "../utils/constants";
 
@@ -61,8 +61,8 @@ export const CareViewPatientsHeader = (props) => {
           <span className="navigation-time" data-testid="navigation-time">
             |
           </span>{" "}
-          <Time16 /> {shiftStartTime} <span className="to-text">to</span>{" "}
-          <Time16 /> {shiftEndTime}
+          <Time size={16} /> {shiftStartTime}{" "}
+          <span className="to-text">to</span> <Time size={16} /> {shiftEndTime}
         </div>
       );
     } else {
@@ -72,12 +72,12 @@ export const CareViewPatientsHeader = (props) => {
           <span className="navigation-time" data-testid="navigation-time">
             |
           </span>{" "}
-          <Time16 /> {shiftStartTime} <span className="to-text">to</span>{" "}
-          {shiftEndDate}
+          <Time size={16} /> {shiftStartTime}{" "}
+          <span className="to-text">to</span> {shiftEndDate}
           <span className="navigation-time" data-testid="navigation-time">
             |
           </span>
-          <Time16 /> {shiftEndTime}
+          <Time size={16} /> {shiftEndTime}
         </div>
       );
     }
@@ -101,7 +101,7 @@ export const CareViewPatientsHeader = (props) => {
           </span>
         </Button>
         <Button
-          renderIcon={ChevronLeft16}
+          renderIcon={ChevronLeft}
           kind="tertiary"
           hasIconOnly
           size="sm"
@@ -111,7 +111,7 @@ export const CareViewPatientsHeader = (props) => {
           disabled={navButtonsDisabled.previous}
         />
         <Button
-          renderIcon={ChevronRight16}
+          renderIcon={ChevronRight}
           kind="tertiary"
           hasIconOnly
           size="sm"

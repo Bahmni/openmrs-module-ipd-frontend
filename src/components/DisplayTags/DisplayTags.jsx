@@ -1,4 +1,4 @@
-import { Tag } from "carbon-components-react";
+import { Tag } from "@carbon/react";
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { IPDContext } from "../../context/IPDContext";

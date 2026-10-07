@@ -10,7 +10,7 @@ import {
   mockColumnData,
   mockSlotsData,
 } from "../../CareViewSummary/tests/CareViewSummaryMock";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 const mockContext = {
   careViewConfig: {

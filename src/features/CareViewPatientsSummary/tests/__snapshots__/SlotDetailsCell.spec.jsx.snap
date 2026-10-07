@@ -19,7 +19,7 @@ exports[`SlotDetailsCell should render slotDetailsCell 1`] = `
           </div>
         </div>
         <test-file-stub
-          classname="clock-icon"
+          class="clock-icon"
         />
       </div>
       <span>

@@ -33,8 +33,8 @@
 
 .date-picker-carbon {
   width: 45%;
-  .bx--date-picker .bx--date-picker--single,
-  .bx--date-picker-container {
+  .cds--date-picker .cds--date-picker--single,
+  .cds--date-picker-container {
     width: 100%;
   }
 }
@@ -43,14 +43,14 @@
 .schedule-time-remainder {
   padding-right: 10px;
   input#time-selector,
-  textarea.bx--text-area.notes-section {
+  textarea.cds--text-area.notes-section {
     background-color: #efefef;
   }
 }
 
 .start-time {
   input#time-selector,
-  textarea.bx--text-area.notes-section {
+  textarea.cds--text-area.notes-section {
     background-color: #efefef;
   }
 }
@@ -107,7 +107,7 @@
   color: #2b95ff;
 }
 
-.bx--text-input-wrapper .bx--text-input {
+.cds--text-input-wrapper .cds--text-input {
   width: 100%;
   overflow: auto;
   border: none;
@@ -115,32 +115,32 @@
   color: #8d8d8d;
 }
 
-button[class*="bx--"]:disabled {
+button[class*="cds--"]:disabled {
   opacity: 1;
   border: none;
   border-radius: 0px;
 }
 
-.bx--text-input__readonly-icon {
+.cds--text-input__readonly-icon {
   display: none;
   cursor: not-allowed;
 }
 
-.bx--date-picker.bx--date-picker--single .bx--date-picker__input {
+.cds--date-picker.cds--date-picker--single .cds--date-picker__input {
   background: #efefef;
   width: 100% !important;
 }
 
-.bx--date-picker.bx--date-picker--single {
+.cds--date-picker.cds--date-picker--single {
   width: 100%;
 }
 
-.bx--date-picker__input:disabled,
-.bx--number input[type="number"]:disabled {
+.cds--date-picker__input:disabled,
+.cds--number input[type="number"]:disabled {
   border: none;
 }
 
-.bx--number input[type="number"]:disabled {
+.cds--number input[type="number"]:disabled {
   font-size: 0.85rem;
   font-weight: 400;
   color: #8d8d8d;
@@ -148,14 +148,14 @@ button[class*="bx--"]:disabled {
   background-color: #efefef;
 }
 
-.bx--number__control-btn:disabled {
+.cds--number__control-btn:disabled {
   border: none;
 }
 
 .frequency {
   width: 100%;
 
-  .bx--list-box__field {
+  .cds--list-box__field {
     max-width: initial;
     border: none;
   }
@@ -165,7 +165,7 @@ button[class*="bx--"]:disabled {
   color: #ff0000;
 }
 
-.bx--time-picker--invalid ~ .bx--form-requirement {
+.cds--time-picker--invalid ~ .cds--form-requirement {
   padding-right: 10px;
 }
 
@@ -173,14 +173,14 @@ button[class*="bx--"]:disabled {
   font-size: 0.75rem;
 }
 
-.bx--dropdown--disabled .bx--list-box__label {
+.cds--dropdown--disabled .cds--list-box__label {
   font-size: 0.85rem;
 }
 
-.bx--number input[type="number"]:disabled ~ .bx--number__controls {
+.cds--number input[type="number"]:disabled ~ .cds--number__controls {
   width: 55%;
 }
 
-.bx--time-picker .bx--select-input {
+.cds--time-picker .cds--select-input {
   background-color: #efefef;
 }

@@ -3,13 +3,13 @@
 exports[`PatientHeader should display all details of the patient 1`] = `
 <div>
   <div
-    class="bx--tile patient-header"
+    class="cds--tile patient-header"
   >
     <div
-      class="bx--grid"
+      class="cds--grid"
     >
       <div
-        class="patient-image-and-details bx--row"
+        class="patient-image-and-details cds--row"
       >
         <img
           alt="patient-image"
@@ -17,10 +17,10 @@ exports[`PatientHeader should display all details of the patient 1`] = `
           src="AxiosError: Network Error"
         />
         <div
-          class="bx--col"
+          class="cds--col"
         >
           <div
-            class="header-title-row bx--row"
+            class="header-title-row cds--row"
           >
             <div
               class="patient-name-and-navigations"
@@ -31,57 +31,81 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                 John Doe
               </h1>
               <a
-                class="bx--link"
+                class="cds--link"
               >
                 Visit Summaries
               </a>
             </div>
-            <button
-              aria-expanded="false"
-              aria-haspopup="true"
-              aria-label="Open and close list of options"
-              class="patient-movement-overflow bx--overflow-menu bx--overflow-menu--md"
-              data-testid="overflow-menu"
-              type="button"
+            <span
+              class="cds--overflow-menu__wrapper"
             >
-              <svg
-                aria-label="Open and close list of options"
-                class="bx--overflow-menu__icon"
-                fill="currentColor"
-                focusable="false"
-                height="16"
-                preserveAspectRatio="xMidYMid meet"
-                role="img"
-                viewBox="0 0 32 32"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
               >
-                <circle
-                  cx="16"
-                  cy="8"
-                  r="2"
-                />
-                <circle
-                  cx="16"
-                  cy="16"
-                  r="2"
-                />
-                <circle
-                  cx="16"
-                  cy="24"
-                  r="2"
-                />
-                <title>
-                  Open and close list of options
-                </title>
-              </svg>
-            </button>
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-labelledby="tooltip-_r_1_"
+                    class="patient-movement-overflow cds--overflow-menu cds--btn cds--btn--ghost cds--btn--icon-only"
+                    data-testid="overflow-menu"
+                    type="button"
+                  >
+                    <svg
+                      aria-label="Options"
+                      class="cds--overflow-menu__icon"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="16"
+                        cy="8"
+                        r="2"
+                      />
+                      <circle
+                        cx="16"
+                        cy="16"
+                        r="2"
+                      />
+                      <circle
+                        cx="16"
+                        cy="24"
+                        r="2"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-_r_1_"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Options
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </span>
           </div>
           <div
-            class="bx--row"
+            class="cds--row"
           >
             <a
-              class="bx--link show-more bx--link--sm"
+              class="cds--link show-more cds--link--sm"
               kind="tertiary"
             >
               Hide Details
@@ -97,7 +121,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M16 10L26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
+                  d="M16 10 26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
                 />
               </svg>
                
@@ -150,7 +174,10 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                         d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
                       />
                       <path
-                        d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                        d="M9.5,17A1.5,1.5,0,1,1,8,18.5,1.5017,1.5017,0,0,1,9.5,17m0-2A3.5,3.5,0,1,0,13,18.5,3.5,3.5,0,0,0,9.5,15Z"
+                      />
+                      <path
+                        d="M21 6 17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
                       />
                     </svg>
                   </h3>
@@ -167,16 +194,16 @@ exports[`PatientHeader should display all details of the patient 1`] = `
       </div>
     </div>
     <div
-      class="bx--tile patient-details"
+      class="cds--tile patient-details"
     >
       <div
-        class="bx--row"
+        class="cds--row"
       >
         <div
-          class="bx--col"
+          class="cds--col"
         >
           <div
-            class="bx--tile details-tile"
+            class="cds--tile details-tile"
           >
             <span
               class="details-headers"
@@ -234,10 +261,10 @@ exports[`PatientHeader should display all details of the patient 1`] = `
           </div>
         </div>
         <div
-          class="bx--col"
+          class="cds--col"
         >
           <div
-            class="bx--tile details-tile"
+            class="cds--tile details-tile"
           >
             <span
               class="details-headers"
@@ -287,10 +314,10 @@ exports[`PatientHeader should display all details of the patient 1`] = `
           </div>
         </div>
         <div
-          class="bx--col"
+          class="cds--col"
         >
           <div
-            class="bx--tile details-tile"
+            class="cds--tile details-tile"
           >
             <span
               class="details-headers"
@@ -325,13 +352,13 @@ exports[`PatientHeader should display all details of the patient 1`] = `
 exports[`PatientHeader should display patient movement item on click of overflow menu icon 1`] = `
 <div>
   <div
-    class="bx--tile patient-header"
+    class="cds--tile patient-header"
   >
     <div
-      class="bx--grid"
+      class="cds--grid"
     >
       <div
-        class="patient-image-and-details bx--row"
+        class="patient-image-and-details cds--row"
       >
         <img
           alt="patient-image"
@@ -339,10 +366,10 @@ exports[`PatientHeader should display patient movement item on click of overflow
           src="AxiosError: Network Error"
         />
         <div
-          class="bx--col"
+          class="cds--col"
         >
           <div
-            class="header-title-row bx--row"
+            class="header-title-row cds--row"
           >
             <div
               class="patient-name-and-navigations"
@@ -353,57 +380,83 @@ exports[`PatientHeader should display patient movement item on click of overflow
                 John Doe
               </h1>
               <a
-                class="bx--link"
+                class="cds--link"
               >
                 Visit Summaries
               </a>
             </div>
-            <button
-              aria-expanded="true"
-              aria-haspopup="true"
-              aria-label="Open and close list of options"
-              class="patient-movement-overflow bx--overflow-menu bx--overflow-menu--open bx--overflow-menu--md"
-              data-testid="overflow-menu"
-              type="button"
+            <span
+              aria-owns="overflow-menu-4__menu-body"
+              class="cds--overflow-menu__wrapper"
             >
-              <svg
-                aria-label="Open and close list of options"
-                class="bx--overflow-menu__icon"
-                fill="currentColor"
-                focusable="false"
-                height="16"
-                preserveAspectRatio="xMidYMid meet"
-                role="img"
-                viewBox="0 0 32 32"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
               >
-                <circle
-                  cx="16"
-                  cy="8"
-                  r="2"
-                />
-                <circle
-                  cx="16"
-                  cy="16"
-                  r="2"
-                />
-                <circle
-                  cx="16"
-                  cy="24"
-                  r="2"
-                />
-                <title>
-                  Open and close list of options
-                </title>
-              </svg>
-            </button>
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-controls="overflow-menu-4__menu-body"
+                    aria-expanded="true"
+                    aria-haspopup="true"
+                    aria-labelledby="tooltip-_r_5_"
+                    class="patient-movement-overflow cds--overflow-menu cds--overflow-menu--open cds--btn cds--btn--ghost cds--btn--icon-only"
+                    data-testid="overflow-menu"
+                    type="button"
+                  >
+                    <svg
+                      aria-label="Options"
+                      class="cds--overflow-menu__icon"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="16"
+                        cy="8"
+                        r="2"
+                      />
+                      <circle
+                        cx="16"
+                        cy="16"
+                        r="2"
+                      />
+                      <circle
+                        cx="16"
+                        cy="24"
+                        r="2"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-_r_5_"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Options
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </span>
           </div>
           <div
-            class="bx--row"
+            class="cds--row"
           >
             <a
-              class="bx--link show-more bx--link--sm"
+              class="cds--link show-more cds--link--sm"
               kind="tertiary"
             >
               Show Details
@@ -419,7 +472,7 @@ exports[`PatientHeader should display patient movement item on click of overflow
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
+                  d="M16 22 6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
                 />
               </svg>
             </a>
@@ -471,7 +524,10 @@ exports[`PatientHeader should display patient movement item on click of overflow
                         d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
                       />
                       <path
-                        d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                        d="M9.5,17A1.5,1.5,0,1,1,8,18.5,1.5017,1.5017,0,0,1,9.5,17m0-2A3.5,3.5,0,1,0,13,18.5,3.5,3.5,0,0,0,9.5,15Z"
+                      />
+                      <path
+                        d="M21 6 17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
                       />
                     </svg>
                   </h3>
@@ -495,13 +551,13 @@ exports[`PatientHeader should display patient movement item on click of overflow
 exports[`PatientHeader should display patient movement overflow menu item as disabled 1`] = `
 <div>
   <div
-    class="bx--tile patient-header"
+    class="cds--tile patient-header"
   >
     <div
-      class="bx--grid"
+      class="cds--grid"
     >
       <div
-        class="patient-image-and-details bx--row"
+        class="patient-image-and-details cds--row"
       >
         <img
           alt="patient-image"
@@ -509,10 +565,10 @@ exports[`PatientHeader should display patient movement overflow menu item as dis
           src="AxiosError: Network Error"
         />
         <div
-          class="bx--col"
+          class="cds--col"
         >
           <div
-            class="header-title-row bx--row"
+            class="header-title-row cds--row"
           >
             <div
               class="patient-name-and-navigations"
@@ -523,57 +579,83 @@ exports[`PatientHeader should display patient movement overflow menu item as dis
                 John Doe
               </h1>
               <a
-                class="bx--link"
+                class="cds--link"
               >
                 Visit Summaries
               </a>
             </div>
-            <button
-              aria-expanded="true"
-              aria-haspopup="true"
-              aria-label="Open and close list of options"
-              class="patient-movement-overflow bx--overflow-menu bx--overflow-menu--open bx--overflow-menu--md"
-              data-testid="overflow-menu"
-              type="button"
+            <span
+              aria-owns="overflow-menu-7__menu-body"
+              class="cds--overflow-menu__wrapper"
             >
-              <svg
-                aria-label="Open and close list of options"
-                class="bx--overflow-menu__icon"
-                fill="currentColor"
-                focusable="false"
-                height="16"
-                preserveAspectRatio="xMidYMid meet"
-                role="img"
-                viewBox="0 0 32 32"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
               >
-                <circle
-                  cx="16"
-                  cy="8"
-                  r="2"
-                />
-                <circle
-                  cx="16"
-                  cy="16"
-                  r="2"
-                />
-                <circle
-                  cx="16"
-                  cy="24"
-                  r="2"
-                />
-                <title>
-                  Open and close list of options
-                </title>
-              </svg>
-            </button>
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-controls="overflow-menu-7__menu-body"
+                    aria-expanded="true"
+                    aria-haspopup="true"
+                    aria-labelledby="tooltip-_r_a_"
+                    class="patient-movement-overflow cds--overflow-menu cds--overflow-menu--open cds--btn cds--btn--ghost cds--btn--icon-only"
+                    data-testid="overflow-menu"
+                    type="button"
+                  >
+                    <svg
+                      aria-label="Options"
+                      class="cds--overflow-menu__icon"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      role="img"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="16"
+                        cy="8"
+                        r="2"
+                      />
+                      <circle
+                        cx="16"
+                        cy="16"
+                        r="2"
+                      />
+                      <circle
+                        cx="16"
+                        cy="24"
+                        r="2"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-_r_a_"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Options
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </span>
           </div>
           <div
-            class="bx--row"
+            class="cds--row"
           >
             <a
-              class="bx--link show-more bx--link--sm"
+              class="cds--link show-more cds--link--sm"
               kind="tertiary"
             >
               Show Details
@@ -589,7 +671,7 @@ exports[`PatientHeader should display patient movement overflow menu item as dis
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
+                  d="M16 22 6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
                 />
               </svg>
             </a>
@@ -641,7 +723,10 @@ exports[`PatientHeader should display patient movement overflow menu item as dis
                         d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
                       />
                       <path
-                        d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                        d="M9.5,17A1.5,1.5,0,1,1,8,18.5,1.5017,1.5017,0,0,1,9.5,17m0-2A3.5,3.5,0,1,0,13,18.5,3.5,3.5,0,0,0,9.5,15Z"
+                      />
+                      <path
+                        d="M21 6 17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
                       />
                     </svg>
                   </h3>

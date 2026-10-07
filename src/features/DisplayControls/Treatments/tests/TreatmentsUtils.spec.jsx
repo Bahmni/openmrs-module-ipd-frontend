@@ -12,7 +12,7 @@ import {
 } from "../utils/TreatmentsUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 const FHIR_DOSING_INSTRUCTION_TYPE =
   "org.openmrs.module.bahmniemrapi.drugorder.dosinginstructions.FhirDosingInstructions";

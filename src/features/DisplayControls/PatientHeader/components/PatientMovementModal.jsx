@@ -18,12 +18,7 @@ import {
   FSN_ADT_NOTES_VALUE,
   BAHMNI_VALUE,
 } from "../../../../constants";
-import {
-  Modal,
-  TextArea,
-  Dropdown,
-  DropdownSkeleton,
-} from "carbon-components-react";
+import { Modal, TextArea, Dropdown, DropdownSkeleton } from "@carbon/react";
 import "../styles/PatientHeader.scss";
 import PropTypes from "prop-types";
 

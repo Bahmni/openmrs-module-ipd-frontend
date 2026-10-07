@@ -1,7 +1,7 @@
 import { Header } from "../components/Header";
 import { render, fireEvent, screen } from "@testing-library/react";
 import React from "react";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { TASK_FILTER_HEADER } from "../../../constants";
 import { IntlProvider } from "react-intl";

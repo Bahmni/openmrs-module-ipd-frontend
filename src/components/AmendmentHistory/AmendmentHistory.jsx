@@ -1,6 +1,6 @@
 import React, { Fragment, useLayoutEffect, useRef, useState } from "react";
 import "./AmendmentHistory.scss";
-import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
+import { ChevronDown, ChevronUp } from "@carbon/icons-react";
 import { NoteTile } from "../../features/DisplayControls/DrugChart/components/NoteTile";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
@@ -36,7 +36,9 @@ const AmendmentHistory = ({ amendments = [] }) => {
     let icon,
       className = "";
     if (totalAmendments > 1) {
-      icon = isExpanded ? ChevronUp20 : ChevronDown20;
+      icon = isExpanded
+        ? () => <ChevronUp size={20} />
+        : () => <ChevronDown size={20} />;
       className = isExpanded ? "no-margin active-tile" : "";
     }
     return (

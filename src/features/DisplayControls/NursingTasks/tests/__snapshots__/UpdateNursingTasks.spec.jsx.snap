@@ -14,34 +14,49 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
       <div
         class="close-icon"
       >
-        <button
-          class="bx--btn bx--btn--ghost bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
-          tabindex="0"
-          type="button"
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
         >
           <div
-            class="bx--assistive-text"
+            class="cds--tooltip-trigger__wrapper"
           >
-            Close
+            <button
+              aria-labelledby="tooltip-_r_7a_"
+              class="cds--btn cds--btn--ghost cds--btn--icon-only"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                />
+              </svg>
+            </button>
           </div>
-          <svg
+          <span
             aria-hidden="true"
-            aria-label="Close"
-            class="bx--btn__icon"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            role="img"
-            viewBox="0 0 32 32"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
+            class="cds--popover"
+            id="tooltip-_r_7a_"
+            role="tooltip"
           >
-            <path
-              d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Close
+            </span>
+            <span
+              class="cds--popover-caret"
             />
-          </svg>
-        </button>
+          </span>
+        </span>
       </div>
     </div>
     <div
@@ -61,52 +76,52 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
           class="nursing-task-section"
         >
           <div
-            class="bx--form-item"
+            class="cds--toggle"
           >
-            <input
-              class="bx--toggle-input bx--toggle-input--small"
+            <button
+              aria-checked="false"
+              class="cds--toggle__button"
               data-testid="done-toggle"
               id="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
-              type="checkbox"
+              role="switch"
+              type="button"
             />
-            <label
-              aria-label="Toggle"
-              class="bx--toggle-input__label"
+            <div
+              class="cds--toggle__label"
               for="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
+              id="d9ae1992-63ac-4e05-8dfb-13f021102ec6_label"
             >
-              <span
-                class="bx--toggle__switch"
+              <div
+                class="cds--toggle__appearance cds--toggle__appearance--sm"
               >
-                <svg
-                  class="bx--toggle__check"
-                  height="5px"
-                  viewBox="0 0 6 5"
-                  width="6px"
+                <div
+                  class="cds--toggle__switch"
                 >
-                  <path
-                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
-                  />
-                </svg>
+                  <svg
+                    aria-hidden="true"
+                    class="cds--toggle__check"
+                    focusable="false"
+                    height="5px"
+                    viewBox="0 0 6 5"
+                    width="6px"
+                  >
+                    <path
+                      d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
+                    />
+                  </svg>
+                </div>
                 <span
                   aria-hidden="true"
-                  class="bx--toggle__text--off"
+                  class="cds--toggle__text"
+                  dir="auto"
                 >
                   <div>
                     Done
                      
                   </div>
                 </span>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--on"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-              </span>
-            </label>
+              </div>
+            </div>
           </div>
           <div
             class="medication-name"
@@ -117,11 +132,12 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
               Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
             </div>
             <div
-              class="bx--tag bx--tag--sm bx--tag--blue"
-              id="tag-80"
+              class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
+              id="tag-id-_r_7d_"
             >
-              
               <span
+                class="cds--tag__label"
+                dir="auto"
                 title="Rx"
               >
                 Rx
@@ -139,97 +155,121 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
               Topical
             </span>
           </div>
-          <button
-            aria-expanded="false"
-            aria-haspopup="true"
-            aria-label="Open and close list of options"
-            class="overflowMenu bx--overflow-menu bx--overflow-menu--md"
-            type="button"
+          <span
+            class="cds--overflow-menu__wrapper"
           >
-            <svg
-              aria-label="Open and close list of options"
-              class="bx--overflow-menu__icon"
-              fill="currentColor"
-              focusable="false"
-              height="16"
-              preserveAspectRatio="xMidYMid meet"
-              role="img"
-              viewBox="0 0 32 32"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
             >
-              <circle
-                cx="16"
-                cy="8"
-                r="2"
-              />
-              <circle
-                cx="16"
-                cy="16"
-                r="2"
-              />
-              <circle
-                cx="16"
-                cy="24"
-                r="2"
-              />
-              <title>
-                Open and close list of options
-              </title>
-            </svg>
-          </button>
+              <div
+                class="cds--tooltip-trigger__wrapper"
+              >
+                <button
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  aria-labelledby="tooltip-_r_7f_"
+                  class="overflowMenu cds--overflow-menu cds--btn cds--btn--ghost cds--btn--icon-only"
+                  type="button"
+                >
+                  <svg
+                    aria-label="Options"
+                    class="cds--overflow-menu__icon"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="16"
+                      cy="8"
+                      r="2"
+                    />
+                    <circle
+                      cx="16"
+                      cy="16"
+                      r="2"
+                    />
+                    <circle
+                      cx="16"
+                      cy="24"
+                      r="2"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <span
+                aria-hidden="true"
+                class="cds--popover"
+                id="tooltip-_r_7f_"
+                role="tooltip"
+              >
+                <span
+                  class="cds--popover-content cds--tooltip-content"
+                >
+                  Options
+                </span>
+                <span
+                  class="cds--popover-caret"
+                />
+              </span>
+            </span>
+          </span>
         </div>
         <div
           class="nursing-task-section"
         >
           <div
-            class="bx--form-item"
+            class="cds--toggle cds--toggle--disabled"
           >
-            <input
-              class="bx--toggle-input bx--toggle-input--small"
+            <button
+              aria-checked="false"
+              class="cds--toggle__button"
               data-testid="done-toggle"
               disabled=""
               id="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
-              type="checkbox"
+              role="switch"
+              type="button"
             />
-            <label
-              aria-label="Toggle"
-              class="bx--toggle-input__label"
+            <div
+              class="cds--toggle__label"
               for="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
+              id="b9904678-eb07-4eb0-8d03-53fcaa1d20d0_label"
             >
-              <span
-                class="bx--toggle__switch"
+              <div
+                class="cds--toggle__appearance cds--toggle__appearance--sm"
               >
-                <svg
-                  class="bx--toggle__check"
-                  height="5px"
-                  viewBox="0 0 6 5"
-                  width="6px"
+                <div
+                  class="cds--toggle__switch"
                 >
-                  <path
-                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
-                  />
-                </svg>
+                  <svg
+                    aria-hidden="true"
+                    class="cds--toggle__check"
+                    focusable="false"
+                    height="5px"
+                    viewBox="0 0 6 5"
+                    width="6px"
+                  >
+                    <path
+                      d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
+                    />
+                  </svg>
+                </div>
                 <span
                   aria-hidden="true"
-                  class="bx--toggle__text--off"
+                  class="cds--toggle__text"
+                  dir="auto"
                 >
                   <div>
                     Done
                      
                   </div>
                 </span>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--on"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-              </span>
-            </label>
+              </div>
+            </div>
           </div>
           <div
             class="medication-name"
@@ -240,11 +280,12 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
               Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
             </div>
             <div
-              class="bx--tag bx--tag--sm bx--tag--blue"
-              id="tag-81"
+              class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
+              id="tag-id-_r_7i_"
             >
-              
               <span
+                class="cds--tag__label"
+                dir="auto"
                 title="Rx"
               >
                 Rx
@@ -262,127 +303,176 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
               Intravenous
             </span>
           </div>
-          <button
-            aria-expanded="false"
-            aria-haspopup="true"
-            aria-label="Open and close list of options"
-            class="overflowMenu bx--overflow-menu bx--overflow-menu--md"
-            type="button"
+          <span
+            class="cds--overflow-menu__wrapper"
           >
-            <svg
-              aria-label="Open and close list of options"
-              class="bx--overflow-menu__icon"
-              fill="currentColor"
-              focusable="false"
-              height="16"
-              preserveAspectRatio="xMidYMid meet"
-              role="img"
-              viewBox="0 0 32 32"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
             >
-              <circle
-                cx="16"
-                cy="8"
-                r="2"
-              />
-              <circle
-                cx="16"
-                cy="16"
-                r="2"
-              />
-              <circle
-                cx="16"
-                cy="24"
-                r="2"
-              />
-              <title>
-                Open and close list of options
-              </title>
-            </svg>
-          </button>
+              <div
+                class="cds--tooltip-trigger__wrapper"
+              >
+                <button
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  aria-labelledby="tooltip-_r_7k_"
+                  class="overflowMenu cds--overflow-menu cds--btn cds--btn--ghost cds--btn--icon-only"
+                  type="button"
+                >
+                  <svg
+                    aria-label="Options"
+                    class="cds--overflow-menu__icon"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="16"
+                      cy="8"
+                      r="2"
+                    />
+                    <circle
+                      cx="16"
+                      cy="16"
+                      r="2"
+                    />
+                    <circle
+                      cx="16"
+                      cy="24"
+                      r="2"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <span
+                aria-hidden="true"
+                class="cds--popover"
+                id="tooltip-_r_7k_"
+                role="tooltip"
+              >
+                <span
+                  class="cds--popover-content cds--tooltip-content"
+                >
+                  Options
+                </span>
+                <span
+                  class="cds--popover-caret"
+                />
+              </span>
+            </span>
+          </span>
         </div>
       </div>
       <div
-        class="bx--modal bx--modal-tall"
+        class="cds--layer-one cds--modal cds--modal-tall"
         role="presentation"
       >
         <span
-          class="bx--visually-hidden"
+          class="cds--visually-hidden"
           role="link"
           tabindex="0"
         >
           Focus sentinel
         </span>
         <div
-          aria-label="[object Object]"
           aria-modal="true"
-          class="bx--modal-container"
+          class="cds--modal-container"
           role="dialog"
           tabindex="-1"
         >
           <div
-            class="bx--modal-header"
+            class="cds--modal-header"
           >
-            
-            <h3
-              class="bx--modal-header__heading"
-              id="bx--modal-header__heading--modal-11"
+            <h2
+              class="cds--modal-header__heading"
+              dir="auto"
+              id="cds--modal-header__heading--modal-id-_r_7o_"
             >
               Please confirm your nursing tasks
-            </h3>
-            <button
-              aria-label="close"
-              class="bx--modal-close"
-              type="button"
+            </h2>
+            <div
+              class="cds--modal-close-button"
             >
-              <svg
-                aria-hidden="true"
-                class="bx--modal-close__icon"
-                fill="currentColor"
-                focusable="false"
-                height="20"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 32 32"
-                width="20"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
               >
-                <path
-                  d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
-                />
-              </svg>
-            </button>
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-label="Close"
+                    aria-labelledby="tooltip-_r_7q_"
+                    class="cds--modal-close cds--btn cds--btn--primary cds--btn--icon-only"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="cds--modal-close__icon"
+                      fill="currentColor"
+                      focusable="false"
+                      height="20"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 32 32"
+                      width="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-_r_7q_"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Close
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </div>
           </div>
           <div
-            aria-labelledby="bx--modal-header__heading--modal-11"
-            class="bx--modal-content"
-            id="bx--modal-body--modal-11"
+            class="cds--layer-two cds--modal-content cds--modal-scroll-content--no-fade"
+            id="cds--modal-body--modal-id-_r_7o_"
           >
             <hr />
             <div
               aria-label="Structured list section"
-              class="bx--structured-list administered-list-body"
+              class="cds--structured-list administered-list-body"
               role="table"
             >
               <div
-                class="bx--structured-list-tbody"
+                class="cds--structured-list-tbody"
                 role="rowgroup"
               />
             </div>
           </div>
           <div
-            class="bx--modal-footer bx--btn-set"
+            aria-busy="false"
+            class="cds--modal-footer cds--btn-set"
           >
             <button
-              class="bx--btn bx--btn--secondary"
-              tabindex="0"
+              class="cds--btn cds--btn--secondary"
               type="button"
             >
               Cancel
             </button>
             <button
-              class="bx--btn bx--btn--primary"
-              tabindex="0"
+              class="cds--btn cds--btn--primary"
               type="button"
             >
               Save
@@ -390,7 +480,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
           </div>
         </div>
         <span
-          class="bx--visually-hidden"
+          class="cds--visually-hidden"
           role="link"
           tabindex="0"
         >
@@ -401,9 +491,8 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
         class="footer"
       >
         <button
-          class="cancel-button-slider bx--btn bx--btn--secondary"
+          class="cancel-button-slider cds--btn cds--btn--secondary"
           data-testid="cancel"
-          tabindex="0"
           type="button"
         >
           <span>
@@ -411,9 +500,8 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
           </span>
         </button>
         <button
-          class="save-button-slider bx--btn bx--btn--primary bx--btn--disabled"
+          class="save-button-slider cds--btn cds--btn--primary cds--btn--disabled"
           disabled=""
-          tabindex="0"
           type="button"
         >
           Save
@@ -438,34 +526,49 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
       <div
         class="close-icon"
       >
-        <button
-          class="bx--btn bx--btn--ghost bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
-          tabindex="0"
-          type="button"
+        <span
+          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
         >
           <div
-            class="bx--assistive-text"
+            class="cds--tooltip-trigger__wrapper"
           >
-            Close
+            <button
+              aria-labelledby="tooltip-_r_1_"
+              class="cds--btn cds--btn--ghost cds--btn--icon-only"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                />
+              </svg>
+            </button>
           </div>
-          <svg
+          <span
             aria-hidden="true"
-            aria-label="Close"
-            class="bx--btn__icon"
-            fill="currentColor"
-            focusable="false"
-            height="16"
-            preserveAspectRatio="xMidYMid meet"
-            role="img"
-            viewBox="0 0 32 32"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
+            class="cds--popover"
+            id="tooltip-_r_1_"
+            role="tooltip"
           >
-            <path
-              d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+            <span
+              class="cds--popover-content cds--tooltip-content"
+            >
+              Close
+            </span>
+            <span
+              class="cds--popover-caret"
             />
-          </svg>
-        </button>
+          </span>
+        </span>
       </div>
     </div>
     <div
@@ -485,52 +588,52 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
           class="nursing-task-section"
         >
           <div
-            class="bx--form-item"
+            class="cds--toggle"
           >
-            <input
-              class="bx--toggle-input bx--toggle-input--small"
+            <button
+              aria-checked="false"
+              class="cds--toggle__button"
               data-testid="done-toggle"
               id="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
-              type="checkbox"
+              role="switch"
+              type="button"
             />
-            <label
-              aria-label="Toggle"
-              class="bx--toggle-input__label"
+            <div
+              class="cds--toggle__label"
               for="d9ae1992-63ac-4e05-8dfb-13f021102ec6"
+              id="d9ae1992-63ac-4e05-8dfb-13f021102ec6_label"
             >
-              <span
-                class="bx--toggle__switch"
+              <div
+                class="cds--toggle__appearance cds--toggle__appearance--sm"
               >
-                <svg
-                  class="bx--toggle__check"
-                  height="5px"
-                  viewBox="0 0 6 5"
-                  width="6px"
+                <div
+                  class="cds--toggle__switch"
                 >
-                  <path
-                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
-                  />
-                </svg>
+                  <svg
+                    aria-hidden="true"
+                    class="cds--toggle__check"
+                    focusable="false"
+                    height="5px"
+                    viewBox="0 0 6 5"
+                    width="6px"
+                  >
+                    <path
+                      d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
+                    />
+                  </svg>
+                </div>
                 <span
                   aria-hidden="true"
-                  class="bx--toggle__text--off"
+                  class="cds--toggle__text"
+                  dir="auto"
                 >
                   <div>
                     Done
                      
                   </div>
                 </span>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--on"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-              </span>
-            </label>
+              </div>
+            </div>
           </div>
           <div
             class="medication-name"
@@ -541,11 +644,12 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
               Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
             </div>
             <div
-              class="bx--tag bx--tag--sm bx--tag--blue"
-              id="tag-3"
+              class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
+              id="tag-id-_r_4_"
             >
-              
               <span
+                class="cds--tag__label"
+                dir="auto"
                 title="Rx"
               >
                 Rx
@@ -563,97 +667,121 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
               Topical
             </span>
           </div>
-          <button
-            aria-expanded="false"
-            aria-haspopup="true"
-            aria-label="Open and close list of options"
-            class="overflowMenu bx--overflow-menu bx--overflow-menu--md"
-            type="button"
+          <span
+            class="cds--overflow-menu__wrapper"
           >
-            <svg
-              aria-label="Open and close list of options"
-              class="bx--overflow-menu__icon"
-              fill="currentColor"
-              focusable="false"
-              height="16"
-              preserveAspectRatio="xMidYMid meet"
-              role="img"
-              viewBox="0 0 32 32"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
             >
-              <circle
-                cx="16"
-                cy="8"
-                r="2"
-              />
-              <circle
-                cx="16"
-                cy="16"
-                r="2"
-              />
-              <circle
-                cx="16"
-                cy="24"
-                r="2"
-              />
-              <title>
-                Open and close list of options
-              </title>
-            </svg>
-          </button>
+              <div
+                class="cds--tooltip-trigger__wrapper"
+              >
+                <button
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  aria-labelledby="tooltip-_r_6_"
+                  class="overflowMenu cds--overflow-menu cds--btn cds--btn--ghost cds--btn--icon-only"
+                  type="button"
+                >
+                  <svg
+                    aria-label="Options"
+                    class="cds--overflow-menu__icon"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="16"
+                      cy="8"
+                      r="2"
+                    />
+                    <circle
+                      cx="16"
+                      cy="16"
+                      r="2"
+                    />
+                    <circle
+                      cx="16"
+                      cy="24"
+                      r="2"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <span
+                aria-hidden="true"
+                class="cds--popover"
+                id="tooltip-_r_6_"
+                role="tooltip"
+              >
+                <span
+                  class="cds--popover-content cds--tooltip-content"
+                >
+                  Options
+                </span>
+                <span
+                  class="cds--popover-caret"
+                />
+              </span>
+            </span>
+          </span>
         </div>
         <div
           class="nursing-task-section"
         >
           <div
-            class="bx--form-item"
+            class="cds--toggle cds--toggle--disabled"
           >
-            <input
-              class="bx--toggle-input bx--toggle-input--small"
+            <button
+              aria-checked="false"
+              class="cds--toggle__button"
               data-testid="done-toggle"
               disabled=""
               id="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
-              type="checkbox"
+              role="switch"
+              type="button"
             />
-            <label
-              aria-label="Toggle"
-              class="bx--toggle-input__label"
+            <div
+              class="cds--toggle__label"
               for="b9904678-eb07-4eb0-8d03-53fcaa1d20d0"
+              id="b9904678-eb07-4eb0-8d03-53fcaa1d20d0_label"
             >
-              <span
-                class="bx--toggle__switch"
+              <div
+                class="cds--toggle__appearance cds--toggle__appearance--sm"
               >
-                <svg
-                  class="bx--toggle__check"
-                  height="5px"
-                  viewBox="0 0 6 5"
-                  width="6px"
+                <div
+                  class="cds--toggle__switch"
                 >
-                  <path
-                    d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
-                  />
-                </svg>
+                  <svg
+                    aria-hidden="true"
+                    class="cds--toggle__check"
+                    focusable="false"
+                    height="5px"
+                    viewBox="0 0 6 5"
+                    width="6px"
+                  >
+                    <path
+                      d="M2.2 2.7L5 0 6 1 2.2 5 0 2.7 1 1.5z"
+                    />
+                  </svg>
+                </div>
                 <span
                   aria-hidden="true"
-                  class="bx--toggle__text--off"
+                  class="cds--toggle__text"
+                  dir="auto"
                 >
                   <div>
                     Done
                      
                   </div>
                 </span>
-                <span
-                  aria-hidden="true"
-                  class="bx--toggle__text--on"
-                >
-                  <div>
-                    Done
-                     
-                  </div>
-                </span>
-              </span>
-            </label>
+              </div>
+            </div>
           </div>
           <div
             class="medication-name"
@@ -664,11 +792,12 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
               Sodium Chloride 0.9% (1 L) Infusion Bag (Normal Saline)
             </div>
             <div
-              class="bx--tag bx--tag--sm bx--tag--blue"
-              id="tag-4"
+              class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
+              id="tag-id-_r_9_"
             >
-              
               <span
+                class="cds--tag__label"
+                dir="auto"
                 title="Rx"
               >
                 Rx
@@ -686,127 +815,176 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
               Intravenous
             </span>
           </div>
-          <button
-            aria-expanded="false"
-            aria-haspopup="true"
-            aria-label="Open and close list of options"
-            class="overflowMenu bx--overflow-menu bx--overflow-menu--md"
-            type="button"
+          <span
+            class="cds--overflow-menu__wrapper"
           >
-            <svg
-              aria-label="Open and close list of options"
-              class="bx--overflow-menu__icon"
-              fill="currentColor"
-              focusable="false"
-              height="16"
-              preserveAspectRatio="xMidYMid meet"
-              role="img"
-              viewBox="0 0 32 32"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
+            <span
+              class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip"
             >
-              <circle
-                cx="16"
-                cy="8"
-                r="2"
-              />
-              <circle
-                cx="16"
-                cy="16"
-                r="2"
-              />
-              <circle
-                cx="16"
-                cy="24"
-                r="2"
-              />
-              <title>
-                Open and close list of options
-              </title>
-            </svg>
-          </button>
+              <div
+                class="cds--tooltip-trigger__wrapper"
+              >
+                <button
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  aria-labelledby="tooltip-_r_b_"
+                  class="overflowMenu cds--overflow-menu cds--btn cds--btn--ghost cds--btn--icon-only"
+                  type="button"
+                >
+                  <svg
+                    aria-label="Options"
+                    class="cds--overflow-menu__icon"
+                    fill="currentColor"
+                    focusable="false"
+                    height="16"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="16"
+                      cy="8"
+                      r="2"
+                    />
+                    <circle
+                      cx="16"
+                      cy="16"
+                      r="2"
+                    />
+                    <circle
+                      cx="16"
+                      cy="24"
+                      r="2"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <span
+                aria-hidden="true"
+                class="cds--popover"
+                id="tooltip-_r_b_"
+                role="tooltip"
+              >
+                <span
+                  class="cds--popover-content cds--tooltip-content"
+                >
+                  Options
+                </span>
+                <span
+                  class="cds--popover-caret"
+                />
+              </span>
+            </span>
+          </span>
         </div>
       </div>
       <div
-        class="bx--modal bx--modal-tall"
+        class="cds--layer-one cds--modal cds--modal-tall"
         role="presentation"
       >
         <span
-          class="bx--visually-hidden"
+          class="cds--visually-hidden"
           role="link"
           tabindex="0"
         >
           Focus sentinel
         </span>
         <div
-          aria-label="[object Object]"
           aria-modal="true"
-          class="bx--modal-container"
+          class="cds--modal-container"
           role="dialog"
           tabindex="-1"
         >
           <div
-            class="bx--modal-header"
+            class="cds--modal-header"
           >
-            
-            <h3
-              class="bx--modal-header__heading"
-              id="bx--modal-header__heading--modal-1"
+            <h2
+              class="cds--modal-header__heading"
+              dir="auto"
+              id="cds--modal-header__heading--modal-id-_r_f_"
             >
               Please confirm your nursing tasks
-            </h3>
-            <button
-              aria-label="close"
-              class="bx--modal-close"
-              type="button"
+            </h2>
+            <div
+              class="cds--modal-close-button"
             >
-              <svg
-                aria-hidden="true"
-                class="bx--modal-close__icon"
-                fill="currentColor"
-                focusable="false"
-                height="20"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 32 32"
-                width="20"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--left cds--tooltip cds--icon-tooltip"
               >
-                <path
-                  d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4 14.6 16 8 22.6 9.4 24 16 17.4 22.6 24 24 22.6 17.4 16 24 9.4z"
-                />
-              </svg>
-            </button>
+                <div
+                  class="cds--tooltip-trigger__wrapper"
+                >
+                  <button
+                    aria-label="Close"
+                    aria-labelledby="tooltip-_r_h_"
+                    class="cds--modal-close cds--btn cds--btn--primary cds--btn--icon-only"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="cds--modal-close__icon"
+                      fill="currentColor"
+                      focusable="false"
+                      height="20"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 32 32"
+                      width="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="cds--popover"
+                  id="tooltip-_r_h_"
+                  role="tooltip"
+                >
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Close
+                  </span>
+                  <span
+                    class="cds--popover-caret"
+                  />
+                </span>
+              </span>
+            </div>
           </div>
           <div
-            aria-labelledby="bx--modal-header__heading--modal-1"
-            class="bx--modal-content"
-            id="bx--modal-body--modal-1"
+            class="cds--layer-two cds--modal-content cds--modal-scroll-content--no-fade"
+            id="cds--modal-body--modal-id-_r_f_"
           >
             <hr />
             <div
               aria-label="Structured list section"
-              class="bx--structured-list administered-list-body"
+              class="cds--structured-list administered-list-body"
               role="table"
             >
               <div
-                class="bx--structured-list-tbody"
+                class="cds--structured-list-tbody"
                 role="rowgroup"
               />
             </div>
           </div>
           <div
-            class="bx--modal-footer bx--btn-set"
+            aria-busy="false"
+            class="cds--modal-footer cds--btn-set"
           >
             <button
-              class="bx--btn bx--btn--secondary"
-              tabindex="0"
+              class="cds--btn cds--btn--secondary"
               type="button"
             >
               Cancel
             </button>
             <button
-              class="bx--btn bx--btn--primary"
-              tabindex="0"
+              class="cds--btn cds--btn--primary"
               type="button"
             >
               Save
@@ -814,7 +992,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
           </div>
         </div>
         <span
-          class="bx--visually-hidden"
+          class="cds--visually-hidden"
           role="link"
           tabindex="0"
         >
@@ -825,9 +1003,8 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
         class="footer"
       >
         <button
-          class="cancel-button-slider bx--btn bx--btn--secondary"
+          class="cancel-button-slider cds--btn cds--btn--secondary"
           data-testid="cancel"
-          tabindex="0"
           type="button"
         >
           <span>
@@ -835,9 +1012,8 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
           </span>
         </button>
         <button
-          class="save-button-slider bx--btn bx--btn--primary bx--btn--disabled"
+          class="save-button-slider cds--btn cds--btn--primary cds--btn--disabled"
           disabled=""
-          tabindex="0"
           type="button"
         >
           Save

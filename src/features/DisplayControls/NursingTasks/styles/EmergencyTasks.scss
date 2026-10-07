@@ -1,4 +1,4 @@
-@import "~carbon-components/scss/globals/scss/vars";
+@use "@carbon/react/scss/theme" as *;
 
 .emergency-task-slider {
   padding: 0 20px 120px;
@@ -8,7 +8,7 @@
     flex-direction: column;
     gap: 16px;
 
-    .bx--list-box__menu-item[disabled] .bx--list-box__menu-item__option {
+    .cds--list-box__menu-item[disabled] .cds--list-box__menu-item__option {
       color: gray;
     }
   }
@@ -18,15 +18,15 @@
     gap: 10px;
   }
 
-  .bx--list-box__wrapper {
+  .cds--list-box__wrapper {
     max-width: 100%;
   }
 
-  .bx--label {
-    color: $text-01;
+  .cds--label {
+    color: $text-primary;
   }
 
-  .bx--tab-content {
+  .cds--tab-content {
     padding: 1rem 0;
   }
 
@@ -57,7 +57,7 @@
 
   .instruction-value {
     margin: 0;
-    color: $text-01;
+    color: $text-primary;
     font-size: 14px;
     font-weight: 400;
     line-height: 18px;
@@ -79,26 +79,26 @@
     justify-content: center;
     flex-shrink: 0;
     background-color: transparent !important;
-    color: $interactive-01 !important;
-    border: 1px solid $interactive-01 !important;
+    color: $interactive !important;
+    border: 1px solid $interactive !important;
 
     &:hover {
-      background-color: $interactive-01 !important;
-      color: $inverse-01 !important;
-      border: 1px solid $interactive-01 !important;
+      background-color: $interactive !important;
+      color: $text-inverse !important;
+      border: 1px solid $interactive !important;
     }
 
     &:active {
-      background-color: $interactive-01 !important;
-      color: $inverse-01 !important;
-      border: 1px solid $interactive-01 !important;
+      background-color: $interactive !important;
+      color: $text-inverse !important;
+      border: 1px solid $interactive !important;
     }
 
     &:focus {
-      background-color: $interactive-01 !important;
-      color: $inverse-01 !important;
-      border: 1px solid $interactive-01 !important;
-      outline: 2px solid $interactive-01;
+      background-color: $interactive !important;
+      color: $text-inverse !important;
+      border: 1px solid $interactive !important;
+      outline: 2px solid $interactive;
       outline-offset: 2px;
       box-shadow: none !important;
     }
@@ -120,12 +120,12 @@
       width: 100%;
     }
 
-    .bx--date-picker-container,
-    .bx--form-item {
+    .cds--date-picker-container,
+    .cds--form-item {
       margin-bottom: 0;
     }
 
-    .bx--date-picker__input {
+    .cds--date-picker__input {
       height: 40px;
       font-size: 0.875rem;
       font-weight: 400;
@@ -133,11 +133,11 @@
       letter-spacing: 0.16px;
     }
 
-    .bx--date-picker__icon {
+    .cds--date-picker__icon {
       cursor: pointer;
     }
 
-    .bx--label {
+    .cds--label {
       margin-bottom: 8px;
       font-size: 0.75rem;
       font-weight: 400;
@@ -151,8 +151,8 @@
     padding-top: 0;
     margin-top: 0;
 
-    .bx--label,
-    .bx--text-area__label-wrapper {
+    .cds--label,
+    .cds--text-area__label-wrapper {
       margin-top: 5px;
     }
   }
@@ -160,7 +160,7 @@
   .replicated-task-remove-button {
     background: none;
     border: none;
-    color: $interactive-01;
+    color: $interactive;
     cursor: pointer;
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.875rem;
@@ -174,7 +174,7 @@
   .replicated-task-separator {
     width: 100%;
     height: 1px;
-    background-color: $ui-03;
+    background-color: $border-subtle;
     margin: 0;
   }
 
