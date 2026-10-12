@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { ComboBox } from "carbon-components-react";
+import { ComboBox } from "@carbon/react";
 import { searchDrugsByName } from "../../utils/CommonUtils";
 import { Title } from "bahmni-carbon-ui";
 

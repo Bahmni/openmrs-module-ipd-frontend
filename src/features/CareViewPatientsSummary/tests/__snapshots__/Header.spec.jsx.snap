@@ -10,20 +10,20 @@ exports[`Header should render header component 1`] = `
       data-testid="patient-details-header"
     >
       <div
-        class="bx--content-switcher task-filter-switcher bx--content-switcher--sm"
+        class="cds--content-switcher task-filter-switcher cds--content-switcher--sm cds--layout--size-sm cds--layout-constraint--size__default-md cds--layout-constraint--size__min-sm cds--layout-constraint--size__max-lg"
         data-testid="task-filter-switcher"
         role="tablist"
       >
         <button
           aria-selected="true"
-          class="bx--content-switcher-btn bx--content-switcher--selected"
+          class="cds--content-switcher-btn cds--content-switcher--selected"
           data-testid="filter-tab-all"
           role="tab"
           tabindex="0"
           type="button"
         >
           <span
-            class="bx--content-switcher__label"
+            class="cds--content-switcher__label"
             title="All"
           >
             All
@@ -31,14 +31,14 @@ exports[`Header should render header component 1`] = `
         </button>
         <button
           aria-selected="false"
-          class="bx--content-switcher-btn"
+          class="cds--content-switcher-btn"
           data-testid="filter-tab-new"
           role="tab"
           tabindex="-1"
           type="button"
         >
           <span
-            class="bx--content-switcher__label"
+            class="cds--content-switcher__label"
             title="New"
           >
             New
@@ -46,14 +46,14 @@ exports[`Header should render header component 1`] = `
         </button>
         <button
           aria-selected="false"
-          class="bx--content-switcher-btn"
+          class="cds--content-switcher-btn"
           data-testid="filter-tab-pending"
           role="tab"
           tabindex="-1"
           type="button"
         >
           <span
-            class="bx--content-switcher__label"
+            class="cds--content-switcher__label"
             title="Pending"
           >
             Pending

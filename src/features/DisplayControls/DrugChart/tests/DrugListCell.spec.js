@@ -9,19 +9,15 @@ import {
 } from "./DrugListCellMockData";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 const MockTooltip = jest.fn();
 jest.mock("../../../../icons/note.svg");
 
-jest.mock("carbon-components-react", () => {
-  const actual = jest.requireActual("carbon-components-react");
-  return {
-    ...actual,
-    Tooltip: (props) => {
-      MockTooltip(props);
-      return <div>{props.children}</div>;
-    },
+jest.mock("../../../../components/IconToggletip/IconToggletip", () => {
+  return function MockIconToggletip(props) {
+    MockTooltip(props);
+    return <div>{props.children}</div>;
   };
 });
 

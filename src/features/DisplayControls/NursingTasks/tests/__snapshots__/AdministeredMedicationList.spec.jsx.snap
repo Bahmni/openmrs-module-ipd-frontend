@@ -4,19 +4,20 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
 <div>
   <div
     aria-label="Structured list section"
-    class="bx--structured-list administered-list-body"
+    class="cds--structured-list administered-list-body"
     role="table"
   >
     <div
-      class="bx--structured-list-tbody"
+      class="cds--structured-list-tbody"
       role="rowgroup"
     >
       <div
-        class="bx--structured-list-row"
+        class="cds--structured-list-row"
         role="row"
       >
         <div
-          class="drug-name-cell bx--structured-list-td"
+          class="cds--structured-list-td drug-name-cell"
+          dir="auto"
           role="cell"
         >
           <div>
@@ -39,11 +40,12 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
           </span>
         </div>
         <div
-          class="administered-time-cell bx--structured-list-td"
+          class="cds--structured-list-td administered-time-cell"
+          dir="auto"
           role="cell"
         >
           <test-file-stub
-            classname="clock-icon"
+            class="clock-icon"
           />
           <span
             class="time"
@@ -52,7 +54,8 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
           </span>
         </div>
         <div
-          class="bx--structured-list-td"
+          class="cds--structured-list-td"
+          dir="auto"
           role="cell"
         >
           <test-file-stub />
@@ -65,11 +68,12 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
         </div>
       </div>
       <div
-        class="bx--structured-list-row"
+        class="cds--structured-list-row"
         role="row"
       >
         <div
-          class="drug-name-cell bx--structured-list-td"
+          class="cds--structured-list-td drug-name-cell"
+          dir="auto"
           role="cell"
         >
           <div>
@@ -88,11 +92,12 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
           </span>
         </div>
         <div
-          class="administered-time-cell bx--structured-list-td"
+          class="cds--structured-list-td administered-time-cell"
+          dir="auto"
           role="cell"
         >
           <test-file-stub
-            classname="clock-icon"
+            class="clock-icon"
           />
           <span
             class="time"
@@ -101,7 +106,8 @@ exports[`AdministeredMedicationList should render AdministeredMedicationList 1`]
           </span>
         </div>
         <div
-          class="bx--structured-list-td"
+          class="cds--structured-list-td"
+          dir="auto"
           role="cell"
         >
           <test-file-stub />

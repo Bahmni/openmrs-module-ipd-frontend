@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
-import { Button, Loading } from "carbon-components-react";
-import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
+import { Button, Loading } from "@carbon/react";
+import { ChevronLeft, ChevronRight, Time } from "@carbon/icons-react";
 import DrugChart from "./DrugChart";
 import {
   fetchMedications,
@@ -529,9 +529,9 @@ export default function DrugChartWrapper(props) {
             </div>
           )}
           <div className="shift-time">
-            {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {shiftStartDate} <span className="mr-5">|</span> <Time size={16} />{" "}
             {formattedShiftStartTime} <span className="to-text">to</span>{" "}
-            <Time16 /> {formattedShiftEndTime}
+            <Time size={16} /> {formattedShiftEndTime}
           </div>
         </div>
       );
@@ -547,9 +547,9 @@ export default function DrugChartWrapper(props) {
             </div>
           )}
           <div className="shift-time">
-            {shiftStartDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {shiftStartDate} <span className="mr-5">|</span> <Time size={16} />{" "}
             {formattedShiftStartTime} <span className="to-text">to</span>{" "}
-            {shiftEndDate} <span className="mr-5">|</span> <Time16 />{" "}
+            {shiftEndDate} <span className="mr-5">|</span> <Time size={16} />{" "}
             {formattedShiftEndTime}
           </div>
         </div>
@@ -575,7 +575,7 @@ export default function DrugChartWrapper(props) {
           />
         </Button>
         <Button
-          renderIcon={ChevronLeft16}
+          renderIcon={ChevronLeft}
           kind="tertiary"
           isExpressive
           hasIconOnly
@@ -586,7 +586,7 @@ export default function DrugChartWrapper(props) {
           disabled={isShiftButtonsDisabled.previous}
         />
         <Button
-          renderIcon={ChevronRight16}
+          renderIcon={ChevronRight}
           kind="tertiary"
           isExpressive
           hasIconOnly

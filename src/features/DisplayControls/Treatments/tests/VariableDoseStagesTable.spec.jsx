@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import MockDate from "mockdate";
 import VariableDoseStagesTable from "../components/VariableDoseStagesTable";
 import { MEDICATION_ADDITIVES_EXTENSION_URL } from "../../../../utils/FhirDosingUtils";
