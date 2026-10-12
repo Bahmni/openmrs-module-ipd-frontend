@@ -2970,9 +2970,10 @@ babel-preset-jest@^29.5.0:
     babel-plugin-jest-hoist "^29.5.0"
     babel-preset-current-node-syntax "^1.0.0"
 
-"bahmni-carbon-ui@file:../bahmni-carbon-ui/bahmni-carbon-ui-v2.0.0.tgz":
+bahmni-carbon-ui@^2.0.0:
   version "2.0.0"
-  resolved "file:../bahmni-carbon-ui/bahmni-carbon-ui-v2.0.0.tgz#dabb33c135d3f68819bfab75c779ff73eed24251"
+  resolved "https://registry.yarnpkg.com/bahmni-carbon-ui/-/bahmni-carbon-ui-2.0.0.tgz#26884e1974fbf087710d80ea6fa5d184b87636e3"
+  integrity sha512-THvOIpziykfabXfMOLvI/J0gu5QEaG0JxA7Kaa3ymcdaFny3ShXFIon5bUoIYnctRBDXTXDoqJfeP0KOzM86tQ==
   dependencies:
     "@carbon/icons-react" "^11.89.0"
     "@carbon/react" "^1.117.0"
