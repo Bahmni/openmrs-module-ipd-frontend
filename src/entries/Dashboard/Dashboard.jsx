@@ -10,8 +10,8 @@ import {
   SideNav,
   SideNavItems,
   SideNavLink,
-} from "@carbon/react";
-import { Application, Home, UserActivity } from "@carbon/icons-react";
+} from "carbon-components-react";
+import { Application24, Home24, UserActivity24 } from "@carbon/icons-react";
 import { componentMapping } from "./componentMapping";
 import "./Dashboard.scss";
 import PropTypes from "prop-types";
@@ -275,14 +275,14 @@ export default function Dashboard(props) {
                       onClick={onClickSideNavExpand}
                       isActive={isSideNavExpanded}
                     />
-                    <Link href={homePageUrl} renderIcon={(props) => <Home size={24} {...props} />} />
+                    <Link href={homePageUrl} renderIcon={Home24} />
                     <Link
                       href={getAppLandingPageUrl(source)}
-                      renderIcon={(props) => <Application size={24} {...props} />}
+                      renderIcon={Application24}
                     />
                     <Link
                       href={getPatientDashboardUrl(patient?.uuid)}
-                      renderIcon={(props) => <UserActivity size={24} {...props} />}
+                      renderIcon={UserActivity24}
                     />
                   </div>
                   <SideNav

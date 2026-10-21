@@ -8,7 +8,7 @@ import {
   TableRow,
   TableHeader,
   Pagination,
-} from "@carbon/react";
+} from "carbon-components-react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import { abnormalHeader } from "../utils/VitalsUtils";

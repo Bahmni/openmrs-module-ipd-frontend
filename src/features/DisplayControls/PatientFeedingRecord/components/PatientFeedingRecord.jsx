@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import moment from "moment";
-import { Button, DataTableSkeleton } from "@carbon/react";
-import { ChevronLeft, ChevronRight, Time } from "@carbon/icons-react";
+import { Button, DataTableSkeleton } from "carbon-components-react";
+import { ChevronLeft16, ChevronRight16, Time16 } from "@carbon/icons-react";
 import { IPDContext } from "../../../../context/IPDContext";
 import {
   displayPeriodTimingsFormat,
@@ -131,9 +131,9 @@ const PatientFeedingRecord = () => {
             </div>
           )}
           <div className="period-time">
-            {periodStartDate} <span className="mr-5">|</span> <Time size={16} />{" "}
+            {periodStartDate} <span className="mr-5">|</span> <Time16 />{" "}
             {formattedPeriodStartTime} <span className="to-text">to</span>{" "}
-            <Time size={16} /> {formattedPeriodEndTime}
+            <Time16 /> {formattedPeriodEndTime}
           </div>
         </div>
       );
@@ -149,9 +149,9 @@ const PatientFeedingRecord = () => {
             </div>
           )}
           <div className="period-time">
-            {periodStartDate} <span className="mr-5">|</span> <Time size={16} />{" "}
+            {periodStartDate} <span className="mr-5">|</span> <Time16 />{" "}
             {formattedPeriodStartTime} <span className="to-text">to</span>{" "}
-            {periodEndDate} <span className="mr-5">|</span> <Time size={16} />{" "}
+            {periodEndDate} <span className="mr-5">|</span> <Time16 />{" "}
             {formattedPeriodEndTime}
           </div>
         </div>
@@ -220,7 +220,7 @@ const PatientFeedingRecord = () => {
           </Button>
           <Button
             disabled={periodButtonsDisabled.previous}
-            renderIcon={ChevronLeft}
+            renderIcon={ChevronLeft16}
             kind="tertiary"
             isExpressive
             hasIconOnly
@@ -231,7 +231,7 @@ const PatientFeedingRecord = () => {
           />
           <Button
             disabled={periodButtonsDisabled.next}
-            renderIcon={ChevronRight}
+            renderIcon={ChevronRight16}
             kind="tertiary"
             isExpressive
             hasIconOnly

@@ -5,10 +5,12 @@ import SVGIcon from "../components/SVGIcon";
 const MockTooltipCarbon = jest.fn();
 jest.mock("../../../../icons/pending.svg");
 
-jest.mock("../../../../components/IconToggletip/IconToggletip", () => {
-  return function MockIconToggletip(props) {
-    MockTooltipCarbon(props);
-    return <div>TooltipCarbon</div>;
+jest.mock("carbon-components-react", () => {
+  return {
+    Tooltip: (props) => {
+      MockTooltipCarbon(props);
+      return <div>TooltipCarbon</div>;
+    },
   };
 });
 
@@ -29,8 +31,9 @@ describe("SVGImage", () => {
     render(<SVGIcon iconType="Administered" info="info" />);
     expect(MockTooltipCarbon).toHaveBeenCalled();
     expect(MockTooltipCarbon).toHaveBeenCalledWith({
-      icon: expect.anything(),
+      renderIcon: expect.any(Function),
       children: "info",
+      autoOrientation: true,
     });
   });
 
@@ -38,8 +41,9 @@ describe("SVGImage", () => {
     render(<SVGIcon iconType="Administered-Late" info="info" />);
     expect(MockTooltipCarbon).toHaveBeenCalled();
     expect(MockTooltipCarbon).toHaveBeenCalledWith({
-      icon: expect.anything(),
+      renderIcon: expect.any(Function),
       children: "info",
+      autoOrientation: true,
     });
   });
 });

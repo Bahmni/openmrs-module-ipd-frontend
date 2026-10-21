@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import IconToggletip from "../../../../components/IconToggletip/IconToggletip";
+import { Tooltip } from "carbon-components-react";
 import AdministeredIcon from "../../../../icons/completed.svg";
 import AdministeredLateIcon from "../../../../icons/administered-late.svg";
 import LateIcon from "../../../../icons/late.svg";
@@ -39,7 +39,9 @@ export default function SVGIcon(props) {
   return (
     <div>
       {info && clickable ? (
-        <IconToggletip icon={icon}>{info}</IconToggletip>
+        <Tooltip autoOrientation={true} renderIcon={() => icon}>
+          {info}
+        </Tooltip>
       ) : (
         icon
       )}

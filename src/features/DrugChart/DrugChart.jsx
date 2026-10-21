@@ -14,21 +14,18 @@ export default function DrugChart(props) {
     vertical: true,
   });
   useEffect(() => {
-    // capture the nodes: React 19 detaches refs before effect cleanup runs on unmount
-    const left = leftPane.current;
-    const right = rightPane.current;
-    if (left) {
-      registerPane(left);
+    if (leftPane.current) {
+      registerPane(leftPane.current);
     }
-    if (right) {
-      registerPane(right);
+    if (rightPane.current) {
+      registerPane(rightPane.current);
     }
     return () => {
-      if (left) {
-        unregisterPane(left);
+      if (leftPane.current) {
+        unregisterPane(leftPane.current);
       }
-      if (right) {
-        unregisterPane(right);
+      if (rightPane.current) {
+        unregisterPane(rightPane.current);
       }
     };
   }, [leftPane, rightPane, registerPane, unregisterPane]);

@@ -12,13 +12,11 @@ exports[`DrugListCell should  match snapshot 1`] = `
         class="drug-name-container"
       >
         <span
-          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom name-tooltip"
+          class="bx--tooltip--definition bx--tooltip--a11y name-tooltip"
         >
           <button
-            aria-controls="id-_r_0_"
-            aria-describedby="id-_r_0_"
-            aria-expanded="false"
-            class="cds--definition-term"
+            aria-describedby="definition-tooltip-1"
+            class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
             type="button"
           >
             <div
@@ -28,17 +26,11 @@ exports[`DrugListCell should  match snapshot 1`] = `
             </div>
           </button>
           <span
-            class="cds--popover"
-            id="id-_r_0_"
+            class="bx--assistive-text"
+            id="definition-tooltip-1"
+            role="tooltip"
           >
-            <span
-              class="cds--popover-content cds--definition-tooltip"
-            >
-              Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
-            </span>
-            <span
-              class="cds--popover-caret"
-            />
+            Amoxicillin/Clavulanic Acid  125 mg/31.25 mg/5 mL Powder for Oral Suspension
           </span>
         </span>
          
@@ -64,12 +56,11 @@ exports[`DrugListCell should  match snapshot 1`] = `
       class="medication-tags"
     >
       <div
-        class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-        id="tag-id-_r_2_"
+        class="bx--tag bx--tag--sm bx--tag--blue"
+        id="tag-1"
       >
+        
         <span
-          class="cds--tag__label"
-          dir="auto"
           title="Rx"
         >
           Rx
@@ -92,13 +83,11 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
         class="drug-name-container"
       >
         <span
-          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom name-tooltip"
+          class="bx--tooltip--definition bx--tooltip--a11y name-tooltip"
         >
           <button
-            aria-controls="id-_r_8_"
-            aria-describedby="id-_r_8_"
-            aria-expanded="false"
-            class="cds--definition-term"
+            aria-describedby="definition-tooltip-4"
+            class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
             type="button"
           >
             <div
@@ -108,17 +97,11 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
             </div>
           </button>
           <span
-            class="cds--popover"
-            id="id-_r_8_"
+            class="bx--assistive-text"
+            id="definition-tooltip-4"
+            role="tooltip"
           >
-            <span
-              class="cds--popover-content cds--definition-tooltip"
-            >
-              Combintation Chlorpheniramine, Paracetamol and Pseudophedrine 100 mL Syrup (Cough and Cold Syrup)
-            </span>
-            <span
-              class="cds--popover-caret"
-            />
+            Combintation Chlorpheniramine, Paracetamol and Pseudophedrine 100 mL Syrup (Cough and Cold Syrup)
           </span>
         </span>
          
@@ -143,20 +126,18 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
           class="administration-details"
         >
           <span
-            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top administration-details-tooltip"
+            class="bx--tooltip--definition bx--tooltip--a11y administration-details-tooltip"
           >
             <button
-              aria-controls="id-_r_a_"
-              aria-describedby="id-_r_a_"
-              aria-expanded="false"
-              class="cds--definition-term"
+              aria-describedby="definition-tooltip-5"
+              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--top bx--tooltip--align-start"
               type="button"
             >
               <div
                 class="administration-time-info"
               >
                 <test-file-stub
-                  class="clock-icon"
+                  classname="clock-icon"
                 />
                 <span
                   style="color: rgb(82, 82, 82);"
@@ -166,17 +147,11 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
               </div>
             </button>
             <span
-              class="cds--popover"
-              id="id-_r_a_"
+              class="bx--assistive-text"
+              id="definition-tooltip-5"
+              role="tooltip"
             >
-              <span
-                class="cds--popover-content cds--definition-tooltip"
-              >
-                08:30
-              </span>
-              <span
-                class="cds--popover-caret"
-              />
+              08:30
             </span>
           </span>
         </div>
@@ -186,12 +161,11 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
       class="medication-tags"
     >
       <div
-        class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-        id="tag-id-_r_c_"
+        class="bx--tag bx--tag--sm bx--tag--blue"
+        id="tag-3"
       >
+        
         <span
-          class="cds--tag__label"
-          dir="auto"
           title="Rx"
         >
           Rx
@@ -214,13 +188,11 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
         class="drug-name-container"
       >
         <span
-          class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom name-tooltip"
+          class="bx--tooltip--definition bx--tooltip--a11y name-tooltip"
         >
           <button
-            aria-controls="id-_r_3_"
-            aria-describedby="id-_r_3_"
-            aria-expanded="false"
-            class="cds--definition-term"
+            aria-describedby="definition-tooltip-2"
+            class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
             type="button"
           >
             <div
@@ -230,17 +202,11 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
             </div>
           </button>
           <span
-            class="cds--popover"
-            id="id-_r_3_"
+            class="bx--assistive-text"
+            id="definition-tooltip-2"
+            role="tooltip"
           >
-            <span
-              class="cds--popover-content cds--definition-tooltip"
-            >
-              Combintation Chlorpheniramine, Paracetamol and Pseudophedrine 100 mL Syrup (Cough and Cold Syrup)
-            </span>
-            <span
-              class="cds--popover-caret"
-            />
+            Combintation Chlorpheniramine, Paracetamol and Pseudophedrine 100 mL Syrup (Cough and Cold Syrup)
           </span>
         </span>
          
@@ -265,20 +231,18 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
           class="administration-details"
         >
           <span
-            class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top administration-details-tooltip"
+            class="bx--tooltip--definition bx--tooltip--a11y administration-details-tooltip"
           >
             <button
-              aria-controls="id-_r_5_"
-              aria-describedby="id-_r_5_"
-              aria-expanded="false"
-              class="cds--definition-term"
+              aria-describedby="definition-tooltip-3"
+              class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--top bx--tooltip--align-start"
               type="button"
             >
               <div
                 class="administration-time-info"
               >
                 <test-file-stub
-                  class="clock-icon"
+                  classname="clock-icon"
                 />
                 <span
                   style="color: rgb(255, 0, 0);"
@@ -288,17 +252,11 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
               </div>
             </button>
             <span
-              class="cds--popover"
-              id="id-_r_5_"
+              class="bx--assistive-text"
+              id="definition-tooltip-3"
+              role="tooltip"
             >
-              <span
-                class="cds--popover-content cds--definition-tooltip"
-              >
-                02:30
-              </span>
-              <span
-                class="cds--popover-caret"
-              />
+              02:30
             </span>
           </span>
         </div>
@@ -308,12 +266,11 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
       class="medication-tags"
     >
       <div
-        class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-        id="tag-id-_r_7_"
+        class="bx--tag bx--tag--sm bx--tag--blue"
+        id="tag-2"
       >
+        
         <span
-          class="cds--tag__label"
-          dir="auto"
           title="Rx"
         >
           Rx

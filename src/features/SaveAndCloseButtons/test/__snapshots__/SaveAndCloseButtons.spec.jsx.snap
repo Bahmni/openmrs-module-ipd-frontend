@@ -6,8 +6,9 @@ exports[`SaveAndCloseButtons should render the component 1`] = `
     class="footer"
   >
     <button
-      class="cancel-button-slider cds--btn cds--btn--secondary"
+      class="cancel-button-slider bx--btn bx--btn--secondary"
       data-testid="cancel"
+      tabindex="0"
       type="button"
     >
       <span>
@@ -15,7 +16,8 @@ exports[`SaveAndCloseButtons should render the component 1`] = `
       </span>
     </button>
     <button
-      class="save-button-slider cds--btn cds--btn--primary"
+      class="save-button-slider bx--btn bx--btn--primary"
+      tabindex="0"
       type="button"
     >
       Save

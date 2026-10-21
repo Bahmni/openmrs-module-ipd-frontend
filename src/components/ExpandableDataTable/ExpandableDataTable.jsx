@@ -10,7 +10,7 @@ import {
   TableExpandedRow,
   TableExpandHeader,
   TableExpandRow,
-} from "@carbon/react";
+} from "carbon-components-react";
 import PropTypes from "prop-types";
 import "./ExpandableDataTable.scss";
 

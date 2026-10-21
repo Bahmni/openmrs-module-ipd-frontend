@@ -92,7 +92,7 @@
     margin: 0;
   }
 
-  .cds--tooltip__trigger.cds--tooltip__trigger--definition.cds--tooltip--bottom {
+  .bx--tooltip__trigger.bx--tooltip__trigger--definition.bx--tooltip--bottom {
     cursor: unset;
   }
 }
@@ -192,12 +192,12 @@
   margin-top: 3px;
 }
 
-.cds--tooltip__trigger.cds--tooltip__trigger--definition {
+.bx--tooltip__trigger.bx--tooltip__trigger--definition {
   border-bottom: 0;
 }
 
-.cds--tooltip__trigger.cds--tooltip__trigger--definition.cds--tooltip--bottom.cds--tooltip--align-start.cds--tooltip--a11y
-  + .cds--assistive-text {
+.bx--tooltip__trigger.bx--tooltip__trigger--definition.bx--tooltip--bottom.bx--tooltip--align-start.bx--tooltip--a11y
+  + .bx--assistive-text {
   color: #fff;
   font-size: 12px;
   font-style: normal;

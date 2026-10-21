@@ -6,8 +6,8 @@ import CalendarHeader from "./CalendarHeader";
 import "../styles/DrugChart.scss";
 import DrugList from "./DrugList";
 import DrugChartLegend from "../../../../components/AdministrationLegend/AdministrationLegend";
-import { Button } from "@carbon/react";
-import { ChevronDown, ChevronUp } from "@carbon/icons-react";
+import { Button } from "carbon-components-react";
+import { ChevronDown20, ChevronUp20 } from "@carbon/icons-react";
 import { throttle } from "lodash";
 import NoteLegend from "../../../../components/NoteLegend/NoteLegend";
 
@@ -26,21 +26,18 @@ export default function DrugChart(props) {
   const drugChartHeight = drugChartData?.length * drugChartRowHeight + 65;
 
   useEffect(() => {
-    // capture the nodes: React 19 detaches refs before effect cleanup runs on unmount
-    const left = leftPane.current;
-    const right = rightPane.current;
-    if (left) {
-      registerPane(left);
+    if (leftPane.current) {
+      registerPane(leftPane.current);
     }
-    if (right) {
-      registerPane(right);
+    if (rightPane.current) {
+      registerPane(rightPane.current);
     }
     return () => {
-      if (left) {
-        unregisterPane(left);
+      if (leftPane.current) {
+        unregisterPane(leftPane.current);
       }
-      if (right) {
-        unregisterPane(right);
+      if (rightPane.current) {
+        unregisterPane(rightPane.current);
       }
     };
   }, [leftPane, rightPane, registerPane, unregisterPane]);
@@ -59,11 +56,9 @@ export default function DrugChart(props) {
   const throttledScrollHandler = useCallback(throttle(handleScroll, 100), []);
 
   useEffect(() => {
-    // React 19 clears refs before running effect cleanups, so keep the node
-    const pane = leftPane.current;
-    pane.addEventListener("scroll", throttledScrollHandler);
+    leftPane.current.addEventListener("scroll", throttledScrollHandler);
     return () => {
-      pane.removeEventListener("scroll", throttledScrollHandler);
+      leftPane.current.removeEventListener("scroll", throttledScrollHandler);
     };
   }, [throttledScrollHandler]);
 
@@ -120,7 +115,7 @@ export default function DrugChart(props) {
             <Button
               className="arrow-button"
               data-testid="up-arrow"
-              renderIcon={(props) => <ChevronUp size={20} {...props} />}
+              renderIcon={ChevronUp20}
               onClick={() => handleSmoothScroll("Up")}
               disabled={isPrevDisabled}
             />
@@ -145,7 +140,7 @@ export default function DrugChart(props) {
         <Button
           className="arrow-button"
           data-testid="down-arrow"
-          renderIcon={(props) => <ChevronDown size={20} {...props} />}
+          renderIcon={ChevronDown20}
           onClick={() => handleSmoothScroll("Down")}
           disabled={isNextDisabled}
         />
