@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
-  Logout,
-  UserAvatar,
-  ChevronUp,
-  ChevronDown,
-  IbmCloudHyperProtectCryptoServices,
+  Logout24,
+  UserAvatar24,
+  ChevronUp16,
+  ChevronDown16,
+  IbmCloudHyperProtectCryptoServices24,
 } from "@carbon/icons-react";
 import "./ProviderActions.scss";
 import { FormattedMessage } from "react-intl";
@@ -42,14 +42,14 @@ export const ProviderActions = (props) => {
           className={`provider-menu ${isDropdownOpen && "menu-selected"}`}
           onClick={handleMenu}
         >
-          <UserAvatar size={24} className={"user-avatar"} />
+          <UserAvatar24 className={"user-avatar"} />
           <div className={"username"}>{username}</div>
-          {isDropdownOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          {isDropdownOpen ? <ChevronUp16 /> : <ChevronDown16 />}
         </div>
         {isDropdownOpen && (
           <div className={"dropdown"}>
             <div onClick={handleChangePassword}>
-              <IbmCloudHyperProtectCryptoServices size={24} />
+              <IbmCloudHyperProtectCryptoServices24 />
               <FormattedMessage
                 id={"CHANGE_PASSWORD"}
                 defaultMessage={"Change Password"}
@@ -59,7 +59,7 @@ export const ProviderActions = (props) => {
         )}
       </div>
       <span onClick={onLogOut} className={"logout"}>
-        <Logout size={24} />
+        <Logout24 />
       </span>
     </div>
   );

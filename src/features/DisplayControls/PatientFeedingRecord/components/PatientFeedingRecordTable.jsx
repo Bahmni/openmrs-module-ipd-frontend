@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@carbon/react";
+} from "carbon-components-react";
 
 const PatientFeedingRecordTable = (props) => {
   const { rows, headers, useZebraStyles } = props;

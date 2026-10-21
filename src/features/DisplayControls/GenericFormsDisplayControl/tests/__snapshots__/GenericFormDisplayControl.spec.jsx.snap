@@ -6,10 +6,10 @@ exports[`Generic Form Display Control should match snapshot 1`] = `
     class="form-table-display-control"
   >
     <div
-      class="cds--data-table-content"
+      class="bx--data-table-content"
     >
       <table
-        class="cds--data-table cds--data-table--lg cds--data-table--zebra"
+        class="bx--data-table bx--data-table--zebra bx--data-table--no-border"
       >
         <thead>
           <tr>
@@ -18,12 +18,9 @@ exports[`Generic Form Display Control should match snapshot 1`] = `
               scope="col"
             >
               <div
-                class="cds--table-header-label"
+                class="bx--table-header-label"
               >
                 Date
-                <div
-                  class="cds--table-header-label--decorator-inner"
-                />
               </div>
             </th>
             <th
@@ -31,12 +28,9 @@ exports[`Generic Form Display Control should match snapshot 1`] = `
               scope="col"
             >
               <div
-                class="cds--table-header-label"
+                class="bx--table-header-label"
               >
                 Time
-                <div
-                  class="cds--table-header-label--decorator-inner"
-                />
               </div>
             </th>
             <th
@@ -44,12 +38,9 @@ exports[`Generic Form Display Control should match snapshot 1`] = `
               scope="col"
             >
               <div
-                class="cds--table-header-label"
+                class="bx--table-header-label"
               >
                 Provider
-                <div
-                  class="cds--table-header-label--decorator-inner"
-                />
               </div>
             </th>
             <th
@@ -73,7 +64,7 @@ exports[`Generic Form Display Control should match snapshot 1`] = `
             </td>
             <td>
               <a
-                class="cds--link"
+                class="bx--link"
               >
                 View
               </a>

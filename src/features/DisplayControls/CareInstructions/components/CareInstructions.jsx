@@ -5,9 +5,6 @@ import {
   DataTableSkeleton,
   Link,
   Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
   Table,
   TableBody,
   TableCell,
@@ -16,7 +13,7 @@ import {
   TableRow,
   Tabs,
   Modal,
-} from "@carbon/react";
+} from "carbon-components-react";
 import { IPDContext } from "../../../../context/IPDContext";
 import { SliderContext } from "../../../../context/SliderContext";
 import RefreshDisplayControl from "../../../../context/RefreshDisplayControl";
@@ -371,24 +368,24 @@ const CareInstructions = (props) => {
   return (
     <div className={"care-instructions-display-control"}>
       <Tabs>
-        <TabList aria-label="Care instructions">
-          <Tab id="notAcknowledged">
-            {intl.formatMessage({
-              id: "NOT_ACKNOWLEDGED_TAB",
-              defaultMessage: "Not Acknowledged",
-            })}
-          </Tab>
-          <Tab id="acknowledged">
-            {intl.formatMessage({
-              id: "ACKNOWLEDGED_TAB",
-              defaultMessage: "Acknowledged",
-            })}
-          </Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>{renderNotAcknowledgedContent()}</TabPanel>
-          <TabPanel>{renderAcknowledgedContent()}</TabPanel>
-        </TabPanels>
+        <Tab
+          id="notAcknowledged"
+          label={intl.formatMessage({
+            id: "NOT_ACKNOWLEDGED_TAB",
+            defaultMessage: "Not Acknowledged",
+          })}
+        >
+          {renderNotAcknowledgedContent()}
+        </Tab>
+        <Tab
+          id="acknowledged"
+          label={intl.formatMessage({
+            id: "ACKNOWLEDGED_TAB",
+            defaultMessage: "Acknowledged",
+          })}
+        >
+          {renderAcknowledgedContent()}
+        </Tab>
       </Tabs>
       {isSliderOpen.careInstructionsTasks && (
         <AddEmergencyTasks

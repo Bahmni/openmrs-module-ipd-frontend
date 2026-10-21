@@ -1,8 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Loading, Modal } from "@carbon/react";
-import { Document as DocumentIcon } from "@carbon/icons-react";
-import IconToggletip from "../../../../components/IconToggletip/IconToggletip";
+import { Loading, Modal, Tooltip } from "carbon-components-react";
+import { Document20 } from "@carbon/icons-react";
 import _ from "lodash";
 import {
   fetchAllObservations,
@@ -51,12 +50,13 @@ export const ViewFormModal = (props) => {
             {heading}
             <span className={"observation-value"}>
               {obs[form.conceptName][0].comment && (
-                <IconToggletip
-                  icon={<DocumentIcon size={20} />}
+                <Tooltip
+                  renderIcon={Document20}
+                  autoOrientation={true}
                   className={"obs-note-icon"}
                 >
                   {obs[form.conceptName][0].comment}
-                </IconToggletip>
+                </Tooltip>
               )}
               {obs[form.conceptName]
                 .map((value) => {

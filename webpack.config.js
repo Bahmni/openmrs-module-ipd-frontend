@@ -7,12 +7,6 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const packageJson = require("./package.json");
 const dependencies = packageJson.dependencies;
 
-// sass-loader's modern API doesn't put the cwd on the load path; keep `@import "src/..."` working
-const sassLoader = {
-  loader: "sass-loader",
-  options: { sassOptions: { loadPaths: [__dirname] } },
-};
-
 const commonConfig = {
   entry: {
     index: "./src/index.js",
@@ -61,7 +55,7 @@ const commonConfig = {
       {
         test: /\.s[ac]ss$/i,
         exclude: /\.module\.s[ac]ss$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader", sassLoader],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
       {
         test: /\.module\.css$/i,
@@ -75,7 +69,7 @@ const commonConfig = {
         use: [
           MiniCssExtractPlugin.loader,
           { loader: "css-loader", options: { modules: true } },
-          sassLoader,
+          "sass-loader",
         ],
       },
       {
@@ -92,12 +86,6 @@ const commonConfig = {
           },
         ],
       },
-      // bahmni-carbon-ui self-hosts IBM Plex; its styles.css references woff2 files in its dist
-      {
-        test: /\.woff2?$/i,
-        type: "asset/resource",
-        generator: { filename: "fonts/[hash][ext]" },
-      },
     ],
   },
 };
@@ -107,14 +95,9 @@ const federationConfig = {
   name: "federation",
   resolve: {
     ...commonConfig.resolve,
-    // exact-match aliases so subpaths like react/jsx-runtime (used by @carbon/icons-react v11) still resolve
     alias: {
-      react$: path.resolve(__dirname, "./__mocks__/windowReact.js"),
-      "react-dom$": path.resolve(__dirname, "./__mocks__/windowReactDom.js"),
-      "react-dom/client$": path.resolve(
-        __dirname,
-        "./__mocks__/windowReactDom.js"
-      ),
+      react: path.resolve(__dirname, "./__mocks__/windowReact.js"),
+      "react-dom": path.resolve(__dirname, "./__mocks__/windowReactDom.js"),
     },
   },
   output: {
@@ -134,16 +117,18 @@ const federationConfig = {
       exposes: {
         "./Dashboard": "./src/entries/Dashboard.jsx",
         "./IpdDashboard": "./src/entries/Dashboard/Dashboard.jsx",
-        "./CareViewDashboard":
-          "./src/entries/CareViewDashboard/CareViewDashboard.jsx",
-        "./DraftIndicator":
-          "./src/components/DraftIndicator/DraftIndicator.jsx",
+        "./CareViewDashboard": "./src/entries/CareViewDashboard/CareViewDashboard.jsx",
+        "./DraftIndicator": "./src/components/DraftIndicator/DraftIndicator.jsx",
       },
       shared: {
         // ...dependencies,
-        "@carbon/react": {
+        "carbon-components": {
           singleton: true,
-          requiredVersion: dependencies["@carbon/react"],
+          requiredVersion: dependencies["carbon-components"],
+        },
+        "carbon-components-react": {
+          singleton: true,
+          requiredVersion: dependencies["carbon-components-react"],
         },
         "bahmni-carbon-ui": {
           singleton: true,
@@ -175,13 +160,7 @@ const sandboxConfig = {
     ...commonConfig.output,
     path: path.resolve(commonConfig.output.path, "sandbox"),
   },
-  // proxy backend calls to a local Bahmni (bahmni-docker on https://localhost);
-  // the session cookie from logging in there is sent along since cookies ignore port
-  devServer: {
-    proxy: ["/openmrs", "/bahmni_config", "/bahmni", "/openelis"].map(
-      (context) => ({ context, target: "https://localhost", secure: false })
-    ),
-  },
+  devServer: {},
   plugins: [
     ...commonConfig.plugins,
     new HtmlWebpackPlugin({

@@ -28,13 +28,11 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
                 </div>
               </div>
               <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cursor-pointer"
+                class="bx--tooltip--definition bx--tooltip--a11y cursor-pointer"
               >
                 <button
-                  aria-controls="id-_r_3_"
-                  aria-describedby="id-_r_3_"
-                  aria-expanded="false"
-                  class="cds--definition-term"
+                  aria-describedby="definition-tooltip-2"
+                  class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
                   type="button"
                 >
                   <span
@@ -45,26 +43,18 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
                   </span>
                 </button>
                 <span
-                  class="cds--popover"
-                  id="id-_r_3_"
-                >
-                  <span
-                    class="cds--popover-content cds--definition-tooltip"
-                  />
-                  <span
-                    class="cds--popover-caret"
-                  />
-                </span>
+                  class="bx--assistive-text"
+                  id="definition-tooltip-2"
+                  role="tooltip"
+                />
               </span>
             </div>
           </div>
           <div
-            class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-            id="tag-id-_r_5_"
+            class="bx--tag bx--tag--sm bx--tag--blue"
+            id="tag-2"
           >
             <span
-              class="cds--tag__label"
-              dir="auto"
               title="Rx"
             >
               Rx
@@ -100,7 +90,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20 V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
+                    d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20	V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
                   />
                 </svg>
                 <span
@@ -168,13 +158,11 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
                 </div>
               </div>
               <span
-                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cursor-not-allowed"
+                class="bx--tooltip--definition bx--tooltip--a11y cursor-not-allowed"
               >
                 <button
-                  aria-controls="id-_r_0_"
-                  aria-describedby="id-_r_0_"
-                  aria-expanded="false"
-                  class="cds--definition-term"
+                  aria-describedby="definition-tooltip-1"
+                  class="bx--tooltip__trigger bx--tooltip--a11y bx--tooltip__trigger--definition bx--tooltip--bottom bx--tooltip--align-start"
                   type="button"
                 >
                   <span
@@ -185,28 +173,20 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
                   </span>
                 </button>
                 <span
-                  class="cds--popover"
-                  id="id-_r_0_"
+                  class="bx--assistive-text"
+                  id="definition-tooltip-1"
+                  role="tooltip"
                 >
-                  <span
-                    class="cds--popover-content cds--definition-tooltip"
-                  >
-                    Halothane/Fluothane 250 mL Inhalation Anesthetic Liquid
-                  </span>
-                  <span
-                    class="cds--popover-caret"
-                  />
+                  Halothane/Fluothane 250 mL Inhalation Anesthetic Liquid
                 </span>
               </span>
             </div>
           </div>
           <div
-            class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-            id="tag-id-_r_2_"
+            class="bx--tag bx--tag--sm bx--tag--blue"
+            id="tag-1"
           >
             <span
-              class="cds--tag__label"
-              dir="auto"
               title="Rx"
             >
               Rx
@@ -247,7 +227,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20 V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
+                    d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20	V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
                   />
                 </svg>
                 <span

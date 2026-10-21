@@ -6,40 +6,30 @@ exports[`DrugInstructions should match snapshot 1`] = `
     class="instructions"
   >
     <div
-      class="cds--form-item instruction"
+      class="bx--form-item"
     >
       <div
-        class="cds--text-area__label-wrapper"
+        class="bx--text-area__label-wrapper"
       >
         <label
-          class="cds--label cds--label--disabled"
-          dir="auto"
+          class="bx--label bx--label--disabled"
         >
           Instruction
         </label>
       </div>
       <div
-        class="cds--text-area__wrapper cds--text-area__wrapper--readonly"
+        class="bx--text-area__wrapper"
       >
         <textarea
-          aria-invalid="false"
-          aria-readonly="true"
-          class="cds--text-area"
+          class="bx--text-area instruction"
+          cols="50"
           disabled=""
-          placeholder=""
           readonly=""
           rows="1"
-          style="width: 100%;"
           type="text"
         >
           instructions
         </textarea>
-        <span
-          aria-atomic="true"
-          aria-live="assertive"
-          class="cds--text-area__counter-alert"
-          role="alert"
-        />
       </div>
     </div>
   </div>
@@ -47,40 +37,30 @@ exports[`DrugInstructions should match snapshot 1`] = `
     class="additional-instructions"
   >
     <div
-      class="cds--form-item additional-instruction"
+      class="bx--form-item"
     >
       <div
-        class="cds--text-area__label-wrapper"
+        class="bx--text-area__label-wrapper"
       >
         <label
-          class="cds--label cds--label--disabled"
-          dir="auto"
+          class="bx--label bx--label--disabled"
         >
           Additional Instruction
         </label>
       </div>
       <div
-        class="cds--text-area__wrapper cds--text-area__wrapper--readonly"
+        class="bx--text-area__wrapper"
       >
         <textarea
-          aria-invalid="false"
-          aria-readonly="true"
-          class="cds--text-area"
+          class="bx--text-area additional-instruction"
+          cols="50"
           disabled=""
-          placeholder=""
           readonly=""
           rows="1"
-          style="width: 100%;"
           type="text"
         >
           additionalInstructions
         </textarea>
-        <span
-          aria-atomic="true"
-          aria-live="assertive"
-          class="cds--text-area__counter-alert"
-          role="alert"
-        />
       </div>
     </div>
   </div>

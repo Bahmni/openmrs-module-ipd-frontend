@@ -12,17 +12,17 @@ import {
 } from "../utils/PatientHeaderUtils";
 import {
   Column,
-  FlexGrid,
+  Grid,
   Link,
   OverflowMenu,
   OverflowMenuItem,
   Row,
   SkeletonText,
   Tile,
-} from "@carbon/react";
+} from "carbon-components-react";
 import { FormattedMessage } from "react-intl";
 import "../styles/PatientHeader.scss";
-import { ChevronDown, ChevronUp, HospitalBed } from "@carbon/icons-react";
+import { ChevronDown20, ChevronUp20, HospitalBed16 } from "@carbon/icons-react";
 import PatientDetails from "./PatientDetails";
 import PatientMovementModal from "./PatientMovementModal";
 import { formatDate } from "../../../../utils/DateTimeUtils";
@@ -135,7 +135,7 @@ export const PatientHeader = (props) => {
           <SkeletonText className="is-loading" data-testid="header-loading" />
         ) : (
           <>
-            <FlexGrid>
+            <Grid>
               <Row className="patient-image-and-details">
                 <img className={"patient-image"} src={profilePicture} alt="patient-image"/>
                 <Column>
@@ -176,7 +176,7 @@ export const PatientHeader = (props) => {
                           toggleDetailsView();
                         }}
                       >
-                        {hideDetails} <ChevronUp size={20} />{" "}
+                        {hideDetails} <ChevronUp20 />{" "}
                       </Link>
                     ) : (
                       <Link
@@ -188,7 +188,7 @@ export const PatientHeader = (props) => {
                           toggleDetailsView();
                         }}
                       >
-                        {showDetails} <ChevronDown size={20} />
+                        {showDetails} <ChevronDown20 />
                       </Link>
                     )}
                     <div className="other-info">
@@ -208,7 +208,7 @@ export const PatientHeader = (props) => {
                         {bedInformation && (
                           <div style={{ display: "flex" }}>
                             <h3 className="patient-info">
-                              <HospitalBed size={16} />
+                              <HospitalBed16 />
                             </h3>
                             <h3 className="bed-information">
                               {` ${bedInformation?.physicalLocation?.display} ${bedInformation?.bedNumber}`}
@@ -220,7 +220,7 @@ export const PatientHeader = (props) => {
                   </Row>
                 </Column>
               </Row>
-            </FlexGrid>
+            </Grid>
             {showPatientDetails && (
               <PatientDetails
                 patientDetails={patientDetails}

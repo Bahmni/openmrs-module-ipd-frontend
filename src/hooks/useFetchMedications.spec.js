@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from "@testing-library/react";
+import { renderHook } from "@testing-library/react-hooks";
 import { useFetchMedications } from "./useFetchMedications";
 import { testData } from "./useFetchMedicationMockData";
 
@@ -20,16 +20,21 @@ beforeEach(() => {
 
 describe("useFetchMedications", () => {
   it("should return medications", async () => {
-    const { result } = renderHook(() => useFetchMedications());
-    await waitFor(() => expect(result.current.isLoading).toEqual(false));
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useFetchMedications()
+    );
+    await waitForNextUpdate();
 
     expect(result.current.drugChartData).toEqual(testData);
   });
 
   it("should return loading state", async () => {
-    const { result } = renderHook(() => useFetchMedications());
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useFetchMedications()
+    );
 
     expect(result.current.isLoading).toEqual(true);
-    await waitFor(() => expect(result.current.isLoading).toEqual(false));
+    await waitForNextUpdate();
+    expect(result.current.isLoading).toEqual(false);
   });
 });

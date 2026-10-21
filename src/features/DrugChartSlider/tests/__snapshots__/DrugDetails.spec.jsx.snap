@@ -3,36 +3,26 @@
 exports[`DrugDetails should match snapshot 1`] = `
 <div>
   <div
-    class="cds--form-item drug-name cds--text-input-wrapper"
+    class="bx--form-item bx--text-input-wrapper"
   >
-    <div
-      class="cds--text-input__label-wrapper"
+    <label
+      class="bx--label bx--label--disabled"
+      for="drug-name"
     >
-      <label
-        class="cds--label cds--label--disabled"
-        dir="auto"
-        for="drug-name"
-      >
-        Drug Name
-      </label>
-    </div>
+      Drug Name
+    </label>
     <div
-      class="cds--text-input__field-outer-wrapper"
+      class="bx--text-input__field-outer-wrapper"
     >
       <div
-        class="cds--text-input__field-wrapper"
+        class="bx--text-input__field-wrapper"
       >
         <input
-          class="cds--text-input"
+          class="bx--text-input drug-name bx--text-input--md"
           disabled=""
           id="drug-name"
           type="text"
-        />
-        <span
-          aria-atomic="true"
-          aria-live="assertive"
-          class="cds--text-input__counter-alert"
-          role="alert"
+          value=""
         />
       </div>
     </div>
@@ -44,17 +34,16 @@ exports[`DrugDetails should match snapshot 1`] = `
       class="dose-field-with-units"
     >
       <div
-        class="NW023la29jMKwMarLfBe"
+        class="-TaKcdG2c0NUzkYaFWOzlQ=="
       >
         <div
-          class="cds--form-item"
+          class="bx--form-item"
         >
           <div
-            class="cds--number cds--number--helpertext cds--number--md"
+            class="bx--number bx--number--helpertext"
           >
             <label
-              class="cds--label cds--label--disabled"
-              dir="auto"
+              class="bx--label bx--label--disabled"
               for="Dropdown"
             >
               <div
@@ -66,24 +55,22 @@ exports[`DrugDetails should match snapshot 1`] = `
               </div>
             </label>
             <div
-              class="cds--number__input-wrapper"
+              class="bx--number__input-wrapper"
             >
               <input
-                aria-invalid="false"
                 disabled=""
                 id="Dropdown"
-                inputmode="decimal"
                 pattern="[0-9]*"
                 step="1"
                 type="number"
                 value="dose"
               />
               <div
-                class="cds--number__controls"
+                class="bx--number__controls"
               >
                 <button
                   aria-label="Decrement number"
-                  class="cds--number__control-btn down-icon"
+                  class="bx--number__control-btn down-icon"
                   disabled=""
                   tabindex="-1"
                   title="Decrement number"
@@ -106,11 +93,11 @@ exports[`DrugDetails should match snapshot 1`] = `
                   </svg>
                 </button>
                 <div
-                  class="cds--number__rule-divider"
+                  class="bx--number__rule-divider"
                 />
                 <button
                   aria-label="Increment number"
-                  class="cds--number__control-btn up-icon"
+                  class="bx--number__control-btn up-icon"
                   disabled=""
                   tabindex="-1"
                   title="Increment number"
@@ -128,12 +115,12 @@ exports[`DrugDetails should match snapshot 1`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M17 15 17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+                      d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
                     />
                   </svg>
                 </button>
                 <div
-                  class="cds--number__rule-divider"
+                  class="bx--number__rule-divider"
                 />
               </div>
             </div>
@@ -146,11 +133,12 @@ exports[`DrugDetails should match snapshot 1`] = `
         style="margin-right: 5px;"
       >
         <div
-          class="cds--dropdown__wrapper cds--list-box__wrapper"
+          class="bx--dropdown__wrapper bx--list-box__wrapper"
         >
           <label
-            class="cds--label cds--label--disabled"
-            id="downshift-_r_1_-label"
+            class="bx--label bx--label--disabled"
+            for="downshift-0-toggle-button"
+            id="downshift-0-label"
           >
             <div
               class="titleText"
@@ -161,30 +149,27 @@ exports[`DrugDetails should match snapshot 1`] = `
             </div>
           </label>
           <div
-            class="cds--dropdown cds--dropdown--disabled cds--list-box"
+            class="bx--dropdown bx--dropdown--disabled bx--list-box"
             id="Dropdown"
           >
             <button
-              aria-activedescendant=""
-              aria-controls="downshift-_r_1_-menu"
+              aria-disabled="true"
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="downshift-_r_1_-label"
-              class="cds--list-box__field"
+              aria-labelledby="downshift-0-label downshift-0-toggle-button"
+              class="bx--list-box__field"
               disabled=""
-              id="downshift-_r_1_-toggle-button"
-              role="combobox"
-              tabindex="0"
+              id="downshift-0-toggle-button"
               title="doseUnits"
               type="button"
             >
               <span
-                class="cds--list-box__label"
+                class="bx--list-box__label"
               >
                 doseUnits
               </span>
               <div
-                class="cds--list-box__menu-icon"
+                class="bx--list-box__menu-icon"
               >
                 <svg
                   aria-label="Open menu"
@@ -199,7 +184,7 @@ exports[`DrugDetails should match snapshot 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                   />
                   <title>
                     Open menu
@@ -207,11 +192,12 @@ exports[`DrugDetails should match snapshot 1`] = `
                 </svg>
               </div>
             </button>
-            <ul
-              aria-labelledby="downshift-_r_1_-label"
-              class="cds--list-box__menu"
-              id="downshift-_r_1_-menu"
+            <div
+              aria-labelledby="downshift-0-label"
+              class="bx--list-box__menu"
+              id="downshift-0-menu"
               role="listbox"
+              tabindex="-1"
             />
           </div>
         </div>
@@ -226,11 +212,12 @@ exports[`DrugDetails should match snapshot 1`] = `
         style="margin-right: 5px;"
       >
         <div
-          class="cds--dropdown__wrapper cds--list-box__wrapper"
+          class="bx--dropdown__wrapper bx--list-box__wrapper"
         >
           <label
-            class="cds--label cds--label--disabled"
-            id="downshift-_r_3_-label"
+            class="bx--label bx--label--disabled"
+            for="downshift-1-toggle-button"
+            id="downshift-1-label"
           >
             <div
               class="titleText"
@@ -241,30 +228,27 @@ exports[`DrugDetails should match snapshot 1`] = `
             </div>
           </label>
           <div
-            class="cds--dropdown cds--dropdown--disabled cds--list-box"
+            class="bx--dropdown bx--dropdown--disabled bx--list-box"
             id="Dropdown"
           >
             <button
-              aria-activedescendant=""
-              aria-controls="downshift-_r_3_-menu"
+              aria-disabled="true"
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="downshift-_r_3_-label"
-              class="cds--list-box__field"
+              aria-labelledby="downshift-1-label downshift-1-toggle-button"
+              class="bx--list-box__field"
               disabled=""
-              id="downshift-_r_3_-toggle-button"
-              role="combobox"
-              tabindex="0"
+              id="downshift-1-toggle-button"
               title="route"
               type="button"
             >
               <span
-                class="cds--list-box__label"
+                class="bx--list-box__label"
               >
                 route
               </span>
               <div
-                class="cds--list-box__menu-icon"
+                class="bx--list-box__menu-icon"
               >
                 <svg
                   aria-label="Open menu"
@@ -279,7 +263,7 @@ exports[`DrugDetails should match snapshot 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                   />
                   <title>
                     Open menu
@@ -287,11 +271,12 @@ exports[`DrugDetails should match snapshot 1`] = `
                 </svg>
               </div>
             </button>
-            <ul
-              aria-labelledby="downshift-_r_3_-label"
-              class="cds--list-box__menu"
-              id="downshift-_r_3_-menu"
+            <div
+              aria-labelledby="downshift-1-label"
+              class="bx--list-box__menu"
+              id="downshift-1-menu"
               role="listbox"
+              tabindex="-1"
             />
           </div>
         </div>
@@ -305,17 +290,16 @@ exports[`DrugDetails should match snapshot 1`] = `
       class="duration-field-with-units"
     >
       <div
-        class="NW023la29jMKwMarLfBe"
+        class="-TaKcdG2c0NUzkYaFWOzlQ=="
       >
         <div
-          class="cds--form-item"
+          class="bx--form-item"
         >
           <div
-            class="cds--number cds--number--helpertext cds--number--md"
+            class="bx--number bx--number--helpertext"
           >
             <label
-              class="cds--label cds--label--disabled"
-              dir="auto"
+              class="bx--label bx--label--disabled"
               for="Dropdown"
             >
               <div
@@ -327,24 +311,22 @@ exports[`DrugDetails should match snapshot 1`] = `
               </div>
             </label>
             <div
-              class="cds--number__input-wrapper"
+              class="bx--number__input-wrapper"
             >
               <input
-                aria-invalid="false"
                 disabled=""
                 id="Dropdown"
-                inputmode="decimal"
                 pattern="[0-9]*"
                 step="1"
                 type="number"
                 value="0"
               />
               <div
-                class="cds--number__controls"
+                class="bx--number__controls"
               >
                 <button
                   aria-label="Decrement number"
-                  class="cds--number__control-btn down-icon"
+                  class="bx--number__control-btn down-icon"
                   disabled=""
                   tabindex="-1"
                   title="Decrement number"
@@ -367,11 +349,11 @@ exports[`DrugDetails should match snapshot 1`] = `
                   </svg>
                 </button>
                 <div
-                  class="cds--number__rule-divider"
+                  class="bx--number__rule-divider"
                 />
                 <button
                   aria-label="Increment number"
-                  class="cds--number__control-btn up-icon"
+                  class="bx--number__control-btn up-icon"
                   disabled=""
                   tabindex="-1"
                   title="Increment number"
@@ -389,12 +371,12 @@ exports[`DrugDetails should match snapshot 1`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M17 15 17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
+                      d="M17 15L17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"
                     />
                   </svg>
                 </button>
                 <div
-                  class="cds--number__rule-divider"
+                  class="bx--number__rule-divider"
                 />
               </div>
             </div>
@@ -407,11 +389,12 @@ exports[`DrugDetails should match snapshot 1`] = `
         style="margin-right: 5px;"
       >
         <div
-          class="cds--dropdown__wrapper cds--list-box__wrapper"
+          class="bx--dropdown__wrapper bx--list-box__wrapper"
         >
           <label
-            class="cds--label cds--label--disabled"
-            id="downshift-_r_5_-label"
+            class="bx--label bx--label--disabled"
+            for="downshift-2-toggle-button"
+            id="downshift-2-label"
           >
             <div
               class="titleText"
@@ -422,28 +405,24 @@ exports[`DrugDetails should match snapshot 1`] = `
             </div>
           </label>
           <div
-            class="cds--dropdown cds--dropdown--disabled cds--list-box"
+            class="bx--dropdown bx--dropdown--disabled bx--list-box"
             id="Dropdown"
           >
             <button
-              aria-activedescendant=""
-              aria-controls="downshift-_r_5_-menu"
+              aria-disabled="true"
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="downshift-_r_5_-label"
-              class="cds--list-box__field"
+              aria-labelledby="downshift-2-label downshift-2-toggle-button"
+              class="bx--list-box__field"
               disabled=""
-              id="downshift-_r_5_-toggle-button"
-              role="combobox"
-              tabindex="0"
-              title=""
+              id="downshift-2-toggle-button"
               type="button"
             >
               <span
-                class="cds--list-box__label"
+                class="bx--list-box__label"
               />
               <div
-                class="cds--list-box__menu-icon"
+                class="bx--list-box__menu-icon"
               >
                 <svg
                   aria-label="Open menu"
@@ -458,7 +437,7 @@ exports[`DrugDetails should match snapshot 1`] = `
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                    d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                   />
                   <title>
                     Open menu
@@ -466,11 +445,12 @@ exports[`DrugDetails should match snapshot 1`] = `
                 </svg>
               </div>
             </button>
-            <ul
-              aria-labelledby="downshift-_r_5_-label"
-              class="cds--list-box__menu"
-              id="downshift-_r_5_-menu"
+            <div
+              aria-labelledby="downshift-2-label"
+              class="bx--list-box__menu"
+              id="downshift-2-menu"
               role="listbox"
+              tabindex="-1"
             />
           </div>
         </div>
@@ -481,18 +461,17 @@ exports[`DrugDetails should match snapshot 1`] = `
       data-testid="datePicker"
     >
       <div
-        class="cds--form-item"
-        disabled=""
+        class="bx--form-item"
       >
         <div
-          class="cds--date-picker cds--date-picker--single"
+          class="bx--date-picker bx--date-picker--single"
+          disabled=""
         >
           <div
-            class="cds--date-picker-container"
+            class="bx--date-picker-container"
           >
             <label
-              class="cds--label cds--label--disabled"
-              dir="auto"
+              class="bx--label bx--label--disabled"
               for="Dropdown"
             >
               <div
@@ -504,36 +483,34 @@ exports[`DrugDetails should match snapshot 1`] = `
               </div>
             </label>
             <div
-              class="cds--date-picker-input__wrapper"
+              class="bx--date-picker-input__wrapper"
             >
-              <span>
-                <input
-                  autocomplete="off"
-                  class="cds--date-picker__input cds--date-picker__input--md flatpickr-input"
-                  disabled=""
-                  id="Dropdown"
-                  pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
-                  placeholder="DD MM YYYY"
-                  style="width: 250px;"
-                  type="text"
+              <input
+                autocomplete="off"
+                class="bx--date-picker__input bx--date-picker__input--md flatpickr-input"
+                disabled=""
+                id="Dropdown"
+                pattern="\\d{1,2}\\/\\d{1,2}\\/\\d{4}"
+                placeholder="DD MM YYYY"
+                style="width: 250px;"
+                type="text"
+              />
+              <svg
+                aria-hidden="true"
+                class="bx--date-picker__icon"
+                fill="currentColor"
+                focusable="false"
+                height="16"
+                preserveAspectRatio="xMidYMid meet"
+                role="img"
+                viewBox="0 0 32 32"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20	V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
                 />
-                <svg
-                  aria-hidden="true"
-                  class="cds--date-picker__icon"
-                  fill="currentColor"
-                  focusable="false"
-                  height="16"
-                  preserveAspectRatio="xMidYMid meet"
-                  role="img"
-                  viewBox="0 0 32 32"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20 V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"
-                  />
-                </svg>
-              </span>
+              </svg>
             </div>
           </div>
         </div>
@@ -549,11 +526,12 @@ exports[`DrugDetails should match snapshot 1`] = `
       style="margin-right: 5px;"
     >
       <div
-        class="cds--dropdown__wrapper cds--list-box__wrapper"
+        class="bx--dropdown__wrapper bx--list-box__wrapper"
       >
         <label
-          class="cds--label cds--label--disabled"
-          id="downshift-_r_8_-label"
+          class="bx--label bx--label--disabled"
+          for="downshift-3-toggle-button"
+          id="downshift-3-label"
         >
           <div
             class="titleText"
@@ -564,28 +542,24 @@ exports[`DrugDetails should match snapshot 1`] = `
           </div>
         </label>
         <div
-          class="cds--dropdown cds--dropdown--disabled cds--list-box"
+          class="bx--dropdown bx--dropdown--disabled bx--list-box"
           id="DropdownFrequency"
         >
           <button
-            aria-activedescendant=""
-            aria-controls="downshift-_r_8_-menu"
+            aria-disabled="true"
             aria-expanded="false"
             aria-haspopup="listbox"
-            aria-labelledby="downshift-_r_8_-label"
-            class="cds--list-box__field"
+            aria-labelledby="downshift-3-label downshift-3-toggle-button"
+            class="bx--list-box__field"
             disabled=""
-            id="downshift-_r_8_-toggle-button"
-            role="combobox"
-            tabindex="0"
-            title=""
+            id="downshift-3-toggle-button"
             type="button"
           >
             <span
-              class="cds--list-box__label"
+              class="bx--list-box__label"
             />
             <div
-              class="cds--list-box__menu-icon"
+              class="bx--list-box__menu-icon"
             >
               <svg
                 aria-label="Open menu"
@@ -600,7 +574,7 @@ exports[`DrugDetails should match snapshot 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                  d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                 />
                 <title>
                   Open menu
@@ -608,11 +582,12 @@ exports[`DrugDetails should match snapshot 1`] = `
               </svg>
             </div>
           </button>
-          <ul
-            aria-labelledby="downshift-_r_8_-label"
-            class="cds--list-box__menu"
-            id="downshift-_r_8_-menu"
+          <div
+            aria-labelledby="downshift-3-label"
+            class="bx--list-box__menu"
+            id="downshift-3-menu"
             role="listbox"
+            tabindex="-1"
           />
         </div>
       </div>

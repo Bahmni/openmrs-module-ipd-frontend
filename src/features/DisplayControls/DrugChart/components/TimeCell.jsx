@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, DefinitionTooltip } from "@carbon/react";
-import IconToggletip from "../../../../components/IconToggletip/IconToggletip";
+import { Tooltip, Button, TooltipDefinition } from "carbon-components-react";
 import "../styles/TimeCell.scss";
 import SVGIcon from "./SVGIcon.jsx";
 import NoteIcon from "../../../../icons/note.svg";
@@ -224,18 +223,21 @@ export default function TimeCell(props) {
     const amendedNotesResponse = noteInfo?.amendedNotes;
 
     const content = ifMedicationNotesPresent(notes, status) ? (
-      <IconToggletip icon={getNoteIcon(hasAmendedNotes, isAcknowledged, slot)}>
+      <Tooltip
+        autoOrientation={true}
+        renderIcon={() => getNoteIcon(hasAmendedNotes, isAcknowledged, slot)}
+      >
         {renderTooltipContent(notes, slot, amendedNotesResponse)}
-      </IconToggletip>
+      </Tooltip>
     ) : (
       (status === "Administered-Late" || status === "Administered") && (
-        <DefinitionTooltip
-          definition={
+        <TooltipDefinition
+          tooltipText={
             <div style={{ color: "#fff", fontSize: "14px", fontWeight: 400 }}>
               <FormattedMessage id="ADD_NOTES" defaultMessage="Add Notes" />
             </div>
           }
-          align="top"
+          direction="top"
         >
           <div
             className="note-icon-container"
@@ -246,7 +248,7 @@ export default function TimeCell(props) {
           >
             <DocumentAdd />
           </div>
-        </DefinitionTooltip>
+        </TooltipDefinition>
       )
     );
 
