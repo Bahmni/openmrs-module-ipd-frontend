@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { DataTable, Table, TableHead, TableRow, TableBody, TableCell, TableHeader } from 'carbon-components-react';
+import { DataTable, Table, TableHead, TableRow, TableBody, TableCell, TableHeader } from "@carbon/react";
 import '../styles/IntakeOutputTable.scss';
 import { FormattedMessage } from "react-intl";
 

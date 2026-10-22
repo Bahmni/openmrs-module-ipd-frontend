@@ -34,8 +34,8 @@ jest.mock("bahmni-carbon-ui", () => {
   };
 });
 
-jest.mock("carbon-components-react", () => {
-  const actual = jest.requireActual("carbon-components-react");
+jest.mock("@carbon/react", () => {
+  const actual = jest.requireActual("@carbon/react");
   return {
     ...actual,
     Tooltip: (props) => <div>{props.children}</div>,
@@ -248,7 +248,7 @@ describe("DrugChartWrapper", () => {
       </SliderContext.Provider>
     );
     const currentShiftButton = screen.getByTestId("currentShift");
-    expect(currentShiftButton.className).toContain("bx--btn--disabled");
+    expect(currentShiftButton.className).toContain("cds--btn--disabled");
     expect(screen.getByTestId("nextButton").disabled).toEqual(true);
   });
 

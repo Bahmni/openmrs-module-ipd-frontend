@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "../styles/CareViewSummary.scss";
-import { Tile, Link } from "carbon-components-react";
+import { Tile, Link } from "@carbon/react";
 import { Dropdown } from "bahmni-carbon-ui";
 import propTypes from "prop-types";
 import _ from "lodash";

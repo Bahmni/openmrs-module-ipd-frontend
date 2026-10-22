@@ -11,7 +11,7 @@ import {
   OverflowMenuItem,
   TextArea,
   Toggle,
-} from "carbon-components-react";
+} from "@carbon/react";
 import moment from "moment";
 import { TimePicker24Hour, Title, TimePicker } from "bahmni-carbon-ui";
 import AdministeredMedicationList from "./AdministeredMedicationList";
@@ -623,7 +623,9 @@ const UpdateNursingTasks = (props) => {
                       size={"sm"}
                       labelA={getLabel(tasks[medicationTask.uuid]?.actualTime)}
                       labelB={getLabel(tasks[medicationTask.uuid]?.actualTime)}
-                      onToggle={handleToggle}
+                      onToggle={(checked) =>
+                        handleToggle(checked, medicationTask.uuid)
+                      }
                       disabled={
                         !verifyPrivileges(medicationTask) ||
                         !tasks[medicationTask.uuid]?.isRelevantTask ||

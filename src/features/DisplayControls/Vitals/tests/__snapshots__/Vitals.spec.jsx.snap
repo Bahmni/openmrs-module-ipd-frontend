@@ -3,14 +3,14 @@
 exports[`Vitals displays vital and biometrics history after data is fetched 1`] = `
 <div>
   <div
-    class="bx--tile vital-table"
+    class="cds--tile vital-table"
   >
     <div
       class="vital-date-time"
     >
       11 Dec 2023 
       <a
-        class="bx--link show-more"
+        class="cds--link show-more"
         kind="tertiary"
       >
         Vitals History
@@ -25,19 +25,19 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M16 10L26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
+            d="M16 10 26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
           />
         </svg>
       </a>
     </div>
     <div
-      class="bx--row"
+      class="cds--row"
     >
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -59,10 +59,10 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vitsal-headers"
@@ -84,10 +84,10 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -109,10 +109,10 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -134,10 +134,10 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -159,10 +159,10 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -184,10 +184,10 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -209,10 +209,10 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -235,10 +235,10 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
       </div>
     </div>
     <div
-      class="bx--tile vitals-biometrics-history"
+      class="cds--tile vitals-biometrics-history"
     >
       <div
-        class="bx--tile"
+        class="cds--tile"
       >
         <div
           class="vitals-history-title"
@@ -246,66 +246,90 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
           Vitals
         </div>
         <div
-          class="bx--data-table-content"
+          class="cds--data-table-content"
         >
           <table
-            class="bx--data-table history-data-table bx--data-table--normal bx--data-table--zebra bx--data-table--no-border"
+            class="cds--data-table history-data-table cds--data-table--lg cds--data-table--zebra cds--data-table--visible-overflow-menu"
             data-testid="vitals-datatable"
           >
             <thead>
               <tr>
                 <th
+                  id="data-table-1__header-date"
                   scope="col"
                 >
                   <div
-                    class="bx--table-header-label"
+                    class="cds--table-header-label"
                   >
                     Date and Time
+                    <div
+                      class="cds--table-header-label--decorator-inner"
+                    />
                   </div>
                 </th>
                 <th
+                  id="data-table-1__header-pulse"
                   scope="col"
                 >
                   <div
-                    class="bx--table-header-label"
+                    class="cds--table-header-label"
                   >
                     Pulse (beats/min)
+                    <div
+                      class="cds--table-header-label--decorator-inner"
+                    />
                   </div>
                 </th>
                 <th
+                  id="data-table-1__header-spO2"
                   scope="col"
                 >
                   <div
-                    class="bx--table-header-label"
+                    class="cds--table-header-label"
                   >
                     SPO2 (%)
+                    <div
+                      class="cds--table-header-label--decorator-inner"
+                    />
                   </div>
                 </th>
                 <th
+                  id="data-table-1__header-respiratoryRate"
                   scope="col"
                 >
                   <div
-                    class="bx--table-header-label"
+                    class="cds--table-header-label"
                   >
                     R.rate (breaths/min)
+                    <div
+                      class="cds--table-header-label--decorator-inner"
+                    />
                   </div>
                 </th>
                 <th
+                  id="data-table-1__header-temperature"
                   scope="col"
                 >
                   <div
-                    class="bx--table-header-label"
+                    class="cds--table-header-label"
                   >
                     Temp (C)
+                    <div
+                      class="cds--table-header-label--decorator-inner"
+                    />
                   </div>
                 </th>
                 <th
+                  id="data-table-1__header-bp"
                   scope="col"
                 >
                   <div
-                    class="bx--table-header-label"
+                    class="cds--table-header-label"
                   >
                     BP (mmHg)
+                    <div
+                      class="cds--table-header-label--decorator-inner"
+                    />
                   </div>
                 </th>
               </tr>
@@ -377,48 +401,49 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
           </table>
         </div>
         <div
-          class="bx--pagination vitals-history-pagination bx--pagination--md"
+          class="cds--pagination cds--pagination--md cds--layout--size-md vitals-history-pagination"
         >
           <div
-            class="bx--pagination__left"
+            class="cds--pagination__left"
           >
             <label
-              class="bx--pagination__text"
-              for="bx-pagination-select-1"
-              id="bx-pagination-select-1-count-label"
+              class="cds--pagination__text"
+              for="cds-pagination-select-id-_r_6_"
+              id="cds-pagination-select-id-_r_6_-count-label"
             >
               Items per page:
             </label>
             <div
-              class="bx--form-item"
+              class="cds--form-item cds--select__item-count"
             >
               <div
-                class="bx--select bx--select--inline bx--select__item-count"
+                class="cds--select cds--select--inline"
               >
                 <div
-                  class="bx--select-input--inline__wrapper"
+                  class="cds--select-input--inline__wrapper"
                 >
                   <div
-                    class="bx--select-input__wrapper"
+                    class="cds--select-input__wrapper"
                   >
                     <select
-                      class="bx--select-input"
-                      id="bx-pagination-select-1"
+                      class="cds--select-input"
+                      id="cds-pagination-select-id-_r_6_"
+                      title="5"
                     >
                       <option
-                        class="bx--select-option"
+                        class="cds--select-option"
                         value="5"
                       >
                         5
                       </option>
                       <option
-                        class="bx--select-option"
+                        class="cds--select-option"
                         value="10"
                       >
                         10
                       </option>
                       <option
-                        class="bx--select-option"
+                        class="cds--select-option"
                         value="20"
                       >
                         20
@@ -426,7 +451,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                     </select>
                     <svg
                       aria-hidden="true"
-                      class="bx--select__arrow"
+                      class="cds--select__arrow"
                       fill="currentColor"
                       focusable="false"
                       height="16"
@@ -436,7 +461,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                     </svg>
                   </div>
@@ -444,38 +469,40 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
               </div>
             </div>
             <span
-              class="bx--pagination__text bx--pagination__items-count"
+              class="cds--pagination__text cds--pagination__items-count"
             >
               1–2 of 2 items
             </span>
           </div>
           <div
-            class="bx--pagination__right"
+            class="cds--pagination__right"
           >
             <div
-              class="bx--form-item"
+              class="cds--form-item cds--select__page-number"
             >
               <div
-                class="bx--select bx--select--inline bx--select__page-number"
+                class="cds--select cds--select--inline"
               >
                 <label
-                  class="bx--label bx--visually-hidden"
-                  for="bx-pagination-select-1-right"
+                  class="cds--label cds--visually-hidden"
+                  dir="auto"
+                  for="cds-pagination-select-id-_r_6_-right"
                 >
-                  Page number, of 1 pages
+                  Page of 1 page
                 </label>
                 <div
-                  class="bx--select-input--inline__wrapper"
+                  class="cds--select-input--inline__wrapper"
                 >
                   <div
-                    class="bx--select-input__wrapper"
+                    class="cds--select-input__wrapper"
                   >
                     <select
-                      class="bx--select-input"
-                      id="bx-pagination-select-1-right"
+                      class="cds--select-input"
+                      id="cds-pagination-select-id-_r_6_-right"
+                      title="1"
                     >
                       <option
-                        class="bx--select-option"
+                        class="cds--select-option"
                         value="1"
                       >
                         1
@@ -483,7 +510,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                     </select>
                     <svg
                       aria-hidden="true"
-                      class="bx--select__arrow"
+                      class="cds--select__arrow"
                       fill="currentColor"
                       focusable="false"
                       height="16"
@@ -493,7 +520,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                     </svg>
                   </div>
@@ -501,77 +528,109 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
               </div>
             </div>
             <span
-              class="bx--pagination__text"
+              class="cds--pagination__text"
             >
               of 1 page
             </span>
             <div
-              class="bx--pagination__control-buttons"
+              class="cds--pagination__control-buttons"
             >
-              <button
-                class="bx--pagination__button bx--pagination__button--backward bx--pagination__button--no-index bx--btn bx--btn--ghost bx--btn--disabled bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
-                disabled=""
-                tabindex="0"
-                type="button"
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
               >
                 <div
-                  class="bx--assistive-text"
+                  class="cds--tooltip-trigger__wrapper"
                 >
-                  Previous page
+                  <button
+                    aria-label="Previous page"
+                    aria-labelledby="tooltip-_r_8_"
+                    class="cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled cds--btn--icon-only"
+                    disabled=""
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M20 24 10 16 20 8z"
+                      />
+                    </svg>
+                  </button>
                 </div>
-                <svg
+                <span
                   aria-hidden="true"
-                  aria-label="Previous page"
-                  class="bx--btn__icon"
-                  fill="currentColor"
-                  focusable="false"
-                  height="16"
-                  preserveAspectRatio="xMidYMid meet"
-                  role="img"
-                  viewBox="0 0 32 32"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
+                  class="cds--popover"
+                  id="tooltip-_r_8_"
+                  role="tooltip"
                 >
-                  <path
-                    d="M20 24L10 16 20 8z"
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Previous page
+                  </span>
+                  <span
+                    class="cds--popover-caret"
                   />
-                </svg>
-              </button>
-              <button
-                class="bx--pagination__button bx--pagination__button--forward bx--pagination__button--no-index bx--btn bx--btn--ghost bx--btn--disabled bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-end"
-                disabled=""
-                tabindex="0"
-                type="button"
+                </span>
+              </span>
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
               >
                 <div
-                  class="bx--assistive-text"
+                  class="cds--tooltip-trigger__wrapper"
                 >
-                  Next page
+                  <button
+                    aria-label="Next page"
+                    aria-labelledby="tooltip-_r_c_"
+                    class="cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled cds--btn--icon-only"
+                    disabled=""
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 8 22 16 12 24z"
+                      />
+                    </svg>
+                  </button>
                 </div>
-                <svg
+                <span
                   aria-hidden="true"
-                  aria-label="Next page"
-                  class="bx--btn__icon"
-                  fill="currentColor"
-                  focusable="false"
-                  height="16"
-                  preserveAspectRatio="xMidYMid meet"
-                  role="img"
-                  viewBox="0 0 32 32"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
+                  class="cds--popover"
+                  id="tooltip-_r_c_"
+                  role="tooltip"
                 >
-                  <path
-                    d="M12 8L22 16 12 24z"
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Next page
+                  </span>
+                  <span
+                    class="cds--popover-caret"
                   />
-                </svg>
-              </button>
+                </span>
+              </span>
             </div>
           </div>
         </div>
       </div>
       <div
-        class="bx--tile"
+        class="cds--tile"
       >
         <div
           class="biometrics-history-title"
@@ -579,57 +638,77 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
           Nutritional Values
         </div>
         <div
-          class="bx--data-table-content"
+          class="cds--data-table-content"
         >
           <table
-            class="bx--data-table history-data-table bx--data-table--normal bx--data-table--zebra bx--data-table--no-border"
+            class="cds--data-table history-data-table cds--data-table--lg cds--data-table--zebra cds--data-table--visible-overflow-menu"
             data-testid="biometrics-datatable"
           >
             <thead>
               <tr>
                 <th
+                  id="data-table-2__header-date"
                   scope="col"
                 >
                   <div
-                    class="bx--table-header-label"
+                    class="cds--table-header-label"
                   >
                     Date and Time
+                    <div
+                      class="cds--table-header-label--decorator-inner"
+                    />
                   </div>
                 </th>
                 <th
+                  id="data-table-2__header-height"
                   scope="col"
                 >
                   <div
-                    class="bx--table-header-label"
+                    class="cds--table-header-label"
                   >
                     Height (Cm)
+                    <div
+                      class="cds--table-header-label--decorator-inner"
+                    />
                   </div>
                 </th>
                 <th
+                  id="data-table-2__header-weight"
                   scope="col"
                 >
                   <div
-                    class="bx--table-header-label"
+                    class="cds--table-header-label"
                   >
                     Weight (Kg)
+                    <div
+                      class="cds--table-header-label--decorator-inner"
+                    />
                   </div>
                 </th>
                 <th
+                  id="data-table-2__header-bmi"
                   scope="col"
                 >
                   <div
-                    class="bx--table-header-label"
+                    class="cds--table-header-label"
                   >
                     BMI (Kg/m2)
+                    <div
+                      class="cds--table-header-label--decorator-inner"
+                    />
                   </div>
                 </th>
                 <th
+                  id="data-table-2__header-muac"
                   scope="col"
                 >
                   <div
-                    class="bx--table-header-label"
+                    class="cds--table-header-label"
                   >
                     MUAC (Cm)
+                    <div
+                      class="cds--table-header-label--decorator-inner"
+                    />
                   </div>
                 </th>
               </tr>
@@ -691,48 +770,49 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
           </table>
         </div>
         <div
-          class="bx--pagination biometrics-history-pagination bx--pagination--md"
+          class="cds--pagination cds--pagination--md cds--layout--size-md biometrics-history-pagination"
         >
           <div
-            class="bx--pagination__left"
+            class="cds--pagination__left"
           >
             <label
-              class="bx--pagination__text"
-              for="bx-pagination-select-2"
-              id="bx-pagination-select-2-count-label"
+              class="cds--pagination__text"
+              for="cds-pagination-select-id-_r_k_"
+              id="cds-pagination-select-id-_r_k_-count-label"
             >
               Items per page:
             </label>
             <div
-              class="bx--form-item"
+              class="cds--form-item cds--select__item-count"
             >
               <div
-                class="bx--select bx--select--inline bx--select__item-count"
+                class="cds--select cds--select--inline"
               >
                 <div
-                  class="bx--select-input--inline__wrapper"
+                  class="cds--select-input--inline__wrapper"
                 >
                   <div
-                    class="bx--select-input__wrapper"
+                    class="cds--select-input__wrapper"
                   >
                     <select
-                      class="bx--select-input"
-                      id="bx-pagination-select-2"
+                      class="cds--select-input"
+                      id="cds-pagination-select-id-_r_k_"
+                      title="5"
                     >
                       <option
-                        class="bx--select-option"
+                        class="cds--select-option"
                         value="5"
                       >
                         5
                       </option>
                       <option
-                        class="bx--select-option"
+                        class="cds--select-option"
                         value="10"
                       >
                         10
                       </option>
                       <option
-                        class="bx--select-option"
+                        class="cds--select-option"
                         value="20"
                       >
                         20
@@ -740,7 +820,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                     </select>
                     <svg
                       aria-hidden="true"
-                      class="bx--select__arrow"
+                      class="cds--select__arrow"
                       fill="currentColor"
                       focusable="false"
                       height="16"
@@ -750,7 +830,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                     </svg>
                   </div>
@@ -758,38 +838,40 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
               </div>
             </div>
             <span
-              class="bx--pagination__text bx--pagination__items-count"
+              class="cds--pagination__text cds--pagination__items-count"
             >
               1–2 of 2 items
             </span>
           </div>
           <div
-            class="bx--pagination__right"
+            class="cds--pagination__right"
           >
             <div
-              class="bx--form-item"
+              class="cds--form-item cds--select__page-number"
             >
               <div
-                class="bx--select bx--select--inline bx--select__page-number"
+                class="cds--select cds--select--inline"
               >
                 <label
-                  class="bx--label bx--visually-hidden"
-                  for="bx-pagination-select-2-right"
+                  class="cds--label cds--visually-hidden"
+                  dir="auto"
+                  for="cds-pagination-select-id-_r_k_-right"
                 >
-                  Page number, of 1 pages
+                  Page of 1 page
                 </label>
                 <div
-                  class="bx--select-input--inline__wrapper"
+                  class="cds--select-input--inline__wrapper"
                 >
                   <div
-                    class="bx--select-input__wrapper"
+                    class="cds--select-input__wrapper"
                   >
                     <select
-                      class="bx--select-input"
-                      id="bx-pagination-select-2-right"
+                      class="cds--select-input"
+                      id="cds-pagination-select-id-_r_k_-right"
+                      title="1"
                     >
                       <option
-                        class="bx--select-option"
+                        class="cds--select-option"
                         value="1"
                       >
                         1
@@ -797,7 +879,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                     </select>
                     <svg
                       aria-hidden="true"
-                      class="bx--select__arrow"
+                      class="cds--select__arrow"
                       fill="currentColor"
                       focusable="false"
                       height="16"
@@ -807,7 +889,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                        d="M8 11 3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
                       />
                     </svg>
                   </div>
@@ -815,71 +897,103 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
               </div>
             </div>
             <span
-              class="bx--pagination__text"
+              class="cds--pagination__text"
             >
               of 1 page
             </span>
             <div
-              class="bx--pagination__control-buttons"
+              class="cds--pagination__control-buttons"
             >
-              <button
-                class="bx--pagination__button bx--pagination__button--backward bx--pagination__button--no-index bx--btn bx--btn--ghost bx--btn--disabled bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-center"
-                disabled=""
-                tabindex="0"
-                type="button"
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
               >
                 <div
-                  class="bx--assistive-text"
+                  class="cds--tooltip-trigger__wrapper"
                 >
-                  Previous page
+                  <button
+                    aria-label="Previous page"
+                    aria-labelledby="tooltip-_r_m_"
+                    class="cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled cds--btn--icon-only"
+                    disabled=""
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M20 24 10 16 20 8z"
+                      />
+                    </svg>
+                  </button>
                 </div>
-                <svg
+                <span
                   aria-hidden="true"
-                  aria-label="Previous page"
-                  class="bx--btn__icon"
-                  fill="currentColor"
-                  focusable="false"
-                  height="16"
-                  preserveAspectRatio="xMidYMid meet"
-                  role="img"
-                  viewBox="0 0 32 32"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
+                  class="cds--popover"
+                  id="tooltip-_r_m_"
+                  role="tooltip"
                 >
-                  <path
-                    d="M20 24L10 16 20 8z"
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Previous page
+                  </span>
+                  <span
+                    class="cds--popover-caret"
                   />
-                </svg>
-              </button>
-              <button
-                class="bx--pagination__button bx--pagination__button--forward bx--pagination__button--no-index bx--btn bx--btn--ghost bx--btn--disabled bx--tooltip--hidden bx--btn--icon-only bx--tooltip__trigger bx--tooltip--a11y bx--btn--icon-only--top bx--tooltip--align-end"
-                disabled=""
-                tabindex="0"
-                type="button"
+                </span>
+              </span>
+              <span
+                class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top cds--tooltip cds--icon-tooltip cds--icon-tooltip--disabled"
               >
                 <div
-                  class="bx--assistive-text"
+                  class="cds--tooltip-trigger__wrapper"
                 >
-                  Next page
+                  <button
+                    aria-label="Next page"
+                    aria-labelledby="tooltip-_r_q_"
+                    class="cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled cds--btn--icon-only"
+                    disabled=""
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      fill="currentColor"
+                      focusable="false"
+                      height="16"
+                      preserveAspectRatio="xMidYMid meet"
+                      viewBox="0 0 32 32"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 8 22 16 12 24z"
+                      />
+                    </svg>
+                  </button>
                 </div>
-                <svg
+                <span
                   aria-hidden="true"
-                  aria-label="Next page"
-                  class="bx--btn__icon"
-                  fill="currentColor"
-                  focusable="false"
-                  height="16"
-                  preserveAspectRatio="xMidYMid meet"
-                  role="img"
-                  viewBox="0 0 32 32"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
+                  class="cds--popover"
+                  id="tooltip-_r_q_"
+                  role="tooltip"
                 >
-                  <path
-                    d="M12 8L22 16 12 24z"
+                  <span
+                    class="cds--popover-content cds--tooltip-content"
+                  >
+                    Next page
+                  </span>
+                  <span
+                    class="cds--popover-caret"
                   />
-                </svg>
-              </button>
+                </span>
+              </span>
             </div>
           </div>
         </div>
@@ -892,14 +1006,14 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
 exports[`Vitals should display vital details after data is fetched 1`] = `
 <div>
   <div
-    class="bx--tile vital-table"
+    class="cds--tile vital-table"
   >
     <div
       class="vital-date-time"
     >
       11 Dec 2023 
       <a
-        class="bx--link show-more"
+        class="cds--link show-more"
         kind="tertiary"
       >
         Vitals History
@@ -914,19 +1028,19 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
+            d="M16 22 6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
           />
         </svg>
       </a>
     </div>
     <div
-      class="bx--row"
+      class="cds--row"
     >
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -948,10 +1062,10 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vitsal-headers"
@@ -973,10 +1087,10 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -998,10 +1112,10 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -1023,10 +1137,10 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -1048,10 +1162,10 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -1073,10 +1187,10 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"
@@ -1098,10 +1212,10 @@ exports[`Vitals should display vital details after data is fetched 1`] = `
         </div>
       </div>
       <div
-        class="bx--col"
+        class="cds--col"
       >
         <div
-          class="bx--tile vital-tiles"
+          class="cds--tile vital-tiles"
         >
           <span
             class="vital-headers"

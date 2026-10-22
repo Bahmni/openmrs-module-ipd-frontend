@@ -1,5 +1,5 @@
 import React from "react";
-import { Close16 } from "@carbon/icons-react";
+import { Close } from "@carbon/icons-react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import { FormattedMessage } from "react-intl";
@@ -89,7 +89,7 @@ const DraftOverlay = ({ formDrafts, fetchError, onClose, onSelect }) => (
         onClick={onClose}
         aria-label="Close drafts overlay"
       >
-        <Close16 />
+        <Close size={16} />
       </button>
     </div>
     <div className="ipd-draft-overlay__content">

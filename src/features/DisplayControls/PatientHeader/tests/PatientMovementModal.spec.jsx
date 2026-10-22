@@ -164,7 +164,7 @@ describe("PatientMovementModal", () => {
     await waitFor(() => {
       expect(screen.getByText("Patient Movement")).toBeTruthy();
     });
-    const closeButton = screen.getByRole("button", { name: "close" });
+    const closeButton = screen.getByRole("button", { name: /close/i });
     expect(closeButton).toBeTruthy();
     fireEvent.click(closeButton);
     expect(closeMethod).toHaveBeenCalledTimes(1);

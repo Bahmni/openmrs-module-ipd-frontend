@@ -1,6 +1,6 @@
 import React from "react";
 import TimeCell from "../components/TimeCell";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import { render, waitFor } from "@testing-library/react";
 import moment from "moment";
 import { timeFormatFor24Hr } from "../../../../constants";
@@ -17,8 +17,8 @@ jest.mock("bahmni-carbon-ui", () => {
   };
 });
 
-jest.mock("carbon-components-react", () => {
-  const actual = jest.requireActual("carbon-components-react");
+jest.mock("@carbon/react", () => {
+  const actual = jest.requireActual("@carbon/react");
   return {
     ...actual,
     Tooltip: ({ children, renderIcon }) => (

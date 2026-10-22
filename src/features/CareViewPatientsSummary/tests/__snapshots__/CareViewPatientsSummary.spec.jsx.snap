@@ -17,20 +17,20 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
             data-testid="patient-details-header"
           >
             <div
-              class="bx--content-switcher task-filter-switcher bx--content-switcher--sm"
+              class="cds--content-switcher task-filter-switcher cds--content-switcher--sm cds--layout--size-sm cds--layout-constraint--size__default-md cds--layout-constraint--size__min-sm cds--layout-constraint--size__max-lg"
               data-testid="task-filter-switcher"
               role="tablist"
             >
               <button
                 aria-selected="true"
-                class="bx--content-switcher-btn bx--content-switcher--selected"
+                class="cds--content-switcher-btn cds--content-switcher--selected"
                 data-testid="filter-tab-all"
                 role="tab"
                 tabindex="0"
                 type="button"
               >
                 <span
-                  class="bx--content-switcher__label"
+                  class="cds--content-switcher__label"
                   title="All"
                 >
                   All
@@ -38,14 +38,14 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
               </button>
               <button
                 aria-selected="false"
-                class="bx--content-switcher-btn"
+                class="cds--content-switcher-btn"
                 data-testid="filter-tab-new"
                 role="tab"
                 tabindex="-1"
                 type="button"
               >
                 <span
-                  class="bx--content-switcher__label"
+                  class="cds--content-switcher__label"
                   title="New"
                 >
                   New
@@ -53,14 +53,14 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
               </button>
               <button
                 aria-selected="false"
-                class="bx--content-switcher-btn"
+                class="cds--content-switcher-btn"
                 data-testid="filter-tab-pending"
                 role="tab"
                 tabindex="-1"
                 type="button"
               >
                 <span
-                  class="bx--content-switcher__label"
+                  class="cds--content-switcher__label"
                   title="Pending"
                 >
                   Pending
@@ -117,7 +117,10 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                     d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
                   />
                   <path
-                    d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                    d="M9.5,17A1.5,1.5,0,1,1,8,18.5,1.5017,1.5017,0,0,1,9.5,17m0-2A3.5,3.5,0,1,0,13,18.5,3.5,3.5,0,0,0,9.5,15Z"
+                  />
+                  <path
+                    d="M21 6 17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
                   />
                 </svg>
                 |
@@ -126,7 +129,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 </span>
                 |
                 <a
-                  class="bx--link"
+                  class="cds--link"
                   data-testid="identifier-ipd-dashboard"
                   href="/bahmni/clinical/#/default/patient/17fd50c7-8f9e-48da-b9ed-88c1bd358798/dashboard/visit/ipd/626b822d-741e-4a86-95ff-626eea753c4c?source=careViewDashboard"
                 >
@@ -175,7 +178,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                   d="M24,16V26.7515l-7.0962-3.5894L16,22.7051l-.9009.456L8,26.748V4H18V2H8A2,2,0,0,0,6,4V30l10-5.0537L26,30V16Z"
                 />
                 <path
-                  d="M26 6L26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
+                  d="M26 6 26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
                 />
               </svg>
             </div>
@@ -213,7 +216,10 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                     d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
                   />
                   <path
-                    d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                    d="M9.5,17A1.5,1.5,0,1,1,8,18.5,1.5017,1.5017,0,0,1,9.5,17m0-2A3.5,3.5,0,1,0,13,18.5,3.5,3.5,0,0,0,9.5,15Z"
+                  />
+                  <path
+                    d="M21 6 17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
                   />
                 </svg>
                 |
@@ -222,7 +228,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 </span>
                 |
                 <a
-                  class="bx--link"
+                  class="cds--link"
                   data-testid="identifier-ipd-dashboard"
                   href="/bahmni/clinical/#/default/patient/7278eb93-8c1d-4ef4-bcbf-4c6ee91365f7/dashboard/visit/ipd/626b822d-741e-4a86-95ff-636eea753c2c?source=careViewDashboard"
                 >
@@ -276,7 +282,22 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                         r="4"
                       />
                       <path
-                        d="M10 13H12V15H10zM10 18H12V20H10zM10 23H12V25H10zM14 13H22V15H14zM14 18H22V20H14zM14 23H18V25H14z"
+                        d="M10 13H12V15H10z"
+                      />
+                      <path
+                        d="M10 18H12V20H10z"
+                      />
+                      <path
+                        d="M10 23H12V25H10z"
+                      />
+                      <path
+                        d="M14 13H22V15H14z"
+                      />
+                      <path
+                        d="M14 18H22V20H14z"
+                      />
+                      <path
+                        d="M14 23H18V25H14z"
                       />
                       <path
                         d="M7,28V7h3v3H22V7h3V18h2V7a2,2,0,0,0-2-2H22V4a2,2,0,0,0-2-2H12a2,2,0,0,0-2,2V5H7A2,2,0,0,0,5,7V28a2,2,0,0,0,2,2H18V28ZM12,4h8V8H12Z"
@@ -294,7 +315,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                       New Medication(s)
                       : 
                       <a
-                        class="bx--link"
+                        class="cds--link"
                         data-testid="treatments-ipd-dashboard"
                         href="/bahmni/clinical/#/default/patient/7278eb93-8c1d-4ef4-bcbf-4c6ee91365f7/dashboard/visit/ipd/626b822d-741e-4a86-95ff-636eea753c2c?source=careViewDashboard"
                       >
@@ -322,7 +343,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                   d="M24,16V26.7515l-7.0962-3.5894L16,22.7051l-.9009.456L8,26.748V4H18V2H8A2,2,0,0,0,6,4V30l10-5.0537L26,30V16Z"
                 />
                 <path
-                  d="M26 6L26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
+                  d="M26 6 26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
                 />
               </svg>
             </div>
@@ -360,7 +381,10 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                     d="M25,16H17a2.0023,2.0023,0,0,0-2,2v6H4V14H2V30H4V26H28v4h2V21A5.0059,5.0059,0,0,0,25,16Zm3,8H17V18h8a3.0033,3.0033,0,0,1,3,3Z"
                   />
                   <path
-                    d="M9.5 17A1.5 1.5 0 118 18.5 1.5017 1.5017 0 019.5 17m0-2A3.5 3.5 0 1013 18.5 3.5 3.5 0 009.5 15zM21 6L17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
+                    d="M9.5,17A1.5,1.5,0,1,1,8,18.5,1.5017,1.5017,0,0,1,9.5,17m0-2A3.5,3.5,0,1,0,13,18.5,3.5,3.5,0,0,0,9.5,15Z"
+                  />
+                  <path
+                    d="M21 6 17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6z"
                   />
                 </svg>
                 |
@@ -369,7 +393,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                 </span>
                 |
                 <a
-                  class="bx--link"
+                  class="cds--link"
                   data-testid="identifier-ipd-dashboard"
                   href="/bahmni/clinical/#/default/patient/3ab51ec0-4650-4400-9aaa-75f30ece0208/dashboard/visit/ipd/627b822d-741e-4a96-45ff-626eea753c4c?source=careViewDashboard"
                 >
@@ -418,7 +442,7 @@ exports[`CareViewPatientsSummary should match snapshot 1`] = `
                   d="M24,16V26.7515l-7.0962-3.5894L16,22.7051l-.9009.456L8,26.748V4H18V2H8A2,2,0,0,0,6,4V30l10-5.0537L26,30V16Z"
                 />
                 <path
-                  d="M26 6L26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
+                  d="M26 6 26 2 24 2 24 6 20 6 20 8 24 8 24 12 26 12 26 8 30 8 30 6 26 6z"
                 />
               </svg>
             </div>

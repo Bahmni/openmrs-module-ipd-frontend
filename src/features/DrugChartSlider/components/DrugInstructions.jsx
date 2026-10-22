@@ -1,5 +1,5 @@
 import React from "react";
-import { TextArea } from "carbon-components-react";
+import { TextArea } from "@carbon/react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 

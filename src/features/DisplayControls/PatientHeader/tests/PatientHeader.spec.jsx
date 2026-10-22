@@ -118,7 +118,7 @@ describe("PatientHeader", () => {
       </IPDContext.Provider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
-    screen.getByTestId("overflow-menu").click();
+    fireEvent.click(screen.getByTestId("overflow-menu"));
     expect(screen.getByText("Patient Movement")).toBeTruthy();
     expect(container).toMatchSnapshot();
   });
@@ -152,7 +152,7 @@ describe("PatientHeader", () => {
       </IPDContext.Provider>
     );
     await waitFor(() => expect(screen.getByText("John Doe")).toBeTruthy());
-    screen.getByTestId("overflow-menu").click();
+    fireEvent.click(screen.getByTestId("overflow-menu"));
     const patientMovementButton = screen.getByTestId("overflow-menu-item1");
     expect(patientMovementButton.disabled).toEqual(true);
     expect(container).toMatchSnapshot();

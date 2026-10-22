@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "../styles/CareViewPatients.scss";
-import { Pagination, Loading } from "carbon-components-react";
+import { Pagination, Loading } from "@carbon/react";
 import PropTypes from "prop-types";
 import {
   fetchPatientsList,
@@ -20,7 +20,7 @@ import {
 } from "../../../utils/DateTimeUtils";
 import { currentShiftHoursArray } from "../../DisplayControls/DrugChart/utils/DrugChartUtils";
 import { items } from "../utils/constants";
-import { WarningAlt20 } from "@carbon/icons-react";
+import { WarningAlt } from "@carbon/icons-react";
 import moment from "moment";
 import { timeFormatFor24Hr } from "../../../constants";
 
@@ -375,14 +375,14 @@ export const CareViewPatients = () => {
             </>
           ) : isSearched ? (
             <div className="no-search-results">
-              <WarningAlt20 className={"warning-icon-20"} />
+              <WarningAlt size={20} className={"warning-icon-20"} />
               <span className="no-search-results-span">
                 {noSearchResultsForPatientsWardMessage}
               </span>
             </div>
           ) : (
             <div className="no-search-results">
-              <WarningAlt20 className={"warning-icon-20"} />
+              <WarningAlt size={20} className={"warning-icon-20"} />
               <span className="no-search-results-span">
                 {emptyResultsForPatientsWardMessage}
               </span>

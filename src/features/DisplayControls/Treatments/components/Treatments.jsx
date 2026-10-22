@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { Link, DataTableSkeleton, TextArea } from "carbon-components-react";
+import { Link, DataTableSkeleton, TextArea } from "@carbon/react";
 import { Title } from "bahmni-carbon-ui";
 import { FormattedMessage } from "react-intl";
 import { useState } from "react";
@@ -627,8 +627,11 @@ const Treatments = (props) => {
         );
         setTreatments(allTreatments);
         getTreatmentConfigs();
+      } else if (!allMedications.error) {
+        // drug orders not fetched yet (initial render): nothing to do
+        return;
       } else if (
-        allMedications.error.response.status === errorCodes.FORBIDDEN
+        allMedications.error.response?.status === errorCodes.FORBIDDEN
       ) {
         setIsLoading(false);
         setErrorMessage(ForbiddenErrorMessage);

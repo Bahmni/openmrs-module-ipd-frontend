@@ -7,7 +7,7 @@ import React from "react";
 import { act, render, waitFor, within } from "@testing-library/react";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { mockConfig } from "../../../utils/CommonUtils";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 const mockContext = {
   careViewConfig: { timeframeLimitInHours: 2 },
