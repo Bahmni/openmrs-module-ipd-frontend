@@ -92,6 +92,12 @@ const commonConfig = {
           },
         ],
       },
+      // bahmni-carbon-ui self-hosts IBM Plex; its styles.css references woff2 files in its dist
+      {
+        test: /\.woff2?$/i,
+        type: "asset/resource",
+        generator: { filename: "fonts/[hash][ext]" },
+      },
     ],
   },
 };
