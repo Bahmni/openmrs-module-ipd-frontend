@@ -34,7 +34,7 @@ exports[`View Form Modal should match snapshot 1`] = `
             >
               <button
                 aria-label="Close"
-                aria-labelledby="tooltip-_r_3_"
+                aria-labelledby="tooltip-_r_ID_"
                 class="cds--modal-close cds--btn cds--btn--primary cds--btn--icon-only"
                 type="button"
               >
@@ -58,7 +58,7 @@ exports[`View Form Modal should match snapshot 1`] = `
             <span
               aria-hidden="false"
               class="cds--popover"
-              id="tooltip-_r_3_"
+              id="tooltip-_r_ID_"
               role="tooltip"
             >
               <span
@@ -75,12 +75,12 @@ exports[`View Form Modal should match snapshot 1`] = `
         <h2
           class="cds--modal-header__heading"
           dir="auto"
-          id="cds--modal-header__heading--modal-id-_r_1_"
+          id="cds--modal-header__heading--modal-id-_r_ID_"
         />
       </div>
       <div
         class="cds--layer-two cds--modal-content cds--modal-scroll-content--no-fade"
-        id="cds--modal-body--modal-id-_r_1_"
+        id="cds--modal-body--modal-id-_r_ID_"
       >
         <div
           class="view-form-container"

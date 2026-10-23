@@ -22,7 +22,7 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
           class="cds--tooltip-trigger__wrapper"
         >
           <button
-            aria-describedby="tooltip-_r_i_"
+            aria-describedby="tooltip-_r_ID_"
             class="margin-right-6 cds--btn cds--layout--size-sm cds--btn--tertiary cds--btn--expressive cds--btn--icon-only"
             data-testid="previousButton"
             type="button"
@@ -46,7 +46,7 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
         <span
           aria-hidden="true"
           class="cds--popover"
-          id="tooltip-_r_i_"
+          id="tooltip-_r_ID_"
           role="tooltip"
         >
           <span
@@ -64,7 +64,7 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
           class="cds--tooltip-trigger__wrapper"
         >
           <button
-            aria-describedby="tooltip-_r_m_"
+            aria-describedby="tooltip-_r_ID_"
             class="margin-right-10 cds--btn cds--layout--size-sm cds--btn--tertiary cds--btn--expressive cds--btn--icon-only"
             data-testid="nextButton"
             type="button"
@@ -88,7 +88,7 @@ exports[`DrugChartWrapper should render loading state when isLoading is true 1`]
         <span
           aria-hidden="true"
           class="cds--popover"
-          id="tooltip-_r_m_"
+          id="tooltip-_r_ID_"
           role="tooltip"
         >
           <span

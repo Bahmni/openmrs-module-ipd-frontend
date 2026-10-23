@@ -15,8 +15,8 @@ exports[`DrugListCell should  match snapshot 1`] = `
           class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom name-tooltip"
         >
           <button
-            aria-controls="id-_r_0_"
-            aria-describedby="id-_r_0_"
+            aria-controls="id-_r_ID_"
+            aria-describedby="id-_r_ID_"
             aria-expanded="false"
             class="cds--definition-term"
             type="button"
@@ -29,7 +29,7 @@ exports[`DrugListCell should  match snapshot 1`] = `
           </button>
           <span
             class="cds--popover"
-            id="id-_r_0_"
+            id="id-_r_ID_"
           >
             <span
               class="cds--popover-content cds--definition-tooltip"
@@ -65,7 +65,7 @@ exports[`DrugListCell should  match snapshot 1`] = `
     >
       <div
         class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-        id="tag-id-_r_2_"
+        id="tag-id-_r_ID_"
       >
         <span
           class="cds--tag__label"
@@ -95,8 +95,8 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
           class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom name-tooltip"
         >
           <button
-            aria-controls="id-_r_8_"
-            aria-describedby="id-_r_8_"
+            aria-controls="id-_r_ID_"
+            aria-describedby="id-_r_ID_"
             aria-expanded="false"
             class="cds--definition-term"
             type="button"
@@ -109,7 +109,7 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
           </button>
           <span
             class="cds--popover"
-            id="id-_r_8_"
+            id="id-_r_ID_"
           >
             <span
               class="cds--popover-content cds--definition-tooltip"
@@ -146,8 +146,8 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
             class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top administration-details-tooltip"
           >
             <button
-              aria-controls="id-_r_a_"
-              aria-describedby="id-_r_a_"
+              aria-controls="id-_r_ID_"
+              aria-describedby="id-_r_ID_"
               aria-expanded="false"
               class="cds--definition-term"
               type="button"
@@ -167,7 +167,7 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
             </button>
             <span
               class="cds--popover"
-              id="id-_r_a_"
+              id="id-_r_ID_"
             >
               <span
                 class="cds--popover-content cds--definition-tooltip"
@@ -187,7 +187,7 @@ exports[`DrugListCell should  match snapshot for drug cell with admin info statu
     >
       <div
         class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-        id="tag-id-_r_c_"
+        id="tag-id-_r_ID_"
       >
         <span
           class="cds--tag__label"
@@ -217,8 +217,8 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
           class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom name-tooltip"
         >
           <button
-            aria-controls="id-_r_3_"
-            aria-describedby="id-_r_3_"
+            aria-controls="id-_r_ID_"
+            aria-describedby="id-_r_ID_"
             aria-expanded="false"
             class="cds--definition-term"
             type="button"
@@ -231,7 +231,7 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
           </button>
           <span
             class="cds--popover"
-            id="id-_r_3_"
+            id="id-_r_ID_"
           >
             <span
               class="cds--popover-content cds--definition-tooltip"
@@ -268,8 +268,8 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
             class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--top administration-details-tooltip"
           >
             <button
-              aria-controls="id-_r_5_"
-              aria-describedby="id-_r_5_"
+              aria-controls="id-_r_ID_"
+              aria-describedby="id-_r_ID_"
               aria-expanded="false"
               class="cds--definition-term"
               type="button"
@@ -289,7 +289,7 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
             </button>
             <span
               class="cds--popover"
-              id="id-_r_5_"
+              id="id-_r_ID_"
             >
               <span
                 class="cds--popover-content cds--definition-tooltip"
@@ -309,7 +309,7 @@ exports[`DrugListCell should  match snapshot for for drug cell with admin info s
     >
       <div
         class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-        id="tag-id-_r_7_"
+        id="tag-id-_r_ID_"
       >
         <span
           class="cds--tag__label"

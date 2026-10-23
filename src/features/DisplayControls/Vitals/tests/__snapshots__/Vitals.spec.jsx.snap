@@ -408,8 +408,8 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
           >
             <label
               class="cds--pagination__text"
-              for="cds-pagination-select-id-_r_6_"
-              id="cds-pagination-select-id-_r_6_-count-label"
+              for="cds-pagination-select-id-_r_ID_"
+              id="cds-pagination-select-id-_r_ID_-count-label"
             >
               Items per page:
             </label>
@@ -427,7 +427,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                   >
                     <select
                       class="cds--select-input"
-                      id="cds-pagination-select-id-_r_6_"
+                      id="cds-pagination-select-id-_r_ID_"
                       title="5"
                     >
                       <option
@@ -486,7 +486,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                 <label
                   class="cds--label cds--visually-hidden"
                   dir="auto"
-                  for="cds-pagination-select-id-_r_6_-right"
+                  for="cds-pagination-select-id-_r_ID_-right"
                 >
                   Page of 1 page
                 </label>
@@ -498,7 +498,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                   >
                     <select
                       class="cds--select-input"
-                      id="cds-pagination-select-id-_r_6_-right"
+                      id="cds-pagination-select-id-_r_ID_-right"
                       title="1"
                     >
                       <option
@@ -543,7 +543,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                 >
                   <button
                     aria-label="Previous page"
-                    aria-labelledby="tooltip-_r_8_"
+                    aria-labelledby="tooltip-_r_ID_"
                     class="cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled cds--btn--icon-only"
                     disabled=""
                     type="button"
@@ -567,7 +567,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_8_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
@@ -588,7 +588,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                 >
                   <button
                     aria-label="Next page"
-                    aria-labelledby="tooltip-_r_c_"
+                    aria-labelledby="tooltip-_r_ID_"
                     class="cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled cds--btn--icon-only"
                     disabled=""
                     type="button"
@@ -612,7 +612,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_c_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
@@ -777,8 +777,8 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
           >
             <label
               class="cds--pagination__text"
-              for="cds-pagination-select-id-_r_k_"
-              id="cds-pagination-select-id-_r_k_-count-label"
+              for="cds-pagination-select-id-_r_ID_"
+              id="cds-pagination-select-id-_r_ID_-count-label"
             >
               Items per page:
             </label>
@@ -796,7 +796,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                   >
                     <select
                       class="cds--select-input"
-                      id="cds-pagination-select-id-_r_k_"
+                      id="cds-pagination-select-id-_r_ID_"
                       title="5"
                     >
                       <option
@@ -855,7 +855,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                 <label
                   class="cds--label cds--visually-hidden"
                   dir="auto"
-                  for="cds-pagination-select-id-_r_k_-right"
+                  for="cds-pagination-select-id-_r_ID_-right"
                 >
                   Page of 1 page
                 </label>
@@ -867,7 +867,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                   >
                     <select
                       class="cds--select-input"
-                      id="cds-pagination-select-id-_r_k_-right"
+                      id="cds-pagination-select-id-_r_ID_-right"
                       title="1"
                     >
                       <option
@@ -912,7 +912,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                 >
                   <button
                     aria-label="Previous page"
-                    aria-labelledby="tooltip-_r_m_"
+                    aria-labelledby="tooltip-_r_ID_"
                     class="cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled cds--btn--icon-only"
                     disabled=""
                     type="button"
@@ -936,7 +936,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_m_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
@@ -957,7 +957,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                 >
                   <button
                     aria-label="Next page"
-                    aria-labelledby="tooltip-_r_q_"
+                    aria-labelledby="tooltip-_r_ID_"
                     class="cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled cds--btn--icon-only"
                     disabled=""
                     type="button"
@@ -981,7 +981,7 @@ exports[`Vitals displays vital and biometrics history after data is fetched 1`] 
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_q_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span

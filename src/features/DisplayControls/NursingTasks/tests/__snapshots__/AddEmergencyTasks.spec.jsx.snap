@@ -21,7 +21,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-_r_11_"
+              aria-labelledby="tooltip-_r_ID_"
               class="cds--btn cds--btn--ghost cds--btn--icon-only"
               type="button"
             >
@@ -44,7 +44,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-_r_11_"
+            id="tooltip-_r_ID_"
             role="tooltip"
           >
             <span
@@ -96,10 +96,10 @@ exports[`AddEmergencyTasks should render the component 1`] = `
             role="tablist"
           >
             <button
-              aria-controls="ccs-_r_14_-tabpanel-0"
+              aria-controls="ccs-_r_ID_-tabpanel-0"
               aria-selected="true"
               class="cds--tabs__nav-item cds--tabs__nav-link cds--tabs__nav-item--selected"
-              id="ccs-_r_14_-tab-0"
+              id="ccs-_r_ID_-tab-0"
               role="tab"
               tabindex="0"
               type="button"
@@ -144,10 +144,10 @@ exports[`AddEmergencyTasks should render the component 1`] = `
               </button>
             </div>
             <button
-              aria-controls="ccs-_r_14_-tabpanel-1"
+              aria-controls="ccs-_r_ID_-tabpanel-1"
               aria-selected="false"
               class="cds--tabs__nav-item cds--tabs__nav-link"
-              id="ccs-_r_14_-tab-1"
+              id="ccs-_r_ID_-tab-1"
               role="tab"
               tabindex="-1"
               type="button"
@@ -216,9 +216,9 @@ exports[`AddEmergencyTasks should render the component 1`] = `
           </button>
         </div>
         <div
-          aria-labelledby="ccs-_r_14_-tab-0"
+          aria-labelledby="ccs-_r_ID_-tab-0"
           class="cds--tab-content"
-          id="ccs-_r_14_-tabpanel-0"
+          id="ccs-_r_ID_-tabpanel-0"
           role="tabpanel"
         >
           <div
@@ -232,7 +232,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                   class="cds--label"
                   dir="auto"
                   for="SearchDrug"
-                  id="downshift-_r_17_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -256,10 +256,10 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                     <input
                       aria-activedescendant=""
                       aria-autocomplete="list"
-                      aria-controls="downshift-_r_17_-menu"
+                      aria-controls="downshift-_r_ID_-menu"
                       aria-expanded="false"
                       aria-haspopup="listbox"
-                      aria-labelledby="downshift-_r_17_-label"
+                      aria-labelledby="downshift-_r_ID_-label"
                       autocomplete="off"
                       class="cds--text-input cds--text-input--empty"
                       id="SearchDrug"
@@ -271,11 +271,11 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                       value=""
                     />
                     <button
-                      aria-controls="downshift-_r_17_-menu"
+                      aria-controls="downshift-_r_ID_-menu"
                       aria-expanded="false"
                       aria-label="Open"
                       class="cds--list-box__menu-icon"
-                      id="downshift-_r_17_-toggle-button"
+                      id="downshift-_r_ID_-toggle-button"
                       tabindex="-1"
                       title="Open"
                       type="button"
@@ -297,9 +297,9 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                     </button>
                   </div>
                   <ul
-                    aria-labelledby="downshift-_r_17_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_17_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -421,7 +421,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                       class="cds--label"
                       dir="auto"
                       for="Dosage Dropdown"
-                      id="downshift-_r_1a_-label"
+                      id="downshift-_r_ID_-label"
                     >
                       <div
                         class="titleText"
@@ -440,10 +440,10 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                         <input
                           aria-activedescendant=""
                           aria-autocomplete="list"
-                          aria-controls="downshift-_r_1a_-menu"
+                          aria-controls="downshift-_r_ID_-menu"
                           aria-expanded="false"
                           aria-haspopup="listbox"
-                          aria-labelledby="downshift-_r_1a_-label"
+                          aria-labelledby="downshift-_r_ID_-label"
                           autocomplete="off"
                           class="cds--text-input cds--text-input--empty"
                           id="Dosage Dropdown"
@@ -455,11 +455,11 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                           type="text"
                         />
                         <button
-                          aria-controls="downshift-_r_1a_-menu"
+                          aria-controls="downshift-_r_ID_-menu"
                           aria-expanded="false"
                           aria-label="Open"
                           class="cds--list-box__menu-icon"
-                          id="downshift-_r_1a_-toggle-button"
+                          id="downshift-_r_ID_-toggle-button"
                           tabindex="-1"
                           title="Open"
                           type="button"
@@ -481,9 +481,9 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                         </button>
                       </div>
                       <ul
-                        aria-labelledby="downshift-_r_1a_-label"
+                        aria-labelledby="downshift-_r_ID_-label"
                         class="cds--list-box__menu"
-                        id="downshift-_r_1a_-menu"
+                        id="downshift-_r_ID_-menu"
                         role="listbox"
                       />
                     </div>
@@ -500,7 +500,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                     class="cds--label"
                     dir="auto"
                     for="Route-Dropdown"
-                    id="downshift-_r_1d_-label"
+                    id="downshift-_r_ID_-label"
                   >
                     <div
                       class="titleText"
@@ -524,10 +524,10 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                       <input
                         aria-activedescendant=""
                         aria-autocomplete="list"
-                        aria-controls="downshift-_r_1d_-menu"
+                        aria-controls="downshift-_r_ID_-menu"
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        aria-labelledby="downshift-_r_1d_-label"
+                        aria-labelledby="downshift-_r_ID_-label"
                         autocomplete="off"
                         class="cds--text-input cds--text-input--empty"
                         id="Route-Dropdown"
@@ -539,11 +539,11 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                         type="text"
                       />
                       <button
-                        aria-controls="downshift-_r_1d_-menu"
+                        aria-controls="downshift-_r_ID_-menu"
                         aria-expanded="false"
                         aria-label="Open"
                         class="cds--list-box__menu-icon"
-                        id="downshift-_r_1d_-toggle-button"
+                        id="downshift-_r_ID_-toggle-button"
                         tabindex="-1"
                         title="Open"
                         type="button"
@@ -565,9 +565,9 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                       </button>
                     </div>
                     <ul
-                      aria-labelledby="downshift-_r_1d_-label"
+                      aria-labelledby="downshift-_r_ID_-label"
                       class="cds--list-box__menu"
-                      id="downshift-_r_1d_-menu"
+                      id="downshift-_r_ID_-menu"
                       role="listbox"
                     />
                   </div>
@@ -696,7 +696,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                   class="cds--label"
                   dir="auto"
                   for="Provider-info"
-                  id="downshift-_r_1h_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -720,10 +720,10 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                     <input
                       aria-activedescendant=""
                       aria-autocomplete="list"
-                      aria-controls="downshift-_r_1h_-menu"
+                      aria-controls="downshift-_r_ID_-menu"
                       aria-expanded="false"
                       aria-haspopup="listbox"
-                      aria-labelledby="downshift-_r_1h_-label"
+                      aria-labelledby="downshift-_r_ID_-label"
                       autocomplete="off"
                       class="cds--text-input cds--text-input--empty"
                       id="Provider-info"
@@ -736,11 +736,11 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                       value=""
                     />
                     <button
-                      aria-controls="downshift-_r_1h_-menu"
+                      aria-controls="downshift-_r_ID_-menu"
                       aria-expanded="false"
                       aria-label="Open"
                       class="cds--list-box__menu-icon"
-                      id="downshift-_r_1h_-toggle-button"
+                      id="downshift-_r_ID_-toggle-button"
                       tabindex="-1"
                       title="Open"
                       type="button"
@@ -762,9 +762,9 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                     </button>
                   </div>
                   <ul
-                    aria-labelledby="downshift-_r_1h_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_1h_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -815,10 +815,10 @@ exports[`AddEmergencyTasks should render the component 1`] = `
           </div>
         </div>
         <div
-          aria-labelledby="ccs-_r_14_-tab-1"
+          aria-labelledby="ccs-_r_ID_-tab-1"
           class="cds--tab-content"
           hidden=""
-          id="ccs-_r_14_-tabpanel-1"
+          id="ccs-_r_ID_-tabpanel-1"
           role="tabpanel"
         >
           <div
@@ -1018,7 +1018,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
             <h2
               class="cds--modal-header__heading"
               dir="auto"
-              id="cds--modal-header__heading--modal-id-_r_1n_"
+              id="cds--modal-header__heading--modal-id-_r_ID_"
             >
               Please confirm the emergency medication task
             </h2>
@@ -1033,7 +1033,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                 >
                   <button
                     aria-label="Close"
-                    aria-labelledby="tooltip-_r_1p_"
+                    aria-labelledby="tooltip-_r_ID_"
                     class="cds--modal-close cds--btn cds--btn--primary cds--btn--icon-only"
                     type="button"
                   >
@@ -1057,7 +1057,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_1p_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
@@ -1074,7 +1074,7 @@ exports[`AddEmergencyTasks should render the component 1`] = `
           </div>
           <div
             class="cds--layer-two cds--modal-content cds--modal-scroll-content--no-fade"
-            id="cds--modal-body--modal-id-_r_1n_"
+            id="cds--modal-body--modal-id-_r_ID_"
           >
             <hr />
             <div
@@ -1161,7 +1161,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-_r_1_"
+              aria-labelledby="tooltip-_r_ID_"
               class="cds--btn cds--btn--ghost cds--btn--icon-only"
               type="button"
             >
@@ -1184,7 +1184,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-_r_1_"
+            id="tooltip-_r_ID_"
             role="tooltip"
           >
             <span
@@ -1236,10 +1236,10 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
             role="tablist"
           >
             <button
-              aria-controls="ccs-_r_4_-tabpanel-0"
+              aria-controls="ccs-_r_ID_-tabpanel-0"
               aria-selected="true"
               class="cds--tabs__nav-item cds--tabs__nav-link cds--tabs__nav-item--selected"
-              id="ccs-_r_4_-tab-0"
+              id="ccs-_r_ID_-tab-0"
               role="tab"
               tabindex="0"
               type="button"
@@ -1284,10 +1284,10 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
               </button>
             </div>
             <button
-              aria-controls="ccs-_r_4_-tabpanel-1"
+              aria-controls="ccs-_r_ID_-tabpanel-1"
               aria-selected="false"
               class="cds--tabs__nav-item cds--tabs__nav-link"
-              id="ccs-_r_4_-tab-1"
+              id="ccs-_r_ID_-tab-1"
               role="tab"
               tabindex="-1"
               type="button"
@@ -1356,9 +1356,9 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
           </button>
         </div>
         <div
-          aria-labelledby="ccs-_r_4_-tab-0"
+          aria-labelledby="ccs-_r_ID_-tab-0"
           class="cds--tab-content"
-          id="ccs-_r_4_-tabpanel-0"
+          id="ccs-_r_ID_-tabpanel-0"
           role="tabpanel"
         >
           <div>
@@ -1377,7 +1377,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                   class="cds--label"
                   dir="auto"
                   for="SearchDrug"
-                  id="downshift-_r_7_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -1401,10 +1401,10 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                     <input
                       aria-activedescendant=""
                       aria-autocomplete="list"
-                      aria-controls="downshift-_r_7_-menu"
+                      aria-controls="downshift-_r_ID_-menu"
                       aria-expanded="false"
                       aria-haspopup="listbox"
-                      aria-labelledby="downshift-_r_7_-label"
+                      aria-labelledby="downshift-_r_ID_-label"
                       autocomplete="off"
                       class="cds--text-input cds--text-input--empty"
                       id="SearchDrug"
@@ -1416,11 +1416,11 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                       value=""
                     />
                     <button
-                      aria-controls="downshift-_r_7_-menu"
+                      aria-controls="downshift-_r_ID_-menu"
                       aria-expanded="false"
                       aria-label="Open"
                       class="cds--list-box__menu-icon"
-                      id="downshift-_r_7_-toggle-button"
+                      id="downshift-_r_ID_-toggle-button"
                       tabindex="-1"
                       title="Open"
                       type="button"
@@ -1442,9 +1442,9 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                     </button>
                   </div>
                   <ul
-                    aria-labelledby="downshift-_r_7_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_7_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -1566,7 +1566,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                       class="cds--label"
                       dir="auto"
                       for="Dosage Dropdown"
-                      id="downshift-_r_a_-label"
+                      id="downshift-_r_ID_-label"
                     >
                       <div
                         class="titleText"
@@ -1585,10 +1585,10 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                         <input
                           aria-activedescendant=""
                           aria-autocomplete="list"
-                          aria-controls="downshift-_r_a_-menu"
+                          aria-controls="downshift-_r_ID_-menu"
                           aria-expanded="false"
                           aria-haspopup="listbox"
-                          aria-labelledby="downshift-_r_a_-label"
+                          aria-labelledby="downshift-_r_ID_-label"
                           autocomplete="off"
                           class="cds--text-input cds--text-input--empty"
                           id="Dosage Dropdown"
@@ -1600,11 +1600,11 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                           type="text"
                         />
                         <button
-                          aria-controls="downshift-_r_a_-menu"
+                          aria-controls="downshift-_r_ID_-menu"
                           aria-expanded="false"
                           aria-label="Open"
                           class="cds--list-box__menu-icon"
-                          id="downshift-_r_a_-toggle-button"
+                          id="downshift-_r_ID_-toggle-button"
                           tabindex="-1"
                           title="Open"
                           type="button"
@@ -1626,9 +1626,9 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                         </button>
                       </div>
                       <ul
-                        aria-labelledby="downshift-_r_a_-label"
+                        aria-labelledby="downshift-_r_ID_-label"
                         class="cds--list-box__menu"
-                        id="downshift-_r_a_-menu"
+                        id="downshift-_r_ID_-menu"
                         role="listbox"
                       />
                     </div>
@@ -1645,7 +1645,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                     class="cds--label"
                     dir="auto"
                     for="Route-Dropdown"
-                    id="downshift-_r_d_-label"
+                    id="downshift-_r_ID_-label"
                   >
                     <div
                       class="titleText"
@@ -1669,10 +1669,10 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                       <input
                         aria-activedescendant=""
                         aria-autocomplete="list"
-                        aria-controls="downshift-_r_d_-menu"
+                        aria-controls="downshift-_r_ID_-menu"
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        aria-labelledby="downshift-_r_d_-label"
+                        aria-labelledby="downshift-_r_ID_-label"
                         autocomplete="off"
                         class="cds--text-input cds--text-input--empty"
                         id="Route-Dropdown"
@@ -1684,11 +1684,11 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                         type="text"
                       />
                       <button
-                        aria-controls="downshift-_r_d_-menu"
+                        aria-controls="downshift-_r_ID_-menu"
                         aria-expanded="false"
                         aria-label="Open"
                         class="cds--list-box__menu-icon"
-                        id="downshift-_r_d_-toggle-button"
+                        id="downshift-_r_ID_-toggle-button"
                         tabindex="-1"
                         title="Open"
                         type="button"
@@ -1710,9 +1710,9 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                       </button>
                     </div>
                     <ul
-                      aria-labelledby="downshift-_r_d_-label"
+                      aria-labelledby="downshift-_r_ID_-label"
                       class="cds--list-box__menu"
-                      id="downshift-_r_d_-menu"
+                      id="downshift-_r_ID_-menu"
                       role="listbox"
                     />
                   </div>
@@ -1841,7 +1841,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                   class="cds--label"
                   dir="auto"
                   for="Provider-info"
-                  id="downshift-_r_h_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -1865,10 +1865,10 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                     <input
                       aria-activedescendant=""
                       aria-autocomplete="list"
-                      aria-controls="downshift-_r_h_-menu"
+                      aria-controls="downshift-_r_ID_-menu"
                       aria-expanded="false"
                       aria-haspopup="listbox"
-                      aria-labelledby="downshift-_r_h_-label"
+                      aria-labelledby="downshift-_r_ID_-label"
                       autocomplete="off"
                       class="cds--text-input cds--text-input--empty"
                       id="Provider-info"
@@ -1881,11 +1881,11 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                       value=""
                     />
                     <button
-                      aria-controls="downshift-_r_h_-menu"
+                      aria-controls="downshift-_r_ID_-menu"
                       aria-expanded="false"
                       aria-label="Open"
                       class="cds--list-box__menu-icon"
-                      id="downshift-_r_h_-toggle-button"
+                      id="downshift-_r_ID_-toggle-button"
                       tabindex="-1"
                       title="Open"
                       type="button"
@@ -1907,9 +1907,9 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                     </button>
                   </div>
                   <ul
-                    aria-labelledby="downshift-_r_h_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_h_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -1960,10 +1960,10 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
           </div>
         </div>
         <div
-          aria-labelledby="ccs-_r_4_-tab-1"
+          aria-labelledby="ccs-_r_ID_-tab-1"
           class="cds--tab-content"
           hidden=""
-          id="ccs-_r_4_-tabpanel-1"
+          id="ccs-_r_ID_-tabpanel-1"
           role="tabpanel"
         >
           <div>
@@ -2168,7 +2168,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
             <h2
               class="cds--modal-header__heading"
               dir="auto"
-              id="cds--modal-header__heading--modal-id-_r_n_"
+              id="cds--modal-header__heading--modal-id-_r_ID_"
             >
               Please confirm the emergency medication task
             </h2>
@@ -2183,7 +2183,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                 >
                   <button
                     aria-label="Close"
-                    aria-labelledby="tooltip-_r_p_"
+                    aria-labelledby="tooltip-_r_ID_"
                     class="cds--modal-close cds--btn cds--btn--primary cds--btn--icon-only"
                     type="button"
                   >
@@ -2207,7 +2207,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_p_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
@@ -2224,7 +2224,7 @@ exports[`AddEmergencyTasks should render the component with loading state 1`] = 
           </div>
           <div
             class="cds--layer-two cds--modal-content cds--modal-scroll-content--no-fade"
-            id="cds--modal-body--modal-id-_r_n_"
+            id="cds--modal-body--modal-id-_r_ID_"
           >
             <hr />
             <div

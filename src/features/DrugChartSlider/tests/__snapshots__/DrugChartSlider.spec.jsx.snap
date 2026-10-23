@@ -21,7 +21,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-_r_7t_"
+              aria-labelledby="tooltip-_r_ID_"
               class="cds--btn cds--btn--ghost cds--btn--icon-only"
               type="button"
             >
@@ -44,7 +44,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-_r_7t_"
+            id="tooltip-_r_ID_"
             role="tooltip"
           >
             <span
@@ -214,7 +214,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
               >
                 <label
                   class="cds--label cds--label--disabled"
-                  id="downshift-_r_81_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -230,13 +230,13 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                 >
                   <button
                     aria-activedescendant=""
-                    aria-controls="downshift-_r_81_-menu"
+                    aria-controls="downshift-_r_ID_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-_r_81_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__field"
                     disabled=""
-                    id="downshift-_r_81_-toggle-button"
+                    id="downshift-_r_ID_-toggle-button"
                     role="combobox"
                     tabindex="0"
                     title="Tablet"
@@ -272,9 +272,9 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                     </div>
                   </button>
                   <ul
-                    aria-labelledby="downshift-_r_81_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_81_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -294,7 +294,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
               >
                 <label
                   class="cds--label cds--label--disabled"
-                  id="downshift-_r_83_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -310,13 +310,13 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                 >
                   <button
                     aria-activedescendant=""
-                    aria-controls="downshift-_r_83_-menu"
+                    aria-controls="downshift-_r_ID_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-_r_83_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__field"
                     disabled=""
-                    id="downshift-_r_83_-toggle-button"
+                    id="downshift-_r_ID_-toggle-button"
                     role="combobox"
                     tabindex="0"
                     title=""
@@ -350,9 +350,9 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                     </div>
                   </button>
                   <ul
-                    aria-labelledby="downshift-_r_83_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_83_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -473,7 +473,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
               >
                 <label
                   class="cds--label cds--label--disabled"
-                  id="downshift-_r_85_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -489,13 +489,13 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                 >
                   <button
                     aria-activedescendant=""
-                    aria-controls="downshift-_r_85_-menu"
+                    aria-controls="downshift-_r_ID_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-_r_85_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__field"
                     disabled=""
-                    id="downshift-_r_85_-toggle-button"
+                    id="downshift-_r_ID_-toggle-button"
                     role="combobox"
                     tabindex="0"
                     title=""
@@ -529,9 +529,9 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                     </div>
                   </button>
                   <ul
-                    aria-labelledby="downshift-_r_85_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_85_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -615,7 +615,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
             >
               <label
                 class="cds--label cds--label--disabled"
-                id="downshift-_r_88_-label"
+                id="downshift-_r_ID_-label"
               >
                 <div
                   class="titleText"
@@ -631,13 +631,13 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
               >
                 <button
                   aria-activedescendant=""
-                  aria-controls="downshift-_r_88_-menu"
+                  aria-controls="downshift-_r_ID_-menu"
                   aria-expanded="false"
                   aria-haspopup="listbox"
-                  aria-labelledby="downshift-_r_88_-label"
+                  aria-labelledby="downshift-_r_ID_-label"
                   class="cds--list-box__field"
                   disabled=""
-                  id="downshift-_r_88_-toggle-button"
+                  id="downshift-_r_ID_-toggle-button"
                   role="combobox"
                   tabindex="0"
                   title="Twice a day"
@@ -673,9 +673,9 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with sche
                   </div>
                 </button>
                 <ul
-                  aria-labelledby="downshift-_r_88_-label"
+                  aria-labelledby="downshift-_r_ID_-label"
                   class="cds--list-box__menu"
-                  id="downshift-_r_88_-menu"
+                  id="downshift-_r_ID_-menu"
                   role="listbox"
                 />
               </div>
@@ -944,7 +944,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-_r_7b_"
+              aria-labelledby="tooltip-_r_ID_"
               class="cds--btn cds--btn--ghost cds--btn--icon-only"
               type="button"
             >
@@ -967,7 +967,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-_r_7b_"
+            id="tooltip-_r_ID_"
             role="tooltip"
           >
             <span
@@ -1137,7 +1137,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
               >
                 <label
                   class="cds--label cds--label--disabled"
-                  id="downshift-_r_7f_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -1153,13 +1153,13 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                 >
                   <button
                     aria-activedescendant=""
-                    aria-controls="downshift-_r_7f_-menu"
+                    aria-controls="downshift-_r_ID_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-_r_7f_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__field"
                     disabled=""
-                    id="downshift-_r_7f_-toggle-button"
+                    id="downshift-_r_ID_-toggle-button"
                     role="combobox"
                     tabindex="0"
                     title="Tablet"
@@ -1195,9 +1195,9 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </div>
                   </button>
                   <ul
-                    aria-labelledby="downshift-_r_7f_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_7f_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -1217,7 +1217,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
               >
                 <label
                   class="cds--label cds--label--disabled"
-                  id="downshift-_r_7h_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -1233,13 +1233,13 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                 >
                   <button
                     aria-activedescendant=""
-                    aria-controls="downshift-_r_7h_-menu"
+                    aria-controls="downshift-_r_ID_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-_r_7h_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__field"
                     disabled=""
-                    id="downshift-_r_7h_-toggle-button"
+                    id="downshift-_r_ID_-toggle-button"
                     role="combobox"
                     tabindex="0"
                     title=""
@@ -1273,9 +1273,9 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </div>
                   </button>
                   <ul
-                    aria-labelledby="downshift-_r_7h_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_7h_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -1396,7 +1396,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
               >
                 <label
                   class="cds--label cds--label--disabled"
-                  id="downshift-_r_7j_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -1412,13 +1412,13 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                 >
                   <button
                     aria-activedescendant=""
-                    aria-controls="downshift-_r_7j_-menu"
+                    aria-controls="downshift-_r_ID_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-_r_7j_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__field"
                     disabled=""
-                    id="downshift-_r_7j_-toggle-button"
+                    id="downshift-_r_ID_-toggle-button"
                     role="combobox"
                     tabindex="0"
                     title=""
@@ -1452,9 +1452,9 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                     </div>
                   </button>
                   <ul
-                    aria-labelledby="downshift-_r_7j_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_7j_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -1538,7 +1538,7 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
             >
               <label
                 class="cds--label cds--label--disabled"
-                id="downshift-_r_7m_-label"
+                id="downshift-_r_ID_-label"
               >
                 <div
                   class="titleText"
@@ -1554,13 +1554,13 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
               >
                 <button
                   aria-activedescendant=""
-                  aria-controls="downshift-_r_7m_-menu"
+                  aria-controls="downshift-_r_ID_-menu"
                   aria-expanded="false"
                   aria-haspopup="listbox"
-                  aria-labelledby="downshift-_r_7m_-label"
+                  aria-labelledby="downshift-_r_ID_-label"
                   class="cds--list-box__field"
                   disabled=""
-                  id="downshift-_r_7m_-toggle-button"
+                  id="downshift-_r_ID_-toggle-button"
                   role="combobox"
                   tabindex="0"
                   title="Twice a day"
@@ -1596,9 +1596,9 @@ exports[`DrugChartSlider Should render Drug Chart Slider for schedules with star
                   </div>
                 </button>
                 <ul
-                  aria-labelledby="downshift-_r_7m_-label"
+                  aria-labelledby="downshift-_r_ID_-label"
                   class="cds--list-box__menu"
-                  id="downshift-_r_7m_-menu"
+                  id="downshift-_r_ID_-menu"
                   role="listbox"
                 />
               </div>
@@ -2027,7 +2027,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-_r_91_"
+              aria-labelledby="tooltip-_r_ID_"
               class="cds--btn cds--btn--ghost cds--btn--icon-only"
               type="button"
             >
@@ -2050,7 +2050,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-_r_91_"
+            id="tooltip-_r_ID_"
             role="tooltip"
           >
             <span
@@ -2220,7 +2220,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               >
                 <label
                   class="cds--label cds--label--disabled"
-                  id="downshift-_r_95_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -2236,13 +2236,13 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                 >
                   <button
                     aria-activedescendant=""
-                    aria-controls="downshift-_r_95_-menu"
+                    aria-controls="downshift-_r_ID_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-_r_95_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__field"
                     disabled=""
-                    id="downshift-_r_95_-toggle-button"
+                    id="downshift-_r_ID_-toggle-button"
                     role="combobox"
                     tabindex="0"
                     title="Tablet"
@@ -2278,9 +2278,9 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </button>
                   <ul
-                    aria-labelledby="downshift-_r_95_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_95_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -2300,7 +2300,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               >
                 <label
                   class="cds--label cds--label--disabled"
-                  id="downshift-_r_97_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -2316,13 +2316,13 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                 >
                   <button
                     aria-activedescendant=""
-                    aria-controls="downshift-_r_97_-menu"
+                    aria-controls="downshift-_r_ID_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-_r_97_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__field"
                     disabled=""
-                    id="downshift-_r_97_-toggle-button"
+                    id="downshift-_r_ID_-toggle-button"
                     role="combobox"
                     tabindex="0"
                     title=""
@@ -2356,9 +2356,9 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </button>
                   <ul
-                    aria-labelledby="downshift-_r_97_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_97_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -2479,7 +2479,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               >
                 <label
                   class="cds--label cds--label--disabled"
-                  id="downshift-_r_99_-label"
+                  id="downshift-_r_ID_-label"
                 >
                   <div
                     class="titleText"
@@ -2495,13 +2495,13 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                 >
                   <button
                     aria-activedescendant=""
-                    aria-controls="downshift-_r_99_-menu"
+                    aria-controls="downshift-_r_ID_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-_r_99_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__field"
                     disabled=""
-                    id="downshift-_r_99_-toggle-button"
+                    id="downshift-_r_ID_-toggle-button"
                     role="combobox"
                     tabindex="0"
                     title=""
@@ -2535,9 +2535,9 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                     </div>
                   </button>
                   <ul
-                    aria-labelledby="downshift-_r_99_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_99_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -2621,7 +2621,7 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
             >
               <label
                 class="cds--label cds--label--disabled"
-                id="downshift-_r_9c_-label"
+                id="downshift-_r_ID_-label"
               >
                 <div
                   class="titleText"
@@ -2637,13 +2637,13 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
               >
                 <button
                   aria-activedescendant=""
-                  aria-controls="downshift-_r_9c_-menu"
+                  aria-controls="downshift-_r_ID_-menu"
                   aria-expanded="false"
                   aria-haspopup="listbox"
-                  aria-labelledby="downshift-_r_9c_-label"
+                  aria-labelledby="downshift-_r_ID_-label"
                   class="cds--list-box__field"
                   disabled=""
-                  id="downshift-_r_9c_-toggle-button"
+                  id="downshift-_r_ID_-toggle-button"
                   role="combobox"
                   tabindex="0"
                   title="Twice a day"
@@ -2679,9 +2679,9 @@ exports[`DrugChartSlider should render with previous time on click of edit drug 
                   </div>
                 </button>
                 <ul
-                  aria-labelledby="downshift-_r_9c_-label"
+                  aria-labelledby="downshift-_r_ID_-label"
                   class="cds--list-box__menu"
-                  id="downshift-_r_9c_-menu"
+                  id="downshift-_r_ID_-menu"
                   role="listbox"
                 />
               </div>

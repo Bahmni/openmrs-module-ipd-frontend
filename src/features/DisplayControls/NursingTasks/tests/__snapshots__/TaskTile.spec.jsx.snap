@@ -31,8 +31,8 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
                 class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cursor-pointer"
               >
                 <button
-                  aria-controls="id-_r_3_"
-                  aria-describedby="id-_r_3_"
+                  aria-controls="id-_r_ID_"
+                  aria-describedby="id-_r_ID_"
                   aria-expanded="false"
                   class="cds--definition-term"
                   type="button"
@@ -46,7 +46,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
                 </button>
                 <span
                   class="cds--popover"
-                  id="id-_r_3_"
+                  id="id-_r_ID_"
                 >
                   <span
                     class="cds--popover-content cds--definition-tooltip"
@@ -60,7 +60,7 @@ exports[`TaskTile should match the snapshot for grouped task 1`] = `
           </div>
           <div
             class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-            id="tag-id-_r_5_"
+            id="tag-id-_r_ID_"
           >
             <span
               class="cds--tag__label"
@@ -171,8 +171,8 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
                 class="cds--popover-container cds--popover--caret cds--popover--high-contrast cds--popover--bottom cursor-not-allowed"
               >
                 <button
-                  aria-controls="id-_r_0_"
-                  aria-describedby="id-_r_0_"
+                  aria-controls="id-_r_ID_"
+                  aria-describedby="id-_r_ID_"
                   aria-expanded="false"
                   class="cds--definition-term"
                   type="button"
@@ -186,7 +186,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
                 </button>
                 <span
                   class="cds--popover"
-                  id="id-_r_0_"
+                  id="id-_r_ID_"
                 >
                   <span
                     class="cds--popover-content cds--definition-tooltip"
@@ -202,7 +202,7 @@ exports[`TaskTile should match the snapshot for non grouped task 1`] = `
           </div>
           <div
             class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-            id="tag-id-_r_2_"
+            id="tag-id-_r_ID_"
           >
             <span
               class="cds--tag__label"

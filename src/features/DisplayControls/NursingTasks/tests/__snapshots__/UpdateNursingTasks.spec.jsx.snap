@@ -21,7 +21,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-_r_7a_"
+              aria-labelledby="tooltip-_r_ID_"
               class="cds--btn cds--btn--ghost cds--btn--icon-only"
               type="button"
             >
@@ -44,7 +44,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-_r_7a_"
+            id="tooltip-_r_ID_"
             role="tooltip"
           >
             <span
@@ -133,7 +133,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </div>
             <div
               class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-              id="tag-id-_r_7d_"
+              id="tag-id-_r_ID_"
             >
               <span
                 class="cds--tag__label"
@@ -167,7 +167,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
                 <button
                   aria-expanded="false"
                   aria-haspopup="true"
-                  aria-labelledby="tooltip-_r_7f_"
+                  aria-labelledby="tooltip-_r_ID_"
                   class="overflowMenu cds--overflow-menu cds--btn cds--btn--ghost cds--btn--icon-only"
                   type="button"
                 >
@@ -204,7 +204,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
               <span
                 aria-hidden="true"
                 class="cds--popover"
-                id="tooltip-_r_7f_"
+                id="tooltip-_r_ID_"
                 role="tooltip"
               >
                 <span
@@ -281,7 +281,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             </div>
             <div
               class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-              id="tag-id-_r_7i_"
+              id="tag-id-_r_ID_"
             >
               <span
                 class="cds--tag__label"
@@ -315,7 +315,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
                 <button
                   aria-expanded="false"
                   aria-haspopup="true"
-                  aria-labelledby="tooltip-_r_7k_"
+                  aria-labelledby="tooltip-_r_ID_"
                   class="overflowMenu cds--overflow-menu cds--btn cds--btn--ghost cds--btn--icon-only"
                   type="button"
                 >
@@ -352,7 +352,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
               <span
                 aria-hidden="true"
                 class="cds--popover"
-                id="tooltip-_r_7k_"
+                id="tooltip-_r_ID_"
                 role="tooltip"
               >
                 <span
@@ -391,7 +391,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
             <h2
               class="cds--modal-header__heading"
               dir="auto"
-              id="cds--modal-header__heading--modal-id-_r_7o_"
+              id="cds--modal-header__heading--modal-id-_r_ID_"
             >
               Please confirm your nursing tasks
             </h2>
@@ -406,7 +406,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
                 >
                   <button
                     aria-label="Close"
-                    aria-labelledby="tooltip-_r_7q_"
+                    aria-labelledby="tooltip-_r_ID_"
                     class="cds--modal-close cds--btn cds--btn--primary cds--btn--icon-only"
                     type="button"
                   >
@@ -430,7 +430,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_7q_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
@@ -447,7 +447,7 @@ exports[`UpdateNursingTasksSlider should close the slider on click of cancel but
           </div>
           <div
             class="cds--layer-two cds--modal-content cds--modal-scroll-content--no-fade"
-            id="cds--modal-body--modal-id-_r_7o_"
+            id="cds--modal-body--modal-id-_r_ID_"
           >
             <hr />
             <div
@@ -533,7 +533,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             class="cds--tooltip-trigger__wrapper"
           >
             <button
-              aria-labelledby="tooltip-_r_1_"
+              aria-labelledby="tooltip-_r_ID_"
               class="cds--btn cds--btn--ghost cds--btn--icon-only"
               type="button"
             >
@@ -556,7 +556,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
           <span
             aria-hidden="true"
             class="cds--popover"
-            id="tooltip-_r_1_"
+            id="tooltip-_r_ID_"
             role="tooltip"
           >
             <span
@@ -645,7 +645,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             </div>
             <div
               class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-              id="tag-id-_r_4_"
+              id="tag-id-_r_ID_"
             >
               <span
                 class="cds--tag__label"
@@ -679,7 +679,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
                 <button
                   aria-expanded="false"
                   aria-haspopup="true"
-                  aria-labelledby="tooltip-_r_6_"
+                  aria-labelledby="tooltip-_r_ID_"
                   class="overflowMenu cds--overflow-menu cds--btn cds--btn--ghost cds--btn--icon-only"
                   type="button"
                 >
@@ -716,7 +716,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
               <span
                 aria-hidden="true"
                 class="cds--popover"
-                id="tooltip-_r_6_"
+                id="tooltip-_r_ID_"
                 role="tooltip"
               >
                 <span
@@ -793,7 +793,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             </div>
             <div
               class="cds--tag cds--tag--sm cds--layout--size-sm cds--tag--blue"
-              id="tag-id-_r_9_"
+              id="tag-id-_r_ID_"
             >
               <span
                 class="cds--tag__label"
@@ -827,7 +827,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
                 <button
                   aria-expanded="false"
                   aria-haspopup="true"
-                  aria-labelledby="tooltip-_r_b_"
+                  aria-labelledby="tooltip-_r_ID_"
                   class="overflowMenu cds--overflow-menu cds--btn cds--btn--ghost cds--btn--icon-only"
                   type="button"
                 >
@@ -864,7 +864,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
               <span
                 aria-hidden="true"
                 class="cds--popover"
-                id="tooltip-_r_b_"
+                id="tooltip-_r_ID_"
                 role="tooltip"
               >
                 <span
@@ -903,7 +903,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
             <h2
               class="cds--modal-header__heading"
               dir="auto"
-              id="cds--modal-header__heading--modal-id-_r_f_"
+              id="cds--modal-header__heading--modal-id-_r_ID_"
             >
               Please confirm your nursing tasks
             </h2>
@@ -918,7 +918,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
                 >
                   <button
                     aria-label="Close"
-                    aria-labelledby="tooltip-_r_h_"
+                    aria-labelledby="tooltip-_r_ID_"
                     class="cds--modal-close cds--btn cds--btn--primary cds--btn--icon-only"
                     type="button"
                   >
@@ -942,7 +942,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_h_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
@@ -959,7 +959,7 @@ exports[`UpdateNursingTasksSlider should render UpdateNursingTasksSlider 1`] = `
           </div>
           <div
             class="cds--layer-two cds--modal-content cds--modal-scroll-content--no-fade"
-            id="cds--modal-body--modal-id-_r_f_"
+            id="cds--modal-body--modal-id-_r_ID_"
           >
             <hr />
             <div

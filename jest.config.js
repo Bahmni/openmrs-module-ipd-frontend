@@ -9,4 +9,5 @@ module.exports = {
     "\\.(css|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
   },
   setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
+  snapshotSerializers: ["<rootDir>/__mocks__/reactIdSerializer.js"],
 };

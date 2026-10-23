@@ -10,7 +10,7 @@ exports[`Search Drug Should allow drug search 1`] = `
         class="cds--label"
         dir="auto"
         for="SearchDrug"
-        id="downshift-_r_2_-label"
+        id="downshift-_r_ID_-label"
       >
         <div
           class="titleText"
@@ -34,10 +34,10 @@ exports[`Search Drug Should allow drug search 1`] = `
           <input
             aria-activedescendant=""
             aria-autocomplete="list"
-            aria-controls="downshift-_r_2_-menu"
+            aria-controls="downshift-_r_ID_-menu"
             aria-expanded="true"
             aria-haspopup="listbox"
-            aria-labelledby="downshift-_r_2_-label"
+            aria-labelledby="downshift-_r_ID_-label"
             autocomplete="off"
             class="cds--text-input cds--combo-box--input--focus"
             id="SearchDrug"
@@ -71,11 +71,11 @@ exports[`Search Drug Should allow drug search 1`] = `
             </svg>
           </button>
           <button
-            aria-controls="downshift-_r_2_-menu"
+            aria-controls="downshift-_r_ID_-menu"
             aria-expanded="true"
             aria-label="Close"
             class="cds--list-box__menu-icon cds--list-box__menu-icon--open"
-            id="downshift-_r_2_-toggle-button"
+            id="downshift-_r_ID_-toggle-button"
             tabindex="-1"
             title="Close"
             type="button"
@@ -97,15 +97,15 @@ exports[`Search Drug Should allow drug search 1`] = `
           </button>
         </div>
         <ul
-          aria-labelledby="downshift-_r_2_-label"
+          aria-labelledby="downshift-_r_ID_-label"
           class="cds--list-box__menu"
-          id="downshift-_r_2_-menu"
+          id="downshift-_r_ID_-menu"
           role="listbox"
         >
           <li
             aria-selected="false"
             class="cds--list-box__menu-item"
-            id="downshift-_r_2_-item-0"
+            id="downshift-_r_ID_-item-0"
             role="option"
           >
             <div
@@ -117,7 +117,7 @@ exports[`Search Drug Should allow drug search 1`] = `
           <li
             aria-selected="false"
             class="cds--list-box__menu-item"
-            id="downshift-_r_2_-item-1"
+            id="downshift-_r_ID_-item-1"
             role="option"
           >
             <div

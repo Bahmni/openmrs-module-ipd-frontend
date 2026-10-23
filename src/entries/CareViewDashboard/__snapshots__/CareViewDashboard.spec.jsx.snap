@@ -116,7 +116,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
               class="cds--label"
               dir="auto"
               for="default"
-              id="downshift-_r_2_-label"
+              id="downshift-_r_ID_-label"
             >
               <div
                 class="titleText"
@@ -135,10 +135,10 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                 <input
                   aria-activedescendant=""
                   aria-autocomplete="list"
-                  aria-controls="downshift-_r_2_-menu"
+                  aria-controls="downshift-_r_ID_-menu"
                   aria-expanded="false"
                   aria-haspopup="listbox"
-                  aria-labelledby="downshift-_r_2_-label"
+                  aria-labelledby="downshift-_r_ID_-label"
                   autocomplete="off"
                   class="cds--text-input cds--text-input--empty"
                   id="default"
@@ -150,11 +150,11 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   type="text"
                 />
                 <button
-                  aria-controls="downshift-_r_2_-menu"
+                  aria-controls="downshift-_r_ID_-menu"
                   aria-expanded="false"
                   aria-label="Open"
                   class="cds--list-box__menu-icon"
-                  id="downshift-_r_2_-toggle-button"
+                  id="downshift-_r_ID_-toggle-button"
                   tabindex="-1"
                   title="Open"
                   type="button"
@@ -176,9 +176,9 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                 </button>
               </div>
               <ul
-                aria-labelledby="downshift-_r_2_-label"
+                aria-labelledby="downshift-_r_ID_-label"
                 class="cds--list-box__menu"
-                id="downshift-_r_2_-menu"
+                id="downshift-_r_ID_-menu"
                 role="listbox"
               />
             </div>
@@ -248,7 +248,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   class="cds--tooltip-trigger__wrapper"
                 >
                   <button
-                    aria-describedby="tooltip-_r_16_"
+                    aria-describedby="tooltip-_r_ID_"
                     class="margin-right-10 cds--btn cds--btn--sm cds--layout--size-sm cds--btn--tertiary cds--btn--icon-only"
                     data-testid="previous-button"
                     type="button"
@@ -272,7 +272,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_16_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
@@ -290,7 +290,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                   class="cds--tooltip-trigger__wrapper"
                 >
                   <button
-                    aria-describedby="tooltip-_r_1a_"
+                    aria-describedby="tooltip-_r_ID_"
                     class="margin-right-10 cds--btn cds--btn--sm cds--layout--size-sm cds--btn--tertiary cds--btn--icon-only"
                     data-testid="next-button"
                     type="button"
@@ -314,7 +314,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_1a_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
@@ -458,12 +458,12 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                 >
                   <button
                     aria-activedescendant=""
-                    aria-controls="downshift-_r_1f_-menu"
+                    aria-controls="downshift-_r_ID_-menu"
                     aria-expanded="false"
                     aria-haspopup="listbox"
-                    aria-labelledby="downshift-_r_1f_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__field"
-                    id="downshift-_r_1f_-toggle-button"
+                    id="downshift-_r_ID_-toggle-button"
                     role="combobox"
                     tabindex="0"
                     title="All Tasks"
@@ -499,9 +499,9 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                     </div>
                   </button>
                   <ul
-                    aria-labelledby="downshift-_r_1f_-label"
+                    aria-labelledby="downshift-_r_ID_-label"
                     class="cds--list-box__menu"
-                    id="downshift-_r_1f_-menu"
+                    id="downshift-_r_ID_-menu"
                     role="listbox"
                   />
                 </div>
@@ -1120,8 +1120,8 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
               >
                 <label
                   class="cds--pagination__text"
-                  for="cds-pagination-select-id-_r_1g_"
-                  id="cds-pagination-select-id-_r_1g_-count-label"
+                  for="cds-pagination-select-id-_r_ID_"
+                  id="cds-pagination-select-id-_r_ID_-count-label"
                 >
                   Patients per page
                 </label>
@@ -1139,7 +1139,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                       >
                         <select
                           class="cds--select-input"
-                          id="cds-pagination-select-id-_r_1g_"
+                          id="cds-pagination-select-id-_r_ID_"
                           title="10"
                         >
                           <option
@@ -1210,7 +1210,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                     <label
                       class="cds--label cds--visually-hidden"
                       dir="auto"
-                      for="cds-pagination-select-id-_r_1g_-right"
+                      for="cds-pagination-select-id-_r_ID_-right"
                     >
                       Page of 1 page
                     </label>
@@ -1222,7 +1222,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                       >
                         <select
                           class="cds--select-input"
-                          id="cds-pagination-select-id-_r_1g_-right"
+                          id="cds-pagination-select-id-_r_ID_-right"
                           title="1"
                         >
                           <option
@@ -1267,7 +1267,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                     >
                       <button
                         aria-label="Previous page"
-                        aria-labelledby="tooltip-_r_1i_"
+                        aria-labelledby="tooltip-_r_ID_"
                         class="cds--pagination__button cds--pagination__button--backward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled cds--btn--icon-only"
                         disabled=""
                         type="button"
@@ -1291,7 +1291,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                     <span
                       aria-hidden="true"
                       class="cds--popover"
-                      id="tooltip-_r_1i_"
+                      id="tooltip-_r_ID_"
                       role="tooltip"
                     >
                       <span
@@ -1312,7 +1312,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                     >
                       <button
                         aria-label="Next page"
-                        aria-labelledby="tooltip-_r_1m_"
+                        aria-labelledby="tooltip-_r_ID_"
                         class="cds--pagination__button cds--pagination__button--forward cds--pagination__button--no-index cds--btn cds--btn--ghost cds--btn--disabled cds--btn--icon-only"
                         disabled=""
                         type="button"
@@ -1336,7 +1336,7 @@ exports[`CareViewDashboard should match the snapshot 1`] = `
                     <span
                       aria-hidden="true"
                       class="cds--popover"
-                      id="tooltip-_r_1m_"
+                      id="tooltip-_r_ID_"
                       role="tooltip"
                     >
                       <span

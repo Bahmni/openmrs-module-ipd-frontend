@@ -150,7 +150,7 @@ exports[`DrugDetails should match snapshot 1`] = `
         >
           <label
             class="cds--label cds--label--disabled"
-            id="downshift-_r_1_-label"
+            id="downshift-_r_ID_-label"
           >
             <div
               class="titleText"
@@ -166,13 +166,13 @@ exports[`DrugDetails should match snapshot 1`] = `
           >
             <button
               aria-activedescendant=""
-              aria-controls="downshift-_r_1_-menu"
+              aria-controls="downshift-_r_ID_-menu"
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="downshift-_r_1_-label"
+              aria-labelledby="downshift-_r_ID_-label"
               class="cds--list-box__field"
               disabled=""
-              id="downshift-_r_1_-toggle-button"
+              id="downshift-_r_ID_-toggle-button"
               role="combobox"
               tabindex="0"
               title="doseUnits"
@@ -208,9 +208,9 @@ exports[`DrugDetails should match snapshot 1`] = `
               </div>
             </button>
             <ul
-              aria-labelledby="downshift-_r_1_-label"
+              aria-labelledby="downshift-_r_ID_-label"
               class="cds--list-box__menu"
-              id="downshift-_r_1_-menu"
+              id="downshift-_r_ID_-menu"
               role="listbox"
             />
           </div>
@@ -230,7 +230,7 @@ exports[`DrugDetails should match snapshot 1`] = `
         >
           <label
             class="cds--label cds--label--disabled"
-            id="downshift-_r_3_-label"
+            id="downshift-_r_ID_-label"
           >
             <div
               class="titleText"
@@ -246,13 +246,13 @@ exports[`DrugDetails should match snapshot 1`] = `
           >
             <button
               aria-activedescendant=""
-              aria-controls="downshift-_r_3_-menu"
+              aria-controls="downshift-_r_ID_-menu"
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="downshift-_r_3_-label"
+              aria-labelledby="downshift-_r_ID_-label"
               class="cds--list-box__field"
               disabled=""
-              id="downshift-_r_3_-toggle-button"
+              id="downshift-_r_ID_-toggle-button"
               role="combobox"
               tabindex="0"
               title="route"
@@ -288,9 +288,9 @@ exports[`DrugDetails should match snapshot 1`] = `
               </div>
             </button>
             <ul
-              aria-labelledby="downshift-_r_3_-label"
+              aria-labelledby="downshift-_r_ID_-label"
               class="cds--list-box__menu"
-              id="downshift-_r_3_-menu"
+              id="downshift-_r_ID_-menu"
               role="listbox"
             />
           </div>
@@ -411,7 +411,7 @@ exports[`DrugDetails should match snapshot 1`] = `
         >
           <label
             class="cds--label cds--label--disabled"
-            id="downshift-_r_5_-label"
+            id="downshift-_r_ID_-label"
           >
             <div
               class="titleText"
@@ -427,13 +427,13 @@ exports[`DrugDetails should match snapshot 1`] = `
           >
             <button
               aria-activedescendant=""
-              aria-controls="downshift-_r_5_-menu"
+              aria-controls="downshift-_r_ID_-menu"
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="downshift-_r_5_-label"
+              aria-labelledby="downshift-_r_ID_-label"
               class="cds--list-box__field"
               disabled=""
-              id="downshift-_r_5_-toggle-button"
+              id="downshift-_r_ID_-toggle-button"
               role="combobox"
               tabindex="0"
               title=""
@@ -467,9 +467,9 @@ exports[`DrugDetails should match snapshot 1`] = `
               </div>
             </button>
             <ul
-              aria-labelledby="downshift-_r_5_-label"
+              aria-labelledby="downshift-_r_ID_-label"
               class="cds--list-box__menu"
-              id="downshift-_r_5_-menu"
+              id="downshift-_r_ID_-menu"
               role="listbox"
             />
           </div>
@@ -553,7 +553,7 @@ exports[`DrugDetails should match snapshot 1`] = `
       >
         <label
           class="cds--label cds--label--disabled"
-          id="downshift-_r_8_-label"
+          id="downshift-_r_ID_-label"
         >
           <div
             class="titleText"
@@ -569,13 +569,13 @@ exports[`DrugDetails should match snapshot 1`] = `
         >
           <button
             aria-activedescendant=""
-            aria-controls="downshift-_r_8_-menu"
+            aria-controls="downshift-_r_ID_-menu"
             aria-expanded="false"
             aria-haspopup="listbox"
-            aria-labelledby="downshift-_r_8_-label"
+            aria-labelledby="downshift-_r_ID_-label"
             class="cds--list-box__field"
             disabled=""
-            id="downshift-_r_8_-toggle-button"
+            id="downshift-_r_ID_-toggle-button"
             role="combobox"
             tabindex="0"
             title=""
@@ -609,9 +609,9 @@ exports[`DrugDetails should match snapshot 1`] = `
             </div>
           </button>
           <ul
-            aria-labelledby="downshift-_r_8_-label"
+            aria-labelledby="downshift-_r_ID_-label"
             class="cds--list-box__menu"
-            id="downshift-_r_8_-menu"
+            id="downshift-_r_ID_-menu"
             role="listbox"
           />
         </div>

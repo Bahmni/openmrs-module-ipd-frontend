@@ -48,7 +48,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                   <button
                     aria-expanded="false"
                     aria-haspopup="true"
-                    aria-labelledby="tooltip-_r_1_"
+                    aria-labelledby="tooltip-_r_ID_"
                     class="patient-movement-overflow cds--overflow-menu cds--btn cds--btn--ghost cds--btn--icon-only"
                     data-testid="overflow-menu"
                     type="button"
@@ -86,7 +86,7 @@ exports[`PatientHeader should display all details of the patient 1`] = `
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_1_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
@@ -399,7 +399,7 @@ exports[`PatientHeader should display patient movement item on click of overflow
                     aria-controls="overflow-menu-4__menu-body"
                     aria-expanded="true"
                     aria-haspopup="true"
-                    aria-labelledby="tooltip-_r_5_"
+                    aria-labelledby="tooltip-_r_ID_"
                     class="patient-movement-overflow cds--overflow-menu cds--overflow-menu--open cds--btn cds--btn--ghost cds--btn--icon-only"
                     data-testid="overflow-menu"
                     type="button"
@@ -437,7 +437,7 @@ exports[`PatientHeader should display patient movement item on click of overflow
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_5_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
@@ -598,7 +598,7 @@ exports[`PatientHeader should display patient movement overflow menu item as dis
                     aria-controls="overflow-menu-7__menu-body"
                     aria-expanded="true"
                     aria-haspopup="true"
-                    aria-labelledby="tooltip-_r_a_"
+                    aria-labelledby="tooltip-_r_ID_"
                     class="patient-movement-overflow cds--overflow-menu cds--overflow-menu--open cds--btn cds--btn--ghost cds--btn--icon-only"
                     data-testid="overflow-menu"
                     type="button"
@@ -636,7 +636,7 @@ exports[`PatientHeader should display patient movement overflow menu item as dis
                 <span
                   aria-hidden="true"
                   class="cds--popover"
-                  id="tooltip-_r_a_"
+                  id="tooltip-_r_ID_"
                   role="tooltip"
                 >
                   <span
