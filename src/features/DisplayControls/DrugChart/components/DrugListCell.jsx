@@ -3,7 +3,8 @@ import { FormattedMessage } from "react-intl";
 import PropTypes from "prop-types";
 import Clock from "../../../../icons/clock.svg";
 import "../styles/DrugListCell.scss";
-import { TooltipDefinition, Tooltip, Tag } from "carbon-components-react";
+import { DefinitionTooltip, Tag } from "@carbon/react";
+import IconToggletip from "../../../../components/IconToggletip/IconToggletip";
 import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";
 import DisplayTags from "../../../../components/DisplayTags/DisplayTags";
@@ -200,19 +201,18 @@ export default function DrugListCell(props) {
   const getMedicationName = () => {
     return (
       <div className="drug-name-container">
-        <TooltipDefinition tooltipText={name} className={"name-tooltip"}>
+        <DefinitionTooltip definition={name} className={"name-tooltip"}>
           <div className={"drug-chart-drug-name"}>{name}</div>
-        </TooltipDefinition>
+        </DefinitionTooltip>
         &nbsp;
         {showInstructionsIcon && (
           <div ref={noteIconRef} className="note-icon-container">
-            <Tooltip
-              direction={tooltipDirection}
-              align="start"
-              renderIcon={() => <NoteIcon />}
+            <IconToggletip
+              align={`${tooltipDirection}-start`}
+              icon={<NoteIcon />}
             >
               {isVariableDose ? stageTooltipContent : toolTipContent}
-            </Tooltip>
+            </IconToggletip>
           </div>
         )}
       </div>
@@ -257,10 +257,10 @@ export default function DrugListCell(props) {
         <div>
           {administrationInfo.length >= 1 && (
             <div className={"administration-details"}>
-              <TooltipDefinition
-                tooltipText={getToolTipTextForAdministeredTime()}
+              <DefinitionTooltip
+                definition={getToolTipTextForAdministeredTime()}
                 className={"administration-details-tooltip"}
-                direction="top"
+                align="top"
               >
                 <div className={"administration-time-info"}>
                   <Clock className={"clock-icon"} />
@@ -292,7 +292,7 @@ export default function DrugListCell(props) {
                     }
                   })}
                 </div>
-              </TooltipDefinition>
+              </DefinitionTooltip>
             </div>
           )}
         </div>

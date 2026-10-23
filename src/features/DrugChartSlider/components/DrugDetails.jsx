@@ -3,7 +3,7 @@ import {
   DatePicker,
   DatePickerInput,
   TextInput,
-} from "carbon-components-react";
+} from "@carbon/react";
 import {
   NumberInputCarbon,
   DropdownCarbon,

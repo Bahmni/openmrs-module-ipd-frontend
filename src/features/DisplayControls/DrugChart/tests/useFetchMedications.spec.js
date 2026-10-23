@@ -1,4 +1,4 @@
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook, waitFor } from "@testing-library/react";
 import { useFetchMedications } from "../hooks/useFetchMedications";
 import { testData } from "./useFetchMedicationMockData";
 
@@ -20,33 +20,24 @@ beforeEach(() => {
 
 describe("useFetchMedications", () => {
   it("should return medications", async () => {
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchMedications()
-    );
-    await waitForNextUpdate();
+    const { result } = renderHook(() => useFetchMedications());
+    await waitFor(() => expect(result.current.isLoading).toEqual(false));
 
     expect(result.current.drugChartData).toEqual(testData);
   });
 
   it("should return loading state", async () => {
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchMedications()
-    );
+    const { result } = renderHook(() => useFetchMedications());
 
     expect(result.current.isLoading).toEqual(true);
-    await waitForNextUpdate();
-    expect(result.current.isLoading).toEqual(false);
+    await waitFor(() => expect(result.current.isLoading).toEqual(false));
   });
 
   it("should return error state", async () => {
     const errorMessage = "An error occurred during fetch";
     mockFetchMedications.mockRejectedValueOnce(new Error(errorMessage));
 
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useFetchMedications()
-    );
-    await waitForNextUpdate();
-
-    expect(result.current.error).toBeTruthy();
+    const { result } = renderHook(() => useFetchMedications());
+    await waitFor(() => expect(result.current.error).toBeTruthy());
   });
 });

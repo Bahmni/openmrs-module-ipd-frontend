@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent, act } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import { DraftIndicator } from "./DraftIndicator";
 
 jest.mock("../../features/i18n/I18nProvider", () => {

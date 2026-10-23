@@ -1,5 +1,5 @@
 import React from "react";
-import { Tile, Tag } from "carbon-components-react";
+import { Tile, Tag } from "@carbon/react";
 import PropTypes from "prop-types";
 import "../styles/NoteTile.scss";
 import moment from "moment";

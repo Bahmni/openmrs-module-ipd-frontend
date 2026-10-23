@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal } from "carbon-components-react";
+import { Modal } from "@carbon/react";
 import PropTypes from "prop-types";
 
 export const SideBarPanelClose = ({

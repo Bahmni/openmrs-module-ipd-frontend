@@ -183,7 +183,7 @@ describe("CareViewDashboard", () => {
     });
 
     const totalPatientsSummary = container.querySelector(
-      ".bx--tile.summary-tile.selected-header"
+      ".cds--tile.summary-tile.selected-header"
     );
     expect(
       within(totalPatientsSummary).getByText(/Total patient/i)
@@ -221,7 +221,7 @@ describe("CareViewDashboard", () => {
     fireEvent.click(screen.getByText(/My patient/i));
 
     const myPatientsSummary = container.querySelector(
-      ".bx--tile.summary-tile.selected-header"
+      ".cds--tile.summary-tile.selected-header"
     );
     expect(within(myPatientsSummary).getByText(/My patient/i)).toBeTruthy();
     expect(within(myPatientsSummary).getByText(/0/i)).toBeTruthy();

@@ -6,7 +6,7 @@ import React, { useContext } from "react";
 import propTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { TASK_FILTER_HEADER } from "../../../constants";
-import { ContentSwitcher, Switch } from "carbon-components-react";
+import { ContentSwitcher, Switch } from "@carbon/react";
 import { useIntl } from "react-intl";
 
 export const Header = ({ timeframeLimitInHours, navHourEpoch }) => {

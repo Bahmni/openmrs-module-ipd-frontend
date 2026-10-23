@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { DataTableSkeleton } from "carbon-components-react";
+import { DataTableSkeleton } from "@carbon/react";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { getPatientDiagnosis, diagnosisHeaders } from "../utils/DiagnosisUtils";

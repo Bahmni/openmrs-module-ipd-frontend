@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import { AlignBoxMiddleLeft24 } from "@carbon/icons-react";
+import { AlignBoxMiddleLeft } from "@carbon/icons-react";
 import "./DraftIndicator.scss";
 import DraftOverlay from "./DraftOverlay";
 import { fetchDraftsForProvider } from "../../services/draftService";
@@ -87,7 +87,7 @@ export const DraftIndicator = () => {
           aria-expanded={isOverlayOpen}
         >
           <span className="ipd-draft-indicator__icon-wrapper">
-            <AlignBoxMiddleLeft24 className="ipd-draft-indicator__icon" />
+            <AlignBoxMiddleLeft size={24} className="ipd-draft-indicator__icon" />
             {hasDrafts && (
               <span
                 className="ipd-draft-indicator__red-dot"

@@ -7,7 +7,7 @@
   border-bottom: 1px solid #007d79;
   position: relative;
 
-  .bx--list-box__wrapper {
+  .cds--list-box__wrapper {
     max-width: 200px;
   }
 
@@ -121,7 +121,7 @@
 
 @media screen and (max-width: $mobile-breakpoint) {
   .care-view-summary {
-    .bx--list-box__wrapper {
+    .cds--list-box__wrapper {
       max-width: 100%;
     }
 
