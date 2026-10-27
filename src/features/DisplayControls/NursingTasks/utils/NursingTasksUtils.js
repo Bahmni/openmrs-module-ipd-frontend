@@ -158,6 +158,7 @@ export const ExtractMedicationNursingTasksData = (
             slot.status === "NOT_DONE" ||
             slot.status === "MISSED",
         serviceType,
+        lastAdministrationTime: slot.lastAdministrationTime ?? null,
       };
 
       if (filterValue.id === "prn" && slotInfo.dosingInstructions.asNeeded) {
