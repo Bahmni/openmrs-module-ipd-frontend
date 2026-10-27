@@ -220,6 +220,7 @@ export const mockNursingTasksResponseForCompleted = [
         serviceType: "MedicationRequest",
         status: "COMPLETED",
         startTime: 1702650600,
+        lastAdministrationTime: 1702670700,
         order: {
           uuid: "paracetamol-120mg-tablet-uuid",
           drug: {
@@ -268,6 +269,7 @@ export const mockNursingTasksResponseForCompleted = [
         serviceType: "MedicationRequest",
         status: "COMPLETED",
         startTime: 1702650600,
+        lastAdministrationTime: 1702650700,
         order: {
           uuid: "paracetamol-125mg-tablet-uuid",
           drug: {
@@ -536,6 +538,7 @@ export const mockNursingTasksResponseForAllTasks = [
         serviceType: "MedicationRequest",
         status: "COMPLETED",
         startTime: 1702650700,
+        lastAdministrationTime: 1702670800,
         order: {
           uuid: "paracetamol-120mg-tablet-uuid",
           drug: {
@@ -671,6 +674,7 @@ export const mockNursingTasksResponseForAllTasks = [
         serviceType: "MedicationRequest",
         status: "COMPLETED",
         startTime: 1702650600,
+        lastAdministrationTime: 1702650700,
         order: {
           uuid: "paracetamol-125mg-tablet-uuid",
           drug: {
@@ -723,6 +727,7 @@ export const mockExtractedMedicationNursingTasksData = [
       isDisabled: false,
       orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750884",
       serviceType: "MedicationRequest",
+      lastAdministrationTime: null,
     },
     {
       drugName: "Paracetamol 120 mg (Tablet)",
@@ -738,6 +743,7 @@ export const mockExtractedMedicationNursingTasksData = [
       isDisabled: false,
       orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750885",
       serviceType: "MedicationRequest",
+      lastAdministrationTime: null,
     },
   ],
   [
@@ -755,6 +761,7 @@ export const mockExtractedMedicationNursingTasksData = [
       orderId: "1e9d8a0f-fac8-46bc-a229-7e2345750885",
       isDisabled: false,
       serviceType: "MedicationRequest",
+      lastAdministrationTime: null,
     },
   ],
 ];
@@ -780,6 +787,7 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       isDisabled: true,
       orderId: "paracetamol-125mg-tablet-uuid",
       serviceType: "MedicationRequest",
+      lastAdministrationTime: 1702650700,
     },
   ],
   [
@@ -802,6 +810,7 @@ export const mockExtractedMedicationNursingTasksDataForCompleted = [
       isDisabled: true,
       orderId: "paracetamol-120mg-tablet-uuid",
       serviceType: "MedicationRequest",
+      lastAdministrationTime: 1702670700,
     },
   ],
 ];
@@ -825,6 +834,7 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
       orderId: "paracetamol-120mg-tablet-uuid",
       isDisabled: true,
       serviceType: "MedicationRequest",
+      lastAdministrationTime: null,
     },
   ],
   [
@@ -846,6 +856,7 @@ export const mockExtractedMedicationNursingTasksDataForStopped = [
       orderId: "paracetamol-125mg-tablet-uuid",
       serviceType: "MedicationRequest",
       isDisabled: true,
+      lastAdministrationTime: null,
     },
   ],
 ];
@@ -869,6 +880,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       isDisabled: true,
       serviceType: "MedicationRequest",
       status: "missed",
+      lastAdministrationTime: null,
     },
   ],
   [
@@ -890,6 +902,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       isDisabled: true,
       serviceType: "MedicationRequest",
       status: "missed",
+      lastAdministrationTime: null,
     },
   ],
   [
@@ -911,6 +924,7 @@ export const mockExtractedMedicationNursingTasksDataForMissed = [
       isDisabled: true,
       serviceType: "MedicationRequest",
       status: "missed",
+      lastAdministrationTime: null,
     },
   ],
 ];
@@ -934,6 +948,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       orderId: "paracetamol-125mg-tablet-uuid",
       serviceType: "MedicationRequest",
       isDisabled: false,
+      lastAdministrationTime: null,
     },
   ],
   [
@@ -954,6 +969,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       orderId: "paracetamol-200mg-tablet-uuid",
       serviceType: "MedicationRequest",
       isDisabled: false,
+      lastAdministrationTime: null,
     },
   ],
   [
@@ -974,6 +990,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       orderId: "paracetamol-500mg-tablet-uuid",
       serviceType: "MedicationRequest",
       isDisabled: false,
+      lastAdministrationTime: null,
     },
   ],
   [
@@ -996,6 +1013,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       orderId: "paracetamol-125mg-tablet-uuid",
       serviceType: "MedicationRequest",
       isDisabled: true,
+      lastAdministrationTime: 1702650700,
     },
   ],
   [
@@ -1018,6 +1036,7 @@ export const mockExtractedMedicationNursingTasksDataForAllTasks = [
       isDisabled: true,
       orderId: "paracetamol-120mg-tablet-uuid",
       serviceType: "MedicationRequest",
+      lastAdministrationTime: 1702670800,
     },
   ],
 ];
