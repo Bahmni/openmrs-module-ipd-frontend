@@ -121,7 +121,10 @@ const UpdateNursingTasks = (props) => {
 
   const handlePrimaryButtonClick = async () => {
     const administeredTasks = createAdministeredTasksPayload();
-    const response = await saveAdministeredMedication(administeredTasks);
+    const response = await saveAdministeredMedication(
+      administeredTasks,
+      config?.config?.enableIpdFhirMigration ?? false
+    );
     if (response.status === 200) {
       Object.keys(tasks).forEach((key) => {
         if (tasks[key].status === "not-done") {

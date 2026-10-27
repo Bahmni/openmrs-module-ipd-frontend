@@ -42,6 +42,16 @@ export const FHIR_MEDICATION_REQUEST_URL = (visitUuid) =>
 export const FHIR_MEDICATION_ADMIN_EMERGENCY_URL = (visitUuid) =>
   FHIR2_R4 +
   `/MedicationAdministration?context=${visitUuid}&category=emergency`;
+export const FHIR_R4_BASE_URL = FHIR2_R4;
+export const FHIR_MEDICATION_ADMINISTRATION_URL =
+  FHIR2_R4 + "/MedicationAdministration";
+export const FHIR_MEDICATION_ADMINISTRATION_BY_ID_URL = (uuid) =>
+  `${FHIR_MEDICATION_ADMINISTRATION_URL}/${uuid}`;
+export const FHIR_MA_SLOT_EXTENSION_URL =
+  "http://fhir.openmrs.org/ext/ipd/medication-administration/slot";
+export const FHIR_NOTE_AMENDMENT_REASON_EXTENSION_URL =
+  "http://fhir.openmrs.org/ext/ipd/note/amendment-reason";
+export const FHIR_JSON_PATCH_CONTENT_TYPE = "application/json-patch+json";
 export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
 export const CLINICAL_CONFIG_URL =
