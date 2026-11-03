@@ -35,7 +35,10 @@ export const mapScheduledPayloadToFhirMedicationAdministration = (item) => ({
   extension: [{ url: FHIR_MA_SLOT_EXTENSION_URL, valueString: item.slotUuid }],
 });
 
-export const mapEmergencyPayloadToFhirMedicationAdministration = (payload) => {
+export const mapEmergencyPayloadToFhirMedicationAdministration = (
+  payload,
+  { id } = {}
+) => {
   const dosage = {};
   if (payload.dose !== undefined && payload.dose !== null) {
     dosage.dose = {
@@ -47,6 +50,7 @@ export const mapEmergencyPayloadToFhirMedicationAdministration = (payload) => {
     dosage.route = { text: payload.route };
   }
   return {
+    ...(id && { id }),
     resourceType: "MedicationAdministration",
     status: payload.status,
     category: { coding: [{ code: "emergency" }] },

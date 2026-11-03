@@ -59,6 +59,27 @@ describe("fhirMedicationAdministrationWriteMapper", () => {
     expect(r.dosage.route).toEqual({ text: "Oral" });
     expect(r.performer).toHaveLength(2);
     expect(r.extension).toBeUndefined();
+    expect(r.id).toBeUndefined();
+  });
+
+  it("includes the id when mapping an emergency payload for update", () => {
+    const r = mapEmergencyPayloadToFhirMedicationAdministration(
+      {
+        patientUuid: "p1",
+        drugUuid: "d1",
+        dose: "2",
+        doseUnits: "Tablet",
+        route: "Oral",
+        providers: [{ providerUuid: "a", function: "Performer" }],
+        notes: [],
+        status: "completed",
+        administeredDateTime: 1703670985,
+      },
+      { id: "254dfbd9-2781-4d56-a964-5d5b6a3c6874" }
+    );
+    expect(r.id).toBe("254dfbd9-2781-4d56-a964-5d5b6a3c6874");
+    expect(r.resourceType).toBe("MedicationAdministration");
+    expect(r.category.coding[0].code).toBe("emergency");
   });
 
   describe("normaliseFhirCreateResponse", () => {
