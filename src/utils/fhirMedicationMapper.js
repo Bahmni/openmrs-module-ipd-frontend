@@ -29,10 +29,14 @@ export const mapMedicationRequestBundleToIpdDrugOrders = (bundle) => {
       const dosage = mr.dosageInstruction?.[0] ?? {};
 
       const drugName =
+        mr.medicationReference?.display ||
         dosage.medicationCodeableConcept?.text ||
         mr.medicationCodeableConcept?.text ||
         mr.medicationCodeableConcept?.coding?.[0]?.display ||
         null;
+
+      const drugUuid =
+        mr.medicationReference?.reference?.split("/")?.pop() ?? null;
 
       const authoredOnMs = mr.authoredOn ? Date.parse(mr.authoredOn) : null;
       const validityStart = mr.dispenseRequest?.validityPeriod?.start
@@ -52,7 +56,7 @@ export const mapMedicationRequestBundleToIpdDrugOrders = (bundle) => {
           scheduledDate: null,
           autoExpireDate: null,
           drug: {
-            uuid: null,
+            uuid: drugUuid,
             name: drugName,
             form: null,
             strength: null,
@@ -116,9 +120,13 @@ export const mapMedicationAdministrationBundleToEmergencyMeds = (bundle) => {
       const ma = entry.resource;
 
       const drugDisplayName =
+        ma.medicationReference?.display ||
         ma.medicationCodeableConcept?.text ||
         ma.medicationCodeableConcept?.coding?.[0]?.display ||
         null;
+
+      const drugUuid =
+        ma.medicationReference?.reference?.split("/")?.pop() ?? null;
 
       return {
         uuid: ma.id,
@@ -142,7 +150,7 @@ export const mapMedicationAdministrationBundleToEmergencyMeds = (bundle) => {
           ma.statusReason?.[0]?.coding?.[0]?.display ||
           null,
         drug: {
-          uuid: null,
+          uuid: drugUuid,
           // "display" is used by TreatmentsUtils.js and DrugChartUtils.js consumers
           display: drugDisplayName,
           name: drugDisplayName,

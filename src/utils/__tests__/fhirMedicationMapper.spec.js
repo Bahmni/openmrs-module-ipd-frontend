@@ -190,6 +190,28 @@ describe("mapMedicationRequestBundleToIpdDrugOrders", () => {
     expect(item.drugOrderSchedule).toBeNull();
   });
 
+  it("reads the drug name and uuid from medicationReference when present", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-ref-001",
+        status: "active",
+        medicationReference: {
+          reference: "Medication/668ee01c-bbd0-4f5b-96c6-223ee104f06a",
+          display: "Paracetamol 150 mg/ml",
+        },
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].drugOrder.drug.name).toBe("Paracetamol 150 mg/ml");
+    expect(result[0].drugOrder.drug.uuid).toBe(
+      "668ee01c-bbd0-4f5b-96c6-223ee104f06a"
+    );
+  });
+
   it("handles missing optional fields gracefully without throwing", () => {
     const minimalEntry = {
       resource: {
@@ -307,6 +329,27 @@ describe("mapMedicationAdministrationBundleToEmergencyMeds", () => {
     expect(item.notes[0].text).toBe("Patient tolerated well");
     expect(item.notes[0].author).toBe("Nurse Alice");
     expect(item.notes[0].time).toBe(Date.parse("2024-01-15T10:35:00.000Z"));
+  });
+
+  it("reads the drug name and uuid from medicationReference when present", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationAdministration",
+        id: "ma-ref-001",
+        status: "completed",
+        medicationReference: {
+          reference: "Medication/012be465-f26a-4b4c-8c8b-356e7b81154c",
+          display: "Paracetamol 650 mg",
+        },
+      },
+    };
+    const bundle = makeMedicationAdministrationBundle([entry]);
+    const result = mapMedicationAdministrationBundleToEmergencyMeds(bundle);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].drug.display).toBe("Paracetamol 650 mg");
+    expect(result[0].drug.name).toBe("Paracetamol 650 mg");
+    expect(result[0].drug.uuid).toBe("012be465-f26a-4b4c-8c8b-356e7b81154c");
   });
 
   it("handles missing optional fields gracefully without throwing", () => {
