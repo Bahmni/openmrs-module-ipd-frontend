@@ -46,7 +46,7 @@ export const FHIR_MEDICATION_REQUEST_URL = (visitUuid) =>
   `/MedicationRequest?visit=${visitUuid}&_count=${FHIR_SEARCH_PAGE_SIZE}`;
 export const FHIR_MEDICATION_ADMIN_EMERGENCY_URL = (visitUuid) =>
   FHIR2_R4 +
-  `/MedicationAdministration?context=${visitUuid}&category=emergency&_count=${FHIR_SEARCH_PAGE_SIZE}`;
+  `/MedicationAdministration?visit=${visitUuid}&category=emergency&_count=${FHIR_SEARCH_PAGE_SIZE}`;
 export const FHIR_MEDICATION_REQUEST_DATE_STOPPED_EXTENSION_URL =
   "http://fhir.bahmni.org/ext/medicationRequest/dateStopped";
 export const FHIR_R4_BASE_URL = FHIR2_R4;

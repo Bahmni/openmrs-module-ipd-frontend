@@ -3,6 +3,16 @@ import axios from "axios";
 const getNextLink = (bundle) =>
   (bundle?.link ?? []).find((link) => link?.relation === "next")?.url ?? null;
 
+const ABSOLUTE_URL = /^[a-z][a-z0-9+.-]*:\/\//i;
+
+const resolveNextUrl = (nextLink, baseUrl) => {
+  if (!nextLink) return null;
+  const base = new URL(baseUrl, "http://localhost");
+  const next = new URL(nextLink, base);
+  const path = `${next.pathname}${next.search}`;
+  return ABSOLUTE_URL.test(baseUrl) ? `${base.origin}${path}` : path;
+};
+
 /**
  * Fetches every page of a FHIR search Bundle, following link[relation=next].
  * Returns a single merged Bundle so callers can keep using the existing mappers.
@@ -22,7 +32,7 @@ export const fetchAllBundleEntries = async (url, config = {}) => {
     const bundle = response.data;
     if (!firstBundle) firstBundle = bundle;
     if (Array.isArray(bundle?.entry)) entries.push(...bundle.entry);
-    nextUrl = getNextLink(bundle);
+    nextUrl = resolveNextUrl(getNextLink(bundle), url);
   }
 
   return {

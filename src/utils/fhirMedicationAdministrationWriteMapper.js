@@ -6,7 +6,7 @@
 import {
   FHIR_MA_SLOT_EXTENSION_URL,
   FHIR_NOTE_AMENDMENT_REASON_EXTENSION_URL,
-  FHIR_TASK_URL,
+  FHIR_MEDICATION_ADMINISTRATION_BY_ID_URL,
 } from "../constants";
 
 const epochSecondsToIso = (epochSeconds) =>
@@ -100,20 +100,18 @@ export const buildAmendmentPatch = ({
 
 /**
  * Single place defining how an acknowledgement is sent to the backend.
- * Backend mechanism is still being decided (Task POST vs operation); change here only.
+ * Uses the FHIR operation POST /MedicationAdministration/{uuid}/$acknowledge; the backend
+ * returns the stored Task (whose focus is the acknowledged note).
  */
 export const buildAcknowledgementRequest = (
   medicationAdministrationUuid,
   { remarks }
 ) => ({
-  url: FHIR_TASK_URL,
+  url: `${FHIR_MEDICATION_ADMINISTRATION_BY_ID_URL(
+    medicationAdministrationUuid
+  )}/$acknowledge`,
   body: {
-    resourceType: "Task",
-    status: "completed",
-    intent: "order",
-    focus: {
-      reference: `MedicationAdministration/${medicationAdministrationUuid}`,
-    },
-    note: [{ text: remarks }],
+    resourceType: "Parameters",
+    parameter: [{ name: "remarks", valueString: remarks }],
   },
 });

@@ -114,17 +114,16 @@ describe("fhirMedicationAdministrationWriteMapper", () => {
     ]);
   });
 
-  it("builds acknowledgement request", () => {
+  it("builds acknowledgement operation request", () => {
     const { url, body } = buildAcknowledgementRequest("ma1", {
       remarks: "ok",
     });
-    expect(url).toMatch(/\/ws\/fhir2\/R4\/Task$/);
+    expect(url).toMatch(
+      /\/ws\/fhir2\/R4\/MedicationAdministration\/ma1\/\$acknowledge$/
+    );
     expect(body).toEqual({
-      resourceType: "Task",
-      status: "completed",
-      intent: "order",
-      focus: { reference: "MedicationAdministration/ma1" },
-      note: [{ text: "ok" }],
+      resourceType: "Parameters",
+      parameter: [{ name: "remarks", valueString: "ok" }],
     });
   });
 });

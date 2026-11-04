@@ -62,4 +62,45 @@ describe("fetchAllBundleEntries", () => {
 
     expect(bundle.entry).toEqual([]);
   });
+
+  it("keeps the next page on the original origin when HAPI returns an internal host", async () => {
+    mock.onGet("/page1").reply(200, {
+      resourceType: "Bundle",
+      entry: [{ resource: { id: "1" } }],
+      link: [
+        {
+          relation: "next",
+          url: "http://internal-hapi:8080/openmrs/ws/fhir2/R4/MedicationRequest?_getpagesoffset=100",
+        },
+      ],
+    });
+    mock
+      .onGet("/openmrs/ws/fhir2/R4/MedicationRequest?_getpagesoffset=100")
+      .reply(200, {
+        resourceType: "Bundle",
+        entry: [{ resource: { id: "2" } }],
+      });
+
+    const bundle = await fetchAllBundleEntries("/page1");
+
+    expect(bundle.entry.map((entry) => entry.resource.id)).toEqual(["1", "2"]);
+  });
+
+  it("keeps the original origin when the request URL is absolute", async () => {
+    mock.onGet("https://fhir.example.com/page1").reply(200, {
+      resourceType: "Bundle",
+      entry: [{ resource: { id: "1" } }],
+      link: [{ relation: "next", url: "http://internal-hapi:8080/page2" }],
+    });
+    mock.onGet("https://fhir.example.com/page2").reply(200, {
+      resourceType: "Bundle",
+      entry: [{ resource: { id: "2" } }],
+    });
+
+    const bundle = await fetchAllBundleEntries(
+      "https://fhir.example.com/page1"
+    );
+
+    expect(bundle.entry.map((entry) => entry.resource.id)).toEqual(["1", "2"]);
+  });
 });
