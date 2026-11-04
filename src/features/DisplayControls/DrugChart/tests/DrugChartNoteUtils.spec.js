@@ -91,17 +91,16 @@ describe("DrugChartUtils note saves", () => {
       );
     });
 
-    it("posts a FHIR Task when enabled", async () => {
+    it("posts the FHIR $acknowledge operation when enabled", async () => {
       axios.post.mockResolvedValueOnce({ status: 201 });
       await saveMedicationAcknowledgementNote(ack, true);
       const [url, body, options] = axios.post.mock.calls[0];
-      expect(url).toMatch(/\/ws\/fhir2\/R4\/Task$/);
+      expect(url).toMatch(
+        /\/ws\/fhir2\/R4\/MedicationAdministration\/ma1\/\$acknowledge$/
+      );
       expect(body).toEqual({
-        resourceType: "Task",
-        status: "completed",
-        intent: "order",
-        focus: { reference: "MedicationAdministration/ma1" },
-        note: [{ text: "ok" }],
+        resourceType: "Parameters",
+        parameter: [{ name: "remarks", valueString: "ok" }],
       });
       expect(options.withCredentials).toBe(true);
     });
