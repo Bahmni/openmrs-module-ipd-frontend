@@ -7,7 +7,12 @@ import {
   ENCOUNTER_TYPE_URL,
   PATIENT_MOVEMENT_URL,
   NON_MEDICATION_BASE_URL,
+  FHIR_MEDICATION_ADMINISTRATION_URL,
 } from "../../../../constants";
+import {
+  mapEmergencyPayloadToFhirMedicationAdministration,
+  normaliseFhirCreateResponse,
+} from "../../../../utils/fhirMedicationAdministrationWriteMapper";
 
 export const getDrugOrdersConfig = async () => {
   try {
@@ -47,7 +52,22 @@ export const fetchMedicationConfig = async () => {
   }
 };
 
-export const saveEmergencyMedication = async (emergencyMedication) => {
+export const saveEmergencyMedication = async (
+  emergencyMedication,
+  enableIpdFhirMigration = false
+) => {
+  if (enableIpdFhirMigration) {
+    try {
+      const response = await axios.post(
+        FHIR_MEDICATION_ADMINISTRATION_URL,
+        mapEmergencyPayloadToFhirMedicationAdministration(emergencyMedication),
+        { withCredentials: true }
+      );
+      return normaliseFhirCreateResponse(response);
+    } catch (error) {
+      return error.response;
+    }
+  }
   try {
     return await axios.post(
       EMERGENCY_MEDICATIONS_BASE_URL,

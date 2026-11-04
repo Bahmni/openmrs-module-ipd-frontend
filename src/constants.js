@@ -37,6 +37,28 @@ export const PATIENT_IMAGE_URL = RESTWS_V1 + "/patientImage?";
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
 export const ALL_DRUG_ORDERS_URL = (visitUuid) =>
   RESTWS_V1 + `/ipdVisit/${visitUuid}/medication?includes=emergencyMedications`;
+// FHIR2 pages search results (fhir2.paging.default = 10, fhir2.paging.maximum = 100).
+// Request the maximum page size explicitly; AllMedicationsContext follows link[relation=next]
+// for visits that still exceed one page.
+export const FHIR_SEARCH_PAGE_SIZE = 100;
+export const FHIR_MEDICATION_REQUEST_URL = (visitUuid) =>
+  FHIR2_R4 +
+  `/MedicationRequest?visit=${visitUuid}&_count=${FHIR_SEARCH_PAGE_SIZE}`;
+export const FHIR_MEDICATION_ADMIN_EMERGENCY_URL = (visitUuid) =>
+  FHIR2_R4 +
+  `/MedicationAdministration?visit=${visitUuid}&category=emergency&_count=${FHIR_SEARCH_PAGE_SIZE}`;
+export const FHIR_MEDICATION_REQUEST_DATE_STOPPED_EXTENSION_URL =
+  "http://fhir.bahmni.org/ext/medicationRequest/dateStopped";
+export const FHIR_R4_BASE_URL = FHIR2_R4;
+export const FHIR_MEDICATION_ADMINISTRATION_URL =
+  FHIR2_R4 + "/MedicationAdministration";
+export const FHIR_MEDICATION_ADMINISTRATION_BY_ID_URL = (uuid) =>
+  `${FHIR_MEDICATION_ADMINISTRATION_URL}/${uuid}`;
+export const FHIR_MA_SLOT_EXTENSION_URL =
+  "http://fhir.openmrs.org/ext/ipd/medication-administration/slot";
+export const FHIR_NOTE_AMENDMENT_REASON_EXTENSION_URL =
+  "http://fhir.openmrs.org/ext/ipd/note/amendment-reason";
+export const FHIR_JSON_PATCH_CONTENT_TYPE = "application/json-patch+json";
 export const ALLERGIES_BASE_URL = FHIR2_R4 + "/AllergyIntolerance";
 export const PATIENT_VITALS_URL = BAHMNI_CORE + "/diseaseSummaryData";
 export const CLINICAL_CONFIG_URL =
@@ -194,7 +216,11 @@ export const DOSE_UNITS = ["ml", "mg", "mcg"];
 export const LOADING_DOSE_SEQUENCE_OFFSET = 1;
 export const NO_LOADING_DOSE_SEQUENCE_OFFSET = 0;
 export const CONCEPT_SET_GROUP_NAME = "observations"; // Configurable group name for deeplinks
-export const CLINICAL_FORM_URL = (patientUuid, formUuid, conceptSetGroupName = CONCEPT_SET_GROUP_NAME) =>
+export const CLINICAL_FORM_URL = (
+  patientUuid,
+  formUuid,
+  conceptSetGroupName = CONCEPT_SET_GROUP_NAME
+) =>
   `/bahmni/clinical/index.html#/default/patient/${patientUuid}/dashboard/concept-set-group/${conceptSetGroupName}/form/${formUuid}`;
 
 export const TASK_COLORS = {

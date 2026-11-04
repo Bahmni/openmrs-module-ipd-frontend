@@ -24,6 +24,7 @@ const DrugChartSlider = (props) => {
   const { config, provider, privileges } = useContext(IPDContext) || {};
   const { setSliderContentModified } = useContext(SliderContext) || {};
   const { drugChartNoteAmendment = {} } = config || {};
+  const enableIpdFhirMigration = config?.config?.enableIpdFhirMigration ?? false;
   const amendmentReasonConceptSetUuid =
     drugChartNoteAmendment.amendmentReasonConceptSetUuid;
 
@@ -84,7 +85,10 @@ const DrugChartSlider = (props) => {
         amendedByUuid: provider?.uuid,
       };
       try {
-        await saveMedicationAmendmentNote(amendmentData);
+        await saveMedicationAmendmentNote(
+          amendmentData,
+          enableIpdFhirMigration
+        );
         setIsSaveDisabled(false);
         hostApi.onModalSave?.();
       } catch (error) {
@@ -99,7 +103,10 @@ const DrugChartSlider = (props) => {
         acknowledgedByUuid: provider?.uuid,
       };
       try {
-        await saveMedicationAcknowledgementNote(acknowledgementData);
+        await saveMedicationAcknowledgementNote(
+          acknowledgementData,
+          enableIpdFhirMigration
+        );
         setIsSaveDisabled(false);
         hostApi.onModalSave?.();
       } catch (error) {
