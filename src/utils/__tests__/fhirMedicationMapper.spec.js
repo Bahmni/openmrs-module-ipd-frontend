@@ -2,6 +2,8 @@ import {
   mapMedicationRequestBundleToIpdDrugOrders,
   mapMedicationAdministrationBundleToEmergencyMeds,
 } from "../fhirMedicationMapper";
+import { FHIR_DOSING_INSTRUCTION_TYPE } from "../FhirDosingUtils";
+import { FHIR_MEDICATION_REQUEST_DATE_STOPPED_EXTENSION_URL } from "../../constants";
 
 // ---------------------------------------------------------------------------
 // Fixture helpers
@@ -27,9 +29,9 @@ const fullMedicationRequestEntry = {
     id: "mr-uuid-001",
     identifier: [{ value: "ORD-001" }],
     status: "active",
-    medicationCodeableConcept: {
-      text: "Paracetamol 500mg",
-      coding: [{ display: "Paracetamol" }],
+    medicationReference: {
+      reference: "Medication/drug-uuid-001",
+      display: "Paracetamol 500mg",
     },
     subject: { reference: "Patient/patient-uuid-001" },
     encounter: { reference: "Encounter/encounter-uuid-001" },
@@ -40,8 +42,11 @@ const fullMedicationRequestEntry = {
     },
     dosageInstruction: [
       {
+        text: '{"instructions":"Take with food","isLoadingDose":false}',
         route: { coding: [{ display: "Oral" }], text: "By mouth" },
         timing: {
+          event: ["2024-01-15T08:00:00.000Z"],
+          repeat: { duration: 7, durationUnit: "d" },
           code: {
             coding: [{ display: "Twice daily" }],
             text: "BID",
@@ -58,10 +63,8 @@ const fullMedicationRequestEntry = {
     dispenseRequest: {
       validityPeriod: {
         start: "2024-01-15T08:00:00.000Z",
-        end: "2024-01-22T08:00:00.000Z",
       },
       quantity: { value: 14, unit: "Tab" },
-      expectedSupplyDuration: { value: 7, unit: "days" },
     },
     reasonCode: [{ text: "Fever management" }],
     note: [{ text: "Take with food" }],
@@ -96,7 +99,10 @@ const fullMedicationAdministrationEntry = {
     note: [
       {
         text: "Patient tolerated well",
-        authorReference: { display: "Nurse Alice" },
+        authorReference: {
+          reference: "Practitioner/author-uuid-001",
+          display: "Nurse Alice",
+        },
         time: "2024-01-15T10:35:00.000Z",
       },
     ],
@@ -148,6 +154,7 @@ describe("mapMedicationRequestBundleToIpdDrugOrders", () => {
 
     // drug name
     expect(item.drugOrder.drug.name).toBe("Paracetamol 500mg");
+    expect(item.drugOrder.drugNonCoded).toBeNull();
 
     // dosing instructions
     expect(item.drugOrder.dosingInstructions.dose).toBe(500);
@@ -157,6 +164,10 @@ describe("mapMedicationRequestBundleToIpdDrugOrders", () => {
     expect(item.drugOrder.dosingInstructions.asNeeded).toBe(false);
     expect(item.drugOrder.dosingInstructions.quantity).toBe(14);
     expect(item.drugOrder.dosingInstructions.quantityUnits).toBe("Tab");
+    expect(
+      item.drugOrder.dosingInstructions.administrationInstructions
+    ).toBe('{"instructions":"Take with food","isLoadingDose":false}');
+    expect(item.drugOrder.dosingInstructionType).toBeNull();
 
     // dates (parsed to millis)
     expect(item.drugOrder.dateActivated).toBe(
@@ -165,16 +176,21 @@ describe("mapMedicationRequestBundleToIpdDrugOrders", () => {
     expect(item.drugOrder.effectiveStartDate).toBe(
       Date.parse("2024-01-15T08:00:00.000Z")
     );
-    expect(item.drugOrder.dateStopped).toBe(
-      Date.parse("2024-01-22T08:00:00.000Z")
+    expect(item.drugOrder.scheduledDate).toBe(
+      Date.parse("2024-01-15T08:00:00.000Z")
     );
+    // An active order has no explicit stop, even if it has a duration.
+    expect(item.drugOrder.dateStopped).toBeNull();
+    expect(item.drugOrder.autoExpireDate).toBeNull();
 
-    // duration
+    // duration comes from timing.repeat, not dispenseRequest
     expect(item.drugOrder.duration).toBe(7);
-    expect(item.drugOrder.durationUnits).toBe("days");
+    expect(item.drugOrder.durationUnits).toBe("Day(s)");
 
-    // reason + notes
-    expect(item.drugOrder.orderReasonText).toBe("Fever management");
+    // reason + notes: reasonCode is the order's own reason, not the stop
+    // reason, so it must not leak into orderReasonConcept/orderReasonText.
+    expect(item.drugOrder.orderReasonConcept).toBeNull();
+    expect(item.drugOrder.orderReasonText).toBeNull();
     expect(item.drugOrder.commentToFulfiller).toBe("Take with food");
 
     // orderer / references
@@ -188,6 +204,148 @@ describe("mapMedicationRequestBundleToIpdDrugOrders", () => {
 
     // drugOrderSchedule is null (FHIR MedicationRequest doesn't carry slot info)
     expect(item.drugOrderSchedule).toBeNull();
+  });
+
+  it("maps dateStopped from the Bahmni dateStopped extension", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-stopped-001",
+        status: "stopped",
+        medicationReference: {
+          reference: "Medication/drug-uuid-001",
+          display: "Paracetamol 500mg",
+        },
+        extension: [
+          {
+            url: FHIR_MEDICATION_REQUEST_DATE_STOPPED_EXTENSION_URL,
+            valueDateTime: "2024-01-18T10:00:00.000Z",
+          },
+        ],
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.dateStopped).toBe(
+      Date.parse("2024-01-18T10:00:00.000Z")
+    );
+  });
+
+  it("does not treat validityPeriod.end as an explicit stop", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-active-with-end-001",
+        status: "active",
+        medicationReference: {
+          reference: "Medication/drug-uuid-001",
+          display: "Paracetamol 500mg",
+        },
+        dispenseRequest: {
+          validityPeriod: {
+            start: "2024-01-15T08:00:00.000Z",
+            end: "2024-01-22T08:00:00.000Z",
+          },
+        },
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.dateStopped).toBeNull();
+  });
+
+  it("maps the variable-dose dosing type from a Dosage[] dosage.text", () => {
+    const vdpText = JSON.stringify([
+      {
+        sequence: 1,
+        text: "Stage 1",
+        doseAndRate: [{ doseQuantity: { value: 1, unit: "mg" } }],
+      },
+    ]);
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-vdp-001",
+        status: "active",
+        medicationReference: {
+          reference: "Medication/drug-uuid-001",
+          display: "Paracetamol 500mg",
+        },
+        dosageInstruction: [{ text: vdpText }],
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.dosingInstructionType).toBe(
+      FHIR_DOSING_INSTRUCTION_TYPE
+    );
+    expect(
+      result[0].drugOrder.dosingInstructions.administrationInstructions
+    ).toBe(vdpText);
+  });
+
+  it("maps drugNonCoded for a free-text drug", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-free-text-001",
+        status: "active",
+        medicationCodeableConcept: { text: "Herbal mixture" },
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.drugNonCoded).toBe("Herbal mixture");
+    expect(result[0].drugOrder.drug.name).toBe("Herbal mixture");
+  });
+
+  it("maps a coded stop reason from statusReason", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-stopped-reason-001",
+        status: "stopped",
+        medicationReference: {
+          reference: "Medication/drug-uuid-001",
+          display: "Paracetamol 500mg",
+        },
+        statusReason: {
+          coding: [{ code: "reason-uuid-001", display: "Adverse reaction" }],
+        },
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.orderReasonConcept).toEqual({
+      uuid: "reason-uuid-001",
+      name: "Adverse reaction",
+    });
+    expect(result[0].drugOrder.orderReasonText).toBeNull();
+  });
+
+  it("maps a non-coded stop reason from statusReason.text", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-stopped-reason-002",
+        status: "stopped",
+        medicationReference: {
+          reference: "Medication/drug-uuid-001",
+          display: "Paracetamol 500mg",
+        },
+        statusReason: { text: "Patient reported rash" },
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.orderReasonConcept).toBeNull();
+    expect(result[0].drugOrder.orderReasonText).toBe("Patient reported rash");
   });
 
   it("reads the drug name and uuid from medicationReference when present", () => {
@@ -232,12 +390,23 @@ describe("mapMedicationRequestBundleToIpdDrugOrders", () => {
     expect(item.drugOrder.uuid).toBe("mr-minimal-001");
     expect(item.drugOrder.orderNumber).toBeNull();
     expect(item.drugOrder.drug.name).toBeNull();
+    expect(item.drugOrder.drugNonCoded).toBeNull();
     expect(item.drugOrder.dosingInstructions.dose).toBeNull();
     expect(item.drugOrder.dosingInstructions.route).toBeNull();
     expect(item.drugOrder.dosingInstructions.frequency).toBeNull();
+    expect(
+      item.drugOrder.dosingInstructions.administrationInstructions
+    ).toBeNull();
+    expect(item.drugOrder.dosingInstructionType).toBeNull();
     expect(item.drugOrder.dateActivated).toBeNull();
     expect(item.drugOrder.effectiveStartDate).toBeNull();
+    expect(item.drugOrder.scheduledDate).toBeNull();
     expect(item.drugOrder.dateStopped).toBeNull();
+    expect(item.drugOrder.autoExpireDate).toBeNull();
+    expect(item.drugOrder.duration).toBeNull();
+    expect(item.drugOrder.durationUnits).toBeNull();
+    expect(item.drugOrder.orderReasonConcept).toBeNull();
+    expect(item.drugOrder.orderReasonText).toBeNull();
     expect(item.drugOrder.orderer).toBeNull();
     expect(item.drugOrder.patientUuid).toBeNull();
     expect(item.drugOrder.encounterUuid).toBeNull();
@@ -320,15 +489,23 @@ describe("mapMedicationAdministrationBundleToEmergencyMeds", () => {
 
     // performers
     expect(item.providers).toHaveLength(1);
-    expect(item.providers[0].provider.display).toBe("Nurse Alice");
     expect(item.providers[0].uuid).toBe("performer-uuid-001");
+    expect(item.providers[0].provider).toEqual({
+      uuid: "performer-uuid-001",
+      display: "Nurse Alice",
+    });
     expect(item.providers[0].function).toBe("Performer");
 
     // notes
     expect(item.notes).toHaveLength(1);
     expect(item.notes[0].text).toBe("Patient tolerated well");
-    expect(item.notes[0].author).toBe("Nurse Alice");
-    expect(item.notes[0].time).toBe(Date.parse("2024-01-15T10:35:00.000Z"));
+    expect(item.notes[0].author).toEqual({
+      uuid: "author-uuid-001",
+      display: "Nurse Alice",
+    });
+    expect(item.notes[0].recordedTime).toBe(
+      Date.parse("2024-01-15T10:35:00.000Z")
+    );
   });
 
   it("reads the drug name and uuid from medicationReference when present", () => {
@@ -383,6 +560,22 @@ describe("mapMedicationAdministrationBundleToEmergencyMeds", () => {
     expect(item.providers).toEqual([]);
     expect(item.notes).toEqual([]);
     expect(item.statusReason).toBeNull();
+  });
+
+  it("maps a note without an author to null uuid/display instead of throwing", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationAdministration",
+        id: "ma-note-no-author-001",
+        status: "completed",
+        note: [{ text: "No author note" }],
+      },
+    };
+    const bundle = makeMedicationAdministrationBundle([entry]);
+    const result = mapMedicationAdministrationBundleToEmergencyMeds(bundle);
+
+    expect(result[0].notes[0].author).toEqual({ uuid: null, display: null });
+    expect(result[0].notes[0].recordedTime).toBeNull();
   });
 
   it("skips non-MedicationAdministration entries", () => {

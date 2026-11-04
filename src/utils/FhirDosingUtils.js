@@ -23,16 +23,26 @@ export const parseFlatAdminInstructions = (adminInstructionsStr) => {
   return parsed;
 };
 
-export const isVariableDoseOrder = (dosingInstructionType) =>
-  dosingInstructionType ===
+export const FHIR_DOSING_INSTRUCTION_TYPE =
   "org.openmrs.module.bahmniemrapi.drugorder.dosinginstructions.FhirDosingInstructions";
+
+export const isVariableDoseOrder = (dosingInstructionType) =>
+  dosingInstructionType === FHIR_DOSING_INSTRUCTION_TYPE;
 
 export const LOADING_DOSE_DURATION_DISPLAY = "Occurrence(s)";
 export const LOADING_DOSE_FREQUENCY = "Once";
 
 export const MEDICATION_ADDITIVES_EXTENSION_URL = "http://fhir.bahmni.org/ext/medication-additives";
 
-const UCUM_TO_DISPLAY = { d: "Day(s)", wk: "Week(s)", mo: "Month(s)" };
+const UCUM_TO_DISPLAY = {
+  s: "Second(s)",
+  min: "Minute(s)",
+  h: "Hour(s)",
+  d: "Day(s)",
+  wk: "Week(s)",
+  mo: "Month(s)",
+  a: "Year(s)",
+};
 const DISPLAY_TO_DAYS = {
   "day(s)": 1,
   "week(s)": 7,

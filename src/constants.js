@@ -37,11 +37,18 @@ export const PATIENT_IMAGE_URL = RESTWS_V1 + "/patientImage?";
 export const DIAGNOSIS_SEARCH_URL = BAHMNI_CORE + "/diagnosis/search";
 export const ALL_DRUG_ORDERS_URL = (visitUuid) =>
   RESTWS_V1 + `/ipdVisit/${visitUuid}/medication?includes=emergencyMedications`;
+// FHIR2 pages search results (fhir2.paging.default = 10, fhir2.paging.maximum = 100).
+// Request the maximum page size explicitly; AllMedicationsContext follows link[relation=next]
+// for visits that still exceed one page.
+export const FHIR_SEARCH_PAGE_SIZE = 100;
 export const FHIR_MEDICATION_REQUEST_URL = (visitUuid) =>
-  FHIR2_R4 + `/MedicationRequest?visit=${visitUuid}`;
+  FHIR2_R4 +
+  `/MedicationRequest?visit=${visitUuid}&_count=${FHIR_SEARCH_PAGE_SIZE}`;
 export const FHIR_MEDICATION_ADMIN_EMERGENCY_URL = (visitUuid) =>
   FHIR2_R4 +
-  `/MedicationAdministration?context=${visitUuid}&category=emergency`;
+  `/MedicationAdministration?context=${visitUuid}&category=emergency&_count=${FHIR_SEARCH_PAGE_SIZE}`;
+export const FHIR_MEDICATION_REQUEST_DATE_STOPPED_EXTENSION_URL =
+  "http://fhir.bahmni.org/ext/medicationRequest/dateStopped";
 export const FHIR_R4_BASE_URL = FHIR2_R4;
 export const FHIR_MEDICATION_ADMINISTRATION_URL =
   FHIR2_R4 + "/MedicationAdministration";

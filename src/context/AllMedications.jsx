@@ -10,6 +10,7 @@ import {
   mapMedicationRequestBundleToIpdDrugOrders,
   mapMedicationAdministrationBundleToEmergencyMeds,
 } from "../utils/fhirMedicationMapper";
+import { fetchAllBundleEntries } from "../utils/fhirBundleUtils";
 import { IPDContext } from "./IPDContext";
 
 export const AllMedicationsContext = React.createContext({
@@ -25,19 +26,19 @@ export const AllMedicationsContextProvider = (props) => {
     setMedications((prev) => ({ ...prev, isLoading: true }));
     try {
       if (enableIpdFhirMigration) {
-        const [medRequestRes, medAdminRes] = await Promise.all([
-          axios.get(FHIR_MEDICATION_REQUEST_URL(visitUuid), {
+        const [medRequestBundle, medAdminBundle] = await Promise.all([
+          fetchAllBundleEntries(FHIR_MEDICATION_REQUEST_URL(visitUuid), {
             withCredentials: true,
           }),
-          axios.get(FHIR_MEDICATION_ADMIN_EMERGENCY_URL(visitUuid), {
-            withCredentials: true,
-          }),
+          fetchAllBundleEntries(
+            FHIR_MEDICATION_ADMIN_EMERGENCY_URL(visitUuid),
+            { withCredentials: true }
+          ),
         ]);
-        const ipdDrugOrders = mapMedicationRequestBundleToIpdDrugOrders(
-          medRequestRes.data
-        );
+        const ipdDrugOrders =
+          mapMedicationRequestBundleToIpdDrugOrders(medRequestBundle);
         const emergencyMedications =
-          mapMedicationAdministrationBundleToEmergencyMeds(medAdminRes.data);
+          mapMedicationAdministrationBundleToEmergencyMeds(medAdminBundle);
         setMedications((prev) => ({
           ...prev,
           isLoading: false,

@@ -5,6 +5,30 @@
  *
  * NO React, NO axios — pure JS only.
  */
+import {
+  FHIR_DOSING_INSTRUCTION_TYPE,
+  fromUcumDurationUnit,
+  parseFhirDosages,
+} from "./FhirDosingUtils";
+import { FHIR_MEDICATION_REQUEST_DATE_STOPPED_EXTENSION_URL } from "../constants";
+
+const getReferenceUuid = (reference) => reference?.split("/")?.pop() ?? null;
+
+const parseDate = (value) => (value ? Date.parse(value) : null);
+
+const getExtensionValue = (resource, url) =>
+  (resource?.extension ?? []).find((extension) => extension?.url === url)
+    ?.valueDateTime ?? null;
+
+const getConcept = (codeableConcept) => {
+  const coding = codeableConcept?.coding?.[0];
+  const name = coding?.display || null;
+  if (!name) return null;
+  return {
+    uuid: coding?.code ?? null,
+    name,
+  };
+};
 
 /**
  * Maps a FHIR R4 MedicationRequest Bundle to the ipdDrugOrders array shape.
@@ -27,34 +51,55 @@ export const mapMedicationRequestBundleToIpdDrugOrders = (bundle) => {
     .map((entry) => {
       const mr = entry.resource;
       const dosage = mr.dosageInstruction?.[0] ?? {};
+      const repeat = dosage.timing?.repeat ?? {};
+
+      const medicationReference = mr.medicationReference;
+      const medicationCodeableConcept = mr.medicationCodeableConcept;
+      const drugNonCoded =
+        !medicationReference && medicationCodeableConcept?.text
+          ? medicationCodeableConcept.text
+          : null;
 
       const drugName =
-        mr.medicationReference?.display ||
-        dosage.medicationCodeableConcept?.text ||
-        mr.medicationCodeableConcept?.text ||
-        mr.medicationCodeableConcept?.coding?.[0]?.display ||
+        medicationReference?.display ||
+        medicationCodeableConcept?.text ||
+        medicationCodeableConcept?.coding?.[0]?.display ||
         null;
 
-      const drugUuid =
-        mr.medicationReference?.reference?.split("/")?.pop() ?? null;
+      const drugUuid = getReferenceUuid(medicationReference?.reference);
 
-      const authoredOnMs = mr.authoredOn ? Date.parse(mr.authoredOn) : null;
-      const validityStart = mr.dispenseRequest?.validityPeriod?.start
-        ? Date.parse(mr.dispenseRequest.validityPeriod.start)
-        : null;
-      const validityEnd = mr.dispenseRequest?.validityPeriod?.end
-        ? Date.parse(mr.dispenseRequest.validityPeriod.end)
-        : null;
+      const authoredOnMs = parseDate(mr.authoredOn);
+      const validityStart = parseDate(mr.dispenseRequest?.validityPeriod?.start);
+      const scheduledDate = parseDate(dosage.timing?.event?.[0]);
+      const dateStopped = parseDate(
+        getExtensionValue(
+          mr,
+          FHIR_MEDICATION_REQUEST_DATE_STOPPED_EXTENSION_URL
+        )
+      );
+      // FHIR2 does not emit autoExpireDate today; boundsPeriod.end is the
+      // forward-compatible location if the backend starts sending it.
+      const autoExpireDate = parseDate(repeat.boundsPeriod?.end);
+
+      // dosage.text carries the persisted dosing-instructions JSON: a flat
+      // object for regular orders, a Dosage[] array for variable-dose orders.
+      const administrationInstructions = dosage.text ?? null;
+      const isVariableDose =
+        parseFhirDosages(administrationInstructions) !== null;
+
+      // FHIR2 only emits statusReason, and only for a discontinuation order;
+      // it carries the stop reason the REST contract exposes.
+      const stopReason = mr.statusReason ?? null;
 
       return {
         drugOrder: {
           uuid: mr.id,
           orderNumber: mr.identifier?.[0]?.value ?? null,
-          dateActivated: authoredOnMs,
-          effectiveStartDate: validityStart ?? authoredOnMs,
-          dateStopped: validityEnd,
-          scheduledDate: null,
-          autoExpireDate: null,
+          dateActivated: validityStart ?? authoredOnMs,
+          effectiveStartDate: scheduledDate ?? validityStart ?? authoredOnMs,
+          dateStopped,
+          scheduledDate,
+          autoExpireDate,
           drug: {
             uuid: drugUuid,
             name: drugName,
@@ -62,6 +107,10 @@ export const mapMedicationRequestBundleToIpdDrugOrders = (bundle) => {
             strength: null,
             concept: null,
           },
+          drugNonCoded,
+          dosingInstructionType: isVariableDose
+            ? FHIR_DOSING_INSTRUCTION_TYPE
+            : null,
           dosingInstructions: {
             dose: dosage.doseAndRate?.[0]?.doseQuantity?.value ?? null,
             doseUnits: dosage.doseAndRate?.[0]?.doseQuantity?.unit ?? null,
@@ -74,24 +123,30 @@ export const mapMedicationRequestBundleToIpdDrugOrders = (bundle) => {
             quantity: mr.dispenseRequest?.quantity?.value ?? null,
             quantityUnits: mr.dispenseRequest?.quantity?.unit ?? null,
             asNeeded: dosage.asNeededBoolean ?? false,
-            administrationInstructions: null,
+            administrationInstructions,
           },
-          duration: mr.dispenseRequest?.expectedSupplyDuration?.value ?? null,
-          durationUnits:
-            mr.dispenseRequest?.expectedSupplyDuration?.unit ?? null,
+          duration: repeat.duration ?? null,
+          durationUnits: repeat.durationUnit
+            ? fromUcumDurationUnit(repeat.durationUnit)
+            : null,
+          // FHIR2 does not expose careSetting, sortWeight or orderGroup.
+          // Treatments sorts by effectiveStartDate, so ordering is preserved.
           careSetting: null,
           action: mr.status ?? null,
-          orderReasonText: mr.reasonCode?.[0]?.text ?? null,
+          // The REST contract exposes the discontinuation reason as
+          // orderReasonConcept/orderReasonText; FHIR carries it in statusReason.
+          orderReasonConcept: getConcept(stopReason),
+          orderReasonText: stopReason?.text ?? null,
           orderer: mr.requester?.display ?? null,
-          encounterUuid: mr.encounter?.reference?.split("/")?.pop() ?? null,
-          patientUuid: mr.subject?.reference?.split("/")?.pop() ?? null,
+          encounterUuid: getReferenceUuid(mr.encounter?.reference),
+          patientUuid: getReferenceUuid(mr.subject?.reference),
           commentToFulfiller: mr.note?.[0]?.text ?? null,
           voided: false,
         },
         drugOrderSchedule: null,
         provider: {
           name: mr.requester?.display ?? null,
-          uuid: mr.requester?.reference?.split("/")?.pop() ?? null,
+          uuid: getReferenceUuid(mr.requester?.reference),
         },
       };
     });
@@ -125,24 +180,32 @@ export const mapMedicationAdministrationBundleToEmergencyMeds = (bundle) => {
         ma.medicationCodeableConcept?.coding?.[0]?.display ||
         null;
 
-      const drugUuid =
-        ma.medicationReference?.reference?.split("/")?.pop() ?? null;
+      const drugUuid = getReferenceUuid(ma.medicationReference?.reference);
 
       return {
         uuid: ma.id,
-        patientUuid: ma.subject?.reference?.split("/")?.pop() ?? null,
-        encounterUuid: ma.context?.reference?.split("/")?.pop() ?? null,
-        orderUuid: ma.request?.reference?.split("/")?.pop() ?? null,
-        providers: (ma.performer ?? []).map((p) => ({
-          uuid: p.actor?.reference?.split("/")?.pop() ?? null,
-          provider: { display: p.actor?.display ?? null },
-          function:
-            p.function?.coding?.[0]?.display || p.function?.text || null,
-        })),
+        patientUuid: getReferenceUuid(ma.subject?.reference),
+        encounterUuid: getReferenceUuid(ma.context?.reference),
+        orderUuid: getReferenceUuid(ma.request?.reference),
+        providers: (ma.performer ?? []).map((p) => {
+          const actorUuid = getReferenceUuid(p.actor?.reference);
+          return {
+            uuid: actorUuid,
+            provider: {
+              uuid: actorUuid,
+              display: p.actor?.display ?? null,
+            },
+            function:
+              p.function?.coding?.[0]?.display || p.function?.text || null,
+          };
+        }),
         notes: (ma.note ?? []).map((n) => ({
           text: n.text ?? null,
-          author: n.authorReference?.display ?? null,
-          time: n.time ? Date.parse(n.time) : null,
+          author: {
+            uuid: getReferenceUuid(n.authorReference?.reference),
+            display: n.authorReference?.display ?? null,
+          },
+          recordedTime: parseDate(n.time),
         })),
         status: ma.status ?? null,
         statusReason:
@@ -170,9 +233,7 @@ export const mapMedicationAdministrationBundleToEmergencyMeds = (bundle) => {
             ma.dosage?.site?.text ||
             null,
         },
-        administeredDateTime: ma.effectiveDateTime
-          ? Date.parse(ma.effectiveDateTime)
-          : null,
+        administeredDateTime: parseDate(ma.effectiveDateTime),
       };
     });
 };

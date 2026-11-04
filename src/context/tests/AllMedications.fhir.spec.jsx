@@ -150,6 +150,46 @@ describe("AllMedicationsContextProvider — FHIR path (enableIpdFhirMigration: t
     expect(data.emergencyMedications[0].uuid).toBe("ma-uuid-fixture-001");
   });
 
+  it("follows the next link when the MedicationRequest search is paged", async () => {
+    const nextPageUrl = `/openmrs/ws/fhir2/R4/MedicationRequest?visit=${VISIT_UUID}&_count=100&_getpagesoffset=100`;
+    const firstPage = {
+      ...mrBundle,
+      link: [{ relation: "next", url: nextPageUrl }],
+    };
+    const secondPage = {
+      resourceType: "Bundle",
+      entry: [
+        {
+          resource: {
+            ...mrBundle.entry[0].resource,
+            id: "mr-uuid-fixture-002",
+          },
+        },
+      ],
+      link: [{ relation: "self", url: nextPageUrl }],
+    };
+
+    mock
+      .onGet(FHIR_MEDICATION_REQUEST_URL(VISIT_UUID))
+      .reply(200, firstPage);
+    mock.onGet(nextPageUrl).reply(200, secondPage);
+    mock
+      .onGet(FHIR_MEDICATION_ADMIN_EMERGENCY_URL(VISIT_UUID))
+      .reply(200, emptyBundle);
+
+    const { getByTestId, captured } = renderWithFhirProvider(VISIT_UUID);
+
+    await waitFor(() => {
+      expect(getByTestId("loading").textContent).toBe("false");
+      expect(getByTestId("has-data").textContent).toBe("true");
+    });
+
+    expect(captured.current.data.ipdDrugOrders).toHaveLength(2);
+    expect(captured.current.data.ipdDrugOrders.map((o) => o.drugOrder.uuid)).toEqual(
+      ["mr-uuid-fixture-001", "mr-uuid-fixture-002"]
+    );
+  });
+
   it("on MedicationRequest failure: sets error, isLoading=false", async () => {
     mock.onGet(FHIR_MEDICATION_REQUEST_URL(VISIT_UUID)).reply(500);
     mock
