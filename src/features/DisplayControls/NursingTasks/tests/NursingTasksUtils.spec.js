@@ -306,6 +306,55 @@ describe("NursingTasksUtils", () => {
     });
   });
 
+  describe("saveAdministeredMedication (FHIR)", () => {
+    const items = [
+      {
+        patientUuid: "p1",
+        orderUuid: "o1",
+        providers: [{ providerUuid: "pr1", function: "Performer" }],
+        notes: [],
+        status: "completed",
+        slotUuid: "s1",
+        administeredDateTime: 1703670985,
+      },
+    ];
+
+    it("posts one MedicationAdministration per slot and normalises to 200", async () => {
+      axios.post.mockClear();
+      axios.post.mockResolvedValue({ status: 201, data: {} });
+      const response = await saveAdministeredMedication(
+        [items[0], { ...items[0], slotUuid: "s2" }],
+        true
+      );
+      expect(axios.post).toHaveBeenCalledTimes(2);
+      const [url, body, options] = axios.post.mock.calls[0];
+      expect(url).toMatch(/\/ws\/fhir2\/R4\/MedicationAdministration$/);
+      expect(body.resourceType).toBe("MedicationAdministration");
+      expect(body.extension[0].valueString).toBe("s1");
+      expect(axios.post.mock.calls[1][1].extension[0].valueString).toBe("s2");
+      expect(options.withCredentials).toBe(true);
+      expect(response.status).toBe(200);
+      axios.post.mockReset();
+    });
+
+    it("stops at the first failing slot and returns its status", async () => {
+      axios.post.mockReset();
+      axios.post.mockResolvedValueOnce({ status: 400, data: {} });
+      const response = await saveAdministeredMedication(
+        [items[0], { ...items[0], slotUuid: "s2" }],
+        true
+      );
+      expect(axios.post).toHaveBeenCalledTimes(1);
+      expect(response.status).toBe(400);
+    });
+
+    it("returns error.response on request failure", async () => {
+      axios.post.mockRejectedValueOnce({ response: { status: 500 } });
+      const response = await saveAdministeredMedication(items, true);
+      expect(response).toEqual({ status: 500 });
+    });
+  });
+
   describe("getLatestFormUuid", () => {
     it("should return latest uuid when multiple versions exist", () => {
       const allFormsSummary = [

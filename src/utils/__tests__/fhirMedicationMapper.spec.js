@@ -1,0 +1,597 @@
+import {
+  mapMedicationRequestBundleToIpdDrugOrders,
+  mapMedicationAdministrationBundleToEmergencyMeds,
+} from "../fhirMedicationMapper";
+import { FHIR_DOSING_INSTRUCTION_TYPE } from "../FhirDosingUtils";
+import { FHIR_MEDICATION_REQUEST_DATE_STOPPED_EXTENSION_URL } from "../../constants";
+
+// ---------------------------------------------------------------------------
+// Fixture helpers
+// ---------------------------------------------------------------------------
+
+const makeMedicationRequestBundle = (entries = []) => ({
+  resourceType: "Bundle",
+  id: "bundle-mr-001",
+  type: "searchset",
+  entry: entries,
+});
+
+const makeMedicationAdministrationBundle = (entries = []) => ({
+  resourceType: "Bundle",
+  id: "bundle-ma-001",
+  type: "searchset",
+  entry: entries,
+});
+
+const fullMedicationRequestEntry = {
+  resource: {
+    resourceType: "MedicationRequest",
+    id: "mr-uuid-001",
+    identifier: [{ value: "ORD-001" }],
+    status: "active",
+    medicationReference: {
+      reference: "Medication/drug-uuid-001",
+      display: "Paracetamol 500mg",
+    },
+    subject: { reference: "Patient/patient-uuid-001" },
+    encounter: { reference: "Encounter/encounter-uuid-001" },
+    authoredOn: "2024-01-15T08:00:00.000Z",
+    requester: {
+      reference: "Practitioner/practitioner-uuid-001",
+      display: "Dr. Jane Smith",
+    },
+    dosageInstruction: [
+      {
+        text: '{"instructions":"Take with food","isLoadingDose":false}',
+        route: { coding: [{ display: "Oral" }], text: "By mouth" },
+        timing: {
+          event: ["2024-01-15T08:00:00.000Z"],
+          repeat: { duration: 7, durationUnit: "d" },
+          code: {
+            coding: [{ display: "Twice daily" }],
+            text: "BID",
+          },
+        },
+        doseAndRate: [
+          {
+            doseQuantity: { value: 500, unit: "mg" },
+          },
+        ],
+        asNeededBoolean: false,
+      },
+    ],
+    dispenseRequest: {
+      validityPeriod: {
+        start: "2024-01-15T08:00:00.000Z",
+      },
+      quantity: { value: 14, unit: "Tab" },
+    },
+    reasonCode: [{ text: "Fever management" }],
+    note: [{ text: "Take with food" }],
+  },
+};
+
+const fullMedicationAdministrationEntry = {
+  resource: {
+    resourceType: "MedicationAdministration",
+    id: "ma-uuid-001",
+    status: "completed",
+    medicationCodeableConcept: {
+      text: "Morphine 10mg",
+      coding: [{ display: "Morphine" }],
+    },
+    subject: { reference: "Patient/patient-uuid-002" },
+    context: { reference: "Encounter/encounter-uuid-002" },
+    request: { reference: "MedicationRequest/mr-uuid-002" },
+    effectiveDateTime: "2024-01-15T10:30:00.000Z",
+    performer: [
+      {
+        actor: {
+          reference: "Practitioner/performer-uuid-001",
+          display: "Nurse Alice",
+        },
+        function: {
+          coding: [{ display: "Performer" }],
+          text: "Performer",
+        },
+      },
+    ],
+    note: [
+      {
+        text: "Patient tolerated well",
+        authorReference: {
+          reference: "Practitioner/author-uuid-001",
+          display: "Nurse Alice",
+        },
+        time: "2024-01-15T10:35:00.000Z",
+      },
+    ],
+    dosage: {
+      text: "10mg IV push",
+      dose: { value: 10, unit: "mg" },
+      route: {
+        coding: [{ display: "Intravenous" }],
+        text: "IV",
+      },
+      site: {
+        coding: [{ display: "Left arm" }],
+        text: "Left arm",
+      },
+    },
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Tests: mapMedicationRequestBundleToIpdDrugOrders
+// ---------------------------------------------------------------------------
+
+describe("mapMedicationRequestBundleToIpdDrugOrders", () => {
+  it("returns [] for null bundle", () => {
+    expect(mapMedicationRequestBundleToIpdDrugOrders(null)).toEqual([]);
+  });
+
+  it("returns [] for undefined bundle", () => {
+    expect(mapMedicationRequestBundleToIpdDrugOrders(undefined)).toEqual([]);
+  });
+
+  it("returns [] for bundle with empty entry array", () => {
+    const bundle = makeMedicationRequestBundle([]);
+    expect(mapMedicationRequestBundleToIpdDrugOrders(bundle)).toEqual([]);
+  });
+
+  it("maps a single MedicationRequest with all fields populated", () => {
+    const bundle = makeMedicationRequestBundle([fullMedicationRequestEntry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result).toHaveLength(1);
+    const item = result[0];
+
+    // drugOrder top-level identity
+    expect(item.drugOrder.uuid).toBe("mr-uuid-001");
+    expect(item.drugOrder.orderNumber).toBe("ORD-001");
+    expect(item.drugOrder.action).toBe("active");
+    expect(item.drugOrder.voided).toBe(false);
+
+    // drug name
+    expect(item.drugOrder.drug.name).toBe("Paracetamol 500mg");
+    expect(item.drugOrder.drugNonCoded).toBeNull();
+
+    // dosing instructions
+    expect(item.drugOrder.dosingInstructions.dose).toBe(500);
+    expect(item.drugOrder.dosingInstructions.doseUnits).toBe("mg");
+    expect(item.drugOrder.dosingInstructions.route).toBe("Oral");
+    expect(item.drugOrder.dosingInstructions.frequency).toBe("Twice daily");
+    expect(item.drugOrder.dosingInstructions.asNeeded).toBe(false);
+    expect(item.drugOrder.dosingInstructions.quantity).toBe(14);
+    expect(item.drugOrder.dosingInstructions.quantityUnits).toBe("Tab");
+    expect(
+      item.drugOrder.dosingInstructions.administrationInstructions
+    ).toBe('{"instructions":"Take with food","isLoadingDose":false}');
+    expect(item.drugOrder.dosingInstructionType).toBeNull();
+
+    // dates (parsed to millis)
+    expect(item.drugOrder.dateActivated).toBe(
+      Date.parse("2024-01-15T08:00:00.000Z")
+    );
+    expect(item.drugOrder.effectiveStartDate).toBe(
+      Date.parse("2024-01-15T08:00:00.000Z")
+    );
+    expect(item.drugOrder.scheduledDate).toBe(
+      Date.parse("2024-01-15T08:00:00.000Z")
+    );
+    // An active order has no explicit stop, even if it has a duration.
+    expect(item.drugOrder.dateStopped).toBeNull();
+    expect(item.drugOrder.autoExpireDate).toBeNull();
+
+    // duration comes from timing.repeat, not dispenseRequest
+    expect(item.drugOrder.duration).toBe(7);
+    expect(item.drugOrder.durationUnits).toBe("Day(s)");
+
+    // reason + notes: reasonCode is the order's own reason, not the stop
+    // reason, so it must not leak into orderReasonConcept/orderReasonText.
+    expect(item.drugOrder.orderReasonConcept).toBeNull();
+    expect(item.drugOrder.orderReasonText).toBeNull();
+    expect(item.drugOrder.commentToFulfiller).toBe("Take with food");
+
+    // orderer / references
+    expect(item.drugOrder.orderer).toBe("Dr. Jane Smith");
+    expect(item.drugOrder.patientUuid).toBe("patient-uuid-001");
+    expect(item.drugOrder.encounterUuid).toBe("encounter-uuid-001");
+
+    // provider
+    expect(item.provider.name).toBe("Dr. Jane Smith");
+    expect(item.provider.uuid).toBe("practitioner-uuid-001");
+
+    // drugOrderSchedule is null (FHIR MedicationRequest doesn't carry slot info)
+    expect(item.drugOrderSchedule).toBeNull();
+  });
+
+  it("maps dateStopped from the Bahmni dateStopped extension", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-stopped-001",
+        status: "stopped",
+        medicationReference: {
+          reference: "Medication/drug-uuid-001",
+          display: "Paracetamol 500mg",
+        },
+        extension: [
+          {
+            url: FHIR_MEDICATION_REQUEST_DATE_STOPPED_EXTENSION_URL,
+            valueDateTime: "2024-01-18T10:00:00.000Z",
+          },
+        ],
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.dateStopped).toBe(
+      Date.parse("2024-01-18T10:00:00.000Z")
+    );
+  });
+
+  it("does not treat validityPeriod.end as an explicit stop", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-active-with-end-001",
+        status: "active",
+        medicationReference: {
+          reference: "Medication/drug-uuid-001",
+          display: "Paracetamol 500mg",
+        },
+        dispenseRequest: {
+          validityPeriod: {
+            start: "2024-01-15T08:00:00.000Z",
+            end: "2024-01-22T08:00:00.000Z",
+          },
+        },
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.dateStopped).toBeNull();
+  });
+
+  it("maps the variable-dose dosing type from a Dosage[] dosage.text", () => {
+    const vdpText = JSON.stringify([
+      {
+        sequence: 1,
+        text: "Stage 1",
+        doseAndRate: [{ doseQuantity: { value: 1, unit: "mg" } }],
+      },
+    ]);
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-vdp-001",
+        status: "active",
+        medicationReference: {
+          reference: "Medication/drug-uuid-001",
+          display: "Paracetamol 500mg",
+        },
+        dosageInstruction: [{ text: vdpText }],
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.dosingInstructionType).toBe(
+      FHIR_DOSING_INSTRUCTION_TYPE
+    );
+    expect(
+      result[0].drugOrder.dosingInstructions.administrationInstructions
+    ).toBe(vdpText);
+  });
+
+  it("maps drugNonCoded for a free-text drug", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-free-text-001",
+        status: "active",
+        medicationCodeableConcept: { text: "Herbal mixture" },
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.drugNonCoded).toBe("Herbal mixture");
+    expect(result[0].drugOrder.drug.name).toBe("Herbal mixture");
+  });
+
+  it("maps a coded stop reason from statusReason", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-stopped-reason-001",
+        status: "stopped",
+        medicationReference: {
+          reference: "Medication/drug-uuid-001",
+          display: "Paracetamol 500mg",
+        },
+        statusReason: {
+          coding: [{ code: "reason-uuid-001", display: "Adverse reaction" }],
+        },
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.orderReasonConcept).toEqual({
+      uuid: "reason-uuid-001",
+      name: "Adverse reaction",
+    });
+    expect(result[0].drugOrder.orderReasonText).toBeNull();
+  });
+
+  it("maps a non-coded stop reason from statusReason.text", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-stopped-reason-002",
+        status: "stopped",
+        medicationReference: {
+          reference: "Medication/drug-uuid-001",
+          display: "Paracetamol 500mg",
+        },
+        statusReason: { text: "Patient reported rash" },
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result[0].drugOrder.orderReasonConcept).toBeNull();
+    expect(result[0].drugOrder.orderReasonText).toBe("Patient reported rash");
+  });
+
+  it("reads the drug name and uuid from medicationReference when present", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-ref-001",
+        status: "active",
+        medicationReference: {
+          reference: "Medication/668ee01c-bbd0-4f5b-96c6-223ee104f06a",
+          display: "Paracetamol 150 mg/ml",
+        },
+      },
+    };
+    const bundle = makeMedicationRequestBundle([entry]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].drugOrder.drug.name).toBe("Paracetamol 150 mg/ml");
+    expect(result[0].drugOrder.drug.uuid).toBe(
+      "668ee01c-bbd0-4f5b-96c6-223ee104f06a"
+    );
+  });
+
+  it("handles missing optional fields gracefully without throwing", () => {
+    const minimalEntry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "mr-minimal-001",
+        status: "active",
+      },
+    };
+    const bundle = makeMedicationRequestBundle([minimalEntry]);
+
+    let result;
+    expect(() => {
+      result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+    }).not.toThrow();
+
+    expect(result).toHaveLength(1);
+    const item = result[0];
+    expect(item.drugOrder.uuid).toBe("mr-minimal-001");
+    expect(item.drugOrder.orderNumber).toBeNull();
+    expect(item.drugOrder.drug.name).toBeNull();
+    expect(item.drugOrder.drugNonCoded).toBeNull();
+    expect(item.drugOrder.dosingInstructions.dose).toBeNull();
+    expect(item.drugOrder.dosingInstructions.route).toBeNull();
+    expect(item.drugOrder.dosingInstructions.frequency).toBeNull();
+    expect(
+      item.drugOrder.dosingInstructions.administrationInstructions
+    ).toBeNull();
+    expect(item.drugOrder.dosingInstructionType).toBeNull();
+    expect(item.drugOrder.dateActivated).toBeNull();
+    expect(item.drugOrder.effectiveStartDate).toBeNull();
+    expect(item.drugOrder.scheduledDate).toBeNull();
+    expect(item.drugOrder.dateStopped).toBeNull();
+    expect(item.drugOrder.autoExpireDate).toBeNull();
+    expect(item.drugOrder.duration).toBeNull();
+    expect(item.drugOrder.durationUnits).toBeNull();
+    expect(item.drugOrder.orderReasonConcept).toBeNull();
+    expect(item.drugOrder.orderReasonText).toBeNull();
+    expect(item.drugOrder.orderer).toBeNull();
+    expect(item.drugOrder.patientUuid).toBeNull();
+    expect(item.drugOrder.encounterUuid).toBeNull();
+    expect(item.provider.name).toBeNull();
+    expect(item.provider.uuid).toBeNull();
+  });
+
+  it("skips non-MedicationRequest entries", () => {
+    const nonMrEntry = {
+      resource: {
+        resourceType: "MedicationAdministration",
+        id: "should-be-skipped",
+      },
+    };
+    const bundle = makeMedicationRequestBundle([
+      nonMrEntry,
+      fullMedicationRequestEntry,
+    ]);
+    const result = mapMedicationRequestBundleToIpdDrugOrders(bundle);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].drugOrder.uuid).toBe("mr-uuid-001");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tests: mapMedicationAdministrationBundleToEmergencyMeds
+// ---------------------------------------------------------------------------
+
+describe("mapMedicationAdministrationBundleToEmergencyMeds", () => {
+  it("returns [] for null bundle", () => {
+    expect(mapMedicationAdministrationBundleToEmergencyMeds(null)).toEqual([]);
+  });
+
+  it("returns [] for undefined bundle", () => {
+    expect(mapMedicationAdministrationBundleToEmergencyMeds(undefined)).toEqual(
+      []
+    );
+  });
+
+  it("returns [] for bundle with empty entry array", () => {
+    const bundle = makeMedicationAdministrationBundle([]);
+    expect(mapMedicationAdministrationBundleToEmergencyMeds(bundle)).toEqual(
+      []
+    );
+  });
+
+  it("maps a MedicationAdministration with performers, notes, and dosage", () => {
+    const bundle = makeMedicationAdministrationBundle([
+      fullMedicationAdministrationEntry,
+    ]);
+    const result = mapMedicationAdministrationBundleToEmergencyMeds(bundle);
+
+    expect(result).toHaveLength(1);
+    const item = result[0];
+
+    // identity
+    expect(item.uuid).toBe("ma-uuid-001");
+    expect(item.status).toBe("completed");
+    expect(item.patientUuid).toBe("patient-uuid-002");
+    expect(item.encounterUuid).toBe("encounter-uuid-002");
+    expect(item.orderUuid).toBe("mr-uuid-002");
+
+    // drug
+    expect(item.drug.display).toBe("Morphine 10mg");
+    expect(item.drug.name).toBe("Morphine 10mg");
+    expect(item.drug.uuid).toBeNull();
+
+    // dosing
+    expect(item.dose).toBe(10);
+    expect(item.doseUnits.display).toBe("mg");
+    expect(item.route.display).toBe("Intravenous");
+    expect(item.site.display).toBe("Left arm");
+    expect(item.dosingInstructions).toBe("10mg IV push");
+
+    // administered date (millis)
+    expect(item.administeredDateTime).toBe(
+      Date.parse("2024-01-15T10:30:00.000Z")
+    );
+
+    // performers
+    expect(item.providers).toHaveLength(1);
+    expect(item.providers[0].uuid).toBe("performer-uuid-001");
+    expect(item.providers[0].provider).toEqual({
+      uuid: "performer-uuid-001",
+      display: "Nurse Alice",
+    });
+    expect(item.providers[0].function).toBe("Performer");
+
+    // notes
+    expect(item.notes).toHaveLength(1);
+    expect(item.notes[0].text).toBe("Patient tolerated well");
+    expect(item.notes[0].author).toEqual({
+      uuid: "author-uuid-001",
+      display: "Nurse Alice",
+    });
+    expect(item.notes[0].recordedTime).toBe(
+      Date.parse("2024-01-15T10:35:00.000Z")
+    );
+  });
+
+  it("reads the drug name and uuid from medicationReference when present", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationAdministration",
+        id: "ma-ref-001",
+        status: "completed",
+        medicationReference: {
+          reference: "Medication/012be465-f26a-4b4c-8c8b-356e7b81154c",
+          display: "Paracetamol 650 mg",
+        },
+      },
+    };
+    const bundle = makeMedicationAdministrationBundle([entry]);
+    const result = mapMedicationAdministrationBundleToEmergencyMeds(bundle);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].drug.display).toBe("Paracetamol 650 mg");
+    expect(result[0].drug.name).toBe("Paracetamol 650 mg");
+    expect(result[0].drug.uuid).toBe("012be465-f26a-4b4c-8c8b-356e7b81154c");
+  });
+
+  it("handles missing optional fields gracefully without throwing", () => {
+    const minimalEntry = {
+      resource: {
+        resourceType: "MedicationAdministration",
+        id: "ma-minimal-001",
+        status: "completed",
+      },
+    };
+    const bundle = makeMedicationAdministrationBundle([minimalEntry]);
+
+    let result;
+    expect(() => {
+      result = mapMedicationAdministrationBundleToEmergencyMeds(bundle);
+    }).not.toThrow();
+
+    expect(result).toHaveLength(1);
+    const item = result[0];
+    expect(item.uuid).toBe("ma-minimal-001");
+    expect(item.patientUuid).toBeNull();
+    expect(item.encounterUuid).toBeNull();
+    expect(item.orderUuid).toBeNull();
+    expect(item.drug.display).toBeNull();
+    expect(item.drug.name).toBeNull();
+    expect(item.dose).toBeNull();
+    expect(item.doseUnits.display).toBeNull();
+    expect(item.route.display).toBeNull();
+    expect(item.site.display).toBeNull();
+    expect(item.administeredDateTime).toBeNull();
+    expect(item.providers).toEqual([]);
+    expect(item.notes).toEqual([]);
+    expect(item.statusReason).toBeNull();
+  });
+
+  it("maps a note without an author to null uuid/display instead of throwing", () => {
+    const entry = {
+      resource: {
+        resourceType: "MedicationAdministration",
+        id: "ma-note-no-author-001",
+        status: "completed",
+        note: [{ text: "No author note" }],
+      },
+    };
+    const bundle = makeMedicationAdministrationBundle([entry]);
+    const result = mapMedicationAdministrationBundleToEmergencyMeds(bundle);
+
+    expect(result[0].notes[0].author).toEqual({ uuid: null, display: null });
+    expect(result[0].notes[0].recordedTime).toBeNull();
+  });
+
+  it("skips non-MedicationAdministration entries", () => {
+    const nonMaEntry = {
+      resource: {
+        resourceType: "MedicationRequest",
+        id: "should-be-skipped",
+      },
+    };
+    const bundle = makeMedicationAdministrationBundle([
+      nonMaEntry,
+      fullMedicationAdministrationEntry,
+    ]);
+    const result = mapMedicationAdministrationBundleToEmergencyMeds(bundle);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].uuid).toBe("ma-uuid-001");
+  });
+});

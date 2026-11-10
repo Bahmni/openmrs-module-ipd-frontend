@@ -104,6 +104,36 @@ describe("EmergencyTasksUtils", () => {
     });
   });
 
+  describe("saveEmergencyMedication (FHIR)", () => {
+    const payload = {
+      patientUuid: "p1",
+      drugUuid: "d1",
+      dose: 2,
+      doseUnits: "Tablet",
+      route: "Oral",
+      providers: [{ providerUuid: "a", function: "Performer" }],
+      notes: [],
+      status: "completed",
+      administeredDateTime: 1704335400,
+    };
+
+    it("posts a MedicationAdministration and normalises 201 to 200", async () => {
+      axios.post.mockResolvedValueOnce({ status: 201, data: { id: "x" } });
+      const response = await saveEmergencyMedication(payload, true);
+      const [url, body, options] = axios.post.mock.calls[axios.post.mock.calls.length - 1];
+      expect(url).toMatch(/\/ws\/fhir2\/R4\/MedicationAdministration$/);
+      expect(body.category.coding[0].code).toBe("emergency");
+      expect(options.withCredentials).toBe(true);
+      expect(response.status).toBe(200);
+    });
+
+    it("returns error.response on failure", async () => {
+      axios.post.mockRejectedValueOnce({ response: { status: 400 } });
+      const response = await saveEmergencyMedication(payload, true);
+      expect(response).toEqual({ status: 400 });
+    });
+  });
+
   describe("saveEmergencyMedication", () => {
     it("should save emergency medication administration successfully", async () => {
       const emergencyMedication =
