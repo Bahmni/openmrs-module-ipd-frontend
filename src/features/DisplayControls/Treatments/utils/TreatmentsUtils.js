@@ -342,11 +342,13 @@ export const modifyEmergencyTreatmentData = (emergencyMedications) => {
           provider.function === verifierFunction
       );
       const approverNotes = medicationAdministration.notes.find(
-        (notes) => notes.author.uuid === approver?.provider.uuid
+        (notes) =>
+          notes.author?.uuid &&
+          notes.author.uuid === approver?.provider?.uuid
       );
-      const approverName = approver?.provider.display.includes(" - ")
-        ? approver?.provider.display.split(" - ")[1]
-        : approver?.provider.display;
+      const approverName = approver?.provider?.display?.includes(" - ")
+        ? approver.provider.display.split(" - ")[1]
+        : approver?.provider?.display;
       return {
         id: medicationAdministration.uuid,
         startDate: formatDate(

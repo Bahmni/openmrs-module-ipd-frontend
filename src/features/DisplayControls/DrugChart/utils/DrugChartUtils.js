@@ -11,7 +11,13 @@ import {
   PRIVILEGE_CONSTANTS,
   displayShiftTimingsFormat,
   displayShiftTimings12HourFormat,
+  FHIR_MEDICATION_ADMINISTRATION_BY_ID_URL,
+  FHIR_JSON_PATCH_CONTENT_TYPE,
 } from "../../../../constants";
+import {
+  buildAmendmentPatch,
+  buildAcknowledgementRequest,
+} from "../../../../utils/fhirMedicationAdministrationWriteMapper";
 import { formatDate } from "../../../../utils/DateTimeUtils";
 import _ from "lodash";
 import { FormattedMessage } from "react-intl";
@@ -155,7 +161,10 @@ export const transformDrugOrders = (orders) => {
   return medicationData;
 };
 
-export const saveMedicationAmendmentNote = async (amendmentData) => {
+export const saveMedicationAmendmentNote = async (
+  amendmentData,
+  enableIpdFhirMigration = false
+) => {
   const {
     medicationAdministrationUuid,
     amendedReason,
@@ -171,6 +180,16 @@ export const saveMedicationAmendmentNote = async (amendmentData) => {
   };
 
   try {
+    if (enableIpdFhirMigration) {
+      return await axios.patch(
+        FHIR_MEDICATION_ADMINISTRATION_BY_ID_URL(medicationAdministrationUuid),
+        buildAmendmentPatch(payload),
+        {
+          withCredentials: true,
+          headers: { "Content-Type": FHIR_JSON_PATCH_CONTENT_TYPE },
+        }
+      );
+    }
     return await axios.post(
       `${MEDICATION_ADMINISTRATION_URL}/${medicationAdministrationUuid}/note`,
       payload
@@ -182,7 +201,8 @@ export const saveMedicationAmendmentNote = async (amendmentData) => {
 };
 
 export const saveMedicationAcknowledgementNote = async (
-  acknowledgementData
+  acknowledgementData,
+  enableIpdFhirMigration = false
 ) => {
   const {
     medicationAdministrationUuid,
@@ -196,6 +216,13 @@ export const saveMedicationAcknowledgementNote = async (
   };
 
   try {
+    if (enableIpdFhirMigration) {
+      const { url, body } = buildAcknowledgementRequest(
+        medicationAdministrationUuid,
+        payload
+      );
+      return await axios.post(url, body, { withCredentials: true });
+    }
     return await axios.post(
       `${MEDICATION_ADMINISTRATION_URL}/${medicationAdministrationUuid}/acknowledgement`,
       payload

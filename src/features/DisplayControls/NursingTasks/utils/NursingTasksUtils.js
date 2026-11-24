@@ -5,7 +5,12 @@ import {
   asNeededPlaceholderConceptName,
   NON_MEDICATION_BASE_URL,
   DOSE_UNITS,
+  FHIR_MEDICATION_ADMINISTRATION_URL,
 } from "../../../../constants";
+import {
+  mapScheduledPayloadToFhirMedicationAdministration,
+  normaliseFhirCreateResponse,
+} from "../../../../utils/fhirMedicationAdministrationWriteMapper";
 import { isSystemGeneratedTask } from "../../../../utils/CommonUtils";
 import {
   parseFhirDosages,
@@ -259,7 +264,28 @@ export const ExtractMedicationNursingTasksData = (
   return groupedData;
 };
 
-export const saveAdministeredMedication = async (administeredMedication) => {
+export const saveAdministeredMedication = async (
+  administeredMedication,
+  enableIpdFhirMigration = false
+) => {
+  if (enableIpdFhirMigration) {
+    // The server has no Bundle endpoint, so each slot is a separate POST.
+    // Sequential, stopping at the first failure so a bad slot is not hidden.
+    try {
+      let response;
+      for (const item of administeredMedication) {
+        response = await axios.post(
+          FHIR_MEDICATION_ADMINISTRATION_URL,
+          mapScheduledPayloadToFhirMedicationAdministration(item),
+          { withCredentials: true }
+        );
+        if (!(response.status >= 200 && response.status < 300)) break;
+      }
+      return normaliseFhirCreateResponse(response);
+    } catch (error) {
+      return error.response;
+    }
+  }
   try {
     return await axios.post(
       ADMINISTERED_MEDICATIONS_BASE_URL,

@@ -385,7 +385,10 @@ const AddEmergencyTasks = (props) => {
 
   const handlePrimaryButtonClick = async () => {
     setIsSaveDisabled(true);
-    const response = await saveEmergencyMedication(emergencyTask);
+    const response = await saveEmergencyMedication(
+      emergencyTask,
+      config?.config?.enableIpdFhirMigration ?? false
+    );
     if (response.status === 200) {
       setIsSaveDisabled(false);
       handleAuditEvent("CREATE_EMERGENCY_MEDICATION_TASK");

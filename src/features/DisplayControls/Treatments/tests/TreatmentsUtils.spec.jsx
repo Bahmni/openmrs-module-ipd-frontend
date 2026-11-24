@@ -9,6 +9,8 @@ import {
   updateDrugOrderList,
   getActiveStageIndex,
   buildStageDrugOrder,
+  modifyEmergencyTreatmentData,
+  mapAdditionalDataForEmergencyTreatments,
 } from "../utils/TreatmentsUtils";
 import { IPDContext } from "../../../../context/IPDContext";
 import { mockConfig } from "../../../../utils/CommonUtils";
@@ -419,5 +421,61 @@ describe("TreatmentsUtils", () => {
       expect(result.drugOrder.duration).toBe(0);
       expect(result.drugOrder.durationUnits).toBe("Day(s)");
     });
+  });
+});
+
+describe("modifyEmergencyTreatmentData", () => {
+  const buildEmergencyMedication = (overrides = {}) => ({
+    uuid: "ma-uuid-001",
+    administeredDateTime: Date.parse("2024-01-15T10:30:00.000Z"),
+    drug: { display: "Morphine 10mg" },
+    dose: 10,
+    doseUnits: { display: "mg" },
+    route: { display: "Intravenous" },
+    providers: [
+      {
+        uuid: "verifier-uuid-001",
+        provider: { uuid: "verifier-uuid-001", display: "Dr. Verifier" },
+        function: "Verifier",
+      },
+    ],
+    notes: [
+      {
+        text: "Approved",
+        author: { uuid: "verifier-uuid-001", display: "Dr. Verifier" },
+        recordedTime: Date.parse("2024-01-15T10:35:00.000Z"),
+      },
+    ],
+    ...overrides,
+  });
+
+  it("resolves the approver note by uuid and exposes recordedTime", () => {
+    const medication = buildEmergencyMedication();
+    const treatments = modifyEmergencyTreatmentData([medication]);
+
+    expect(treatments[0].providerName).toBe("Dr. Verifier");
+    expect(treatments[0].additionalData.approverNotes).toBe(
+      medication.notes[0]
+    );
+
+    const additional = mapAdditionalDataForEmergencyTreatments(treatments);
+    expect(additional[0].approverNotes).toBe("Approved");
+    expect(additional[0].approverAdditionalData).toContain("Dr. Verifier");
+  });
+
+  it("does not throw when a note has no author", () => {
+    const medication = buildEmergencyMedication({
+      notes: [
+        {
+          text: "No author",
+          author: { uuid: null, display: null },
+          recordedTime: null,
+        },
+      ],
+    });
+
+    expect(() => modifyEmergencyTreatmentData([medication])).not.toThrow();
+    const treatments = modifyEmergencyTreatmentData([medication]);
+    expect(treatments[0].additionalData.approverNotes).toBeUndefined();
   });
 });
