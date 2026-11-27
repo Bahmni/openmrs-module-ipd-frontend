@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { TextArea } from "carbon-components-react";
+import { TextArea } from "@carbon/react";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";

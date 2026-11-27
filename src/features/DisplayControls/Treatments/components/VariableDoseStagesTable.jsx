@@ -8,7 +8,7 @@ import {
   TableBody,
   TableCell,
   Link,
-} from "carbon-components-react";
+} from "@carbon/react";
 import { FormattedMessage } from "react-intl";
 import { TooltipCarbon } from "bahmni-carbon-ui";
 import NoteIcon from "../../../../icons/note.svg";

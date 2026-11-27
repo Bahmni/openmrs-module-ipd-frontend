@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "carbon-components-react";
+} from "@carbon/react";
 import React, { useContext, useEffect, useState } from "react";
 import { useFetchAllergiesIntolerance } from "../hooks/useFetchAllergiesIntolerance";
 import { useFetchNoKnownAllergyUuid } from "../hooks/useFetchNoKnownAllergyUuid";

@@ -1,13 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { bookmarkPatient } from "../../CareViewPatients/utils/CareViewPatientsUtils";
-import {
-  BookmarkAdd20,
-  BookmarkFilled20,
-  HospitalBed16,
-  ResultNew20,
-  WarningAlt20,
-} from "@carbon/icons-react";
-import { Link } from "carbon-components-react";
+import { BookmarkAdd, BookmarkFilled, HospitalBed, ResultNew, WarningAlt } from "@carbon/icons-react";
+import { Link } from "@carbon/react";
 import { FormattedMessage } from "react-intl";
 import propTypes from "prop-types";
 import { CareViewContext } from "../../../context/CareViewContext";
@@ -103,7 +97,7 @@ export const PatientDetailsCell = ({
     <td className={"patient-details-container"}>
       <div className={"care-view-patient-details"}>
         <div className={"admission-details"}>
-          <HospitalBed16 />|<span>{bedDetails.bedNumber}</span>|
+          <HospitalBed size={16} />|<span>{bedDetails.bedNumber}</span>|
           <Link
             href={getIPDPatientDashboardUrl(
               patientDetails.uuid,
@@ -127,7 +121,7 @@ export const PatientDetailsCell = ({
               data-testid="new-notifications"
             >
               <div className="warning_icon">
-                <ResultNew20 className={"result-new-icon-20"} />
+                <ResultNew size={20} className={"result-new-icon-20"} />
               </div>
               <div className="treatments-notification-span">
                 {newTreatments > 0 && (
@@ -200,7 +194,7 @@ export const PatientDetailsCell = ({
               data-testid="pending-tasks-notification"
             >
               <div className="warning_icon">
-                <WarningAlt20 className={"warning-icon-20"} />
+                <WarningAlt size={20} className={"warning-icon-20"} />
               </div>
               <div className="treatments-notification-span">
                 <div>
@@ -234,14 +228,14 @@ export const PatientDetailsCell = ({
           onClick={() => handleBookmarkClick(uuid)}
           data-testid="bookmark-filled-icon"
         >
-          <BookmarkFilled20 />
+          <BookmarkFilled size={20} />
         </div>
       ) : (
         <div
           data-testid="bookmark-add-icon"
           onClick={() => handleBookmarkClick(uuid)}
         >
-          <BookmarkAdd20 />
+          <BookmarkAdd size={20} />
         </div>
       )}
     </td>

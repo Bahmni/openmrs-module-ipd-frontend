@@ -16,7 +16,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "carbon-components-react";
+} from "@carbon/react";
 import { useIntl } from "react-intl";
 import { ViewFormModal } from "./ViewFormModal";
 import {

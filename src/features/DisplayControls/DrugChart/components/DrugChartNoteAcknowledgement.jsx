@@ -1,5 +1,5 @@
 import React from "react";
-import { TextArea, Toggle } from "carbon-components-react";
+import { TextArea, Toggle } from "@carbon/react";
 import PropTypes from "prop-types";
 import { FormattedMessage, useIntl } from "react-intl";
 import { I18nProvider } from "../../../i18n/I18nProvider";

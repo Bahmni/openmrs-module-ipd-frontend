@@ -49,8 +49,8 @@ jest.mock("../utils/EmergencyTasksUtils", () => {
   };
 });
 
-jest.mock("carbon-components-react", () => {
-  const originalModule = jest.requireActual("carbon-components-react");
+jest.mock("@carbon/react", () => {
+  const originalModule = jest.requireActual("@carbon/react");
   return {
     ...originalModule,
     Loading: jest.fn(() => <div>Loading...</div>),
@@ -68,25 +68,15 @@ jest.mock("../../../../utils/CommonUtils", () => {
   };
 });
 
-jest.mock("react-intl", () => {
-  const reactIntl = jest.requireActual("react-intl");
-  return {
-    ...reactIntl,
-    useIntl: () => ({
-      formatMessage: ({ id, defaultMessage }) => defaultMessage || id,
-    }),
-  };
-});
-
 const selectDrug = async (container, getByText) => {
-  const drugNameSearch = container.querySelectorAll(".bx--text-input")[0];
+  const drugNameSearch = container.querySelectorAll(".cds--text-input")[0];
   const targetDrug = "Paracetamol 250 mg Suppository";
   fireEvent.click(drugNameSearch);
   fireEvent.change(drugNameSearch, { target: { value: "Para" } });
 
   await waitFor(() => {
     expect(
-      container.querySelector(".bx--list-box__menu-item__option")
+      container.querySelector(".cds--list-box__menu-item__option")
     ).toBeTruthy();
   });
   expect(mockSearchDrug).toHaveBeenCalled();
@@ -198,7 +188,7 @@ describe("AddEmergencyTasks", () => {
     );
     await selectDrug(container, getByText);
     await waitFor(() => {
-      expect(container.querySelectorAll(".bx--text-input")[1].value).toEqual(
+      expect(container.querySelectorAll(".cds--text-input")[1].value).toEqual(
         "Tablet(s)"
       );
     });
@@ -221,7 +211,7 @@ describe("AddEmergencyTasks", () => {
     );
     await selectDrug(container, getByText);
     await waitFor(() => {
-      expect(container.querySelectorAll(".bx--text-input")[2].value).toEqual(
+      expect(container.querySelectorAll(".cds--text-input")[2].value).toEqual(
         "Oral"
       );
     });
@@ -259,7 +249,7 @@ describe("AddEmergencyTasks", () => {
     expect(dosageInput.value).toEqual("1");
 
     // Set Administration Date
-    const datePickerInput = container.querySelector(".bx--date-picker__input");
+    const datePickerInput = container.querySelector(".cds--date-picker__input");
     fireEvent.change(datePickerInput, {
       target: { value: moment().format("m/d/Y") },
     });
@@ -270,17 +260,17 @@ describe("AddEmergencyTasks", () => {
 
     //Set Administration Time
     const startTimeSelector = container.querySelector(
-      ".bx--time-picker__input-field"
+      ".cds--time-picker__input-field"
     );
     fireEvent.change(startTimeSelector, { target: { value: "9:30" } });
     fireEvent.blur(startTimeSelector);
 
     // Set Provider
-    const providerSelector = container.querySelectorAll(".bx--text-input")[4];
+    const providerSelector = container.querySelectorAll(".cds--text-input")[4];
     fireEvent.change(providerSelector, { target: { value: "Dr." } });
     await waitFor(() => {
       expect(
-        container.querySelector(".bx--list-box__menu-item__option")
+        container.querySelector(".cds--list-box__menu-item__option")
       ).toBeTruthy();
     });
     fireEvent.click(getByText("Dr. Test"));
@@ -330,7 +320,7 @@ describe("AddEmergencyTasks", () => {
     expect(dosageInput.value).toEqual("1");
 
     // Set Administration Date
-    const datePickerInput = container.querySelector(".bx--date-picker__input");
+    const datePickerInput = container.querySelector(".cds--date-picker__input");
     fireEvent.change(datePickerInput, {
       target: { value: "01-01-2024" },
     });
@@ -338,17 +328,17 @@ describe("AddEmergencyTasks", () => {
 
     //Set Administration Time
     const startTimeSelector = container.querySelector(
-      ".bx--time-picker__input-field"
+      ".cds--time-picker__input-field"
     );
     fireEvent.change(startTimeSelector, { target: { value: "12:00" } });
     fireEvent.blur(startTimeSelector);
 
     // Set Provider
-    const providerSelector = container.querySelectorAll(".bx--text-input")[4];
+    const providerSelector = container.querySelectorAll(".cds--text-input")[4];
     fireEvent.change(providerSelector, { target: { value: "Dr." } });
     await waitFor(() => {
       expect(
-        container.querySelector(".bx--list-box__menu-item__option")
+        container.querySelector(".cds--list-box__menu-item__option")
       ).toBeTruthy();
     });
     fireEvent.click(getByText("Dr. Test"));
@@ -408,7 +398,7 @@ describe("AddEmergencyTasks", () => {
     expect(dosageInput.value).toEqual("1");
 
     const cancelButton = screen.getAllByText("Cancel")[1];
-    cancelButton.click();
+    fireEvent.click(cancelButton);
 
     expect(
       screen.getByText(
@@ -489,7 +479,7 @@ describe("AddEmergencyTasks", () => {
     expect(saveButton.disabled).toEqual(true);
 
     const startTimeSelector = container.querySelectorAll(
-      ".bx--time-picker__input-field"
+      ".cds--time-picker__input-field"
     )[1];
     fireEvent.change(startTimeSelector, { target: { value: "9:30" } });
     fireEvent.blur(startTimeSelector);
@@ -623,7 +613,7 @@ describe("AddEmergencyTasks", () => {
 
     // Change the first task's time to 12:30
     const firstTimeInput = container.querySelector(
-      ".bx--time-picker__input-field"
+      ".cds--time-picker__input-field"
     );
     fireEvent.change(firstTimeInput, { target: { value: "12:30" } });
     fireEvent.blur(firstTimeInput);
@@ -639,7 +629,7 @@ describe("AddEmergencyTasks", () => {
     });
 
     const allTimeInputs = container.querySelectorAll(
-      ".bx--time-picker__input-field"
+      ".cds--time-picker__input-field"
     );
     // First task retains 12:30
     expect(allTimeInputs[0].value).toBe("12:30");
@@ -713,7 +703,7 @@ describe("AddEmergencyTasks", () => {
     });
 
     const scheduledDateInput = container.querySelector(
-      ".bx--date-picker__input"
+      ".cds--date-picker__input"
     );
     const expectedDateFormat = moment().format("DD MMM YYYY");
     expect(scheduledDateInput.value).toMatch(expectedDateFormat);
@@ -765,14 +755,14 @@ describe("AddEmergencyTasks", () => {
 
       const { container } = utils;
       if (options.scheduleDateInput) {
-        const dateInput = container.querySelector(".bx--date-picker__input");
+        const dateInput = container.querySelector(".cds--date-picker__input");
         fireEvent.change(dateInput, {
           target: { value: options.scheduleDateInput },
         });
         fireEvent.blur(dateInput);
       }
       const timeInput = container.querySelector(
-        ".bx--time-picker__input-field"
+        ".cds--time-picker__input-field"
       );
       fireEvent.change(timeInput, {
         target: { value: options.scheduleTimeInput || "9:00" },
@@ -905,7 +895,7 @@ describe("AddEmergencyTasks", () => {
         { nursingTaskScheduling: { enableDateSelection: true } }
       );
 
-      expect(container.querySelector(".bx--date-picker__input")).toBeTruthy();
+      expect(container.querySelector(".cds--date-picker__input")).toBeTruthy();
     });
 
     it("should hide scheduled date picker and use today's date when date selection is disabled", async () => {
@@ -915,7 +905,7 @@ describe("AddEmergencyTasks", () => {
         { nursingTaskScheduling: { enableDateSelection: false } }
       );
 
-      expect(container.querySelector(".bx--date-picker__input")).toBeFalsy();
+      expect(container.querySelector(".cds--date-picker__input")).toBeFalsy();
 
       await waitFor(() => {
         expect(mockSaveBulkNonMedicationTasks).toHaveBeenCalled();

@@ -1,6 +1,6 @@
 import React from "react";
 import propTypes from "prop-types";
-import { Button } from "carbon-components-react";
+import { Button } from "@carbon/react";
 import { FormattedMessage } from "react-intl";
 import "../styles/SaveAndCloseButtons.scss";
 

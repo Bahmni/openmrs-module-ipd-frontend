@@ -44,7 +44,7 @@ describe("DrugChartNoteAcknowledgement (presentational)", () => {
       </I18nProvider>
     );
     expect(screen.getByLabelText(/Acknowledgement Notes/i)).toBeInTheDocument();
-    expect(screen.getByRole("checkbox")).toBeInTheDocument();
+    expect(screen.getByRole("switch")).toBeInTheDocument();
   });
 
   it("calls onNotesChange when textarea changes", () => {
@@ -65,7 +65,7 @@ describe("DrugChartNoteAcknowledgement (presentational)", () => {
         <DrugChartNoteAcknowledgement {...defaultProps} />
       </I18nProvider>
     );
-    fireEvent.click(screen.getByRole("checkbox"));
+    fireEvent.click(screen.getByRole("switch"));
     expect(defaultProps.onToggleChange).toHaveBeenCalled();
   });
 

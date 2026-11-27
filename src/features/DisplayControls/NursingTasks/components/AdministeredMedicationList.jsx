@@ -4,7 +4,7 @@ import {
   StructuredListBody,
   StructuredListRow,
   StructuredListCell,
-} from "carbon-components-react";
+} from "@carbon/react";
 import PropTypes from "prop-types";
 import { getMedicationDetails } from "../utils/TaskTileUtils";
 import ClockIcon from "../../../../icons/clock.svg";

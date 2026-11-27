@@ -96,7 +96,7 @@ describe("UpdateNursingTasksSlider", function () {
     );
     const saveButton = screen.getAllByText("Save")[1];
     expect(saveButton.disabled).toEqual(true);
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
     expect(saveButton.disabled).toEqual(false);
   });
@@ -124,14 +124,14 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
     const timePicker = container.querySelectorAll(
-      ".bx--time-picker__input-field"
+      ".cds--time-picker__input-field"
     )[0];
     expect(timePicker).toBeTruthy();
-    const notes = container.querySelectorAll(".bx--text-area")[0];
+    const notes = container.querySelectorAll(".cds--text-area")[0];
     expect(notes).toBeTruthy();
   });
 
@@ -158,10 +158,10 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
-    const timePicker = container.querySelectorAll(".bx--time-picker")[0];
+    const timePicker = container.querySelectorAll(".cds--time-picker")[0];
     expect(timePicker).toBeTruthy();
   });
 
@@ -193,10 +193,10 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
-    const timePicker = container.querySelectorAll(".bx--time-picker")[0];
+    const timePicker = container.querySelectorAll(".cds--time-picker")[0];
     expect(timePicker).toBeTruthy();
 
     const saveButton = screen.getAllByText("Save")[1];
@@ -237,7 +237,7 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
     const saveButton = screen.getAllByText("Save")[1];
@@ -275,7 +275,7 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
     const timePicker = screen.getAllByRole("textbox")[0];
@@ -310,7 +310,7 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
     const timePicker = screen.getAllByRole("textbox")[0];
@@ -344,7 +344,7 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
     const timePicker = screen.getAllByRole("textbox")[0];
@@ -384,7 +384,7 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
     const timePicker = screen.getAllByRole("textbox")[0];
@@ -453,7 +453,7 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
     const timePicker = screen.getAllByRole("textbox")[0];
@@ -497,7 +497,7 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
     const timePicker = screen.getAllByRole("textbox")[0];
@@ -543,7 +543,7 @@ describe("UpdateNursingTasksSlider", function () {
       </IntlProvider>
     );
 
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
     const timePicker = screen.getAllByRole("textbox")[0];
@@ -584,7 +584,7 @@ describe("UpdateNursingTasksSlider", function () {
       </IntlProvider>
     );
 
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
     const timePicker = screen.getAllByRole("textbox")[0];
@@ -624,7 +624,7 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    expect(container.querySelectorAll(".bx--overflow-menu")).toBeTruthy();
+    expect(container.querySelectorAll(".cds--overflow-menu")).toBeTruthy();
   });
 
   it("should show Skip Drug option on click of Overflow menu button", () => {
@@ -650,8 +650,9 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     fireEvent.click(overflowMenuButton);
     expect(screen.getByText("Skip Drug")).toBeTruthy();
   });
@@ -679,12 +680,13 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     fireEvent.click(overflowMenuButton);
     const skipDrugButton = screen.getByText("Skip Drug");
     fireEvent.click(skipDrugButton);
-    expect(container.querySelectorAll(".bx--toggle__switch")).toHaveLength(0);
+    expect(container.querySelectorAll(".cds--toggle__switch")).toHaveLength(0);
   });
 
   it("should show notes as mandatory when Skip Drug button is clicked", () => {
@@ -710,8 +712,9 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     fireEvent.click(overflowMenuButton);
     const skipDrugButton = screen.getByText("Skip Drug");
     fireEvent.click(skipDrugButton);
@@ -772,8 +775,9 @@ describe("UpdateNursingTasksSlider", function () {
     );
     const scheduledFor = screen.queryByText("Scheduled for");
     expect(scheduledFor).toBeNull();
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     expect(overflowMenuButton).not.toBeTruthy();
   });
 
@@ -800,7 +804,7 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const toggleButton = container.querySelectorAll(".bx--toggle__switch")[0];
+    const toggleButton = container.querySelectorAll(".cds--toggle__switch")[0];
     fireEvent.click(toggleButton);
 
     const timePicker = screen.getAllByRole("textbox")[0];
@@ -842,7 +846,7 @@ describe("UpdateNursingTasksSlider", function () {
     );
     const toggleButton = queryAllByTestId("done-toggle")[0];
     expect(toggleButton.disabled).toBeTruthy();
-    expect(container.querySelectorAll(".bx--overflow-menu")).toHaveLength(0);
+    expect(container.querySelectorAll(".cds--overflow-menu")).toHaveLength(0);
   });
 
   it("should render system-generated non-medication task name as a form link when mapping and form uuid exist", () => {
@@ -1048,8 +1052,9 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     fireEvent.click(overflowMenuButton);
     expect(screen.getByText("Stop Task")).toBeTruthy();
   });
@@ -1077,12 +1082,13 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     fireEvent.click(overflowMenuButton);
     const stopTaskButton = screen.getByText("Stop Task");
     fireEvent.click(stopTaskButton);
-    expect(container.querySelectorAll(".bx--toggle__switch")).toHaveLength(0);
+    expect(container.querySelectorAll(".cds--toggle__switch")).toHaveLength(0);
   });
 
   it("should enable save button when Stop Task is clicked", () => {
@@ -1111,8 +1117,9 @@ describe("UpdateNursingTasksSlider", function () {
     const saveButton = screen.getAllByText("Save")[1];
     expect(saveButton.disabled).toBe(true);
 
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     fireEvent.click(overflowMenuButton);
     const stopTaskButton = screen.getByText("Stop Task");
     fireEvent.click(stopTaskButton);
@@ -1143,8 +1150,9 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     fireEvent.click(overflowMenuButton);
     const stopTaskButton = screen.getByText("Stop Task");
     fireEvent.click(stopTaskButton);
@@ -1177,8 +1185,9 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     fireEvent.click(overflowMenuButton);
     expect(screen.queryByText("Stop Task")).toBeNull();
   });
@@ -1206,13 +1215,14 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     fireEvent.click(overflowMenuButton);
     const stopTaskButton = screen.getByText("Stop Task");
     fireEvent.click(stopTaskButton);
 
-    expect(container.querySelectorAll(".bx--toggle__switch")).toHaveLength(0);
+    expect(container.querySelectorAll(".cds--toggle__switch")).toHaveLength(0);
   });
 
   it("should deactivate Stop when Skip is activated (mutual exclusivity)", () => {
@@ -1241,8 +1251,9 @@ describe("UpdateNursingTasksSlider", function () {
       </IntlProvider>
     );
 
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
 
     fireEvent.click(overflowMenuButton);
     let stopTaskButton = screen.getByText("Stop Task");
@@ -1288,8 +1299,9 @@ describe("UpdateNursingTasksSlider", function () {
       </IntlProvider>
     );
 
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
 
     fireEvent.click(overflowMenuButton);
     let skipTaskButton = screen.getByText("Skip Task");
@@ -1335,8 +1347,9 @@ describe("UpdateNursingTasksSlider", function () {
       </IntlProvider>
     );
 
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
 
     fireEvent.click(overflowMenuButton);
     let skipTaskButton = screen.getByText("Skip Task");
@@ -1380,8 +1393,9 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     fireEvent.click(overflowMenuButton);
     expect(screen.getByText("Stop Task")).toBeTruthy();
   });
@@ -1409,8 +1423,9 @@ describe("UpdateNursingTasksSlider", function () {
         </IPDContext.Provider>
       </IntlProvider>
     );
-    const overflowMenuButton =
-      container.querySelectorAll(".bx--overflow-menu")[0];
+    const overflowMenuButton = container.querySelectorAll(
+      ".cds--overflow-menu"
+    )[0];
     fireEvent.click(overflowMenuButton);
     expect(screen.queryByText("Stop Task")).toBeNull();
   });

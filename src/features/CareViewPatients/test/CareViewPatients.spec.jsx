@@ -110,7 +110,7 @@ describe("CareViewPatients", () => {
     await waitFor(() => {
       expect(container.querySelectorAll(".task-type")).toBeTruthy();
     });
-    expect(screen.getByRole("searchbox")).toBeTruthy();
+    expect(await screen.findByRole("searchbox")).toBeTruthy();
     expect(
       screen.getByPlaceholderText(
         "Type a minimum of 3 characters to search patient by name, bed number or patient ID"

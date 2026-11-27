@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import DrugChart from "../components/DrugChart";
 import { drugChartData, mockDrugChartDataLarge } from "./DrugChartMockData";
 import { IPDContext } from "../../../../context/IPDContext";

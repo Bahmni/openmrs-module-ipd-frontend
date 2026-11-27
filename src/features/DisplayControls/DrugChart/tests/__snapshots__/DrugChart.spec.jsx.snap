@@ -17,15 +17,14 @@ exports[`DrugChart should match snapshot 1`] = `
           class="header"
         >
           <button
-            class="arrow-button bx--btn bx--btn--primary bx--btn--disabled"
+            class="arrow-button cds--btn cds--btn--primary cds--btn--disabled"
             data-testid="up-arrow"
             disabled=""
-            tabindex="0"
             type="button"
           >
             <svg
               aria-hidden="true"
-              class="bx--btn__icon"
+              class="cds--btn__icon"
               fill="currentColor"
               focusable="false"
               height="20"
@@ -35,7 +34,7 @@ exports[`DrugChart should match snapshot 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M16 10L26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
+                d="M16 10 26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"
               />
             </svg>
           </button>
@@ -125,15 +124,14 @@ exports[`DrugChart should match snapshot 1`] = `
       class="arrow-button-wrapper"
     >
       <button
-        class="arrow-button bx--btn bx--btn--primary bx--btn--disabled"
+        class="arrow-button cds--btn cds--btn--primary cds--btn--disabled"
         data-testid="down-arrow"
         disabled=""
-        tabindex="0"
         type="button"
       >
         <svg
           aria-hidden="true"
-          class="bx--btn__icon"
+          class="cds--btn__icon"
           fill="currentColor"
           focusable="false"
           height="20"
@@ -143,7 +141,7 @@ exports[`DrugChart should match snapshot 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
+            d="M16 22 6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"
           />
         </svg>
       </button>

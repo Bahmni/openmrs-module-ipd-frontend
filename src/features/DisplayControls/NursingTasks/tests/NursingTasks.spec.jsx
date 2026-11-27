@@ -149,7 +149,7 @@ describe("NursingTasks", () => {
     );
 
     await waitFor(() => {
-      const filterDropdown = container.querySelector(".bx--list-box__field");
+      const filterDropdown = container.querySelector(".cds--list-box__field");
       fireEvent.click(filterDropdown);
       const complete = getByText("Completed");
       fireEvent.click(complete);
@@ -180,7 +180,7 @@ describe("NursingTasks", () => {
     );
 
     await waitFor(() => {
-      const filterDropdown = container.querySelector(".bx--list-box__field");
+      const filterDropdown = container.querySelector(".cds--list-box__field");
       fireEvent.click(filterDropdown);
       const complete = getByText("All Tasks");
       fireEvent.click(complete);
@@ -444,8 +444,8 @@ describe("NursingTasks", () => {
     const currentShiftButton = getByTestId("current-shift");
     const AddTaskButton = getByText("Add Task");
 
-    expect(currentShiftButton.className).toContain("bx--btn--disabled");
-    expect(AddTaskButton.className).toContain("bx--btn--disabled");
+    expect(currentShiftButton.className).toContain("cds--btn--disabled");
+    expect(AddTaskButton.className).toContain("cds--btn--disabled");
   });
 
   it("should not render Add Task button when privilege is not present", async () => {

@@ -598,7 +598,7 @@ describe("Treatments", () => {
     const editDrugChartLink = await waitFor(() => getByText("Edit Drug Chart"));
     await waitFor(() => {
       expect(editDrugChartLink).toBeTruthy();
-      expect(editDrugChartLink.className).not.toContain("bx--link--disabled");
+      expect(editDrugChartLink.className).not.toContain("cds--link--disabled");
     });
   });
 
@@ -760,7 +760,7 @@ describe("Treatments", () => {
         )
       ).toBeTruthy();
       const stopDrugButton = getAllByText("Stop drug")[1];
-      expect(stopDrugButton.className).toContain("bx--btn--disabled");
+      expect(stopDrugButton.className).toContain("cds--btn--disabled");
     });
   });
 
@@ -794,13 +794,13 @@ describe("Treatments", () => {
     await waitFor(() => {
       getAllByText("Stop drug")[0].click();
       const stopDrugButton = getAllByText("Stop drug")[1];
-      expect(stopDrugButton.className).toContain("bx--btn--disabled");
-      const reasonInputField = container.querySelector(".bx--text-area");
+      expect(stopDrugButton.className).toContain("cds--btn--disabled");
+      const reasonInputField = container.querySelector(".cds--text-area");
       fireEvent.change(reasonInputField, {
         target: { value: "test" },
       });
-      expect(stopDrugButton.className).not.toContain("bx--btn--disabled");
-      expect(stopDrugButton.className).toContain("bx--btn--danger");
+      expect(stopDrugButton.className).not.toContain("cds--btn--disabled");
+      expect(stopDrugButton.className).toContain("cds--btn--danger");
     });
   });
 
@@ -848,7 +848,7 @@ describe("Treatments", () => {
     await waitFor(() => {
       getAllByText("Stop drug")[0].click();
       const stopDrugButton = getAllByText("Stop drug")[1];
-      const reasonInputField = container.querySelector(".bx--text-area");
+      const reasonInputField = container.querySelector(".cds--text-area");
       fireEvent.change(reasonInputField, {
         target: { value: "test" },
       });
@@ -1181,7 +1181,7 @@ describe("Treatments", () => {
 
     await waitFor(() => {
       getAllByText("Stop drug")[0].click();
-      const reasonInputField = container.querySelector(".bx--text-area");
+      const reasonInputField = container.querySelector(".cds--text-area");
       fireEvent.change(reasonInputField, { target: { value: "test reason" } });
       const stopDrugButton = getAllByText("Stop drug")[1];
       fireEvent.click(stopDrugButton);
@@ -1255,6 +1255,6 @@ it("should render an Edit Drug Chart link disabled for IPD treatments read mode"
   const editDrugChartLink = await waitFor(() => getByText("Edit Drug Chart"));
   await waitFor(() => {
     expect(editDrugChartLink).toBeTruthy();
-    expect(editDrugChartLink.className).toContain("bx--link--disabled");
+    expect(editDrugChartLink.className).toContain("cds--link--disabled");
   });
 });

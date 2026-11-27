@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
 import ExpandableRowData from "../components/ExpandableRowData";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 const makeDosage = ({ sequence, text, isLoadingDose = false }) => ({
   sequence,

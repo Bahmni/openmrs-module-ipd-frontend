@@ -5,6 +5,11 @@ import { mockWardList } from "./CareViewSummaryMock";
 import { CareViewContext } from "../../../context/CareViewContext";
 import { WARD_SUMMARY_HEADER } from "../../../constants";
 
+// getWardOptions returns { label, value } options built from the ward list
+const mockWardOptions = mockWardList.map((ward) => ({
+  label: ward.ward.display,
+  value: ward.ward.uuid,
+}));
 const mockGetSelectedWard = jest.fn();
 const mockGetWardOptions = jest.fn();
 const mockGetWardSummary = jest.fn();
@@ -43,7 +48,7 @@ jest.mock("../utils/CareViewSummary", () => {
 
 describe("CareViewSummary", function () {
   it("should render Dropdown and summary tiles", () => {
-    mockGetWardOptions.mockReturnValue(mockWardList);
+    mockGetWardOptions.mockReturnValue(mockWardOptions);
     mockGetWardSummary.mockReturnValue({
       totalPatients: 27,
     });
@@ -52,13 +57,13 @@ describe("CareViewSummary", function () {
         <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
       </CareViewContext.Provider>
     );
-    expect(container.querySelector(".bx--list-box__wrapper")).toBeTruthy();
+    expect(container.querySelector(".cds--list-box__wrapper")).toBeTruthy();
     expect(container.querySelectorAll(".summary-tile")).toBeTruthy();
     expect(container.querySelectorAll(".summary-tile").length).toEqual(2);
   });
 
   it("should display the total patient count", () => {
-    mockGetWardOptions.mockReturnValue(mockWardList);
+    mockGetWardOptions.mockReturnValue(mockWardOptions);
     mockGetWardSummary.mockReturnValue({
       totalPatients: 27,
     });
@@ -71,7 +76,7 @@ describe("CareViewSummary", function () {
   });
 
   it("should display the my patient count", () => {
-    mockGetWardOptions.mockReturnValue(mockWardList);
+    mockGetWardOptions.mockReturnValue(mockWardOptions);
     const { getByText } = render(
       <CareViewContext.Provider value={mockContext}>
         <CareViewSummary callbacks={{ setIsLoading: jest.fn }} />
@@ -81,7 +86,7 @@ describe("CareViewSummary", function () {
   });
 
   it("should select total patients tile by default", async () => {
-    mockGetWardOptions.mockReturnValue(mockWardList);
+    mockGetWardOptions.mockReturnValue(mockWardOptions);
     mockGetWardSummary.mockReturnValue({
       totalPatients: 27,
     });
@@ -91,7 +96,7 @@ describe("CareViewSummary", function () {
       </CareViewContext.Provider>
     );
 
-    const activeTiles = container.querySelectorAll(".bx--tile.summary-tile");
+    const activeTiles = container.querySelectorAll(".cds--tile.summary-tile");
     expect(activeTiles).toBeTruthy();
 
     activeTiles.forEach((div, index) => {
@@ -102,7 +107,7 @@ describe("CareViewSummary", function () {
   });
 
   it("should set my patients when the my patients tile is clicked", async () => {
-    mockGetWardOptions.mockReturnValue(mockWardList);
+    mockGetWardOptions.mockReturnValue(mockWardOptions);
     mockGetWardSummary.mockReturnValue({
       totalPatients: 27,
     });
@@ -113,7 +118,7 @@ describe("CareViewSummary", function () {
     );
 
     await waitFor(() => {
-      const activeTiles = container.querySelectorAll(".bx--tile.summary-tile");
+      const activeTiles = container.querySelectorAll(".cds--tile.summary-tile");
       expect(activeTiles).toBeTruthy();
       expect(mockContext.setHeaderSelected).toHaveBeenCalledTimes(0);
       const myPatientsTile = activeTiles[1];
